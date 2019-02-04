@@ -68,11 +68,19 @@ abstract class Controller extends \Module
 
     public function hasRequestParameter($name)
     {
+        if (!$this->request) {
+            $this->maskAsDeprecatedCall(__METHOD__);
+            return parent::hasRequestParameter($name);
+        }
         return $this->hasHeader($name) || $this->hasGetParameter($name) || $this->hasPostParameter($name);
     }
 
     public function hasHeader($name)
     {
+        if (!$this->request) {
+            $this->maskAsDeprecatedCall(__METHOD__);
+            return parent::hasHeader($name);
+        }
         return $this->getPsrRequest()->hasHeader(strtolower($name));
     }
 
@@ -88,6 +96,11 @@ abstract class Controller extends \Module
 
     public function getRequestParameter($name)
     {
+        if (!$this->request) {
+            $this->maskAsDeprecatedCall(__METHOD__);
+            return parent::getRequestParameter($name);
+        }
+
         if ($this->hasRequestParameter($name)) {
             return $this->getRequestParameters()[$name];
         } elseif ($this->getPsrRequest()->hasHeader($name)) {
@@ -100,7 +113,7 @@ abstract class Controller extends \Module
     public function getHeaders()
     {
         if (!$this->request) {
-            \common_Logger::w('Deprecated usage of ' . __METHOD__);
+            $this->maskAsDeprecatedCall(__FUNCTION__);
             return parent::getHeaders();
         }
 
@@ -115,7 +128,7 @@ abstract class Controller extends \Module
     public function getHeader($name)
     {
         if (!$this->request) {
-            \common_Logger::w('Deprecated usage of ' . __METHOD__);
+            $this->maskAsDeprecatedCall(__FUNCTION__);
             return parent::getHeader($name);
         }
         return $this->getPsrRequest()->getHeader($name);
@@ -187,8 +200,8 @@ abstract class Controller extends \Module
 
     public function setContentHeader($contentType, $charset = 'UTF-8')
     {
-        $response = $this->getPsrResponse()->withHeader('content-type', $contentType . ';' . $charset);
-        $this->response = $response;
+        $this->response = $this->getPsrResponse()->withHeader('content-type', $contentType . ';' . $charset);
+        return $this;
     }
 
     public function getContentType()
@@ -196,4 +209,13 @@ abstract class Controller extends \Module
         return $this->getPsrRequest()->getHeader('content-type');
     }
 
+    protected function maskAsDeprecatedCall($function = null)
+    {
+        $message = '[DEPRECATED]  Deprecated call ';
+        if (!is_null($function)) {
+            $message .= 'of "' . $function . '"';
+        }
+        $message .= ' (' . get_called_class() .')';
+        \common_Logger::w($message);
+    }
 }
