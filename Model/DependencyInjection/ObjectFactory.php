@@ -15,8 +15,10 @@ class ObjectFactory
 {
 
     /**
+     * Resolve the dependencies, and create a new instance of a class
+     *
      * @param string $className
-     * @return mixed
+     * @return $className
      * @throws \ReflectionException
      * @throws \Exception
      */

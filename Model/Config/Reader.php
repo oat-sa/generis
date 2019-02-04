@@ -40,17 +40,15 @@ class Reader
     {
         $config = $this->getConfig();
         $keys = explode('/', $path);
-        $configValue = null;
 
         foreach ($keys as $key) {
-            $configValue = $config;
-            if (!isset($configValue[$key])) {
+            if (!isset($config[$key])) {
                 return null;
             }
 
-            $configValue = $configValue[$key];
+            $config = $config[$key];
         }
 
-        return $configValue;
+        return $config;
     }
 }
