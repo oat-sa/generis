@@ -23,7 +23,7 @@ use common_Config;
 use common_session_SessionManager;
 use common_test_TestUserSession;
 use core_kernel_persistence_smoothsql_SmoothModel;
-use oat\generis\Helper\FileSerializerMigrationHelper;
+use oat\generis\scripts\tools\FileSerializerMigration\MigrationHelper;
 use oat\generis\model\fileReference\ResourceFileSerializer;
 use oat\generis\model\fileReference\UrlFileSerializer;
 use oat\generis\model\GenerisRdf;
@@ -42,9 +42,10 @@ class FileSerializerMigrationHelperTest extends GenerisTestCase
 
     const PARENT_RESOURCE_URI = 'http://www.tao.lu/Ontologies/generis.rdf#UnitTest';
     const PROPERTY_URI = 'http://www.tao.lu/Ontologies/generis.rdf#TestFile';
+    const SAMPLE_FILE = 'fileMigrationUnitTest.txt';
 
     /**
-     * @var FileSerializerMigrationHelper
+     * @var MigrationHelper
      */
     protected $fileMigrationHelper;
 
@@ -94,8 +95,7 @@ class FileSerializerMigrationHelperTest extends GenerisTestCase
     public function setUp()
     {
         common_Config::load();
-        common_session_SessionManager::startSession(new common_test_TestUserSession());
-        $this->fileMigrationHelper = new FileSerializerMigrationHelper();
+        $this->fileMigrationHelper = new MigrationHelper();
         $this->resourceFileSerializer = new ResourceFileSerializer();
         $this->urlFileSerializer = new UrlFileSerializer();
 
@@ -114,7 +114,11 @@ class FileSerializerMigrationHelperTest extends GenerisTestCase
     {
         try {
             $fileResource = $this->getFileResource();
-            $this->fileMigrationHelper->migrateResource($fileResource, self::PARENT_RESOURCE_URI, self::PROPERTY_URI);
+            $this->fileMigrationHelper->migrateResource(
+                $fileResource,
+                $this->ontologyMock->getProperty(self::PARENT_RESOURCE_URI),
+                $this->ontologyMock->getResource(self::PROPERTY_URI)
+            );
         } catch (\Exception $e) {
             if ($this->testFile !== null) {
                 $this->testFile->delete();
@@ -133,11 +137,9 @@ class FileSerializerMigrationHelperTest extends GenerisTestCase
     private function getFileResource()
     {
         $dir = $this->getTempDirectory();
-
-        $sampleFile = 'sampleFile.txt';
         $fileClass = $this->ontologyMock->getClass(GenerisRdf::CLASS_GENERIS_FILE);
-        $this->testFile = $dir->getFile($sampleFile);
-        $this->testFile->write($sampleFile, 'PHP Unit test file');
+        $this->testFile = $dir->getFile(self::SAMPLE_FILE);
+        $this->testFile->write(self::SAMPLE_FILE, 'PHP Unit test file');
 
         if ($this->testFile instanceof File) {
             $filename = $this->testFile->getBasename();
@@ -164,14 +166,6 @@ class FileSerializerMigrationHelperTest extends GenerisTestCase
         $unitTestResource->setPropertyValue($testFileProperty, $unitTestResource);
 
         return $resource;
-    }
-
-    /**
-     * Clean up after running tests
-     */
-    public function tearDown()
-    {
-
     }
 
     /**
@@ -204,6 +198,13 @@ class FileSerializerMigrationHelperTest extends GenerisTestCase
             $this->tempDirectory = $fileSystemService->getDirectory($this->tempFileSystemId);
         }
         return $this->tempDirectory;
+    }
+
+    protected function tearDown()
+    {
+        $dir = $this->getTempDirectory();
+        $this->testFile = $dir->getFile(self::SAMPLE_FILE);
+        $this->testFile->delete();
     }
 
     /**
