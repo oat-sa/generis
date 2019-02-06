@@ -14,7 +14,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2017  (original work) Open Assessment Technologies SA;
+ * Copyright (c) 2019 (original work) Open Assessment Technologies SA;
  *
  * @author Martijn Swinkels <m.swinkels@taotesting.com>
  */
@@ -205,12 +205,11 @@ class Migrate extends ScriptAction
      * Check if the file serializer service needs to be updated
      *
      * @return bool
-     * @throws InvalidServiceManagerException
      */
     private function fileSerializerNeedsUpdate()
     {
         $needsUpdate = true;
-        $currentFileReferenceSerializer = $this->getServiceManager()->get(FileReferenceSerializer::SERVICE_ID);
+        $currentFileReferenceSerializer = $this->getServiceLocator()->get(FileReferenceSerializer::SERVICE_ID);
         if ($currentFileReferenceSerializer instanceof UrlFileSerializer) {
             $needsUpdate = false;
         }

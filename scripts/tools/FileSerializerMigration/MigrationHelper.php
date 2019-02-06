@@ -14,7 +14,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2018 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
+ * Copyright (c) 2019 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
 
 namespace oat\generis\scripts\tools\FileSerializerMigration;
@@ -29,8 +29,7 @@ use oat\generis\model\GenerisRdf;
 use oat\generis\model\OntologyAwareTrait;
 use oat\oatbox\filesystem\Directory;
 use oat\oatbox\filesystem\File;
-use oat\oatbox\service\ServiceManager;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\ServiceManager\ServiceLocatorAwareTrait;
 
 /**
  * Helper class for the File serializer migration script
@@ -38,6 +37,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 class MigrationHelper
 {
     use OntologyAwareTrait;
+    use ServiceLocatorAwareTrait;
 
     /**
      * Amount of resources processed in one batch
@@ -72,16 +72,6 @@ class MigrationHelper
      * @var string[][]
      */
     public $failedResources = [];
-
-    /**
-     * @var ServiceManager
-     */
-    private $serviceLocator;
-
-    /**
-     * @var ServiceManager
-     */
-    private $serviceManager;
 
     /**
      * @var bool
@@ -178,26 +168,6 @@ class MigrationHelper
         }
 
         return $this->resourceFileSerializer;
-    }
-
-    /**
-     * Set the Service Locator for this class
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     */
-    public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
-    {
-        $this->serviceLocator = $serviceLocator;
-    }
-
-    /**
-     * Get the Service Locator
-     *
-     * @return ServiceLocatorInterface
-     */
-    private function getServiceLocator()
-    {
-        return $this->serviceLocator;
     }
 
     /**

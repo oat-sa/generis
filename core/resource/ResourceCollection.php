@@ -21,7 +21,6 @@ namespace oat\generis\model\resource;
 
 use common_persistence_SqlPersistence;
 use core_kernel_classes_Class;
-use core_kernel_classes_Resource;
 use Countable;
 use Iterator;
 use common_persistence_sql_Filter as Filter;
@@ -90,11 +89,14 @@ class ResourceCollection implements Iterator, Countable
     /**
      * ResourceCollection constructor.
      *
-     * @param null $class
+     * @param null|string|core_kernel_classes_Class $class
      * @param int $cacheSize
      */
     public function __construct($class = null, $cacheSize = self::CACHE_SIZE)
     {
+        if ($class !== null) {
+            $class = $this->getClass($class);
+        }
         $this->class = $class;
         $this->filter = new Filter();
         $this->cacheSize = $cacheSize;
@@ -257,7 +259,7 @@ class ResourceCollection implements Iterator, Countable
      */
     private function isLimitReached()
     {
-        return $this->limit !== null && (!$this->count()) < $this->limit;
+        return $this->limit !== null && $this->count() >= $this->limit;
     }
 
     /**
@@ -274,10 +276,6 @@ class ResourceCollection implements Iterator, Countable
      */
     private function addClassFilter()
     {
-        if (is_string($this->class)) {
-            $this->getClass($this->class);
-        }
-
         $this->addTypeFilter($this->class->getUri());
         $this->classFilterSet = true;
     }
