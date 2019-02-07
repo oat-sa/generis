@@ -29,12 +29,13 @@ use oat\generis\model\GenerisRdf;
 use oat\generis\model\OntologyAwareTrait;
 use oat\oatbox\filesystem\Directory;
 use oat\oatbox\filesystem\File;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 
 /**
  * Helper class for the File serializer migration script
  */
-class MigrationHelper
+class MigrationHelper implements ServiceLocatorAwareInterface
 {
     use OntologyAwareTrait;
     use ServiceLocatorAwareTrait;
