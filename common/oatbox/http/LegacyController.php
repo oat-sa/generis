@@ -335,6 +335,7 @@ abstract class LegacyController extends Controller
     protected function isXmlHttpRequest()
     {
         if (!$this->request) {
+            $this->maskAsDeprecatedCall();
             return \tao_helpers_Request::isAjax();
         }
         return parent::isXmlHttpRequest();

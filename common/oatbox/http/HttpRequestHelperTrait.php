@@ -7,10 +7,37 @@ use Psr\Http\Message\ServerRequestInterface;
 trait HttpRequestHelperTrait
 {
     /**
+     * Get the HTTP request
+     *
      * @return ServerRequestInterface
      */
     abstract protected function getPsrRequest();
 
+    /**
+     * Retrieves all message header values.
+     *
+     * The keys represent the header name as it will be sent over the wire, and
+     * each value is an array of strings associated with the header.
+     *
+     *     // Represent the headers as a string
+     *     foreach ($message->getHeaders() as $name => $values) {
+     *         echo $name . ": " . implode(", ", $values);
+     *     }
+     *
+     *     // Emit headers iteratively:
+     *     foreach ($message->getHeaders() as $name => $values) {
+     *         foreach ($values as $value) {
+     *             header(sprintf('%s: %s', $name, $value), false);
+     *         }
+     *     }
+     *
+     * While header names are not case-sensitive, getHeaders() will preserve the
+     * exact case in which headers were originally specified.
+     *
+     * @return string[][] Returns an associative array of the message's headers. Each
+     *     key MUST be a header name, and each value MUST be an array of strings
+     *     for that header.
+     */
     protected function getHeaders()
     {
         $headers = [];
@@ -33,83 +60,194 @@ trait HttpRequestHelperTrait
         return $this->getPsrRequest()->hasHeader(strtolower($name));
     }
 
+    /**
+     * Retrieves a message header value by the given case-insensitive name.
+     *
+     * This method returns an array of all the header values of the given
+     * case-insensitive header name.
+     *
+     * If the header does not appear in the message, this method MUST return an
+     * empty array.
+     *
+     * @param string $name Case-insensitive header field name.
+     * @return string[] An array of string values as provided for the given
+     *    header. If the header does not appear in the message, this method MUST
+     *    return an empty array.
+     */
     protected function getHeader($name)
     {
         return $this->getPsrRequest()->getHeader($name);
     }
 
-    /***/
-
+    /**
+     * Retrieve any parameters provided in the request body.
+     *
+     * If the request Content-Type is either application/x-www-form-urlencoded
+     * or multipart/form-data, and the request method is POST, this method MUST
+     * return the contents of $_POST.
+     *
+     * Otherwise, this method may return any results of deserializing
+     * the request body content; as parsing returns structured content, the
+     * potential types MUST be arrays or objects only. A null value indicates
+     * the absence of body content.
+     *
+     * @return null|array|object The deserialized body parameters, if any.
+     *     These will typically be an array or object.
+     */
     protected function getPostParameters()
     {
         return (array) $this->getPsrRequest()->getParsedBody();
     }
 
+    /**
+     * Check if the HTTP request contains POST parameter $name
+     *
+     * @param $name
+     * @return bool
+     */
     protected function hasPostParameter($name)
     {
-        return in_array($name, array_keys((array) $this->getPostParameters()));
+        return in_array($name, array_keys($this->getPostParameters()));
     }
 
+    /**
+     * Get the POST parameter $name
+     *
+     * @param $name
+     * @return bool|mixed Return the POST parameter or false if any
+     */
     protected function getPostParameter($name)
     {
         if ($this->hasPostParameter($name)) {
-            return ((array) $this->getPostParameters())[$name];
+            return $this->getPostParameters()[$name];
         }
         return false;
     }
 
-    /***/
-
+    /**
+     * Retrieve query string arguments.
+     *
+     * Retrieves the deserialized query string arguments, if any.
+     *
+     * Note: the query params might not be in sync with the URI or server
+     * params. If you need to ensure you are only getting the original
+     * values, you may need to parse the query string from `getUri()->getQuery()`
+     * or from the `QUERY_STRING` server param.
+     *
+     * @return array
+     */
     protected function getGetParameters()
     {
         return (array) $this->getPsrRequest()->getQueryParams();
     }
 
+    /**
+     * Check if the HTTP request contains GET parameter $name
+     *
+     * @param $name
+     * @return bool
+     */
     protected function hasGetParameter($name)
     {
-        return in_array($name, array_keys((array) $this->getGetParameters()));
+        return in_array($name, array_keys($this->getGetParameters()));
     }
 
+    /**
+     * Get the GET parameter $name
+     *
+     * @param $name
+     * @return bool|mixed Return the GET parameter or false if any
+     */
     protected function getGetParameter($name)
     {
         if ($this->hasGetParameter($name)) {
-            return ((array) $this->getGetParameters())[$name];
+            return $this->getGetParameters()[$name];
         }
         return false;
     }
 
-    /***/
-
+    /**
+     * Retrieve attributes derived from the request.
+     *
+     * The request "attributes" may be used to allow injection of any
+     * parameters derived from the request: e.g., the results of path
+     * match operations; the results of decrypting cookies; the results of
+     * deserializing non-form-encoded message bodies; etc. Attributes
+     * will be application and request specific, and CAN be mutable.
+     *
+     * @return array Attributes derived from the request.
+     */
     protected function getAttributesParameters()
     {
         return (array) $this->getPsrRequest()->getAttributes();
     }
 
+    /**
+     * Check if the HTTP request contains attribute $name
+     *
+     * @param $name
+     * @return bool
+     */
     protected function hasAttributeParameter($name)
     {
-        return in_array($name, array_keys((array) $this->getAttributesParameters()));
+        return in_array($name, array_keys($this->getAttributesParameters()));
     }
 
-    protected function getAttributeParameter($name)
+    /**
+     * Retrieve a single derived request attribute.
+     *
+     * Retrieves a single derived request attribute as described in
+     * getAttributes(). If the attribute has not been previously set, returns
+     * the default value as provided.
+     *
+     * This method obviates the need for a hasAttribute() method, as it allows
+     * specifying a default value to return if the attribute is not found.
+     *
+     * @see getAttributes()
+     * @param string $name The attribute name.
+     * @param mixed $default Default value to return if the attribute does not exist.
+     * @return mixed
+     */
+    protected function getAttributeParameter($name, $default = null)
     {
-        if ($this->hasAttributeParameter($name)) {
-            return ((array) $this->getAttributesParameters())[$name];
+        if (!$this->hasAttributeParameter($name) && $default === null) {
+            return false;
         }
-        return false;
+        return $this->getPsrRequest()->getAttribute($name, $default);
+
     }
 
-    /***/
-
+    /**
+     * Retrieve cookies.
+     *
+     * Retrieves cookies sent by the client to the server.
+     *
+     * The data MUST be compatible with the structure of the $_COOKIE superglobal.
+     *
+     * @return array
+     */
     protected function getCookieParams()
     {
         return (array) $this->getPsrRequest()->getCookieParams();
     }
 
+    /**
+     * Check if the given $name exists as a cookie
+     *
+     * @param $name
+     * @return bool
+     */
     protected function hasCookie($name)
     {
         return isset($this->getCookieParams()[$name]);
     }
 
+    /**
+     * Get the cookie associated to $name
+     *
+     * @param $name
+     * @return bool|string return cookie or false it does not exist
+     */
     protected function getCookie($name)
     {
         if ($this->hasCookie($name)) {
@@ -118,8 +256,6 @@ trait HttpRequestHelperTrait
             return false;
         }
     }
-
-    /***/
 
     /**
      * Get the HTTP request method
@@ -130,4 +266,111 @@ trait HttpRequestHelperTrait
     {
         return $this->getPsrRequest()->getMethod();
     }
+
+    /**
+     * Check if the HTTP request method is GET
+     *
+     * @return bool
+     */
+    protected function isRequestGet()
+    {
+        return $this->getRequestMethod() == 'GET';
+    }
+
+    /**
+     * Check if the HTTP request method is POST
+     *
+     * @return bool
+     */
+    protected function isRequestPost()
+    {
+        return $this->getRequestMethod() == 'POST';
+    }
+
+    /**
+     * Check if the HTTP request method is PUT
+     *
+     * @return bool
+     */
+    protected function isRequestPut()
+    {
+        return $this->getRequestMethod() == 'PUT';
+    }
+
+    /**
+     * Check if the HTTP request method is DELETE
+     *
+     * @return bool
+     */
+    protected function isRequestDelete()
+    {
+        return $this->getRequestMethod() == 'DELETE';
+    }
+
+    /**
+     * Check if the HTTP request method is HEAD
+     *
+     * @return bool
+     */
+    protected function isRequestHead()
+    {
+        return $this->getRequestMethod() == 'HEAD';
+    }
+
+    /**
+     * Check if the current request is using AJAX
+     *
+     * @return bool
+     */
+    protected function isXmlHttpRequest()
+    {
+        $serverParams = $this->getPsrRequest()->getServerParams();
+        if(isset($serverParams['HTTP_X_REQUESTED_WITH'])){
+            if(strtolower($serverParams['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest'){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Get the user agent from HTTP request header "user-agent"
+     *
+     * @return string[]
+     */
+    protected function getUserAgent()
+    {
+        return $this->getPsrRequest()->getHeader('user-agent');
+    }
+
+    /**
+     * Get the query string of HTTP request Uri
+     *
+     * @return string
+     */
+    protected function getQueryString()
+    {
+        return $this->getPsrRequest()->getUri()->getQuery();
+    }
+
+    /**
+     * Get the request uri e.q. the HTTP request path
+     *
+     * @return string
+     */
+    protected function getRequestURI()
+    {
+        return $this->getPsrRequest()->getUri()->getPath();
+    }
+
+    /**
+     * Get the content type from HTTP request header "content-type"
+     *
+     * @return string[]
+     */
+    protected function getContentType()
+    {
+        return $this->getPsrRequest()->getHeader('content-type');
+    }
+
 }

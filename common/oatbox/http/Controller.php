@@ -20,7 +20,6 @@
 
 namespace oat\oatbox\http;
 
-use oat\oatbox\session\LegacySessionUtils;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -28,7 +27,6 @@ abstract class Controller
 {
     use HttpRequestHelperTrait;
     use HttpFlowTrait;
-    use LegacySessionUtils;
 
     protected $request;
     protected $response;
@@ -59,113 +57,6 @@ abstract class Controller
     public function getPsrResponse()
     {
         return $this->response;
-    }
-
-    /**
-     * Check if the HTTP request method is GET
-     *
-     * @return bool
-     */
-    protected function isRequestGet()
-    {
-        return $this->getRequestMethod() == 'GET';
-    }
-
-    /**
-     * Check if the HTTP request method is POST
-     *
-     * @return bool
-     */
-    protected function isRequestPost()
-    {
-        return $this->getRequestMethod() == 'POST';
-    }
-
-    /**
-     * Check if the HTTP request method is PUT
-     *
-     * @return bool
-     */
-    protected function isRequestPut()
-    {
-        return $this->getRequestMethod() == 'PUT';
-    }
-
-    /**
-     * Check if the HTTP request method is DELETE
-     *
-     * @return bool
-     */
-    protected function isRequestDelete()
-    {
-        return $this->getRequestMethod() == 'DELETE';
-    }
-
-    /**
-     * Check if the HTTP request method is HEAD
-     *
-     * @return bool
-     */
-    protected function isRequestHead()
-    {
-        return $this->getRequestMethod() == 'HEAD';
-    }
-
-    /**
-     * Check if the current request is using AJAX
-     *
-     * @return bool
-     */
-    protected function isXmlHttpRequest()
-    {
-        $serverParams = $this->getPsrRequest()->getServerParams();
-        if(isset($serverParams['HTTP_X_REQUESTED_WITH'])){
-            if(strtolower($serverParams['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest'){
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Get the user agent from HTTP request header "user-agent"
-     *
-     * @return string[]
-     */
-    protected function getUserAgent()
-    {
-        return $this->getPsrRequest()->getHeader('user-agent');
-    }
-
-    /**
-     * Get the query string of HTTP request Uri
-     *
-     * @return string
-     */
-    protected function getQueryString()
-    {
-        return $this->getPsrRequest()->getUri()->getQuery();
-    }
-
-    /**
-     * Get the request uri e.q. the HTTP request path
-     *
-     * @return string
-     */
-    protected function getRequestURI()
-    {
-        return $this->getPsrRequest()->getUri()->getPath();
-    }
-
-    /**
-     * Get the content type from HTTP request header "content-type"
-     *
-     * @return string[]
-     */
-    protected function getContentType()
-    {
-        return $this->getPsrRequest()->getHeader('content-type');
     }
 
     /**

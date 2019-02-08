@@ -1,4 +1,22 @@
 <?php
+/**
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; under version 2
+ * of the License (non-upgradable).
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ *
+ * Copyright (c) 2019 (original work) Open Assessment Technologies SA;
+ *
+ */
 
 namespace oat\oatbox\http;
 
@@ -25,6 +43,7 @@ trait HttpFlowTrait
 
     /**
      * Redirect using the TAO FlowController implementation
+     *
      * @see {@link oat\model\routing\FlowController}
      * @param string $url
      * @param int $statusCode
@@ -47,6 +66,7 @@ trait HttpFlowTrait
     /**
      * Forward the action to execute regarding a URL
      * The forward runs into tha same HTTP request unlike redirect.
+     *
      * @param string $url the url to forward to
      * @throws InterruptedActionException
      * @throws \ActionEnforcingException
@@ -87,8 +107,18 @@ trait HttpFlowTrait
         //add a custom header so the client knows where the route ends
         header('X-Tao-Forward: ' . $resolver->getExtensionId() . '/' .  $resolver->getControllerShortName() . '/' . $resolver->getMethodName());
 
-        //execite the new action
-        $enforcer = new ActionEnforcer($resolver->getExtensionId(), $resolver->getControllerClass(), $resolver->getMethodName(), $params);
+//        $request = $request
+//            ->withAttribute('extension', $resolver->getExtensionId())
+//            ->withAttribute('controller', $resolver->getControllerShortName())
+//            ->withAttribute('method', $resolver->getMethodName());
+
+        //execute the new action
+        $enforcer = new ActionEnforcer(
+            $resolver->getExtensionId(),
+            $resolver->getControllerClass(),
+            $resolver->getMethodName(),
+            $params
+        );
         $enforcer->setServiceLocator($this->getServiceLocator());
         $enforcer->execute();
 
@@ -100,11 +130,14 @@ trait HttpFlowTrait
 
     /**
      * Forward routing.
+     *
      * @param string $action the name of the new action
      * @param string $controller the name of the new controller/module
      * @param string $extension the name of the new extension
      * @param array $params additional parameters
      * @throws InterruptedActionException
+     * @throws \ActionEnforcingException
+     * @throws \common_exception_Error
      */
     public function forward($action, $controller = null, $extension = null, $params = array())
     {
