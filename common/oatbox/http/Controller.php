@@ -23,6 +23,14 @@ namespace oat\oatbox\http;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
+/**
+ * Class Controller
+ *
+ * A controller to handle http request & response following Psr7 standard
+ *
+ * @package oat\oatbox\http
+ * @author Moyon Camille
+ */
 abstract class Controller
 {
     use HttpRequestHelperTrait;
@@ -31,12 +39,24 @@ abstract class Controller
     protected $request;
     protected $response;
 
+    /**
+     * Set Psr7 http request
+     *
+     * @param ServerRequestInterface $request
+     * @return $this
+     */
     public function setRequest(ServerRequestInterface $request)
     {
         $this->request = $request;
         return $this;
     }
 
+    /**
+     * Set Psr7 http response
+     *
+     * @param ResponseInterface $response
+     * @return $this
+     */
     public function setResponse(ResponseInterface $response)
     {
         $this->response = $response;
@@ -44,6 +64,8 @@ abstract class Controller
     }
 
     /**
+     * Get the Psr7 request
+     *
      * @return ServerRequestInterface
      */
     protected function getPsrRequest()
@@ -52,6 +74,8 @@ abstract class Controller
     }
 
     /**
+     * Get the Psr7 response
+     *
      * @return ResponseInterface
      */
     public function getPsrResponse()

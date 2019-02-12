@@ -30,6 +30,8 @@ use Context;
  */
 abstract class LegacyController extends Controller
 {
+    protected $response, $request;
+
     /**
      * @deprecated Use getPsrResponse() instead
      *
@@ -308,7 +310,7 @@ abstract class LegacyController extends Controller
      */
     public function setContentHeader($contentType, $charset = 'UTF-8')
     {
-        if (!$this->request) {
+        if (!$this->response) {
            return $this->getResponse()->setContentHeader($contentType, $charset);
         }
         return parent::setContentHeader($contentType, $charset);
@@ -321,7 +323,7 @@ abstract class LegacyController extends Controller
      */
     public function getContentType()
     {
-        if (!$this->request) {
+        if (!$this->response) {
             return $this->getResponse()->getContentType();
         }
         return parent::getContentType();
