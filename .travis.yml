@@ -14,6 +14,7 @@ addons:
     token:
       secure: "aP7gBswYJhtoBEehnL/xFoUoxrM5EbKKpvou/U45Hk1+amW9+tmnkd85CpBfXRfy4KuALxHPwZmm1GuKTAVq+ZHFpHAQsCYsBLWWHta2BCPIsuILrK2CLyXCX/WCCH+3gtVhejAHBv06dF0aLh4kwDMQi7XSHc56QlPq9Voi96U="
 
+
 before_script:
   - composer install
 
