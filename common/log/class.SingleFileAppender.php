@@ -136,11 +136,17 @@ class common_log_SingleFileAppender extends common_log_BaseAppender
     {
         if ($this->maxFileSize > 0 && file_exists($this->filename) && filesize($this->filename) >= $this->maxFileSize) {
             // need to reduce the file size
-            $file = file($this->filename);
-            $file = array_splice($file, ceil(count($file) * $this->reduceRatio));
+            $reduceLen= ($this->maxFileSize< (int)ini_get('memory_limit')*1024?$this->maxFileSize:(int)ini_get('memory_limit')*1024)*$this->reduceRatio;
+            $size = filesize($this->filename)-$reduceLen;
+            $log =file_get_contents($this->filename, false, null,  $size, $reduceLen );
+
+            $log= explode(PHP_EOL, $log);
+            //delete first element (can be broken)
+            array_shift($log);
+
             $this->filehandle = @fopen($this->filename, 'w');
-            foreach ($file as $line) {
-                @fwrite($this->filehandle, $line);
+            foreach ($log as $line) {
+                @fwrite($this->filehandle, $line.PHP_EOL);
             }
         } else {
             $this->filehandle = @fopen($this->filename, 'a');
