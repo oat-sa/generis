@@ -28,7 +28,14 @@ use oat\generis\test\TestCase;
  */
 class DriverTest extends TestCase
 {
-
+    protected function setUp()
+    {
+        if (!extension_loaded('pdo_sqlite')) {
+            $this->markTestSkipped(
+                'The PDO SQLITE extension is not available.'
+            );
+        }
+    }
     public function testGetPlatForm()
     {
         $driver = new \common_persistence_sql_dbal_Driver();
