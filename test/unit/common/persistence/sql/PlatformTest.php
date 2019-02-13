@@ -23,7 +23,14 @@ use oat\generis\test\TestCase;
 
 class PlatformTest extends TestCase
 {
-
+    protected function setUp()
+    {
+        if (!extension_loaded('pdo_sqlite')) {
+            $this->markTestSkipped(
+                'The PDO SQLITE extension is not available.'
+            );
+        }
+    }
     public function testGetQueryBuilder()
     {
         $platform = $this->createInstance();
