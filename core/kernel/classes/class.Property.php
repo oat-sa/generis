@@ -55,7 +55,7 @@ class core_kernel_classes_Property
      * or a literal value if the range is the Literal class
      *
      * @access public
-     * @var Class
+     * @var core_kernel_classes_Class
      */
     public $range = null;
 
@@ -67,7 +67,7 @@ class core_kernel_classes_Property
      * to be retrieved even if in cache, when no widget is set for the property.
      *
      * @access public
-     * @var Property
+     * @var core_kernel_classes_Property
      */
     public $widget = false;
 
@@ -250,7 +250,7 @@ class core_kernel_classes_Property
     public function isLgDependent()
     {
         if (is_null($this->lgDependent)) {
-            $this->lgDependent  = helpers_PropertyLgCacheHelper::getLgDependencyCache($this->getUri());
+            $this->lgDependent  = $this->getImplementation()->isLgDependent($this);
         }
         return (bool) $this->lgDependent;
     }
@@ -266,9 +266,7 @@ class core_kernel_classes_Property
     public function setLgDependent($isLgDependent)
     {
         $this->getImplementation()->setLgDependent($this, $isLgDependent);
-        helpers_PropertyLgCacheHelper::setLgDependencyCache($this->getUri(), $isLgDependent);
     	$this->lgDependent = $isLgDependent;
-        
     }
 
     /**

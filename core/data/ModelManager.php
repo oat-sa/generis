@@ -21,7 +21,6 @@
 namespace oat\generis\model\data;
 
 use oat\oatbox\service\ServiceManager;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
 /**
  * transitory class to manage the ontology driver
  * instead of managing full models, it only handles the rdfs interfaces
@@ -32,32 +31,18 @@ class ModelManager
 {
     const CONFIG_KEY = 'ontology';
     
-    private static $model = null;
-    
     /**
      * @return Model
      */
     public static function getModel() {
-        if (is_null(self::$model)) {
-            $array = \common_ext_ExtensionsManager::singleton()->getExtensionById('generis')->getConfig(self::CONFIG_KEY);
-            if (is_array($array)) {
-                self::$model = self::array2model($array);
-                if (self::$model instanceof ServiceLocatorAwareInterface) {
-                    self::$model->setServiceLocator(ServiceManager::getServiceManager());
-                }
-            } else {
-                throw new \common_exception_InconsistentData('No data model found');
-            }
-        }
-        return self::$model;
+        return ServiceManager::getServiceManager()->get(Ontology::SERVICE_ID);
     }
     
     /**
-     * @param core_kernel_persistence_RdfsDriver $model
+     * @param Ontology $model
      */
     public static function setModel(Model $model) {
-        self::$model = $model;
-        \common_ext_ExtensionsManager::singleton()->getExtensionById('generis')->setConfig(self::CONFIG_KEY, self::model2array($model));
+        return ServiceManager::getServiceManager()->register(Ontology::SERVICE_ID, $model);
     }
     
     protected static function model2array(Model $model) {

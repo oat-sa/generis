@@ -21,6 +21,6 @@
  * @package generis
  *
  */
-use oat\generis\model\fileReference\ResourceFileSerializer;
+use oat\generis\model\fileReference\UrlFileSerializer;
 
-return new ResourceFileSerializer();
+return new UrlFileSerializer();

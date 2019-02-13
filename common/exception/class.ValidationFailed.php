@@ -38,8 +38,16 @@ class common_exception_ValidationFailed extends common_exception_BadRequest
         $this->field = $field;
     }
 
+    /**
+     * @return string
+     */
+    public function getField()
+    {
+        return $this->field;
+    }
+
     public function getUserMessage()
     {
-        return __("Validation for field %s has failed.", $this->field);
+        return __("Validation for field '%s' has failed.", $this->field);
     }
 }

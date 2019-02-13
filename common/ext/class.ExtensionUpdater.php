@@ -82,7 +82,6 @@ abstract class common_ext_ExtensionUpdater
      * @param string $minVersion
      * @param string $maxVersion
      * @return boolean
-     * @deprecated
      */
     public function isBetween($minVersion, $maxVersion)
     {

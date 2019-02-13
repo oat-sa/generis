@@ -27,6 +27,8 @@ namespace oat\oatbox\task;
  *
  * @package oat\oatbox\task\implementation
  * @author Aleh Hutnikau, <huntikau@1pt.com>
+ *
+ * @deprecated since version 7.10.0, to be removed in 8.0. Use \oat\tao\model\taskQueue\Task\AbstractTask instead.
  */
 abstract class AbstractTask implements Task , \JsonSerializable
 {
