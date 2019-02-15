@@ -17,11 +17,9 @@
  * Copyright (c) 2018 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
 
-namespace oat\generis\test\unit\helpers;
+namespace oat\generis\test\integration\helpers;
 
 use common_Config;
-use common_session_SessionManager;
-use common_test_TestUserSession;
 use core_kernel_persistence_smoothsql_SmoothModel;
 use oat\generis\scripts\tools\FileSerializerMigration\MigrationHelper;
 use oat\generis\model\fileReference\ResourceFileSerializer;
