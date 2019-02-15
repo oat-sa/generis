@@ -280,4 +280,18 @@ class common_persistence_sql_Platform {
     {
         return $this->dbalPlatform->getTruncateTableSql($tableName);
     }
+
+    public function switchToMaster()
+    {
+        if ($this->dbalConnection instanceof \Doctrine\DBAL\Connections\MasterSlaveConnection) {
+            $this->dbalConnection->connect('master');
+        }
+    }
+
+    public function switchToSlave()
+    {
+        if ($this->dbalConnection instanceof \Doctrine\DBAL\Connections\MasterSlaveConnection) {
+            $this->dbalConnection->connect('slave');
+        }
+    }
 }
