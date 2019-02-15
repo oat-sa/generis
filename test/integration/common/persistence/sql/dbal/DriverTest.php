@@ -71,6 +71,13 @@ class TestDbalDriverManager
  */
 class DriverTest extends TestCase
 {
+    public function testGetPlatForm()
+    {
+        $driver = new \common_persistence_sql_dbal_Driver();
+        $driver->connect('test_connection', ['connection' => ['url' => 'sqlite:///:memory:']]);
+        $this->assertTrue($driver->getPlatForm() instanceof \common_persistence_sql_Platform);
+    }
+
     public function testReconnectionOnException()
     {
         $driver = new TestDbalDriver();
