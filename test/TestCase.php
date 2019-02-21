@@ -107,4 +107,24 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
             ->setMethods($methods)
             ->getMock();
     }
+
+    /**
+     * Forward compatibility function for PHPUnit 5.4+
+     *
+     * Creates a test double for the given class with configured return values.
+     *
+     * @param $originalClassName
+     * @param array $returnValues array of values to return: method name => return value
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function createConfiguredMock($originalClassName, array $returnValues)
+    {
+        $mock = $this->createPartialMock($originalClassName, array_keys($returnValues));
+
+        foreach($returnValues as $method => $returnValue) {
+            $mock->method($method)->willReturn($returnValue);
+        }
+
+        return $mock;
+    }
 }
