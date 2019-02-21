@@ -29,6 +29,11 @@ use oat\tao\model\routing\Resolver;
 use Psr\Http\Message\ServerRequestInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
+/**
+ * Trait HttpFlowTrait
+ * @package oat\oatbox\http
+ * @author Moyon Camille
+ */
 trait HttpFlowTrait
 {
     /**
@@ -141,6 +146,8 @@ trait HttpFlowTrait
      */
     public function forward($action, $controller = null, $extension = null, $params = array())
     {
+        \common_Logger::e(__METHOD__);
+
         //as we use a route resolver, it's easier to rebuild the URL to resolve it
         $this->forwardUrl(\tao_helpers_Uri::url($action, $controller, $extension, $params));
     }
