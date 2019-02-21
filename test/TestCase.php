@@ -4,18 +4,18 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
  * of the License (non-upgradable).
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- * 
+ *
  * Copyright (c) 2018 (original work) Open Assessment Technologies SA;
- * 
+ *
  */
 namespace oat\generis\test;
 
@@ -86,5 +86,45 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
             ->disableOriginalClone()
             ->disableArgumentCloning()
             ->getMock();
+    }
+
+    /**
+     * Forward compatibility function for PHPUnit 5.4+
+     *
+     * Returns a partial test double for the specified class.
+     *
+     * @param string $originalClassName
+     * @param array $methods
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @since Method available since Release 5.4.0
+     */
+    protected function createPartialMock($originalClassName, array $methods = [])
+    {
+        return $this->getMockBuilder($originalClassName)
+            ->disableOriginalConstructor()
+            ->disableOriginalClone()
+            ->disableArgumentCloning()
+            ->setMethods($methods)
+            ->getMock();
+    }
+
+    /**
+     * Forward compatibility function for PHPUnit 5.4+
+     *
+     * Creates a test double for the given class with configured return values.
+     *
+     * @param $originalClassName
+     * @param array $returnValues array of values to return: method name => return value
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function createConfiguredMock($originalClassName, array $returnValues)
+    {
+        $mock = $this->createPartialMock($originalClassName, array_keys($returnValues));
+
+        foreach($returnValues as $method => $returnValue) {
+            $mock->method($method)->willReturn($returnValue);
+        }
+
+        return $mock;
     }
 }
