@@ -3,3 +3,4 @@
 /.buildpath
 /data/*
 composer.lock
+/.idea/
