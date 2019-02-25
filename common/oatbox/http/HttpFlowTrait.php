@@ -146,8 +146,6 @@ trait HttpFlowTrait
      */
     public function forward($action, $controller = null, $extension = null, $params = array())
     {
-        \common_Logger::e(__METHOD__);
-
         //as we use a route resolver, it's easier to rebuild the URL to resolve it
         $this->forwardUrl(\tao_helpers_Uri::url($action, $controller, $extension, $params));
     }

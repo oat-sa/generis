@@ -200,7 +200,7 @@ trait HttpRequestHelperTrait
      *
      * @return array Attributes derived from the request.
      */
-    protected function getAttributesParameters()
+    protected function getAttributeParameters()
     {
         return (array) $this->getPsrRequest()->getAttributes();
     }
@@ -213,7 +213,7 @@ trait HttpRequestHelperTrait
      */
     protected function hasAttributeParameter($name)
     {
-        return in_array($name, array_keys($this->getAttributesParameters()));
+        return in_array($name, array_keys($this->getAttributeParameters()));
     }
 
     /**
