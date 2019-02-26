@@ -22,6 +22,7 @@
 
 use oat\generis\model\data\event\ResourceCreated;
 use oat\generis\model\OntologyRdf;
+use oat\generis\model\resource\ResourceCollection;
 use oat\oatbox\event\EventManager;
 
 /**
@@ -46,8 +47,8 @@ class core_kernel_classes_Class extends core_kernel_classes_Resource
     {
         return $this->getModel()->getRdfsInterface()->getClassImplementation();
     }
-    
-    
+
+
     /**
      * returns the collection of direct subClasses (see getIndirectSubClassesOf
      * a complete list of subclasses)
@@ -116,6 +117,18 @@ class core_kernel_classes_Class extends core_kernel_classes_Resource
     public function getInstances($recursive = false, $params = array())
     {
         return (array) $this->getImplementation()->getInstances($this, $recursive, $params);
+    }
+
+    /**
+     * return direct instances of this class as a collection
+     *
+     * @param  boolean recursive
+     * @param  array params
+     * @return ResourceCollection
+     */
+    public function getInstanceCollection()
+    {
+        return new ResourceCollection($this);
     }
 
     /**
@@ -341,7 +354,7 @@ class core_kernel_classes_Class extends core_kernel_classes_Resource
         }
         // create the instance
         $returnValue = $this->getImplementation()->createInstanceWithProperties($this, $properties);
-        
+
         foreach ($additionalTypes as $type) {
             $returnValue->setType($type);
         }
