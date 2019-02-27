@@ -1,0 +1,20 @@
+#!/usr/bin/env php
+
+<?php
+
+require_once __DIR__ . '/../vendor/autoload.php';
+
+use oat\generis\component\Config\Reader;
+use Symfony\Component\Console\Application;
+use oat\generis\component\DependencyInjection\ObjectFactory;
+
+$app = new Application();
+$configReader = new Reader();
+$objectFactory = new ObjectFactory();
+
+$commands = (array) $configReader->get('commands');
+foreach ($commands as $command) {
+    $app->add($objectFactory->create($command));
+}
+
+$app->run();
