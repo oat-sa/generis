@@ -1,2 +1,2 @@
 commands:
-  - '\oat\generis\Model\Command\ConfigUpdate'
+  - 'oat\generis\component\Command\ConfigUpdate'
