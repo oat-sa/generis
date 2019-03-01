@@ -71,6 +71,9 @@ class FileSystemComponentTest extends TestCase
         $this->assertTrue($this->subject->getMustCheckIfEmpty());
     }
 
+    /**
+     * @depends skipIfVfsStreamNotAvailable()
+     */
     public function testIsReadable()
     {
         vfsStream::setup('testDir1', 0777);
@@ -80,6 +83,9 @@ class FileSystemComponentTest extends TestCase
         $this->assertFalse($this->subject->isWritable(vfsStream::url('testDir2')));
     }
 
+    /**
+     * @depends skipIfVfsStreamNotAvailable()
+     */
     public function testIsWritable()
     {
         vfsStream::setup('testDir3', 0777);
@@ -89,6 +95,9 @@ class FileSystemComponentTest extends TestCase
         $this->assertFalse($this->subject->isWritable(vfsStream::url('testDir4')));
     }
 
+    /**
+     * @depends skipIfVfsStreamNotAvailable()
+     */
     public function testIsExecutable()
     {
         vfsStream::setup('testDir5', 0777);
@@ -102,6 +111,9 @@ class FileSystemComponentTest extends TestCase
         $this->assertFalse($this->subject->isExecutable(vfsStream::url('testDir6/test.txt')));
     }
 
+    /**
+     * @depends skipIfVfsStreamNotAvailable()
+     */
     public function testCheckDirectoryPermissionsSuccess()
     {
         vfsStream::setup('testDir7', 0777);
@@ -117,6 +129,9 @@ class FileSystemComponentTest extends TestCase
         );
     }
 
+    /**
+     * @depends skipIfVfsStreamNotAvailable()
+     */
     public function testCheckFilePermissionsSuccess()
     {
         vfsStream::setup('testDir8', 0777);
@@ -134,6 +149,9 @@ class FileSystemComponentTest extends TestCase
         );
     }
 
+    /**
+     * @depends skipIfVfsStreamNotAvailable()
+     */
     public function testCheckDirectoryContentFailure()
     {
         vfsStream::setup('testDir9', 0777);
@@ -152,6 +170,9 @@ class FileSystemComponentTest extends TestCase
         );
     }
 
+    /**
+     * @depends skipIfVfsStreamNotAvailable()
+     */
     public function testCheckDirectoryContentSuccess()
     {
         vfsStream::setup('testDir10', 0777);
@@ -166,5 +187,12 @@ class FileSystemComponentTest extends TestCase
             "File system component 'tao.configuration.filesystem' in 'vfs://testDir10 is compliant with expected rights (rw).'",
             $output->getMessage()
         );
+    }
+
+    public function skipIfVfsStreamNotAvailable()
+    {
+        if (!class_exists('org\bovigo\vfs\vfsStream')) {
+            $this->markTestSkipped('VfsStream is not available.');
+        }
     }
 }
