@@ -145,14 +145,29 @@ class common_configuration_ComponentFactory
      * @param  string location
      * @param  string expectedRights
      * @param  boolean optional
+     * @param  boolean recursive
+     * @param  boolean mustCheckIfEmpty
+     * @throws common_configuration_MalformedRightsException
      * @return common_configuration_FileSystemComponent
      */
-    public static function buildFileSystemComponent($location, $expectedRights, $optional = false, $recursive = false)
-    {
-        $returnValue = new common_configuration_FileSystemComponent($location, $expectedRights, $optional = false, $recursive);
+    public static function buildFileSystemComponent(
+        $location,
+        $expectedRights,
+        $optional = false,
+        $recursive = false,
+        $mustCheckIfEmpty = false
+    ) {
+        $returnValue = new common_configuration_FileSystemComponent(
+            $location,
+            $expectedRights,
+            $optional,
+            $recursive,
+            $mustCheckIfEmpty
+        );
+
         self::incrementFileSystemCount();
+
         $returnValue->setName('FileSystemComponentCheck_' . self::getFileSystemCount());
-        
 
         return $returnValue;
     }
@@ -378,11 +393,7 @@ class common_configuration_ComponentFactory
      */
     private static function getFileSystemCount()
     {
-        $returnValue = (int) 0;
-
-        
         $returnValue = self::$fileSystemCount;
-        
 
         return (int) $returnValue;
     }
@@ -427,11 +438,7 @@ class common_configuration_ComponentFactory
      */
     private static function getMockCount()
     {
-        $returnValue = (int) 0;
-
-        
         $returnValue = self::$mockCount;
-        
 
         return (int) $returnValue;
     }
