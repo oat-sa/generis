@@ -183,8 +183,6 @@ class common_Logger
      * @param  int $level
      * @param  string $message
      * @param  array $tags
-     * @param  string $errorFile
-     * @param  int $errorLine
      * @return mixed
      */
     public function log($level, $message, $tags = [])
@@ -345,6 +343,7 @@ class common_Logger
                 ? debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS)
                 : debug_backtrace(false);
 
+            // remove 2 last traces which are error handler itself. to make logs more readable and reduce size of a log
             $tags[self::CONTEXT_TRACE] = array_slice($trace, 2);
         }
 
@@ -372,7 +371,7 @@ class common_Logger
      * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Exception $exception
      */
-    public function handleException( Exception $exception)
+    public function handleException(Exception $exception)
     {
         $severity = method_exists($exception, 'getSeverity') ? $exception->getSeverity() : self::ERROR_LEVEL;
         self::singleton()
@@ -389,64 +388,71 @@ class common_Logger
     }
 
     /**
-     * a handler for php errors, should never be called manually
+     * A handler for php errors, should never be called manually
      *
      * @access public
      * @author Joel Bout, <joel.bout@tudor.lu>
+     *
      * @param  int $errorNumber
      * @param  string $errorString
      * @param  string $errorFile
-     * @param  mixed  $errorLine
+     * @param  mixed $errorLine
      * @param  array $errorContext
+     *
      * @return boolean
      */
-    public function handlePHPErrors($errorNumber, $errorString, $errorFile = null, $errorLine = null, $errorContext = array())
-    {
-        if (error_reporting() !== 0){
-        	if ($errorNumber === E_STRICT) {
-        		foreach ($this->ACCEPTABLE_WARNINGS as $pattern) {
-        			if (preg_match($pattern, $errorString) > 0){
-        				return false;
-        			}
-        		}
-        	}
-        		
-        	switch ($errorNumber) {
-        		case E_USER_ERROR :
-        		case E_RECOVERABLE_ERROR :
-        			$severity = self::FATAL_LEVEL;
-        			break;
-        		case E_WARNING :
-        		case E_USER_WARNING :
-        			$severity = self::ERROR_LEVEL;
-        			break;
-        		case E_NOTICE :
-        		case E_USER_NOTICE:
-        			$severity = self::WARNING_LEVEL;
-        			break;
-        		case E_DEPRECATED :
-        		case E_USER_DEPRECATED :
-        		case E_STRICT:
-        			$severity = self::DEBUG_LEVEL;
-        			break;
-        		default :
-        			self::d('Unsupported PHP error type: '.$errorNumber, 'common_Logger');
-        			$severity = self::ERROR_LEVEL;
-        			break;
-        	}
+    public function handlePHPErrors(
+        $errorNumber,
+        $errorString,
+        $errorFile = null,
+        $errorLine = null,
+        $errorContext = array()
+    ) {
+        if (error_reporting() !== 0) {
+            if ($errorNumber === E_STRICT) {
+                foreach ($this->ACCEPTABLE_WARNINGS as $pattern) {
+                    if (preg_match($pattern, $errorString) > 0) {
+                        return false;
+                    }
+                }
+            }
 
-            self::singleton()
-                ->log($severity,
-                    'php error(' . $errorNumber . '): ' . $errorString,
-                    [
-                        'PHPERROR',
-                        self::CONTEXT_ERROR_FILE => $errorFile,
-                        self::CONTEXT_ERROR_LINE => $errorLine,
-                        self::CONTEXT_TRACE => self::addTrace()
-                    ]
-                );
+            switch ($errorNumber) {
+                case E_USER_ERROR:
+                case E_RECOVERABLE_ERROR:
+                    $severity = self::FATAL_LEVEL;
+                    break;
+                case E_WARNING:
+                case E_USER_WARNING:
+                    $severity = self::ERROR_LEVEL;
+                    break;
+                case E_NOTICE:
+                case E_USER_NOTICE:
+                    $severity = self::WARNING_LEVEL;
+                    break;
+                case E_DEPRECATED:
+                case E_USER_DEPRECATED:
+                case E_STRICT:
+                    $severity = self::DEBUG_LEVEL;
+                    break;
+                default:
+                    self::d('Unsupported PHP error type: ' . $errorNumber, 'common_Logger');
+                    $severity = self::ERROR_LEVEL;
+                    break;
+            }
+
+            self::singleton()->log(
+                $severity,
+                sprintf('php error(%s): %s', $errorNumber, $errorString),
+                [
+                    'PHPERROR',
+                    self::CONTEXT_ERROR_FILE => $errorFile,
+                    self::CONTEXT_ERROR_LINE => $errorLine,
+                    self::CONTEXT_TRACE      => self::addTrace()
+                ]
+            );
         }
-        
+
         return false;
     }
 
