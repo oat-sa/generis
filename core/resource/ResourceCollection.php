@@ -187,7 +187,7 @@ class ResourceCollection implements Iterator, Countable
      */
     public function count()
     {
-        if (!is_array($this->resources) && !$this->resources instanceof Countable) {
+        if (!is_array($this->resources) || !$this->resources instanceof Countable) {
             return 0;
         }
 
