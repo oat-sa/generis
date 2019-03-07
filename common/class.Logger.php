@@ -21,9 +21,6 @@
  * 
  */
 
-use oat\oatbox\service\ServiceManager;
-use oat\oatbox\log\LoggerService;
-
 /**
  * Abstraction for the System Logger
  *
@@ -115,6 +112,14 @@ class common_Logger
      */
     const FATAL_LEVEL = 5;
 
+    const CONTEXT_ERROR_FILE = 'file';
+
+    const CONTEXT_ERROR_LINE = 'line';
+
+    const CONTEXT_TRACE = 'trace';
+
+    const CONTEXT_EXCEPTION = 'exception';
+
     /**
      * Warnings that are acceptable in our projects
      * invoked by the way generis/tao use abstract functions
@@ -178,23 +183,14 @@ class common_Logger
      * @param  int $level
      * @param  string $message
      * @param  array $tags
-     * @param  string $errorFile
-     * @param  int $errorLine
      * @return mixed
      */
-    public function log($level, $message, $tags, $errorFile = '', $errorLine = 0)
+    public function log($level, $message, $tags = [])
     {
         if ($this->enabled) {
             $this->disable();
             try {
                 if (defined('CONFIG_PATH')) {
-                    $tags = is_array($tags) ? $tags : [$tags];
-                    if (!empty($errorFile)) {
-                        $tags['file'] = $errorFile;
-                    }
-                    if (!empty($errorLine)) {
-                        $tags['line'] = $errorLine;
-                    }
                     // Gets the log context.
                     $context = $this->getContext();
                     $context = array_merge($context, $tags);
@@ -337,9 +333,21 @@ class common_Logger
      */
     public static function e($message, $tags = array())
     {
+        self::singleton()->log(self::ERROR_LEVEL, $message, self::addTrace($tags));
+    }
 
-		self::singleton()->log(self::ERROR_LEVEL, $message, $tags);
-        
+    private static function addTrace(array $tags = [])
+    {
+        if (!isset($tags[self::CONTEXT_TRACE])) {
+            $trace = defined('DEBUG_BACKTRACE_IGNORE_ARGS')
+                ? debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS)
+                : debug_backtrace(false);
+
+            // remove 2 last traces which are error handler itself. to make logs more readable and reduce size of a log
+            $tags[self::CONTEXT_TRACE] = array_slice($trace, 2);
+        }
+
+        return $tags;
     }
 
     /**
@@ -351,12 +359,9 @@ class common_Logger
      * @param  array $tags
      * @return mixed
      */
-    public static function f($message, $tags = array()
-)
+    public static function f($message, $tags = array())
     {
-        
-		self::singleton()->log(self::FATAL_LEVEL, $message, $tags);
-        
+		self::singleton()->log(self::FATAL_LEVEL, $message, self::addTrace($tags));
     }
 
     /**
@@ -365,68 +370,90 @@ class common_Logger
      * @access public
      * @author Joel Bout, <joel.bout@tudor.lu>
      * @param  Exception $exception
-     * @return mixed
      */
-    public function handleException( Exception $exception)
+    public function handleException(Exception $exception)
     {
-        
-        $severity = method_exists($exception, 'getSeverity') ? $exception->getSeverity() : self::INFO_LEVEL;
-        self::singleton()->log($severity, $exception->getMessage(), array(get_class($exception)), $exception->getFile(), $exception->getLine());
-        
+        $severity = method_exists($exception, 'getSeverity') ? $exception->getSeverity() : self::ERROR_LEVEL;
+        self::singleton()
+            ->log(
+                $severity,
+                $exception->getMessage(),
+                [
+                    self::CONTEXT_EXCEPTION => get_class($exception),
+                    self::CONTEXT_ERROR_FILE => $exception->getFile(),
+                    self::CONTEXT_ERROR_LINE => $exception->getLine(),
+                    self::CONTEXT_TRACE => $exception->getTrace()
+                ]
+            );
     }
 
     /**
-     * a handler for php errors, should never be called manually
+     * A handler for php errors, should never be called manually
      *
      * @access public
      * @author Joel Bout, <joel.bout@tudor.lu>
+     *
      * @param  int $errorNumber
      * @param  string $errorString
      * @param  string $errorFile
-     * @param  mixed  $errorLine
+     * @param  mixed $errorLine
      * @param  array $errorContext
+     *
      * @return boolean
      */
-    public function handlePHPErrors($errorNumber, $errorString, $errorFile = null, $errorLine = null, $errorContext = array())
-    {
-        $returnValue = (bool) false;
-        if (error_reporting() != 0){
-        	if ($errorNumber == E_STRICT) {
-        		foreach ($this->ACCEPTABLE_WARNINGS as $pattern) {
-        			if (preg_match($pattern, $errorString) > 0){
-        				return false;
-        			}
-        		}
-        	}
-        		
-        	switch ($errorNumber) {
-        		case E_USER_ERROR :
-        		case E_RECOVERABLE_ERROR :
-        			$severity = self::FATAL_LEVEL;
-        			break;
-        		case E_WARNING :
-        		case E_USER_WARNING :
-        			$severity = self::ERROR_LEVEL;
-        			break;
-        		case E_NOTICE :
-        		case E_USER_NOTICE:
-        			$severity = self::WARNING_LEVEL;
-        			break;
-        		case E_DEPRECATED :
-        		case E_USER_DEPRECATED :
-        		case E_STRICT:
-        			$severity = self::DEBUG_LEVEL;
-        			break;
-        		default :
-        			self::d('Unsuported PHP error type: '.$errorNumber, 'common_Logger');
-        			$severity = self::ERROR_LEVEL;
-        			break;
-        	}
-        	self::singleton()->log($severity, 'php error('.$errorNumber.'): '.$errorString, array('PHPERROR'), $errorFile, $errorLine);
-        }
-        
+    public function handlePHPErrors(
+        $errorNumber,
+        $errorString,
+        $errorFile = null,
+        $errorLine = null,
+        $errorContext = array()
+    ) {
+        if (error_reporting() !== 0) {
+            if ($errorNumber === E_STRICT) {
+                foreach ($this->ACCEPTABLE_WARNINGS as $pattern) {
+                    if (preg_match($pattern, $errorString) > 0) {
+                        return false;
+                    }
+                }
+            }
 
-        return (bool) $returnValue;
+            switch ($errorNumber) {
+                case E_USER_ERROR:
+                case E_RECOVERABLE_ERROR:
+                    $severity = self::FATAL_LEVEL;
+                    break;
+                case E_WARNING:
+                case E_USER_WARNING:
+                    $severity = self::ERROR_LEVEL;
+                    break;
+                case E_NOTICE:
+                case E_USER_NOTICE:
+                    $severity = self::WARNING_LEVEL;
+                    break;
+                case E_DEPRECATED:
+                case E_USER_DEPRECATED:
+                case E_STRICT:
+                    $severity = self::DEBUG_LEVEL;
+                    break;
+                default:
+                    self::d('Unsupported PHP error type: ' . $errorNumber, 'common_Logger');
+                    $severity = self::ERROR_LEVEL;
+                    break;
+            }
+
+            self::singleton()->log(
+                $severity,
+                sprintf('php error(%s): %s', $errorNumber, $errorString),
+                [
+                    'PHPERROR',
+                    self::CONTEXT_ERROR_FILE => $errorFile,
+                    self::CONTEXT_ERROR_LINE => $errorLine,
+                    self::CONTEXT_TRACE      => self::addTrace()
+                ]
+            );
+        }
+
+        return false;
     }
 
     /**
