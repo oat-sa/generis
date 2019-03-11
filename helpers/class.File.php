@@ -96,7 +96,27 @@ class helpers_File
     }
 
     /**
-     * deletes a file or a directory recursively
+     * Helps prevent 'path traversal' attacks
+     *
+     * @param $filename
+     * @param $directory
+     * @return bool
+     */
+    static public function isFileInsideDirectory($filename, $directory)
+    {
+        $canonicalDirectory = realpath($directory);
+        if (false === $canonicalDirectory) {
+            return false;
+        }
+        $canonicalFilename = realpath($canonicalDirectory . DIRECTORY_SEPARATOR . $filename);
+        if (false === $canonicalFilename) {
+            return false;
+        }
+        return 0 === strpos($canonicalFilename, $canonicalDirectory);
+    }
+
+    /**
+     * deletes a file or a direcstory recursively
      *
      * @access public
      * @author Lionel Lecaque, <lionel@taotesting.com>
