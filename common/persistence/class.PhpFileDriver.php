@@ -202,8 +202,11 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
     public function get($id)
     {
         $entry = $this->readFile($id);
-        if ($entry != false && $this->isTtlMode()) {
-            $entry = (is_null($entry[static::ENTRY_EXPIRATION]) || $entry[static::ENTRY_EXPIRATION] > $this->getTime())
+
+        if ($entry !== false && $this->isTtlMode()) {
+            $entry = isset($entry)
+                    && array_key_exists(static::ENTRY_EXPIRATION, $entry)
+                    && (is_null($entry[static::ENTRY_EXPIRATION]) || $entry[static::ENTRY_EXPIRATION] > $this->getTime())
                 ? $entry[static::ENTRY_VALUE]
                 : false
             ;
@@ -352,7 +355,7 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
     }
 
     /**
-     * Map the provided key to a relativ path
+     * Map the provided key to a relative path
      * 
      * @param string $key
      * @return string
