@@ -33,11 +33,9 @@ class ServiceNotFoundException extends ZendException
     public function __construct($serviceKey, $message = '') {
         parent::__construct('Service "'.$serviceKey.'" not found'. (empty($message) ? '' : ': '.$message));
         $this->serviceKey = $serviceKey;
-        \common_Logger::singleton()->handleException($this);
     }
     
     public function getServiceKey() {
         return $this->serviceKey;
     }
-    
 }

@@ -71,7 +71,7 @@ abstract class common_ext_ExtensionHandler
      */
     protected function runExtensionScript($script, array $arguments = [])
     {
-        $this->log('d', 'Running custom extension script ' . $script . ' for extension ' . $this->getExtension()->getId(), 'INSTALL');
+        $this->log('d', 'Running custom extension script ' . $script . ' for extension ' . $this->getExtension()->getId());
         if (file_exists($script)) {
             require_once $script;
         } elseif (class_exists($script) && is_subclass_of($script, \oat\oatbox\action\Action::class)) {
