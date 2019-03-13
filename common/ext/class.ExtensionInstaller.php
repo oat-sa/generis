@@ -65,7 +65,7 @@ class common_ext_ExtensionInstaller
      */
 	public function install()
 	{
-		$this->log('i', 'Installing extension '.$this->extension->getId(), 'INSTALL');
+		$this->log('i', 'Installing extension '.$this->extension->getId());
 		
 		if ($this->extension->getId() == 'generis') {
 			throw new common_ext_ForbiddenActionException(
@@ -169,7 +169,7 @@ class common_ext_ExtensionInstaller
 	protected function installRegisterExt()
 	{
 		
-		$this->log('d', 'Registering extension '.$this->extension->getId(), 'INSTALL');
+		$this->log('d', 'Registering extension '.$this->extension->getId());
 		common_ext_ExtensionsManager::singleton()->registerExtension($this->extension);
 		common_ext_ExtensionsManager::singleton()->setEnabled($this->extension->getId());
 		
