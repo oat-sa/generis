@@ -24,8 +24,8 @@ use core_kernel_classes_Resource;
 use oat\generis\model\fileReference\ResourceFileSerializer;
 use oat\generis\model\GenerisRdf;
 use oat\generis\model\OntologyAwareTrait;
+use oat\generis\model\resource\ResourceCollection;
 use oat\oatbox\extension\script\ScriptAction;
-use oat\oatbox\filesystem\Directory;
 use oat\oatbox\filesystem\FileSystemHandler;
 
 /**
@@ -92,18 +92,18 @@ class CleanUpOrphanFiles extends ScriptAction
         /** @var ResourceFileSerializer $serializer */
         $serializer = $this->getServiceManager()->get(ResourceFileSerializer::SERVICE_ID);
         $total = 0;
-        $resourceIterator = new \core_kernel_classes_ResourceIterator(GenerisRdf::CLASS_GENERIS_FILE);
-        foreach ($resourceIterator as $resource) {
+        $resourceCollection = new ResourceCollection(GenerisRdf::CLASS_GENERIS_FILE);
+        foreach ($resourceCollection as $resource) {
             $total++;
             try {
-
-                $file = $serializer->unserialize($resource);
+                $subject = $this->getResource($resource['subject']);
+                $file = $serializer->unserialize($subject);
                 $isRedundant = $this->isRedundant($file);
 
                 if ($isRedundant) {
-                    $this->manageRedundant($resource, $file);
+                    $this->manageRedundant($subject, $file);
                 } else {
-                    $this->manageOrphan($resource, $file);
+                    $this->manageOrphan($subject, $file);
                 }
 
             } catch (\Exception $exception) {
@@ -168,10 +168,8 @@ class CleanUpOrphanFiles extends ScriptAction
      */
     private function markForRemoval(core_kernel_classes_Resource $resource)
     {
-        if ($this->wetRun) {
             $this->markedTobeRemoved[]= $resource;
         }
-    }
 
     /**
      * @param core_kernel_classes_Resource $resource
@@ -222,9 +220,7 @@ class CleanUpOrphanFiles extends ScriptAction
      */
     private function isRedundant(FileSystemHandler $file)
     {
-        $isDirectory = $file instanceof Directory;
-        $isRedundant = !$isDirectory && in_array($file->getBasename(), $this->getRedundantFiles());
-        return $isRedundant;
+        return $file->getFileSystemId() === null;
     }
 
 
