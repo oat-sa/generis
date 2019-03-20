@@ -31,15 +31,15 @@
  */
 class common_Exception extends Exception
 {
-    public function __construct($message = null, $code = 0, Exception $previous = null)
-    {
-        parent::__construct($message, $code);
-        common_Logger::singleton()->handleException($this);
-    }
-
     public function __toString()
     {
-        return get_class($this) . " '{$this->message}' in {$this->file}({$this->line})\n
-                                    {$this->getTraceAsString()}";
+        return sprintf(
+            "%s '%s' in %s(%s) %s",
+            get_class($this),
+            $this->message,
+            $this->file,
+            $this->line,
+            $this->getTraceAsString()
+        );
     }
 }
