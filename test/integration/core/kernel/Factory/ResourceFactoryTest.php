@@ -2,6 +2,7 @@
 
 namespace oat\generis\test\integration\core\kernel\Factory;
 
+use core_kernel_classes_Property;
 use core_kernel_classes_Resource;
 use LogicException;
 use oat\generis\model\kernel\Factory\ResourceFactory;
@@ -17,32 +18,52 @@ class ResourceFactoryTest extends TestCase
         $this->resourceFactory = new ResourceFactory();
     }
 
-    public function testCreate()
+    /**
+     * @dataProvider fqcnDataProvider
+     * @param string $fqcn
+     */
+    public function testCreateMethodReturnsTheCorrectInstance($fqcn)
     {
-        $this->assertInstanceOf(core_kernel_classes_Resource::class, $this->resourceFactory->create('test'));
+        $this->assertInstanceOf(core_kernel_classes_Resource::class, $this->resourceFactory->create(
+            $fqcn,
+            'test'
+        ));
     }
 
-    public function testCreateWithDebug()
+    /**
+     * @dataProvider fqcnDataProvider
+     * @param string $fqcn
+     */
+    public function testCreateMethodWithDebugReturnsTheCorrectInstance($fqcn)
     {
-        $this->assertInstanceOf(core_kernel_classes_Resource::class, $this->resourceFactory->create('test', 'debug'));
+        $this->assertInstanceOf(core_kernel_classes_Resource::class, $this->resourceFactory->create(
+            $fqcn,
+            'test',
+            'debug'
+        ));
     }
 
     /**
      * @expectedException LogicException
      */
-    public function testCreateLogicException()
+    public function testCreateMethodThrowsLogicExceptionWhenClassNotExists()
     {
-        $resourceFactoryMock = $this->getMock(ResourceFactory::class, ['getClass']);
-
-        $resourceFactoryMock
-            ->method('getClass')
-            ->willReturn(null);
-
-        $resourceFactoryMock->create('test');
+        $this->resourceFactory->create('test', 'test');
     }
 
-    public function testGetClass()
+    /**
+     * @expectedException LogicException
+     */
+    public function testCreateMethodThrowsLogicExceptionWhenNotIsNotInstanceOfResource()
     {
-        $this->assertEquals(core_kernel_classes_Resource::class, $this->resourceFactory->getClass());
+        $this->resourceFactory->create(ResourceFactory::class, 'test');
+    }
+
+    public function fqcnDataProvider()
+    {
+        return [
+            [core_kernel_classes_Resource::class],
+            [core_kernel_classes_Property::class],
+        ];
     }
 }

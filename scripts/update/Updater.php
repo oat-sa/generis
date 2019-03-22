@@ -31,7 +31,6 @@ use EasyRdf_Exception;
 use oat\generis\model\data\ModelManager;
 use oat\generis\model\fileReference\FileReferenceSerializer;
 use oat\generis\model\fileReference\ResourceFileSerializer;
-use oat\generis\model\kernel\Factory\PropertyFactory;
 use oat\generis\model\kernel\Factory\ResourceFactory;
 use oat\generis\model\kernel\persistence\smoothsql\search\ComplexSearchService;
 use oat\generis\model\user\AuthAdapter;
@@ -367,7 +366,6 @@ class Updater extends common_ext_ExtensionUpdater
 
         if ($this->isVersion('9.0.4')) {
             $this->getServiceManager()->register(ResourceFactory::SERVICE_ID, new ResourceFactory());
-            $this->getServiceManager()->register(PropertyFactory::SERVICE_ID, new PropertyFactory());
 
             $this->setVersion('9.1.0');
         }
