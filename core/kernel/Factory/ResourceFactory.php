@@ -14,17 +14,16 @@ class ResourceFactory extends ConfigurableService
      *
      * @param string $classFQCN
      * @param string $uri
-     * @param string $debug
      * @return core_kernel_classes_Resource
      */
-    public function create($classFQCN, $uri, $debug = '')
+    public function create($classFQCN, $uri)
     {
         if (!class_exists($classFQCN)) {
             throw new \LogicException(sprintf('Class not exists: "%s"', $classFQCN));
         }
 
         try {
-            $class = new $classFQCN($uri, $debug);
+            $class = new $classFQCN($uri);
         } catch (\TypeError $e) {
             throw new \LogicException(sprintf('Creating new class instance failed: %s', $e->getMessage()));
         }

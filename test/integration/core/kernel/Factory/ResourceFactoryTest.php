@@ -2,8 +2,6 @@
 
 namespace oat\generis\test\integration\core\kernel\Factory;
 
-use core_kernel_classes_Property;
-use core_kernel_classes_Resource;
 use LogicException;
 use oat\generis\model\kernel\Factory\ResourceFactory;
 use oat\generis\test\TestCase;
@@ -24,27 +22,15 @@ class ResourceFactoryTest extends TestCase
      */
     public function testCreateMethodReturnsTheCorrectInstance($fqcn)
     {
-        $this->assertInstanceOf(core_kernel_classes_Resource::class, $this->resourceFactory->create(
-            $fqcn,
-            'test'
-        ));
-    }
+        $class = $this->resourceFactory->create($fqcn, 'test');
 
-    /**
-     * @dataProvider fqcnDataProvider
-     * @param string $fqcn
-     */
-    public function testCreateMethodWithDebugReturnsTheCorrectInstance($fqcn)
-    {
-        $this->assertInstanceOf(core_kernel_classes_Resource::class, $this->resourceFactory->create(
-            $fqcn,
-            'test',
-            'debug'
-        ));
+        $this->assertInstanceOf($fqcn, $class);
+        $this->assertEquals('test', $class->getUri());
     }
 
     /**
      * @expectedException LogicException
+     * @expectedExceptionMessageRegExp /Class not exists/
      */
     public function testCreateMethodThrowsLogicExceptionWhenClassNotExists()
     {
@@ -53,6 +39,7 @@ class ResourceFactoryTest extends TestCase
 
     /**
      * @expectedException LogicException
+     * @expectedExceptionMessageRegExp /Creating new class instance failed/
      */
     public function testCreateMethodThrowsLogicExceptionWhenNotIsNotInstanceOfResource()
     {
@@ -62,8 +49,12 @@ class ResourceFactoryTest extends TestCase
     public function fqcnDataProvider()
     {
         return [
-            [core_kernel_classes_Resource::class],
-            [core_kernel_classes_Property::class],
+            [\core_kernel_classes_Resource::class],
+            [\core_kernel_classes_Property::class],
+            [\core_kernel_rules_Term::class],
+            [\core_kernel_rules_Operation::class],
+            [\core_kernel_rules_Expression::class],
+            [\core_kernel_rules_Rule::class],
         ];
     }
 }
