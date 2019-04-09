@@ -27,6 +27,7 @@ use core_kernel_persistence_smoothsql_SmoothModel;
 use oat\generis\model\kernel\persistence\smoothsql\search\filter\FilterFactory;
 use oat\oatbox\service\ConfigurableService;
 use oat\search\base\QueryBuilderInterface;
+use oat\search\base\QueryInterface;
 use oat\search\base\SearchGateWayInterface;
 use Zend\ServiceManager\Config;
 use Zend\ServiceManager\ServiceManager;
@@ -119,12 +120,13 @@ class ComplexSearchService extends ConfigurableService
         return $this->getGateway()->query();
     }
 
-        /**
+    /**
      * return a preset query builder with types
      * @param QueryBuilderInterface $query
      * @param string $class_uri
      * @param boolean $recursive
-     * @return QueryBuilderInterface
+     * @return QueryInterface
+     * @throws \common_exception_Error
      */
     public function searchType(QueryBuilderInterface $query , $class_uri , $recursive = false) {
 
