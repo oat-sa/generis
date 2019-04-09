@@ -23,6 +23,8 @@ namespace oat\generis\test\unit\oatbox\service;
 use oat\oatbox\service\ServiceManager;
 use oat\oatbox\service\ConfigurableService;
 use oat\generis\test\TestCase;
+use oat\oatbox\service\AutowiringSupport;
+use Psr\Container\NotFoundExceptionInterface;
 
 /**
  * Class ServiceManager
@@ -43,6 +45,21 @@ class ServiceManagerTest extends TestCase
         $this->assertTrue($serviceManager->get(TestService2_2::class) instanceof TestService2_2);
         $this->assertTrue($serviceManager->get(TestService2_2::SERVICE_ID) instanceof TestService2_2);
     }
+
+    public function testGetAutowire()
+    {
+        $config = new \common_persistence_KeyValuePersistence([], new \common_persistence_InMemoryKvDriver());
+        $serviceManager = new ServiceManager($config);
+        $this->assertTrue($serviceManager->get(TestService3::class) instanceof TestService3);
+    }
+
+    public function testWithoutAutowire()
+    {
+        $this->expectException(NotFoundExceptionInterface::class);
+        $config = new \common_persistence_KeyValuePersistence([], new \common_persistence_InMemoryKvDriver());
+        $serviceManager = new ServiceManager($config);
+        $serviceManager->get(TestService2::class);
+    }
 }
 
 interface TestServiceInterface1
@@ -54,3 +71,5 @@ class TestService2 extends ConfigurableService {
     const SERVICE_ID = 'test/TestService2';
 }
 class TestService2_2 extends TestService2 {}
+
+class TestService3 extends ConfigurableService implements AutowiringSupport {}

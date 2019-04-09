@@ -23,15 +23,20 @@ namespace oat\oatbox\service;
 use oat\oatbox\Configurable;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Psr\Container\ContainerInterface;
 
 /**
  * The simple placeholder ServiceManager
  * @author Joel Bout <joel@taotesting.com>
  */
-class ServiceManager implements ServiceLocatorInterface
+class ServiceManager implements ServiceLocatorInterface, ContainerInterface
 {
     private static $instance;
 
+    /**
+     * @return \oat\oatbox\service\ServiceManager
+     * @deprecated Pass service locator instead of relying on static function
+     */
     public static function getServiceManager()
     {
         if (is_null(self::$instance)) {
@@ -63,25 +68,57 @@ class ServiceManager implements ServiceLocatorInterface
      *
      * @param string $serviceKey
      * @return ConfigurableService
+     * @throws ServiceNotFoundException
+     * @see ContainerInterface::get()
      */
     public function get($serviceKey)
     {
-        if ((interface_exists($serviceKey) || class_exists($serviceKey)) && defined($serviceKey . '::SERVICE_ID')) {
-            $serviceKey = $serviceKey::SERVICE_ID;
+        $serviceId = $this->getServiceId($serviceKey);
+        if (!isset($this->services[$serviceId])) {
+            $this->services[$serviceId] = $this->load($serviceId, $serviceKey);
         }
-        if (!isset($this->services[$serviceKey])) {
-            $service = $this->getConfig()->get($serviceKey);
-            if ($service === false) {
-                throw new ServiceNotFoundException($serviceKey);
+        return $this->services[$serviceId];
+    }
+
+    /**
+     * Extract the service id from the provided parameter
+     * @param string $serviceKey
+     * @return string
+     */
+    protected function getServiceId($serviceKey) {
+        return ((interface_exists($serviceKey) || class_exists($serviceKey)) && defined($serviceKey . '::SERVICE_ID'))
+            ? $serviceKey::SERVICE_ID
+            : (string)$serviceKey
+        ;
+    }
+
+    /**
+     * Loads the service referenced by id,
+     * or initialises it IF it was called as a class and supports autowiring
+     * @param string $serviceId
+     * @param string $serviceKey
+     * @throws ServiceNotFoundException
+     * @return ConfigurableService
+     */
+    protected function load($serviceId, $serviceKey)
+    {
+        $service = $this->getConfig()->get($serviceId);
+        if ($service === false) {
+            if (class_exists($serviceKey) && is_subclass_of($serviceKey, AutowiringSupport::class)) {
+                $service = new $serviceKey();
+            } else {
+                throw new ServiceNotFoundException($serviceId);
             }
-            $this->services[$serviceKey] = $this->propagate($service);
         }
-        return $this->services[$serviceKey];
+        if(is_object($service) &&  ($service instanceof ServiceLocatorAwareInterface)){
+            $service->setServiceLocator($this);
+        }
+        return $service;
     }
 
     /**
      * (non-PHPdoc)
-     * @see \Zend\ServiceManager\ServiceLocatorInterface::has()
+     * @see ContainerInterface::has()
      */
     public function has($serviceKey)
     {

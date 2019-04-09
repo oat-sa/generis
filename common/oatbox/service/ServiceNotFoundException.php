@@ -21,12 +21,13 @@
 namespace oat\oatbox\service;
 
 use Zend\ServiceManager\Exception\ServiceNotFoundException as ZendException;
+use Psr\Container\NotFoundExceptionInterface;
 /**
  * 
  * @author bout
  *
  */
-class ServiceNotFoundException extends ZendException
+class ServiceNotFoundException extends ZendException implements NotFoundExceptionInterface
 {
     private $serviceKey;
     
