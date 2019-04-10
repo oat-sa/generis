@@ -85,7 +85,7 @@ class ServiceManager implements ServiceLocatorInterface, ContainerInterface
      * @param string $serviceKey
      * @return string
      */
-    protected function getServiceId($serviceKey) {
+    private function getServiceId($serviceKey) {
         return ((interface_exists($serviceKey) || class_exists($serviceKey)) && defined($serviceKey . '::SERVICE_ID'))
             ? $serviceKey::SERVICE_ID
             : (string)$serviceKey
@@ -100,13 +100,13 @@ class ServiceManager implements ServiceLocatorInterface, ContainerInterface
      * @throws ServiceNotFoundException
      * @return ConfigurableService
      */
-    protected function load($serviceId, $serviceKey)
+    private function load($serviceId, $serviceKey)
     {
         $service = $this->getConfig()->get($serviceId);
         if ($service === false) {
             $service = $this->tryAutowiring($serviceId, $serviceKey);
         }
-        if(is_object($service) &&  ($service instanceof ServiceLocatorAwareInterface)){
+        if (is_object($service) && ($service instanceof ServiceLocatorAwareInterface)) {
             $service->setServiceLocator($this);
         }
         return $service;
@@ -120,7 +120,7 @@ class ServiceManager implements ServiceLocatorInterface, ContainerInterface
      * @throws ServiceNotFoundException
      * @return ConfigurableService
      */
-    protected function tryAutowiring($serviceId, $serviceKey)
+    private function tryAutowiring($serviceId, $serviceKey)
     {
         if (!class_exists($serviceKey) || !is_subclass_of($serviceKey, ConfigurableService::class)) {
             throw new ServiceNotFoundException($serviceId);
