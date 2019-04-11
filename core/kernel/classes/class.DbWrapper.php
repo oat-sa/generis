@@ -190,18 +190,12 @@ class core_kernel_classes_DbWrapper
         $returnValue = null;
 
         
-        $this->debug($statement);
-        common_Profiler::queryStart();
 //         $trace=debug_backtrace();
 //         $caller=array_shift($trace);
 //         $caller=array_shift($trace);
 //         common_Logger::d('trace : '. $caller['function'] .$caller['class'] );
 //         common_Logger::d($statement . implode('|', $params));
        	$sth = $this->persistence->query($statement,$params);
-//        	$string = '$this->persistence->executeQuery('.common_Utils::toPHPVariableString($statement).','
-//        			.common_Utils::toPHPVariableString($params).');$this->count++;'.PHP_EOL;
-//        	file_put_contents(ROOT_PATH.'sql.php', $string,FILE_APPEND);
-        common_Profiler::queryStop($statement, $params);
 		
         if (!empty($sth)){
         	$returnValue = $sth;
@@ -225,12 +219,8 @@ class core_kernel_classes_DbWrapper
     {
         $this->debug($statement);
 		
-		common_Profiler::queryStart();
-
         $returnValue = $this->persistence->exec($statement,$params);
 
-        common_Profiler::queryStop($statement, $params);
-		
         $this->incrementNrOfQueries();
         return (int) $returnValue;
     }
