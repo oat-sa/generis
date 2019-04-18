@@ -21,6 +21,8 @@
 namespace oat\oatbox\event;
 
 use oat\oatbox\service\ConfigurableService;
+use oat\tao\model\resources\ResourceWatcher;
+
 /**
  * The simple placeholder ServiceManager
  * @author Joel Bout <joel@taotesting.com>
@@ -33,12 +35,12 @@ class EventManager extends ConfigurableService
      * @deprecated use SERVICE_ID
      */
     const CONFIG_ID = 'generis/event';
-    
+
     const OPTION_LISTENERS = 'listeners';
-    
+
     /**
      * Dispatch an event and trigger its listeners
-     * 
+     *
      * @param mixed $event either an Event object or a string
      * @param array $params
      */
@@ -47,7 +49,10 @@ class EventManager extends ConfigurableService
         foreach ($this->getListeners($eventObject) as $callback) {
             if (is_array($callback) && count($callback) == 2) {
                 list($key, $function) = $callback;
-                if (is_string($key) && !class_exists($key) && $this->getServiceManager()->has($key)) {
+                if (!is_string($key)) {
+                    continue;
+                }
+                if ($this->getServiceManager()->has($key) || is_subclass_of($key, ConfigurableService::class, true)) {
                     $service = $this->getServiceManager()->get($key);
                     $callback = [$service, $function];
                 }
@@ -55,10 +60,10 @@ class EventManager extends ConfigurableService
             call_user_func($callback, $eventObject);
         }
     }
-    
+
     /**
      * Attach a Listener to one or multiple events
-     * 
+     *
      * @param mixed $event either an Event object or a string
      * @param callable $callback
      */
@@ -77,7 +82,7 @@ class EventManager extends ConfigurableService
         }
         $this->setOption(self::OPTION_LISTENERS, $listeners);
     }
-    
+
     /**
      * remove listener from an event and delete event if it dosn't have any listeners
      * @param array $listeners
@@ -115,10 +120,10 @@ class EventManager extends ConfigurableService
         }
         $this->setOption(self::OPTION_LISTENERS, $listeners);
     }
-    
+
     /**
      * Get all Listeners listening to this kind of event
-     * 
+     *
      * @param Event $eventObject
      * @return Callable[] listeners associated with this event
      */
