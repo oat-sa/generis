@@ -81,68 +81,24 @@ class ServiceManager implements ServiceLocatorInterface, ContainerInterface
     }
 
     /**
-     * Extract the service id from the provided parameter
-     * @param string $serviceKey
-     * @return string
-     */
-    private function getServiceId($serviceKey) {
-        return ((interface_exists($serviceKey) || class_exists($serviceKey)) && defined($serviceKey . '::SERVICE_ID'))
-            ? $serviceKey::SERVICE_ID
-            : (string)$serviceKey
-        ;
-    }
-
-    /**
-     * Loads the service referenced by id
-     *
-     * @param string $serviceId
-     * @param string $serviceKey
-     * @throws ServiceNotFoundException
-     * @return ConfigurableService
-     */
-    private function load($serviceId, $serviceKey)
-    {
-        $service = $this->getConfig()->get($serviceId);
-        if ($service === false) {
-            $service = $this->tryAutowiring($serviceId, $serviceKey);
-        }
-        if (is_object($service) && ($service instanceof ServiceLocatorAwareInterface)) {
-            $service->setServiceLocator($this);
-        }
-        return $service;
-    }
-
-    /**
-     * Try to initialize the class without parameters
-     *
-     * @param string $serviceId
-     * @param string $serviceKey
-     * @throws ServiceNotFoundException
-     * @return ConfigurableService
-     */
-    private function tryAutowiring($serviceId, $serviceKey)
-    {
-        if (!class_exists($serviceKey) || !is_subclass_of($serviceKey, ConfigurableService::class)) {
-            throw new ServiceNotFoundException($serviceId);
-        }
-        return new $serviceKey();
-    }
-
-    /**
      * (non-PHPdoc)
      * @see ContainerInterface::has()
+     * @param $serviceKey
+     * @return bool
      */
     public function has($serviceKey)
     {
+        $serviceKey = $this->getServiceId($serviceKey);
         if (isset($this->services[$serviceKey])) {
             return true;
         }
+
         $parts = explode('/', $serviceKey, 2);
-        if (count($parts) < 2) {
-            return false;
+        if (count($parts) == 2 && $this->getConfig()->exists($serviceKey)) {
+            return true;
         }
 
-        return $this->getConfig()->exists($serviceKey);
+        return $this->isAutoWirable($serviceKey);
     }
 
     /**
@@ -234,5 +190,64 @@ class ServiceManager implements ServiceLocatorInterface, ContainerInterface
     public function overload($serviceKey, ConfigurableService $service)
     {
         $this->services[$serviceKey] = $service;
+    }
+
+    /**
+     * Extract the service id from the provided parameter
+     * @param string $serviceKey
+     * @return string
+     */
+    private function getServiceId($serviceKey) {
+        return ((interface_exists($serviceKey) || class_exists($serviceKey)) && defined($serviceKey . '::SERVICE_ID'))
+            ? $serviceKey::SERVICE_ID
+            : (string)$serviceKey
+            ;
+    }
+
+    /**
+     * Loads the service referenced by id
+     *
+     * @param string $serviceId
+     * @param string $serviceKey
+     * @throws ServiceNotFoundException
+     * @return ConfigurableService
+     */
+    private function load($serviceId, $serviceKey)
+    {
+        $service = $this->getConfig()->get($serviceId);
+        if ($service === false) {
+            $service = $this->tryAutowiring($serviceId, $serviceKey);
+        }
+        if (is_object($service) && ($service instanceof ServiceLocatorAwareInterface)) {
+            $service->setServiceLocator($this);
+        }
+        return $service;
+    }
+
+    /**
+     * Try to initialize the class without parameters
+     *
+     * @param string $serviceId
+     * @param string $serviceKey
+     * @throws ServiceNotFoundException
+     * @return ConfigurableService
+     */
+    private function tryAutowiring($serviceId, $serviceKey)
+    {
+        if (!$this->isAutoWirable($serviceKey)) {
+            throw new ServiceNotFoundException($serviceId);
+        }
+        return new $serviceKey();
+    }
+
+    /**
+     * Check if $serviceKey can be autowired
+     *
+     * @param $serviceKey
+     * @return bool
+     */
+    private function isAutoWirable($serviceKey)
+    {
+        return class_exists($serviceKey) && is_subclass_of($serviceKey, ConfigurableService::class, true);
     }
 }

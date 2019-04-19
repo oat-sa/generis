@@ -33,16 +33,16 @@ class EventManagerTest extends TestCase
         $listeners = [
             'fixture-event' => [
                 [
-                    EventListenerMock::SERVICE_ID, 'listen'
+                    ConfigurableEventListenerMock::SERVICE_ID, 'listen'
                 ]
             ]
         ];
 
         $eventManager = $this->getEventManager($listeners);
-        $eventManager->getServiceLocator()->register(EventListenerMock::SERVICE_ID, new EventListenerMock());
+        $eventManager->getServiceLocator()->register(ConfigurableEventListenerMock::SERVICE_ID, new ConfigurableEventListenerMock());
 
         $eventManager->trigger(new FixtureEvent());
-        $this->assertTrue(EventListenerMock::$listened);
+        $this->assertTrue(ConfigurableEventListenerMock::$listened);
     }
 
     public function testTriggerEventWithClassName()
@@ -50,14 +50,31 @@ class EventManagerTest extends TestCase
         $listeners = [
             'fixture-event' => [
                 [
-                    EventListenerMock::class, 'listen'
+                    ConfigurableEventListenerMock::class, 'listen'
                 ]
             ]
         ];
         $this->getEventManager($listeners)->trigger(new FixtureEvent());
-        $this->assertTrue(EventListenerMock::$listened);
+        $this->assertTrue(ConfigurableEventListenerMock::$listened);
     }
 
+    public function testTriggerEventWithNotConfigurableClassName()
+    {
+        $listeners = [
+            'fixture-event' => [
+                [
+                    WildEventListenerMock::class, 'staticListen'
+                ]
+            ]
+        ];
+        $this->getEventManager($listeners)->trigger(new FixtureEvent());
+        $this->assertTrue(WildEventListenerMock::$listened);
+    }
+
+    /**
+     * @param array $listeners
+     * @return EventManager
+     */
     protected function getEventManager(array $listeners)
     {
         $eventManager = new EventManager([
@@ -68,7 +85,17 @@ class EventManagerTest extends TestCase
     }
 }
 
-class EventListenerMock extends ConfigurableService
+class WildEventListenerMock
+{
+    public static $listened = false;
+
+    static public function staticListen()
+    {
+        self::$listened = true;
+    }
+}
+
+class ConfigurableEventListenerMock extends ConfigurableService
 {
     const SERVICE_ID = 'fixture/toto';
 

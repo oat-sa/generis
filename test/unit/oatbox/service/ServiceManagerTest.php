@@ -32,24 +32,58 @@ use Psr\Container\NotFoundExceptionInterface;
  */
 class ServiceManagerTest extends TestCase
 {
-    public function testGet()
+    /**
+     * @dataProvider getExpectedServicesProvider
+     * @param $serviceKey
+     * @param $serviceClass
+     * @throws \common_Exception
+     */
+    public function testGet($serviceKey, $serviceClass)
     {
         $config = new \common_persistence_KeyValuePersistence([], new \common_persistence_InMemoryKvDriver());
         $serviceManager = new ServiceManager($config);
         $serviceManager->register(TestServiceInterface1::SERVICE_ID, new TestService1());
         $serviceManager->register(TestService2_2::SERVICE_ID, new TestService2_2());
-        $this->assertTrue($serviceManager->get(TestServiceInterface1::SERVICE_ID) instanceof TestService1);
-        $this->assertTrue($serviceManager->get(TestServiceInterface1::class) instanceof TestService1);
-        $this->assertTrue($serviceManager->get(TestService1::class) instanceof TestService1);
-        $this->assertTrue($serviceManager->get(TestService2_2::class) instanceof TestService2_2);
-        $this->assertTrue($serviceManager->get(TestService2_2::SERVICE_ID) instanceof TestService2_2);
+        $this->assertTrue($serviceManager->get($serviceKey) instanceof $serviceClass);
     }
 
+    /**
+     * @dataProvider getExpectedServicesProvider
+     * @param $serviceKey
+     * @param $serviceClass
+     * @throws \common_Exception
+     */
+    public function testHas($serviceKey, $serviceClass)
+    {
+        $config = new \common_persistence_KeyValuePersistence([], new \common_persistence_InMemoryKvDriver());
+        $serviceManager = new ServiceManager($config);
+        $serviceManager->register(TestServiceInterface1::SERVICE_ID, new TestService1());
+        $serviceManager->register(TestService2_2::SERVICE_ID, new TestService2_2());
+        $this->assertTrue($serviceManager->has($serviceKey), "$serviceKey => $serviceClass : ". get_class($serviceManager->get($serviceKey)));
+     }
+
+    public function getExpectedServicesProvider()
+    {
+        return [
+            [TestServiceInterface1::SERVICE_ID, TestService1::class],
+            [TestServiceInterface1::class, TestService1::class],
+            [TestService1::class, TestService1::class],
+            [TestService2_2::class, TestService2_2::class],
+            [TestService2_2::SERVICE_ID, TestService2_2::class],
+        ];
+    }
     public function testGetAutowire()
     {
         $config = new \common_persistence_KeyValuePersistence([], new \common_persistence_InMemoryKvDriver());
         $serviceManager = new ServiceManager($config);
         $this->assertTrue($serviceManager->get(TestService3::class) instanceof TestService3);
+    }
+
+    public function testHasAutowire()
+    {
+        $config = new \common_persistence_KeyValuePersistence([], new \common_persistence_InMemoryKvDriver());
+        $serviceManager = new ServiceManager($config);
+        $this->assertTrue($serviceManager->has(TestService3::class));
     }
 
     public function testWithoutAutowire()
