@@ -52,6 +52,7 @@ class TaoLog extends ConfigurableService implements LoggerInterface
     {
         if (isset($context['trace'])) {
             $stack = $context['trace'];
+            unset($context['trace']);
         } else {
             $stack = defined('DEBUG_BACKTRACE_IGNORE_ARGS')
                 ? debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS)
@@ -59,15 +60,7 @@ class TaoLog extends ConfigurableService implements LoggerInterface
             array_shift($stack);
         }
 
-        // retrieving the user can be a complex procedure, leading to missing log informations
-        $user = null;
-        $keys = array_keys($stack);
-        $current = isset($keys[2]) ? $stack[$keys[2]] : end($stack);
-
-        if (!empty($stack)) {
-            unset($context['trace']);
-        }
-
+        $current = isset($stack[2]) ? $stack[2] : end($stack);
         $current = array_merge($current, $context);
 
         if (isset($current['file'], $current['line'])) {
