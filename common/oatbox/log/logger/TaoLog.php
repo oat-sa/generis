@@ -50,19 +50,29 @@ class TaoLog extends ConfigurableService implements LoggerInterface
      */
     public function log($level, $message, array $context = [])
     {
-        $stack = isset($context['trace']) ? $context['trace'] : [];
-        if (!empty($stack)) {
-            unset($context['trace']);
-            // retrieving the user can be a complex procedure, leading to missing log informations
-            $user = null;
-            $keys = array_keys($stack);
-            $current = isset($keys[2]) ? $stack[$keys[2]] : $stack[end($keys)];
-            $current = array_merge($current, $context);
+        if (isset($context['trace'])) {
+            $stack = $context['trace'];
+        } else {
+            $stack = defined('DEBUG_BACKTRACE_IGNORE_ARGS')
+                ? debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS)
+                : debug_backtrace(false);
+            array_shift($stack);
         }
 
+        // retrieving the user can be a complex procedure, leading to missing log informations
+        $user = null;
+        $keys = array_keys($stack);
+        $current = isset($keys[2]) ? $stack[$keys[2]] : $stack[end($keys)];
+
+        if (!empty($stack)) {
+            unset($context['trace']);
+        }
+
+        $current = array_merge($current, $context);
+
         if (isset($current['file'], $current['line'])) {
-            $errorFile = $context['file'];
-            $errorLine = $context['line'];
+            $errorFile = $current['file'];
+            $errorLine = $current['line'];
         } elseif (isset($current['class'], $context['function'])) {
             $errorFile = $context['class'];
             $errorLine = $context['function'];
