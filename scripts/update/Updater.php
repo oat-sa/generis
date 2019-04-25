@@ -361,11 +361,11 @@ class Updater extends common_ext_ExtensionUpdater
             $this->setVersion('8.0.0');
         }
 
-        $this->skip('8.0.0', '9.1.0');
+        $this->skip('8.0.0', '9.1.3');
 
-        if ($this->isVersion('9.1.0')) {
+        if ($this->isVersion('9.1.3')) {
             $this->getServiceManager()->unregister('generis/profiler');
-            $this->setVersion('9.1.1');
+            $this->setVersion('9.1.4');
         }
     }
 }

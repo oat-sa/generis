@@ -153,6 +153,10 @@ class ResourceFileSerializer extends ConfigurableService implements FileReferenc
             throw new \common_exception_NotFound('File reference serial "'. $serial .'" not exist as resource');
         }
 
+        if (!$file->hasType($this->getClass(GenerisRdf::CLASS_GENERIS_FILE))) {
+            throw new \common_exception_NotFound('Resource ' . $serial . ' is not a file');
+        }
+
         $properties = [];
         $propertiesDefinition = [
             $this->getProperty(GenerisRdf::PROPERTY_FILE_FILEPATH),
