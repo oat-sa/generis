@@ -41,7 +41,7 @@ class common_cache_KeyValueCache extends ConfigurableService
     protected function getPersistence()
     {
         if (is_null($this->persistence)) {
-            $this->persistence = $this->getServiceManager()->get('generis/persistences')->getPersistenceById($this->getOption(self::OPTION_PERSISTENCE));
+            $this->persistence = $this->getServiceLocator()->get('generis/persistences')->getPersistenceById($this->getOption(self::OPTION_PERSISTENCE));
         }
         return $this->persistence;
     }

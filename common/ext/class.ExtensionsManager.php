@@ -195,7 +195,7 @@ class common_ext_ExtensionsManager extends ConfigurableService
         }
         if (! isset($this->extensions[$id])) {
             $extension = new common_ext_Extension($id, false);
-            $this->getServiceManager()->propagate($extension);
+            $this->propagate($extension);
 
             // loads the extension if it hasn't been loaded yet
             $extension->load();

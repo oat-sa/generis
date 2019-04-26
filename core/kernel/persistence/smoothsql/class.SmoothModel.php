@@ -115,7 +115,7 @@ class core_kernel_persistence_smoothsql_SmoothModel extends ConfigurableService
      * @return ComplexSearchService
      */
     public function getSearchInterface() {
-        $search = $this->getServiceManager()->get($this->getOption(self::OPTION_SEARCH_SERVICE));
+        $search = $this->getServiceLocator()->get($this->getOption(self::OPTION_SEARCH_SERVICE));
         $search->setModel($this);
         return $search;
     }
