@@ -36,9 +36,7 @@ class common_persistence_Manager extends ConfigurableService
 {
     /** @deprecated */
     const SERVICE_KEY = 'generis/persistences';
-    
     const SERVICE_ID = 'generis/persistences';
-
     const OPTION_PERSISTENCES = 'persistences';
 
     /**
@@ -76,34 +74,10 @@ class common_persistence_Manager extends ConfigurableService
     }
 
     /**
-     * Returns TRUE if the requested persistence exist, otherwise FALSE.
-     *
-     * @param string $persistenceId
-     *
-     * @return bool
-     */
-    public function hasPersistence($persistenceId)
-    {
-        $persistenceList = $this->getOption(static::OPTION_PERSISTENCES);
-
-        return isset($persistenceList[$persistenceId]);
-    }
-
-    /**
-     * Registers a new persistence.
-     *
-     * @param string $persistenceId
-     * @param array  $persistenceConf
-     */
-    public function registerPersistence($persistenceId, array $persistenceConf)
-    {
-        static::addPersistence($persistenceId, $persistenceConf);
-    }
-
-    /**
      *
      * @param string $persistenceId
      * @return common_persistence_Persistence
+     * @deprecated
      */
     public static function getPersistence($persistenceId)
     {
@@ -115,14 +89,12 @@ class common_persistence_Manager extends ConfigurableService
      *
      * @param string $persistenceId
      * @param array $persistenceConf
+     * @deprecated
      */
     public static function addPersistence($persistenceId, array $persistenceConf)
     {
         $manager = self::getDefaultManager();
-        $configs = $manager->getOption(self::OPTION_PERSISTENCES);
-        $configs[$persistenceId] = $persistenceConf;
-        $manager->setOption(self::OPTION_PERSISTENCES, $configs);
-        
+        $manager->registerPersistence($persistenceId, $persistenceConf);
         $manager->getServiceManager()->register(self::SERVICE_ID, $manager);
     }
     
@@ -130,7 +102,7 @@ class common_persistence_Manager extends ConfigurableService
      * @var array
      */
     private $persistences = array();
-    
+
     /**
      * @return common_persistence_Persistence
      */
@@ -143,12 +115,37 @@ class common_persistence_Manager extends ConfigurableService
     }
 
     /**
+     * Returns TRUE if the requested persistence exist, otherwise FALSE.
+     *
+     * @param string $persistenceId
+     * @return bool
+     */
+    public function hasPersistence($persistenceId)
+    {
+        $persistenceList = $this->getOption(static::OPTION_PERSISTENCES);
+        
+        return isset($persistenceList[$persistenceId]);
+    }
+    
+    /**
+     * Registers a new persistence.
+     *
+     * @param string $persistenceId
+     * @param array  $persistenceConf
+     */
+    public function registerPersistence($persistenceId, array $persistenceConf)
+    {
+        $configs = $this->getOption(self::OPTION_PERSISTENCES);
+        $configs[$persistenceId] = $persistenceConf;
+        $this->setOption(self::OPTION_PERSISTENCES, $configs);
+    }
+
+    /**
      * @param string $persistenceId
      * @throws common_Exception
      * @return common_persistence_Persistence
      */
     private function createPersistence($persistenceId) {
-        $generis = common_ext_ExtensionsManager::singleton()->getExtensionById('generis');
         $configs = $this->getOption(self::OPTION_PERSISTENCES);
         if (isset($configs[$persistenceId])) {
             $config = $configs[$persistenceId];
