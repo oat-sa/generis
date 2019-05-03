@@ -135,6 +135,13 @@ class common_persistence_Manager extends ConfigurableService
      */
     public function registerPersistence($persistenceId, array $persistenceConf)
     {
+        // wrap pdo drivers in dbal
+        if (strpos($persistenceConf['driver'], 'pdo_') === 0) {
+            $persistenceConf = [
+                'driver' => 'dbal',
+                'connection' => $persistenceConf,
+            ];
+        }
         $configs = $this->getOption(self::OPTION_PERSISTENCES);
         $configs[$persistenceId] = $persistenceConf;
         $this->setOption(self::OPTION_PERSISTENCES, $configs);

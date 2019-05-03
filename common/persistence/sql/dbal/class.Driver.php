@@ -216,4 +216,13 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
         return $this->connection;
     }
     
+    /**
+     * Returns the name of the connections database
+     * @return string
+     */
+    public function getDataBase()
+    {
+        return $this->connection->getDatabase();
+    }
+    
 }
