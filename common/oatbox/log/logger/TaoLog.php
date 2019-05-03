@@ -39,36 +39,41 @@ class TaoLog extends ConfigurableService implements LoggerInterface
     const OPTION_APPENDERS = 'appenders';
 
     /** @var \common_log_Dispatcher */
-    private $dispatcher = null;
-    
+    private $dispatcher;
+
 
     /**
      * @param mixed $level
      * @param string $message
      * @param array $context
-     * @throws \common_configuration_ComponentFactoryException
+     * @throws \Exception
      */
-    public function log($level, $message, array $context = array())
+    public function log($level, $message, array $context = [])
     {
-        $stack = defined('DEBUG_BACKTRACE_IGNORE_ARGS')
+        if (isset($context['trace'])) {
+            $stack = $context['trace'];
+            unset($context['trace']);
+        } else {
+            $stack = defined('DEBUG_BACKTRACE_IGNORE_ARGS')
                 ? debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS)
                 : debug_backtrace(false);
-		array_shift($stack);
-		// retrieving the user can be a complex procedure, leading to missing log informations
-		$user = null;
-		$keys = array_keys($stack);
-		$current = isset($keys[2]) ? $stack[$keys[2]] : $stack[end($keys)];
+            array_shift($stack);
+        }
+
+        $current = isset($stack[2]) ? $stack[2] : end($stack);
         $current = array_merge($current, $context);
-        if (isset($current['file']) && isset($current['line'])) {
+
+        if (isset($current['file'], $current['line'])) {
             $errorFile = $current['file'];
             $errorLine = $current['line'];
-        } elseif (isset($current['class']) && isset($current['function'])) {
-            $errorFile = $current['class'];
-            $errorLine = $current['function'];
+        } elseif (isset($current['class'], $context['function'])) {
+            $errorFile = $context['class'];
+            $errorLine = $context['function'];
         } else {
             $errorFile = $errorLine = 'undefined';
         }
-		if(PHP_SAPI != 'cli'){
+
+		if(PHP_SAPI !== 'cli'){
 			$requestURI = $_SERVER['REQUEST_URI'];
 		} else {
 			$requestURI = implode(' ', $_SERVER['argv']);
@@ -103,6 +108,4 @@ class TaoLog extends ConfigurableService implements LoggerInterface
         }
         return $this->dispatcher;
     }
-
-
 }

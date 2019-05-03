@@ -349,9 +349,14 @@ class Updater extends common_ext_ExtensionUpdater {
             $this->setVersion('8.0.0');
         }
 
-        $this->skip('8.0.0', '8.1.1');
+        $this->skip('8.0.0', '9.1.3');
 
-        if ($this->isVersion('8.1.1')) {
+        if ($this->isVersion('9.1.3')) {
+            $this->getServiceManager()->unregister('generis/profiler');
+            $this->setVersion('10.0.0');
+        }
+
+        if ($this->isVersion('10.0.0')) {
             /** @var \common_persistence_Manager $persistenceManager */
             $persistenceManager = $this->getServiceManager()->get(\common_persistence_Manager::SERVICE_ID);
 
@@ -368,7 +373,7 @@ class Updater extends common_ext_ExtensionUpdater {
             $persistenceManager->setOption('persistences', $persistenceManagerConfig);
             $this->getServiceManager()->register(\common_persistence_Manager::SERVICE_ID, $persistenceManager);
 
-            $this->setVersion('8.1.2');
+            $this->setVersion('11.0.0');
         }
     }
 }

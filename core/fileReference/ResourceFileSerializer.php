@@ -27,6 +27,11 @@ use oat\oatbox\filesystem\File;
 use oat\oatbox\filesystem\FileSystemService;
 use oat\oatbox\service\ConfigurableService;
 
+/**
+ * Class ResourceFileSerializer
+ *
+ * @see UrlFileSerializer
+ */
 class ResourceFileSerializer extends ConfigurableService implements FileReferenceSerializer
 {
     use OntologyAwareTrait;
@@ -146,6 +151,10 @@ class ResourceFileSerializer extends ConfigurableService implements FileReferenc
 
         if (!$file->exists()) {
             throw new \common_exception_NotFound('File reference serial "'. $serial .'" not exist as resource');
+        }
+
+        if (!$file->hasType($this->getClass(GenerisRdf::CLASS_GENERIS_FILE))) {
+            throw new \common_exception_NotFound('Resource ' . $serial . ' is not a file');
         }
 
         $properties = [];

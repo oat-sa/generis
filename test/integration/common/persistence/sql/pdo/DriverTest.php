@@ -17,21 +17,22 @@
  * Copyright (c) 2017 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
 
-namespace oat\generis\test\unit\common\persistence\sql\pdo;
+namespace oat\generis\test\integration\common\persistence\sql\pdo;
 
+use common_persistence_sql_pdo_sqlite_Driver;
+use common_persistence_sql_Platform;
+use Doctrine\DBAL\Query\QueryBuilder;
 use oat\generis\test\TestCase;
 
 /**
- * Class DriverTest
  * @package oat\generis\test\unit\common\persistence\sql\dbal
- * @author Aleh Hutnikau, <hutnikau@1pt.com>
+ * @author  Aleh Hutnikau, <hutnikau@1pt.com>
  */
 class DriverTest extends TestCase
 {
-
     public function testGetPlatForm()
     {
-        $driver = new \common_persistence_sql_pdo_sqlite_Driver();
+        $driver = new common_persistence_sql_pdo_sqlite_Driver();
         $driver->connect('test_connection', [
             'driver' => 'pdo_sqlite',
             'user' => null,
@@ -39,8 +40,8 @@ class DriverTest extends TestCase
             'host' => null,
             'dbname' => ':memory:',
         ]);
-        $platform = $driver->getPlatForm();
-        $this->assertTrue($platform instanceof \common_persistence_sql_Platform);
-        $this->assertTrue($platform->getQueryBuilder() instanceof \Doctrine\DBAL\Query\QueryBuilder);
+        $platform = $driver->getPlatform();
+        $this->assertInstanceOf(common_persistence_sql_Platform::class, $platform);
+        $this->assertInstanceOf(QueryBuilder::class, $platform->getQueryBuilder());
     }
 }

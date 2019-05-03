@@ -60,7 +60,7 @@ class EventManager extends ConfigurableService
      * Attach a Listener to one or multiple events
      * 
      * @param mixed $event either an Event object or a string
-     * @param Callable $callback
+     * @param callable $callback
      */
     public function attach($event, $callback) {
         $events = is_array($event) ? $event : array($event);

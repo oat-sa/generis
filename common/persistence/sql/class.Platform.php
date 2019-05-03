@@ -183,6 +183,19 @@ class common_persistence_sql_Platform {
     }
 
     /**
+     * Returns the SQL snippet to append to any SELECT statement which locks rows in shared read lock.
+     *
+     * This defaults to the ANSI SQL "FOR UPDATE", which is an exclusive lock (Write). Some database
+     * vendors allow to lighten this constraint up to be a real read lock.
+     *
+     * @return string
+     */
+    public function getReadLockSQL()
+    {
+        return $this->dbalPlatform->getReadLockSQL();
+    }
+
+    /**
      * Starts a transaction by suspending auto-commit mode.
      * 
      * @return void

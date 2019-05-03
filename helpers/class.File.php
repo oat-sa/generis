@@ -1,25 +1,25 @@
 <?php
 
-/**  
+/**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
  * of the License (non-upgradable).
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- * 
+ *
  * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
  *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
  *               2013      (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- * 
+ *
  */
 
 /**
@@ -30,7 +30,7 @@
  * @access public
  * @author Lionel Lecaque, <lionel@taotesting.com>
  * @package generis
- 
+
  */
 class helpers_File
 {
@@ -38,13 +38,13 @@ class helpers_File
     const SCAN_DIRECTORY = 2;
 
     // --- ATTRIBUTES ---
-    
+
     /**
      * matches [A-Za-z] | - | _
      * @var array
      */
     private static $ALLOWED_CHARACTERS = array('A' => '','B' => '','C' => '','D' => '','E' => '','F' => '','G' => '','H' => '','I' => '','J' => '','K' => '','L' => '','M' => '','N' => '','O' => '','P' => '','Q' => '','R' => '','S' => '','T' => '','U' => '','V' => '','W' => '','X' => '','Y' => '','Z' => '','a' => '','b' => '','c' => '','d' => '','e' => '','f' => '','g' => '','h' => '','i' => '','j' => '','k' => '','l' => '','m' => '','n' => '','o' => '','p' => '','q' => '','r' => '','s' => '','t' => '','u' => '','v' => '','w' => '','x' => '','y' => '','z' => '',0 => '',1 => '',2 => '',3 => '',4 => '',5 => '',6 => '',7 => '',8 => '',9 => '','_' => '','-' => '');
-    
+
     /**
      * Directory Mode
      *
@@ -62,7 +62,7 @@ class helpers_File
      * @var int
      */
     public static $FILE = 1;
-    
+
     // --- OPERATIONS ---
 
     /**
@@ -78,11 +78,11 @@ class helpers_File
     static public function getRelPath($from, $to)
     {
         $returnValue = (string) '';
-        
+
         $from = is_dir($from) ? $from : dirname($from);
         $arrFrom = explode(DIRECTORY_SEPARATOR, rtrim($from, DIRECTORY_SEPARATOR));
         $arrTo = explode(DIRECTORY_SEPARATOR, rtrim($to, DIRECTORY_SEPARATOR));
-        
+
         while (count($arrFrom) && count($arrTo) && ($arrFrom[0] == $arrTo[0])) {
             array_shift($arrFrom);
             array_shift($arrTo);
@@ -91,12 +91,32 @@ class helpers_File
             $returnValue .= '..' . DIRECTORY_SEPARATOR;
         }
         $returnValue .= implode(DIRECTORY_SEPARATOR, $arrTo);
-        
+
         return (string) $returnValue;
     }
 
     /**
-     * deletes a file or a directory recursively
+     * Helps prevent 'path traversal' attacks
+     *
+     * @param $filename
+     * @param $directory
+     * @return bool
+     */
+    static public function isFileInsideDirectory($filename, $directory)
+    {
+        $canonicalDirectory = realpath($directory);
+        if (false === $canonicalDirectory) {
+            return false;
+        }
+        $canonicalFilename = realpath($canonicalDirectory . DIRECTORY_SEPARATOR . $filename);
+        if (false === $canonicalFilename) {
+            return false;
+        }
+        return 0 === strpos($canonicalFilename, $canonicalDirectory);
+    }
+
+    /**
+     * deletes a file or a direcstory recursively
      *
      * @access public
      * @author Lionel Lecaque, <lionel@taotesting.com>
@@ -106,7 +126,7 @@ class helpers_File
     static public function remove($path)
     {
         $returnValue = (bool) false;
-        
+
         if (is_file($path)) {
             $returnValue = unlink($path);
         } elseif (is_dir($path)) {
@@ -124,20 +144,20 @@ class helpers_File
             } else {
                 throw new common_exception_Error('"' . $path . '" cannot be opened for removal');
             }
-            
+
             $returnValue = rmdir($path);
         } else {
             throw new common_exception_Error('"' . $path . '" cannot be removed since it\'s neither a file nor directory');
         }
-        
+
         return (bool) $returnValue;
     }
 
     /**
      * Empty a directory without deleting it
-     * 
+     *
      * @param string $path
-     * @param boolean $ignoreSystemFiles 
+     * @param boolean $ignoreSystemFiles
      * @return boolean
      */
     static public function emptyDirectory($path, $ignoreSystemFiles = false)
@@ -149,7 +169,7 @@ class helpers_File
                 if ($entry[0] === '.' && $ignoreSystemFiles === true) {
                     continue;
                 }
-                
+
                 $success = self::remove($path . DIRECTORY_SEPARATOR . $entry) ? $success : false;
             }
         }
@@ -176,18 +196,18 @@ class helpers_File
 
         $returnValue = (bool) false;
 
-        
+
         // Check for System File
         $basename = basename($source);
         if ($basename[0] === '.' && $ignoreSystemFiles === true) {
             return false;
         }
-        
+
         // Check for symlinks
         if (is_link($source)) {
             return symlink(readlink($source), $destination);
         }
-        
+
         // Simple copy for a file
         if (is_file($source)) {
             // get path info of destination.
@@ -197,7 +217,7 @@ class helpers_File
                     return false;
                 }
             }
-            
+
             return copy($source, $destination);
         }
 
@@ -227,15 +247,15 @@ class helpers_File
             return false;
         }
 
-        
+
         return (bool) $returnValue;
     }
 
     /**
      * Scan directory located at $path depending on given $options array.
-     * 
+     *
      * Options are the following:
-     * 
+     *
      * * 'recursive' -> boolean
      * * 'only' -> boolean ($FILE or $DIR)
      * * 'absolute' -> boolean (returns absolute path or file name)
@@ -249,11 +269,11 @@ class helpers_File
     static public function scandir($path, $options = array())
     {
         $returnValue = array();
-        
+
         $recursive = isset($options['recursive']) ? $options['recursive'] : false;
         $only = isset($options['only']) ? $options['only'] : null;
         $absolute = isset($options['absolute']) ? $options['absolute'] : false;
-        
+
         if (is_dir($path)) {
             $iterator = new DirectoryIterator($path);
             foreach ($iterator as $fileinfo) {
@@ -261,7 +281,7 @@ class helpers_File
                 if ($absolute === true) {
                     $fileName = $fileinfo->getPathname();
                 }
-                
+
                 if (! $fileinfo->isDot()) {
                     if (! is_null($only)) {
                         if ($only == self::SCAN_DIRECTORY && $fileinfo->isDir()) {
@@ -274,7 +294,7 @@ class helpers_File
                     } else {
                         array_push($returnValue, $fileName);
                     }
-                    
+
                     if ($fileinfo->isDir() && $recursive) {
                         $returnValue = array_merge($returnValue, self::scandir(realpath($fileinfo->getPathname()), $options));
                     }
@@ -283,10 +303,10 @@ class helpers_File
         } else {
             throw new common_Exception("An error occured : The function (" . __METHOD__ . ") of the class (" . __CLASS__ . ") is expecting a directory path as first parameter : " . $path);
         }
-        
+
         return (array) $returnValue;
     }
-    
+
     /**
      * Convert url to path
      * @param string $path
@@ -303,15 +323,15 @@ class helpers_File
      * An alternative way to resolve the real path of a path. The resulting
      * path might point to something non-existant on the file system contrary to
      * PHP's realpath function.
-     * 
+     *
      * @param string $path The original path.
      * @return string The resolved path.
      */
-    static public function truePath($path) 
+    static public function truePath($path)
     {
         // From Magento Mass Import utils (MIT)
         // http://sourceforge.net/p/magmi/git/ci/master/tree/magmi-0.8/inc/magmi_utils.php
-        
+
         // whether $path is unix or not
         $unipath = strlen( $path ) == 0 || $path{0} != '/';
         // attempts to detect if path is relative in which case, add cwd
@@ -333,10 +353,6 @@ class helpers_File
             }
         }
         $path = implode( DIRECTORY_SEPARATOR, $absolutes );
-        // resolve any symlinks
-        if ( file_exists( $path ) && linkinfo( $path ) > 0 ) {
-            $path = readlink( $path );
-        }
         // put initial separator that could have been lost
         $path = !$unipath ? '/' . $path : $path;
         return $path;
@@ -345,7 +361,7 @@ class helpers_File
     /**
      * Sanitize a string using an injective function
      * to prevent collisions
-     * 
+     *
      * @param string $key
      * @return string
      */
@@ -356,13 +372,13 @@ class helpers_File
         }
         return $sanitized;
     }
-    
+
     /**
      * Whether or not a given directory located at $path
      * contains one or more files with extension $types.
-     * 
+     *
      * If $path is not readable or not a directory, false is returned.
-     * 
+     *
      * @param string $path
      * @param string|array $types Types to look for with no dot. e.g. 'php', 'js', ...
      * @param boolean $recursive Whether or not scan the directory recursively.
@@ -373,15 +389,15 @@ class helpers_File
         if (!is_array($types)) {
             $types = array($types);
         }
-        
+
         if (!is_dir($path)) {
             return false;
         }
-        
+
         foreach (self::scandir($path, array('absolute' => true, 'recursive' => $recursive)) as $item) {
             if (is_file($item)) {
                 $pathParts = pathinfo($item);
-                
+
                 // if .inc.php, returns 'php' as extension, so no worries with composed types
                 // if you are looking for some php code.
                 if (isset($pathParts['extension']) && in_array($pathParts['extension'], $types)) {
@@ -389,7 +405,7 @@ class helpers_File
                 }
             }
         }
-        
+
         return false;
     }
 
