@@ -356,15 +356,13 @@ class Updater extends common_ext_ExtensionUpdater {
             $persistenceManager = $this->getServiceManager()->get(\common_persistence_Manager::SERVICE_ID);
 
             $persistenceManagerConfig = $persistenceManager->getOption('persistences');
-
-            $pdoDriverPrefix = 'pdo_';
             foreach ($persistenceManagerConfig as $persistenceId => $persistenceParams) {
-                if (substr($persistenceParams['driver'], 0, strlen($pdoDriverPrefix)) === $pdoDriverPrefix) {
-                    $newParams = [
+                // wrap pdo drivers in dbal
+                if (strpos($persistenceParams['driver'], 'pdo_') === 0) {
+                    $persistenceManagerConfig[$persistenceId] = [
                         'driver' => 'dbal',
                         'connection' => $persistenceParams,
                     ];
-                    $persistenceManagerConfig[$persistenceId] = $newParams;
                 }
             }
             $persistenceManager->setOption('persistences', $persistenceManagerConfig);
