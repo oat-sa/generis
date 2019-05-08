@@ -367,5 +367,7 @@ class Updater extends common_ext_ExtensionUpdater
             $this->getServiceManager()->unregister('generis/profiler');
             $this->setVersion('10.0.0');
         }
+
+        $this->skip('10.0.0', '10.1.0');
     }
 }
