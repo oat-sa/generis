@@ -133,10 +133,10 @@ class core_kernel_persistence_smoothsql_Resource
         $platform = $this->getPersistence()->getPlatForm();
 
         // Define language if required
-        $lang = '';
-        $defaultLg = '';
         if (isset($options['lg'])) {
             $lang = $options['lg'];
+            $default = null;
+            $defaultLg = '';
         } else {
             $lang = $this->getServiceLocator()->get(SessionService::SERVICE_ID)->getCurrentSession()->getDataLanguage();
             $default = $this->getServiceLocator()->get(UserLanguageServiceInterface::SERVICE_ID)->getDefaultLanguage();
@@ -265,6 +265,7 @@ class core_kernel_persistence_smoothsql_Resource
         $returnValue = (bool)false;
 
         if (is_array($properties) && count($properties) > 0) {
+            /** @var common_session_Session $session */
             $session = $this->getServiceLocator()->get(SessionService::SERVICE_ID)->getCurrentSession();
             $platform = $this->getPersistence()->getPlatForm();
 
@@ -320,8 +321,6 @@ class core_kernel_persistence_smoothsql_Resource
      */
     public function setPropertyValueByLg(Resource $resource, Property $property, $value, $lg)
     {
-        $returnValue = (bool)false;
-
         $platform = $this->getPersistence()->getPlatForm();
         $userId = $this->getServiceLocator()->get(SessionService::SERVICE_ID)->getCurrentUser()->getIdentifier();
 
@@ -355,8 +354,6 @@ class core_kernel_persistence_smoothsql_Resource
      */
     public function removePropertyValues(Resource $resource, Property $property, $options = [])
     {
-        $returnValue = (bool)false;
-
         // Optional params
         $pattern = isset($options['pattern']) && !is_null($options['pattern']) ? $options['pattern'] : null;
         $like = isset($options['like']) && $options['like'] == true ? true : false;
@@ -428,8 +425,6 @@ class core_kernel_persistence_smoothsql_Resource
      */
     public function removePropertyValueByLg(Resource $resource, Property $property, $lg, $options = [])
     {
-        $returnValue = (bool)false;
-
         $sqlQuery = 'DELETE FROM statements WHERE subject = ? and predicate = ? and l_language = ?';
         //be sure the property we try to remove is included in an updatable model
         $sqlQuery .= ' AND ' . $this->getModelWriteSqlCondition();
@@ -464,7 +459,7 @@ class core_kernel_persistence_smoothsql_Resource
         $query = 'SELECT * FROM statements WHERE subject = ? AND ' . $this->getModelReadSqlCondition() . ' ORDER BY predicate';
         $result = $this->getPersistence()->query($query, [$resource->getUri()]);
 
-        $returnValue = new ContainerCollection(new common_Object(__METHOD__));
+        $returnValue = new ContainerCollection(new common_Object());
         while ($statement = $result->fetch()) {
             $triple = new Triple();
             $triple->modelid = $statement["modelid"];
@@ -568,8 +563,6 @@ class core_kernel_persistence_smoothsql_Resource
      */
     public function delete(Resource $resource, $deleteReference = false)
     {
-        $returnValue = (bool)false;
-
         $query = 'DELETE FROM statements WHERE subject = ? AND ' . $this->getModelWriteSqlCondition();
         $returnValue = $this->getPersistence()->exec($query, [$resource->getUri()]);
 
@@ -641,8 +634,6 @@ class core_kernel_persistence_smoothsql_Resource
         $result = $this->getPersistence()->query($query);
 
         $rows = $result->fetchAll();
-        $sortedByLg = Utils::sortByLanguage($this->getPersistence(), $rows, 'l_language', $lang, $default);
-        $identifiedLg = Utils::identifyFirstLanguage($sortedByLg);
 
         foreach ($rows as $row) {
             $value = $platform->getPhpTextValue($row['object']);
@@ -684,23 +675,19 @@ class core_kernel_persistence_smoothsql_Resource
      */
     public function removeType(Resource $resource, Class_ $class)
     {
-        $returnValue = (bool)false;
-
         $query = 'DELETE FROM statements 
 		    		WHERE subject = ? AND predicate = ? AND ' . $this->getPersistence()->getPlatForm()->getObjectTypeCondition() . ' = ?';
 
         //be sure the property we try to remove is included in an updatable model
         $query .= ' AND ' . $this->getModelWriteSqlCondition();
 
-        $returnValue = $this->getPersistence()->exec($query, [
+        $this->getPersistence()->exec($query, [
             $resource->getUri(),
             OntologyRdf::RDF_TYPE,
             $class->getUri(),
         ]);
 
-        $returnValue = true;
-
-        return (bool)$returnValue;
+        return true;
     }
 
     /**
