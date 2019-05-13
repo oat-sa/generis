@@ -20,11 +20,11 @@
  *               2017 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
 
-use core_kernel_classes_Class as Class_;
+use core_kernel_classes_Class as RdfClass;
 use core_kernel_classes_ContainerCollection as ContainerCollection;
 use core_kernel_classes_Literal as Literal;
 use core_kernel_classes_Property as Property;
-use core_kernel_classes_Resource as Resource;
+use core_kernel_classes_Resource as RdfResource;
 use core_kernel_classes_Triple as Triple;
 use core_kernel_persistence_Exception as Exception;
 use core_kernel_persistence_PersistenceImpl as PersistenceImpl;
@@ -89,12 +89,12 @@ class core_kernel_persistence_smoothsql_Resource
      * @access public
      * @author Joel Bout, <joel.bout@tudor.lu>
      *
-     * @param Resource $resource
+     * @param RdfResource $resource
      *
      * @return array
      * @throws common_exception_Error
      */
-    public function getTypes(Resource $resource)
+    public function getTypes(RdfResource $resource)
     {
         $returnValue = [];
 
@@ -103,7 +103,7 @@ class core_kernel_persistence_smoothsql_Resource
 
         while ($row = $sth->fetch()) {
             $uri = $this->getPersistence()->getPlatForm()->getPhpTextValue($row['object']);
-            $returnValue[$uri] = new Class_($uri);
+            $returnValue[$uri] = new RdfClass($uri);
         }
 
         return (array)$returnValue;
@@ -115,14 +115,14 @@ class core_kernel_persistence_smoothsql_Resource
      * @access public
      * @author Joel Bout, <joel.bout@tudor.lu>
      *
-     * @param Resource $resource
-     * @param Property $property
-     * @param array    $options
+     * @param RdfResource $resource
+     * @param Property    $property
+     * @param array       $options
      *
      * @return array
      * @throws Exception
      */
-    public function getPropertyValues(Resource $resource, Property $property, $options = [])
+    public function getPropertyValues(RdfResource $resource, Property $property, $options = [])
     {
         $returnValue = [];
 
@@ -182,14 +182,14 @@ class core_kernel_persistence_smoothsql_Resource
      * @access public
      * @author Joel Bout, <joel.bout@tudor.lu>
      *
-     * @param Resource $resource
-     * @param Property $property
-     * @param string   $lg
+     * @param RdfResource $resource
+     * @param Property    $property
+     * @param string      $lg
      *
      * @return ContainerCollection
      * @throws Exception
      */
-    public function getPropertyValuesByLg(Resource $resource, Property $property, $lg)
+    public function getPropertyValuesByLg(RdfResource $resource, Property $property, $lg)
     {
         $returnValue = null;
 
@@ -211,17 +211,17 @@ class core_kernel_persistence_smoothsql_Resource
      * @access public
      * @author Joel Bout, <joel.bout@tudor.lu>
      *
-     * @param Resource $resource
-     * @param Property $property
-     * @param string   $object
-     * @param string   $lg
+     * @param RdfResource $resource
+     * @param Property    $property
+     * @param string      $object
+     * @param string      $lg
      *
      * @return boolean
      */
-    public function setPropertyValue(Resource $resource, Property $property, $object, $lg = null)
+    public function setPropertyValue(RdfResource $resource, Property $property, $object, $lg = null)
     {
         $userId = $this->getServiceLocator()->get(SessionService::SERVICE_ID)->getCurrentUser()->getIdentifier();
-        $object = $object instanceof Resource ? $object->getUri() : (string)$object;
+        $object = $object instanceof RdfResource ? $object->getUri() : (string)$object;
         $platform = $this->getPersistence()->getPlatForm();
         $lang = "";
         // Define language if required
@@ -255,12 +255,12 @@ class core_kernel_persistence_smoothsql_Resource
      * @access public
      * @author Joel Bout, <joel.bout@tudor.lu>
      *
-     * @param Resource $resource
-     * @param array    $properties
+     * @param RdfResource $resource
+     * @param array       $properties
      *
      * @return boolean
      */
-    public function setPropertiesValues(Resource $resource, $properties)
+    public function setPropertiesValues(RdfResource $resource, $properties)
     {
         $returnValue = (bool)false;
 
@@ -277,11 +277,11 @@ class core_kernel_persistence_smoothsql_Resource
                 $lang = ($property->isLgDependent() ? $session->getDataLanguage() : '');
                 $formatedValues = [];
 
-                if ($value instanceof Resource) {
+                if ($value instanceof RdfResource) {
                     $formatedValues[] = $value->getUri();
                 } elseif (is_array($value)) {
                     foreach ($value as $val) {
-                        $formatedValues[] = ($val instanceof Resource) ? $val->getUri() : $val;
+                        $formatedValues[] = ($val instanceof RdfResource) ? $val->getUri() : $val;
                     }
                 } else {
                     $formatedValues[] = ($value == null) ? '' : $value;
@@ -312,14 +312,14 @@ class core_kernel_persistence_smoothsql_Resource
      * @access public
      * @author Joel Bout, <joel.bout@tudor.lu>
      *
-     * @param Resource $resource
-     * @param Property $property
-     * @param string   $value
-     * @param string   $lg
+     * @param RdfResource $resource
+     * @param Property    $property
+     * @param string      $value
+     * @param string      $lg
      *
      * @return boolean
      */
-    public function setPropertyValueByLg(Resource $resource, Property $property, $value, $lg)
+    public function setPropertyValueByLg(RdfResource $resource, Property $property, $value, $lg)
     {
         $platform = $this->getPersistence()->getPlatForm();
         $userId = $this->getServiceLocator()->get(SessionService::SERVICE_ID)->getCurrentUser()->getIdentifier();
@@ -346,13 +346,13 @@ class core_kernel_persistence_smoothsql_Resource
      * @access public
      * @author Joel Bout, <joel.bout@tudor.lu>
      *
-     * @param Resource $resource
-     * @param Property $property
-     * @param array    $options
+     * @param RdfResource $resource
+     * @param Property    $property
+     * @param array       $options
      *
      * @return boolean
      */
-    public function removePropertyValues(Resource $resource, Property $property, $options = [])
+    public function removePropertyValues(RdfResource $resource, Property $property, $options = [])
     {
         // Optional params
         $pattern = isset($options['pattern']) && !is_null($options['pattern']) ? $options['pattern'] : null;
@@ -416,14 +416,14 @@ class core_kernel_persistence_smoothsql_Resource
      * @access public
      * @author Joel Bout, <joel.bout@tudor.lu>
      *
-     * @param Resource $resource
-     * @param Property $property
-     * @param string   $lg
-     * @param array    $options
+     * @param RdfResource $resource
+     * @param Property    $property
+     * @param string      $lg
+     * @param array       $options
      *
      * @return boolean
      */
-    public function removePropertyValueByLg(Resource $resource, Property $property, $lg, $options = [])
+    public function removePropertyValueByLg(RdfResource $resource, Property $property, $lg, $options = [])
     {
         $sqlQuery = 'DELETE FROM statements WHERE subject = ? and predicate = ? and l_language = ?';
         //be sure the property we try to remove is included in an updatable model
@@ -448,11 +448,11 @@ class core_kernel_persistence_smoothsql_Resource
      * @access public
      * @author Joel Bout, <joel@taotesting.com>
      *
-     * @param Resource $resource
+     * @param RdfResource $resource
      *
      * @return ContainerCollection
      */
-    public function getRdfTriples(Resource $resource)
+    public function getRdfTriples(RdfResource $resource)
     {
         $returnValue = null;
 
@@ -482,12 +482,12 @@ class core_kernel_persistence_smoothsql_Resource
      * @access public
      * @author Joel Bout, <joel.bout@tudor.lu>
      *
-     * @param Resource $resource
-     * @param Property $property
+     * @param RdfResource $resource
+     * @param Property    $property
      *
      * @return array
      */
-    public function getUsedLanguages(Resource $resource, Property $property)
+    public function getUsedLanguages(RdfResource $resource, Property $property)
     {
         $returnValue = [];
 
@@ -511,13 +511,13 @@ class core_kernel_persistence_smoothsql_Resource
      * @access public
      * @author Joel Bout, <joel.bout@tudor.lu>
      *
-     * @param Resource $resource
-     * @param array    $excludedProperties
+     * @param RdfResource $resource
+     * @param array       $excludedProperties
      *
-     * @return Resource
+     * @return RdfResource
      * @throws common_exception_Error
      */
-    public function duplicate(Resource $resource, $excludedProperties = [])
+    public function duplicate(RdfResource $resource, $excludedProperties = [])
     {
         $returnValue = null;
         $newUri = common_Utils::getNewUri();
@@ -543,7 +543,7 @@ class core_kernel_persistence_smoothsql_Resource
             }
 
             if ($this->getPersistence()->insertMultiple('statements', $valuesToInsert)) {
-                $returnValue = new Resource($newUri);
+                $returnValue = new RdfResource($newUri);
             }
         }
 
@@ -556,12 +556,12 @@ class core_kernel_persistence_smoothsql_Resource
      * @access public
      * @author Joel Bout, <joel.bout@tudor.lu>
      *
-     * @param Resource $resource
-     * @param boolean  $deleteReference
+     * @param RdfResource $resource
+     * @param boolean     $deleteReference
      *
      * @return boolean
      */
-    public function delete(Resource $resource, $deleteReference = false)
+    public function delete(RdfResource $resource, $deleteReference = false)
     {
         $query = 'DELETE FROM statements WHERE subject = ? AND ' . $this->getModelWriteSqlCondition();
         $returnValue = $this->getPersistence()->exec($query, [$resource->getUri()]);
@@ -589,13 +589,13 @@ class core_kernel_persistence_smoothsql_Resource
      * @access public
      * @author Joel Bout, <joel.bout@tudor.lu>
      *
-     * @param Resource $resource
-     * @param array    $properties
+     * @param RdfResource $resource
+     * @param array       $properties
      *
      * @return array
      * @throws common_exception_Error
      */
-    public function getPropertiesValues(Resource $resource, $properties)
+    public function getPropertiesValues(RdfResource $resource, $properties)
     {
         $returnValue = [];
 
@@ -638,7 +638,7 @@ class core_kernel_persistence_smoothsql_Resource
         foreach ($rows as $row) {
             $value = $platform->getPhpTextValue($row['object']);
             $returnValue[$row['predicate']][] = common_Utils::isUri($value)
-                ? new Resource($value)
+                ? new RdfResource($value)
                 : new Literal($value);
         }
 
@@ -651,12 +651,12 @@ class core_kernel_persistence_smoothsql_Resource
      * @access public
      * @author Joel Bout, <joel.bout@tudor.lu>
      *
-     * @param Resource $resource
-     * @param Class_   $class
+     * @param RdfResource $resource
+     * @param RdfClass    $class
      *
      * @return boolean
      */
-    public function setType(Resource $resource, Class_ $class)
+    public function setType(RdfResource $resource, RdfClass $class)
     {
         $returnValue = $this->setPropertyValue($resource, $this->getModel()->getProperty(OntologyRdf::RDF_TYPE), $class);
         return (bool)$returnValue;
@@ -668,12 +668,12 @@ class core_kernel_persistence_smoothsql_Resource
      * @access public
      * @author Joel Bout, <joel.bout@tudor.lu>
      *
-     * @param Resource $resource
-     * @param Class_   $class
+     * @param RdfResource $resource
+     * @param RdfClass    $class
      *
      * @return boolean
      */
-    public function removeType(Resource $resource, Class_ $class)
+    public function removeType(RdfResource $resource, RdfClass $class)
     {
         $query = 'DELETE FROM statements 
 		    		WHERE subject = ? AND predicate = ? AND ' . $this->getPersistence()->getPlatForm()->getObjectTypeCondition() . ' = ?';
@@ -704,11 +704,11 @@ class core_kernel_persistence_smoothsql_Resource
      * @access public
      * @author Joel Bout, <joel.bout@tudor.lu>
      *
-     * @param Resource $resource
+     * @param RdfResource $resource
      *
      * @return boolean
      */
-    public function isValidContext(Resource $resource)
+    public function isValidContext(RdfResource $resource)
     {
         return true;
     }
