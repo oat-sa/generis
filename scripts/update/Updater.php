@@ -369,5 +369,25 @@ class Updater extends common_ext_ExtensionUpdater
         }
 
         $this->skip('10.0.0', '10.1.0');
+
+        if ($this->isVersion('10.1.0')) {
+            /** @var \common_persistence_Manager $persistenceManager */
+            $persistenceManager = $this->getServiceManager()->get(\common_persistence_Manager::SERVICE_ID);
+
+            $persistenceManagerConfig = $persistenceManager->getOption('persistences');
+            foreach ($persistenceManagerConfig as $persistenceId => $persistenceParams) {
+                // wrap pdo drivers in dbal
+                if (strpos($persistenceParams['driver'], 'pdo_') === 0) {
+                    $persistenceManagerConfig[$persistenceId] = [
+                        'driver' => 'dbal',
+                        'connection' => $persistenceParams,
+                    ];
+                }
+            }
+            $persistenceManager->setOption('persistences', $persistenceManagerConfig);
+            $this->getServiceManager()->register(\common_persistence_Manager::SERVICE_ID, $persistenceManager);
+
+            $this->setVersion('11.0.0');
+        }
     }
 }
