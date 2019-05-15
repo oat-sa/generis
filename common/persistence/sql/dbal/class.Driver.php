@@ -211,7 +211,7 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
     /**
      * @return \Doctrine\DBAL\Connection
      */
-    protected function getDbalConnection()
+    public function getDbalConnection()
     {
         return $this->connection;
     }
