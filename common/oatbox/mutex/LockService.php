@@ -23,6 +23,7 @@ namespace oat\oatbox\mutex;
 
 use oat\oatbox\service\ConfigurableService;
 use Symfony\Component\Lock\Factory;
+use Symfony\Component\Lock\Store\FlockStore;
 use Symfony\Component\Lock\StoreInterface;
 use Symfony\Component\Lock\Store\PdoStore;
 use Symfony\Component\Lock\Store\RetryTillSaveStore;
@@ -66,15 +67,17 @@ class LockService extends ConfigurableService
     private function getStore()
     {
         if ($this->store === null) {
-            $persistence = $this->getOption(self::OPTION_PERSISTENCE);
+            $persistenceId = $this->getOption(self::OPTION_PERSISTENCE);
             $persistenceManager = $this->getServiceLocator()->get(\common_persistence_Manager::SERVICE_ID);
-            $persistence = $persistenceManager->getPersistence($persistence);
-            if (!$persistence instanceof \common_persistence_SqlPersistence) {
-                throw new \common_exception_NotImplemented('Only Sql persistence store supported by LockService');
+            if ($persistenceManager->hasPersistence($persistenceId)) {
+                $persistence = $persistenceManager->getPersistenceById($persistenceId);
+                if (!$persistence instanceof \common_persistence_SqlPersistence) {
+                    throw new \common_exception_NotImplemented('Only Sql persistence store supported by LockService');
+                }
+                $this->store = new PdoStore($persistence->getDriver()->getDbalConnection());
+            } elseif (is_dir($persistenceId) && is_writable($persistenceId)) {
+                $this->store = new FlockStore($persistenceId);
             }
-
-            $this->store = new PdoStore($persistence->getDriver()->getDbalConnection());
-
         }
         return $this->store;
     }
@@ -84,10 +87,12 @@ class LockService extends ConfigurableService
      */
     public function install()
     {
-        try {
-            $this->getStore()->createTable();
-        } catch (\Doctrine\DBAL\DBALException $exception) {
-            // the table could not be created for some reason
+        if ($this->getStore() instanceof PdoStore) {
+            try {
+                $this->getStore()->createTable();
+            } catch (\Doctrine\DBAL\DBALException $exception) {
+                // the table could not be created for some reason
+            }
         }
     }
 }
