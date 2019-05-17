@@ -20,9 +20,10 @@
 
 namespace oat\generis\scripts\install;
 
-use common_report_Report;
+use common_report_Report as Report;
 use oat\oatbox\extension\InstallAction;
 use oat\oatbox\mutex\LockService;
+use Symfony\Component\Lock\Store\PdoStore;
 
 /**
  * Class RegisterLockService
@@ -32,18 +33,19 @@ class RegisterLockService extends InstallAction
 {
     /**
      * @param $params
-     * @return common_report_Report
+     * @return Report
      * @throws \common_Exception
      * @throws \oat\oatbox\service\exception\InvalidServiceManagerException
      */
     public function __invoke($params)
     {
         $service = new LockService([
-            LockService::OPTION_PERSISTENCE => 'default',
+            LockService::OPTION_PERSISTENCE_CLASS => PdoStore::class,
+            LockService::OPTION_PERSISTENCE_OPTIONS => 'default',
         ]);
 
         $this->getServiceManager()->register(LockService::SERVICE_ID, $service);
         $service->install();
-        return new common_report_Report(common_report_Report::TYPE_SUCCESS, 'LockService service is registered');
+        return new Report(Report::TYPE_SUCCESS, 'LockService service is registered');
     }
 }

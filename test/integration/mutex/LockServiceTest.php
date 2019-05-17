@@ -25,6 +25,7 @@ namespace oat\generis\test\integration\mutex;
 use oat\generis\test\TestCase;
 use oat\oatbox\mutex\LockService;
 use oat\oatbox\service\ServiceManager;
+use Symfony\Component\Lock\Store\PdoStore;
 
 /**
  * Class LockServiceTest
@@ -93,7 +94,8 @@ class LockServiceTest extends TestCase
     public function getInstance()
     {
         $service = new LockService([
-            LockService::OPTION_PERSISTENCE => 'default'
+            LockService::OPTION_PERSISTENCE_CLASS => PdoStore::class,
+            LockService::OPTION_PERSISTENCE_OPTIONS => 'default',
         ]);
         $service->setServiceLocator(ServiceManager::getServiceManager());
         $service->install();

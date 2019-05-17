@@ -25,6 +25,8 @@ namespace oat\generis\test\unit\oatbox\mutex;
 use oat\generis\test\TestCase;
 use oat\oatbox\mutex\LockService;
 use oat\oatbox\service\ServiceManager;
+use Symfony\Component\Lock\Store\FlockStore;
+use oat\oatbox\mutex\NoLockStorage;
 
 /**
  * Class LockServiceTest
@@ -48,18 +50,36 @@ class LockServiceTest extends TestCase
         $actionId1 = 'action_1';
         $actionId2 = 'action_2';
         $sleep = 3;
-        $this->getInstance();
+        $this->getInstance(FlockStore::class);
         $time = time();
-        $pipe1 = popen('php ' . __DIR__ . DIRECTORY_SEPARATOR . 'test_action.php ' . $actionId1 . ' ' . $sleep, 'w');
-        $pipe2 = popen('php ' . __DIR__ . DIRECTORY_SEPARATOR . 'test_action.php ' . $actionId1 . ' ' . $sleep, 'w');
-        $pipe3 = popen('php ' . __DIR__ . DIRECTORY_SEPARATOR . 'test_action.php ' . $actionId1 . ' ' . $sleep, 'w');
-        $pipe4 = popen('php ' . __DIR__ . DIRECTORY_SEPARATOR . 'test_action.php ' . $actionId2 . ' ' . $sleep, 'w');
+        $pipe1 = popen('php ' . __DIR__ . DIRECTORY_SEPARATOR . 'test_action.php ' . $actionId1 . ' ' . $sleep . ' FlockStore', 'w');
+        $pipe2 = popen('php ' . __DIR__ . DIRECTORY_SEPARATOR . 'test_action.php ' . $actionId1 . ' ' . $sleep . ' FlockStore', 'w');
+        $pipe3 = popen('php ' . __DIR__ . DIRECTORY_SEPARATOR . 'test_action.php ' . $actionId1 . ' ' . $sleep . ' FlockStore', 'w');
+        $pipe4 = popen('php ' . __DIR__ . DIRECTORY_SEPARATOR . 'test_action.php ' . $actionId2 . ' ' . $sleep . ' FlockStore', 'w');
         pclose($pipe1);
         pclose($pipe2);
         pclose($pipe3);
         pclose($pipe4);
-        $this->assertTrue((time() - $time) >= ($sleep*3));
-        $this->assertTrue((time() - $time) < ($sleep*4));
+        $consumedTime = (time() - $time);
+        $this->assertTrue($consumedTime >= ($sleep*3));
+        $this->assertTrue($consumedTime < ($sleep*4));
+    }
+
+    public function testNoLock()
+    {
+        $actionId1 = 'action_1';
+        $sleep = 3;
+        $this->getInstance(NoLockStorage::class);
+        $time = time();
+        $pipe1 = popen('php ' . __DIR__ . DIRECTORY_SEPARATOR . 'test_action.php ' . $actionId1 . ' ' . $sleep . ' NoLockStorage', 'w');
+        $pipe2 = popen('php ' . __DIR__ . DIRECTORY_SEPARATOR . 'test_action.php ' . $actionId1 . ' ' . $sleep . ' NoLockStorage', 'w');
+        $pipe3 = popen('php ' . __DIR__ . DIRECTORY_SEPARATOR . 'test_action.php ' . $actionId1 . ' ' . $sleep . ' NoLockStorage', 'w');
+        pclose($pipe1);
+        pclose($pipe2);
+        pclose($pipe3);
+        $consumedTime = (time() - $time);
+        $this->assertTrue($consumedTime >= $sleep);
+        $this->assertTrue($consumedTime < ($sleep*3));
     }
 
     /**
@@ -67,14 +87,15 @@ class LockServiceTest extends TestCase
      * @throws \common_Exception
      * @throws \common_exception_NotImplemented
      */
-    public function getInstance()
+    public function getInstance($class)
     {
         $config = new \common_persistence_KeyValuePersistence([], new \common_persistence_InMemoryKvDriver());
         $config->set(\common_persistence_Manager::SERVICE_ID, new \common_persistence_Manager);
         $serviceManager = new ServiceManager($config);
 
         $service = new LockService([
-            LockService::OPTION_PERSISTENCE => $this->lockDir
+            LockService::OPTION_PERSISTENCE_CLASS => $class,
+            LockService::OPTION_PERSISTENCE_OPTIONS => $this->lockDir
         ]);
         $service->setServiceLocator($serviceManager);
         $service->install();

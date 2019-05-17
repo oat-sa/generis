@@ -40,7 +40,8 @@ use Symfony\Component\Lock\Store\RetryTillSaveStore;
 class LockService extends ConfigurableService
 {
     const SERVICE_ID = 'generis/LockService';
-    const OPTION_PERSISTENCE = 'persistence';
+    const OPTION_PERSISTENCE_CLASS = 'persistence_class';
+    const OPTION_PERSISTENCE_OPTIONS = 'persistence_options';
 
     /** @var Factory */
     private $factory;
@@ -50,6 +51,7 @@ class LockService extends ConfigurableService
 
     /**
      * @return Factory
+     * @throws \common_exception_FileReadFailedException
      * @throws \common_exception_NotImplemented
      */
     public function getLockFactory()
@@ -61,20 +63,32 @@ class LockService extends ConfigurableService
     }
 
     /**
-     * @return StoreInterface
+     * @return NoLockStorage|FlockStore|PdoStore|StoreInterface
+     * @throws \common_exception_FileReadFailedException
      * @throws \common_exception_NotImplemented
      */
     private function getStore()
     {
         if ($this->store === null) {
-            $persistenceId = $this->getOption(self::OPTION_PERSISTENCE);
-            $persistenceManager = $this->getServiceLocator()->get(\common_persistence_Manager::SERVICE_ID);
-            if ($persistenceManager->hasPersistence($persistenceId)) {
-                $this->store = $this->getPdoStore($persistenceId);
-            } elseif (is_dir($persistenceId) && is_writable($persistenceId)) {
-                $this->store = $this->getFlockStore($persistenceId);
+            $persistenceClass = $this->getOption(self::OPTION_PERSISTENCE_CLASS);
+            $persistenceOptions = $this->getOption(self::OPTION_PERSISTENCE_OPTIONS);
+
+            switch ($persistenceClass) {
+                case PdoStore::class:
+                    $this->store = $this->getPdoStore($persistenceOptions);
+                    break;
+                case FlockStore::class:
+                    $this->store = $this->getFlockStore($persistenceOptions);
+                    break;
+                case NoLockStorage::class:
+                    $this->store = $this->getNoLockStore($persistenceOptions);
+                    break;
+                default:
+                    throw new \common_exception_NotImplemented('configured storage is not supported');
+
             }
         }
+
         return $this->store;
     }
 
@@ -104,15 +118,27 @@ class LockService extends ConfigurableService
         if (!$persistence instanceof \common_persistence_SqlPersistence) {
             throw new \common_exception_NotImplemented('Only Sql persistence store supported by LockService');
         }
-        return  new PdoStore($persistence->getDriver()->getDbalConnection());
+        return new PdoStore($persistence->getDriver()->getDbalConnection());
     }
 
     /**
-     * @param $persistenceId
+     * @param $filePath
      * @return FlockStore
+     * @throws \common_exception_FileReadFailedException
      */
-    private function getFlockStore($persistenceId)
+    private function getFlockStore($filePath)
     {
-        return new FlockStore($persistenceId);
+        if (is_dir($filePath) && is_writable($filePath)) {
+            return new FlockStore($filePath);
+        }
+        throw new \common_exception_FileReadFailedException('Lock store path is not writable');
+    }
+
+    /**
+     * @return NoLockStorage
+     */
+    private function getNoLockStore()
+    {
+        return new NoLockStorage();
     }
 }

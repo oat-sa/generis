@@ -50,6 +50,7 @@ use oat\oatbox\user\UserLanguageService;
 use oat\oatbox\session\SessionService;
 use oat\generis\model\data\Ontology;
 use oat\oatbox\mutex\LockService;
+use Symfony\Component\Lock\Store\PdoStore;
 
 /**
  * @author Joel Bout <joel@taotesting.com>
@@ -395,7 +396,8 @@ class Updater extends common_ext_ExtensionUpdater
 
         if ($this->isVersion('11.1.0')) {
             $service = new LockService([
-                LockService::OPTION_PERSISTENCE => 'default',
+                LockService::OPTION_PERSISTENCE_CLASS => PdoStore::class,
+                LockService::OPTION_PERSISTENCE_OPTIONS => 'default',
             ]);
             $this->getServiceManager()->register(LockService::SERVICE_ID, $service);
             $service->install();

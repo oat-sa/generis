@@ -4,12 +4,21 @@ require_once __DIR__ . '/../../../../common/inc.extension.php';
 
 use oat\oatbox\mutex\LockService;
 use oat\oatbox\service\ServiceManager;
+use Symfony\Component\Lock\Store\FlockStore;
+use oat\oatbox\mutex\NoLockStorage;
 
 array_shift($argv);
 $actionId = $argv[0];
 $sleep = (integer) $argv[1];
+$implementation = (string) $argv[2];
 
-$service = getInstance();
+if ($implementation === 'FlockStore') {
+    $class = FlockStore::class;
+} elseif ($implementation === 'NoLockStorage') {
+    $class = NoLockStorage::class;
+}
+
+$service = getInstance($class);
 $factory = $service->getLockFactory();
 $lock = $factory->createLock($actionId);
 $lock->acquire(true);
@@ -17,15 +26,18 @@ sleep($sleep);
 $lock->release();
 
 /**
+ * @param $class
  * @return LockService
+ * @throws common_Exception
  */
-function getInstance()
+function getInstance($class)
 {
     $config = new \common_persistence_KeyValuePersistence([], new \common_persistence_InMemoryKvDriver());
     $config->set(\common_persistence_Manager::SERVICE_ID, new \common_persistence_Manager);
     $serviceManager = new ServiceManager($config);
     $service = new LockService([
-        LockService::OPTION_PERSISTENCE => __DIR__.DIRECTORY_SEPARATOR.'flock'
+        LockService::OPTION_PERSISTENCE_CLASS => $class,
+        LockService::OPTION_PERSISTENCE_OPTIONS => __DIR__.DIRECTORY_SEPARATOR.'flock'
     ]);
     $service->setServiceLocator($serviceManager);
     return $service;
