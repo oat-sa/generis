@@ -36,26 +36,19 @@ use oat\oatbox\mutex\NoLockStorage;
 class LockServiceTest extends TestCase
 {
 
-    private $lockDir = __DIR__.DIRECTORY_SEPARATOR.'flock';
-
-    public function setUp()
-    {
-        if (!is_dir($this->lockDir)) {
-            mkdir($this->lockDir);
-        }
-    }
 
     public function testLock()
     {
+        $dir = \tao_helpers_File::createTempDir();
         $actionId1 = 'action_1';
         $actionId2 = 'action_2';
         $sleep = 3;
-        $this->getInstance(FlockStore::class);
+        $this->getInstance(FlockStore::class, $dir);
         $time = time();
-        $pipe1 = popen('php ' . __DIR__ . DIRECTORY_SEPARATOR . 'test_action.php ' . $actionId1 . ' ' . $sleep . ' FlockStore', 'w');
-        $pipe2 = popen('php ' . __DIR__ . DIRECTORY_SEPARATOR . 'test_action.php ' . $actionId1 . ' ' . $sleep . ' FlockStore', 'w');
-        $pipe3 = popen('php ' . __DIR__ . DIRECTORY_SEPARATOR . 'test_action.php ' . $actionId1 . ' ' . $sleep . ' FlockStore', 'w');
-        $pipe4 = popen('php ' . __DIR__ . DIRECTORY_SEPARATOR . 'test_action.php ' . $actionId2 . ' ' . $sleep . ' FlockStore', 'w');
+        $pipe1 = popen('php ' . __DIR__ . DIRECTORY_SEPARATOR . 'test_action.php ' . $actionId1 . ' ' . $sleep . ' FlockStore ' . $dir, 'w');
+        $pipe2 = popen('php ' . __DIR__ . DIRECTORY_SEPARATOR . 'test_action.php ' . $actionId1 . ' ' . $sleep . ' FlockStore ' . $dir, 'w');
+        $pipe3 = popen('php ' . __DIR__ . DIRECTORY_SEPARATOR . 'test_action.php ' . $actionId1 . ' ' . $sleep . ' FlockStore ' . $dir, 'w');
+        $pipe4 = popen('php ' . __DIR__ . DIRECTORY_SEPARATOR . 'test_action.php ' . $actionId2 . ' ' . $sleep . ' FlockStore ' . $dir, 'w');
         pclose($pipe1);
         pclose($pipe2);
         pclose($pipe3);
@@ -87,7 +80,7 @@ class LockServiceTest extends TestCase
      * @throws \common_Exception
      * @throws \common_exception_NotImplemented
      */
-    public function getInstance($class)
+    public function getInstance($class, $dir = null)
     {
         $config = new \common_persistence_KeyValuePersistence([], new \common_persistence_InMemoryKvDriver());
         $config->set(\common_persistence_Manager::SERVICE_ID, new \common_persistence_Manager);
@@ -95,7 +88,7 @@ class LockServiceTest extends TestCase
 
         $service = new LockService([
             LockService::OPTION_PERSISTENCE_CLASS => $class,
-            LockService::OPTION_PERSISTENCE_OPTIONS => $this->lockDir
+            LockService::OPTION_PERSISTENCE_OPTIONS => $dir
         ]);
         $service->setServiceLocator($serviceManager);
         $service->install();
