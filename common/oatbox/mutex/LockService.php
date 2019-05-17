@@ -52,6 +52,7 @@ class LockService extends ConfigurableService
     /**
      * @return Factory
      * @throws \common_exception_FileReadFailedException
+     * @throws \common_exception_InconsistentData
      * @throws \common_exception_NotImplemented
      */
     public function getLockFactory()
@@ -63,8 +64,9 @@ class LockService extends ConfigurableService
     }
 
     /**
-     * @return NoLockStorage|FlockStore|PdoStore|StoreInterface
+     * @return StoreInterface
      * @throws \common_exception_FileReadFailedException
+     * @throws \common_exception_InconsistentData
      * @throws \common_exception_NotImplemented
      */
     private function getStore()
@@ -93,6 +95,8 @@ class LockService extends ConfigurableService
     }
 
     /**
+     * @throws \common_exception_FileReadFailedException
+     * @throws \common_exception_InconsistentData
      * @throws \common_exception_NotImplemented
      */
     public function install()
@@ -109,14 +113,14 @@ class LockService extends ConfigurableService
     /**
      * @param $persistenceId
      * @return PdoStore
-     * @throws \common_exception_NotImplemented
+     * @throws \common_exception_InconsistentData
      */
     private function getPdoStore($persistenceId)
     {
         $persistenceManager = $this->getServiceLocator()->get(\common_persistence_Manager::SERVICE_ID);
         $persistence = $persistenceManager->getPersistenceById($persistenceId);
         if (!$persistence instanceof \common_persistence_SqlPersistence) {
-            throw new \common_exception_NotImplemented('Only Sql persistence store supported by LockService');
+            throw new \common_exception_InconsistentData('Only Sql persistence supported by PdoStore of LockService');
         }
         return new PdoStore($persistence->getDriver()->getDbalConnection());
     }
