@@ -54,7 +54,7 @@
 		"tao-extension-name" : "generis"
 	},
 	"require" : {
-		"clearFw/clearFw" : "~1.2.0",
+		"clearfw/clearfw" : "~1.2.0",
 		"easyrdf/easyrdf" : "^0.9.0",
 		"doctrine/dbal" : "~2.5.0",
 		"zendframework/zend-servicemanager" : "~2.5.0",
@@ -67,7 +67,7 @@
 		"fluent/logger": "^1.0.1"
 	},
         "require-dev" : {
-		"mikey179/vfsStream" : "1.4.0",
+		"mikey179/vfsstream" : "1.4.0",
 		"phpunit/phpunit": "^4.8",
 		"symfony/cache": "~4.1"
         },
