@@ -419,14 +419,14 @@ class core_kernel_classes_DbWrapper
     }
 
     /**
-     * Rebuild the indexes of a given table. This method throws PDOExceptions in
-     * of error.
+     * Rebuild the indexes of a given table. This method throws DBALException in case of error.
      *
      * @abstract
      * @access public
      * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @param  string tableName
      * @return void
+     * @throws \Doctrine\DBAL\DBALException
      */
     public function rebuildIndexes($tableName){
         return $this->getSchemaManager()->rebuildIndexes($tableName);

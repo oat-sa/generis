@@ -25,6 +25,7 @@ use oat\generis\model\OntologyRdf;
 use oat\generis\model\OntologyRdfs;
 use oat\oatbox\service\ServiceManager;
 use oat\generis\model\kernel\persistence\smoothsql\search\ComplexSearchService;
+use Doctrine\DBAL\DBALException;
 
 /**
  * Short description of class core_kernel_persistence_smoothsql_Class
@@ -471,7 +472,7 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
         		// as deleted.
         		$this->getPersistence()->exec($query);	
         		$returnValue = true;
-            } catch (PDOException $e) {
+            } catch (DBALException $e) {
         	    throw new core_kernel_persistence_smoothsql_Exception("An error occured while deleting resources: " . $e->getMessage());
             }
         }
