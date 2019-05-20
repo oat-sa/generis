@@ -83,11 +83,10 @@ class LockService extends ConfigurableService
                     $this->store = $this->getFlockStore($persistenceOptions);
                     break;
                 case NoLockStorage::class:
-                    $this->store = $this->getNoLockStore($persistenceOptions);
+                    $this->store = $this->getNoLockStore();
                     break;
                 default:
                     throw new \common_exception_NotImplemented('configured storage is not supported');
-
             }
         }
 
