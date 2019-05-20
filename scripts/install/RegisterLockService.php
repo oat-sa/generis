@@ -24,6 +24,7 @@ use common_report_Report as Report;
 use oat\oatbox\extension\InstallAction;
 use oat\oatbox\mutex\LockService;
 use Symfony\Component\Lock\Store\PdoStore;
+use oat\oatbox\service\ServiceNotFoundException;
 
 /**
  * Class RegisterLockService
@@ -35,16 +36,23 @@ class RegisterLockService extends InstallAction
      * @param $params
      * @return Report
      * @throws \common_Exception
+     * @throws \common_exception_FileReadFailedException
+     * @throws \common_exception_InconsistentData
+     * @throws \common_exception_NotImplemented
      * @throws \oat\oatbox\service\exception\InvalidServiceManagerException
      */
     public function __invoke($params)
     {
-        $service = new LockService([
-            LockService::OPTION_PERSISTENCE_CLASS => PdoStore::class,
-            LockService::OPTION_PERSISTENCE_OPTIONS => 'default',
-        ]);
+        try {
+            $service = $this->getServiceManager()->get(LockService::SERVICE_ID);
+        } catch (ServiceNotFoundException $e) {
+            $service = new LockService([
+                LockService::OPTION_PERSISTENCE_CLASS => PdoStore::class,
+                LockService::OPTION_PERSISTENCE_OPTIONS => 'default',
+            ]);
+            $this->getServiceManager()->register(LockService::SERVICE_ID, $service);
+        }
 
-        $this->getServiceManager()->register(LockService::SERVICE_ID, $service);
         $service->install();
         return new Report(Report::TYPE_SUCCESS, 'LockService service is registered');
     }

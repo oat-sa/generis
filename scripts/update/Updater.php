@@ -392,9 +392,9 @@ class Updater extends common_ext_ExtensionUpdater
             $this->setVersion('11.0.0');
         }
 
-        $this->skip('11.0.0', '11.1.0');
+        $this->skip('11.0.0', '11.1.1');
 
-        if ($this->isVersion('11.1.0')) {
+        if ($this->isVersion('11.1.1')) {
             $service = new LockService([
                 LockService::OPTION_PERSISTENCE_CLASS => PdoStore::class,
                 LockService::OPTION_PERSISTENCE_OPTIONS => 'default',
