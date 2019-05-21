@@ -25,7 +25,7 @@ use oat\oatbox\service\ConfigurableService;
 use Symfony\Component\Lock\Factory;
 use Symfony\Component\Lock\Store\FlockStore;
 use Symfony\Component\Lock\StoreInterface;
-use Symfony\Component\Lock\Store\PdoStore;
+use oat\oatbox\mutex\PdoStore;
 use Symfony\Component\Lock\Store\RetryTillSaveStore;
 
 /**

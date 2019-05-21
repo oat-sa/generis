@@ -25,7 +25,7 @@ namespace oat\generis\test\integration\mutex;
 use oat\generis\test\TestCase;
 use oat\oatbox\mutex\LockService;
 use oat\oatbox\service\ServiceManager;
-use Symfony\Component\Lock\Store\PdoStore;
+use oat\oatbox\mutex\PdoStore;
 
 /**
  * Class LockServiceTest

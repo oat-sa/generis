@@ -23,7 +23,7 @@ namespace oat\generis\scripts\install;
 use common_report_Report as Report;
 use oat\oatbox\extension\InstallAction;
 use oat\oatbox\mutex\LockService;
-use Symfony\Component\Lock\Store\PdoStore;
+use oat\oatbox\mutex\PdoStore;
 use oat\oatbox\service\ServiceNotFoundException;
 
 /**
