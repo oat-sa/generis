@@ -1,11 +1,11 @@
 {
-  "name" : "oat-sa/generis",
-  "description" : "TAO generis library",
-  "type" : "tao-extension",
-  "authors" : [
+  "name": "oat-sa/generis",
+  "description": "TAO generis library",
+  "type": "tao-extension",
+  "authors": [
     {
-      "name" : "Open Assessment Technologies S.A.",
-      "homepage" : "http://www.taotesting.com"
+      "name": "Open Assessment Technologies S.A.",
+      "homepage": "http://www.taotesting.com"
     },
     {
       "name": "Jérôme Bogaerts",
@@ -40,44 +40,44 @@
     "forum": "http://forum.taotesting.com",
     "issues": "http://forge.taotesting.com"
   },
-  "keywords" : [
+  "keywords": [
     "tao",
     "oat",
     "doctrine-dbal",
     "computer-based-assessment"
   ],
-  "homepage" : "http://www.taotesting.com",
-  "license" : [
+  "homepage": "http://www.taotesting.com",
+  "license": [
     "GPL-2.0-only"
   ],
-  "extra" : {
-    "tao-extension-name" : "generis"
+  "extra": {
+    "tao-extension-name": "generis"
   },
-  "require" : {
-    "clearFw/clearFw" : "~1.2.0",
-    "easyrdf/easyrdf" : "^0.9.0",
-    "doctrine/dbal" : "~2.5.0",
-    "zendframework/zend-servicemanager" : "~2.5.0",
+  "require": {
+    "clearfw/clearfw": "~1.2.0",
+    "easyrdf/easyrdf": "^0.9.0",
+    "doctrine/dbal": "~2.5.0",
+    "zendframework/zend-servicemanager": "~2.5.0",
     "league/flysystem": "~1.0",
     "oat-sa/oatbox-extension-installer": "~1.1||dev-master",
-    "php" : ">=5.6.6",
+    "php": ">=5.6.6",
     "psr/log": "~1.0",
     "oat-sa/lib-generis-search": "^2.0.1",
     "monolog/monolog": "^1.23.0",
     "fluent/logger": "^1.0.1",
     "symfony/lock": "^4.2",
-    "psr/container" : "^1.0.0"
+    "psr/container": "^1.0.0"
   },
-  "require-dev" : {
-    "mikey179/vfsStream" : "1.4.0",
+  "require-dev": {
+    "mikey179/vfsstream": "1.4.0",
     "phpunit/phpunit": "^4.8",
     "symfony/cache": "~4.1"
   },
-  "autoload" : {
-    "psr-4" : {
-      "oat\\generis\\model\\" : "core/",
-      "oat\\generis\\Helper\\" : "helpers/",
-      "oat\\oatbox\\" : "common/oatbox/",
+  "autoload": {
+    "psr-4": {
+      "oat\\generis\\model\\": "core/",
+      "oat\\generis\\Helper\\": "helpers/",
+      "oat\\oatbox\\": "common/oatbox/",
       "oat\\generis\\test\\": "test/",
       "oat\\generis\\scripts\\": "scripts/"
     },
