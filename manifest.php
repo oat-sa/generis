@@ -31,7 +31,7 @@ return array(
     'label' => 'Generis Core',
     'description' => 'Core extension, provide the low level framework and an API to manage ontologies',
     'license' => 'GPL-2.0',
-    'version' => '11.1.2',
+    'version' => '11.2.1',
     'author' => 'Open Assessment Technologies, CRP Henri Tudor',
     'requires' => array(),
     'models' => array(
@@ -53,6 +53,7 @@ return array(
         'php' => array(
             oat\generis\scripts\install\TaskQueue::class,
             \oat\generis\scripts\install\SetupUserFactoryService::class,
+            \oat\generis\scripts\install\RegisterLockService::class
         ),
     ),
     'update' => 'oat\\generis\\scripts\\update\\Updater',
