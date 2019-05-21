@@ -65,7 +65,7 @@
     "oat-sa/lib-generis-search": "^2.0.1",
     "monolog/monolog": "^1.23.0",
     "fluent/logger": "^1.0.1",
-    "symfony/lock": "^4.2",
+    "symfony/lock": "^3.4",
     "psr/container": "^1.0.0"
   },
   "require-dev": {
