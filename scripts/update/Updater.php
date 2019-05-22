@@ -414,5 +414,7 @@ class Updater extends common_ext_ExtensionUpdater
             $this->getServiceManager()->register(LockService::SERVICE_ID, $service);
             $this->setVersion('11.2.2');
         }
+
+        $this->skip('11.2.2', '11.2.3');
     }
 }

@@ -17,10 +17,18 @@
  * Copyright (c) 2019 (original work) Open Assessment Technologies SA ;
  */
 
-/**
- * @deprecated
- */
-class common_exception_RestNotFound extends common_exception_ResourceNotFound
+class common_exception_ResourceNotFound extends \common_exception_NotFound
+    implements \common_exception_UserReadableException
 {
+    /**
+     * @inheritdoc
+     */
+    public function getUserMessage()
+    {
+        if ($this->message === null) {
+            return __('Resource not found');
+        }
 
+        return $this->message;
+    }
 }
