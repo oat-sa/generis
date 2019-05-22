@@ -29,6 +29,9 @@ class AnonymousUser implements User
      * @see \oat\oatbox\user\User::getIdentifier()
      */
     public function getIdentifier() {
+        if (PHP_SAPI === 'cli') {
+            return 'cli';
+        }
         return null;
     }
     
