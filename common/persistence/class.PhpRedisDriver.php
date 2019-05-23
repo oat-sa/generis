@@ -186,4 +186,11 @@ class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDrive
         return $this->callWithRetry('decr' , [$key] );
     }
 
+    /**
+     * @return Redis
+     */
+    public function getConnection()
+    {
+        return $this->connection;
+    }
 }
