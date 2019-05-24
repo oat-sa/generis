@@ -28,7 +28,6 @@ use oat\oatbox\user\AnonymousUser;
  * @access private
  * @author Joel Bout, <joel@taotesting.com>
  * @package generis
- 
  */
 class SessionService extends ConfigurableService
 {
@@ -59,6 +58,16 @@ class SessionService extends ConfigurableService
      */
     public function isAnonymous() {
         return $this->getCurrentUser() instanceof AnonymousUser;
-    }    
-    
+    }
+
+    /**
+     * Starts a new session and stores it in the session if stateful
+     *
+     * @param \common_session_Session $session
+     * @return boolean
+     */
+    public function setSession(\common_session_Session $session)
+    {
+        return \common_session_SessionManager::startSession($session);
+    }
 }

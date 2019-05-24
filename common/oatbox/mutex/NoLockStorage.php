@@ -14,37 +14,60 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2014 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
+ * Copyright (c) 2019 (original work) Open Assessment Technologies SA;
  *
- * @author "Lionel Lecaque, <lionel@taotesting.com>"
- * @license GPLv2
- * @package generis
- 
  *
  */
-class common_persistence_sql_pdo_pgsql_SchemaManager extends common_persistence_sql_pdo_SchemaManager{
 
-    
-    
-    
+namespace oat\oatbox\mutex;
+
+use Symfony\Component\Lock\StoreInterface;
+use Symfony\Component\Lock\Key;
+
+/**
+ * Class NoLockStorage
+ * @package oat\oatbox\mutex
+ * @author Aleh Hutnikau, <goodnickoff@gmail.com>
+ */
+class NoLockStorage implements StoreInterface
+{
     /**
-     * Short description of method getIndexAlreadyExistsErrorCode
-     *
-     * @access public
-     * @author Jerome Bogaerts, <jerome@taotesting.com>
-     * @return string
+     * @inheritdoc
      */
-    public function getIndexAlreadyExistsErrorCode()
+    public function save(Key $key)
     {
-        return (string) "42P07";
+
     }
 
     /**
-     * (non-PHPdoc)
-     * @see common_persistence_sql_SchemaManager::getColumnNotFoundErrorCode()
+     * @inheritdoc
      */
-    public function getColumnNotFoundErrorCode(){
-        return '42703';
+    public function waitAndSave(Key $key)
+    {
+
     }
 
+    /**
+     * @inheritdoc
+     */
+    public function putOffExpiration(Key $key, $ttl)
+    {
+
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function delete(Key $key)
+    {
+
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function exists(Key $key)
+    {
+        return false;
+    }
 }

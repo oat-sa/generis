@@ -49,6 +49,9 @@ use Psr\Log\LoggerInterface;
 use oat\oatbox\user\UserLanguageService;
 use oat\oatbox\session\SessionService;
 use oat\generis\model\data\Ontology;
+use oat\oatbox\mutex\LockService;
+//use Symfony\Component\Lock\Store\PdoStore;
+use oat\oatbox\mutex\NoLockStorage;
 
 /**
  * @author Joel Bout <joel@taotesting.com>
@@ -369,5 +372,49 @@ class Updater extends common_ext_ExtensionUpdater
         }
 
         $this->skip('10.0.0', '10.1.0');
+
+        if ($this->isVersion('10.1.0')) {
+            /** @var \common_persistence_Manager $persistenceManager */
+            $persistenceManager = $this->getServiceManager()->get(\common_persistence_Manager::SERVICE_ID);
+
+            $persistenceManagerConfig = $persistenceManager->getOption('persistences');
+            foreach ($persistenceManagerConfig as $persistenceId => $persistenceParams) {
+                // wrap pdo drivers in dbal
+                if (strpos($persistenceParams['driver'], 'pdo_') === 0) {
+                    $persistenceManagerConfig[$persistenceId] = [
+                        'driver' => 'dbal',
+                        'connection' => $persistenceParams,
+                    ];
+                }
+            }
+            $persistenceManager->setOption('persistences', $persistenceManagerConfig);
+            $this->getServiceManager()->register(\common_persistence_Manager::SERVICE_ID, $persistenceManager);
+
+            $this->setVersion('11.0.0');
+        }
+
+        $this->skip('11.0.0', '11.1.1');
+
+        if ($this->isVersion('11.1.1')) {
+//            $service = new LockService([
+//                LockService::OPTION_PERSISTENCE_CLASS => PdoStore::class,
+//                LockService::OPTION_PERSISTENCE_OPTIONS => 'default',
+//            ]);
+//            $this->getServiceManager()->register(LockService::SERVICE_ID, $service);
+//            $service->install();
+            $this->setVersion('11.2.0');
+        }
+
+        $this->skip('11.2.0', '11.2.1');
+
+        if ($this->isVersion('11.2.1')) {
+            $service = new LockService([
+                LockService::OPTION_PERSISTENCE_CLASS => NoLockStorage::class
+            ]);
+            $this->getServiceManager()->register(LockService::SERVICE_ID, $service);
+            $this->setVersion('11.2.2');
+        }
+
+        $this->skip('11.2.2', '11.3.1');
     }
 }
