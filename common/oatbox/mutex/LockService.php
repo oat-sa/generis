@@ -26,7 +26,6 @@ use Symfony\Component\Lock\Factory;
 use Symfony\Component\Lock\Store\FlockStore;
 use Symfony\Component\Lock\Store\RedisStore;
 use Symfony\Component\Lock\StoreInterface;
-//use Symfony\Component\Lock\Store\PdoStore;
 use Symfony\Component\Lock\Store\RetryTillSaveStore;
 
 /**
@@ -67,6 +66,7 @@ class LockService extends ConfigurableService
     /**
      * @return StoreInterface
      * @throws \common_exception_FileReadFailedException
+     * @throws \common_exception_InconsistentData
      * @throws \common_exception_NotImplemented
      */
     private function getStore()
@@ -76,9 +76,6 @@ class LockService extends ConfigurableService
             $persistenceOptions = $this->getOption(self::OPTION_PERSISTENCE_OPTIONS);
 
             switch ($persistenceClass) {
-//                case PdoStore::class:
-//                    $this->store = $this->getPdoStore($persistenceOptions);
-//                    break;
                 case FlockStore::class:
                     $this->store = $this->getFlockStore($persistenceOptions);
                     break;
@@ -103,33 +100,11 @@ class LockService extends ConfigurableService
      */
     public function install()
     {
-//        if ($this->getStore() instanceof PdoStore) {
-//            try {
-//                $this->getStore()->createTable();
-//            } catch (\Doctrine\DBAL\DBALException $exception) {
-//                // the table could not be created for some reason
-//            }
-//        }
     }
 
     /**
      * @param $persistenceId
-     * @return PdoStore
-     * @throws \common_exception_InconsistentData
-     */
-    private function getPdoStore($persistenceId)
-    {
-        $persistenceManager = $this->getServiceLocator()->get(\common_persistence_Manager::SERVICE_ID);
-        $persistence = $persistenceManager->getPersistenceById($persistenceId);
-        if (!$persistence instanceof \common_persistence_SqlPersistence) {
-            throw new \common_exception_InconsistentData('Only Sql persistence supported by PdoStore of LockService');
-        }
-        return new PdoStore($persistence->getDriver()->getDbalConnection());
-    }
-
-    /**
-     * @param $persistenceId
-     * @return PdoStore
+     * @return RedisStore
      * @throws \common_exception_InconsistentData
      */
     private function getRedisStore($persistenceId)

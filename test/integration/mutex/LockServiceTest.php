@@ -26,7 +26,6 @@ use oat\generis\test\TestCase;
 use oat\oatbox\mutex\LockService;
 use oat\oatbox\service\ServiceManager;
 use oat\oatbox\mutex\NoLockStorage;
-//use Symfony\Component\Lock\Store\PdoStore;
 
 /**
  * Class LockServiceTest
