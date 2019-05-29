@@ -421,10 +421,12 @@ class Updater extends common_ext_ExtensionUpdater
             /** @var \common_persistence_Manager $persistenceManager */
             $persistenceManager = $this->getServiceManager()->get(\common_persistence_Manager::SERVICE_ID);
             $persistenceManagerConfig = $persistenceManager->getOption('persistences');
-            if (isset($persistenceManagerConfig['default']['connection'])
-                && $persistenceManagerConfig['default']['connection']['driver'] === 'pdo_mysql'
-                && !isset($persistenceManagerConfig['default']['connection']['charset'])) {
-                $persistenceManagerConfig['default']['connection']['charset'] = 'utf8';
+            foreach ($persistenceManagerConfig as $persistenceId => $persistenceParams) {
+                if (isset($persistenceManagerConfig[$persistenceId]['connection'])
+                    && $persistenceManagerConfig[$persistenceId]['connection']['driver'] === 'pdo_mysql'
+                    && !isset($persistenceManagerConfig[$persistenceId]['connection']['charset'])) {
+                    $persistenceManagerConfig[$persistenceId]['connection']['charset'] = 'utf8';
+                }
             }
             $persistenceManager->setOption('persistences', $persistenceManagerConfig);
             $this->getServiceManager()->register(\common_persistence_Manager::SERVICE_ID, $persistenceManager);
