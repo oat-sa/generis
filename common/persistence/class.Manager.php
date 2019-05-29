@@ -101,7 +101,7 @@ class common_persistence_Manager extends ConfigurableService
             ];
         }
 
-        if (isset($persistenceConf['connection']) && $persistenceConf['connection']['driver'] === 'pdo_mysql') {
+        if (isset($persistenceConf['connection']['driver']) && $persistenceConf['connection']['driver'] === 'pdo_mysql') {
             $persistenceConf['connection']['charset'] = 'utf8';
         }
 
