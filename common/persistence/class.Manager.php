@@ -100,6 +100,13 @@ class common_persistence_Manager extends ConfigurableService
                 'connection' => $persistenceConf,
             ];
         }
+
+        if ($persistenceId === 'default') {
+            if ($persistenceConf['connection']['driver'] === 'pdo_mysql') {
+                $persistenceConf['connection']['charset'] = 'utf8';
+            }
+        }
+
         $configs = $this->getOption(self::OPTION_PERSISTENCES);
         $configs[$persistenceId] = $persistenceConf;
         $this->setOption(self::OPTION_PERSISTENCES, $configs);
