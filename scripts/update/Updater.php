@@ -416,5 +416,19 @@ class Updater extends common_ext_ExtensionUpdater
         }
 
         $this->skip('11.2.2', '11.3.1');
+
+        if ($this->isVersion('11.3.1')) {
+            /** @var \common_persistence_Manager $persistenceManager */
+            $persistenceManager = $this->getServiceManager()->get(\common_persistence_Manager::SERVICE_ID);
+            $persistenceManagerConfig = $persistenceManager->getOption('persistences');
+            if (isset($persistenceManagerConfig['default']['connection'])
+                && $persistenceManagerConfig['default']['connection']['driver'] === 'pdo_mysql'
+                && !isset($persistenceManagerConfig['default']['connection']['charset'])) {
+                $persistenceManagerConfig['default']['connection']['charset'] = 'utf8';
+            }
+            $persistenceManager->setOption('persistences', $persistenceManagerConfig);
+            $this->getServiceManager()->register(\common_persistence_Manager::SERVICE_ID, $persistenceManager);
+            $this->setVersion('11.3.2');
+        }
     }
 }
