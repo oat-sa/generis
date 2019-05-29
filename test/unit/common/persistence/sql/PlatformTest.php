@@ -30,6 +30,20 @@ class PlatformTest extends TestCase
         $this->assertTrue($platform->getQueryBuilder() instanceof \Doctrine\DBAL\Query\QueryBuilder);
     }
 
+    public function testMysqlPersistenceWithCharset()
+    {
+        $service = $this->getPersistenceManager();
+        $service->registerPersistence('mysql', ['driver' => 'dbal', 'connection' => ['driver' => 'pdo_mysql']]);
+        $this->assertEquals('utf8',$service->getOption('persistences')['mysql']['connection']['charset']);
+    }
+
+    public function testNotMysqlPersistenceWithCharset()
+    {
+        $service = $this->getPersistenceManager();
+        $service->registerPersistence('notMysql', ['driver' => 'dbal', 'connection' => ['driver' => 'pdo_not_mysql']]);
+        $this->assertArrayNotHasKey('charset',$service->getOption('persistences')['notMysql']['connection']);
+    }
+
     /**
      * @return \common_persistence_sql_Platform
      */
@@ -42,5 +56,18 @@ class PlatformTest extends TestCase
         $driver = new \common_persistence_sql_dbal_Driver();
         $driver->connect('test_connection', ['connection' => ['url' => 'sqlite:///:memory:']]);
         return $driver->getPlatForm();
+    }
+
+    /**
+     * @return \common_persistence_Manager
+     */
+    protected function getPersistenceManager()
+    {
+        $service = new \common_persistence_Manager();
+
+        $service->setServiceLocator(
+            $this->getServiceLocatorMock([])
+        );
+        return $service;
     }
 }
