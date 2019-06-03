@@ -94,9 +94,7 @@ class LockService extends ConfigurableService
     }
 
     /**
-     * @throws \common_exception_FileReadFailedException
-     * @throws \common_exception_InconsistentData
-     * @throws \common_exception_NotImplemented
+     * Install store. Should be called after registration of lock service
      */
     public function install()
     {
