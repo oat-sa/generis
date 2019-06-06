@@ -59,7 +59,7 @@ class core_kernel_api_ModelFactory
      */
     public function addNewModel($namespace)
     {
-        $modelId = $this->getNewSpannerPrimaryKey();
+        $modelId = $this->getUniquePrimaryKey();
         $this->dbWrapper->insert('models', ['modelid' => $modelId, 'modeluri' => $namespace]);
 
         return $modelId;
