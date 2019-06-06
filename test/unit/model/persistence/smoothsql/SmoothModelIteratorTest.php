@@ -65,7 +65,8 @@ class SmoothModelIteratorTest extends TestCase
         
         $plop = $statementProphecy->reveal();
 
-        $query = 'SELECT * FROM statements ORDER BY id';
+        // TODO: refactor this to use a triple store abstraction.
+        $query = 'SELECT * FROM statements ORDER BY epoch';
         $finalQuery = $query.' LIMIT 100';
 
         $platformProphecy = $this->prophesize('common_persistence_sql_Platform');

@@ -229,11 +229,12 @@ class core_kernel_classes_DbWrapper
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
      * @param string $tableName
      * @param array $data
+     * @return int
      */
     public function insert($tableName, array $data){
     	$this->incrementNrOfQueries();
-        return $this->persistence->insert($tableName,$data);
 
+        return $this->persistence->insert($tableName,$data);
     }
 
     /**
