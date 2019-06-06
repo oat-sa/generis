@@ -93,7 +93,7 @@ class core_kernel_api_ModelFactory
 
         foreach ($data as $subjectUri => $propertiesValues) {
             foreach ($propertiesValues as $prop => $values) {
-                foreach ($values as $k => $v) {
+                foreach ($values as $v) {
                     $returnValue |= $this->addStatement($modelId, $subjectUri, $prop, $v['value'], isset($v['lang']) ? $v['lang'] : null);
                 }
             }

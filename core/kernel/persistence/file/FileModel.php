@@ -131,7 +131,8 @@ class FileModel
         }
         if (is_null($modelId)) {
             \common_Logger::d('modelId not found, need to add namespace '. $namespaceUri);
-            
+
+            // TODO: inject ModelFactory as a dependency.
             $modelFactory = new \core_kernel_api_ModelFactory();
             $modelId = $modelFactory->addNewModel($namespaceUri);
             $namespaceManager->reset();
