@@ -19,12 +19,9 @@
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
  *               2017 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
-?>
-<?php
 
 use oat\generis\model\OntologyRdf;
 use oat\generis\model\OntologyRdfs;
-use Doctrine\DBAL\DBALException;
 
 error_reporting(E_ALL);
 
@@ -341,7 +338,7 @@ class core_kernel_impl_ApiModelOO
     {
         $localNsManager = common_ext_NamespaceManager::singleton();
         $modelId = $localNsManager->getLocalNamespace()->getModelId();
-        $currentUser = \common_session_SessionManager::getSession()->getUserUri();
+        $currentUser = common_session_SessionManager::getSession()->getUserUri();
 
         // TODO: inject ModelFactory
         $modelFactory = new core_kernel_api_ModelFactory();

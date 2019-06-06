@@ -60,7 +60,11 @@ class core_kernel_api_ModelFactory
     public function addNewModel($namespace)
     {
         $modelId = $this->getUniquePrimaryKey();
-        $this->dbWrapper->insert('models', ['modelid' => $modelId, 'modeluri' => $namespace]);
+
+        $inserted = $this->dbWrapper->insert('models', ['modelid' => $modelId, 'modeluri' => $namespace]);
+        if ($inserted === false) {
+
+        }
 
         return $modelId;
     }
@@ -139,7 +143,7 @@ class core_kernel_api_ModelFactory
                 'predicate' => $predicate,
                 'object' => $object,
                 'l_language' => is_null($lang) ? '' : $lang,
-                'author' => $author,
+                'author' => is_null($author) ? '' : $author,
                 'epoch' => $date,
             ]
         );
