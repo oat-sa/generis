@@ -46,11 +46,11 @@ class SmoothRdsModel
         $table->addColumn('modelid', 'string', ['notnull' => true]);
         $table->addColumn('subject', 'string', ['length' => 255]);
         $table->addColumn('predicate', 'string', ['length' => 255]);
-        $table->addColumn('object', 'text', ['default' => null]);
+        $table->addColumn('object', 'text');
         $table->addColumn('l_language', 'string', ['length' => 255]);
 
         $table->addColumn('author', 'string', ['length' => 255]);
-        $table->addColumn('epoch', 'timestamp');    // Spanner timestamp type
+        $table->addColumn('epoch', 'string');    // timestamp type to be modified for benchmark on spanner
 
         $table->setPrimaryKey(['id']);
         $table->addIndex(['subject', 'predicate'], 'k_sp');
