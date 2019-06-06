@@ -66,12 +66,12 @@ class core_kernel_persistence_smoothsql_Resource
 
     protected function getModelReadSqlCondition()
     {
-        return 'modelid IN (' . implode(',', $this->model->getReadableModels()) . ')';
+        return 'modelid IN (' . implode(',', array_map(function ($a) { return "'" . $a . "'"; }, $this->model->getReadableModels())) . ')';
     }
 
     protected function getModelWriteSqlCondition()
     {
-        return 'modelid IN (' . implode(',', $this->model->getWritableModels()) . ')';
+        return 'modelid IN (' . implode(',', array_map(function ($a) { return "'" . $a . "'"; }, $this->model->getWritableModels())) . ')';
     }
 
     protected function getNewTripleModelId()

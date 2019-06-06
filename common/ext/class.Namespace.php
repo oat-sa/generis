@@ -84,15 +84,7 @@ class common_ext_Namespace
      */
     public function getModelId()
     {
-        $returnValue = (int) 0;
-
-        
-        
-        $returnValue = $this->modelId;
-        
-        
-
-        return (int) $returnValue;
+        return $this->modelId;
     }
 
     /**
