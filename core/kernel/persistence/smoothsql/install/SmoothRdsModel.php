@@ -17,43 +17,45 @@
  * Copyright (c) 2018 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  *
  */
-namespace   oat\generis\model\kernel\persistence\smoothsql\install;
+
+namespace oat\generis\model\kernel\persistence\smoothsql\install;
 
 use Doctrine\DBAL\Schema\Schema;
+
 /**
  * Helper to setup the required tables for generis smoothsql
  */
-class SmoothRdsModel {
-
+class SmoothRdsModel
+{
     /**
-     * 
+     *
      * @param Schema $schema
+     *
      * @return \Doctrine\DBAL\Schema\Schema
      */
     public static function addSmoothTables(Schema $schema)
     {
-        $table = $schema->createTable("models");
-        $table->addColumn('modelid', "integer",array("notnull" => true,"autoincrement" => true));
-        $table->addColumn('modeluri', "string", array("length" => 255,"default" => null));
-        $table->addOption('engine' , 'MyISAM');
-        $table->setPrimaryKey(array('modelid'));
+        $table = $schema->createTable('models');
+        $table->addColumn('modelid', 'string', ['length' => 25, 'notnull' => true]);
+        $table->addColumn('modeluri', 'string', ['length' => 255]);
+        $table->setPrimaryKey(['modelid']);
 
-        $table = $schema->createTable("statements");
-        $table->addColumn("modelid", "integer",array("notnull" => true,"default" => 0));
-        $table->addColumn("subject", "string",array("length" => 255,"default" => null));
-        $table->addColumn("predicate", "string",array("length" => 255,"default" => null));
-        $table->addColumn("object", "text", array("default" => null,"notnull" => false));
-            
-        $table->addColumn("l_language", "string",array("length" => 255,"default" => null,"notnull" => false));
-        $table->addColumn("id", "integer",array("notnull" => true,"autoincrement" => true));
-        $table->addColumn("author", "string",array("length" => 255,"default" => null,"notnull" => false));
-        $table->setPrimaryKey(array("id"));
-        $table->addOption('engine' , 'MyISAM');
-        $table->addColumn("epoch", "string" , array("notnull" => null));
-            
-        $table->addIndex(array("subject","predicate"),"k_sp");
-        $table->addIndex(array("predicate","object"),"k_po");
-        
+        $table = $schema->createTable('statements');
+        $table->addColumn('id', 'string', ['length' => 25, 'notnull' => true]);
+
+        $table->addColumn('modelid', 'string', ['notnull' => true]);
+        $table->addColumn('subject', 'string', ['length' => 255]);
+        $table->addColumn('predicate', 'string', ['length' => 255]);
+        $table->addColumn('object', 'text', ['default' => null]);
+        $table->addColumn('l_language', 'string', ['length' => 255]);
+
+        $table->addColumn('author', 'string', ['length' => 255]);
+        $table->addColumn('epoch', 'timestamp');    // Spanner timestamp type
+
+        $table->setPrimaryKey(['id']);
+        $table->addIndex(['subject', 'predicate'], 'k_sp');
+        $table->addIndex(['predicate', 'object'], 'k_po');
+
         return $schema;
     }
 }

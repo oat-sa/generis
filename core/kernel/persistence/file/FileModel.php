@@ -110,6 +110,7 @@ class FileModel
     // helper
     
     /**
+     *
      * @param string $file
      * @throws common_exception_Error
      */
@@ -121,7 +122,9 @@ class FileModel
         }
         $namespaceUri = (string) $attrs['base'];
         $modelId = null;
-        foreach (common_ext_NamespaceManager::singleton()->getAllNamespaces() as $namespace) {
+
+        $namespaceManager = \common_ext_NamespaceManager::singleton();
+        foreach ($namespaceManager->getAllNamespaces() as $namespace) {
             if ($namespace->getUri() == $namespaceUri) {
                 $modelId = $namespace->getModelId();
             }
@@ -129,14 +132,11 @@ class FileModel
         if (is_null($modelId)) {
             \common_Logger::d('modelId not found, need to add namespace '. $namespaceUri);
             
-            //TODO bad way, need to find better
-            $dbWrapper = \core_kernel_classes_DbWrapper::singleton();
-            $results = $dbWrapper->insert('models', array('modeluri' =>$namespaceUri));
-            $result = $dbWrapper->query('select modelid from models where modeluri = ?', array($namespaceUri));
-            $modelId = $result->fetch()['modelid'];
-            common_ext_NamespaceManager::singleton()->reset();
-            
+            $modelFactory = new \core_kernel_api_ModelFactory();
+            $modelId = $modelFactory->addNewModel($namespaceUri);
+            $namespaceManager->reset();
         }
+
         return $modelId;
     }
 }
