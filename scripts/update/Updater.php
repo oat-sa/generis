@@ -427,7 +427,7 @@ class Updater extends common_ext_ExtensionUpdater
             }
 
             $this->getServiceManager()->register(\common_persistence_Manager::SERVICE_ID, $persistenceManager);
-            $this->setVersion('11.3.3');
+            $this->setVersion('11.3.2');
         }
 
         $this->skip('11.3.2', '11.4.1');
