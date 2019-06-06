@@ -146,9 +146,7 @@ class core_kernel_api_ModelFactory
     }
 
     /**
-     * Generates a unique primary key for gcp Spanner sharding.
-     *
-     * @TODO: confirm this is the optimal solution for gcp Spanner.
+     * Generates a unique, not auto-increment based, primary key.
      *
      * @return string
      */
