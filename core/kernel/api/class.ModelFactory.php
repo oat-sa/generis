@@ -44,6 +44,10 @@ class core_kernel_api_ModelFactory
      */
     public function getModelId($namespace)
     {
+        if (substr($namespace, -1) !== '#') {
+            $namespace .= '#';
+        }
+
         $query = 'SELECT modelid FROM models WHERE (modeluri = ?)';
         $results = $this->dbWrapper->query($query, [$namespace]);
 
