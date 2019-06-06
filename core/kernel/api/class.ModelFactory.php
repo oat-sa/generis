@@ -61,10 +61,7 @@ class core_kernel_api_ModelFactory
     {
         $modelId = $this->getUniquePrimaryKey();
 
-        $inserted = $this->dbWrapper->insert('models', ['modelid' => $modelId, 'modeluri' => $namespace]);
-        if ($inserted === false) {
-
-        }
+        $this->dbWrapper->insert('models', ['modelid' => $modelId, 'modeluri' => $namespace]);
 
         return $modelId;
     }
