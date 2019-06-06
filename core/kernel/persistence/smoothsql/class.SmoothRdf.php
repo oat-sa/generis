@@ -56,7 +56,7 @@ class core_kernel_persistence_smoothsql_SmoothRdf
     }
 
     /**
-     * (non-PHPdoc)git
+     * (non-PHPdoc)
      * @see \oat\generis\model\data\RdfInterface::add()
      */
     public function add(\core_kernel_classes_Triple $triple) {
