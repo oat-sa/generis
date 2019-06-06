@@ -51,13 +51,13 @@ class common_ext_GenerisInstaller extends common_ext_ExtensionInstaller
 
         // Id of the writable model.
         $modelFactory = new \core_kernel_api_ModelFactory();
-        $userlandModelId = $modelFactory->getUniquePrimaryKey();
+        $writableModelId = $modelFactory->getModelId(LOCAL_NAMESPACE);
 
         $model = new \core_kernel_persistence_smoothsql_SmoothModel(array(
             \core_kernel_persistence_smoothsql_SmoothModel::OPTION_PERSISTENCE => 'default',
-            \core_kernel_persistence_smoothsql_SmoothModel::OPTION_READABLE_MODELS => [$userlandModelId],
-            \core_kernel_persistence_smoothsql_SmoothModel::OPTION_WRITEABLE_MODELS => [$userlandModelId],
-            \core_kernel_persistence_smoothsql_SmoothModel::OPTION_NEW_TRIPLE_MODEL => $userlandModelId,
+            \core_kernel_persistence_smoothsql_SmoothModel::OPTION_READABLE_MODELS => [$writableModelId],
+            \core_kernel_persistence_smoothsql_SmoothModel::OPTION_WRITEABLE_MODELS => [$writableModelId],
+            \core_kernel_persistence_smoothsql_SmoothModel::OPTION_NEW_TRIPLE_MODEL => $writableModelId,
             \core_kernel_persistence_smoothsql_SmoothModel::OPTION_SEARCH_SERVICE => ComplexSearchService::SERVICE_ID,
             \core_kernel_persistence_smoothsql_SmoothModel::OPTION_CACHE_SERVICE => common_cache_Cache::SERVICE_ID
         ));
