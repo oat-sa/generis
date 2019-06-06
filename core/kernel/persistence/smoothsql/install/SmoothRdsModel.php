@@ -35,26 +35,30 @@ class SmoothRdsModel
      */
     public static function addSmoothTables(Schema $schema)
     {
+        // Models table.
         $table = $schema->createTable('models');
         $table->addColumn('modelid', 'string', ['length' => 25, 'notnull' => true]);
         $table->addColumn('modeluri', 'string', ['length' => 255]);
         $table->setPrimaryKey(['modelid']);
+        $table->addOption('engine' , 'MyISAM');
 
+        // Statements table.
         $table = $schema->createTable('statements');
         $table->addColumn('id', 'string', ['length' => 25, 'notnull' => true]);
 
-        $table->addColumn('modelid', 'string', ['notnull' => true]);
+        $table->addColumn('modelid', 'string', ['length' => 25, 'notnull' => true]);
         $table->addColumn('subject', 'string', ['length' => 255]);
         $table->addColumn('predicate', 'string', ['length' => 255]);
         $table->addColumn('object', 'text');
         $table->addColumn('l_language', 'string', ['length' => 255]);
 
         $table->addColumn('author', 'string', ['length' => 255]);
-        $table->addColumn('epoch', 'string');    // timestamp type to be modified for benchmark on spanner
+        $table->addColumn('epoch', 'string', ['notnull' => true]);
 
         $table->setPrimaryKey(['id']);
         $table->addIndex(['subject', 'predicate'], 'k_sp');
         $table->addIndex(['predicate', 'object'], 'k_po');
+        $table->addOption('engine' , 'MyISAM');
 
         return $schema;
     }

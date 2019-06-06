@@ -24,6 +24,8 @@
  */
 class core_kernel_api_ModelFactory
 {
+    const DEFAULT_AUTHOR = 'http://www.tao.lu/Ontologies/TAO.rdf#installator';
+
     /** @var core_kernel_classes_DbWrapper */
     private $dbWrapper;
 
@@ -114,7 +116,7 @@ class core_kernel_api_ModelFactory
      *
      * @return bool Was a row added?
      */
-    public function addStatement($modelId, $subject, $predicate, $object, $lang = null, $author = 'http://www.tao.lu/Ontologies/TAO.rdf#installator')
+    public function addStatement($modelId, $subject, $predicate, $object, $lang = null, $author = self::DEFAULT_AUTHOR)
     {
         // TODO: refactor this to use a triple store abstraction.
         $result = $this->dbWrapper->query(
@@ -131,7 +133,7 @@ class core_kernel_api_ModelFactory
         return (bool) $this->dbWrapper->insert(
             'statements',
             [
-                'id' => $this->getNewSpannerPrimaryKey(),
+                'id' => $this->getUniquePrimaryKey(),
                 'modelid' => $modelId,
                 'subject' => $subject,
                 'predicate' => $predicate,
@@ -150,7 +152,7 @@ class core_kernel_api_ModelFactory
      *
      * @return string
      */
-    public function getNewSpannerPrimaryKey()
+    public function getUniquePrimaryKey()
     {
         return strrev(uniqid('', true));
     }
