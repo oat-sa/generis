@@ -52,7 +52,7 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
         $isMysqlDbal = false;
         if (isset($params['connection'])) {
             $connectionParams = $params['connection'];
-            $isMysqlDbal = $connectionParams['driver'] === 'pdo_mysql';
+            $isMysqlDbal = isset($connectionParams['driver']) && $connectionParams['driver'] === 'pdo_mysql';
         } else {
             $connectionParams = $params;
             $connectionParams['driver'] = str_replace('dbal_', '', $connectionParams['driver']);
