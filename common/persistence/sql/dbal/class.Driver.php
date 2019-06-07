@@ -49,14 +49,20 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
      */
     public function connect($id, array $params)
     {
+        $isMysqlDbal = false;
         if (isset($params['connection'])) {
             $connectionParams = $params['connection'];
+            $isMysqlDbal = $connectionParams['driver'] === 'pdo_mysql';
         } else {
             $connectionParams = $params;
             $connectionParams['driver'] = str_replace('dbal_', '', $connectionParams['driver']);
         }
 
         $this->persistentConnect($connectionParams);
+
+        if ($isMysqlDbal) {
+            $this->exec('SET SESSION SQL_MODE=\'ANSI_QUOTES\';');
+        }
 
         return new common_persistence_SqlPersistence($params, $this);
     }

@@ -25,7 +25,7 @@ namespace oat\generis\test\integration\mutex;
 use oat\generis\test\TestCase;
 use oat\oatbox\mutex\LockService;
 use oat\oatbox\service\ServiceManager;
-//use Symfony\Component\Lock\Store\PdoStore;
+use oat\oatbox\mutex\NoLockStorage;
 
 /**
  * Class LockServiceTest
@@ -37,11 +37,13 @@ class LockServiceTest extends TestCase
 
     public function testLock()
     {
-        $this->markTestSkipped('Test must be enabled after switch to v4 of sympfony/lock library');
+        $service = $this->getInstance();
+        if ($this->isNoLockConfigured($service)) {
+            $this->markTestSkipped('No lock storage configured for lock service. Skip integration test.');
+        }
         $actionId1 = 'action_1';
         $actionId2 = 'action_2';
         $sleep = 3;
-        $this->getInstance();
         $time = time();
         $pipe1 = popen('php ' . __DIR__ . DIRECTORY_SEPARATOR . 'test_action.php ' . $actionId1 . ' ' . $sleep . ' 0', 'w');
         $pipe2 = popen('php ' . __DIR__ . DIRECTORY_SEPARATOR . 'test_action.php ' . $actionId1 . ' ' . $sleep . ' 0', 'w');
@@ -57,7 +59,10 @@ class LockServiceTest extends TestCase
 
     public function testLockTimeout()
     {
-        $this->markTestSkipped('Test must be enabled after switch to v4 of sympfony/lock library');
+        $service = $this->getInstance();
+        if ($this->isNoLockConfigured($service)) {
+            $this->markTestSkipped('No lock storage configured for lock service. Skip integration test.');
+        }
         $actionId1 = 'action_1';
         $sleep = 5;
         $timeout = 2;
@@ -90,18 +95,22 @@ class LockServiceTest extends TestCase
     }
 
     /**
-     * @return LockService
-     * @throws \common_exception_NotImplemented
+     * @return LockService|\oat\oatbox\service\ConfigurableService
      */
     public function getInstance()
     {
-        $service = new LockService([
-            LockService::OPTION_PERSISTENCE_CLASS => PdoStore::class,
-            LockService::OPTION_PERSISTENCE_OPTIONS => 'default',
-        ]);
-        $service->setServiceLocator(ServiceManager::getServiceManager());
-        $service->install();
-        return $service;
+        return ServiceManager::getServiceManager()->get(LockService::class);
+    }
+
+    /**
+     * @param $service
+     * @return bool
+     * @throws \ReflectionException
+     */
+    private function isNoLockConfigured($service)
+    {
+        $reflectionClass = new \ReflectionClass($service->getOption($service::OPTION_PERSISTENCE_CLASS));
+        return $reflectionClass->getName() === NoLockStorage::class;
     }
 
 }
