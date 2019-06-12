@@ -98,5 +98,6 @@
     "psr-4": {
       "oat\\generis\\test\\": "generis/test/"
     }
-  }
+  },
+  "minimum-stability" : "dev"
 }
