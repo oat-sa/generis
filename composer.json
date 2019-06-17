@@ -69,7 +69,7 @@
     "oat-sa/oatbox-extension-installer": "~1.1||dev-master",
     "php": ">=5.6.6",
     "psr/log": "~1.0",
-    "oat-sa/lib-generis-search": "^2.0.1",
+    "oat-sa/lib-generis-search": "dev-feature/NEX-84/spanner-compatible-statements",
     "oat-sa/lib-dbal-spanner": "dev-feature/NEX-84/spanner-query-refactoring",
     "monolog/monolog": "^1.23.0",
     "fluent/logger": "^1.0.1",
