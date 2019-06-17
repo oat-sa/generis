@@ -64,6 +64,7 @@ class common_persistence_SqlPersistence extends common_persistence_Persistence
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
      * @param string $tableName
      * @param array $data
+     * @return int
      */
     public function insert($tableName, array $data)
     {

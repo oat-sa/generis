@@ -43,7 +43,7 @@ class NamespaceTest extends \PHPUnit_Framework_TestCase
 		
 		//$this->assertReference($namespaceManager, common_ext_NamespaceManager::singleton());
 		
-		$tempNamesapce = new common_ext_Namespace();
+		$tempNamesapce = new common_ext_Namespace('','');
 		$this->assertInstanceOf('common_ext_Namespace', $tempNamesapce);
 	}
 	
