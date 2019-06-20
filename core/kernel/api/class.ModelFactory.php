@@ -22,8 +22,13 @@
  * @package generis
  *
  */
+
+use oat\generis\Helper\UuidPrimaryKeyTrait;
+
 class core_kernel_api_ModelFactory
 {
+    use UuidPrimaryKeyTrait;
+
     const DEFAULT_AUTHOR = 'http://www.tao.lu/Ontologies/TAO.rdf#installator';
 
     /** @var core_kernel_classes_DbWrapper */
@@ -148,15 +153,5 @@ class core_kernel_api_ModelFactory
                 'epoch' => $date,
             ]
         );
-    }
-
-    /**
-     * Generates a unique, not auto-increment based, primary key.
-     *
-     * @return string
-     */
-    public function getUniquePrimaryKey()
-    {
-        return strrev(uniqid('', true));
     }
 }
