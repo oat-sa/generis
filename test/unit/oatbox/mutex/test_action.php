@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/../../../../common/inc.extension.php';
+require(__DIR__ . '/../../../../../vendor/autoload.php');
 
 use oat\oatbox\mutex\LockService;
 use oat\oatbox\service\ServiceManager;
