@@ -23,17 +23,29 @@
  *
  */
 
+namespace oat\generis\test\unit\helpers;
+
+use oat\generis\Helper\UuidPrimaryKeyTrait;
+use oat\generis\test\TestCase;
+
+class UuidPrimaryKeyTraitTest extends TestCase
+{
+    public function testgetUniquePrimaryKey()
+    {
+        $subject = new UuidPrimaryKeyTraitUser();
+
+        $this->assertEquals('diuu desoppus a', $subject->getUniquePrimaryKey());
+    }
+}
+
+class UuidPrimaryKeyTraitUser
+{
+    use UuidPrimaryKeyTrait;
+}
+
 namespace oat\generis\Helper;
 
-trait UuidPrimaryKeyTrait
+function uniqid ($prefix = "", $more_entropy = false)
 {
-    /**
-     * Generates a unique, not auto-increment based, primary key.
-     *
-     * @return string
-     */
-    public function getUniquePrimaryKey()
-    {
-        return strrev(uniqid('', true));
-    }
+    return 'a supposed uuid';
 }
