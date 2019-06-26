@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,25 +26,27 @@ namespace oat\generis\test\unit\helpers;
 
 use oat\generis\Helper\UuidPrimaryKeyTrait;
 use oat\generis\test\TestCase;
+use phpmock\MockBuilder;
 
 class UuidPrimaryKeyTraitTest extends TestCase
 {
-    public function testgetUniquePrimaryKey()
-    {
-        $subject = new UuidPrimaryKeyTraitUser();
-
-        $this->assertEquals('diuu desoppus a', $subject->getUniquePrimaryKey());
-    }
-}
-
-class UuidPrimaryKeyTraitUser
-{
     use UuidPrimaryKeyTrait;
-}
 
-namespace oat\generis\Helper;
+    public function testGetUniquePrimaryKey()
+    {
+        $builder = new MockBuilder();
+        $builder->setNamespace('oat\generis\Helper')
+            ->setName('uniqid')
+            ->setFunction(
+                function () {
+                    return 'a supposed uuid';
+                }
+            );
+        $mock = $builder->build();
+        $mock->enable();
 
-function uniqid ($prefix = "", $more_entropy = false)
-{
-    return 'a supposed uuid';
+        $this->assertEquals('diuu desoppus a', $this->getUniquePrimaryKey());
+
+        $mock->disable();
+    }
 }

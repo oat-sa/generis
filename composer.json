@@ -71,7 +71,8 @@
   "require-dev": {
     "mikey179/vfsstream": "1.4.0",
     "phpunit/phpunit": "^4.8",
-    "symfony/cache": "~4.1"
+    "symfony/cache": "~4.1",
+    "php-mock/php-mock": "^2.1"
   },
   "autoload": {
     "psr-4": {
