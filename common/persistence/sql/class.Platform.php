@@ -146,16 +146,31 @@ class common_persistence_sql_Platform {
     public function getName(){
         return $this->dbalPlatform->getName();
     }
+
     /**
-     * 
      * @author Lionel Lecaque, lionel@taotesting.com
      * @return string
      */
     public function getNowExpression(){
-        $datetime = new DateTime('now', new \DateTimeZone('UTC'));
-        $date = $datetime->format('Y-m-d H:i:s');
-       // return $this->dbalPlatform->getNowExpression();
-       return $date;
+        return $this->dbalPlatform->getNowExpression();
+    }
+
+    /**
+     * Returns platform specific date formatting to store datetime field.
+     * @return string
+     */
+    public function getDateTimeFormatString()
+    {
+        return $this->dbalPlatform->getDateTimeFormatString();
+    }
+
+    /**
+     * Returns platform specific date formatting with timezone to store datetime field.
+     * @return string
+     */
+    public function getDateTimeTzFormatString()
+    {
+        return $this->dbalPlatform->getDateTimeTzFormatString();
     }
 
     /**
