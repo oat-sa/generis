@@ -102,5 +102,15 @@ abstract class common_persistence_Persistence
     protected function setParams($params){
         $this->params = $params;
     }
+
+    /**
+     * Generates a unique, not auto-increment based, primary key.
+     *
+     * @return string
+     */
+    public function getUniquePrimaryKey()
+    {
+        return strrev(uniqid('', true));
+    }
 }
 
