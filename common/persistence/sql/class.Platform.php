@@ -164,15 +164,6 @@ class common_persistence_sql_Platform {
     }
 
     /**
-     * Returns platform specific date formatting to store datetime field.
-     * @return string
-     */
-    public function getDateTimeFormatString()
-    {
-        return $this->dbalPlatform->getDateTimeFormatString();
-    }
-
-    /**
      * Returns platform specific date formatting with timezone to store datetime field.
      * @return string
      */
