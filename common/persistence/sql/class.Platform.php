@@ -152,7 +152,17 @@ class common_persistence_sql_Platform {
      * @return string
      */
     public function getNowExpression(){
-        return $this->dbalPlatform->getNowExpression();
+        // We can't use $this->dbalPlatform->getNowExpression() because sqlite,
+        // at least used for the tests, returns `datetime('now')` which can
+        // not be parsed as a regular date.
+        // We instead generate a date with php and the format it with
+        // $this->dbalPlatform->getDateTimeTzFormatString(), to still have the
+        // correct format to be inserted in db.
+
+        $datetime = new \DateTime('now', new \DateTimeZone('UTC'));
+        $date = $datetime->format($this->dbalPlatform->getDateTimeTzFormatString());
+
+        return $date;
     }
 
     /**
