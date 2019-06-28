@@ -23,8 +23,8 @@ namespace oat\oatbox\validator;
  * validator base interface
  * @author Christophe GARCIA <christopheg@taotesting.com>
  */
-interface ValidatorInterface {
-    
+interface ValidatorInterface
+{
     /**
      * return validator name
      * @return string
@@ -63,5 +63,4 @@ interface ValidatorInterface {
      * @return boolean
      */
     public function evaluate($values);
-    
 }
