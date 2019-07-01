@@ -35,7 +35,7 @@ class common_exception_MethodNotAllowed extends common_exception_BadRequest
      * @param int $code
      * @param string[]|null $allowedMethods
      */
-    public function __construct($message = null, $code = 0, $allowedMethods = null)
+    public function __construct($message = null, $code = 0, array $allowedMethods = null)
     {
         parent::__construct($message, $code);
         $this->allowedMethods = $allowedMethods;
