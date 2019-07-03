@@ -51,9 +51,9 @@ class PlatformTest extends TestCase
         $format = 'm:i:d:H:Y:s';
         $dbalPlatform = $this->getMockBuilder(AbstractPlatform::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getDateTimeTzFormatString'])
+            ->setMethods(['getDateTimeFormatString'])
             ->getMockForAbstractClass();
-        $dbalPlatform->method('getDateTimeTzFormatString')->willReturn($format);
+        $dbalPlatform->method('getDateTimeFormatString')->willReturn($format);
 
         /** @var Connection|\PHPUnit_Framework_MockObject_MockObject $dbalConnection */
         $dbalConnection = $this->getMockBuilder(Connection::class)
