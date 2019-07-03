@@ -160,7 +160,7 @@ class common_persistence_sql_Platform {
         // correct format to be inserted in db.
 
         $datetime = new \DateTime('now', new \DateTimeZone('UTC'));
-        return $datetime->format($this->dbalPlatform->getDateTimeFormatString());
+        return $datetime->format($this->getDateTimeFormatString());
     }
 
     /**
