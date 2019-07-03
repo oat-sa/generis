@@ -19,6 +19,8 @@
 
 namespace oat\generis\test\unit\common\persistence\sql\dbal;
 
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Platforms\AbstractPlatform;
 use oat\generis\test\TestCase;
 
 class PlatformTest extends TestCase
@@ -42,6 +44,27 @@ class PlatformTest extends TestCase
         $service = $this->getPersistenceManager();
         $service->registerPersistence('notMysql', ['driver' => 'dbal', 'connection' => ['driver' => 'pdo_not_mysql']]);
         $this->assertArrayNotHasKey('charset',$service->getOption('persistences')['notMysql']['connection']);
+    }
+
+    public function testGetNowExpression()
+    {
+        $format = 'm:i:d:H:Y:s';
+        $dbalPlatform = $this->getMockBuilder(AbstractPlatform::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getDateTimeFormatString'])
+            ->getMockForAbstractClass();
+        $dbalPlatform->method('getDateTimeFormatString')->willReturn($format);
+
+        /** @var Connection|\PHPUnit_Framework_MockObject_MockObject $dbalConnection */
+        $dbalConnection = $this->getMockBuilder(Connection::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getDatabasePlatform'])
+            ->getMock();
+        $dbalConnection->method('getDatabasePlatform')->willReturn($dbalPlatform);
+
+        $platform = new \common_persistence_sql_Platform($dbalConnection);
+        $datetime = (new \DateTime('now', new \DateTimeZone('UTC')))->format($format);
+        $this->assertEquals($datetime, $platform->getNowExpression());
     }
 
     /**
