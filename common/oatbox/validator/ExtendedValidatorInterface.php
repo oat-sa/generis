@@ -21,7 +21,7 @@ namespace oat\oatbox\validator;
 
 use tao_helpers_form_FormElement;
 
-interface ExtendedValidatorInterface
+interface ExtendedValidatorInterface extends ValidatorInterface
 {
     /**
      * @param tao_helpers_form_FormElement[] $elements
