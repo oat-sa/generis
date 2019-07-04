@@ -436,7 +436,7 @@ class Updater extends common_ext_ExtensionUpdater
         if ($this->isVersion('11.5.2')) {
             $this->runExtensionScript(RegisterDefaultKvPersistence::class);
 
-            $this->setVersion('11.5.3');
+            $this->setVersion('11.6.0');
         }
     }
 }
