@@ -34,6 +34,7 @@ use oat\generis\model\fileReference\ResourceFileSerializer;
 use oat\generis\model\kernel\persistence\smoothsql\search\ComplexSearchService;
 use oat\generis\model\user\AuthAdapter;
 use oat\generis\model\user\UserFactoryService;
+use oat\generis\scripts\install\RegisterDefaultKvPersistence;
 use oat\oatbox\action\ActionService;
 use oat\oatbox\filesystem\FileSystemService;
 use oat\oatbox\log\LoggerService;
@@ -431,5 +432,11 @@ class Updater extends common_ext_ExtensionUpdater
         }
 
         $this->skip('11.3.2', '11.5.2');
+
+        if ($this->isVersion('11.5.2')) {
+            $this->runExtensionScript(RegisterDefaultKvPersistence::class);
+
+            $this->setVersion('11.5.3');
+        }
     }
 }
