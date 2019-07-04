@@ -34,6 +34,7 @@ use oat\generis\model\fileReference\ResourceFileSerializer;
 use oat\generis\model\kernel\persistence\smoothsql\search\ComplexSearchService;
 use oat\generis\model\user\AuthAdapter;
 use oat\generis\model\user\UserFactoryService;
+use oat\generis\scripts\install\RegisterDefaultKvPersistence;
 use oat\oatbox\action\ActionService;
 use oat\oatbox\filesystem\FileSystemService;
 use oat\oatbox\log\LoggerService;
@@ -52,7 +53,6 @@ use oat\generis\model\data\Ontology;
 use oat\oatbox\mutex\LockService;
 //use Symfony\Component\Lock\Store\PdoStore;
 use oat\oatbox\mutex\NoLockStorage;
-use oat\generis\scripts\update\RegisterDefaultKvPersistence;
 
 /**
  * @author Joel Bout <joel@taotesting.com>
@@ -439,5 +439,10 @@ class Updater extends common_ext_ExtensionUpdater
             $this->setVersion('11.6.0');
         }
         $this->skip('11.6.0', '12.1.0');
+        if ($this->isVersion('12.1.0')) {
+            $this->runExtensionScript(RegisterDefaultKvPersistence::class);
+
+            $this->setVersion('12.1.0.1');
+        }
     }
 }
