@@ -26,7 +26,8 @@ class common_persistence_SqlKvDriver implements common_persistence_KvDriver
 {
 
     const DEFAULT_GC_PROBABILITY = 1000;
-    
+
+    const OPTION_PERSISTENCE_SQL = 'sqlPersistence';
     /**
      * @var common_persistence_SqlPersistence
      */
@@ -47,7 +48,7 @@ class common_persistence_SqlKvDriver implements common_persistence_KvDriver
      */
     function connect($id, array $params)
     {
-        if (!isset($params['sqlPersistence'])) {
+        if (!isset($params[self::OPTION_PERSISTENCE_SQL])) {
             throw new common_exception_Error('Missing underlying sql persistence');
         }
         
