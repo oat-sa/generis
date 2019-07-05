@@ -34,7 +34,6 @@ use oat\generis\model\fileReference\ResourceFileSerializer;
 use oat\generis\model\kernel\persistence\smoothsql\search\ComplexSearchService;
 use oat\generis\model\user\AuthAdapter;
 use oat\generis\model\user\UserFactoryService;
-use oat\generis\scripts\install\RegisterDefaultKvPersistence;
 use oat\oatbox\action\ActionService;
 use oat\oatbox\filesystem\FileSystemService;
 use oat\oatbox\log\LoggerService;
@@ -53,6 +52,7 @@ use oat\generis\model\data\Ontology;
 use oat\oatbox\mutex\LockService;
 //use Symfony\Component\Lock\Store\PdoStore;
 use oat\oatbox\mutex\NoLockStorage;
+use oat\generis\scripts\install\RegisterDefaultKvPersistence;
 
 /**
  * @author Joel Bout <joel@taotesting.com>
