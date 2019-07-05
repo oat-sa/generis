@@ -52,7 +52,7 @@ use oat\generis\model\data\Ontology;
 use oat\oatbox\mutex\LockService;
 //use Symfony\Component\Lock\Store\PdoStore;
 use oat\oatbox\mutex\NoLockStorage;
-use oat\generis\scripts\install\RegisterDefaultKvPersistence;
+use oat\generis\scripts\update\RegisterDefaultKvPersistence;
 
 /**
  * @author Joel Bout <joel@taotesting.com>
