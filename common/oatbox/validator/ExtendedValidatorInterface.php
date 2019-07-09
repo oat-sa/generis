@@ -19,13 +19,11 @@
  */
 namespace oat\oatbox\validator;
 
-use tao_helpers_form_FormElement;
-
 interface ExtendedValidatorInterface extends ValidatorInterface
 {
     /**
-     * @param tao_helpers_form_FormElement[] $elements
-     * @param tao_helpers_form_FormElement $currentElement
+     * @param array $values
+     * @param string $currentPropertyUri
      */
-    public function populateAdditionValues(array $elements, tao_helpers_form_FormElement $currentElement);
+    public function populateAdditionValues(array $values, $currentPropertyUri);
 }
