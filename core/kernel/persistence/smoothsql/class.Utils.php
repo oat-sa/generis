@@ -162,7 +162,7 @@ class core_kernel_persistence_smoothsql_Utils
                 if ($pattern instanceof core_kernel_classes_Resource) {
                     $returnValue = '= ' . $persistence->quote($pattern->getUri());
                 } else {
-                    common_Logger::w('non ressource as search parameter: '. get_class($pattern), 'GENERIS');
+                    common_Logger::w('non ressource as search parameter: '. get_class($pattern), ['GENERIS']);
                 }
                 break;
             

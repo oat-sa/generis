@@ -20,6 +20,7 @@
  * 				 2013-2017 (update and modification) Open Assessment Technologies SA;
  *
  */
+use oat\generis\scripts\install\SetupDefaultKvPersistence;
 
 /**
  *
@@ -53,7 +54,8 @@ return array(
         'php' => array(
             oat\generis\scripts\install\TaskQueue::class,
             \oat\generis\scripts\install\SetupUserFactoryService::class,
-            \oat\generis\scripts\install\RegisterLockService::class
+            \oat\generis\scripts\install\RegisterLockService::class,
+            SetupDefaultKvPersistence::class
         ),
     ),
     'update' => 'oat\\generis\\scripts\\update\\Updater',
