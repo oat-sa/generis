@@ -28,13 +28,12 @@ use oat\oatbox\service\ConfigurableService;
  * @access public
  * @author Joel Bout, <joel@taotesting.com>
  * @package generis
- 
  */
 class Bin2HexUriProvider extends ConfigurableService
     implements UriProvider
 {
     const OPTION_NAMESPACE = 'namespace';
-    
+
     /**
      * Generates a URI based on a serial stored in the database.
      *
@@ -47,5 +46,4 @@ class Bin2HexUriProvider extends ConfigurableService
     {
         return $this->getOption(self::OPTION_NAMESPACE) . uniqid('i'). getmypid(). bin2hex(openssl_random_pseudo_bytes(8));
     }
-
 }
