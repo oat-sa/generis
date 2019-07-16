@@ -55,15 +55,11 @@ class core_kernel_uri_DatabaseSerialUriProvider extends Configurable
      * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @return string
-     * @throws common_UriProviderException
+     * @throws UriProviderException
      */
     public function provide()
     {
         $returnValue = (string) '';
-        
-        
-        
-        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
         try {
             $sth = $this->getPersistence()->query($this->getPersistence()->getPlatForm()->getSqlFunction("generis_sequence_uri_provider"), array(
                     $this->getOption(self::OPTION_NAMESPACE)

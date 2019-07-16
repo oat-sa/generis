@@ -43,10 +43,10 @@ class MicrotimeRandUriProvider extends ConfigurableService
     // --- OPERATIONS ---
     
     /**
-     * @return common_persistence_SqlPersistence
+     * @return \common_persistence_SqlPersistence
      */
     public function getPersistence() {
-        return \common_persistence_SqlPersistence::getPersistence($this->getOption(self::OPTION_PERSISTENCE));
+        return $this->getServiceLocator()->get(\common_persistence_Manager::SERVICE_ID)->getPersistenceById($this->getOption(self::OPTION_PERSISTENCE));
     }
     
     /**

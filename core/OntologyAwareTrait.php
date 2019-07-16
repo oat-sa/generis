@@ -22,6 +22,7 @@ namespace oat\generis\model;
 
 use oat\generis\model\data\ModelManager;
 use oat\generis\model\data\Model;
+use oat\generis\model\data\Ontology;
 /**
  * Trait for classes that want to access the ontology
  * 
@@ -47,7 +48,7 @@ trait OntologyAwareTrait
      * Sets the model to use
      * @param Model $model
      */
-    function setModel(Model $model)
+    function setModel(Ontology $model)
     {
         $this->model = $model;
     }

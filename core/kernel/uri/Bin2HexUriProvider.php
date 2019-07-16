@@ -41,7 +41,7 @@ class Bin2HexUriProvider extends ConfigurableService
      * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @return string
-     * @throws common_UriProviderException
+     * @throws UriProviderException
      */
     public function provide()
     {
