@@ -42,7 +42,7 @@ class common_ext_ExtensionUninstaller
 	public function uninstall()
 	{
 		
-		common_Logger::i('Uninstalling '.$this->extension->getId(), 'UNINSTALL');
+		common_Logger::i('Uninstalling '.$this->extension->getId(), ['UNINSTALL']);
 
 		// uninstall possible
     	if (is_null($this->extension->getManifest()->getUninstallData())) {
