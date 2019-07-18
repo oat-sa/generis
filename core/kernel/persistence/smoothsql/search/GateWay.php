@@ -26,6 +26,7 @@ namespace   oat\generis\model\kernel\persistence\smoothsql\search;
 
 use common_persistence_Manager;
 use common_persistence_SqlPersistence;
+use OAT\Library\DBALSpanner\SpannerStatement;
 use oat\oatbox\service\ServiceManager;
 use oat\search\base\exception\SearchGateWayExeption;
 use oat\search\base\QueryBuilderInterface;
@@ -99,10 +100,10 @@ class GateWay extends TaoSearchGateWay {
 
     /**
      * 
-     * @param \PDOStatement $statement
+     * @param \PDOStatement|SpannerStatement $statement
      * @return array
      */
-    protected function statementToArray(\PDOStatement $statement) {
+    protected function statementToArray($statement) {
         $result = [];
         while($row = $statement->fetch(\PDO::FETCH_OBJ)) {
             $result[] = $row;
