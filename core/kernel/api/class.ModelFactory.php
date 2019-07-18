@@ -128,10 +128,16 @@ class core_kernel_api_ModelFactory
      */
     public function addStatement($modelId, $subject, $predicate, $object, $lang = null, $author = self::DEFAULT_AUTHOR)
     {
+        // Casting values and types.
+        $object = (string) $object;
+        if (is_null($lang)) {
+            $lang = '';
+        }
+
         // TODO: refactor this to use a triple store abstraction.
         $result = $this->dbWrapper->query(
             'SELECT count(*) FROM statements WHERE modelid = ? AND subject = ? AND predicate = ? AND object = ? AND l_language = ?',
-            [$modelId, $subject, $predicate, $object, (is_null($lang)) ? '' : $lang]
+            [$modelId, $subject, $predicate, $object, $lang]
         );
 
         if (intval($result->fetchColumn()) > 0) {
@@ -148,7 +154,7 @@ class core_kernel_api_ModelFactory
                 'subject' => $subject,
                 'predicate' => $predicate,
                 'object' => $object,
-                'l_language' => is_null($lang) ? '' : $lang,
+                'l_language' => $lang,
                 'author' => is_null($author) ? '' : $author,
                 'epoch' => $date,
             ]
