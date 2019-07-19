@@ -84,14 +84,14 @@ class Directory extends FileSystemHandler implements \IteratorAggregate
 
         $iterator = array();
         $contents = $this->getFileSystem()->listContents($this->getPrefix(), $recursive);
-
+        $dirPath = $this->getFileSystem()->get($this->getPrefix())->getPath();
         foreach ($contents as $content) {
             if ($withDirectories && $content['type'] == 'dir') {
-                $iterator[] = $this->getDirectory(str_replace($this->getPrefix(), '', $content['path']));
+                $iterator[] = $this->getDirectory(str_replace($dirPath, '', $content['path']));
             }
 
             if ($withFiles && $content['type'] == 'file') {
-                $iterator[] = $this->getFile(str_replace($this->getPrefix(), '', $content['path']));
+                $iterator[] = $this->getFile(str_replace($dirPath, '', $content['path']));
             }
         }
 

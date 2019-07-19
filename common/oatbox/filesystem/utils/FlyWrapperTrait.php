@@ -17,7 +17,7 @@ trait FlyWrapperTrait
      */
     public function write($path, $contents, Config $config)
     {
-        return $this->getAdapter()->write($path, $contents, $config);
+        return $this->getAdapter()->write($this->getFullPath($path), $contents, $config);
     }
 
     /**
@@ -26,7 +26,7 @@ trait FlyWrapperTrait
      */
     public function writeStream($path, $resource, Config $config)
     {
-        return $this->getAdapter()->writeStream($path, $resource, $config);
+        return $this->getAdapter()->writeStream($this->getFullPath($path), $resource, $config);
     }
 
     /**
@@ -35,7 +35,7 @@ trait FlyWrapperTrait
      */
     public function update($path, $contents, Config $config)
     {
-        return $this->getAdapter()->update($path, $contents, $config);
+        return $this->getAdapter()->update($this->getFullPath($path), $contents, $config);
     }
 
     /**
@@ -44,7 +44,7 @@ trait FlyWrapperTrait
      */
     public function updateStream($path, $resource, Config $config)
     {
-        return $this->getAdapter()->updateStream($path, $resource, $config);
+        return $this->getAdapter()->updateStream($this->getFullPath($path), $resource, $config);
     }
 
     /**
@@ -53,7 +53,7 @@ trait FlyWrapperTrait
      */
     public function rename($path, $newpath)
     {
-        return $this->getAdapter()->rename($path, $newpath);
+        return $this->getAdapter()->rename($this->getFullPath($path), $newpath);
     }
 
     /**
@@ -62,7 +62,7 @@ trait FlyWrapperTrait
      */
     public function copy($path, $newpath)
     {
-        $this->getAdapter()->copy($path, $newpath);
+        $this->getAdapter()->copy($this->getFullPath($path), $newpath);
     }
 
     /**
@@ -71,7 +71,7 @@ trait FlyWrapperTrait
      */
     public function delete($path)
     {
-        return $this->getAdapter()->delete($path);
+        return $this->getAdapter()->delete($this->getFullPath($path));
     }
 
     /**
@@ -80,7 +80,7 @@ trait FlyWrapperTrait
      */
     public function deleteDir($dirname)
     {
-        return $this->getAdapter()->deleteDir($dirname);
+        return $this->getAdapter()->deleteDir($this->getFullPath($dirname));
     }
 
     /**
@@ -89,7 +89,7 @@ trait FlyWrapperTrait
      */
     public function createDir($dirname, Config $config)
     {
-        return $this->getAdapter()->createDir($dirname, $config);
+        return $this->getAdapter()->createDir($this->getFullPath($dirname), $config);
     }
 
     /**
@@ -98,7 +98,7 @@ trait FlyWrapperTrait
      */
     public function setVisibility($path, $visibility)
     {
-        return $this->getAdapter()->setVisibility($path, $visibility);
+        return $this->getAdapter()->setVisibility($this->getFullPath($path), $visibility);
     }
 
     /**
@@ -107,7 +107,7 @@ trait FlyWrapperTrait
      */
     public function has($path)
     {
-        return $this->getAdapter()->has($path);
+        return $this->getAdapter()->has($this->getFullPath($path));
     }
 
     /**
@@ -116,7 +116,7 @@ trait FlyWrapperTrait
      */
     public function read($path)
     {
-        return $this->getAdapter()->read($path);
+        return $this->getAdapter()->read($this->getFullPath($path));
     }
 
     /**
@@ -125,7 +125,7 @@ trait FlyWrapperTrait
      */
     public function readStream($path)
     {
-        return $this->getAdapter()->readStream($path);
+        return $this->getAdapter()->readStream($this->getFullPath($path));
     }
 
     /**
@@ -134,7 +134,7 @@ trait FlyWrapperTrait
      */
     public function listContents($directory = '', $recursive = false)
     {
-        return $this->getAdapter()->listContents($directory, $recursive);
+        return $this->getAdapter()->listContents($this->getFullPath($directory), $recursive);
     }
 
     /**
@@ -143,7 +143,7 @@ trait FlyWrapperTrait
      */
     public function getMetadata($path)
     {
-        return $this->getAdapter()->getMetadata($path);
+        return $this->getAdapter()->getMetadata($this->getFullPath($path));
     }
 
     /**
@@ -152,7 +152,7 @@ trait FlyWrapperTrait
      */
     public function getSize($path)
     {
-        return $this->getAdapter()->getSize($path);
+        return $this->getAdapter()->getSize($this->getFullPath($path));
     }
 
     /**
@@ -161,7 +161,7 @@ trait FlyWrapperTrait
      */
     public function getMimetype($path)
     {
-        return $this->getAdapter()->getMimetype($path);
+        return $this->getAdapter()->getMimetype($this->getFullPath($path));
     }
 
     /**
@@ -170,7 +170,7 @@ trait FlyWrapperTrait
      */
     public function getTimestamp($path)
     {
-        return $this->getAdapter()->getTimestamp($path);
+        return $this->getAdapter()->getTimestamp($this->getFullPath($path));
     }
 
     /**
@@ -179,7 +179,7 @@ trait FlyWrapperTrait
      */
     public function getVisibility($path)
     {
-        return $this->getAdapter()->getVisibility($path);
+        return $this->getAdapter()->getVisibility($this->getFullPath($path));
     }
 
     /**
@@ -188,4 +188,6 @@ trait FlyWrapperTrait
      * @return AdapterInterface
      */
     abstract public function getAdapter();
+
+    abstract public function getFullPath($path);
 }

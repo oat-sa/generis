@@ -36,16 +36,19 @@ class FileSystem implements FilesystemInterface
 
     protected $filesystem;
 
+    protected $prefix;
+
     /**
      * Filesystem constructor.
      *
      * @param $id
      * @param $adapter
      */
-    public function __construct($id, $adapter)
+    public function __construct($id, FlyFileSystem $flySystem, $prefix)
     {
         $this->id = $id;
-        $this->filesystem = new FlyFileSystem($adapter);
+        $this->filesystem = $flySystem;
+        $this->prefix = $prefix;
     }
 
     /**
@@ -62,10 +65,6 @@ class FileSystem implements FilesystemInterface
      */
     protected function getFileSystem()
     {
-        if (! $this->filesystem) {
-            throw new \common_Exception('Unable to find filesystem.');
-        }
-
         return $this->filesystem;
     }
 
@@ -74,8 +73,13 @@ class FileSystem implements FilesystemInterface
      *
      * @return AdapterInterface adapter
      */
-    public function getAdapter()
+    private function getAdapter()
     {
         return $this->getFileSystem()->getAdapter();
+    }
+
+    protected function getFullPath($path)
+    {
+        return $this->prefix . '/' . $path;
     }
 }

@@ -23,23 +23,27 @@ use oat\oatbox\service\ConfigurableService;
 use League\Flysystem\AdapterInterface;
 use common_exception_Error;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use \League\Flysystem\Filesystem as FlyFileSystem;
+use League\Flysystem\FilesystemInterface;
  /**
  * A service to reference and retrieve filesystems
  */
 class FileSystemService extends ConfigurableService
 {
     const SERVICE_ID = 'generis/filesystem';
-    
+
     const OPTION_FILE_PATH = 'filesPath';
-    
+
     const OPTION_ADAPTERS = 'adapters';
-    
+
+    const OPTION_DIRECTORIES = 'dirs';
+
     const FLYSYSTEM_ADAPTER_NS = '\\League\\Flysystem\\Adapter\\';
-    
+
     const FLYSYSTEM_LOCAL_ADAPTER = 'Local';
-    
+
     private $filesystems = array();
-    
+
     /**
      * 
      * @param $id
@@ -47,9 +51,54 @@ class FileSystemService extends ConfigurableService
      */
     public function getDirectory($id)
     {
-        $directory = new Directory($id, '');
-        $directory->setServiceLocator($this->getServiceLocator());
-        return $directory;
+        return $this->propagate(new Directory($id, ''));
+    }
+
+    /**
+     * Returns the configuration for an adapter
+     * @param string $id
+     * @return string[]
+     */
+    protected function getAdapterConfig($id)
+    {
+        $dirs = $this->getDirectories();
+        if (!isset($dirs[$id])) {
+            $config = [
+                'adapter' => $id,
+                'path' => ''
+            ];
+        } elseif (is_array($dirs[$id])) {
+            $config = $dirs[$id];
+        } else {
+            $config = [
+                'adapter' => $dirs[$id],
+                'path' => $id
+            ];
+        }
+        return $config;
+    }
+
+    /**
+     * Returns the directory config
+     * @return array
+     */
+    protected function getDirectories()
+    {
+        return $this->hasOption(self::OPTION_DIRECTORIES)
+            ? $this->getOption(self::OPTION_DIRECTORIES)
+            : [];
+    }
+
+    /**
+     * Add a directory reference
+     * @param string $id
+     * @param string $adapterId
+     */
+    protected function addDir($id, $adapterId)
+    {
+        $dirs = $this->getDirectories();
+        $dirs[$id] = $adapterId;
+        $this->setOption(self::OPTION_DIRECTORIES, $dirs);
     }
     
     /**
@@ -69,14 +118,16 @@ class FileSystemService extends ConfigurableService
      * Retrieve an existing FileSystem by ID.
      *
      * @param string $id
-     * @return FileSystem
+     * @return FilesystemInterface
      * @throws \common_exception_Error
      * @throws \common_exception_NotFound
      */
     public function getFileSystem($id)
     {
         if (!isset($this->filesystems[$id])) {
-            $this->filesystems[$id] = new FileSystem($id, $this->getFlysystemAdapter($id));
+            $config = $this->getAdapterConfig($id);
+            $adapter = $this->getFlysystemAdapter($config['adapter']);
+            $this->filesystems[$id] = new FileSystem($id, new FlyFileSystem($adapter), $config['path']);
         }
         return $this->filesystems[$id];
     }
@@ -87,18 +138,11 @@ class FileSystemService extends ConfigurableService
      *
      * @param string $id
      * @param string $subPath
-     * @return FileSystem
+     * @return FilesystemInterface
      */
     public function createFileSystem($id, $subPath = null)
     {
-        $path = $this->getOption(self::OPTION_FILE_PATH).
-            (is_null($subPath) ? \helpers_File::sanitizeInjectively($id) : ltrim($subPath, '/'));
-        $adapters = $this->hasOption(self::OPTION_ADAPTERS) ? $this->getOption(self::OPTION_ADAPTERS) : array();
-        $adapters[$id] = array(
-            'class' => self::FLYSYSTEM_LOCAL_ADAPTER,
-            'options' => array('root' => $path)
-        );
-        $this->setOption(self::OPTION_ADAPTERS, $adapters);
+        $this->addDir($id, 'default');
         return $this->getFileSystem($id);
     }
 
@@ -106,7 +150,7 @@ class FileSystemService extends ConfigurableService
      * Create a new local file system
      * 
      * @param string $id
-     * @return FileSystem
+     * @return FilesystemInterface
      */
     public function createLocalFileSystem($id)
     {
@@ -175,7 +219,7 @@ class FileSystemService extends ConfigurableService
         }
         $class = $adapterConfig['class'];
         $options = isset($adapterConfig['options']) ? $adapterConfig['options'] : array();
-        
+
         if (!class_exists($class)) {
             if (class_exists(self::FLYSYSTEM_ADAPTER_NS.$class)) {
                 $class = self::FLYSYSTEM_ADAPTER_NS.$class;
@@ -185,7 +229,7 @@ class FileSystemService extends ConfigurableService
                 throw new common_exception_Error('Unknown Flysystem adapter "'.$class.'"');
             }
         }
-        
+
         if (!is_subclass_of($class, 'League\Flysystem\AdapterInterface')) {
             throw new common_exception_Error('"'.$class.'" is not a flysystem adapter');
         }
