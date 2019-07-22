@@ -181,6 +181,8 @@ class common_Utils
                 }
             }
             $returnValue = "array(".substr($string, 0, -1).PHP_EOL.str_repeat('    ', $indentation).")";
+        } elseif (gettype($value) == "string") {
+            $returnValue = self::toPHPVariableString($value);
         } else {
             $lines = explode(PHP_EOL, self::toPHPVariableString($value));
             $returnValue = implode(PHP_EOL.str_repeat('    ', $indentation), $lines);
