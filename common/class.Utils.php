@@ -163,7 +163,7 @@ class common_Utils
      */
     public static function toHumanReadablePhpString($value, $indentation = 0)
     {
-        if (gettype($value) == "array") {
+        if (is_array($value)) {
             $array = array_keys($value);
             $assocArray = ($array !== array_keys($array));
             $string = "";
@@ -181,7 +181,7 @@ class common_Utils
                 }
             }
             $returnValue = "array(".substr($string, 0, -1).PHP_EOL.str_repeat('    ', $indentation).")";
-        } elseif (gettype($value) == "string") {
+        } elseif (is_string($value)) {
             $returnValue = self::toPHPVariableString($value);
         } else {
             $lines = explode(PHP_EOL, self::toPHPVariableString($value));
