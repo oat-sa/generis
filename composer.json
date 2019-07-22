@@ -74,6 +74,9 @@
     "phpunit/phpunit": "^4.8",
     "symfony/cache": "~4.1"
   },
+  "suggest": {
+    "superbalist/flysystem-google-storage": "Supports google flystore"
+  },
   "autoload": {
     "psr-4": {
       "oat\\generis\\model\\": "core/",
