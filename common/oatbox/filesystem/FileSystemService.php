@@ -84,8 +84,9 @@ class FileSystemService extends ConfigurableService
      */
     public function hasDirectory($id)
     {
-        $fsConfig = $this->getOption(self::OPTION_ADAPTERS);
-        return isset($fsConfig[$id]);
+        $adapterConfig = $this->getOption(self::OPTION_ADAPTERS);
+        $dirConfig = $this->getOption(self::OPTION_DIRECTORIES);
+        return isset($adapterConfig[$id]) || isset($dirConfig[$id]);
     }
 
     /**

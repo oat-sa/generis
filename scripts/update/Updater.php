@@ -53,6 +53,7 @@ use oat\oatbox\mutex\LockService;
 //use Symfony\Component\Lock\Store\PdoStore;
 use oat\oatbox\mutex\NoLockStorage;
 use oat\generis\scripts\update\RegisterDefaultKvPersistence;
+use League\Flysystem\Adapter\Local;
 
 /**
  * @author Joel Bout <joel@taotesting.com>
@@ -439,5 +440,24 @@ class Updater extends common_ext_ExtensionUpdater
             $this->setVersion('11.6.0');
         }
         $this->skip('11.6.0', '12.0.2');
+
+        if ($this->isVersion('12.0.2')) {
+            $fs = $this->getServiceManager()->get(FileSystemService::SERVICE_ID);
+            $adapters = $fs->getOption(FileSystemService::OPTION_ADAPTERS);
+            if (!isset($adapters['default'])) {
+                if (get_class($fs) == FileSystemService::class) {
+                    // override default behavior to ensure an adapter and not a directory is created
+                    $adapters['default'] = array(
+                        'class' => Local::class,
+                        'options' => array('root' => $fs->getOption(self::OPTION_FILE_PATH))
+                    );
+                    $fs->setOption(FileSystemService::OPTION_ADAPTERS, $adapters);
+                    $this->getServiceManager()->register(FileSystemService::SERVICE_ID, $fs);
+                } else {
+                    $fs->createFileSystem('default', '');
+                }
+            }
+            $this->setVersion('12.1.0');
+        }
     }
 }
