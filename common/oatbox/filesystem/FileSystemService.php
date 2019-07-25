@@ -55,30 +55,6 @@ class FileSystemService extends ConfigurableService
     }
 
     /**
-     * Returns the configuration for an adapter
-     * @param string $id
-     * @return string[]
-     */
-    protected function getAdapterConfig($id)
-    {
-        $dirs = $this->getDirectories();
-        if (!isset($dirs[$id])) {
-            $config = [
-                'adapter' => $id,
-                'path' => ''
-            ];
-        } elseif (is_array($dirs[$id])) {
-            $config = $dirs[$id];
-        } else {
-            $config = [
-                'adapter' => $dirs[$id],
-                'path' => $id
-            ];
-        }
-        return $config;
-    }
-
-    /**
      * Returns the directory config
      * @return array
      */
@@ -149,6 +125,7 @@ class FileSystemService extends ConfigurableService
     /**
      * Create a new local file system
      * 
+     * @deprecated never rely on a directory being local
      * @param string $id
      * @return FilesystemInterface
      */
@@ -162,6 +139,7 @@ class FileSystemService extends ConfigurableService
     /**
      * Registers a local file system, used for transition
      * 
+     * @deprecated never rely on a directory being local
      * @param string $id
      * @param string $path
      * @return boolean
@@ -185,17 +163,46 @@ class FileSystemService extends ConfigurableService
      */
     public function unregisterFileSystem($id)
     {
+        if (isset($this->filesystems[$id])) {
+            unset($this->filesystems[$id]);
+        }
         $adapters = $this->getOption(self::OPTION_ADAPTERS);
         if (isset($adapters[$id])) {
             unset($adapters[$id]);
-            if (isset($this->filesystems[$id])) {
-                unset($this->filesystems[$id]);
-            }
             $this->setOption(self::OPTION_ADAPTERS, $adapters);
+            return true;
+        } elseif ($this->hasDirectory($id)) {
+            $directories = $this->getOption(self::OPTION_DIRECTORIES);
+            unset($directories[$id]);
+            $this->setOption(self::OPTION_DIRECTORIES, $directories);
             return true;
         } else {
             return false;
         }
+    }
+
+    /**
+     * Returns the configuration for an adapter
+     * @param string $id
+     * @return string[]
+     */
+    protected function getAdapterConfig($id)
+    {
+        $dirs = $this->getDirectories();
+        if (!isset($dirs[$id])) {
+            $config = [
+                'adapter' => $id,
+                'path' => ''
+            ];
+        } elseif (is_array($dirs[$id])) {
+            $config = $dirs[$id];
+        } else {
+            $config = [
+                'adapter' => $dirs[$id],
+                'path' => $id
+            ];
+        }
+        return $config;
     }
 
     /**
