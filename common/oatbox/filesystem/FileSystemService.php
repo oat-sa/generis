@@ -126,7 +126,7 @@ class FileSystemService extends ConfigurableService
     /**
      * Create a new local file system
      * 
-     * @deprecated never rely on a directory being local
+     * @deprecated never rely on a directory being local, use addDir instead
      * @param string $id
      * @return FilesystemInterface
      */
@@ -140,7 +140,7 @@ class FileSystemService extends ConfigurableService
     /**
      * Registers a local file system, used for transition
      * 
-     * @deprecated never rely on a directory being local
+     * @deprecated never rely on a directory being local, use addDir instead
      * @param string $id
      * @param string $path
      * @return boolean
