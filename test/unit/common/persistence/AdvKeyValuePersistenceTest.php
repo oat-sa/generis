@@ -62,6 +62,14 @@ class AdvKeyValuePersistenceTest extends TestCase
         $this->largeValuePersistence->hSet('test', 'fixture', 'value');
     }
 
+    public function testHset()
+    {
+        $this->assertTrue($this->largeValuePersistence->hSet('test', 'hset1', 'value'));
+        $this->assertTrue($this->largeValuePersistence->hSet('test', 'hset2', 'value'));
+        $this->assertFalse($this->largeValuePersistence->hSet('test', 'hset1', 'value2'));
+        $this->assertEquals('value2', $this->largeValuePersistence->hGet('test', 'hset1'));
+    }
+
     public function testLargeHmsetHget()
     {
         $bigValue = $this->get100000bytesValue();

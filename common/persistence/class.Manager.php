@@ -54,7 +54,8 @@ class common_persistence_Manager extends ConfigurableService
         'phpredis'   => 'common_persistence_PhpRedisDriver',
         'phpfile'    => 'common_persistence_PhpFileDriver',
         'SqlKvWrapper' => 'common_persistence_SqlKvDriver',
-        'no_storage' => 'common_persistence_InMemoryKvDriver'
+        'no_storage' => 'common_persistence_InMemoryKvDriver',
+        'no_storage_adv' => 'common_persistence_InMemoryAdvKvDriver'
     );
     
     /**
