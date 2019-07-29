@@ -452,10 +452,10 @@ class Updater extends common_ext_ExtensionUpdater
                         'options' => array('root' => $fs->getOption(FileSystemService::OPTION_FILE_PATH))
                     );
                     $fs->setOption(FileSystemService::OPTION_ADAPTERS, $adapters);
-                    $this->getServiceManager()->register(FileSystemService::SERVICE_ID, $fs);
                 } else {
                     $fs->createFileSystem('default', '');
                 }
+                $this->getServiceManager()->register(FileSystemService::SERVICE_ID, $fs);
             }
             $this->setVersion('12.1.0');
         }
