@@ -20,7 +20,6 @@
 
 namespace oat\oatbox\filesystem;
 
-use \League\Flysystem\Filesystem as FlyFileSystem;
 use League\Flysystem\FilesystemInterface;
 use oat\oatbox\filesystem\utils\FileSystemWrapperTrait;
 use League\Flysystem\AdapterInterface;
@@ -32,10 +31,19 @@ class FileSystem implements FilesystemInterface
 {
     use FileSystemWrapperTrait;
 
+    /**
+     * @var string
+     */
     protected $id;
 
+    /**
+     * @var FilesystemInterface
+     */
     protected $filesystem;
 
+    /**
+     * @var string
+     */
     protected $prefix;
 
     /**
@@ -44,7 +52,7 @@ class FileSystem implements FilesystemInterface
      * @param $id
      * @param $adapter
      */
-    public function __construct($id, FlyFileSystem $flySystem, $prefix)
+    public function __construct($id, FilesystemInterface $flySystem, $prefix)
     {
         $this->id = $id;
         $this->filesystem = $flySystem;
@@ -60,7 +68,7 @@ class FileSystem implements FilesystemInterface
     }
 
     /**
-     * @return FlyFileSystem
+     * @return FilesystemInterface
      * @throws \common_Exception
      */
     protected function getFileSystem()
