@@ -41,7 +41,7 @@ class GoogleStorageWrapper extends ConfigurableService implements AdapterInterfa
     private $adapter;
     
     /**
-     * @return \Google\Cloud\Storage\StorageClient
+     * @return StorageClient
      */
     private function getClient()
     {
