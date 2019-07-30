@@ -19,6 +19,8 @@
 
 namespace oat\oatbox\service;
 
+use common_Utils as Utils;
+use InvalidArgumentException;
 use oat\oatbox\PhpSerializable;
 
 class EnvironmentVariable implements PhpSerializable
@@ -28,12 +30,16 @@ class EnvironmentVariable implements PhpSerializable
 
     public function __construct($name)
     {
+        if(!is_string($name)) {
+            throw new InvalidArgumentException('Environment variable name must be a string.');
+        }
+
         $this->name = $name;
     }
 
     public function __toPhpCode()
     {
-        return 'new ' . __CLASS__ . '(' . $this->name . ')';
+        return 'new ' . __CLASS__ . '(' . Utils::toPHPVariableString($this->name) . ')';
     }
 
     public function __toString()

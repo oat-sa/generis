@@ -19,12 +19,14 @@
 
 namespace oat\generis\test\unit\oatbox\service;
 
+use common_Utils as Utils;
+use InvalidArgumentException;
 use oat\generis\test\TestCase;
 use oat\oatbox\service\EnvironmentVariable;
 
 class EnvironmentVariableTest extends TestCase
 {
-    const VAR_NAME = 'name of the variable';
+    const VAR_NAME = 'That\'s the variable\'s name.';
 
     /** @var EnvironmentVariable */
     private $subject;
@@ -43,15 +45,21 @@ class EnvironmentVariableTest extends TestCase
         $this->assertSame(self::VAR_NAME, $property->getValue($this->subject));
     }
 
+    public function testConstructorWithNonStringKeyThrowsException()
+    {
+        $this->setExpectedException(InvalidArgumentException::class, 'Environment variable name must be a string.');
+        new EnvironmentVariable([]);
+    }
+
     public function testToPhpCode()
     {
-        $this->assertSame('new ' . EnvironmentVariable::class . '(' . self::VAR_NAME . ')', $this->subject->__toPhpCode());
+        $this->assertSame('new ' . EnvironmentVariable::class . '(' . Utils::toPHPVariableString(self::VAR_NAME) . ')', $this->subject->__toPhpCode());
     }
 
     public function testToString()
     {
         $_ENV[self::VAR_NAME] = 1012;
 
-        $this->assertSame('1012', (string) $this->subject) ;
+        $this->assertSame('1012', (string)$this->subject);
     }
 }
