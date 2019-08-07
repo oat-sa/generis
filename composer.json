@@ -53,12 +53,6 @@
   "extra": {
     "tao-extension-name": "generis"
   },
-  "repositories": [
-    {
-      "type": "vcs",
-      "url": "git@github.com:oat-sa/lib-dbal-spanner.git"
-    }
-  ],
   "require": {
     "clearfw/clearfw": "~1.2.0",
     "easyrdf/easyrdf": "^0.9.0",
@@ -70,7 +64,6 @@
     "php": "^7.1",
     "psr/log": "~1.0",
     "oat-sa/lib-generis-search": "dev-feature/NEX-84/spanner-compatible-statements",
-    "oat-sa/lib-dbal-spanner": "dev-feature/NEX-84/spanner-query-refactoring",
     "monolog/monolog": "^1.23.0",
     "fluent/logger": "^1.0.1",
     "symfony/lock": "^3.4",
@@ -83,6 +76,7 @@
     "symfony/cache": "~4.1"
   },
   "suggest": {
+    "oat-sa/lib-dbal-spanner": "dev-feature/NEX-84/spanner-query-refactoring",
     "superbalist/flysystem-google-storage": "Supports google flystore"
   },
   "autoload": {
