@@ -93,7 +93,17 @@ class Installer extends ConfigurableService
                 throw new InvalidService('Your service must be a oat\oatbox\filesystem\FileSystemService');
             }
         } catch(ServiceNotFoundException $e){
-            $fileSystemService = new FileSystemService(array(FileSystemService::OPTION_FILE_PATH => $this->getOption('file_path')));
+            $fileSystemService = new FileSystemService([
+                FileSystemService::OPTION_FILE_PATH => $this->getOption('file_path'),
+                FileSystemService::OPTION_ADAPTERS => [
+                    'default' => [
+                        'class' => 'Local',
+                        'options' => array(
+                            'root' => $this->getOption('file_path')
+                        )
+                    ]
+                ]
+            ]);
             $this->getServiceManager()->register(FileSystemService::SERVICE_ID, $fileSystemService);
         }
     }

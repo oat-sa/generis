@@ -82,6 +82,9 @@
     "php-mock/php-mock": "^2.0",
     "symfony/cache": "~4.1"
   },
+  "suggest": {
+    "superbalist/flysystem-google-storage": "Supports google flystore"
+  },
   "autoload": {
     "psr-4": {
       "oat\\generis\\model\\": "core/",
