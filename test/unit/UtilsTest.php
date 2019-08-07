@@ -75,10 +75,14 @@ class generis_test_UtilsTest extends TestCase
             'b' => new core_kernel_classes_Resource('doesnotexist'),
             'c' => array(
                 '1', '2', array(common_user_auth_Service::singleton())
-            )
+            ),
+            'd' => 'aaaaa'.PHP_EOL.'bbbbb'.PHP_EOL.'ccccc'
         );
         $value = eval("return " . common_Utils::toPHPVariableString($toSerialize) . ";");
         $this->assertEquals($toSerialize, $value);
+
+        $valueNice = eval("return " . common_Utils::toHumanReadablePhpString($toSerialize) . ";");
+        $this->assertEquals($toSerialize, $valueNice);
     }
 
     private function buildBinString()

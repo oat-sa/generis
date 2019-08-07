@@ -54,7 +54,8 @@ class common_persistence_Manager extends ConfigurableService
         'phpredis'   => 'common_persistence_PhpRedisDriver',
         'phpfile'    => 'common_persistence_PhpFileDriver',
         'SqlKvWrapper' => 'common_persistence_SqlKvDriver',
-        'no_storage' => 'common_persistence_InMemoryKvDriver'
+        'no_storage' => 'common_persistence_InMemoryKvDriver',
+        'no_storage_adv' => 'common_persistence_InMemoryAdvKvDriver'
     );
     
     /**
@@ -71,6 +72,43 @@ class common_persistence_Manager extends ConfigurableService
             $manager->setServiceManager(ServiceManager::getServiceManager());
         }
         return $manager;
+    }
+
+    /**
+     * Returns TRUE if the requested persistence exist, otherwise FALSE.
+     *
+     * @param string $persistenceId
+     * @return bool
+     */
+    public function hasPersistence($persistenceId)
+    {
+        $persistenceList = $this->getOption(static::OPTION_PERSISTENCES);
+        return isset($persistenceList[$persistenceId]);
+    }
+
+    /**
+     * Registers a new persistence.
+     *
+     * @param string $persistenceId
+     * @param array  $persistenceConf
+     */
+    public function registerPersistence($persistenceId, array $persistenceConf)
+    {
+        // wrap pdo drivers in dbal
+        if (strpos($persistenceConf['driver'], 'pdo_') === 0) {
+            $persistenceConf = [
+                'driver' => 'dbal',
+                'connection' => $persistenceConf,
+            ];
+        }
+
+        if (isset($persistenceConf['connection']['driver']) && $persistenceConf['connection']['driver'] === 'pdo_mysql') {
+            $persistenceConf['connection']['charset'] = 'utf8';
+        }
+
+        $configs = $this->getOption(self::OPTION_PERSISTENCES);
+        $configs[$persistenceId] = $persistenceConf;
+        $this->setOption(self::OPTION_PERSISTENCES, $configs);
     }
 
     /**
@@ -112,39 +150,6 @@ class common_persistence_Manager extends ConfigurableService
             $this->persistences[$persistenceId] = $this->createPersistence($persistenceId);
         }
         return $this->persistences[$persistenceId];
-    }
-
-    /**
-     * Returns TRUE if the requested persistence exist, otherwise FALSE.
-     *
-     * @param string $persistenceId
-     * @return bool
-     */
-    public function hasPersistence($persistenceId)
-    {
-        $persistenceList = $this->getOption(static::OPTION_PERSISTENCES);
-        
-        return isset($persistenceList[$persistenceId]);
-    }
-    
-    /**
-     * Registers a new persistence.
-     *
-     * @param string $persistenceId
-     * @param array  $persistenceConf
-     */
-    public function registerPersistence($persistenceId, array $persistenceConf)
-    {
-        // wrap pdo drivers in dbal
-        if (strpos($persistenceConf['driver'], 'pdo_') === 0) {
-            $persistenceConf = [
-                'driver' => 'dbal',
-                'connection' => $persistenceConf,
-            ];
-        }
-        $configs = $this->getOption(self::OPTION_PERSISTENCES);
-        $configs[$persistenceId] = $persistenceConf;
-        $this->setOption(self::OPTION_PERSISTENCES, $configs);
     }
 
     /**

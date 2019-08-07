@@ -49,6 +49,11 @@ use Psr\Log\LoggerInterface;
 use oat\oatbox\user\UserLanguageService;
 use oat\oatbox\session\SessionService;
 use oat\generis\model\data\Ontology;
+use oat\oatbox\mutex\LockService;
+//use Symfony\Component\Lock\Store\PdoStore;
+use oat\oatbox\mutex\NoLockStorage;
+use oat\generis\scripts\update\RegisterDefaultKvPersistence;
+use League\Flysystem\Adapter\Local;
 
 /**
  * @author Joel Bout <joel@taotesting.com>
@@ -366,6 +371,94 @@ class Updater extends common_ext_ExtensionUpdater
         if ($this->isVersion('9.1.3')) {
             $this->getServiceManager()->unregister('generis/profiler');
             $this->setVersion('10.0.0');
+        }
+
+        $this->skip('10.0.0', '10.1.0');
+
+        if ($this->isVersion('10.1.0')) {
+            /** @var \common_persistence_Manager $persistenceManager */
+            $persistenceManager = $this->getServiceManager()->get(\common_persistence_Manager::SERVICE_ID);
+
+            $persistenceManagerConfig = $persistenceManager->getOption('persistences');
+            foreach ($persistenceManagerConfig as $persistenceId => $persistenceParams) {
+                // wrap pdo drivers in dbal
+                if (strpos($persistenceParams['driver'], 'pdo_') === 0) {
+                    $persistenceManagerConfig[$persistenceId] = [
+                        'driver' => 'dbal',
+                        'connection' => $persistenceParams,
+                    ];
+                }
+            }
+            $persistenceManager->setOption('persistences', $persistenceManagerConfig);
+            $this->getServiceManager()->register(\common_persistence_Manager::SERVICE_ID, $persistenceManager);
+
+            $this->setVersion('11.0.0');
+        }
+
+        $this->skip('11.0.0', '11.1.1');
+
+        if ($this->isVersion('11.1.1')) {
+//            $service = new LockService([
+//                LockService::OPTION_PERSISTENCE_CLASS => PdoStore::class,
+//                LockService::OPTION_PERSISTENCE_OPTIONS => 'default',
+//            ]);
+//            $this->getServiceManager()->register(LockService::SERVICE_ID, $service);
+//            $service->install();
+            $this->setVersion('11.2.0');
+        }
+
+        $this->skip('11.2.0', '11.2.1');
+
+        if ($this->isVersion('11.2.1')) {
+            $service = new LockService([
+                LockService::OPTION_PERSISTENCE_CLASS => NoLockStorage::class
+            ]);
+            $this->getServiceManager()->register(LockService::SERVICE_ID, $service);
+            $this->setVersion('11.2.2');
+        }
+
+        $this->skip('11.2.2', '11.3.1');
+
+        if ($this->isVersion('11.3.1')) {
+            /** @var \common_persistence_Manager $persistenceManager */
+            $persistenceManager = $this->getServiceManager()->get(\common_persistence_Manager::SERVICE_ID);
+            $persistenceManagerConfig = $persistenceManager->getOption('persistences');
+
+            foreach ($persistenceManagerConfig as $persistenceId => $persistenceParams) {
+                $persistenceManager->registerPersistence($persistenceId,$persistenceParams);
+            }
+
+            $this->getServiceManager()->register(\common_persistence_Manager::SERVICE_ID, $persistenceManager);
+            $this->setVersion('11.3.2');
+        }
+
+        $this->skip('11.3.2', '11.5.2');
+
+        if ($this->isVersion('11.5.2')) {
+            $this->runExtensionScript(RegisterDefaultKvPersistence::class);
+
+            $this->setVersion('11.6.0');
+        }
+
+        $this->skip('11.6.0', '12.1.0');
+
+        if ($this->isVersion('12.1.0')) {
+            $fs = $this->getServiceManager()->get(FileSystemService::SERVICE_ID);
+            $adapters = $fs->getOption(FileSystemService::OPTION_ADAPTERS);
+            if (!isset($adapters['default'])) {
+                if (get_class($fs) == FileSystemService::class) {
+                    // override default behavior to ensure an adapter and not a directory is created
+                    $adapters['default'] = array(
+                        'class' => Local::class,
+                        'options' => array('root' => $fs->getOption(FileSystemService::OPTION_FILE_PATH))
+                    );
+                    $fs->setOption(FileSystemService::OPTION_ADAPTERS, $adapters);
+                } else {
+                    $fs->createFileSystem('default', '');
+                }
+                $this->getServiceManager()->register(FileSystemService::SERVICE_ID, $fs);
+            }
+            $this->setVersion('12.2.0');
         }
     }
 }

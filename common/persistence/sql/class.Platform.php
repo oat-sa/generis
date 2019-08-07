@@ -23,6 +23,7 @@
  */
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\DBALException;
 
 class common_persistence_sql_Platform {
     
@@ -145,16 +146,39 @@ class common_persistence_sql_Platform {
     public function getName(){
         return $this->dbalPlatform->getName();
     }
+
     /**
-     * 
      * @author Lionel Lecaque, lionel@taotesting.com
      * @return string
      */
     public function getNowExpression(){
-        $datetime = new DateTime('now', new \DateTimeZone('UTC'));
-        $date = $datetime->format('Y-m-d H:i:s');
-       // return $this->dbalPlatform->getNowExpression();
-       return $date;
+        // We can't use $this->dbalPlatform->getNowExpression() because sqlite,
+        // at least used for the tests, returns `datetime('now')` which can
+        // not be parsed as a regular date.
+        // We instead generate a date with php and the format it with
+        // $this->dbalPlatform->getDateTimeTzFormatString(), to still have the
+        // correct format to be inserted in db.
+
+        $datetime = new \DateTime('now', new \DateTimeZone('UTC'));
+        return $datetime->format($this->getDateTimeFormatString());
+    }
+
+    /**
+     * Returns platform specific date formatting with timezone to store datetime field.
+     * @return string
+     */
+    public function getDateTimeFormatString()
+    {
+        return $this->dbalPlatform->getDateTimeFormatString();
+    }
+
+    /**
+     * Returns platform specific date formatting with timezone to store datetime field.
+     * @return string
+     */
+    public function getDateTimeTzFormatString()
+    {
+        return $this->dbalPlatform->getDateTimeTzFormatString();
     }
 
     /**
@@ -266,13 +290,14 @@ class common_persistence_sql_Platform {
      *
      * @return void
      * @throws \Doctrine\DBAL\ConnectionException If the commit failed due to no active transaction or because the transaction was marked for rollback only.
+     * @throws DBALException
      * @throws common_persistence_sql_SerializationException In case of SerializationFailure (SQLSTATE 40001).
      */
     public function commit()
     {
         try {
             $this->dbalConnection->commit();
-        } catch (\PDOException $e) {
+        } catch (DBALException $e) {
             // Surprisingly, DBAL's commit throws a PDOExeption in case
             // of serialization issue (not documented).
             if (($code = $e->getCode()) == '40001') {
