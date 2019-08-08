@@ -23,10 +23,11 @@
  */
 
 use Doctrine\DBAL\DBALException;
-use oat\generis\model\RdsSchema;
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use oat\oatbox\log\LoggerAwareTrait;
 use Psr\Log\LoggerAwareInterface;
+use Doctrine\DBAL\Schema\Schema;
+use oat\generis\model\kernel\persistence\smoothsql\install\SmoothRdsModel;
 
 class common_DbalDbCreator implements LoggerAwareInterface {
     
@@ -85,27 +86,52 @@ class common_DbalDbCreator implements LoggerAwareInterface {
 	/**
 	 * @author "Lionel Lecaque, <lionel@taotesting.com>"
 	 */
-	public function initTaoDataBase(common_persistence_SqlPersistence $p)
+	private function initTaoDataBase(common_persistence_SqlPersistence $p)
 	{
-	    $generisSchemaGenerator = new RdsSchema();
-	    $queries = $p->getPlatForm()->schemaToSql($generisSchemaGenerator->getSchema());
+	    $queries = $p->getPlatForm()->schemaToSql($this->getSchema());
 	    foreach ($queries as $query){
 	        $p->exec($query);
 	    }
+	}
+
+	/**
+	 * Generate databse schema
+	 * @return Schema
+	 */
+	public function getSchema()
+	{
+	    $schema = new Schema();
+	    SmoothRdsModel::addSmoothTables($schema);
+	    $this->addKeyValueStoreTable($schema);
+	    return $schema;
+	}
+
+	/**
+	 * Add keyvalue rds implementation tables
+	 * @param Schema $schema
+	 */
+	protected function addKeyValueStoreTable(Schema $schema)
+	{
+	    $table = $schema->createTable("kv_store");
+	    $table->addColumn('kv_id',"string",array("notnull" => null,"length" => 255));
+	    $table->addColumn('kv_value',"text",array("notnull" => null));
+	    $table->addColumn('kv_time',"integer",array("notnull" => null,"length" => 30));
+	    $table->setPrimaryKey(array("kv_id"));
+	    $table->addOption('engine' , 'MyISAM');
 	}
 
     /**
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
      * @param string $dbName
      */
-   	public function dbExists(AbstractSchemaManager $schemaManager, $dbName){
+	private function dbExists(AbstractSchemaManager $schemaManager, $dbName){
    	    return in_array($dbName,$schemaManager->listDatabases());
     }
 
     /**
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
      */
-    public function destroyTaoDatabase(){
+    private function destroyTaoDatabase(){
     	$platform = $this->connection->getDatabasePlatform();
     	$queries = $this->schema->toDropSql($platform);
     	foreach ($queries as $query){
@@ -122,10 +148,9 @@ class common_DbalDbCreator implements LoggerAwareInterface {
     }
 
     /**
-     * 
      * @author Lionel Lecaque, lionel@taotesting.com
      */
-    public function cleanDb(common_persistence_SqlPersistence $p)
+    private function cleanDb(common_persistence_SqlPersistence $p)
     {
         $sm = $p->getSchemaManager()->getDbalSchemaManager();
         $tables = $sm->listTableNames();
