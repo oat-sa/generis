@@ -21,7 +21,7 @@
  * @package tao
  *
  */
-namespace oat\generis\persistence;
+namespace oat\generis\persistence\sql;
 
 use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
