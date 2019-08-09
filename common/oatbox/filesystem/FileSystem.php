@@ -81,7 +81,7 @@ class FileSystem implements FilesystemInterface
      *
      * @return AdapterInterface adapter
      */
-    private function getAdapter()
+    public function getAdapter()
     {
         return $this->getFileSystem()->getAdapter();
     }
