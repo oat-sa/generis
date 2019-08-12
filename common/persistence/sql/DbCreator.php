@@ -81,7 +81,7 @@ class DbCreator implements LoggerAwareInterface {
      */
     private function initTaoDataBase(\common_persistence_SqlPersistence $p)
     {
-        $queries = $p->getPlatForm()->schemaToSql($this->getSchema());
+        $queries = $p->getPlatForm()->schemaToSql($this->getSchema($p));
         foreach ($queries as $query){
             $p->exec($query);
         }
@@ -91,9 +91,9 @@ class DbCreator implements LoggerAwareInterface {
      * Generate databse schema
      * @return Schema
      */
-    public function getSchema()
+    public function getSchema(\common_persistence_SqlPersistence $p)
     {
-        $schema = new Schema();
+        $schema = $p->getSchemaManager()->createSchema();
         SmoothRdsModel::addSmoothTables($schema);
         $this->addKeyValueStoreTable($schema);
         return $schema;
