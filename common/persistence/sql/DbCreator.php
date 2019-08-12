@@ -94,7 +94,8 @@ class DbCreator implements LoggerAwareInterface {
     public function getSchema(\common_persistence_SqlPersistence $p)
     {
         $schema = $p->getSchemaManager()->createSchema();
-        SmoothRdsModel::addSmoothTables($schema);
+        $indexLengthLimit = $p->getPlatForm()->getName() == 'mysql';
+        SmoothRdsModel::addSmoothTables($schema, $indexLengthLimit);
         $this->addKeyValueStoreTable($schema);
         return $schema;
     }

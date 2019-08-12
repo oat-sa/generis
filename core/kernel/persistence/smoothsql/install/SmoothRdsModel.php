@@ -30,7 +30,7 @@ class SmoothRdsModel {
      * @param Schema $schema
      * @return \Doctrine\DBAL\Schema\Schema
      */
-    public static function addSmoothTables(Schema $schema)
+    public static function addSmoothTables(Schema $schema, $indexLengthLimit = false)
     {
         $table = $schema->createTable("models");
         $table->addColumn('modelid', "integer",array("notnull" => true,"autoincrement" => true));
@@ -50,10 +50,9 @@ class SmoothRdsModel {
         $table->setPrimaryKey(array("id"));
         $table->addOption('engine' , 'MyISAM');
         $table->addColumn("epoch", "string" , array("notnull" => null));
-            
+
         $table->addIndex(array("subject","predicate"),"k_sp");
-        $table->addIndex(array("predicate","object"),"k_po");
-        
+        $table->addIndex(array("predicate",($indexLengthLimit ? "object(164)" : "object")),"k_po");
         return $schema;
     }
 }
