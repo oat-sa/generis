@@ -17,7 +17,7 @@
  * Copyright (c) 2019 (original work) Open Assessment Technologies SA ;
  */
 
-namespace oat\generis\scripts\install;
+namespace oat\generis\scripts\update;
 
 
 use common_persistence_Manager;
