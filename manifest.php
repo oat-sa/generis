@@ -53,6 +53,7 @@ return array(
         'php' => array(
             oat\generis\scripts\install\TaskQueue::class,
             \oat\generis\scripts\install\SetupUserFactoryService::class,
+            SetupDefaultKvPersistence::class
         ),
     ),
     'update' => 'oat\\generis\\scripts\\update\\Updater',
