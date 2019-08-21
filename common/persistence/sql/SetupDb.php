@@ -113,39 +113,10 @@ class SetupDb implements LoggerAwareInterface {
      */
     private function cleanDb(\common_persistence_SqlPersistence $p)
     {
-        try {
-            $schema = $p->getSchemaManager()->createSchema();
-            $queries = $p->getPlatForm()->toDropSql($schema);
-            foreach ($queries as $query){
-                $p->exec($query);
-            }
-        } catch (\Exception $e) {
-            $this->fallbackCleanDb($p);
-        }
-    }
-
-    /**
-     * @author Lionel Lecaque, lionel@taotesting.com
-     */
-    private function fallbackCleanDb(\common_persistence_SqlPersistence $p)
-    {
-        $sm = $p->getSchemaManager()->getDbalSchemaManager();
-        $tables = $sm->listTableNames();
-        while (!empty($tables)) {
-            $oldCount = count($tables);
-            foreach(array_keys($tables) as $id){
-                $name = $tables[$id];
-                try {
-                    $sm->dropTable($name);
-                    \common_Logger::d('Droped table: '  . $name);
-                    unset($tables[$id]);
-                } catch (DBALException $e) {
-                    \common_Logger::w('Failed to drop: '  . $name);
-                }
-            }
-            if (count($tables) == $oldCount) {
-                throw new \common_exception_Error('Unable to clean DB');
-            }
+        $schema = $p->getSchemaManager()->createSchema();
+        $queries = $p->getPlatForm()->toDropSql($schema);
+        foreach ($queries as $query){
+            $p->exec($query);
         }
     }
 }
