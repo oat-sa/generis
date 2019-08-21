@@ -31,7 +31,7 @@ use Doctrine\DBAL\Schema\Schema;
 use oat\generis\model\kernel\persistence\smoothsql\install\SmoothRdsModel;
 use Doctrine\DBAL\Exception\ConnectionException;
 
-class DbCreator implements LoggerAwareInterface {
+class SetupDb implements LoggerAwareInterface {
 
     use LoggerAwareTrait;
 
