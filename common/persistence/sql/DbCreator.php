@@ -29,6 +29,7 @@ use oat\oatbox\log\LoggerAwareTrait;
 use Psr\Log\LoggerAwareInterface;
 use Doctrine\DBAL\Schema\Schema;
 use oat\generis\model\kernel\persistence\smoothsql\install\SmoothRdsModel;
+use Doctrine\DBAL\Exception\ConnectionException;
 
 class DbCreator implements LoggerAwareInterface {
 
@@ -41,45 +42,26 @@ class DbCreator implements LoggerAwareInterface {
             throw new \common_exception_InconsistentData('Non DBAL driver no longer supported');
         }
         $dbName = $dbalDriver->getDataBase();
-        $this->createDatabase($p, $dbName);
-        $this->initTaoDataBase($p);
+        $this->verifyDatabase($p, $dbName);
+        $this->cleanDb($p);
+        $this->setupTables($p);
     }
 
     /**
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
      */
-    private function createDatabase(\common_persistence_SqlPersistence $p, $dbName)
+    private function verifyDatabase(\common_persistence_SqlPersistence $p, $dbName)
     {
         $schemaManager = $p->getSchemaManager()->getDbalSchemaManager();
-        if ($this->dbExists($schemaManager, $dbName)) {
-            try {
-                $this->cleanDb($p);
-            } catch (\Exception $e){
-                $this->logInfo('Problem cleaning db will try to erase the whole db: '.$e->getMessage());
-                try {
-                    $this->destroyTaoDatabase($dbName);
-                } catch (\Exception $e){
-                    $this->logInfo('isssue during db cleaning : ' . $e->getMessage());
-                }
-            }
-            $this->logInfo("Dropped all tables");
-        }
-        // Else create it
-        else {
-            try {
-                $escapedName = $schemaManager->getDatabasePlatform()->quoteIdentifier($dbName);
-                $schemaManager->createDatabase($escapedName);
-                $this->logInfo("Created database ".$dbName);
-            } catch (\Exception $e){
-                throw new \tao_install_utils_Exception('Unable to create the database, make sure that the db user is granted to create databases. Otherwise create the database with your super user and give to the db user the right to use it.');
-            }
+        if (!$this->dbExists($schemaManager, $dbName)) {
+            throw new \tao_install_utils_Exception('Unable to find the database, make sure that the db exists and that the db user has the rights to use it.');
         }
     }
 
     /**
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
      */
-    private function initTaoDataBase(\common_persistence_SqlPersistence $p)
+    private function setupTables(\common_persistence_SqlPersistence $p)
     {
         $queries = $p->getPlatForm()->schemaToSql($this->getSchema($p));
         foreach ($queries as $query){
@@ -118,30 +100,34 @@ class DbCreator implements LoggerAwareInterface {
      * @param string $dbName
      */
     private function dbExists(AbstractSchemaManager $schemaManager, $dbName){
-           return in_array($dbName,$schemaManager->listDatabases());
+        try {
+            return in_array($dbName,$schemaManager->listDatabases());
+        } catch (ConnectionException $e) {
+            $this->logWarning('Unable to connect to validate dbExists');
+            return false;
+        }
     }
 
     /**
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
      */
-    private function destroyTaoDatabase(){
-        $platform = $this->connection->getDatabasePlatform();
-        $queries = $this->schema->toDropSql($platform);
-        foreach ($queries as $query){
-            $this->connection->executeUpdate($query);
-        }
-        //drop sequence
-        $sm = $this->getSchemaManager();
-        $sequences = $sm->listSequences();
-        foreach($sequences as $name){
-            $sm->dropSequence($name);
+    private function cleanDb(\common_persistence_SqlPersistence $p)
+    {
+        try {
+            $schema = $p->getSchemaManager()->createSchema();
+            $queries = $p->getPlatForm()->toDropSql($schema);
+            foreach ($queries as $query){
+                $p->exec($query);
+            }
+        } catch (\Exception $e) {
+            $this->fallbackCleanDb($p);
         }
     }
 
     /**
      * @author Lionel Lecaque, lionel@taotesting.com
      */
-    private function cleanDb(\common_persistence_SqlPersistence $p)
+    private function fallbackCleanDb(\common_persistence_SqlPersistence $p)
     {
         $sm = $p->getSchemaManager()->getDbalSchemaManager();
         $tables = $sm->listTableNames();
