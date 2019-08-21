@@ -20,6 +20,7 @@
  * 				 2013-2017 (update and modification) Open Assessment Technologies SA;
  *
  */
+use oat\generis\scripts\install\SetupDefaultKvPersistence;
 
 /**
  *
