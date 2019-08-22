@@ -373,7 +373,7 @@ class Updater extends common_ext_ExtensionUpdater
 
         $this->skip('10.0.0', '10.1.0');
 
-        if ($this->isVersion('10.1.0')) {
+        if ($this->isBetween('10.1.0','11.0.0')) {
             /** @var \common_persistence_Manager $persistenceManager */
             $persistenceManager = $this->getServiceManager()->get(\common_persistence_Manager::SERVICE_ID);
 
