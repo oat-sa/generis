@@ -27,7 +27,7 @@ use oat\generis\persistence\PersistenceManager;
  * @author Lionel Lecaque  <lionel@taotesting.com>
  * @license GPLv2
  * @package generis
- *
+ * @deprecated use PersistenceManager
  */
 class common_persistence_Manager extends PersistenceManager
 {
@@ -36,6 +36,7 @@ class common_persistence_Manager extends PersistenceManager
     
     /**
      * @return common_persistence_Manager
+     * @deprecated
      */
     protected static function getDefaultManager()
     {
