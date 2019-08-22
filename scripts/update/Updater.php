@@ -369,5 +369,10 @@ class Updater extends common_ext_ExtensionUpdater
         }
 
         $this->skip('10.0.0', '10.1.0');
+        if ($this->isVersion('10.1.0')) {
+            $this->runExtensionScript(RegisterDefaultKvPersistence::class);
+            $this->setVersion('10.1.0.1');
+        }
+
     }
 }
