@@ -430,11 +430,13 @@ class Updater extends common_ext_ExtensionUpdater
             $this->setVersion('11.3.2');
         }
 
-        $this->skip('11.3.2', '12.1.0');
-        if ($this->isVersion('12.1.0')) {
+        $this->skip('11.3.2', '11.5.2');
+
+        if ($this->isVersion('11.5.2')) {
             $this->runExtensionScript(RegisterDefaultKvPersistence::class);
 
-            $this->setVersion('12.1.0.1');
+            $this->setVersion('11.6.0');
         }
+        $this->skip('11.6.0', '12.1.0.1');
     }
 }
