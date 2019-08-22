@@ -14,16 +14,14 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2013 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
+ * Copyright (c) 2013-2019 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  *
  * @author Lionel Lecaque  <lionel@taotesting.com>
  * @license GPLv2
  * @package tao
- *
  */
 namespace oat\generis\persistence\sql;
 
-use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use oat\oatbox\log\LoggerAwareTrait;
 use Psr\Log\LoggerAwareInterface;
@@ -31,10 +29,15 @@ use Doctrine\DBAL\Schema\Schema;
 use oat\generis\model\kernel\persistence\smoothsql\install\SmoothRdsModel;
 use Doctrine\DBAL\Exception\ConnectionException;
 
-class SetupDb implements LoggerAwareInterface {
-
+class SetupDb implements LoggerAwareInterface
+{
     use LoggerAwareTrait;
 
+    /**
+     * Setup the tables for the database
+     * @param \common_persistence_SqlPersistence $p
+     * @throws \common_exception_InconsistentData
+     */
     public function setupDatabase(\common_persistence_SqlPersistence $p)
     {
         $dbalDriver = $p->getDriver();
@@ -99,7 +102,8 @@ class SetupDb implements LoggerAwareInterface {
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
      * @param string $dbName
      */
-    private function dbExists(AbstractSchemaManager $schemaManager, $dbName){
+    private function dbExists(AbstractSchemaManager $schemaManager, $dbName)
+    {
         try {
             return in_array($dbName,$schemaManager->listDatabases());
         } catch (ConnectionException $e) {
