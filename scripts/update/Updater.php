@@ -375,7 +375,7 @@ class Updater extends common_ext_ExtensionUpdater
 
         $this->skip('10.0.0', '10.1.0');
 
-        if ($this->isVersion('10.1.0')) {
+        if ($this->isBetween('10.1.0','11.0.0')) {
             /** @var \common_persistence_Manager $persistenceManager */
             $persistenceManager = $this->getServiceManager()->get(\common_persistence_Manager::SERVICE_ID);
 
@@ -442,7 +442,7 @@ class Updater extends common_ext_ExtensionUpdater
 
         $this->skip('11.6.0', '12.1.0');
 
-        if ($this->isVersion('12.1.0')) {
+        if ($this->isBetween('12.1.0','12.2.0')) {
             $fs = $this->getServiceManager()->get(FileSystemService::SERVICE_ID);
             $adapters = $fs->getOption(FileSystemService::OPTION_ADAPTERS);
             if (!isset($adapters['default'])) {
@@ -460,5 +460,6 @@ class Updater extends common_ext_ExtensionUpdater
             }
             $this->setVersion('12.2.0');
         }
+        $this->skip('12.2.0', '12.2.1');
     }
 }
