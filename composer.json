@@ -70,7 +70,6 @@
     "php": "^7.1",
     "psr/log": "~1.0",
     "oat-sa/lib-generis-search": "dev-feature/NEX-84/spanner-compatible-statements",
-    "oat-sa/lib-dbal-spanner": "dev-feature/NEX-84/spanner-query-refactoring",
     "monolog/monolog": "^1.23.0",
     "fluent/logger": "^1.0.1",
     "symfony/lock": "^3.4",
