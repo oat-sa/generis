@@ -97,7 +97,7 @@ abstract class common_persistence_Persistence
      * 
      * @access protected
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
-     * @param unknown $params
+     * @param array $params
      */
     protected function setParams($params){
         $this->params = $params;
