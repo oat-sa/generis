@@ -130,6 +130,15 @@ class common_persistence_sql_Platform {
 
     /**
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
+     * @param \Doctrine\DBAL\Schema\Schema $schema
+     * @return array
+     */
+    public function toDropSql($schema){
+        return $schema->toDropSql($this->dbalPlatform);
+    }
+
+    /**
+     * @author "Lionel Lecaque, <lionel@taotesting.com>"
      * @param \Doctrine\DBAL\Schema\Schema $fromSchema
      * @param \Doctrine\DBAL\Schema\Schema $toSchema
      * @return array

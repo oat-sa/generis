@@ -1,4 +1,6 @@
 <?php
+use Doctrine\DBAL\Schema\AbstractSchemaManager;
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,7 +30,7 @@
     
     /**
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
-     * @param d $dbalSchemaManager
+     * @param AbstractSchemaManager $dbalSchemaManager
      */
     public function __construct($dbalSchemaManager){
         $this->dbalSchemaManager = $dbalSchemaManager;
@@ -37,6 +39,7 @@
     
     /**
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
+     * @return AbstractSchemaManager
      */
     protected function getSchemaManager() {
         return $this->dbalSchemaManager;
