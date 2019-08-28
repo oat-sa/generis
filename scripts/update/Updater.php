@@ -458,7 +458,7 @@ class Updater extends common_ext_ExtensionUpdater
                 }
                 $this->getServiceManager()->register(FileSystemService::SERVICE_ID, $fs);
             }
-            $this->setVersion('12.2.0');
+            $this->setVersion('12.2.1');
         }
     }
 }
