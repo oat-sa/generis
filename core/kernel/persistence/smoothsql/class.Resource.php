@@ -624,9 +624,6 @@ class core_kernel_persistence_smoothsql_Resource
         $result	= $this->getPersistence()->query($query);
         
         $rows = $result->fetchAll();
-        $sortedByLg = core_kernel_persistence_smoothsql_Utils::sortByLanguage($this->getPersistence(), $rows, 'l_language', $lang, $default);
-        $identifiedLg = core_kernel_persistence_smoothsql_Utils::identifyFirstLanguage($sortedByLg);
-
         foreach($rows as $row){
         	$value = $platform->getPhpTextValue($row['object']);
 			$returnValue[$row['predicate']][] = common_Utils::isUri($value)
