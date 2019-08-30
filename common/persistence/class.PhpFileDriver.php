@@ -373,7 +373,7 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
      * of backwards compatibility
      *
      * @param string $key
-     * @return Ambigous string
+     * @return string
      */
     protected function sanitizeReadableFileName($key)
     {

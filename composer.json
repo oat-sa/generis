@@ -80,6 +80,7 @@
   },
   "autoload": {
     "psr-4": {
+      "oat\\generis\\persistence\\": "common/persistence/",
       "oat\\generis\\model\\": "core/",
       "oat\\generis\\Helper\\": "helpers/",
       "oat\\oatbox\\": "common/oatbox/",
