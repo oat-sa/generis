@@ -26,6 +26,7 @@ use oat\generis\model\OntologyRdfs;
 use oat\oatbox\service\ServiceManager;
 use oat\generis\model\kernel\persistence\smoothsql\search\ComplexSearchService;
 use Doctrine\DBAL\DBALException;
+use oat\generis\model\kernel\uri\UriProvider;
 
 /**
  * Short description of class core_kernel_persistence_smoothsql_Class
@@ -256,7 +257,7 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
 
     	$subject = '';
     	if ($uri == ''){
-			$subject = common_Utils::getNewUri();
+            $subject = $this->getServiceLocator()->get(UriProvider::SERVICE_ID)->provide();
 		}
 		else if ( $uri[0]=='#'){ //$uri should start with # and be well formed
 				$modelUri = common_ext_NamespaceManager::singleton()->getLocalNamespace()->getUri();
@@ -293,7 +294,7 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
         if (!empty($uri)) {
             common_Logger::w('Use of parameter uri in '.__METHOD__.' is deprecated');
         }
-        $uri = empty($uri) ? common_Utils::getNewUri() : $uri;
+        $uri = empty($uri) ? $this->getServiceLocator()->get(UriProvider::SERVICE_ID)->provide() : $uri;
         $returnValue = new core_kernel_classes_Class($uri, __METHOD__);
         $properties = array(
             OntologyRdfs::RDFS_SUBCLASSOF => $resource,
@@ -436,7 +437,7 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
         }
         
         $properties[OntologyRdf::RDF_TYPE] = $type;
-		$returnValue = new core_kernel_classes_Resource(common_Utils::getNewUri(), __METHOD__);
+        $returnValue = new core_kernel_classes_Resource($this->getServiceLocator()->get(UriProvider::SERVICE_ID)->provide(), __METHOD__);
 		$returnValue->setPropertiesValues($properties);
         
         return $returnValue;

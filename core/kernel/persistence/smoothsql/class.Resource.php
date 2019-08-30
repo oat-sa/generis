@@ -23,6 +23,7 @@
 use oat\generis\model\OntologyRdf;
 use oat\oatbox\session\SessionService;
 use oat\oatbox\user\UserLanguageServiceInterface;
+use oat\generis\model\kernel\uri\UriProvider;
 
 /**
  * Short description of class core_kernel_persistence_smoothsql_Resource
@@ -511,7 +512,7 @@ class core_kernel_persistence_smoothsql_Resource
     public function duplicate( core_kernel_classes_Resource $resource, $excludedProperties = array())
     {
         $returnValue = null;
-    	$newUri = common_Utils::getNewUri();
+        $newUri = $this->getServiceLocator()->get(UriProvider::SERVICE_ID)->provide();
     	$collection = $this->getRdfTriples($resource);
         
     	if ($collection->count() > 0) {
@@ -535,7 +536,7 @@ class core_kernel_persistence_smoothsql_Resource
 	    	}
 	    	
         	if ($this->getPersistence()->insertMultiple('statements', $valuesToInsert)) {
-        		$returnValue = new core_kernel_classes_Resource($newUri);
+                $this->getModel()->getResource($newUri);
         	}
     	}
         
