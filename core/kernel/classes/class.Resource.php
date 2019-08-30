@@ -559,9 +559,7 @@ class core_kernel_classes_Resource
      */
     public function getUsedLanguages( core_kernel_classes_Property $property)
     {
-        $returnValue = array();
-        $returnValue = $this->getImplementation()->getUsedLanguages($this, $property);
-        return (array) $returnValue;
+        return $this->getImplementation()->getUsedLanguages($this, $property);
     }
 
     /**

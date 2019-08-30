@@ -48,7 +48,7 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
             while ($row = $sqlResult->fetch()) {
                 $returnValue[$row['subject']] = $this->getModel()->getClass($row['subject']);
             }
-            return (array) $returnValue;
+            return $returnValue;
         } else {
             return $this->getRecursiveSubClasses($resource);
         }
