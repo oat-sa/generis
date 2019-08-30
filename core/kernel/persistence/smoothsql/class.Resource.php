@@ -34,8 +34,7 @@ use oat\generis\model\kernel\uri\UriProvider;
  
  */
 class core_kernel_persistence_smoothsql_Resource
-    extends core_kernel_persistence_PersistenceImpl
-        implements core_kernel_persistence_ResourceInterface
+    implements core_kernel_persistence_ResourceInterface
 {
 
     /**
@@ -90,7 +89,7 @@ class core_kernel_persistence_smoothsql_Resource
 
         while ($row = $sth->fetch()){
             $uri = $this->getPersistence()->getPlatForm()->getPhpTextValue($row['object']);
-            $returnValue[$uri] = new core_kernel_classes_Class($uri);
+            $returnValue[$uri] = $this->getModel()->getClass($uri);
         }        
         
 
@@ -259,7 +258,7 @@ class core_kernel_persistence_smoothsql_Resource
 
             foreach ($properties as $propertyUri => $value) {
                 
-                $property = new core_kernel_classes_Property($propertyUri);
+                $property = $this->getModel()->getProperty($propertyUri);
                 
                 $lang = ($property->isLgDependent() ? $session->getDataLanguage() : '');
                 $formatedValues = [];
@@ -536,7 +535,7 @@ class core_kernel_persistence_smoothsql_Resource
 	    	}
 	    	
         	if ($this->getPersistence()->insertMultiple('statements', $valuesToInsert)) {
-                $this->getModel()->getResource($newUri);
+                $returnValue = $this->getModel()->getResource($newUri);
         	}
     	}
         
@@ -631,7 +630,7 @@ class core_kernel_persistence_smoothsql_Resource
         foreach($rows as $row){
         	$value = $platform->getPhpTextValue($row['object']);
 			$returnValue[$row['predicate']][] = common_Utils::isUri($value)
-				? new core_kernel_classes_Resource($value)
+				? $this->getModel()->getResource($value)
 				: new core_kernel_classes_Literal($value);
         }
         
@@ -696,18 +695,4 @@ class core_kernel_persistence_smoothsql_Resource
     {
         return $this->getModel()->getServiceLocator();
     }
-
-    /**
-     * Short description of method isValidContext
-     *
-     * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
-     * @param  Resource resource
-     * @return boolean
-     */
-    public function isValidContext( core_kernel_classes_Resource $resource)
-    {
-        return true;
-    }
-
 }

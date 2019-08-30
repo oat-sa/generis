@@ -46,7 +46,7 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
             $sqlQuery = 'SELECT subject FROM statements WHERE predicate = ? and '.$this->getPersistence()->getPlatForm()->getObjectTypeCondition() .' = ?';
             $sqlResult = $this->getPersistence()->query($sqlQuery, array(OntologyRdfs::RDFS_SUBCLASSOF, $resource->getUri()));
             while ($row = $sqlResult->fetch()) {
-                $returnValue[$row['subject']] = new core_kernel_classes_Class($row['subject']);
+                $returnValue[$row['subject']] = $this->getModel()->getClass($row['subject']);
             }
             return (array) $returnValue;
         } else {
@@ -73,7 +73,7 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
             $sqlResult = $this->getPersistence()->query($sqlQuery, array(OntologyRdfs::RDFS_SUBCLASSOF));
             $todo = [];
             while ($row = $sqlResult->fetch()) {
-                $subClass = new core_kernel_classes_Class($row['subject']);
+                $subClass = $this->getModel()->getClass($row['subject']);
                 if (!isset($returnValue[$subClass->getUri()])) {
                     $todo[] = $subClass;
                 }
@@ -130,12 +130,12 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
 
 		while ($row = $sqlResult->fetch()){
 
-            $parentClass = new core_kernel_classes_Class($row['object']);
+            $parentClass = $this->getModel()->getClass($row['object']);
             
             $returnValue[$parentClass->getUri()] = $parentClass ;
             if ($recursive == true && $parentClass->getUri() != OntologyRdfs::RDFS_CLASS && $parentClass->getUri() != OntologyRdfs::RDFS_RESOURCE) {
                 if ($parentClass->getUri() == GenerisRdf::CLASS_GENERIS_RESOURCE) {
-                    $returnValue[OntologyRdfs::RDFS_RESOURCE] = new core_kernel_classes_Class(OntologyRdfs::RDFS_RESOURCE);
+                    $returnValue[OntologyRdfs::RDFS_RESOURCE] = $this->getModel()->getClass(OntologyRdfs::RDFS_RESOURCE);
                 } else {
                     $plop = $parentClass->getParentClasses(true);
                 	$returnValue = array_merge($returnValue, $plop);
@@ -161,7 +161,7 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
         ));
         
         while ($row = $sqlResult->fetch()) {
-            $property = new core_kernel_classes_Property($row['subject']);
+            $property = $this->getModel()->getProperty($row['subject']);
             $returnValue[$property->getUri()] = $property;
         }
         
@@ -192,7 +192,7 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
         
         while ($row = $result->fetch()) {
             $foundInstancesUri = $row['subject'];
-            $returnValue[$foundInstancesUri] = new core_kernel_classes_Resource($foundInstancesUri);
+            $returnValue[$foundInstancesUri] = $this->getModel()->getResource($foundInstancesUri);
         }
         
         return $returnValue;
@@ -225,7 +225,7 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
     {
         $returnValue = (bool) false;
 
-		$subClassOf = new core_kernel_classes_Property(OntologyRdfs::RDFS_SUBCLASSOF);
+		$subClassOf = $this->getModel()->getProperty(OntologyRdfs::RDFS_SUBCLASSOF);
 		$returnValue = $this->setPropertyValue($resource, $subClassOf, $iClass->getUri());
 
         return (bool) $returnValue;
@@ -295,7 +295,7 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
             common_Logger::w('Use of parameter uri in '.__METHOD__.' is deprecated');
         }
         $uri = empty($uri) ? $this->getServiceLocator()->get(UriProvider::SERVICE_ID)->provide() : $uri;
-        $returnValue = new core_kernel_classes_Class($uri, __METHOD__);
+        $returnValue = $this->getModel()->getClass($uri);
         $properties = array(
             OntologyRdfs::RDFS_SUBCLASSOF => $resource,
         );
@@ -319,9 +319,9 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
         $returnValue = null;
 
 
-    	$property = new core_kernel_classes_Class(OntologyRdf::RDF_PROPERTY, __METHOD__);
+    	$property = $this->getModel()->getClass(OntologyRdf::RDF_PROPERTY);
 		$propertyInstance = $property->createInstance($label,$comment);
-		$returnValue = new core_kernel_classes_Property($propertyInstance->getUri(), __METHOD__);
+		$returnValue = $this->getModel()->getProperty($propertyInstance->getUri());
 		$returnValue->setLgDependent($isLgDependent);
 
 		if (!$returnValue->setDomain($resource)){
@@ -351,7 +351,7 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
         
         while ($row = $result->fetch()) {	
             $foundInstancesUri = $row['subject'];
-            $returnValue[$foundInstancesUri] = new core_kernel_classes_Resource($foundInstancesUri);
+            $returnValue[$foundInstancesUri] = $this->getModel()->getResource($foundInstancesUri);
         }
         
         return $returnValue;
@@ -437,7 +437,7 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
         }
         
         $properties[OntologyRdf::RDF_TYPE] = $type;
-        $returnValue = new core_kernel_classes_Resource($this->getServiceLocator()->get(UriProvider::SERVICE_ID)->provide(), __METHOD__);
+        $returnValue = $this->getModel()->getResource($this->getServiceLocator()->get(UriProvider::SERVICE_ID)->provide());
 		$returnValue->setPropertiesValues($properties);
         
         return $returnValue;
@@ -451,7 +451,7 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
     {
         $returnValue = false;
 
-        $class = new core_kernel_classes_Class($resource->getUri());
+        $class = $this->getModel()->getClass($resource->getUri());
         $uris = array();
         
         foreach ($resources as $r) {

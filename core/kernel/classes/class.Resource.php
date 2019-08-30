@@ -576,7 +576,6 @@ class core_kernel_classes_Resource
      */
     public function duplicate($excludedProperties = array())
     {
-        $returnValue = null;
         $returnValue = $this->getImplementation()->duplicate($this, $excludedProperties);
         return $returnValue;
     }
