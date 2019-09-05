@@ -33,6 +33,8 @@ trait common_persistence_sql_MultipleOperations
 
             $platform = $this->getPlatform();
 
+            $data = $this->castBooleansForPostgreSql($data);
+
             $quotedColumnIdentifiers = array_map(
                 function ($value) use ($platform) {
                     return $platform->quoteIdentifier($value);
@@ -93,6 +95,8 @@ trait common_persistence_sql_MultipleOperations
         if ($this->updateMultiple === null) {
             $this->updateMultiple = new common_persistence_sql_UpdateMultiple($this->getDbalConnection());
         }
+
+        $data = $this->castBooleansForPostgreSql($data);
 
         return $this->updateMultiple->updateMultiple($table, $data);
     }
