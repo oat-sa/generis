@@ -27,13 +27,11 @@ trait common_persistence_sql_MultipleOperations
     /** @var common_persistence_sql_UpdateMultiple */
     private $updateMultiple = null;
 
-    public function insertMultiple($tableName, array $data)
+    public function insertMultiple($tableName, array $data, array $types = [])
     {
         if (is_array($data) && count($data) > 0) {
 
             $platform = $this->getPlatform();
-
-            $data = $this->castBooleansForPostgreSql($data);
 
             $quotedColumnIdentifiers = array_map(
                 function ($value) use ($platform) {
@@ -53,7 +51,7 @@ trait common_persistence_sql_MultipleOperations
 
             $query .= implode(', ', $valuesQueries);
 
-            return $this->exec($query, $allValues);
+            return $this->exec($query, $allValues, $types);
         } else {
             return 0;
         }

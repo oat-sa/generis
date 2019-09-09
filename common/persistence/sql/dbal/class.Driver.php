@@ -161,12 +161,13 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
      *
      * @param mixed $statement
      * @param array $params
+     * @param array $types
      *
      * @return integer number of affected row
      */
-    public function exec($statement, $params = [])
+    public function exec($statement, $params = [], array $types = [])
     {
-        return $this->connection->executeUpdate($statement, $params);
+        return $this->connection->executeUpdate($statement, $params, $types);
     }
 
     /**
@@ -175,12 +176,14 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
      *
      * @param mixed $statement
+     * @param array $params
+     * @param array $types
      *
      * @return \Doctrine\DBAL\Driver\Statement
      */
-    public function query($statement, $params = [])
+    public function query($statement, $params = [], array $types = [])
     {
-        return $this->connection->executeQuery($statement, $params);
+        return $this->connection->executeQuery($statement, $params, $types);
     }
 
     /**
@@ -199,40 +202,15 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
     }
 
     /**
-     * (non-PHPdoc)
-     * @see common_persistence_sql_Driver::insert()
+     * @inheritdoc
      */
-    public function insert($tableName, array $data)
+    public function insert($tableName, array $data, array $types = [])
     {
-        $data = $this->castBooleansForPostgreSql($data);
         $cleanColumns = [];
         foreach ($data as $columnName => $value) {
             $cleanColumns[$this->getPlatForm()->quoteIdentifier($columnName)] = $value;
         }
-        return $this->connection->insert($tableName, $cleanColumns);
-    }
-
-    /**
-     * Casts booleans to integers if the current platform PostgreSql.
-     *
-     * @param array $data
-     *
-     * @return array
-     */
-    public function castBooleansForPostgreSql(array $data)
-    {
-        if ($this->getPlatForm()->getName() === 'postgres') {
-            $data = array_map(
-                function ($item) {
-                    return is_bool($item)
-                        ? (int)$item
-                        : $item;
-                },
-                $data
-            );
-        }
-
-        return $data;
+        return $this->connection->insert($tableName, $cleanColumns, $types);
     }
 
     /**

@@ -37,9 +37,9 @@ class common_persistence_SqlPersistence extends common_persistence_Persistence
      * @param string $statement
      * @param array $params
      */
-    public function exec($statement,$params = array())
+    public function exec($statement,$params = array(), array $types = [])
     {
-        return $this->getDriver()->exec($statement,$params);
+        return $this->getDriver()->exec($statement,$params, $types);
     }
 
     
@@ -66,14 +66,14 @@ class common_persistence_SqlPersistence extends common_persistence_Persistence
      * @param array $data
      * @return int
      */
-    public function insert($tableName, array $data)
+    public function insert($tableName, array $data, array $types = [])
     {
-        return $this->getDriver()->insert($tableName, $data);
+        return $this->getDriver()->insert($tableName, $data, $types);
     }
     
-    public function insertMultiple($tableName, array $data)
+    public function insertMultiple($tableName, array $data, array $types = [])
     {
-        return $this->getDriver()->insertMultiple($tableName, $data);
+        return $this->getDriver()->insertMultiple($tableName, $data, $types);
     }
 
     /**
@@ -94,9 +94,9 @@ class common_persistence_SqlPersistence extends common_persistence_Persistence
      * @param array $params
      * @return \Doctrine\DBAL\Driver\Statement
      */
-    public function query($statement,$params= array())
+    public function query($statement,$params= array(), array $types = [])
     {
-        return $this->getDriver()->query($statement,$params);
+        return $this->getDriver()->query($statement,$params, $types);
     }
     
 
