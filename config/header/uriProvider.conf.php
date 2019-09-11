@@ -12,5 +12,5 @@
  *     oat\generis\model\kernel\uri\MicrotimeRandUriProvider
  *     oat\generis\model\kernel\uri\Bin2HexUriProvider
  * 
- * @see core_kernel_uri_UriService
+ * @see oat\generis\model\kernel\uri\UriProvider
  */
