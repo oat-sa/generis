@@ -21,7 +21,7 @@
 namespace oat\generis\model;
 
 use oat\generis\model\data\ModelManager;
-use oat\generis\model\data\Model;
+use oat\generis\model\data\Ontology;
 /**
  * Trait for classes that want to access the ontology
  * 
@@ -29,27 +29,30 @@ use oat\generis\model\data\Model;
  */
 trait OntologyAwareTrait
 {
-    private $model;
+    /**
+     * @var Ontology
+     */
+    private $ontology;
     
     /**
      * Return the used model
-     * @return Model
+     * @return Ontology
      */
     function getModel()
     {
-        if (is_null($this->model)) {
+        if (is_null($this->ontology)) {
             return ModelManager::getModel();
         }
-        return $this->model;
+        return $this->ontology;
     }
-    
+
     /**
      * Sets the model to use
-     * @param Model $model
+     * @param Ontology $model
      */
-    function setModel(Model $model)
+    function setModel(Ontology $model)
     {
-        $this->model = $model;
+        $this->ontology = $model;
     }
     
     /**
