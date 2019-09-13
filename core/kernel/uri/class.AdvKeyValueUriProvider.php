@@ -59,7 +59,7 @@ class core_kernel_uri_AdvKeyValueUriProvider extends ConfigurableService
         list($usec, $sec) = explode(" ", microtime());
         $uri = $this->getOption(self::OPTION_NAMESPACE) .'i'. (str_replace(".","",$sec."".$usec)) . $nextId;
 
-        return (string) $uri;
+        return $uri;
     }
 
 }
