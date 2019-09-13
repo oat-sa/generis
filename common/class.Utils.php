@@ -1,5 +1,7 @@
 <?php
 use oat\oatbox\PhpSerializable;
+use oat\oatbox\service\ServiceManager;
+use oat\generis\model\kernel\uri\UriProvider;
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -95,15 +97,16 @@ class common_Utils
 
 
     /**
-     * Short description of method getNewUri
+     * Backward compatibility function for URI Provider
      *
      * @access public
      * @author Joel Bout, <joel@taotesting.com>
      * @return string
+     * @deprecated
      */
     public static function getNewUri()
     {
-        return core_kernel_uri_UriService::singleton()->generateUri();
+        return ServiceManager::getServiceManager()->get(UriProvider::SERVICE_ID)->provide();
     }
 
     /**
@@ -163,7 +166,7 @@ class common_Utils
      */
     public static function toHumanReadablePhpString($value, $indentation = 0)
     {
-        if (gettype($value) == "array") {
+        if (is_array($value)) {
             $array = array_keys($value);
             $assocArray = ($array !== array_keys($array));
             $string = "";
@@ -181,6 +184,8 @@ class common_Utils
                 }
             }
             $returnValue = "array(".substr($string, 0, -1).PHP_EOL.str_repeat('    ', $indentation).")";
+        } elseif (is_string($value)) {
+            $returnValue = self::toPHPVariableString($value);
         } else {
             $lines = explode(PHP_EOL, self::toPHPVariableString($value));
             $returnValue = implode(PHP_EOL.str_repeat('    ', $indentation), $lines);

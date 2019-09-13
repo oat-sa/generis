@@ -53,6 +53,9 @@ use oat\oatbox\mutex\LockService;
 //use Symfony\Component\Lock\Store\PdoStore;
 use oat\oatbox\mutex\NoLockStorage;
 use oat\generis\scripts\update\RegisterDefaultKvPersistence;
+use League\Flysystem\Adapter\Local;
+use oat\generis\model\kernel\uri\UriProvider;
+use oat\oatbox\config\ConfigurationService;
 
 /**
  * @author Joel Bout <joel@taotesting.com>
@@ -374,7 +377,7 @@ class Updater extends common_ext_ExtensionUpdater
 
         $this->skip('10.0.0', '10.1.0');
 
-        if ($this->isVersion('10.1.0')) {
+        if ($this->isBetween('10.1.0','11.0.0')) {
             /** @var \common_persistence_Manager $persistenceManager */
             $persistenceManager = $this->getServiceManager()->get(\common_persistence_Manager::SERVICE_ID);
 
@@ -438,6 +441,40 @@ class Updater extends common_ext_ExtensionUpdater
 
             $this->setVersion('11.6.0');
         }
-        $this->skip('11.6.0', '12.0.1');
+
+        $this->skip('11.6.0', '12.1.0');
+
+        if ($this->isBetween('12.1.0','12.2.0')) {
+            $fs = $this->getServiceManager()->get(FileSystemService::SERVICE_ID);
+            $adapters = $fs->getOption(FileSystemService::OPTION_ADAPTERS);
+            if (!isset($adapters['default'])) {
+                if (get_class($fs) == FileSystemService::class) {
+                    // override default behavior to ensure an adapter and not a directory is created
+                    $adapters['default'] = array(
+                        'class' => Local::class,
+                        'options' => array('root' => $fs->getOption(FileSystemService::OPTION_FILE_PATH))
+                    );
+                    $fs->setOption(FileSystemService::OPTION_ADAPTERS, $adapters);
+                } else {
+                    $fs->createFileSystem('default', '');
+                }
+                $this->getServiceManager()->register(FileSystemService::SERVICE_ID, $fs);
+            }
+            $this->setVersion('12.2.0');
+        }
+        $this->skip('12.2.0', '12.4.0');
+        if ($this->isVersion('12.4.0')) {
+            $uriService = $this->getServiceManager()->get(UriProvider::SERVICE_ID);
+            if ($uriService instanceof ConfigurationService) {
+                $innerService = $uriService->getConfig();
+                if ($innerService instanceof UriProvider) {
+                    $this->getServiceManager()->register(UriProvider::SERVICE_ID, $innerService);
+                } else {
+                    throw new \common_exception_InconsistentData('Unknown URI Provider found');
+                }
+            }
+            $this->setVersion('12.4.1');
+        }
+        $this->skip('12.4.1', '12.4.2');
     }
 }

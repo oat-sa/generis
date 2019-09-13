@@ -72,10 +72,15 @@
   "require-dev": {
     "mikey179/vfsstream": "1.4.0",
     "phpunit/phpunit": "^4.8",
+    "php-mock/php-mock": "^2.0",
     "symfony/cache": "~4.1"
+  },
+  "suggest": {
+    "superbalist/flysystem-google-storage": "Supports google flystore"
   },
   "autoload": {
     "psr-4": {
+      "oat\\generis\\persistence\\": "common/persistence/",
       "oat\\generis\\model\\": "core/",
       "oat\\generis\\Helper\\": "helpers/",
       "oat\\oatbox\\": "common/oatbox/",

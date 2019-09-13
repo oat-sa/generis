@@ -19,7 +19,7 @@
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
  * 
  */
-use oat\oatbox\Configurable;
+use oat\oatbox\service\ConfigurableService;
 use oat\generis\model\kernel\uri\UriProvider;
 use oat\generis\model\kernel\uri\UriProviderException;
 
@@ -30,7 +30,7 @@ use oat\generis\model\kernel\uri\UriProviderException;
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
  * @package generis
  */
-class core_kernel_uri_DatabaseSerialUriProvider extends Configurable
+class core_kernel_uri_DatabaseSerialUriProvider extends ConfigurableService
     implements UriProvider
 {
     const OPTION_PERSISTENCE = 'persistence';

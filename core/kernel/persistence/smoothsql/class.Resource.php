@@ -23,6 +23,7 @@
 use oat\generis\model\OntologyRdf;
 use oat\oatbox\session\SessionService;
 use oat\oatbox\user\UserLanguageServiceInterface;
+use oat\generis\model\kernel\uri\UriProvider;
 
 /**
  * Short description of class core_kernel_persistence_smoothsql_Resource
@@ -33,8 +34,7 @@ use oat\oatbox\user\UserLanguageServiceInterface;
  
  */
 class core_kernel_persistence_smoothsql_Resource
-    extends core_kernel_persistence_PersistenceImpl
-        implements core_kernel_persistence_ResourceInterface
+    implements core_kernel_persistence_ResourceInterface
 {
 
     /**
@@ -89,7 +89,7 @@ class core_kernel_persistence_smoothsql_Resource
 
         while ($row = $sth->fetch()){
             $uri = $this->getPersistence()->getPlatForm()->getPhpTextValue($row['object']);
-            $returnValue[$uri] = new core_kernel_classes_Class($uri);
+            $returnValue[$uri] = $this->getModel()->getClass($uri);
         }        
         
 
@@ -258,7 +258,7 @@ class core_kernel_persistence_smoothsql_Resource
 
             foreach ($properties as $propertyUri => $value) {
                 
-                $property = new core_kernel_classes_Property($propertyUri);
+                $property = $this->getModel()->getProperty($propertyUri);
                 
                 $lang = ($property->isLgDependent() ? $session->getDataLanguage() : '');
                 $formatedValues = [];
@@ -511,7 +511,7 @@ class core_kernel_persistence_smoothsql_Resource
     public function duplicate( core_kernel_classes_Resource $resource, $excludedProperties = array())
     {
         $returnValue = null;
-    	$newUri = common_Utils::getNewUri();
+        $newUri = $this->getServiceLocator()->get(UriProvider::SERVICE_ID)->provide();
     	$collection = $this->getRdfTriples($resource);
         
     	if ($collection->count() > 0) {
@@ -535,7 +535,7 @@ class core_kernel_persistence_smoothsql_Resource
 	    	}
 	    	
         	if ($this->getPersistence()->insertMultiple('statements', $valuesToInsert)) {
-        		$returnValue = new core_kernel_classes_Resource($newUri);
+                $returnValue = $this->getModel()->getResource($newUri);
         	}
     	}
         
@@ -624,13 +624,10 @@ class core_kernel_persistence_smoothsql_Resource
         $result	= $this->getPersistence()->query($query);
         
         $rows = $result->fetchAll();
-        $sortedByLg = core_kernel_persistence_smoothsql_Utils::sortByLanguage($this->getPersistence(), $rows, 'l_language', $lang, $default);
-        $identifiedLg = core_kernel_persistence_smoothsql_Utils::identifyFirstLanguage($sortedByLg);
-
         foreach($rows as $row){
         	$value = $platform->getPhpTextValue($row['object']);
 			$returnValue[$row['predicate']][] = common_Utils::isUri($value)
-				? new core_kernel_classes_Resource($value)
+				? $this->getModel()->getResource($value)
 				: new core_kernel_classes_Literal($value);
         }
         
@@ -695,18 +692,4 @@ class core_kernel_persistence_smoothsql_Resource
     {
         return $this->getModel()->getServiceLocator();
     }
-
-    /**
-     * Short description of method isValidContext
-     *
-     * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
-     * @param  Resource resource
-     * @return boolean
-     */
-    public function isValidContext( core_kernel_classes_Resource $resource)
-    {
-        return true;
-    }
-
 }
