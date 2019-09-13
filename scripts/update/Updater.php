@@ -466,9 +466,9 @@ class Updater extends common_ext_ExtensionUpdater
         if ($this->isVersion('12.4.0')) {
             $uriService = $this->getServiceManager()->get(UriProvider::SERVICE_ID);
             if ($uriService instanceof ConfigurationService) {
-                $uriService = $this->getConfig();
-                if ($uriService instanceof UriProvider) {
-                    $this->getServiceManager()->register(UriProvider::SERVICE_ID, $uriService);
+                $innerService = $uriService->getConfig();
+                if ($innerService instanceof UriProvider) {
+                    $this->getServiceManager()->register(UriProvider::SERVICE_ID, $innerService);
                 } else {
                     throw new \common_exception_InconsistentData('Unknown URI Provider found');
                 }
