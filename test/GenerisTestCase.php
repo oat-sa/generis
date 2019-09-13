@@ -19,7 +19,6 @@
  */
 namespace oat\generis\test;
 
-use common_persistence_Manager;
 use oat\generis\model\kernel\persistence\smoothsql\install\SmoothRdsModel;
 use oat\oatbox\user\UserLanguageServiceInterface;
 use oat\oatbox\session\SessionService;
@@ -27,10 +26,17 @@ use Prophecy\Argument;
 use oat\oatbox\event\EventManager;
 use Psr\Log\LoggerInterface;
 use oat\oatbox\log\LoggerService;
+use oat\generis\persistence\PersistenceManager;
+use oat\generis\model\kernel\uri\UriProvider;
+use oat\generis\model\kernel\uri\Bin2HexUriProvider;
+use oat\generis\model\data\Ontology;
 
 class GenerisTestCase extends TestCase
 {
 
+    /**
+     * @return Ontology
+     */
     protected function getOntologyMock()
     {
         $pm = $this->getSqlMock('mockSql');
@@ -44,11 +50,12 @@ class GenerisTestCase extends TestCase
         
         $session = new \common_session_AnonymousSession();
         $sl = $this->getServiceLocatorMock([
-            common_persistence_Manager::SERVICE_ID => $pm,
+            PersistenceManager::SERVICE_ID => $pm,
             UserLanguageServiceInterface::SERVICE_ID => $this->getUserLanguageServiceMock('xx_XX'),
             SessionService::SERVICE_ID => $this->getSessionServiceMock($session),
             EventManager::SERVICE_ID => new EventManager(),
             LoggerService::SERVICE_ID => $this->prophesize(LoggerInterface::class)->reveal(),
+            UriProvider::SERVICE_ID => new Bin2HexUriProvider([Bin2HexUriProvider::OPTION_NAMESPACE => 'http://ontology.mock/bin2hex#']),
             'smoothcache' => new \common_cache_NoCache()
         ]);
         $session->setServiceLocator($sl);
