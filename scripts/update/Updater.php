@@ -54,6 +54,8 @@ use oat\oatbox\mutex\LockService;
 use oat\oatbox\mutex\NoLockStorage;
 use oat\generis\scripts\update\RegisterDefaultKvPersistence;
 use League\Flysystem\Adapter\Local;
+use oat\generis\model\kernel\uri\UriProvider;
+use oat\oatbox\config\ConfigurationService;
 
 /**
  * @author Joel Bout <joel@taotesting.com>
@@ -461,5 +463,17 @@ class Updater extends common_ext_ExtensionUpdater
             $this->setVersion('12.2.0');
         }
         $this->skip('12.2.0', '12.4.0');
+        if ($this->isVersion('12.4.0')) {
+            $uriService = $this->getServiceManager()->get(UriProvider::SERVICE_ID);
+            if ($uriService instanceof ConfigurationService) {
+                $innerService = $uriService->getConfig();
+                if ($innerService instanceof UriProvider) {
+                    $this->getServiceManager()->register(UriProvider::SERVICE_ID, $innerService);
+                } else {
+                    throw new \common_exception_InconsistentData('Unknown URI Provider found');
+                }
+            }
+            $this->setVersion('12.4.1');
+        }
     }
 }
