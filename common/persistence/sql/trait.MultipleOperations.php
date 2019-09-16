@@ -94,8 +94,6 @@ trait common_persistence_sql_MultipleOperations
             $this->updateMultiple = new common_persistence_sql_UpdateMultiple($this->getDbalConnection());
         }
 
-        $data = $this->castBooleansForPostgreSql($data);
-
         return $this->updateMultiple->updateMultiple($table, $data);
     }
 }
