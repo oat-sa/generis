@@ -22,6 +22,7 @@
 
 use oat\oatbox\service\ConfigurableService;
 use oat\generis\model\kernel\uri\UriProvider;
+use oat\generis\model\kernel\uri\UriProviderException;
 /**
  * UriProvider implementation based on an advanced key value storage
  *
@@ -50,17 +51,15 @@ class core_kernel_uri_AdvKeyValueUriProvider extends ConfigurableService
      * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @return string
-     * @throws common_UriProviderException
+     * @throws UriProviderException
      */
     public function provide()
     {
-        $returnValue = (string) '';
-        
         $nextId = $this->getPersistence()->incr(self::PERSISTENCE_KEY);
         list($usec, $sec) = explode(" ", microtime());
         $uri = $this->getOption(self::OPTION_NAMESPACE) .'i'. (str_replace(".","",$sec."".$usec)) . $nextId;
 
-        return (string) $uri;
+        return $uri;
     }
 
 }
