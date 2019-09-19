@@ -1,5 +1,4 @@
 <?php
-use oat\oatbox\PhpSerializable;
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,6 +19,9 @@ use oat\oatbox\PhpSerializable;
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
  *
  */
+use oat\oatbox\PhpSerializable;
+use oat\oatbox\service\ServiceManager;
+use oat\generis\model\kernel\uri\UriProvider;
 
 /**
  *
@@ -95,15 +97,16 @@ class common_Utils
 
 
     /**
-     * Short description of method getNewUri
+     * Backward compatibility function for URI Provider
      *
      * @access public
      * @author Joel Bout, <joel@taotesting.com>
      * @return string
+     * @deprecated
      */
     public static function getNewUri()
     {
-        return core_kernel_uri_UriService::singleton()->generateUri();
+        return ServiceManager::getServiceManager()->get(UriProvider::SERVICE_ID)->provide();
     }
 
     /**

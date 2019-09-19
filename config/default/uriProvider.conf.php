@@ -1,5 +1,6 @@
 <?php
 use oat\generis\model\kernel\uri\Bin2HexUriProvider;
+
 /**
  * Default config header
  *

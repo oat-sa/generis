@@ -100,8 +100,9 @@ class RegisterDefaultKvPersistence extends InstallAction
     {
         /** @var common_persistence_Manager $persistenceManager */
         $persistenceManager = $this->getServiceManager()->get(common_persistence_Manager::SERVICE_ID);
-
-        if (!$persistenceManager->hasPersistence($persistenceId)) {
+        $persistencesConfig = $persistenceManager->getOption('persistences');
+        if (!$persistenceManager->hasPersistence($persistenceId)
+            || $persistencesConfig[$persistenceId]['driver'] == 'phpfile') {
             return false;
         }
 

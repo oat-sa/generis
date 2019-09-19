@@ -96,6 +96,7 @@ class AuthAdapter extends Configurable implements LoginAdapter
     	$options = array('like' => false, 'recursive' => true);
     	$users = $userClass->searchInstances($filters, $options);
     	
+    	
     	if (count($users) > 1){
     		// Multiple users matching
     		throw new common_exception_InconsistentData("Multiple Users found with the same login '".$this->username."'.");
