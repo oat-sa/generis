@@ -233,5 +233,4 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
     {
         return $this->connection->getDatabase();
     }
-
 }

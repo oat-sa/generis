@@ -41,5 +41,4 @@ interface UriProvider
      * @return string
      */
     public function provide();
-
 }

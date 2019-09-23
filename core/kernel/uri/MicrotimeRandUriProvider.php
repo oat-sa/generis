@@ -22,6 +22,8 @@
 namespace oat\generis\model\kernel\uri;
 
 use oat\oatbox\service\ConfigurableService;
+use oat\generis\persistence\PersistenceManager;
+use common_persistence_SqlPersistence;
 /**
  * UriProvider implementation based on PHP microtime and rand().
  *
@@ -46,7 +48,7 @@ class MicrotimeRandUriProvider extends ConfigurableService
      * @return common_persistence_SqlPersistence
      */
     public function getPersistence() {
-        return \common_persistence_SqlPersistence::getPersistence($this->getOption(self::OPTION_PERSISTENCE));
+        return $this->getServiceLocator()->get(PersistenceManager::SERVICE_ID)->getPersistenceById($this->getOption(self::OPTION_PERSISTENCE));
     }
     
     /**

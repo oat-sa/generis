@@ -1,4 +1,3 @@
-TODO changes
 <?php
 /**  
  * This program is free software; you can redistribute it and/or
@@ -500,10 +499,9 @@ class core_kernel_persistence_smoothsql_Resource
                 );
     			}
 	    	}
-
-        	if ($addedRows) {
-            	return $this->getModel()->getResource($newUri);
-        	}
+       	if ($addedRows) {
+           	return $this->getModel()->getResource($newUri);
+       	}
 
         return null;
     }
