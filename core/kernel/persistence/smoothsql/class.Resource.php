@@ -499,10 +499,9 @@ class core_kernel_persistence_smoothsql_Resource
                 );
     			}
 	    	}
-
-        	if ($addedRows) {
-            	return $this->getModel()->getResource($newUri);
-        	}
+       	if ($addedRows) {
+           	return $this->getModel()->getResource($newUri);
+       	}
 
         return null;
     }
