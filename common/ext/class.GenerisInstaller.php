@@ -19,6 +19,7 @@
  * 				 2013-2014 (update and modification) Open Assessment Technologies SA;
  * 
  */
+use core_kernel_api_ModelFactory as ModelFactory;
 use oat\generis\model\data\ModelManager;
 use oat\generis\model\kernel\persistence\smoothsql\search\ComplexSearchService;
 use oat\oatbox\service\ServiceManager;
@@ -50,7 +51,7 @@ class common_ext_GenerisInstaller extends common_ext_ExtensionInstaller
         $this->installLoadDefaultConfig();
 
         // Id of the writable model.
-        $modelFactory = new \core_kernel_api_ModelFactory();
+        $modelFactory = $this->getServiceManager()->get(ModelFactory::SERVICE_ID);
         $writableModelId = $modelFactory->getModelId(LOCAL_NAMESPACE);
 
         $model = new \core_kernel_persistence_smoothsql_SmoothModel(array(
@@ -61,7 +62,7 @@ class common_ext_GenerisInstaller extends common_ext_ExtensionInstaller
             \core_kernel_persistence_smoothsql_SmoothModel::OPTION_SEARCH_SERVICE => ComplexSearchService::SERVICE_ID,
             \core_kernel_persistence_smoothsql_SmoothModel::OPTION_CACHE_SERVICE => common_cache_Cache::SERVICE_ID
         ));
-        $model->setServiceLocator(ServiceManager::getServiceManager());
+        $model->setServiceLocator($this->getServiceManager());
         ModelManager::setModel($model);
         
         $this->installOntology();

@@ -22,16 +22,17 @@
 /**
  * Short description of class common_ext_Namespace
  *
- * @access  public
- * @author  Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+ * @access public
+ * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
  * @package generis
+
  */
 class common_ext_Namespace
 {
     /**
      * A unique identifier of the namespace
      *
-     * @var string
+     * @var string|int
      */
     protected $modelId;
 
@@ -47,10 +48,10 @@ class common_ext_Namespace
      *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      *
-     * @param  string id
+     * @param  string|int id
      * @param  string uri
      */
-    public function __construct($id = '', $uri = '')
+    public function __construct($id, $uri = '')
     {
         $this->modelId = $id;
         $this->uri = $uri;
@@ -60,7 +61,7 @@ class common_ext_Namespace
      * Get the identifier of the namespace instance
      *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @return string
+     * @return string|int
      */
     public function getModelId()
     {

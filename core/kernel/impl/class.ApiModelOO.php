@@ -1,3 +1,4 @@
+TODO changes
 <?php
 /*  
  * This program is free software; you can redistribute it and/or
@@ -22,6 +23,8 @@
 
 use oat\generis\model\OntologyRdf;
 use oat\generis\model\OntologyRdfs;
+use oat\oatbox\service\ServiceManager;
+use core_kernel_api_ModelFactory as ModelFactory;
 
 error_reporting(E_ALL);
 
@@ -44,21 +47,42 @@ class core_kernel_impl_ApiModelOO
     extends core_kernel_impl_Api
         implements core_kernel_api_ApiModel
 {
-    // --- ASSOCIATIONS ---
-
-
-    // --- ATTRIBUTES ---
-
     /**
-     * Short description of attribute instance
-     *
-     * @access private
-     * @var ApiModelOO
+     * @var core_kernel_impl_ApiModelOO
      */
     private static $instance = null;
 
-    // --- OPERATIONS ---
+    /** @var ModelFactory */
+    private $modelFactory;
 
+    /**
+     * @author firstname and lastname of author, <author@example.org>
+     * @return void
+     */
+    private function __construct()
+    {
+        $serviceManager = ServiceManager::getServiceManager();
+        $this->modelFactory = $serviceManager->get(ModelFactory::SERVICE_ID);
+    }
+
+    /**
+     * @author firstname and lastname of author, <author@example.org>
+     * @return core_kernel_impl_ApiModelOO
+     */
+    public static function singleton()
+    {
+        $returnValue = null;
+
+
+        if (!isset(self::$instance)) {
+            $c = __CLASS__;
+            self::$instance = new $c();
+        }
+        $returnValue = self::$instance;
+
+
+        return $returnValue;
+    }
 
     /**
      * build xml rdf containing rdf:Description of all meta-data the conected
@@ -101,8 +125,6 @@ class core_kernel_impl_ApiModelOO
      */
     public function importXmlRdf($targetNameSpace, $fileLocation)
     {
-        $returnValue = (bool) false;
-
         if(!file_exists($fileLocation) || !is_readable($fileLocation)){
             throw new common_Exception("Unable to load ontology : $fileLocation");
         }
@@ -110,12 +132,8 @@ class core_kernel_impl_ApiModelOO
 	    if(!preg_match("/#$/", $targetNameSpace)){
 			$targetNameSpace .= '#';
 		}
-		$modFactory = new core_kernel_api_ModelFactory();
-		$returnValue = $modFactory->createModel($targetNameSpace, file_get_contents($fileLocation));
-		
 
-
-        return (bool) $returnValue;
+        return $this->modelFactory->createModel($targetNameSpace, file_get_contents($fileLocation));
     }
 
 
@@ -340,10 +358,7 @@ class core_kernel_impl_ApiModelOO
         $modelId = $localNsManager->getLocalNamespace()->getModelId();
         $currentUser = common_session_SessionManager::getSession()->getUserUri();
 
-        // TODO: inject ModelFactory
-        $modelFactory = new core_kernel_api_ModelFactory();
-
-        return $modelFactory->addStatement(
+        return $this->modelFactory->addStatement(
             $modelId,
             $subject,
             $predicate,
@@ -490,40 +505,4 @@ class core_kernel_impl_ApiModelOO
 
         return $returnValue;
     }
-
-    /**
-     * Short description of method singleton
-     *
-     * @access public
-     * @author firstname and lastname of author, <author@example.org>
-     * @return core_kernel_impl_ApiModelOO
-     */
-    public static function singleton()
-    {
-        $returnValue = null;
-
-        
-		if (!isset(self::$instance)) {
-			$c = __CLASS__;
-			self::$instance = new $c();
-		}
-		$returnValue = self::$instance;
-        
-
-        return $returnValue;
-    }
-
-    /**
-     * Short description of method __construct
-     *
-     * @access private
-     * @author firstname and lastname of author, <author@example.org>
-     * @return void
-     */
-    private function __construct()
-    {
-        
-        
-    }
-
 }

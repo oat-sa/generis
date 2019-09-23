@@ -23,16 +23,16 @@
  *
  */
 
-use oat\generis\Helper\UuidPrimaryKeyTrait;
+use Doctrine\DBAL\Schema\Schema;
+use Doctrine\DBAL\Schema\Table;
 
 class core_kernel_api_ModelFactory
 {
-    use UuidPrimaryKeyTrait;
-
+    const SERVICE_ID = __CLASS__;
     const DEFAULT_AUTHOR = 'http://www.tao.lu/Ontologies/TAO.rdf#installator';
 
     /** @var core_kernel_classes_DbWrapper */
-    private $dbWrapper;
+    protected $dbWrapper;
 
     public function __construct()
     {
@@ -64,15 +64,13 @@ class core_kernel_api_ModelFactory
      *
      * @param string $namespace
      *
-     * @return string new added model id
+     * @return string|int new added model id
      */
     public function addNewModel($namespace)
     {
-        $modelId = $this->getUniquePrimaryKey();
-
-        $this->dbWrapper->insert('models', ['modelid' => $modelId, 'modeluri' => $namespace]);
-
-        return $modelId;
+        $this->dbWrapper->insert('models', ['modeluri' => $namespace]);
+        $result = $this->dbWrapper->query('select modelid from models where modeluri = ?', [$namespace]);
+        return $result->fetch()['modelid'];
     }
 
     /**
@@ -80,6 +78,7 @@ class core_kernel_api_ModelFactory
      *
      * @param string $namespace
      * @param string $data xml content
+     *
      * @return bool Were triples added?
      */
     public function createModel($namespace, $data)
@@ -117,19 +116,19 @@ class core_kernel_api_ModelFactory
      *
      * @author "Joel Bout, <joel@taotesting.com>"
      *
-     * @param int    $modelId
-     * @param string $subject
-     * @param string $predicate
-     * @param string $object
-     * @param string $lang
-     * @param string $author
+     * @param string|int $modelId
+     * @param string     $subject
+     * @param string     $predicate
+     * @param string     $object
+     * @param string     $lang
+     * @param string     $author
      *
      * @return bool Was a row added?
      */
     public function addStatement($modelId, $subject, $predicate, $object, $lang = null, $author = self::DEFAULT_AUTHOR)
     {
         // Casting values and types.
-        $object = (string) $object;
+        $object = (string)$object;
         if (is_null($lang)) {
             $lang = '';
         }
@@ -144,20 +143,99 @@ class core_kernel_api_ModelFactory
             return false;
         }
 
+        return (bool)$this->dbWrapper->insert(
+            'statements',
+            $this->prepareStatement($modelId, $subject, $predicate, $object, $lang, is_null($author) ? '' : $author)
+        );
+    }
+
+    /**
+     * Prepares a statement to be inserted in the ontology
+     *
+     * @param string|int $modelId
+     * @param string     $subject
+     * @param string     $predicate
+     * @param string     $object
+     * @param string     $lang
+     * @param string     $author
+     *
+     * @return array
+     */
+    public function prepareStatement($modelId, $subject, $predicate, $object, $lang, $author)
+    {
         $date = $this->dbWrapper->getPlatForm()->getNowExpression();
 
-        return (bool) $this->dbWrapper->insert(
-            'statements',
-            [
-                'id' => $this->getUniquePrimaryKey(),
-                'modelid' => $modelId,
-                'subject' => $subject,
-                'predicate' => $predicate,
-                'object' => $object,
-                'l_language' => $lang,
-                'author' => is_null($author) ? '' : $author,
-                'epoch' => $date,
-            ]
-        );
+        return [
+            'modelid' => $modelId,
+            'subject' => $subject,
+            'predicate' => $predicate,
+            'object' => $object,
+            'l_language' => $lang,
+            'author' => is_null($author) ? '' : $author,
+            'epoch' => $date,
+        ];
+    }
+
+    public function getIteratorQuery($modelIds)
+    {
+        return 'SELECT * FROM statements '
+            . (is_null($modelIds) ? '' : 'WHERE modelid IN (' . implode(',', $modelIds) . ') ')
+            . 'ORDER BY id';
+    }
+
+    public function getPropertySortingField()
+    {
+        return 'id';
+    }
+
+    public function quoteModelSqlCondition(array $models)
+    {
+        return 'modelid IN (' . implode(',', $models) . ')';
+    }
+
+    /**
+     * Creates table schema for models.
+     *
+     * @param Schema $schema
+     *
+     * @return Table
+     */
+    public static function createModelsTable(Schema $schema)
+    {
+        // Models table.
+        $table = $schema->createTable('models');
+        $table->addColumn('modelid', 'integer', ['notnull' => true, 'autoincrement' => true]);
+        $table->addColumn('modeluri', 'string', ['length' => 255, 'default' => null]);
+        $table->setPrimaryKey(['modelid']);
+        $table->addOption('engine', 'MyISAM');
+
+        return $table;
+    }
+
+    /**
+     * Creates table schema for statements.
+     *
+     * @param Schema $schema
+     *
+     * @return Table
+     */
+    public static function createStatementsTable(Schema $schema)
+    {
+        $table = $schema->createTable('statements');
+        $table->addColumn('id', 'integer', ['notnull' => true, 'autoincrement' => true]);
+        $table->addColumn('modelid', 'integer', ['notnull' => true, 'default' => 0]);
+        $table->addColumn('subject', 'string', ['length' => 255, 'default' => null]);
+        $table->addColumn('predicate', 'string', ['length' => 255, 'default' => null]);
+        $table->addColumn('object', 'text', ['default' => null, 'notnull' => false]);
+        $table->addColumn('l_language', 'string', ['length' => 255, 'default' => null, 'notnull' => false]);
+        $table->addColumn('author', 'string', ['length' => 255, 'default' => null, 'notnull' => false]);
+        $table->addColumn('epoch', 'string', ['notnull' => null]);
+
+        $table->setPrimaryKey(['id']);
+        $table->addIndex(['subject', 'predicate'], 'k_sp', [], ['lengths' => [164, 164]]);
+        $table->addIndex(['predicate', 'object'], 'k_po', [], ['lengths' => [164, 164]]);
+        $table->addOption('engine', 'MyISAM');
+
+        return $table;
     }
 }

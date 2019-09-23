@@ -18,6 +18,7 @@
  *
  */
 
+use core_kernel_api_ModelFactory as ModelFactory;
 use oat\generis\model\data\RdfInterface;
 use oat\generis\model\OntologyRdf;
 use oat\generis\model\OntologyRdfs;
@@ -64,8 +65,8 @@ class core_kernel_persistence_smoothsql_SmoothRdf
             $this->model->addReadableModel($triple->modelid);
         }
 
-        // TODO: inject ModelFactory
-        $modelFactory = new core_kernel_api_ModelFactory();
+        /** @var ModelFactory $modelFactory */
+        $modelFactory = $this->getServiceManager()->get(ModelFactory::SERVICE_ID);
         $returnValue = $modelFactory->addStatement(
             $triple->modelid,
             $triple->subject,

@@ -1,3 +1,4 @@
+TODO changes
 <?php
 /**
  * This program is free software; you can redistribute it and/or
@@ -18,6 +19,9 @@
  *
  */
 
+use core_kernel_api_ModelFactory as ModelFactory;
+use oat\oatbox\service\ServiceManager;
+
 /**
  * Iterator over all triples
  * 
@@ -33,11 +37,11 @@ class core_kernel_persistence_smoothsql_SmoothIterator
      * @param array $modelIds
      */
     public function __construct(common_persistence_SqlPersistence $persistence, $modelIds = null) {
-        // TODO: refactor this to use a triple store abstraction.
-        $query = 'SELECT * FROM statements '
-            .(is_null($modelIds) ? '' : 'WHERE modelid IN ("'.implode('","', $modelIds).'") ')
-            .'ORDER BY epoch';
-        parent::__construct($persistence, $query);
+
+        $serviceManager = ServiceManager::getServiceManager();
+        /** @var ModelFactory $modelFactory */
+        $modelFactory = $serviceManager->get(ModelFactory::SERVICE_ID);
+        parent::__construct($persistence, $modelFactory->getIteratorQuery($modelIds));
     }
     
     /**

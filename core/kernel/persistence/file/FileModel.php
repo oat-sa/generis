@@ -19,11 +19,13 @@
  */
 namespace oat\generis\model\kernel\persistence\file;
 
+use core_kernel_api_ModelFactory as ModelFactory;
 use oat\generis\model\data\Model;
 use \common_ext_NamespaceManager;
 use \common_exception_MissingParameter;
 use \common_exception_Error;
 use oat\generis\model\kernel\persistence\file\FileRdf;
+use oat\oatbox\service\ServiceManager;
 
 /**
  * transitory model for the smooth sql implementation
@@ -110,7 +112,6 @@ class FileModel
     // helper
     
     /**
-     *
      * @param string $file
      * @throws common_exception_Error
      */
@@ -123,7 +124,7 @@ class FileModel
         $namespaceUri = (string) $attrs['base'];
         $modelId = null;
 
-        $namespaceManager = \common_ext_NamespaceManager::singleton();
+        $namespaceManager = common_ext_NamespaceManager::singleton();
         foreach ($namespaceManager->getAllNamespaces() as $namespace) {
             if ($namespace->getUri() == $namespaceUri) {
                 $modelId = $namespace->getModelId();
@@ -132,8 +133,9 @@ class FileModel
         if (is_null($modelId)) {
             \common_Logger::d('modelId not found, need to add namespace '. $namespaceUri);
 
-            // TODO: inject ModelFactory as a dependency.
-            $modelFactory = new \core_kernel_api_ModelFactory();
+            $serviceManager = ServiceManager::getServiceManager();
+            /** @var ModelFactory $modelFactory */
+            $modelFactory = $serviceManager->get(ModelFactory::SERVICE_ID);
             $modelId = $modelFactory->addNewModel($namespaceUri);
             $namespaceManager->reset();
         }
