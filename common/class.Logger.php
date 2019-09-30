@@ -265,7 +265,7 @@ class common_Logger
      * @param  array $tags
      * @return mixed
      */
-    public static function t($message, $tags = array())
+    public static function t($message, array $tags = array())
     {
         
 		self::singleton()->log(self::TRACE_LEVEL, $message, $tags);
@@ -281,7 +281,7 @@ class common_Logger
      * @param  array $tags
      * @return mixed
      */
-    public static function d($message, $tags = array())
+    public static function d($message, array $tags = array())
     {
         
 		self::singleton()->log(self::DEBUG_LEVEL, $message, $tags);
@@ -299,7 +299,7 @@ class common_Logger
      * @param  array $tags
      * @return mixed
      */
-    public static function i($message, $tags = array())
+    public static function i($message, array $tags = array())
     {
         
 		self::singleton()->log(self::INFO_LEVEL, $message, $tags);
@@ -315,7 +315,7 @@ class common_Logger
      * @param  array $tags
      * @return mixed
      */
-    public static function w($message, $tags = array())
+    public static function w($message, array $tags = array())
     {
         
 		self::singleton()->log(self::WARNING_LEVEL, $message, $tags);
@@ -331,7 +331,7 @@ class common_Logger
      * @param  array $tags
      * @return mixed
      */
-    public static function e($message, $tags = array())
+    public static function e($message, array $tags = array())
     {
         self::singleton()->log(self::ERROR_LEVEL, $message, self::addTrace($tags));
     }
@@ -359,7 +359,7 @@ class common_Logger
      * @param  array $tags
      * @return mixed
      */
-    public static function f($message, $tags = array())
+    public static function f($message, array $tags = array())
     {
 		self::singleton()->log(self::FATAL_LEVEL, $message, self::addTrace($tags));
     }
