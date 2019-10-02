@@ -26,7 +26,7 @@
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Schema\Table;
 
-class core_kernel_api_ModelFactory
+abstract class core_kernel_api_ModelFactory
 {
     const SERVICE_ID = __CLASS__;
     const DEFAULT_AUTHOR = 'http://www.tao.lu/Ontologies/TAO.rdf#installator';
@@ -42,9 +42,7 @@ class core_kernel_api_ModelFactory
 
     /**
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
-     *
      * @param string $namespace
-     *
      * @return string
      */
     public function getModelId($namespace)
@@ -60,25 +58,18 @@ class core_kernel_api_ModelFactory
     }
 
     /**
-     * @author "Lionel Lecaque, <lionel@taotesting.com>"
+     * Creates a new model in the ontology.
      *
      * @param string $namespace
      *
      * @return string|int new added model id
      */
-    public function addNewModel($namespace)
-    {
-        $this->dbWrapper->insert('models', ['modeluri' => $namespace]);
-        $result = $this->dbWrapper->query('select modelid from models where modeluri = ?', [$namespace]);
-        return $result->fetch()['modelid'];
-    }
+    abstract public function addNewModel($namespace);
 
     /**
-     * @author "Lionel Lecaque, <lionel@taotesting.com>"
-     *
+     * Creates a new model.
      * @param string $namespace
      * @param string $data xml content
-     *
      * @return bool Were triples added?
      */
     public function createModel($namespace, $data)
@@ -112,17 +103,13 @@ class core_kernel_api_ModelFactory
     }
 
     /**
-     * Adds a statement to the ontology if it does not exist yet
-     *
-     * @author "Joel Bout, <joel@taotesting.com>"
-     *
+     * Adds a statement to the ontology if it does not exist yet.
      * @param string|int $modelId
      * @param string     $subject
      * @param string     $predicate
      * @param string     $object
      * @param string     $lang
      * @param string     $author
-     *
      * @return bool Was a row added?
      */
     public function addStatement($modelId, $subject, $predicate, $object, $lang = null, $author = self::DEFAULT_AUTHOR)
@@ -150,48 +137,45 @@ class core_kernel_api_ModelFactory
     }
 
     /**
-     * Prepares a statement to be inserted in the ontology
-     *
+     * Prepares a statement to be inserted in the ontology.
      * @param string|int $modelId
      * @param string     $subject
      * @param string     $predicate
      * @param string     $object
      * @param string     $lang
      * @param string     $author
-     *
      * @return array
      */
-    public function prepareStatement($modelId, $subject, $predicate, $object, $lang, $author)
-    {
-        $date = $this->dbWrapper->getPlatForm()->getNowExpression();
+    abstract public function prepareStatement($modelId, $subject, $predicate, $object, $lang, $author);
 
-        return [
-            'modelid' => $modelId,
-            'subject' => $subject,
-            'predicate' => $predicate,
-            'object' => $object,
-            'l_language' => $lang,
-            'author' => is_null($author) ? '' : $author,
-            'epoch' => $date,
-        ];
-    }
-
+    /**
+     * Creates a query for iterator on selected statements.
+     * @param $modelIds
+     * @return string
+     */
     public function getIteratorQuery($modelIds)
     {
         return 'SELECT * FROM statements '
-            . (is_null($modelIds) ? '' : 'WHERE modelid IN (' . implode(',', $modelIds) . ') ')
-            . 'ORDER BY id';
+            . (is_null($modelIds) ? '' : 'WHERE ' . $this->buildModelSqlCondition($modelIds) . ' ')
+            . 'ORDER BY ' . $this->getPropertySortingField();
     }
 
-    public function getPropertySortingField()
-    {
-        return 'id';
-    }
-
-    public function quoteModelSqlCondition(array $models)
+    /**
+     * Prepares parameters for statement selection.
+     * @param array $models
+     *
+     * @return string
+     */
+    public function buildModelSqlCondition(array $models)
     {
         return 'modelid IN (' . implode(',', $models) . ')';
     }
+
+    /**
+     * Returns the property to sort the statements on.
+     * @return string
+     */
+    abstract public function getPropertySortingField();
 
     /**
      * Creates table schema for models.
@@ -200,17 +184,7 @@ class core_kernel_api_ModelFactory
      *
      * @return Table
      */
-    public static function createModelsTable(Schema $schema)
-    {
-        // Models table.
-        $table = $schema->createTable('models');
-        $table->addColumn('modelid', 'integer', ['notnull' => true, 'autoincrement' => true]);
-        $table->addColumn('modeluri', 'string', ['length' => 255, 'default' => null]);
-        $table->setPrimaryKey(['modelid']);
-        $table->addOption('engine', 'MyISAM');
-
-        return $table;
-    }
+    abstract public function createModelsTable(Schema $schema);
 
     /**
      * Creates table schema for statements.
@@ -219,23 +193,5 @@ class core_kernel_api_ModelFactory
      *
      * @return Table
      */
-    public static function createStatementsTable(Schema $schema)
-    {
-        $table = $schema->createTable('statements');
-        $table->addColumn('id', 'integer', ['notnull' => true, 'autoincrement' => true]);
-        $table->addColumn('modelid', 'integer', ['notnull' => true, 'default' => 0]);
-        $table->addColumn('subject', 'string', ['length' => 255, 'default' => null]);
-        $table->addColumn('predicate', 'string', ['length' => 255, 'default' => null]);
-        $table->addColumn('object', 'text', ['default' => null, 'notnull' => false]);
-        $table->addColumn('l_language', 'string', ['length' => 255, 'default' => null, 'notnull' => false]);
-        $table->addColumn('author', 'string', ['length' => 255, 'default' => null, 'notnull' => false]);
-        $table->addColumn('epoch', 'string', ['notnull' => null]);
-
-        $table->setPrimaryKey(['id']);
-        $table->addIndex(['subject', 'predicate'], 'k_sp', [], ['lengths' => [164, 164]]);
-        $table->addIndex(['predicate', 'object'], 'k_po', [], ['lengths' => [164, 164]]);
-        $table->addOption('engine', 'MyISAM');
-
-        return $table;
-    }
+    abstract public function createStatementsTable(Schema $schema);
 }

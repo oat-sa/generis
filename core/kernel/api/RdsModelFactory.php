@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,20 +22,17 @@ namespace oat\generis\model\kernel\api;
 
 use core_kernel_api_ModelFactory as ModelFactory;
 use Doctrine\DBAL\Schema\Schema;
-use oat\generis\Helper\UuidPrimaryKeyTrait;
 
-class NewSqlModelFactory extends ModelFactory
+class RdsModelFactory extends ModelFactory
 {
-    use UuidPrimaryKeyTrait;
-
     /**
      * @inheritdoc
      */
     public function addNewModel($namespace)
     {
-        $modelId = $this->getUniquePrimaryKey();
-        $this->dbWrapper->insert('models', ['modelid' => $modelId, 'modeluri' => $namespace]);
-        return $modelId;
+        $this->dbWrapper->insert('models', ['modeluri' => $namespace]);
+        $result = $this->dbWrapper->query('select modelid from models where modeluri = ?', [$namespace]);
+        return $result->fetch()['modelid'];
     }
 
     /**
@@ -45,7 +43,6 @@ class NewSqlModelFactory extends ModelFactory
         $date = $this->dbWrapper->getPlatForm()->getNowExpression();
 
         return [
-            'id' => $this->getUniquePrimaryKey(),
             'modelid' => $modelId,
             'subject' => $subject,
             'predicate' => $predicate,
@@ -59,23 +56,9 @@ class NewSqlModelFactory extends ModelFactory
     /**
      * @inheritdoc
      */
-    public function buildModelSqlCondition(array $models)
-    {
-        $models = array_map(
-            function ($a) {
-                return "'" . $a . "'";
-            },
-            $models
-        );
-        return parent::buildModelSqlCondition($models);
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function getPropertySortingField()
     {
-        return 'epoch';
+        return 'id';
     }
 
     /**
@@ -83,10 +66,12 @@ class NewSqlModelFactory extends ModelFactory
      */
     public function createModelsTable(Schema $schema)
     {
+        // Models table.
         $table = $schema->createTable('models');
-        $table->addColumn('modelid', 'string', ['length' => 23, 'notnull' => true]);
-        $table->addColumn('modeluri', 'string', ['length' => 255]);
+        $table->addColumn('modelid', 'integer', ['notnull' => true, 'autoincrement' => true]);
+        $table->addColumn('modeluri', 'string', ['length' => 255, 'default' => null]);
         $table->setPrimaryKey(['modelid']);
+        $table->addOption('engine', 'MyISAM');
 
         return $table;
     }
@@ -97,18 +82,19 @@ class NewSqlModelFactory extends ModelFactory
     public function createStatementsTable(Schema $schema)
     {
         $table = $schema->createTable('statements');
-        $table->addColumn('id', 'string', ['length' => 23, 'notnull' => true]);
-        $table->addColumn('modelid', 'string', ['length' => 23, 'notnull' => true]);
-        $table->addColumn('subject', 'string', ['length' => 255]);
-        $table->addColumn('predicate', 'string', ['length' => 255]);
-        $table->addColumn('object', 'text', []);
-        $table->addColumn('l_language', 'string', ['length' => 255]);
-        $table->addColumn('author', 'string', ['length' => 255]);
-        $table->addColumn('epoch', 'string', ['notnull' => true]);
+        $table->addColumn('id', 'integer', ['notnull' => true, 'autoincrement' => true]);
+        $table->addColumn('modelid', 'integer', ['notnull' => true, 'default' => 0]);
+        $table->addColumn('subject', 'string', ['length' => 255, 'default' => null]);
+        $table->addColumn('predicate', 'string', ['length' => 255, 'default' => null]);
+        $table->addColumn('object', 'text', ['default' => null, 'notnull' => false]);
+        $table->addColumn('l_language', 'string', ['length' => 255, 'default' => null, 'notnull' => false]);
+        $table->addColumn('author', 'string', ['length' => 255, 'default' => null, 'notnull' => false]);
+        $table->addColumn('epoch', 'string', ['notnull' => null]);
 
         $table->setPrimaryKey(['id']);
-        $table->addIndex(['subject', 'predicate'], 'k_sp');
-        $table->addIndex(['predicate', 'object'], 'k_po');
+        $table->addIndex(['subject', 'predicate'], 'k_sp', [], ['lengths' => [164, 164]]);
+        $table->addIndex(['predicate', 'object'], 'k_po', [], ['lengths' => [164, 164]]);
+        $table->addOption('engine', 'MyISAM');
 
         return $table;
     }
