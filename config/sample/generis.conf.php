@@ -49,12 +49,6 @@ define('DEFAULT_ANONYMOUS_INTERFACE_LANG', '');
 #mode
 define('DEBUG_MODE', false);
 
-#application state
-/**
- * @deprecated Use \oat\tao\model\maintenance\Maintenance instead
- */
-define('SYS_READY', true);
-
 #the time zone, required since PHP5.3
 define('TIME_ZONE', 'UTC');
 
