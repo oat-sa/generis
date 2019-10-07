@@ -69,7 +69,6 @@ define('USE_HTTP_USER', '');
 define('USE_HTTP_PASS', '');
 
 #generis paths
-define('VENDOR_PATH' , ROOT_PATH.DIRECTORY_SEPARATOR.'vendor'.DIRECTORY_SEPARATOR);
 define('EXTENSION_PATH' , ROOT_PATH);
 define('FILES_PATH' , '');
 define('GENERIS_CACHE_PATH', FILES_PATH.'generis'.DIRECTORY_SEPARATOR.'cache'.DIRECTORY_SEPARATOR);

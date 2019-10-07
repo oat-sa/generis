@@ -50,21 +50,6 @@ class ActionService extends ConfigurableService
         return $action;
     }
     
-    public function getAvailableActions()
-    {
-        if ($this->getCache()->has(__FUNCTION__)) {
-            $actions = $this->getCache()->get(__FUNCTION__);
-        } else {
-            $actions = array();
-            foreach (\common_ext_ExtensionsManager::singleton()->getInstalledExtensions() as $ext) {
-                $actions = array_merge($actions, $this->getActionsInDirectory($ext->getDir()));
-            }
-            $actions = array_merge($actions, $this->getActionsInDirectory(VENDOR_PATH.'oat-sa'));
-            $this->getCache()->put($actions, __FUNCTION__);
-        }
-        return $actions;
-    }
-    
     /**
      * @return \common_cache_Cache
      */
