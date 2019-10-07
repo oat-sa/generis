@@ -69,7 +69,7 @@ class common_ext_ExtensionUninstaller
 		$this->unregister();
 		
 		// we purge the whole cache.
-		$cache = common_cache_FileCache::singleton();
+		$cache = $this->getServiceManager()->get(common_cache_Cache::SERVICE_ID);
 		$cache->purge();
 		
 		common_Logger::i('Uninstalled ' . $this->extension->getId());

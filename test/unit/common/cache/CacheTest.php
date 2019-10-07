@@ -18,21 +18,26 @@
  *               
  * 
  */
-namespace oat\generis\test\integration\common\cache;
+namespace oat\generis\test\unit\common\cache;
 
-use oat\generis\test\GenerisPhpUnitTestRunner;
-use \common_cache_FileCache;
+use oat\generis\test\GenerisTestCase;
+use oat\generis\persistence\PersistenceManager;
 
 // @todo can be turned into unit test, the problem is only constructing the cache object
 
-class CacheTest extends GenerisPhpUnitTestRunner {
+class CacheTest extends GenerisTestCase {
 	
     /**
      * @dataProvider keyProvider
      */
 	public function testFileCache($key)
 	{
-	    $cache = common_cache_FileCache::singleton();
+	    $pm = $this->prophesize(PersistenceManager::class);
+	    $pm->getPersistenceById('test')->willReturn(new \common_persistence_AdvKeyValuePersistence([],new \common_persistence_InMemoryAdvKvDriver()));
+	    $cache = new \common_cache_KeyValueCache([\common_cache_KeyValueCache::OPTION_PERSISTENCE => 'test']);
+	    $cache->setServiceLocator($this->getServiceLocatorMock([
+	        PersistenceManager::SERVICE_ID => $pm->reveal()
+	    ]));
 	    $this->assertFalse($cache->has($key));
 	    $this->assertTrue($cache->put('data', $key));
 	    $this->assertTrue($cache->has($key));

@@ -118,7 +118,7 @@ class common_ext_UpdateExtensions implements Action, ServiceLocatorAwareInterfac
 
                 $report->add($versionReport);
 
-                common_cache_FileCache::singleton()->purge();
+                $this->getServiceManager()->get(common_cache_Cache::SERVICE_ID)->purge();
             }
         } else {
             $report = new common_report_Report(common_report_Report::TYPE_INFO, $ext->getName().' already up to date');

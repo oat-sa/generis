@@ -80,7 +80,7 @@ class common_ext_ExtensionInstaller
 		
 		// we purge the whole cache.
         $this->log('d', 'Purging cache...');
-		$cache = common_cache_FileCache::singleton();
+        $cache = $this->getServiceManager()->get(common_cache_Cache::SERVICE_ID);
 		$cache->purge();	
 	
 

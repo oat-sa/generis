@@ -4,5 +4,5 @@
  */
 
 return new common_cache_KeyValueCache(array(
-    common_cache_FileCache::OPTION_PERSISTENCE => 'cache'
+    common_cache_KeyValueCache::OPTION_PERSISTENCE => 'cache'
 ));
