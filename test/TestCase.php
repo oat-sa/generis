@@ -23,8 +23,10 @@ use Prophecy\Argument;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use common_persistence_Manager;
 use common_persistence_sql_dbal_Driver;
+use PHPUnit\Framework\TestCase as UnitTestCase;
+use oat\generis\test\MockObject;
 
-abstract class TestCase extends \PHPUnit_Framework_TestCase
+abstract class TestCase extends UnitTestCase
 {
     /**
      * Forward compatibility function for PHPUnit 7.0
@@ -75,7 +77,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
      * Returns a test double for the specified class.
      *
      * @param string $originalClassName
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      * @throws \PHPUnit_Framework_Exception
      * @since Method available since Release 5.4.0
      */
@@ -95,7 +97,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
      *
      * @param string $originalClassName
      * @param array $methods
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      * @since Method available since Release 5.4.0
      */
     protected function createPartialMock($originalClassName, array $methods = [])
