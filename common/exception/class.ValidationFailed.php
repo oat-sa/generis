@@ -35,7 +35,7 @@ class common_exception_ValidationFailed extends common_exception_BadRequest
     public function __construct($field, $message = null, $code = 0)
     {
         $this->field = $field;
-        if (! $message) {
+        if (!$message) {
             $message = $this->getUserMessage();
         }
         parent::__construct($message, $code);
