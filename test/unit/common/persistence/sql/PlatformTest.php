@@ -22,6 +22,7 @@ namespace oat\generis\test\unit\common\persistence\sql\dbal;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use oat\generis\test\TestCase;
+use oat\generis\test\MockObject;
 
 class PlatformTest extends TestCase
 {
@@ -55,7 +56,7 @@ class PlatformTest extends TestCase
             ->getMockForAbstractClass();
         $dbalPlatform->method('getDateTimeFormatString')->willReturn($format);
 
-        /** @var Connection|\PHPUnit_Framework_MockObject_MockObject $dbalConnection */
+        /** @var Connection|MockObject $dbalConnection */
         $dbalConnection = $this->getMockBuilder(Connection::class)
             ->disableOriginalConstructor()
             ->setMethods(['getDatabasePlatform'])
