@@ -34,8 +34,10 @@ use oat\generis\model\OntologyRdf;
  */
 class core_kernel_users_GenerisUser extends common_user_User implements UserInternalInterface
 {
-
-    private $userResource;
+    /**
+     * @var string identifier of user
+     */
+    private $identifier;
 
     private $cache;
 
@@ -51,14 +53,14 @@ class core_kernel_users_GenerisUser extends common_user_User implements UserInte
 
     public function __construct(core_kernel_classes_Resource $user)
     {
-        $this->userResource = $user;
+        $this->identifier = $user->getUri();
         // load datalanguage to prevent cycle later on
         $this->getPropertyValues(GenerisRdf::PROPERTY_USER_DEFLG);
     }
 
     public function getIdentifier()
     {
-        return $this->userResource->getUri();
+        return $this->identifier;
     }
 
     private function getUserResource()

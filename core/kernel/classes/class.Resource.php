@@ -103,24 +103,13 @@ class core_kernel_classes_Resource
      */
     public function __construct($uri, $debug = '')
     {
-        
-        //we should check using utils if the uri is short or long always use long uri inside the api (nevertheless the api may be called with short )
-        if(!is_string($uri)){
-			
-			if($uri instanceof self){
-				$uri = $uri->getUri();
-			} else {
-				$trace=debug_backtrace();
-				$caller=array_shift($trace);
-
-				throw new common_exception_Error('could not create resource from ' . (is_object($uri) ? get_class($uri) : gettype($uri)).' debug: '.$debug);
-			}
-		}else if(empty($uri)){
-		    
-			throw new common_exception_Error('cannot construct the resource because the uri cannot be empty, debug: '.$debug);
-		}
-		
-		$this->uriResource = $uri;
+        if (empty($uri)) {
+            throw new common_exception_Error('cannot construct the resource because the uri cannot be empty, debug: '.$debug);
+        }
+        if (!is_string($uri) && !$uri instanceof self) {
+            throw new common_exception_Error('could not create resource from ' . (is_object($uri) ? get_class($uri) : gettype($uri)).' debug: '.$debug);
+        }
+        $this->uriResource = $uri instanceof self ? $uri->getUri() : $uri;
     }
 
 
@@ -559,9 +548,7 @@ class core_kernel_classes_Resource
      */
     public function getUsedLanguages( core_kernel_classes_Property $property)
     {
-        $returnValue = array();
-        $returnValue = $this->getImplementation()->getUsedLanguages($this, $property);
-        return (array) $returnValue;
+        return $this->getImplementation()->getUsedLanguages($this, $property);
     }
 
     /**
@@ -576,7 +563,6 @@ class core_kernel_classes_Resource
      */
     public function duplicate($excludedProperties = array())
     {
-        $returnValue = null;
         $returnValue = $this->getImplementation()->duplicate($this, $excludedProperties);
         return $returnValue;
     }

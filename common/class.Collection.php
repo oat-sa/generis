@@ -37,7 +37,7 @@
  */
 
 class common_Collection
-    extends common_Object implements IteratorAggregate
+    extends common_Object implements IteratorAggregate, Countable
 {
     // --- ASSOCIATIONS ---
 
