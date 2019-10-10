@@ -34,8 +34,11 @@ class common_exception_ValidationFailed extends common_exception_BadRequest
 
     public function __construct($field, $message = null, $code = 0)
     {
-        parent::__construct($message, $code);
         $this->field = $field;
+        if (! $message) {
+            $message = printf("Validation for field '%s' has failed.", $field);
+        }
+        parent::__construct($message, $code);
     }
 
     /**
