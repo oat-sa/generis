@@ -34,12 +34,11 @@ class SystemHelper
             self::toBytes(ini_get('post_max_size'))
         ];
 
-        if (($memory_limit = self::toBytes(ini_get('memory_limit'))) !== -1) {
-            $limits[] = $memory_limit;
+        if (ini_get('memory_limit') !== '-1') {
+            $limits[] = self::toBytes(ini_get('memory_limit'));
         }
-        $returnValue = min($limits);
 
-        return $returnValue;
+        return min($limits);
     }
 
 
