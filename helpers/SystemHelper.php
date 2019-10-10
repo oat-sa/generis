@@ -29,14 +29,17 @@ class SystemHelper
      */
     public static function getFileUploadLimit()
     {
+        $limits = [
+            self::toBytes(ini_get('upload_max_filesize')),
+            self::toBytes(ini_get('post_max_size'))
+        ];
 
-        $max_upload = self::toBytes(ini_get('upload_max_filesize'));
-        $max_post = self::toBytes(ini_get('post_max_size'));
-        $memory_limit = self::toBytes(ini_get('memory_limit'));
+        if (($memory_limit = self::toBytes(ini_get('memory_limit'))) !== -1) {
+            $limits[] = $memory_limit;
+        }
+        $returnValue = min($limits);
 
-        $returnValue = min($max_upload, $max_post, $memory_limit);
-
-        return (int)$returnValue;
+        return $returnValue;
     }
 
 
@@ -97,6 +100,6 @@ class SystemHelper
                     $val *= 1024;
             }
         }
-        return $val;
+        return (int)$val;
     }
 }
