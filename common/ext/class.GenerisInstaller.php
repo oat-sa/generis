@@ -17,8 +17,9 @@
  * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
  * 				 2013-2014 (update and modification) Open Assessment Technologies SA;
- * 
  */
+
+use core_kernel_api_ModelFactory as ModelFactory;
 use oat\generis\model\data\ModelManager;
 use oat\generis\model\kernel\persistence\smoothsql\search\ComplexSearchService;
 use oat\oatbox\service\ServiceManager;
@@ -48,16 +49,20 @@ class common_ext_GenerisInstaller extends common_ext_ExtensionInstaller
         }
  
         $this->installLoadDefaultConfig();
+
+        // Id of the writable model.
+        $modelFactory = $this->getServiceManager()->get(ModelFactory::SERVICE_ID);
+        $writableModelId = $modelFactory->getModelId(LOCAL_NAMESPACE);
         
         $model = new \core_kernel_persistence_smoothsql_SmoothModel(array(
             \core_kernel_persistence_smoothsql_SmoothModel::OPTION_PERSISTENCE => 'default',
-            \core_kernel_persistence_smoothsql_SmoothModel::OPTION_READABLE_MODELS => array('1'),
-            \core_kernel_persistence_smoothsql_SmoothModel::OPTION_WRITEABLE_MODELS => array('1'),
-            \core_kernel_persistence_smoothsql_SmoothModel::OPTION_NEW_TRIPLE_MODEL => '1',
+            \core_kernel_persistence_smoothsql_SmoothModel::OPTION_READABLE_MODELS => [$writableModelId],
+            \core_kernel_persistence_smoothsql_SmoothModel::OPTION_WRITEABLE_MODELS => [$writableModelId],
+            \core_kernel_persistence_smoothsql_SmoothModel::OPTION_NEW_TRIPLE_MODEL => $writableModelId,
             \core_kernel_persistence_smoothsql_SmoothModel::OPTION_SEARCH_SERVICE => ComplexSearchService::SERVICE_ID,
             \core_kernel_persistence_smoothsql_SmoothModel::OPTION_CACHE_SERVICE => common_cache_Cache::SERVICE_ID
         ));
-        $model->setServiceLocator(ServiceManager::getServiceManager());
+        $model->setServiceLocator($this->getServiceManager());
         ModelManager::setModel($model);
         
         $this->installOntology();
