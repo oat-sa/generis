@@ -40,7 +40,7 @@ class common_ext_Namespace
      * @access protected
      * @var int
      */
-    protected $modelId = 0;
+    protected $modelId;
 
     /**
      * the namespace URI
@@ -48,122 +48,73 @@ class common_ext_Namespace
      * @access protected
      * @var string
      */
-    protected $uri = '';
+    protected $uri;
 
     // --- OPERATIONS ---
 
     /**
      * Create a namespace instance
      *
-     * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  int id
-     * @param  string uri
-     * @return mixed
+     * @param string|int id
+     * @param string uri
      */
-    public function __construct($id = 0, $uri = '')
+    public function __construct($id, $uri = '')
     {
-        
-        
-    	if($id > 0){
-    		$this->modelId = $id;
-    	}
-    	if(!empty($uri)){
-    		$this->uri = $uri;
-    	}
-    	
-        
+  		$this->modelId = $id;
+   		$this->uri = $uri;
     }
 
     /**
      * Get the identifier of the namespace instance
      *
-     * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @return int
+     * @return string|int
      */
     public function getModelId()
     {
-        $returnValue = (int) 0;
-
-        
-        
-        $returnValue = $this->modelId;
-        
-        
-
-        return (int) $returnValue;
+        return $this->modelId;
     }
 
     /**
      * Get the namespace URI
      *
-     * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @return string
      */
     public function getUri()
     {
-        $returnValue = (string) '';
-
-        
-        
-        $returnValue = $this->uri;
-        
-        
-
-        return (string) $returnValue;
+        return $this->uri;
     }
 
     /**
      * Magic method, return the Namespace URI
      *
-     * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @return string
      */
     public function __toString()
     {
-        $returnValue = (string) '';
-
-        
-        
-        $returnValue = $this->getUri();
-        
-        
-
-        return (string) $returnValue;
+        return $this->getUri();
     }
 
     /**
      * Remove a namespace from the ontology. All triples bound to the model will
      * be removed.
      *
-     * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @return boolean
      */
     public function remove()
     {
-        $returnValue = (bool) false;
-
-        
         $db = core_kernel_classes_DbWrapper::singleton();
-        if (false === $db->exec("DELETE FROM statements WHERE modelid = ?", array($this->getModelId()))){
-        	$returnValue = false;
-        }
-        else{
-        	if (false === $db->exec("DELETE FROM models WHERE modelid = ?", array($this->getModelId()))){
-        		$returnValue = false;
-        	}
-        	else{
-        		$returnValue = true;
-        	}
-        }
-        
-        
 
-        return (bool) $returnValue;
+        // TODO refactor this to use triple store abstraction.
+        if (false === $db->exec("DELETE FROM statements WHERE modelid = ?", array($this->getModelId()))){
+        	return false;
+        }
+
+        // TODO refactor this to use triple store abstraction.
+        if (false === $db->exec("DELETE FROM models WHERE modelid = ?", array($this->getModelId()))){
+            return false;
+        }
+        
+        return true;
     }
 
 }
