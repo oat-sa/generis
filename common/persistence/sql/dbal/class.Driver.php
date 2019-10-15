@@ -18,8 +18,8 @@
  */
 
 /**
- * Dbal Driver
- *
+ * Dbal Driver 
+ * 
  * @author Lionel Lecaque  <lionel@taotesting.com>
  * @license GPLv2
  * @package generis
@@ -41,7 +41,7 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
 
     /**
      * Connect to Dbal
-     *
+     * 
      * @param string $id
      * @param array $params
      * @return common_persistence_Persistence|common_persistence_SqlPersistence
@@ -76,8 +76,8 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
     protected function persistentConnect($connectionParams)
     {
         $config = new \Doctrine\DBAL\Configuration();
-        //          $logger = new Doctrine\DBAL\Logging\EchoSQLLogger();
-        //          $config->setSQLLogger($logger);
+//          $logger = new Doctrine\DBAL\Logging\EchoSQLLogger();
+//          $config->setSQLLogger($logger);
 
         $connLimit = 3; // Max connection attempts.
         $counter = 0; // Connection attempts counter.
@@ -140,7 +140,7 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
     public function getPlatForm(){
         return new common_persistence_sql_Platform($this->getDbalConnection());
     }
-
+    
     /**
      * (non-PHPdoc)
      * @see common_persistence_sql_Driver::getSchemaManager()
@@ -149,8 +149,8 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
     {
         return new common_persistence_sql_dbal_SchemaManager($this->connection->getSchemaManager());
     }
-
-
+    
+   
     /**
      * Execute the statement with provided params
      *
@@ -159,27 +159,24 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
      * @param array $params
      * @return integer number of affected row
      */
-    public function exec($statement, $params = [], array $types = [])
+    public function exec($statement,$params = array())
     {
-        return $this->connection->executeUpdate($statement, $params, $types);
+        return $this->connection->executeUpdate($statement,$params);
     }
-
-
+    
+    
     /**
      * Query  the statement with provided params
-     *
+     * 
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
      * @param mixed $statement
-     * @param array $params
-     * @param array $types
-     *
      * @return \Doctrine\DBAL\Driver\Statement
      */
-    public function query($statement, $params = [], array $types = [])
+    public function query($statement,$params = array())
     {
-        return $this->connection->executeQuery($statement, $params, $types);
+        return $this->connection->executeQuery($statement,$params);
     }
-
+    
     /**
      * Convenience access to PDO::quote.
      *
@@ -191,21 +188,21 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
     public function quote($parameter, $parameter_type = PDO::PARAM_STR){
         return $this->connection->quote($parameter, $parameter_type);
     }
-
-
+    
+    
 
     /**
-     * @inheritdoc
+     * (non-PHPdoc)
+     * @see common_persistence_sql_Driver::insert()
      */
-    public function insert($tableName, array $data, array $types = [])
-    {
-        $cleanColumns = [];
+    public function insert($tableName, array $data){
+        $cleanColumns = array();
         foreach ($data as $columnName => $value) {
             $cleanColumns[$this->getPlatForm()->quoteIdentifier($columnName)] = $value;
         }
-        return $this->connection->insert($tableName, $cleanColumns, $types);
+        return $this->connection->insert($tableName, $cleanColumns);
     }
-
+    
     /**
      * Convenience access to PDO::lastInsertId.
      *
@@ -224,7 +221,7 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
     {
         return $this->connection;
     }
-
+    
     /**
      * Returns the name of the connections database
      * @return string
@@ -233,4 +230,5 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
     {
         return $this->connection->getDatabase();
     }
+    
 }

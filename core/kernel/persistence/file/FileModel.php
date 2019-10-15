@@ -19,13 +19,11 @@
  */
 namespace oat\generis\model\kernel\persistence\file;
 
-use core_kernel_api_ModelFactory as ModelFactory;
 use oat\generis\model\data\Model;
 use \common_ext_NamespaceManager;
 use \common_exception_MissingParameter;
 use \common_exception_Error;
 use oat\generis\model\kernel\persistence\file\FileRdf;
-use oat\oatbox\service\ServiceManager;
 
 /**
  * transitory model for the smooth sql implementation
@@ -123,23 +121,22 @@ class FileModel
         }
         $namespaceUri = (string) $attrs['base'];
         $modelId = null;
-
-        $namespaceManager = common_ext_NamespaceManager::singleton();
-        foreach ($namespaceManager->getAllNamespaces() as $namespace) {
+        foreach (common_ext_NamespaceManager::singleton()->getAllNamespaces() as $namespace) {
             if ($namespace->getUri() == $namespaceUri) {
                 $modelId = $namespace->getModelId();
             }
         }
         if (is_null($modelId)) {
             \common_Logger::d('modelId not found, need to add namespace '. $namespaceUri);
-
-            $serviceManager = ServiceManager::getServiceManager();
-            /** @var ModelFactory $modelFactory */
-            $modelFactory = $serviceManager->get(ModelFactory::SERVICE_ID);
-            $modelId = $modelFactory->addNewModel($namespaceUri);
-            $namespaceManager->reset();
+            
+            //TODO bad way, need to find better
+            $dbWrapper = \core_kernel_classes_DbWrapper::singleton();
+            $results = $dbWrapper->insert('models', array('modeluri' =>$namespaceUri));
+            $result = $dbWrapper->query('select modelid from models where modeluri = ?', array($namespaceUri));
+            $modelId = $result->fetch()['modelid'];
+            common_ext_NamespaceManager::singleton()->reset();
+            
         }
-
         return $modelId;
     }
 }

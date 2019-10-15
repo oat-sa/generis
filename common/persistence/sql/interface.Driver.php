@@ -35,10 +35,9 @@ interface common_persistence_sql_Driver extends common_persistence_Driver
      * 
      * @param string $tableName name of the table
      * @param array $data An associative array containing column-value pairs.
-     * @param array $types
      * @return integer The number of affected rows. 
      */
-    public function insert($tableName, array $data, array $types = []);
+    public function insert($tableName, array $data);
     
     public function insertMultiple($tableName, array $data);
 
