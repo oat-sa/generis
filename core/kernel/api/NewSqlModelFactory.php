@@ -22,6 +22,7 @@ namespace oat\generis\model\kernel\api;
 use core_kernel_api_ModelFactory as ModelFactory;
 use Doctrine\DBAL\Schema\Schema;
 use oat\generis\Helper\UuidPrimaryKeyTrait;
+use RuntimeException;
 
 class NewSqlModelFactory extends ModelFactory
 {
@@ -33,7 +34,10 @@ class NewSqlModelFactory extends ModelFactory
     public function addNewModel($namespace)
     {
         $modelId = $this->getUniquePrimaryKey();
-        $this->dbWrapper->insert('models', ['modelid' => $modelId, 'modeluri' => $namespace]);
+
+        if ($this->getPersistence()->insert('models', ['modelid' => $modelId, 'modeluri' => $namespace]) === 0) {
+            throw new RuntimeException('A problem occurred while creating a new model.');
+        }
         return $modelId;
     }
 
@@ -42,7 +46,7 @@ class NewSqlModelFactory extends ModelFactory
      */
     public function prepareStatement($modelId, $subject, $predicate, $object, $lang, $author)
     {
-        $date = $this->dbWrapper->getPlatForm()->getNowExpression();
+        $date = $this->getPersistence()->getPlatForm()->getNowExpression();
 
         return [
             'id' => $this->getUniquePrimaryKey(),
@@ -51,7 +55,7 @@ class NewSqlModelFactory extends ModelFactory
             'predicate' => $predicate,
             'object' => $object,
             'l_language' => $lang,
-            'author' => is_null($author) ? '' : $author,
+            'author' => $author ?? '',
             'epoch' => $date,
         ];
     }
@@ -84,7 +88,7 @@ class NewSqlModelFactory extends ModelFactory
     public function createModelsTable(Schema $schema)
     {
         $table = $schema->createTable('models');
-        $table->addColumn('modelid', 'string', ['length' => 23, 'notnull' => true]);
+        $table->addColumn('modelid', 'string', ['length' => 36, 'notnull' => true]);
         $table->addColumn('modeluri', 'string', ['length' => 255]);
         $table->setPrimaryKey(['modelid']);
 
@@ -97,7 +101,7 @@ class NewSqlModelFactory extends ModelFactory
     public function createStatementsTable(Schema $schema)
     {
         $table = $schema->createTable('statements');
-        $table->addColumn('id', 'string', ['length' => 23, 'notnull' => true]);
+        $table->addColumn('id', 'string', ['length' => 36, 'notnull' => true]);
         $table->addColumn('modelid', 'string', ['length' => 23, 'notnull' => true]);
         $table->addColumn('subject', 'string', ['length' => 255]);
         $table->addColumn('predicate', 'string', ['length' => 255]);

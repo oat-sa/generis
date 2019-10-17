@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,20 +24,16 @@
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Schema\Table;
+use core_kernel_classes_DbWrapper as DbWrapper;
+use core_kernel_persistence_Exception as PersistenceException;
+use oat\oatbox\log\LoggerAwareTrait;
 
-abstract class core_kernel_api_ModelFactory
+abstract class core_kernel_api_ModelFactory 
 {
+    use LoggerAwareTrait;
+    
     const SERVICE_ID = __CLASS__;
     const DEFAULT_AUTHOR = 'http://www.tao.lu/Ontologies/TAO.rdf#installator';
-
-    /** @var core_kernel_classes_DbWrapper */
-    protected $dbWrapper;
-
-    public function __construct()
-    {
-        // @TODO: inject dbWrapper as a dependency.
-        $this->dbWrapper = core_kernel_classes_DbWrapper::singleton();
-    }
 
     /**
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
@@ -52,7 +47,7 @@ abstract class core_kernel_api_ModelFactory
         }
 
         $query = 'SELECT modelid FROM models WHERE (modeluri = ?)';
-        $results = $this->dbWrapper->query($query, [$namespace]);
+        $results = $this->getPersistence()->query($query, [$namespace]);
 
         return $results->fetchColumn(0);
     }
@@ -63,6 +58,7 @@ abstract class core_kernel_api_ModelFactory
      * @param string $namespace
      *
      * @return string|int new added model id
+     * @throws RuntimeException when a problem occurs when creating the new model in db.
      */
     abstract public function addNewModel($namespace);
 
@@ -76,7 +72,7 @@ abstract class core_kernel_api_ModelFactory
     {
         $modelId = $this->getModelId($namespace);
         if ($modelId === false) {
-            common_Logger::d('modelId not found, need to add namespace ' . $namespace);
+            $this->logInfo('modelId not found, need to add namespace ' . $namespace);
             $modelId = $this->addNewModel($namespace);
         }
         $modelDefinition = new EasyRdf_Graph($namespace);
@@ -121,16 +117,16 @@ abstract class core_kernel_api_ModelFactory
         }
 
         // TODO: refactor this to use a triple store abstraction.
-        $result = $this->dbWrapper->query(
+        $result = $this->getPersistence()->query(
             'SELECT count(*) FROM statements WHERE modelid = ? AND subject = ? AND predicate = ? AND object = ? AND l_language = ?',
             [$modelId, $subject, $predicate, $object, $lang]
         );
 
-        if (intval($result->fetchColumn()) > 0) {
+        if ((int)$result->fetchColumn() > 0) {
             return false;
         }
 
-        return (bool)$this->dbWrapper->insert(
+        return (bool)$this->getPersistence()->insert(
             'statements',
             $this->prepareStatement($modelId, $subject, $predicate, $object, $lang, is_null($author) ? '' : $author)
         );
@@ -155,9 +151,11 @@ abstract class core_kernel_api_ModelFactory
      */
     public function getIteratorQuery($modelIds)
     {
-        return 'SELECT * FROM statements '
-            . (is_null($modelIds) ? '' : 'WHERE ' . $this->buildModelSqlCondition($modelIds) . ' ')
-            . 'ORDER BY ' . $this->getPropertySortingField();
+        $where = '';
+        if ($modelIds !== null) {
+            $where = 'WHERE ' . $this->buildModelSqlCondition($modelIds);
+        }
+        return sprintf('SELECT * FROM statements %s ORDER BY %s', $where, $this->getPropertySortingField());
     }
 
     /**
@@ -194,4 +192,14 @@ abstract class core_kernel_api_ModelFactory
      * @return Table
      */
     abstract public function createStatementsTable(Schema $schema);
+
+    /**
+     * @return DbWrapper
+     * @throws PersistenceException
+     */
+    public function getPersistence()
+    {
+        // @TODO: inject dbWrapper as a dependency.
+        return DbWrapper::singleton();
+    }
 }

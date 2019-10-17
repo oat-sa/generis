@@ -20,10 +20,13 @@
  *               2017 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
 
+use core_kernel_api_ModelFactory as ModelFactory;
+use core_kernel_classes_DbWrapper as DbWrapper;
+use core_kernel_persistence_Exception as PersistenceException;
 use oat\generis\model\OntologyRdf;
 use oat\generis\model\OntologyRdfs;
+use oat\oatbox\log\LoggerAwareTrait;
 use oat\oatbox\service\ServiceManager;
-use core_kernel_api_ModelFactory as ModelFactory;
 
 error_reporting(E_ALL);
 
@@ -46,6 +49,8 @@ class core_kernel_impl_ApiModelOO
     extends core_kernel_impl_Api
         implements core_kernel_api_ApiModel
 {
+    use LoggerAwareTrait;
+    
     /**
      * @var core_kernel_impl_ApiModelOO
      */
@@ -62,25 +67,6 @@ class core_kernel_impl_ApiModelOO
     {
         $serviceManager = ServiceManager::getServiceManager();
         $this->modelFactory = $serviceManager->get(ModelFactory::SERVICE_ID);
-    }
-
-    /**
-     * @author firstname and lastname of author, <author@example.org>
-     * @return core_kernel_impl_ApiModelOO
-     */
-    public static function singleton()
-    {
-        $returnValue = null;
-
-
-        if (!isset(self::$instance)) {
-            $c = __CLASS__;
-            self::$instance = new $c();
-        }
-        $returnValue = self::$instance;
-
-
-        return $returnValue;
     }
 
     /**
@@ -101,7 +87,7 @@ class core_kernel_impl_ApiModelOO
 				$namespace .= "#";
 			}
 
-			$result = $dbWrapper->query('SELECT * FROM "models"  WHERE "modeluri" = ?', array(
+			$result = $this->getPersistence()->query('SELECT * FROM "models"  WHERE "modeluri" = ?', array(
 				$namespace
 			));
 			if ($row = $result->fetch(PDO::FETCH_ASSOC)){
@@ -148,14 +134,10 @@ class core_kernel_impl_ApiModelOO
      */
     public function getResourceDescriptionXML($uriResource)
     {
-        $returnValue = (string) '';
-
+        $returnValue = '';
         
-        
-        
-        
-    	$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-		$subject = $dbWrapper->quote($uriResource);
+    	$persistence = $this->getPersistence();
+		$subject = $persistence->quote($uriResource);
 		
 		$baseNs = array(
 						'xmlns:rdf'		=> 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
@@ -164,8 +146,8 @@ class core_kernel_impl_ApiModelOO
 		
 		$query = 'SELECT "models"."modelid", "models"."modeluri" FROM "models" INNER JOIN "statements" ON "statements"."modelid" = "models"."modelid"
 											WHERE "statements"."subject" = ' . $subject;
-		$query = $dbWrapper->limitStatement($query, 1);
-		$result = $dbWrapper->query($query);
+		$query = $persistence->limitStatement($query, 1);
+		$result = $persistence->query($query);
 		if($row = $result->fetch()){
 			$modelId  = $row['modelid'];
 			$modelUri =  $row['modeluri'];
@@ -180,7 +162,7 @@ class core_kernel_impl_ApiModelOO
 		
 		
 		$allModels = array();
-		$result = $dbWrapper->query('SELECT * FROM "models"');
+		$result = $persistence->query('SELECT * FROM "models"');
 		while($row = $result->fetch(PDO::FETCH_ASSOC)){
 			$allModels[] = $row;
 		}
@@ -208,7 +190,7 @@ class core_kernel_impl_ApiModelOO
 			$description = $dom->createElement('rdf:Description');
 			$description->setAttribute('rdf:about', $uriResource);
 			
-			$result = $dbWrapper->query('SELECT * FROM "statements" WHERE "subject" = ' . $subject);
+			$result = $persistence->query('SELECT * FROM "statements" WHERE "subject" = ' . $subject);
 			while($row = $result->fetch()){
 				
 				$predicate 	= trim($row['predicate']);
@@ -264,23 +246,18 @@ class core_kernel_impl_ApiModelOO
 							}
 						}
 						$description->appendChild($node);
-					}
-					catch(DOMException $de){
-						//print $de;
+					} catch(DOMException $de){
+                        $this->logError($de);
 					}
 				}
 			}
 			$root->appendChild($description);
 			$returnValue = $dom->saveXml();
+		} catch(DomException $e){
+			$this->logError($e);
 		}
-		catch(DomException $e){
-			print $e;
-		}
         
-        
-        
-
-        return (string) $returnValue;
+        return $returnValue;
     }
 
     /**
@@ -292,16 +269,12 @@ class core_kernel_impl_ApiModelOO
      */
     public function getMetaClasses()
     {
-        $returnValue = null;
-
-        
         $returnValue = new core_kernel_classes_ContainerCollection(new core_kernel_classes_Container(__METHOD__),__METHOD__);
         
         $classClass = new core_kernel_classes_Class(OntologyRdfs::RDFS_CLASS);
         foreach($classClass->getSubClasses(true) as $uri => $subClass){
         	$returnValue->add($subClass);
         }
-		
 
         return $returnValue;
     }
@@ -315,17 +288,11 @@ class core_kernel_impl_ApiModelOO
      */
     public function getRootClasses()
     {
-        $returnValue = null;
-
-        
-    
         $returnValue = new core_kernel_classes_ContainerCollection(new core_kernel_classes_Container(__METHOD__),__METHOD__);
-        
-        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
         
         $query =  "SELECT DISTINCT subject FROM statements WHERE (predicate = ? AND object = ?) 
         			AND subject NOT IN (SELECT subject FROM statements WHERE predicate = ?)";
-    	$result	= $dbWrapper->query($query, array(
+    	$result	= $this->getPersistence()->query($query, array(
 			OntologyRdf::RDF_TYPE,
             OntologyRdfs::RDFS_CLASS,
             OntologyRdfs::RDFS_SUBCLASSOF
@@ -335,8 +302,6 @@ class core_kernel_impl_ApiModelOO
        		$returnValue->add(new core_kernel_classes_Class($row['subject']));
         }
 		
-        
-
         return $returnValue;
     }
 
@@ -376,16 +341,10 @@ class core_kernel_impl_ApiModelOO
      */
     public function getAllClasses()
     {
-        $returnValue = null;
-
-        
-    	
         $returnValue = new core_kernel_classes_ContainerCollection(new core_kernel_classes_Container(__METHOD__),__METHOD__);
         
-        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
-        
         $query =  "SELECT DISTINCT subject FROM statements WHERE (predicate = ? AND object = ?) OR predicate = ?";
-    	$result	= $dbWrapper->query($query, array(
+    	$result	= $this->getPersistence()->query($query, array(
 			OntologyRdf::RDF_TYPE,
             OntologyRdfs::RDFS_CLASS,
             OntologyRdfs::RDFS_SUBCLASSOF
@@ -395,8 +354,6 @@ class core_kernel_impl_ApiModelOO
         	$returnValue->add(new core_kernel_classes_Class($row['subject']));
         }
 		
-        
-
         return $returnValue;
     }
 
@@ -411,24 +368,19 @@ class core_kernel_impl_ApiModelOO
      */
     public function getSubject($predicate, $object)
     {
-        $returnValue = null;
-
+        $returnValue = new core_kernel_classes_ContainerCollection(new common_Object(__METHOD__));
         
-		
-		$sqlQuery = "SELECT subject FROM statements WHERE predicate = ? AND object= ? ";
-		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-		$sqlResult = $dbWrapper->query($sqlQuery, array (
+        $query = "SELECT subject FROM statements WHERE predicate = ? AND object= ? ";
+        $sqlResult = $this->getPersistence()->query($query, array (
 			$predicate,
 			$object
 		));
-		$returnValue = new core_kernel_classes_ContainerCollection(new common_Object(__METHOD__));
+
 		while ($row = $sqlResult->fetch()){
 			$container = new core_kernel_classes_Resource($row['subject'], __METHOD__);
 			$container->debug = __METHOD__ ;
 			$returnValue->add($container);
 		}
-
-        
 
         return $returnValue;
     }
@@ -446,23 +398,16 @@ class core_kernel_impl_ApiModelOO
      */
     public function removeStatement($subject, $predicate, $object, $language)
     {
-        $returnValue = (bool) false;
-
-        
-        $dbWrapper 	= core_kernel_classes_DbWrapper::singleton();
-    
         $query = "DELETE FROM statements WHERE subject = ?
         			AND predicate = ? AND object = ?
         			AND (l_language = ? OR l_language = '')";
 
-        $returnValue = $dbWrapper->exec($query, array(
+        $returnValue = $this->getPersistence()->exec($query, array(
        		$subject,
        		$predicate,
        		$object,
        		$language
         ));
-        
-        
 
         return (bool) $returnValue;
     }
@@ -478,16 +423,14 @@ class core_kernel_impl_ApiModelOO
      */
     public function getObject($subject, $predicate)
     {
-        $returnValue = null;
-
+        $returnValue = new core_kernel_classes_ContainerCollection(new common_Object(__METHOD__));
         
     	$sqlQuery = "SELECT object FROM statements WHERE subject = ? AND predicate = ?";
-		$dbWrapper = core_kernel_classes_DbWrapper::singleton();
-		$sqlResult = $dbWrapper->query($sqlQuery, array (
+		$sqlResult = $this->getPersistence()->query($sqlQuery, array (
 			$subject,
 			$predicate
 		));
-		$returnValue = new core_kernel_classes_ContainerCollection(new common_Object(__METHOD__));
+		
 		while ($row = $sqlResult->fetch()){
 			
 			$value = $row['object'];
@@ -500,8 +443,37 @@ class core_kernel_impl_ApiModelOO
 			$container->debug = __METHOD__ ;
 			$returnValue->add($container);
 		}
-        
 
         return $returnValue;
+    }
+
+    /**
+     * Short description of method singleton
+     *
+     * @access public
+     * @author firstname and lastname of author, <author@example.org>
+     * @return core_kernel_impl_ApiModelOO
+     */
+    public static function singleton()
+    {
+        $returnValue = null;
+
+        if (!isset(self::$instance)) {
+            $c = __CLASS__;
+            self::$instance = new $c();
+        }
+        $returnValue = self::$instance;
+
+        return $returnValue;
+    }
+
+    /**
+     * @return DbWrapper
+     * @throws PersistenceException
+     */
+    public function getPersistence()
+    {
+        // @TODO: inject dbWrapper as a dependency.
+        return DbWrapper::singleton();
     }
 }

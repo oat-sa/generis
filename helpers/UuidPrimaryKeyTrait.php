@@ -23,15 +23,17 @@
  */
 namespace oat\generis\Helper;
 
+use Ramsey\Uuid\Uuid;
+
 trait UuidPrimaryKeyTrait
 {
     /**
      * Generates a unique, not auto-increment based, primary key.
-     *
      * @return string
+     * @throws \Exception
      */
     public function getUniquePrimaryKey()
     {
-        return strrev(uniqid('', true));
+        return Uuid::uuid4();
     }
 }

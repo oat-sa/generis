@@ -44,14 +44,31 @@ class core_kernel_persistence_smoothsql_Resource
      * @var core_kernel_persistence_smoothsql_SmoothModel
      */
     private $model;
-    
+
+    /**
+     * core_kernel_persistence_smoothsql_Resource constructor.
+     *
+     * @param core_kernel_persistence_smoothsql_SmoothModel $model
+     */
     public function __construct(core_kernel_persistence_smoothsql_SmoothModel $model) {
-        $this->modelFactory = $this->getServiceLocator()->get(ModelFactory::SERVICE_ID);
         $this->model = $model;
     }
-    
+
+    /**
+     * @return core_kernel_persistence_smoothsql_SmoothModel
+     */
     protected function getModel() {
         return $this->model;
+    }
+
+    /**
+     * @return ModelFactory
+     */
+    protected function getModelFactory() {
+        if ($this->modelFactory === null) {
+            $this->modelFactory = $this->getServiceLocator()->get(ModelFactory::SERVICE_ID);
+        }
+        return $this->modelFactory;
     }
     
     /**
@@ -62,11 +79,11 @@ class core_kernel_persistence_smoothsql_Resource
     }
     
     protected function getModelReadSqlCondition() {
-        return $this->modelFactory->quoteModelSqlCondition($this->model->getReadableModels());
+        return $this->getModelFactory()->buildModelSqlCondition($this->model->getReadableModels());
     }
     
     protected function getModelWriteSqlCondition() {
-        return $this->modelFactory->quoteModelSqlCondition($this->model->getWritableModels());
+        return $this->getModelFactory()->buildModelSqlCondition($this->model->getWritableModels());
     }
     
     protected function getNewTripleModelId() {
@@ -143,7 +160,7 @@ class core_kernel_persistence_smoothsql_Resource
     	
 		if ($one) {
             // Select first only
-			$query .= ' ORDER BY ' . $this->modelFactory->getPropertySortingField() . ' DESC';
+			$query .= ' ORDER BY ' . $this->getModelFactory()->getPropertySortingField() . ' DESC';
 			$query = $platform->limitStatement($query, 1, 0);
 		}
         $result = $this->getPersistence()->query($query,array($resource->getUri(), $property->getUri(), $lang));
@@ -220,7 +237,7 @@ class core_kernel_persistence_smoothsql_Resource
         	}
         }
 
-        return $this->modelFactory->addStatement(
+        return $this->getModelFactory()->addStatement(
             $this->getNewTripleModelId(),
             $resource->getUri(),
             $property->getUri(),
@@ -271,7 +288,7 @@ class core_kernel_persistence_smoothsql_Resource
                 }
                 
                 foreach ($formatedValues as $object) {
-                    $returnValue |= $this->modelFactory->addStatement($modelId, $subject, $property->getUri(), $object, $lang, $author);
+                    $returnValue |= $this->getModelFactory()->addStatement($modelId, $subject, $property->getUri(), $object, $lang, $author);
                 }
             }
         }
@@ -294,7 +311,7 @@ class core_kernel_persistence_smoothsql_Resource
     {
 		$userId = $this->getServiceLocator()->get(SessionService::SERVICE_ID)->getCurrentUser()->getIdentifier();
 
-        return $this->modelFactory->addStatement(
+        return $this->getModelFactory()->addStatement(
             $this->getNewTripleModelId(),
             $resource->getUri(),
             $property->getUri(),
@@ -489,7 +506,7 @@ class core_kernel_persistence_smoothsql_Resource
 
     		foreach ($collection->getIterator() as $triple) {
     			if (!in_array($triple->predicate, $excludedProperties)) {
-                $addedRows |= $this->modelFactory->addStatement(
+                $addedRows |= $this->getModelFactory()->addStatement(
                     $modelId,
                     $newUri,
                     $triple->predicate,

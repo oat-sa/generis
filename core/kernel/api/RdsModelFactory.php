@@ -22,6 +22,7 @@ namespace oat\generis\model\kernel\api;
 
 use core_kernel_api_ModelFactory as ModelFactory;
 use Doctrine\DBAL\Schema\Schema;
+use RuntimeException;
 
 class RdsModelFactory extends ModelFactory
 {
@@ -30,9 +31,15 @@ class RdsModelFactory extends ModelFactory
      */
     public function addNewModel($namespace)
     {
-        $this->dbWrapper->insert('models', ['modeluri' => $namespace]);
-        $result = $this->dbWrapper->query('select modelid from models where modeluri = ?', [$namespace]);
-        return $result->fetch()['modelid'];
+        $persistence = $this->getPersistence();
+        if ($persistence->insert('models', ['modeluri' => $namespace]) === 0) {
+            throw new RuntimeException('A problem occurred while creating a new model.');
+        }
+        
+        // Retrieving the inserted modelid (auto-increment).
+        $result = $persistence->query('select modelid from models where modeluri = ?', [$namespace]);
+        $modelId = $result->fetch();
+        return $modelId['modelid'];
     }
 
     /**
@@ -40,7 +47,7 @@ class RdsModelFactory extends ModelFactory
      */
     public function prepareStatement($modelId, $subject, $predicate, $object, $lang, $author)
     {
-        $date = $this->dbWrapper->getPlatForm()->getNowExpression();
+        $date = $this->getPersistence()->getPlatForm()->getNowExpression();
 
         return [
             'modelid' => $modelId,
@@ -48,7 +55,7 @@ class RdsModelFactory extends ModelFactory
             'predicate' => $predicate,
             'object' => $object,
             'l_language' => $lang,
-            'author' => is_null($author) ? '' : $author,
+            'author' => $author ?? '',
             'epoch' => $date,
         ];
     }
