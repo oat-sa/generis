@@ -24,15 +24,17 @@
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Schema\Table;
-use core_kernel_classes_DbWrapper as DbWrapper;
-use core_kernel_persistence_Exception as PersistenceException;
+use common_persistence_SqlPersistence as Persistence;
+use oat\generis\persistence\PersistenceManager;
 use oat\oatbox\log\LoggerAwareTrait;
+use oat\oatbox\service\ConfigurableService;
 
-abstract class core_kernel_api_ModelFactory 
+abstract class core_kernel_api_ModelFactory extends ConfigurableService
 {
     use LoggerAwareTrait;
     
     const SERVICE_ID = __CLASS__;
+    const OPTION_PERSISTENCE = 'persistence';
     const DEFAULT_AUTHOR = 'http://www.tao.lu/Ontologies/TAO.rdf#installator';
 
     /**
@@ -194,12 +196,13 @@ abstract class core_kernel_api_ModelFactory
     abstract public function createStatementsTable(Schema $schema);
 
     /**
-     * @return DbWrapper
-     * @throws PersistenceException
+     * @return Persistence
      */
     public function getPersistence()
     {
-        // @TODO: inject dbWrapper as a dependency.
-        return DbWrapper::singleton();
+        $persistenceId = $this->hasOption(self::OPTION_PERSISTENCE) ?
+            $this->getOption(self::OPTION_PERSISTENCE)
+            : 'default';
+        return $this->getServiceLocator()->get(PersistenceManager::SERVICE_ID)->getPersistenceById($persistenceId);
     }
 }
