@@ -22,24 +22,28 @@ namespace oat\generis\test\unit;
 use oat\generis\model\data\Model;
 use oat\generis\test\GenerisTestCase;
 use oat\generis\model\data\Ontology;
+use core_kernel_persistence_smoothsql_SmoothModel as SmoothModel;
 /**
  * 
  */
 class OntologyMockTest extends GenerisTestCase
 {
-    public function testModel()
+    /** @var SmoothModel */
+    private $subject;
+    
+    public function setUp()
     {
-        $model = $this->getOntologyMock();
-        $this->assertInstanceOf(Model::class, $model);
-        return $model;
+        $this->subject = $this->getOntologyMock();
     }
 
-    /**
-     * @depends testModel
-     */
-    public function testSetLabel($model)
+    public function testOntologyMockClass()
     {
-        $resource = $model->getResource('http://testing');
+        $this->assertInstanceOf(Model::class, $this->subject);
+    }
+
+    public function testSetLabel()
+    {
+        $resource = $this->subject->getResource('http://testing');
         $this->assertInstanceOf(\core_kernel_classes_Resource::class, $resource);
         $label = $resource->getLabel();
         $this->assertEquals('', $label);
@@ -48,12 +52,9 @@ class OntologyMockTest extends GenerisTestCase
         $this->assertEquals('magic', $label);
     }
 
-    /**
-     * @depends testModel
-     */
-    public function testCreateInstance($model)
+    public function testCreateInstance()
     {
-        $class = $model->getClass('http://testing#class');
+        $class = $this->subject->getClass('http://testing#class');
         $this->assertInstanceOf(\core_kernel_classes_Class::class, $class);
         // with URI
         $resource = $class->createInstance('sample', 'comment', 'http://testing#resource');
@@ -61,15 +62,11 @@ class OntologyMockTest extends GenerisTestCase
         // without URI
         $resource = $class->createInstance('sample');
         $this->assertInstanceOf(\core_kernel_classes_Resource::class, $resource);
-        return $resource;
     }
 
-    /**
-     * @depends testModel
-     */
-    public function testDuplicateInstance(Ontology $model)
+    public function testDuplicateInstance()
     {
-        $class = $model->getClass('http://testing#class');
+        $class = $this->subject->getClass('http://testing#class');
         $this->assertInstanceOf(\core_kernel_classes_Class::class, $class);
         $resource = $class->createInstance('original');
         $this->assertInstanceOf(\core_kernel_classes_Resource::class, $resource);
@@ -79,11 +76,11 @@ class OntologyMockTest extends GenerisTestCase
         $this->assertNotEquals($resource, $resourceClone);
     }
 
-    /**
-     * @depends testCreateInstance
-     */
-    public function testDeleteInstance(\core_kernel_classes_Resource $resource)
+    public function testDeleteInstance()
     {
+        $class = $this->subject->getClass('http://testing#class');
+        $resource = $class->createInstance('sample');
+
         $this->assertTrue($resource->exists());
         $resource->delete();
         $this->assertFalse($resource->exists());
