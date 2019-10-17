@@ -1,22 +1,22 @@
 <?php
-/**
+/**  
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
  * of the License (non-upgradable).
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- *
+ * 
  * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- *
+ * 
  */
 
 /**
@@ -25,94 +25,145 @@
  * @access public
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
  * @package generis
-
+ 
  */
 class common_ext_Namespace
 {
+    // --- ASSOCIATIONS ---
+    // generateAssociationEnd : 
+
+    // --- ATTRIBUTES ---
+
     /**
      * A unique identifier of the namespace
      *
-     * @var string|int
+     * @access protected
+     * @var int
      */
-    protected $modelId;
+    protected $modelId = 0;
 
     /**
      * the namespace URI
      *
+     * @access protected
      * @var string
      */
-    protected $uri;
+    protected $uri = '';
+
+    // --- OPERATIONS ---
 
     /**
-     * Namespace constructor.
+     * Create a namespace instance
      *
+     * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     *
-     * @param  string|int id
+     * @param  int id
      * @param  string uri
+     * @return mixed
      */
-    public function __construct($id, $uri = '')
+    public function __construct($id = 0, $uri = '')
     {
-        $this->modelId = $id;
-        $this->uri = $uri;
+        
+        
+    	if($id > 0){
+    		$this->modelId = $id;
+    	}
+    	if(!empty($uri)){
+    		$this->uri = $uri;
+    	}
+    	
+        
     }
 
     /**
      * Get the identifier of the namespace instance
      *
+     * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @return string|int
+     * @return int
      */
     public function getModelId()
     {
-        return $this->modelId;
+        $returnValue = (int) 0;
+
+        
+        
+        $returnValue = $this->modelId;
+        
+        
+
+        return (int) $returnValue;
     }
 
     /**
      * Get the namespace URI
      *
+     * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @return string
      */
     public function getUri()
     {
-        return $this->uri;
+        $returnValue = (string) '';
+
+        
+        
+        $returnValue = $this->uri;
+        
+        
+
+        return (string) $returnValue;
     }
 
     /**
      * Magic method, return the Namespace URI
      *
+     * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @return string
      */
     public function __toString()
     {
-        return $this->getUri();
+        $returnValue = (string) '';
+
+        
+        
+        $returnValue = $this->getUri();
+        
+        
+
+        return (string) $returnValue;
     }
 
     /**
      * Remove a namespace from the ontology. All triples bound to the model will
      * be removed.
      *
+     * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     *
      * @return boolean
-     * @throws core_kernel_persistence_Exception
      */
     public function remove()
     {
+        $returnValue = (bool) false;
+
+        
         $db = core_kernel_classes_DbWrapper::singleton();
-
-        // TODO refactor this to use triple store abstraction.
-        if (false === $db->exec("DELETE FROM statements WHERE modelid = ?", [$this->getModelId()])) {
-            return false;
+        if (false === $db->exec("DELETE FROM statements WHERE modelid = ?", array($this->getModelId()))){
+        	$returnValue = false;
         }
-
-        // TODO refactor this to use triple store abstraction.
-        if (false === $db->exec("DELETE FROM models WHERE modelid = ?", [$this->getModelId()])) {
-            return false;
+        else{
+        	if (false === $db->exec("DELETE FROM models WHERE modelid = ?", array($this->getModelId()))){
+        		$returnValue = false;
+        	}
+        	else{
+        		$returnValue = true;
+        	}
         }
+        
+        
 
-        return true;
+        return (bool) $returnValue;
     }
+
 }

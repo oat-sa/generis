@@ -27,7 +27,7 @@ trait common_persistence_sql_MultipleOperations
     /** @var common_persistence_sql_UpdateMultiple */
     private $updateMultiple = null;
 
-    public function insertMultiple($tableName, array $data, array $types = [])
+    public function insertMultiple($tableName, array $data)
     {
         if (is_array($data) && count($data) > 0) {
 
@@ -51,7 +51,7 @@ trait common_persistence_sql_MultipleOperations
 
             $query .= implode(', ', $valuesQueries);
 
-            return $this->exec($query, $allValues, $types);
+            return $this->exec($query, $allValues);
         } else {
             return 0;
         }
