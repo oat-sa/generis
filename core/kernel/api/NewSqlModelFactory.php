@@ -33,7 +33,7 @@ class NewSqlModelFactory extends ModelFactory
      */
     public function addNewModel($namespace)
     {
-        $modelId = $this->getUniquePrimaryKey();
+        $modelId = md5($namespace);
 
         if ($this->getPersistence()->insert('models', ['modelid' => $modelId, 'modeluri' => $namespace]) === 0) {
             throw new RuntimeException('A problem occurred while creating a new model.');
