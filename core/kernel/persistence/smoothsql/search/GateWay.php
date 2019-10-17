@@ -98,11 +98,9 @@ class GateWay extends TaoSearchGateWay {
     }
 
     /**
-     * 
-     * @param \PDOStatement $statement
      * @return array
      */
-    protected function statementToArray(\PDOStatement $statement) {
+    protected function statementToArray($statement) {
         $result = [];
         while($row = $statement->fetch(\PDO::FETCH_OBJ)) {
             $result[] = $row;
