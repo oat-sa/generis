@@ -20,16 +20,19 @@
  * @license GPLv2
  * @package tao
  */
+
 namespace oat\generis\persistence\sql;
 
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use oat\oatbox\log\LoggerAwareTrait;
+use oat\oatbox\service\ConfigurableService;
 use Psr\Log\LoggerAwareInterface;
 use Doctrine\DBAL\Schema\Schema;
 use oat\generis\model\kernel\persistence\smoothsql\install\SmoothRdsModel;
 use Doctrine\DBAL\Exception\ConnectionException;
+use common_persistence_SqlPersistence as Persistence;
 
-class SetupDb implements LoggerAwareInterface
+class SetupDb extends ConfigurableService implements LoggerAwareInterface
 {
     use LoggerAwareTrait;
 
@@ -38,7 +41,7 @@ class SetupDb implements LoggerAwareInterface
      * @param \common_persistence_SqlPersistence $p
      * @throws \common_exception_InconsistentData
      */
-    public function setupDatabase(\common_persistence_SqlPersistence $p)
+    public function setupDatabase(Persistence $p)
     {
         $dbalDriver = $p->getDriver();
         if (!$dbalDriver instanceof \common_persistence_sql_dbal_Driver) {
@@ -50,10 +53,7 @@ class SetupDb implements LoggerAwareInterface
         $this->setupTables($p);
     }
 
-    /**
-     * @author "Lionel Lecaque, <lionel@taotesting.com>"
-     */
-    private function verifyDatabase(\common_persistence_SqlPersistence $p, $dbName)
+    private function verifyDatabase(Persistence $p, $dbName)
     {
         $schemaManager = $p->getSchemaManager()->getDbalSchemaManager();
         if (!$this->dbExists($schemaManager, $dbName)) {
@@ -61,10 +61,7 @@ class SetupDb implements LoggerAwareInterface
         }
     }
 
-    /**
-     * @author "Lionel Lecaque, <lionel@taotesting.com>"
-     */
-    private function setupTables(\common_persistence_SqlPersistence $p)
+    private function setupTables(Persistence $p)
     {
         $queries = $p->getPlatForm()->schemaToSql($this->getSchema($p));
         foreach ($queries as $query){
@@ -76,10 +73,11 @@ class SetupDb implements LoggerAwareInterface
      * Generate databse schema
      * @return Schema
      */
-    public function getSchema(\common_persistence_SqlPersistence $p)
+    public function getSchema(Persistence $p)
     {
         $schema = $p->getSchemaManager()->createSchema();
-        SmoothRdsModel::addSmoothTables($schema);
+        $smoothRdsModel = $this->getServiceLocator()->get(SmoothRdsModel::class); 
+        $smoothRdsModel->addSmoothTables($schema);
         $this->addKeyValueStoreTable($schema);
         return $schema;
     }
@@ -99,8 +97,9 @@ class SetupDb implements LoggerAwareInterface
     }
 
     /**
-     * @author "Lionel Lecaque, <lionel@taotesting.com>"
+     * @param AbstractSchemaManager $schemaManager
      * @param string $dbName
+     * @return bool
      */
     private function dbExists(AbstractSchemaManager $schemaManager, $dbName)
     {
@@ -112,10 +111,7 @@ class SetupDb implements LoggerAwareInterface
         }
     }
 
-    /**
-     * @author "Lionel Lecaque, <lionel@taotesting.com>"
-     */
-    private function cleanDb(\common_persistence_SqlPersistence $p)
+    private function cleanDb(Persistence $p)
     {
         $schema = $p->getSchemaManager()->createSchema();
         $queries = $p->getPlatForm()->toDropSql($schema);

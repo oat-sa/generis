@@ -16,31 +16,22 @@
  * 
  * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- * 				 2013-2014 (update and modification) Open Assessment Technologies SA;
- * 
+ * 				 2013-2019 (update and modification) Open Assessment Technologies SA;
  */
+
 use core_kernel_api_ModelFactory as ModelFactory;
 use oat\generis\model\data\ModelManager;
 use oat\generis\model\kernel\persistence\smoothsql\search\ComplexSearchService;
-use oat\oatbox\service\ServiceManager;
 
 /**
  * Custom extension installer for generis
- *
- * @access public
- * @author Joel Bout, <joel.bout@tudor.lu>
- * @package generis
- *         
  */
 class common_ext_GenerisInstaller extends common_ext_ExtensionInstaller
 {
-
     /**
      * Setup the ontology configuration
-     *
-     * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
      * @return mixed
+     * @throws common_ext_ExtensionException
      */
     public function install()
     {
@@ -51,6 +42,7 @@ class common_ext_GenerisInstaller extends common_ext_ExtensionInstaller
         $this->installLoadDefaultConfig();
 
         // Id of the writable model.
+        /** @var ModelFactory $modelFactory */
         $modelFactory = $this->getServiceManager()->get(ModelFactory::SERVICE_ID);
         $writableModelId = $modelFactory->getModelId(LOCAL_NAMESPACE);
 
