@@ -18,6 +18,7 @@
  *
  */
 
+use core_kernel_api_ModelFactory as ModelFactory;
 use oat\generis\model\data\RdfInterface;
 use oat\generis\model\OntologyRdf;
 use oat\generis\model\OntologyRdfs;
@@ -63,8 +64,18 @@ class core_kernel_persistence_smoothsql_SmoothRdf
         if (!in_array($triple->modelid, $this->model->getReadableModels())) {
             $this->model->addReadableModel($triple->modelid);
         }
-        $query = "INSERT INTO statements ( modelId, subject, predicate, object, l_language, epoch, author) VALUES ( ? , ? , ? , ? , ? , ?, ?);";
-        $success = $this->getPersistence()->exec($query, array($triple->modelid, $triple->subject, $triple->predicate, $triple->object, is_null($triple->lg) ? '' : $triple->lg, $this->getPersistence()->getPlatForm()->getNowExpression(), is_null($triple->author) ? '' : $triple->author));
+        
+        /** @var ModelFactory $modelFactory */
+        $modelFactory = $this->getServiceManager()->get(ModelFactory::SERVICE_ID);
+        $success = $modelFactory->addStatement(
+            $triple->modelid, 
+            $triple->subject, 
+            $triple->predicate, 
+            $triple->object, 
+            $triple->lg ?? '', 
+            $triple->author ?? ''
+        );
+
         if ($triple->predicate == OntologyRdfs::RDFS_SUBCLASSOF || $triple->predicate == OntologyRdf::RDF_TYPE) {
             $eventManager = $this->getServiceManager()->get(EventManager::CONFIG_ID);
             $eventManager->trigger(new ResourceCreated(new core_kernel_classes_Resource($triple->subject)));

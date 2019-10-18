@@ -18,6 +18,9 @@
  *
  */
 
+use core_kernel_api_ModelFactory as ModelFactory;
+use Zend\ServiceManager\ServiceLocatorAwareTrait;
+
 /**
  * Iterator over all triples
  * 
@@ -27,16 +30,18 @@
 class core_kernel_persistence_smoothsql_SmoothIterator
     extends common_persistence_sql_QueryIterator
 {
+    use ServiceLocatorAwareTrait;
+    
     /**
      * Constructor of the iterator expecting the model ids
      * 
+     * @param common_persistence_SqlPersistence $persistence
      * @param array $modelIds
      */
     public function __construct(common_persistence_SqlPersistence $persistence, $modelIds = null) {
-        $query = 'SELECT * FROM statements '
-            .(is_null($modelIds) ? '' : 'WHERE modelid IN ('.implode(',', $modelIds).') ')
-            .'ORDER BY id';
-        parent::__construct($persistence, $query);
+        /** @var ModelFactory $modelFactory */
+        $modelFactory = $this->getServiceLocator()->get(ModelFactory::SERVICE_ID);
+        parent::__construct($persistence, $modelFactory->getIteratorQuery($modelIds));
     }
     
     /**
@@ -46,7 +51,8 @@ class core_kernel_persistence_smoothsql_SmoothIterator
      */
     function current() {
         $statement = parent::current();
-        
+
+        // TODO: create a constructor
         $triple = new core_kernel_classes_Triple();
         $triple->modelid = $statement["modelid"];
         $triple->subject = $statement["subject"];

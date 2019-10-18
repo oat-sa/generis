@@ -19,6 +19,8 @@
  */
 namespace oat\generis\test;
 
+use core_kernel_api_ModelFactory as ModelFactory;
+use oat\generis\model\kernel\api\RdsModelFactory;
 use oat\generis\model\kernel\persistence\smoothsql\install\SmoothRdsModel;
 use oat\oatbox\user\UserLanguageServiceInterface;
 use oat\oatbox\session\SessionService;
@@ -43,10 +45,7 @@ class GenerisTestCase extends TestCase
         $rds = $pm->getPersistenceById('mockSql');
         $schema = $rds->getSchemaManager()->createSchema();
         $schema = SmoothRdsModel::addSmoothTables($schema);
-        $queries = $rds->getPlatform()->schemaToSql($schema);
-        foreach ($queries as $query){
-            $rds->query($query);
-        }
+        $smoothRdsModel = new SmoothRdsModel();
         
         $session = new \common_session_AnonymousSession();
         $sl = $this->getServiceLocatorMock([
@@ -56,6 +55,7 @@ class GenerisTestCase extends TestCase
             EventManager::SERVICE_ID => new EventManager(),
             LoggerService::SERVICE_ID => $this->prophesize(LoggerInterface::class)->reveal(),
             UriProvider::SERVICE_ID => new Bin2HexUriProvider([Bin2HexUriProvider::OPTION_NAMESPACE => 'http://ontology.mock/bin2hex#']),
+            ModelFactory::SERVICE_ID => new RdsModelFactory(),
             'smoothcache' => new \common_cache_NoCache()
         ]);
         $session->setServiceLocator($sl);
@@ -67,7 +67,13 @@ class GenerisTestCase extends TestCase
             'cache' => 'smoothcache'
         ]);
         $model->setServiceLocator($sl);
-
+        $smoothRdsModel->setServiceLocator($sl);
+        $schema = $smoothRdsModel->addSmoothTables($schema);
+        $queries = $rds->getPlatform()->schemaToSql($schema);
+        foreach ($queries as $query){
+            $rds->query($query);
+        }
+        
         return $model;
     }
 
