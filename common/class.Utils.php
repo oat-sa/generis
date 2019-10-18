@@ -73,13 +73,16 @@ class common_Utils
                 $returnValue[] = self::toResource($val);
             }
             return $returnValue;
-        } else {
-            if (common_Utils::isUri($value)) {
-                return new core_kernel_classes_Resource($value);
+        }
+        if (self::isUri($value)) {
+            $resource = new core_kernel_classes_Resource($value);
+            if ($resource->exists()) {
+                return $resource;
             } else {
                 return new core_kernel_classes_Literal($value);
             }
         }
+        return new core_kernel_classes_Literal($value);
     }
 
     /**
