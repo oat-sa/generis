@@ -586,7 +586,7 @@ class core_kernel_classes_Resource
 
 
     /**
-     * Short description of method __toString
+     * Return uri of a resource when casting to string
      *
      * @access public
      * @author Joel Bout, <joel.bout@tudor.lu>
@@ -594,7 +594,7 @@ class core_kernel_classes_Resource
      */
     public function __toString()
     {
-        return $this->getUri()."\n" . $this->getLabel() ;
+        return $this->getUri();
     }
 
     /**
