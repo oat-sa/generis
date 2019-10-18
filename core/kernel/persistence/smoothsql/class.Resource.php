@@ -34,7 +34,6 @@ use oat\generis\model\kernel\uri\UriProvider;
  * @package generis
  */
 class core_kernel_persistence_smoothsql_Resource
-    extends core_kernel_persistence_PersistenceImpl
     implements core_kernel_persistence_ResourceInterface
 {
     /** @var ModelFactory */
