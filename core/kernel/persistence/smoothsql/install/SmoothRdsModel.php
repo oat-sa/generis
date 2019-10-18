@@ -37,7 +37,7 @@ class SmoothRdsModel
     {
         // Models table.
         $table = $schema->createTable('models');
-        $table->addColumn('modelid', 'string', ['length' => 23, 'notnull' => true]);
+        $table->addColumn('modelid', 'string', ['length' => 36, 'notnull' => true]);
         $table->addColumn('modeluri', 'string', ['length' => 255]);
         $table->setPrimaryKey(['modelid']);
         $table->addOption('engine' , 'MyISAM');

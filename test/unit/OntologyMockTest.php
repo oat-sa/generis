@@ -21,6 +21,7 @@ namespace oat\generis\test\unit;
 
 use oat\generis\model\data\Model;
 use oat\generis\test\GenerisTestCase;
+use oat\generis\model\data\Ontology;
 /**
  * 
  */
@@ -54,9 +55,28 @@ class OntologyMockTest extends GenerisTestCase
     {
         $class = $model->getClass('http://testing#class');
         $this->assertInstanceOf(\core_kernel_classes_Class::class, $class);
+        // with URI
         $resource = $class->createInstance('sample', 'comment', 'http://testing#resource');
         $this->assertInstanceOf(\core_kernel_classes_Resource::class, $resource);
+        // without URI
+        $resource = $class->createInstance('sample');
+        $this->assertInstanceOf(\core_kernel_classes_Resource::class, $resource);
         return $resource;
+    }
+
+    /**
+     * @depends testModel
+     */
+    public function testDuplicateInstance(Ontology $model)
+    {
+        $class = $model->getClass('http://testing#class');
+        $this->assertInstanceOf(\core_kernel_classes_Class::class, $class);
+        $resource = $class->createInstance('original');
+        $this->assertInstanceOf(\core_kernel_classes_Resource::class, $resource);
+        $resourceClone = $resource->duplicate();
+        $this->assertInstanceOf(\core_kernel_classes_Resource::class, $resourceClone);
+        $this->assertEquals($resource->getLabel(), $resourceClone->getLabel());
+        $this->assertNotEquals($resource, $resourceClone);
     }
 
     /**

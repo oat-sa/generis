@@ -1,5 +1,4 @@
 <?php
-use oat\generis\model\kernel\uri\UriProvider;
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -18,11 +17,14 @@ use oat\generis\model\kernel\uri\UriProvider;
  * Copyright (c) 2015 (original work) Open Assessment Technologies SA;
  *
  */
+use oat\generis\model\kernel\uri\UriProvider;
+use oat\oatbox\service\ServiceManager;
 
 /**
- * Iterates over a class(es) and its subclasses 
+ * Provides backward compatibility to generates a URI
  * 
  * @author Joel Bout <joel@taotesting.com>
+ * @deprecated
  */
 class core_kernel_uri_UriService
 {
@@ -58,8 +60,8 @@ class core_kernel_uri_UriService
      */
     public function setUriProvider(UriProvider $provider)
     {
-        $this->uriProvider = $provider; 
-        common_ext_ExtensionsManager::singleton()->getExtensionById('generis')->setConfig(self::CONFIG_KEY, $provider);
+        $this->uriProvider = $provider;
+        ServiceManager::getServiceManager()->register(UriProvider::SERVICE_ID, $provider);
     }
     
     /**
@@ -70,7 +72,7 @@ class core_kernel_uri_UriService
     public function getUriProvider()
     {
         if (is_null($this->uriProvider)) {
-            $this->uriProvider = common_ext_ExtensionsManager::singleton()->getExtensionById('generis')->getConfig(self::CONFIG_KEY);
+            $this->uriProvider = ServiceManager::getServiceManager()->get(UriProvider::SERVICE_ID);
         }
         return $this->uriProvider;
     }

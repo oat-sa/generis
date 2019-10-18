@@ -21,9 +21,10 @@
 namespace oat\generis\test\integration;
 
 
+use oat\generis\test\TestCase;
 use oat\oatbox\BasicRegistry;
 
-class RegistryTest extends \PHPUnit_Framework_TestCase
+class RegistryTest extends TestCase
 {
     /**
      *
