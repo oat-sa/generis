@@ -476,5 +476,10 @@ class Updater extends common_ext_ExtensionUpdater
             $this->setVersion('12.4.1');
         }
         $this->skip('12.4.1', '12.5.2');
+        if ($this->isVersion('12.5.2')) {
+            // not sure about what to do in here.
+
+            $this->setVersion('12.6.0');
+        }
     }
 }

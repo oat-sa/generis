@@ -150,31 +150,30 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
         return new common_persistence_sql_dbal_SchemaManager($this->connection->getSchemaManager());
     }
     
-   
     /**
      * Execute the statement with provided params
      *
-     * @author "Lionel Lecaque, <lionel@taotesting.com>"
      * @param mixed $statement
      * @param array $params
+     * @param array $types
      * @return integer number of affected row
      */
-    public function exec($statement,$params = array())
+    public function exec($statement, $params = [], array $types = [])
     {
-        return $this->connection->executeUpdate($statement,$params);
+        return $this->connection->executeUpdate($statement, $params, $types);
     }
-    
     
     /**
      * Query  the statement with provided params
      * 
-     * @author "Lionel Lecaque, <lionel@taotesting.com>"
      * @param mixed $statement
+     * @param array $params
+     * @param array $types
      * @return \Doctrine\DBAL\Driver\Statement
      */
-    public function query($statement,$params = array())
+    public function query($statement, $params = [], array $types = [])
     {
-        return $this->connection->executeQuery($statement,$params);
+        return $this->connection->executeQuery($statement, $params, $types);
     }
     
     /**
@@ -189,18 +188,16 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
         return $this->connection->quote($parameter, $parameter_type);
     }
     
-    
-
     /**
-     * (non-PHPdoc)
-     * @see common_persistence_sql_Driver::insert()
+     * @inheritdoc
      */
-    public function insert($tableName, array $data){
+    public function insert($tableName, array $data, array $types = [])
+    {
         $cleanColumns = array();
         foreach ($data as $columnName => $value) {
             $cleanColumns[$this->getPlatForm()->quoteIdentifier($columnName)] = $value;
         }
-        return $this->connection->insert($tableName, $cleanColumns);
+        return $this->connection->insert($tableName, $cleanColumns, $types);
     }
     
     /**
