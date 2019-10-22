@@ -41,11 +41,11 @@ class GenerisTestCase extends TestCase
      */
     protected function getOntologyMock()
     {
+        $smoothRdsModel = new SmoothRdsModel();
         $pm = $this->getSqlMock('mockSql');
         $rds = $pm->getPersistenceById('mockSql');
         $schema = $rds->getSchemaManager()->createSchema();
-        $schema = SmoothRdsModel::addSmoothTables($schema);
-        $smoothRdsModel = new SmoothRdsModel();
+        $schema = $smoothRdsModel->addSmoothTables($schema);
         
         $session = new \common_session_AnonymousSession();
         $sl = $this->getServiceLocatorMock([
