@@ -21,6 +21,7 @@
  * @author 
  */
 
+use Doctrine\DBAL\DBALException;
 /**
  * Persistence base on SQL
  */
@@ -32,6 +33,7 @@ class common_persistence_SqlPersistence extends common_persistence_Persistence
      * @param array $params
      * @param array $types
      * @return int number of updated rows
+     * @throws DBALException
      */
     public function exec($statement, array $params = [], array $types = [])
     {
@@ -60,6 +62,7 @@ class common_persistence_SqlPersistence extends common_persistence_Persistence
      * @param array $data
      * @param array $types
      * @return int number of updated rows
+     * @throws DBALException
      */
     public function insert($tableName, array $data, array $types = [])
     {
@@ -96,6 +99,7 @@ class common_persistence_SqlPersistence extends common_persistence_Persistence
      * @param string $statement
      * @param array $params
      * @return \Doctrine\DBAL\Driver\Statement
+     * @throws DBALException
      */
     public function query($statement, $params = [], array $types = [])
     {
