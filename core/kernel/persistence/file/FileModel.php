@@ -19,10 +19,12 @@
  */
 namespace oat\generis\model\kernel\persistence\file;
 
+use common_exception_Error;
+use common_exception_MissingParameter;
+use common_ext_NamespaceManager;
+use core_kernel_api_ModelFactory as ModelFactory;
+use oat\oatbox\service\ServiceManager;
 use oat\generis\model\data\Model;
-use \common_ext_NamespaceManager;
-use \common_exception_MissingParameter;
-use \common_exception_Error;
 use oat\generis\model\kernel\persistence\file\FileRdf;
 
 /**
@@ -114,6 +116,8 @@ class FileModel
      * @throws common_exception_Error
      */
     public static function getModelIdFromXml($file) {
+        $serviceManager = ServiceManager::getServiceManager();
+        
         $xml = simplexml_load_file($file);
         $attrs = $xml->attributes('xml', true);
         if(!isset($attrs['base']) || empty($attrs['base'])){
@@ -121,21 +125,20 @@ class FileModel
         }
         $namespaceUri = (string) $attrs['base'];
         $modelId = null;
-        foreach (common_ext_NamespaceManager::singleton()->getAllNamespaces() as $namespace) {
+        
+        $namespaceManager = common_ext_NamespaceManager::singleton();
+        foreach ($namespaceManager->getAllNamespaces() as $namespace) {
             if ($namespace->getUri() == $namespaceUri) {
                 $modelId = $namespace->getModelId();
             }
         }
         if (is_null($modelId)) {
             \common_Logger::d('modelId not found, need to add namespace '. $namespaceUri);
-            
-            //TODO bad way, need to find better
-            $dbWrapper = \core_kernel_classes_DbWrapper::singleton();
-            $results = $dbWrapper->insert('models', array('modeluri' =>$namespaceUri));
-            $result = $dbWrapper->query('select modelid from models where modeluri = ?', array($namespaceUri));
-            $modelId = $result->fetch()['modelid'];
-            common_ext_NamespaceManager::singleton()->reset();
-            
+
+            /** @var ModelFactory $modelFactory */
+            $modelFactory = $serviceManager->get(ModelFactory::SERVICE_ID);
+            $modelId = $modelFactory->addNewModel($namespaceUri);
+            $namespaceManager->reset();
         }
         return $modelId;
     }
