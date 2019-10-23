@@ -22,6 +22,7 @@ namespace   oat\generis\model\kernel\persistence\smoothsql\install;
 use core_kernel_api_ModelFactory as ModelFactory;
 use Doctrine\DBAL\Schema\Schema;
 use oat\oatbox\service\ConfigurableService;
+use oat\oatbox\service\ServiceManager;
 
 /**
  * Helper to setup the required tables for generis smoothsql
@@ -36,7 +37,7 @@ class SmoothRdsModel extends ConfigurableService
     public function addSmoothTables(Schema $schema)
     {
         /** @var ModelFactory $modelFactory */
-        $modelFactory = $this->getServiceLocator()->get(ModelFactory::SERVICE_ID);
+        $modelFactory = ServiceManager::getServiceManager()->get(ModelFactory::SERVICE_ID);
         $modelFactory->createModelsTable($schema);
         $modelFactory->createStatementsTable($schema);
         return $schema;

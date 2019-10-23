@@ -34,7 +34,7 @@ abstract class core_kernel_api_ModelFactory extends ConfigurableService {
 
     use LoggerAwareTrait;
         
-    const SERVICE_ID = __CLASS__;
+    const SERVICE_ID = 'generis/modelFactory';
     const OPTION_PERSISTENCE = 'persistence';
     const DEFAULT_AUTHOR = 'http://www.tao.lu/Ontologies/TAO.rdf#installator';
 
@@ -75,7 +75,7 @@ abstract class core_kernel_api_ModelFactory extends ConfigurableService {
 
         $modelId = $this->getModelId($namespace);
         if($modelId === false){
-            $this->logInfo('modelId not found, need to add namespace '. $namespace);
+            // $this->logInfo('modelId not found, need to add namespace '. $namespace);
             $modelId = $this->addNewModel($namespace);
         }
         $modelDefinition = new EasyRdf_Graph($namespace);

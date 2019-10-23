@@ -79,7 +79,7 @@ class SetupDb extends ConfigurableService implements LoggerAwareInterface
      */
     public function getSchema(\common_persistence_SqlPersistence $p)
     {
-        $smoothRdsModel = new SmoothRdsModel();
+        $smoothRdsModel = $this->getServiceLocator()->get(SmoothRdsModel::class);
         $schema = $p->getSchemaManager()->createSchema();
         $smoothRdsModel->addSmoothTables($schema);
         $this->addKeyValueStoreTable($schema);
