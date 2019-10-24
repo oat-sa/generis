@@ -34,6 +34,6 @@ trait UuidPrimaryKeyTrait
      */
     public function getUniquePrimaryKey()
     {
-        return Uuid::uuid4();
+        return (string)Uuid::uuid4();
     }
 }
