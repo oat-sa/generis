@@ -23,6 +23,8 @@
  */
 namespace oat\generis\Helper;
 
+use Ramsey\Uuid\Uuid;
+
 trait UuidPrimaryKeyTrait
 {
     /**
@@ -32,6 +34,6 @@ trait UuidPrimaryKeyTrait
      */
     public function getUniquePrimaryKey()
     {
-        return strrev(uniqid('', true));
+        return (string)Uuid::uuid4();
     }
 }
