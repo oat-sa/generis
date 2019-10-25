@@ -44,9 +44,9 @@ class SmoothRdsModel
 
         // Statements table.
         $table = $schema->createTable('statements');
-        $table->addColumn('id', 'string', ['length' => 23, 'notnull' => true]);
+        $table->addColumn('id', 'string', ['length' => 36, 'notnull' => true]);
 
-        $table->addColumn('modelid', 'string', ['length' => 23, 'notnull' => true]);
+        $table->addColumn('modelid', 'string', ['length' => 36, 'notnull' => true]);
         $table->addColumn('subject', 'string', ['length' => 255]);
         $table->addColumn('predicate', 'string', ['length' => 255]);
         $table->addColumn('object', 'text');
