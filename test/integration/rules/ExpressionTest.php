@@ -23,8 +23,9 @@ use oat\generis\model\RulesRdf;
  * 
  */
 
+use oat\generis\test\TestCase;
 
-class ExpressionTest extends \PHPUnit_Framework_TestCase
+class ExpressionTest extends TestCase
 {
 
     public function testEvaluate(){

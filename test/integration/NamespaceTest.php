@@ -28,7 +28,10 @@
  * @package generis
  
  */
-class NamespaceTest extends \PHPUnit_Framework_TestCase
+
+use oat\generis\test\TestCase;
+
+class NamespaceTest extends TestCase
 {
 	
 	public function setUp(){

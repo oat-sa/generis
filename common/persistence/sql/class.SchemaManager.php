@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,6 +38,7 @@ abstract class common_persistence_sql_SchemaManager {
     
     /**
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
+     * @return Doctrine\DBAL\Schema\AbstractSchemaManager;
      */
     protected abstract function getSchemaManager();
     
@@ -116,6 +116,14 @@ abstract class common_persistence_sql_SchemaManager {
         $index = new \Doctrine\DBAL\Schema\Index($indexName,array_keys($columns));
         $table = new \Doctrine\DBAL\Schema\Table($tableName);
         $this->getSchemaManager()->createIndex($index,$table);
+    }
+
+    /**
+     * @return Doctrine\DBAL\Schema\AbstractSchemaManager;
+     */
+    public function getDbalSchemaManager()
+    {
+        return $this->getSchemaManager();
     }
 
     /**

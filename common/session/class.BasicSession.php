@@ -35,10 +35,14 @@ use oat\oatbox\Refreshable;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use oat\oatbox\user\UserLanguageServiceInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
 class common_session_BasicSession implements common_session_Session, ServiceLocatorAwareInterface
 {
-    use ServiceLocatorAwareTrait;
+    use ServiceLocatorAwareTrait {
+        setServiceLocator as protected setOriginalServiceLocator;
+    }
+
     /**
      * @var common_user_User
      */
@@ -139,5 +143,18 @@ class common_session_BasicSession implements common_session_Session, ServiceLoca
         if( $this->user instanceof Refreshable ){
             $this->user->refresh();
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see \Zend\ServiceManager\ServiceLocatorAwareInterface::setServiceLocator()
+     * propagate to user
+     */
+    public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
+    {
+        if ($this->user instanceof ServiceLocatorAwareInterface) {
+            $this->user->setServiceLocator($serviceLocator);
+        }
+        return $this->setOriginalServiceLocator($serviceLocator);
     }
 }

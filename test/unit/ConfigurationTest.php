@@ -98,7 +98,7 @@ class ConfigurationTest extends TestCase
         $this->assertTrue($php->isOptional());
 
         // max & min test.
-        $php = new \common_configuration_PHPRuntime('5.3', '7.2.x');
+        $php = new \common_configuration_PHPRuntime('5.3', '7.3.x');
         $report = $php->check();
 
         $this->assertEquals($report->getStatus(), \common_configuration_Report::VALID);
@@ -160,7 +160,7 @@ class ConfigurationTest extends TestCase
         // We consider that if there is no version information but the extension
         // is loaded, the report is always valid even if min and/or max version(s)
         // are specified.
-        $ext = new \common_configuration_PHPExtension(null, null, 'hash');
+        $ext = new \common_configuration_PHPExtension(null, null, 'json');
         $report = $ext->check();
         $this->assertEquals($report->getStatus(), \common_configuration_Report::VALID);
 
@@ -309,7 +309,7 @@ class ConfigurationTest extends TestCase
 
     public function testComponentFactory()
     {
-        $component = \common_configuration_ComponentFactory::buildPHPRuntime('5.0', '7.2.x', true);
+        $component = \common_configuration_ComponentFactory::buildPHPRuntime('5.0', '7.3.x', true);
         $this->assertInstanceOf(\common_configuration_PHPRuntime::class, $component);
         $this->assertEquals($component->getMin(), '5.0');
         // 5.5.x will be replaced internally
@@ -352,7 +352,7 @@ class ConfigurationTest extends TestCase
         $this->assertInstanceOf(\common_configuration_Report::class, $report);
         $this->assertEquals($report->getStatus(), \common_configuration_Report::VALID);
 
-        $array = array('type' => 'PHPRuntime', 'value' => array('min' => '5.0', 'max' => '7.2.x', 'optional' => true));
+        $array = array('type' => 'PHPRuntime', 'value' => array('min' => '5.0', 'max' => '7.3.x', 'optional' => true));
         $component = \common_configuration_ComponentFactory::buildFromArray($array);
         $this->assertInstanceOf(\common_configuration_PHPRuntime::class, $component);
         $this->assertEquals($component->getMin(), '5.0');
