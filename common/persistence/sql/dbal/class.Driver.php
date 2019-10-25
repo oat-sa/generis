@@ -17,6 +17,8 @@
  * Copyright (c) 2013 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
 
+use Doctrine\DBAL\DBALException;
+
 /**
  * Dbal Driver 
  * 
@@ -45,7 +47,7 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
      * @param string $id
      * @param array $params
      * @return common_persistence_Persistence|common_persistence_SqlPersistence
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws DBALException
      */
     public function connect($id, array $params)
     {
@@ -71,7 +73,7 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
      * Endless connection
      *
      * @param $connectionParams
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws DBALException
      */
     protected function persistentConnect($connectionParams)
     {
@@ -106,7 +108,7 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
      * @param $config
      * @return \Doctrine\DBAL\Connection
      *
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws DBALException
      *
      */
     private function getConnection($params, $config)
@@ -150,31 +152,32 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
         return new common_persistence_sql_dbal_SchemaManager($this->connection->getSchemaManager());
     }
     
-   
     /**
      * Execute the statement with provided params
      *
-     * @author "Lionel Lecaque, <lionel@taotesting.com>"
      * @param mixed $statement
      * @param array $params
+     * @param array $types
      * @return integer number of affected row
+     * @throws DBALException;
      */
-    public function exec($statement,$params = array())
+    public function exec($statement, $params = [], array $types = [])
     {
-        return $this->connection->executeUpdate($statement,$params);
+        return $this->connection->executeUpdate($statement, $params, $types);
     }
-    
     
     /**
      * Query  the statement with provided params
      * 
-     * @author "Lionel Lecaque, <lionel@taotesting.com>"
      * @param mixed $statement
+     * @param array $params
+     * @param array $types
      * @return \Doctrine\DBAL\Driver\Statement
+     * @throws DBALException;
      */
-    public function query($statement,$params = array())
+    public function query($statement, $params = [], array $types = [])
     {
-        return $this->connection->executeQuery($statement,$params);
+        return $this->connection->executeQuery($statement, $params, $types);
     }
     
     /**
@@ -189,18 +192,18 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
         return $this->connection->quote($parameter, $parameter_type);
     }
     
-    
-
     /**
      * (non-PHPdoc)
      * @see common_persistence_sql_Driver::insert()
+     * @throws DBALException;
      */
-    public function insert($tableName, array $data){
+    public function insert($tableName, array $data, array $types = [])
+    {
         $cleanColumns = array();
         foreach ($data as $columnName => $value) {
             $cleanColumns[$this->getPlatForm()->quoteIdentifier($columnName)] = $value;
         }
-        return $this->connection->insert($tableName, $cleanColumns);
+        return $this->connection->insert($tableName, $cleanColumns, $types);
     }
     
     /**

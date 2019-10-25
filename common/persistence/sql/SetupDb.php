@@ -22,14 +22,15 @@
  */
 namespace oat\generis\persistence\sql;
 
+use Doctrine\DBAL\Exception\ConnectionException;
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
-use oat\oatbox\log\LoggerAwareTrait;
-use Psr\Log\LoggerAwareInterface;
 use Doctrine\DBAL\Schema\Schema;
 use oat\generis\model\kernel\persistence\smoothsql\install\SmoothRdsModel;
-use Doctrine\DBAL\Exception\ConnectionException;
+use oat\oatbox\log\LoggerAwareTrait;
+use oat\oatbox\service\ConfigurableService;
+use Psr\Log\LoggerAwareInterface;
 
-class SetupDb implements LoggerAwareInterface
+class SetupDb extends ConfigurableService implements LoggerAwareInterface
 {
     use LoggerAwareTrait;
 
@@ -78,8 +79,9 @@ class SetupDb implements LoggerAwareInterface
      */
     public function getSchema(\common_persistence_SqlPersistence $p)
     {
+        $smoothRdsModel = $this->getServiceLocator()->get(SmoothRdsModel::class);
         $schema = $p->getSchemaManager()->createSchema();
-        SmoothRdsModel::addSmoothTables($schema);
+        $smoothRdsModel->addSmoothTables($schema);
         $this->addKeyValueStoreTable($schema);
         return $schema;
     }

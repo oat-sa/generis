@@ -21,12 +21,22 @@
  * @package generis
  *
  */
+
+use Doctrine\DBAL\DBALException;
+
 interface common_persistence_sql_Driver extends common_persistence_Driver
 {
-    
-    public function query($statement,$params);
-    
-    public function exec($statement,$params);
+    /**
+     * @inheritdoc
+     * @throws DBALException;
+     */
+    public function query($statement,$params, array $types = []);
+
+    /**
+     * @inheritdoc
+     * @throws DBALException;
+     */
+    public function exec($statement,$params, array $types = []);
     
     /**
      * Insert a single row into the database.
@@ -35,9 +45,10 @@ interface common_persistence_sql_Driver extends common_persistence_Driver
      * 
      * @param string $tableName name of the table
      * @param array $data An associative array containing column-value pairs.
-     * @return integer The number of affected rows. 
+     * @return integer The number of affected rows.
+     * @throws DBALException
      */
-    public function insert($tableName, array $data);
+    public function insert($tableName, array $data, array $types = []);
     
     public function insertMultiple($tableName, array $data);
 
