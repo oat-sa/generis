@@ -23,6 +23,7 @@ namespace oat\oatbox\log\logger;
 use Monolog\Formatter\FormatterInterface;
 use Monolog\Handler\HandlerInterface;
 use Monolog\Logger;
+use oat\oatbox\log\LoggerService;
 use oat\oatbox\service\ConfigurableService;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LoggerTrait;
@@ -41,6 +42,7 @@ class TaoMonolog extends ConfigurableService implements LoggerInterface
     use LoggerTrait;
 
     const HANDLERS_OPTION = 'handlers';
+    private const OPTION_NAME = 'name';
 
     /** @var Logger null  */
     protected $logger = null;
@@ -60,13 +62,18 @@ class TaoMonolog extends ConfigurableService implements LoggerInterface
         $this->logger->log($level, $message, $context);
     }
 
+    public function getName(): string
+    {
+        return $this->getOption(self::OPTION_NAME) ?? LoggerService::DEFAULT_CHANNEL;
+    }
+
     /**
      * @return Logger
      * @throws \common_configuration_ComponentFactoryException
      */
     protected function buildLogger()
     {
-        $logger = new Logger($this->getOption('name'));
+        $logger = new Logger($this->getName());
 
         if ($this->hasOption(self::HANDLERS_OPTION)) {
             foreach ($this->getOption(self::HANDLERS_OPTION) as $handlerOptions) {

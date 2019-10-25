@@ -20,6 +20,7 @@
 
 namespace oat\oatbox\log;
 
+use oat\oatbox\log\logger\TaoMonolog;
 use oat\oatbox\service\ConfigurableService;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LoggerTrait;
@@ -29,98 +30,87 @@ class LoggerService extends ConfigurableService implements LoggerInterface
 {
     use LoggerTrait;
 
-    const SERVICE_ID = 'generis/log';
+    public const SERVICE_ID = 'generis/log';
+    public const DEFAULT_CHANNEL = 'tao';
+    private const OPTION_LOGGERS = 'loggers';
+    private const OPTION_CLASS = 'class';
+    private const OPTION_OPTIONS = 'options';
+    private const OPTION_NAME = 'name';
 
-    const LOGGER_OPTION = 'logger';
-
-    /** @var LoggerInterface */
-    protected $logger;
+    /** @var LoggerInterface[] */
+    private $loggers = [];
 
     /**
-     * Add a Psr3 logger to LoggerService instance
-     * Previous and new logger are encapsulated into a LoggerAggregator
-     *
-     * @param LoggerInterface $logger
-     * @return LoggerAggregator|LoggerInterface
+     * Register the given PSR-3 logger into the defined channel.
+     * Previous and new logger are encapsulated into a LoggerAggregator.
      */
-    public function addLogger(LoggerInterface $logger)
+    public function addLogger(LoggerInterface $logger, string $channel = null): LoggerInterface
     {
-        if ($this->isLoggerLoaded() && !($this->logger instanceof NullLogger)) {
-            $logger = new LoggerAggregator([$logger, $this->logger]);
+        $channel = $channel ?? self::DEFAULT_CHANNEL;
+
+        if (!($this->loggers[$channel] instanceof NullLogger)) {
+            $this->loggers[$channel] = new LoggerAggregator([$logger, $this->loggers[$channel]]);
         }
-        $this->logger = $logger;
-        return $logger;
+
+        return $this->loggers[$channel];
+    }
+
+    public function getLogger(string $channel = null): LoggerInterface
+    {
+        if ($this->loggers === []) {
+            $this->loadLoggers();
+        }
+
+        return $this->loggers[$channel] ?? $this->loggers[self::DEFAULT_CHANNEL];
     }
 
     /**
-     * Get the logger
-     *
-     * @return LoggerInterface
+     * Logs to the default channel
      */
-    public function getLogger()
-    {
-        if (!$this->isLoggerLoaded()) {
-            $this->loadLogger();
-        }
-        return $this->logger;
-    }
-
-    /**
-     * Wrap a log to built logger
-     *
-     * @param mixed $level
-     * @param string $message
-     * @param array $context
-     */
-    public function log($level, $message, array $context = array())
+    public function log($level, $message, array $context = []): void
     {
         $this->getLogger()->log($level, $message, $context);
     }
 
-    /**
-     * Load the logger from configuration
-     *
-     * If options does not contain any Psr3 Logger, NullLogger is set by default
-     *
-     * @return LoggerInterface
-     */
-    protected function loadLogger()
+    private function loadLoggers(): void
     {
-        $logger = null;
-        if ($this->hasOption(self::LOGGER_OPTION)) {
-            $loggerOptions = $this->getOption(self::LOGGER_OPTION);
-            if (is_object($loggerOptions)) {
-                if (is_a($loggerOptions, LoggerInterface::class)) {
-                    $logger = $loggerOptions;
-                }
-            } elseif (is_array($loggerOptions) && isset($loggerOptions['class'])) {
-                $classname = $loggerOptions['class'];
-                if (is_a($classname, LoggerInterface::class, true)) {
-                    if (isset($loggerOptions['options'])) {
-                        $logger = new $classname($loggerOptions['options']);
-                    } else {
-                        $logger = new $classname();
-                    }
-                }
+        foreach ($this->getOption(self::OPTION_LOGGERS) ?? [] as $logger) {
+            if ($logger instanceof TaoMonolog) {
+                $this->registerLogger($logger, $logger->getName());
+                continue;
             }
-        }
 
-        if (!is_null($logger)) {
-            $this->logger = $logger;
-        } else {
-            $this->logger = new NullLogger();
-        }
+            if ($logger instanceof LoggerInterface) {
+                $channel = method_exists($logger, 'getName') ? $logger->getName() : self::DEFAULT_CHANNEL;
 
-        return $this->logger;
+                $this->registerLogger($logger, $channel);
+                continue;
+            }
+
+            if (!is_array($logger)) {
+                throw new \LogicException('Logger options must be an array');
+            }
+
+            if (!array_key_exists(self::OPTION_CLASS, $logger)) {
+                throw new \LogicException('No class defined for logger');
+            }
+
+            if (!is_a($logger[self::OPTION_CLASS], LoggerInterface::class, true)) {
+                throw new \LogicException(sprintf('Logger class must implement %s', LoggerInterface::class));
+            }
+
+            $channel = $logger[self::OPTION_OPTIONS][self::OPTION_NAME] ?? self::DEFAULT_CHANNEL;
+
+            $this->registerLogger(new $logger[self::OPTION_CLASS]($logger[self::OPTION_OPTIONS]), $channel);
+        }
     }
 
-    /**
-     * Check if the logger is loaded from configuration
-     *
-     * @return bool
-     */
-    protected function isLoggerLoaded()
+    private function registerLogger(LoggerInterface $logger, string $channel): void
     {
-        return $this->logger instanceof LoggerInterface;
+        if (array_key_exists($channel, $this->loggers)) {
+            $this->loggers[$channel] = new LoggerAggregator([$logger, $this->loggers[$channel]]);
+        } else {
+            $this->loggers[$channel] = $logger;
+        }
     }
 }

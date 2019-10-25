@@ -15,7 +15,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2016 (original work) Open Assessment Technologies SA
- * 
+ *
  */
 
 namespace oat\oatbox\log;
@@ -49,64 +49,54 @@ trait LoggerAwareTrait
      *
      * @return \Psr\Log\LoggerInterface
      */
-    public function getLogger()
+    public function getLogger(string $channel = null)
     {
-        if ($this->logger instanceof LoggerInterface) {
-            return $this->logger;
-        }
         if ($this instanceof ServiceLocatorAwareInterface) {
             $logger = $this->getServiceLocator()->get(LoggerService::SERVICE_ID);
         } else {
             $logger = ServiceManager::getServiceManager()->get(LoggerService::SERVICE_ID);
         }
-        return ($logger instanceof LoggerInterface) ? $logger : new NullLogger();
+
+        return $logger->getLogger($channel) !== null ? $logger->getLogger($channel) : new NullLogger();
     }
 
-    // Helpers
-    
-    /**
-     * Logs an emergency
-     * 
-     * @param string $message
-     * @param array $context
-     */
-    public function logEmergency($message, $context = array())
+    public function logEmergency(string $message, array $context = [], string $channel = null): void
     {
-        $this->getLogger()->emergency($message, $context);
+        $this->getLogger($channel)->emergency($message, $context);
     }
-    
-    public function logAlert($message, $context = array())
+
+    public function logAlert(string $message, array $context = [], string $channel = null): void
     {
-        $this->getLogger()->alert($message, $context);
+        $this->getLogger($channel)->alert($message, $context);
     }
-    
-    public function logCritical($message, $context = array())
+
+    public function logCritical(string $message, array $context = [], string $channel = null): void
     {
-        $this->getLogger()->critical($message, $context);
+        $this->getLogger($channel)->critical($message, $context);
     }
-    
-    public function logError($message, $context = array())
+
+    public function logError(string $message, array $context = [], string $channel = null): void
     {
-        $this->getLogger()->error($message, $context);
+        $this->getLogger($channel)->error($message, $context);
     }
-    
-    public function logWarning($message, $context = array())
+
+    public function logWarning(string $message, array $context = [], string $channel = null): void
     {
-        $this->getLogger()->warning($message, $context);
+        $this->getLogger($channel)->warning($message, $context);
     }
-    
-    public function logNotice($message, $context = array())
+
+    public function logNotice(string $message, array $context = [], string $channel = null): void
     {
-        $this->getLogger()->notice($message, $context);
+        $this->getLogger($channel)->notice($message, $context);
     }
-    
-    public function logInfo($message, $context = array())
+
+    public function logInfo(string $message, array $context = [], string $channel = null): void
     {
-        $this->getLogger()->info($message, $context);
+        $this->getLogger($channel)->info($message, $context);
     }
-    
-    public function logDebug($message, $context = array())
+
+    public function logDebug(string $message, array $context = [], string $channel = null): void
     {
-        $this->getLogger()->debug($message, $context);
+        $this->getLogger($channel)->debug($message, $context);
     }
 }
