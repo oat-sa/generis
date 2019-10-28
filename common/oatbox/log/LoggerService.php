@@ -32,6 +32,7 @@ class LoggerService extends ConfigurableService implements LoggerInterface
 
     public const SERVICE_ID = 'generis/log';
     public const DEFAULT_CHANNEL = 'tao';
+    private const OPTION_LOGGER = 'logger';
     private const OPTION_LOGGERS = 'loggers';
     private const OPTION_CLASS = 'class';
     private const OPTION_OPTIONS = 'options';
@@ -58,6 +59,11 @@ class LoggerService extends ConfigurableService implements LoggerInterface
     public function getLogger(string $channel = null): LoggerInterface
     {
         if ($this->loggers === []) {
+            // To keep backward compatibility, "logger" key must be supported also
+            if ($this->hasOption(self::OPTION_LOGGER)) {
+                $this->loadLogger($this->getOption(self::OPTION_LOGGER));
+            }
+
             $this->loadLoggers();
         }
 
@@ -75,34 +81,39 @@ class LoggerService extends ConfigurableService implements LoggerInterface
     private function loadLoggers(): void
     {
         foreach ($this->getOption(self::OPTION_LOGGERS) ?? [] as $logger) {
-            if ($logger instanceof TaoMonolog) {
-                $this->registerLogger($logger, $logger->getName());
-                continue;
-            }
-
-            if ($logger instanceof LoggerInterface) {
-                $channel = method_exists($logger, 'getName') ? $logger->getName() : self::DEFAULT_CHANNEL;
-
-                $this->registerLogger($logger, $channel);
-                continue;
-            }
-
-            if (!is_array($logger)) {
-                throw new \LogicException('Logger options must be an array');
-            }
-
-            if (!array_key_exists(self::OPTION_CLASS, $logger)) {
-                throw new \LogicException('No class defined for logger');
-            }
-
-            if (!is_a($logger[self::OPTION_CLASS], LoggerInterface::class, true)) {
-                throw new \LogicException(sprintf('Logger class must implement %s', LoggerInterface::class));
-            }
-
-            $channel = $logger[self::OPTION_OPTIONS][self::OPTION_NAME] ?? self::DEFAULT_CHANNEL;
-
-            $this->registerLogger(new $logger[self::OPTION_CLASS]($logger[self::OPTION_OPTIONS]), $channel);
+            $this->loadLogger($logger);
         }
+    }
+
+    private function loadLogger($logger): void
+    {
+        if ($logger instanceof TaoMonolog) {
+            $this->registerLogger($logger, $logger->getName());
+            return;
+        }
+
+        if ($logger instanceof LoggerInterface) {
+            $channel = method_exists($logger, 'getName') ? $logger->getName() : self::DEFAULT_CHANNEL;
+
+            $this->registerLogger($logger, $channel);
+            return;
+        }
+
+        if (!is_array($logger)) {
+            throw new \LogicException('Logger options must be an array');
+        }
+
+        if (!array_key_exists(self::OPTION_CLASS, $logger)) {
+            throw new \LogicException('No class defined for logger');
+        }
+
+        if (!is_a($logger[self::OPTION_CLASS], LoggerInterface::class, true)) {
+            throw new \LogicException(sprintf('Logger class must implement %s', LoggerInterface::class));
+        }
+
+        $channel = $logger[self::OPTION_OPTIONS][self::OPTION_NAME] ?? self::DEFAULT_CHANNEL;
+
+        $this->registerLogger(new $logger[self::OPTION_CLASS]($logger[self::OPTION_OPTIONS]), $channel);
     }
 
     private function registerLogger(LoggerInterface $logger, string $channel): void
