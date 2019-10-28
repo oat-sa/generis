@@ -98,7 +98,7 @@ class common_persistence_SqlKvDriver implements common_persistence_KvDriver
             } else {
                 $statement = 'UPDATE kv_store SET kv_value = :data , kv_time = :time WHERE kv_id = :id';
                 $returnValue = $this->sqlPeristence->exec($statement, $params, ['data' => ParameterType::STRING, 'time' => ParameterType::INTEGER, 'id' => ParameterType::STRING]);
-                if (0 == $returnValue) {
+                if (0 === $returnValue) {
                     $returnValue = $this->sqlPeristence->insert('kv_store',
                         ['kv_id' => $id, 'kv_time' => $expire, 'kv_value' => $encoded],
                         ['kv_id' => ParameterType::STRING, 'kv_time' => ParameterType::INTEGER, 'kv_value' => ParameterType::STRING]);
