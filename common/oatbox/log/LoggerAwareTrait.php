@@ -32,32 +32,29 @@ use Zend\ServiceManager\ServiceLocatorAwareInterface;
  */
 trait LoggerAwareTrait
 {
+    /** @var LoggerInterface */
     private $logger;
 
-    /**
-     * Set a new logger
-     *
-     * @param LoggerInterface $logger
-     */
     public function setLogger(LoggerInterface $logger)
     {
         $this->logger = $logger;
     }
 
-    /**
-     * Get the logger based on service manager
-     *
-     * @return \Psr\Log\LoggerInterface
-     */
     public function getLogger(string $channel = null)
     {
+        if ($this->logger instanceof LoggerInterface) {
+            return $this->logger;
+        }
+
         if ($this instanceof ServiceLocatorAwareInterface) {
             $logger = $this->getServiceLocator()->get(LoggerService::SERVICE_ID);
         } else {
             $logger = ServiceManager::getServiceManager()->get(LoggerService::SERVICE_ID);
         }
 
-        return $logger->getLogger($channel) !== null ? $logger->getLogger($channel) : new NullLogger();
+        return $logger->getLogger($channel) !== null && $logger->getLogger($channel) instanceof LoggerInterface
+            ? $logger->getLogger($channel)
+            : new NullLogger();
     }
 
     public function logEmergency(string $message, array $context = [], string $channel = null)

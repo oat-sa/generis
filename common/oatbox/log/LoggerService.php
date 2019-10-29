@@ -49,15 +49,19 @@ class LoggerService extends ConfigurableService implements LoggerInterface
     {
         $channel = $channel ?? self::DEFAULT_CHANNEL;
 
-        if (!($this->loggers[$channel] instanceof NullLogger)) {
-            $this->loggers[$channel] = new LoggerAggregator([$logger, $this->loggers[$channel]]);
+        if (!array_key_exists($channel, $this->loggers)) {
+            $this->loggers[$channel] = new NullLogger();
         }
+
+        $this->loggers[$channel] = new LoggerAggregator([$logger, $this->loggers[$channel]]);
 
         return $this->loggers[$channel];
     }
 
     public function getLogger(string $channel = null): LoggerInterface
     {
+        $channel = $channel ?? self::DEFAULT_CHANNEL;
+
         if ($this->loggers === []) {
             // To keep backward compatibility, "logger" key must be supported also
             if ($this->hasOption(self::OPTION_LOGGER)) {
@@ -67,7 +71,11 @@ class LoggerService extends ConfigurableService implements LoggerInterface
             $this->loadLoggers();
         }
 
-        return $this->loggers[$channel] ?? $this->loggers[self::DEFAULT_CHANNEL];
+        if (array_key_exists($channel, $this->loggers) && $this->loggers[$channel] instanceof LoggerInterface) {
+            return $this->loggers[$channel];
+        }
+
+        return new NullLogger();
     }
 
     /**
