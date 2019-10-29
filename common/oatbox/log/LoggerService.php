@@ -45,7 +45,7 @@ class LoggerService extends ConfigurableService implements LoggerInterface
      * Register the given PSR-3 logger into the defined channel.
      * Previous and new logger are encapsulated into a LoggerAggregator.
      */
-    public function addLogger(LoggerInterface $logger, string $channel = null): LoggerInterface
+    public function addLogger(LoggerInterface $logger, string $channel = null)
     {
         $channel = $channel ?? self::DEFAULT_CHANNEL;
 
@@ -118,10 +118,8 @@ class LoggerService extends ConfigurableService implements LoggerInterface
 
     private function registerLogger(LoggerInterface $logger, string $channel): void
     {
-        if (array_key_exists($channel, $this->loggers)) {
-            $this->loggers[$channel] = new LoggerAggregator([$logger, $this->loggers[$channel]]);
-        } else {
-            $this->loggers[$channel] = $logger;
-        }
+        $this->loggers[$channel] = array_key_exists($channel, $this->loggers)
+            ? new LoggerAggregator([$logger, $this->loggers[$channel]])
+            : $this->loggers[$channel] = $logger;
     }
 }

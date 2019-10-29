@@ -62,6 +62,11 @@ class TaoMonolog extends ConfigurableService implements LoggerInterface
         $this->logger->log($level, $message, $context);
     }
 
+    public function getLogger(): LoggerInterface
+    {
+        return $this->logger;
+    }
+
     public function getName(): string
     {
         return $this->getOption(self::OPTION_NAME) ?? LoggerService::DEFAULT_CHANNEL;

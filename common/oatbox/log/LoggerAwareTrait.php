@@ -60,42 +60,42 @@ trait LoggerAwareTrait
         return $logger->getLogger($channel) !== null ? $logger->getLogger($channel) : new NullLogger();
     }
 
-    public function logEmergency(string $message, array $context = [], string $channel = null): void
+    public function logEmergency(string $message, array $context = [], string $channel = null)
     {
         $this->getLogger($channel)->emergency($message, $context);
     }
 
-    public function logAlert(string $message, array $context = [], string $channel = null): void
+    public function logAlert(string $message, array $context = [], string $channel = null)
     {
         $this->getLogger($channel)->alert($message, $context);
     }
 
-    public function logCritical(string $message, array $context = [], string $channel = null): void
+    public function logCritical(string $message, array $context = [], string $channel = null)
     {
         $this->getLogger($channel)->critical($message, $context);
     }
 
-    public function logError(string $message, array $context = [], string $channel = null): void
+    public function logError(string $message, array $context = [], string $channel = null)
     {
         $this->getLogger($channel)->error($message, $context);
     }
 
-    public function logWarning(string $message, array $context = [], string $channel = null): void
+    public function logWarning(string $message, array $context = [], string $channel = null)
     {
         $this->getLogger($channel)->warning($message, $context);
     }
 
-    public function logNotice(string $message, array $context = [], string $channel = null): void
+    public function logNotice(string $message, array $context = [], string $channel = null)
     {
         $this->getLogger($channel)->notice($message, $context);
     }
 
-    public function logInfo(string $message, array $context = [], string $channel = null): void
+    public function logInfo(string $message, array $context = [], string $channel = null)
     {
         $this->getLogger($channel)->info($message, $context);
     }
 
-    public function logDebug(string $message, array $context = [], string $channel = null): void
+    public function logDebug(string $message, array $context = [], string $channel = null)
     {
         $this->getLogger($channel)->debug($message, $context);
     }
