@@ -36,7 +36,6 @@ trait FileSystemWrapperTrait
         return $this->getFileSystem()->has($this->getFullPath($path));
     }
 
-
     /**
      * (non-PHPdoc)
      * @see \League\Flysystem\FilesystemInterface::read()
@@ -234,13 +233,22 @@ trait FileSystemWrapperTrait
         return $this->getFileSystem()->get($this->getFullPath($path), $handler);
     }
 
-
     /**
      * (non-PHPdoc)
      * @see \League\Flysystem\FilesystemInterface::addPlugin()
      */
     public function addPlugin(PluginInterface $plugin) {
         return $this->getFileSystem()->addPlugin($plugin);
+    }
+
+    /**
+     * Checks if a file exists and can be written to
+     *
+     * @param string $path
+     * @return bool
+     */
+    public function isWriteable($path) {
+        return is_writable($this->getFullPath($path));
     }
 
     /**

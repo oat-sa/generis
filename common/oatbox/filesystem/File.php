@@ -140,11 +140,15 @@ class File extends FileSystemHandler
     public function update($mixed, $mimeType = null)
     {
         if (!$this->exists()) {
-            throw new \FileNotFoundException('File "' . $this->getPrefix() . '" not found."');
+            throw new \FileNotFoundException(sprintf('File "%s" not found."', $this->getPrefix()));
+        }
+
+        if (!$this->isWriteable()) {
+            throw new FileNotWritableException(sprintf('Unable to write to file "%s"', $this->getPrefix()));
         }
 
         \common_Logger::i('Writting in ' . $this->getPrefix());
-        $config = (is_null($mimeType)) ? [] : ['ContentType' => $mimeType];
+        $config = $mimeType === null ? [] : ['ContentType' => $mimeType];
 
         if (is_string($mixed)) {
             return $this->getFileSystem()->update($this->getPrefix(), $mixed, $config);
@@ -262,6 +266,16 @@ class File extends FileSystemHandler
         } catch (FileNotFoundException $e) {
         }
         return false;
+    }
+
+    /**
+     * Check if $this file exists and is writeable
+     *
+     * @return bool
+     */
+    public function isWriteable()
+    {
+        return $this->getFileSystem()->isWriteable($this->getPrefix());
     }
 
     /**
