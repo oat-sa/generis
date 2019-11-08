@@ -33,9 +33,10 @@ class core_kernel_persistence_smoothsql_SmoothIterator
      * @param array $modelIds
      */
     public function __construct(common_persistence_SqlPersistence $persistence, $modelIds = null) {
+        // TODO: refactor this to use a triple store abstraction.
         $query = 'SELECT * FROM statements '
-            .(is_null($modelIds) ? '' : 'WHERE modelid IN ('.implode(',', $modelIds).') ')
-            .'ORDER BY id';
+            .(is_null($modelIds) ? '' : 'WHERE modelid IN ("'.implode('","', $modelIds).'") ')
+            .'ORDER BY epoch';
         parent::__construct($persistence, $query);
     }
     
@@ -46,7 +47,8 @@ class core_kernel_persistence_smoothsql_SmoothIterator
      */
     function current() {
         $statement = parent::current();
-        
+
+        // TODO: create a constructor
         $triple = new core_kernel_classes_Triple();
         $triple->modelid = $statement["modelid"];
         $triple->subject = $statement["subject"];

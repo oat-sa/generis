@@ -18,9 +18,9 @@
  */
 
 /**
- * Dbal Driver 
- * 
- * @author Lionel Lecaque  <lionel@taotesting.com>
+ * Dbal Driver
+ *
+ * @author  Lionel Lecaque  <lionel@taotesting.com>
  * @license GPLv2
  * @package generis
  *
@@ -41,9 +41,10 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
 
     /**
      * Connect to Dbal
-     * 
+     *
      * @param string $id
-     * @param array $params
+     * @param array  $params
+     *
      * @return common_persistence_Persistence|common_persistence_SqlPersistence
      * @throws \Doctrine\DBAL\DBALException
      */
@@ -71,13 +72,14 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
      * Endless connection
      *
      * @param $connectionParams
+     *
      * @throws \Doctrine\DBAL\DBALException
      */
     protected function persistentConnect($connectionParams)
     {
         $config = new \Doctrine\DBAL\Configuration();
-//          $logger = new Doctrine\DBAL\Logging\EchoSQLLogger();
-//          $config->setSQLLogger($logger);
+        //          $logger = new Doctrine\DBAL\Logging\EchoSQLLogger();
+        //          $config->setSQLLogger($logger);
 
         $connLimit = 3; // Max connection attempts.
         $counter = 0; // Connection attempts counter.
@@ -93,7 +95,7 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
                 $this->connection = null;
                 $counter++;
 
-                if ($counter === $connLimit){
+                if ($counter === $connLimit) {
                     // Connection attempts exceeded.
                     throw $e;
                 }
@@ -104,6 +106,7 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
     /**
      * @param $params
      * @param $config
+     *
      * @return \Doctrine\DBAL\Connection
      *
      * @throws \Doctrine\DBAL\DBALException
@@ -137,10 +140,11 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
      * (non-PHPdoc)
      * @see common_persistence_sql_Driver::getPlatForm()
      */
-    public function getPlatForm(){
+    public function getPlatForm()
+    {
         return new common_persistence_sql_Platform($this->getDbalConnection());
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see common_persistence_sql_Driver::getSchemaManager()
@@ -149,68 +153,77 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
     {
         return new common_persistence_sql_dbal_SchemaManager($this->connection->getSchemaManager());
     }
-    
-   
+
     /**
      * Execute the statement with provided params
      *
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
+     *
      * @param mixed $statement
      * @param array $params
+     * @param array $types
+     *
      * @return integer number of affected row
      */
-    public function exec($statement,$params = array())
+    public function exec($statement, $params = [], array $types = [])
     {
-        return $this->connection->executeUpdate($statement,$params);
+        return $this->connection->executeUpdate($statement, $params, $types);
     }
-    
-    
+
     /**
      * Query  the statement with provided params
-     * 
+     *
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
+     *
      * @param mixed $statement
+     * @param array $params
+     * @param array $types
+     *
      * @return \Doctrine\DBAL\Driver\Statement
      */
-    public function query($statement,$params = array())
+    public function query($statement, $params = [], array $types = [])
     {
-        return $this->connection->executeQuery($statement,$params);
+        return $this->connection->executeQuery($statement, $params, $types);
     }
-    
+
     /**
      * Convenience access to PDO::quote.
      *
      * @author Jerome Bogaerts, <jerome@taotesting.com>
-     * @param string $parameter The parameter to quote.
-     * @param int $parameter_type A PDO PARAM_XX constant.
+     *
+     * @param string $parameter      The parameter to quote.
+     * @param int    $parameter_type A PDO PARAM_XX constant.
+     *
      * @return string The quoted string.
      */
-    public function quote($parameter, $parameter_type = PDO::PARAM_STR){
+    public function quote($parameter, $parameter_type = PDO::PARAM_STR)
+    {
         return $this->connection->quote($parameter, $parameter_type);
     }
-    
-    
 
     /**
-     * (non-PHPdoc)
-     * @see common_persistence_sql_Driver::insert()
+     * @inheritdoc
      */
-    public function insert($tableName, array $data){
-        $cleanColumns = array();
+    public function insert($tableName, array $data, array $types = [])
+    {
+        $cleanColumns = [];
         foreach ($data as $columnName => $value) {
             $cleanColumns[$this->getPlatForm()->quoteIdentifier($columnName)] = $value;
         }
-        return $this->connection->insert($tableName, $cleanColumns);
+        return $this->connection->insert($tableName, $cleanColumns, $types);
     }
-    
+
     /**
      * Convenience access to PDO::lastInsertId.
      *
      * @author Jerome Bogaerts, <jerome@taotesting.com>
+     *
      * @param string $name
+     *
      * @return string The quoted string.
      */
-    public function lastInsertId($name = null){
+    public function lastInsertId($name = null)
+    {
         return $this->connection->lastInsertId($name);
     }
 
@@ -230,5 +243,4 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
     {
         return $this->connection->getDatabase();
     }
-    
 }

@@ -19,12 +19,9 @@
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
  *               2017 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
-?>
-<?php
 
 use oat\generis\model\OntologyRdf;
 use oat\generis\model\OntologyRdfs;
-use Doctrine\DBAL\DBALException;
 
 error_reporting(E_ALL);
 
@@ -339,37 +336,21 @@ class core_kernel_impl_ApiModelOO
      */
     public function setStatement($subject, $predicate, $object, $language)
     {
-        $returnValue = (bool) false;
+        $localNsManager = common_ext_NamespaceManager::singleton();
+        $modelId = $localNsManager->getLocalNamespace()->getModelId();
+        $currentUser = common_session_SessionManager::getSession()->getUserUri();
 
-        
-        $dbWrapper 	= core_kernel_classes_DbWrapper::singleton();
-        $platform   = $dbWrapper->getPlatForm();
-        $localNs 	= common_ext_NamespaceManager::singleton()->getLocalNamespace();
-        $mask		= 'yyy[admin,administrators,authors]';	//now it's the default right mode
-        $query = 'INSERT INTO statements (modelid,subject,predicate,object,l_language,author,epoch)
-        			VALUES  (?, ?, ?, ?, ?, ? , ?);';
+        // TODO: inject ModelFactory
+        $modelFactory = new core_kernel_api_ModelFactory();
 
-        try{
-	        $returnValue = $dbWrapper->exec($query, array(
-	       		$localNs->getModelId(),
-	       		$subject,
-	       		$predicate,
-	       		$object,
-	       		$language,
-	       		\common_session_SessionManager::getSession()->getUserUri(),
-	            $platform->getNowExpression()
-	             
-	        ));
-        }
-        catch (DBALException $e){
-	        if($e->getCode() !== '00000'){
-				throw new common_Exception ("Unable to setStatement (SPO) {$subject}, {$predicate}, {$object} : " . $e->getMessage());
-			}
-        }
-        
-        
-
-        return (bool) $returnValue;
+        return $modelFactory->addStatement(
+            $modelId,
+            $subject,
+            $predicate,
+            $object,
+            $language,
+            $currentUser
+        );
     }
 
     /**
