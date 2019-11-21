@@ -29,7 +29,7 @@ use Doctrine\DBAL\Schema\Schema;
 use oat\generis\model\kernel\persistence\smoothsql\install\SmoothRdsModel;
 use Doctrine\DBAL\Exception\ConnectionException;
 
-class SetupDb implements LoggerAwareInterface
+class SetupDb extends ConfigurableService implements LoggerAwareInterface
 {
     use LoggerAwareTrait;
 
@@ -78,8 +78,9 @@ class SetupDb implements LoggerAwareInterface
      */
     public function getSchema(\common_persistence_SqlPersistence $p)
     {
+        $smoothRdsModel = new SmoothRdsModel();
         $schema = $p->getSchemaManager()->createSchema();
-        SmoothRdsModel::addSmoothTables($schema);
+        $smoothRdsModel->addSmoothTables($schema);
         $this->addKeyValueStoreTable($schema);
         return $schema;
     }
