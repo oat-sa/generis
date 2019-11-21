@@ -17,7 +17,8 @@
  * Copyright (c) (original work) 2015 Open Assessment Technologies SA
  * 
  */
-namespace oat\generis\test\unit\model\persistence\smoothsql;
+
+namespace oat\generis\test\integration\model\persistence\smoothsql;
 
 use Prophecy\Promise\ReturnPromise;
 use Prophecy\Argument;
