@@ -96,6 +96,7 @@ class TaoSearchDriver extends EscaperAbstract {
         $like = [
             'mysql'      => 'LIKE',
             'postgresql' => 'ILIKE',
+            'gcp-spanner' => 'LIKE',
         ];
 
         $name = $this->persistence->getPlatForm()->getName();

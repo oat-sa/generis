@@ -17,7 +17,8 @@
  * Copyright (c) (original work) 2015 Open Assessment Technologies SA
  * 
  */
-namespace oat\generis\test\unit\model\persistence\smoothsql;
+
+namespace oat\generis\test\integration\model\persistence\smoothsql;
 
 use \core_kernel_persistence_smoothsql_SmoothRdf;
 use Prophecy\Prophet;
