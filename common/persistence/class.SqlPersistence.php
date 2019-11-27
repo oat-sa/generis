@@ -19,6 +19,9 @@
  *
  */
 
+use oat\generis\persistence\PersistenceManager;
+use oat\oatbox\service\ServiceManager;
+
 
 /**
  * Persistence base on SQL
@@ -122,4 +125,26 @@ class common_persistence_SqlPersistence extends common_persistence_Persistence
       public function lastInsertId($name = null){
           return $this->getDriver()->lastInsertId($name);
       }
+
+    /**
+     * To avoid serialization of connection properties
+     * @return array
+     */
+    public function __sleep()
+    {
+        return [];
+    }
+
+    /**
+     * We have to have opportunity to create new connection with unserialize connection
+     */
+    public function __wakeup()
+    {
+        /** @var PersistenceManager $persistenceManager */
+        $persistenceManager = ServiceManager::getServiceManager()->get(PersistenceManager::SERVICE_ID);
+        /** @var common_persistence_Persistence $persistence */
+        $persistence = $persistenceManager->getPersistenceById('default');
+        $driver = $persistence->getDriver();
+        $this->setDriver($driver);
+    }
 }
