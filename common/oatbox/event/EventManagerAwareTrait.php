@@ -21,6 +21,7 @@
 namespace oat\oatbox\event;
 
 use oat\oatbox\service\ServiceManager;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
 
 /**
  * Trait EventManagerAwareTrait
@@ -33,6 +34,8 @@ trait EventManagerAwareTrait
      */
     public function getEventManager()
     {
-        return ServiceManager::getServiceManager()->get(EventManager::CONFIG_ID);
+        return ($this instanceof ServiceLocatorAwareInterface)
+            ? $this->getServiceLocator()->get(EventManager::SERVICE_ID)
+            : ServiceManager::getServiceManager()->get(EventManager::SERVICE_ID);
     }
 }

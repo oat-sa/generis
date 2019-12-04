@@ -28,7 +28,7 @@ use oat\generis\model\OntologyRdfs;
  * @access public
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
  * @package generis
- 
+ * @deprecated breaks dependency injection
  */
 class core_kernel_classes_ResourceFactory
 {
@@ -48,6 +48,7 @@ class core_kernel_classes_ResourceFactory
      * @param  string label
      * @param  string comment
      * @return core_kernel_classes_Resource
+     * @deprecated breaks dependency injection
      */
     public static function create( core_kernel_classes_Class $type, $label = '', $comment = '')
     {
