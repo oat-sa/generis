@@ -75,9 +75,7 @@ class core_kernel_users_GenerisUser extends common_user_User implements UserInte
         } elseif (!isset($this->cache[$property])) {
             $this->cache[$property] = $this->getUncached($property);
         }
-
         return $this->cache[$property];
-
     }
 
     private function getUncached($property)
@@ -89,7 +87,8 @@ class core_kernel_users_GenerisUser extends common_user_User implements UserInte
                 $resource = $this->getUserResource()->getOnePropertyValue(new core_kernel_classes_Property($property));
 	    	    if (!is_null($resource)) {
 	    	        if ($resource instanceof core_kernel_classes_Resource) {
-                        return array($resource->getUniquePropertyValue(new core_kernel_classes_Property(OntologyRdf::RDF_VALUE)));
+                        $value = (string)$resource->getUniquePropertyValue(new core_kernel_classes_Property(OntologyRdf::RDF_VALUE));
+                        return array($value);
 	    	        } else {
 	    	            common_Logger::w('Language '.$resource.' is not a resource');
 	    	            return array(DEFAULT_LANG);
