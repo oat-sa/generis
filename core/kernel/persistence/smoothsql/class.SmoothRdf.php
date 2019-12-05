@@ -66,8 +66,8 @@ class core_kernel_persistence_smoothsql_SmoothRdf
         $query = "INSERT INTO statements ( modelId, subject, predicate, object, l_language, epoch, author) VALUES ( ? , ? , ? , ? , ? , ?, ?);";
         $success = $this->getPersistence()->exec($query, array($triple->modelid, $triple->subject, $triple->predicate, $triple->object, is_null($triple->lg) ? '' : $triple->lg, $this->getPersistence()->getPlatForm()->getNowExpression(), is_null($triple->author) ? '' : $triple->author));
         if ($triple->predicate == OntologyRdfs::RDFS_SUBCLASSOF || $triple->predicate == OntologyRdf::RDF_TYPE) {
-            $eventManager = $this->getServiceManager()->get(EventManager::CONFIG_ID);
-            $eventManager->trigger(new ResourceCreated(new core_kernel_classes_Resource($triple->subject)));
+            $eventManager = $this->getServiceManager()->get(EventManager::SERVICE_ID);
+            $eventManager->trigger(new ResourceCreated($this->model->getResource($triple->subject)));
         }
         return $success;
     }
