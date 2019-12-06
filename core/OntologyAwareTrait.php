@@ -42,7 +42,7 @@ trait OntologyAwareTrait
     function getModel()
     {
         if (is_null($this->ontology)) {
-            return ($this instanceof ServiceLocatorAwareInterface)
+            return ($this instanceof ServiceLocatorAwareInterface && !is_null($this->getServiceLocator()))
                 ? $this->getServiceLocator()->get(Ontology::SERVICE_ID)
                 : ModelManager::getModel();
         }
