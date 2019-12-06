@@ -30,6 +30,7 @@ use oat\generis\persistence\PersistenceManager;
 use oat\generis\model\kernel\uri\UriProvider;
 use oat\generis\model\kernel\uri\Bin2HexUriProvider;
 use oat\generis\model\data\Ontology;
+use oat\oatbox\filesystem\FileSystemService;
 
 class GenerisTestCase extends TestCase
 {
@@ -49,7 +50,15 @@ class GenerisTestCase extends TestCase
         }
         
         $session = new \common_session_AnonymousSession();
+        $model = new \core_kernel_persistence_smoothsql_SmoothModel([
+            \core_kernel_persistence_smoothsql_SmoothModel::OPTION_PERSISTENCE => 'mockSql',
+            \core_kernel_persistence_smoothsql_SmoothModel::OPTION_READABLE_MODELS=> [123],
+            \core_kernel_persistence_smoothsql_SmoothModel::OPTION_WRITEABLE_MODELS=> [123],
+            \core_kernel_persistence_smoothsql_SmoothModel::OPTION_NEW_TRIPLE_MODEL=> 123,
+            'cache' => 'smoothcache'
+        ]);
         $sl = $this->getServiceLocatorMock([
+            Ontology::SERVICE_ID => $model,
             PersistenceManager::SERVICE_ID => $pm,
             UserLanguageServiceInterface::SERVICE_ID => $this->getUserLanguageServiceMock('xx_XX'),
             SessionService::SERVICE_ID => $this->getSessionServiceMock($session),
@@ -59,16 +68,34 @@ class GenerisTestCase extends TestCase
             'smoothcache' => new \common_cache_NoCache()
         ]);
         $session->setServiceLocator($sl);
-        $model = new \core_kernel_persistence_smoothsql_SmoothModel([
-            \core_kernel_persistence_smoothsql_SmoothModel::OPTION_PERSISTENCE => 'mockSql',
-            \core_kernel_persistence_smoothsql_SmoothModel::OPTION_READABLE_MODELS=> [123],
-            \core_kernel_persistence_smoothsql_SmoothModel::OPTION_WRITEABLE_MODELS=> [123],
-            \core_kernel_persistence_smoothsql_SmoothModel::OPTION_NEW_TRIPLE_MODEL=> 123,
-            'cache' => 'smoothcache'
-        ]);
         $model->setServiceLocator($sl);
 
         return $model;
+    }
+
+    /**
+     * @return FileSystemService
+     */
+    protected function getFileSystemMock($dirs = [])
+    {
+        $adapterparam = [
+            'testfs' => class_exists('League\Flysystem\Memory\MemoryAdapter')
+                ? [
+                    'class' => \League\Flysystem\Memory\MemoryAdapter::class
+                ]
+                : [
+                    'class' => FileSystemService::FLYSYSTEM_LOCAL_ADAPTER,
+                    'options' => ['root' => \tao_helpers_File::createTempDir()]
+                ]
+        ];
+        $dirparam = [];
+        foreach ($dirs as $dir) {
+            $dirparam[$dir] = 'testfs';
+        }
+        return new FileSystemService([
+            FileSystemService::OPTION_ADAPTERS => $adapterparam,
+            FileSystemService::OPTION_DIRECTORIES => $dirparam
+        ]);
     }
 
     protected function getSessionServiceMock($session)
