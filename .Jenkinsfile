@@ -23,7 +23,7 @@ pipeline {
                 )
                 sh(
                     label: 'Run backend tests',
-                    script: './vendor/phpunit/phpunit test/unit'
+                    script: 'php ./vendor/phpunit/phpunit test/unit'
                 )
             }
         }
