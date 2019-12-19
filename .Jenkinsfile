@@ -22,6 +22,10 @@ pipeline {
                     script: "composer install --no-interaction --no-ansi --no-progress"
                 )
                 sh(
+                    label: 'Add phpunit',
+                    script: 'composer require phpunit/phpunit:4.8',
+                )
+                sh(
                     label: 'Run backend tests',
                     script: './bin/phpunit'
                 )
