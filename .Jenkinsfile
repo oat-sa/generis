@@ -6,7 +6,7 @@ pipeline {
         stage('Tests') {
             agent {
                 docker {
-                    image 'php/7.2-cli-stretch'
+                    image 'alexwijn/docker-git-php-composer'
                     reuseNode true
                 }
             }
@@ -17,6 +17,10 @@ pipeline {
                 skipDefaultCheckout()
             }
             steps {
+                sh(
+                    label: 'php version',
+                    script: "php -v"
+                )
                 sh(
                     label: 'Install/Update sources from Composer',
                     script: "composer update --no-interaction --no-ansi --no-progress"
