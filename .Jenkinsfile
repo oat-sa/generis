@@ -22,12 +22,8 @@ pipeline {
                     script: "composer update --no-interaction --no-ansi --no-progress"
                 )
                 sh(
-                    label: 'DEBUG',
-                    script: 'ls -alh vendor/phpunit/'
-                )
-                sh(
                     label: 'Run backend tests',
-                    script: './vendor/phpunit/phpunit test/unit'
+                    script: './vendor/phpunit/phpunit/phpunit test/unit'
                 )
             }
         }
