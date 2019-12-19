@@ -19,11 +19,15 @@ pipeline {
             steps {
                 sh(
                     label: 'Install/Update sources from Composer',
-                    script: "composer install --no-interaction --no-ansi --no-progress"
+                    script: "composer update --no-interaction --no-ansi --no-progress"
+                )
+                sh(
+                    label: 'DEBUG',
+                    script: 'ls -alh vendor/phpunit/'
                 )
                 sh(
                     label: 'Run backend tests',
-                    script: 'php ./vendor/phpunit/phpunit test/unit'
+                    script: './vendor/phpunit/phpunit test/unit'
                 )
             }
         }
