@@ -6,7 +6,7 @@ pipeline {
         stage('Tests') {
             agent {
                 docker {
-                    image 'alexwijn/docker-git-php-composer'
+                    image 'php/7.2-cli-stretch'
                     reuseNode true
                 }
             }
