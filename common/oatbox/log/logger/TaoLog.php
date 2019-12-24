@@ -75,10 +75,12 @@ class TaoLog extends ConfigurableService implements LoggerInterface
 
 		if(PHP_SAPI !== 'cli'){
 			$requestURI = $_SERVER['REQUEST_URI'];
+			$session = session_id();
 		} else {
 			$requestURI = implode(' ', $_SERVER['argv']);
+			$session = 'cli';
 		}
-		
+
 		//reformat input
 		if(is_object($message)){
 			$message = 'Message is object of type ' . gettype($message);
@@ -94,9 +96,9 @@ class TaoLog extends ConfigurableService implements LoggerInterface
 			$message = (string) $message;
 		}
 		$level = \common_log_Logger2Psr::getCommonFromPsrLevel($level);
-		$this->getDispatcher()->log(new \common_log_Item($message, $level, time(), $stack, $context, $requestURI, $errorFile, $errorLine));
+        $this->getDispatcher()->log(new \common_log_Item($message, $level, time(), $stack, $context, $requestURI, $errorFile, $errorLine, $session));
     }
-    
+
     /**
      * Returns the dispatcher
      *
