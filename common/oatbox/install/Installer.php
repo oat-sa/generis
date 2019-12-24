@@ -72,8 +72,10 @@ class Installer extends ConfigurableService
                 'dir' => $configPath,
                 'humanReadable' => true
             ));
+            $sm = new ServiceManager($configService);
+            ServiceManager::setServiceManager($sm);
 
-            $this->setServiceManager(new ServiceManager($configService));
+            $this->setServiceLocator($sm);
         }
 
         return $this->getServiceManager();
