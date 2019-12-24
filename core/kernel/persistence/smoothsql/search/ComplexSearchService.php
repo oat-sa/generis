@@ -155,7 +155,11 @@ class ComplexSearchService extends ConfigurableService
      * @param string $defaultLanguage
      * @return $this
      */
-    public function setLanguage(QueryBuilderInterface $query , $userLanguage = '' , $defaultLanguage = \DEFAULT_LANG) {
+    public function setLanguage(QueryBuilderInterface $query , $userLanguage = '' , $defaultLanguage = null)
+    {
+        if (is_null($defaultLanguage)) {
+            $defaultLanguage = DEFAULT_LANG;
+        }
         $options = $this->getGateway()->getOptions();
         if(!empty($userLanguage)) {
             $options['language'] = $userLanguage;
