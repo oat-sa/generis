@@ -170,7 +170,7 @@ class helpers_File
                     continue;
                 }
 
-                $success = self::remove($path . DIRECTORY_SEPARATOR . $entry) ? $success : false;
+                $success = self::remove($path . DIRECTORY_SEPARATOR . $entry) && $success;
             }
         }
         closedir($handle);
