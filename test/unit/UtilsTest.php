@@ -1,5 +1,5 @@
 <?php
-/*  
+/**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
@@ -59,11 +59,8 @@ class generis_test_UtilsTest extends TestCase
         }
         $value = eval("return " . common_Utils::toPHPVariableString($all) . ";");
         $this->assertEquals($all, $value);
-
-        $prophet = new Prophet();
-        $e = $prophet->prophesize('generis_test_UtilsTest');
-
-        $serialized = serialize($e->reveal());
+        
+        $serialized = new stdClass();
         $value = eval("return " . common_Utils::toPHPVariableString($serialized) . ";");
         $this->assertEquals($serialized, $value);
     }
