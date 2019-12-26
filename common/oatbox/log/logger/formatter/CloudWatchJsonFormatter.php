@@ -22,8 +22,6 @@ namespace oat\oatbox\log\logger\formatter;
 
 
 use Monolog\Formatter\FormatterInterface;
-use oat\oatbox\log\logger\processor\BacktraceProcessor;
-use oat\oatbox\log\logger\processor\EnvironmentProcessorAbstract;
 
 /**
  * Json log formatter.
@@ -32,45 +30,6 @@ use oat\oatbox\log\logger\processor\EnvironmentProcessorAbstract;
  */
 class CloudWatchJsonFormatter implements FormatterInterface
 {
-    /**
-     * Used datetime format.
-     */
-    const DATETIME_FORMAT = 'd/m/Y:H:i:s O';
-
-    /**
-     * Datetime offset in the generated output.
-     */
-    const DATETIME_OFFSET = 'datetime';
-
-    /**
-     * Stack offset in the generated output.
-     */
-    const STACK_OFFSET    = 'stack';
-
-    /**
-     * Severity offset in the generated output.
-     */
-    const SEVERITY_OFFSET = 'severity';
-
-    /**
-     * Line offset in the generated output.
-     */
-    const LINE_OFFSET     = 'line';
-
-    /**
-     * File offset in the generated output.
-     */
-    const FILE_OFFSET     = 'file';
-
-    /**
-     * Content/message offset in the generated output.
-     */
-    const CONTENT_OFFSET  = 'content';
-
-    /**
-     * Backtrace offset in the generated output.
-     */
-    const TRACE_OFFSET    = 'trace';
 
     /**
      * @inheritdoc
