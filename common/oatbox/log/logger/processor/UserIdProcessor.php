@@ -20,7 +20,7 @@
 
 namespace oat\oatbox\log\logger\processor;
 
-use Psr\Log\LogLevel;
+use Monolog\Logger;
 
 /**
  * Class UserIdProcessor
@@ -35,11 +35,10 @@ class UserIdProcessor
     protected $level;
 
     /**
-     * EnvironmentProcessor constructor.
-     *
-     * @param string $level
+     * UserIdProcessor constructor.
+     * @param int $level
      */
-    public function __construct($level = LogLevel::DEBUG)
+    public function __construct($level = Logger::DEBUG)
     {
         $this->level = $level;
     }

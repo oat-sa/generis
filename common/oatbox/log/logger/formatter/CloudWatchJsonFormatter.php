@@ -46,7 +46,7 @@ class CloudWatchJsonFormatter implements FormatterInterface
         $jsonString = json_encode($this->getOutputRecord($record));
 
         if ($jsonString === false) {
-            throw new \RuntimeException('Error happened during the log format process! (json encode error)');
+            throw new \RuntimeException('Error happened during the log format process! ' . json_last_error_msg());
         }
 
         return $jsonString . PHP_EOL;
