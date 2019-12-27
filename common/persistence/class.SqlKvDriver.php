@@ -128,7 +128,9 @@ class common_persistence_SqlKvDriver implements common_persistence_KvDriver
             $sessionValue = $this->sqlPeristence->query($statement,array($id));
             while ($row = $sessionValue->fetch()) {
                 if ($row['kv_time'] == 0 || $row['kv_time'] >= time() ) {
-                    return preg_match('/^\d+$/', $row['kv_value']) ? (int)$row['kv_value'] : base64_decode($row['kv_value']);
+                    return filter_var($row['kv_value'], FILTER_VALIDATE_INT) !== false
+                        ? (int)$row['kv_value']
+                        : base64_decode($row['kv_value']);
                 }
             }
         }
