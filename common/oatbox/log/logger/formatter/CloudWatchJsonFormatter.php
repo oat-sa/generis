@@ -32,6 +32,11 @@ class CloudWatchJsonFormatter implements FormatterInterface
 {
 
     /**
+     * Used datetime format.
+     */
+    const DATETIME_FORMAT = 'd/m/Y:H:i:s O';
+
+    /**
      * @inheritdoc
      *
      * @throws \RuntimeException
