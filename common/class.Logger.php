@@ -468,7 +468,7 @@ class common_Logger
     {
         
         $error = error_get_last();
-        if (($error['type'] & (E_COMPILE_ERROR | E_ERROR | E_PARSE | E_CORE_ERROR)) != 0) {
+        if ($error && ($error['type'] & (E_COMPILE_ERROR | E_ERROR | E_PARSE | E_CORE_ERROR)) != 0) {
             $msg = (isset($error['file']) && isset($error['line']))
                ? 'php error('.$error['type'].') in '.$error['file'].'@'.$error['line'].': '.$error['message']
                : 'php error('.$error['type'].'): '.$error['message'];
