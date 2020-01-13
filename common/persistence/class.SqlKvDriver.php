@@ -186,7 +186,7 @@ class common_persistence_SqlKvDriver implements common_persistence_KvDriver
     {
         $params = [':id' => $id];
         $platformName = $this->sqlPeristence->getPlatForm()->getName();
-        $intVal = $platformName == 'mysql' ? 'CAST(kv_value, INT)' : 'kv_value::integer';
+        $intVal = $platformName == 'postgresql' ? 'kv_value::integer' : 'kv_value';
         $statement = 'UPDATE kv_store SET kv_value = '.$intVal.' + 1 WHERE kv_id = :id';
         return $this->sqlPeristence->exec($statement, $params);
     }
@@ -199,7 +199,7 @@ class common_persistence_SqlKvDriver implements common_persistence_KvDriver
     public function decr($id) {
         $params = [':id' => $id];
         $platformName = $this->sqlPeristence->getPlatForm()->getName();
-        $intVal = $platformName == 'mysql' ? 'CAST(kv_value, INT)' : 'kv_value::integer';
+        $intVal = $platformName == 'postgresql' ? 'kv_value::integer' : 'kv_value';
         $statement = 'UPDATE kv_store SET kv_value = '.$intVal.' - 1 WHERE kv_id = :id';
         return $this->sqlPeristence->exec($statement, $params);
     }
