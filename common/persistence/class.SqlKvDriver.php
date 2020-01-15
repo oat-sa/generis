@@ -76,8 +76,9 @@ class common_persistence_SqlKvDriver implements common_persistence_KvDriver
         try{
             
             $expire = is_null($ttl) ? 0 : time() + $ttl;
-            
-            $encoded = base64_encode($value);
+
+            // we need int to have safe incr and decr methods
+            $encoded = is_int($value) ? $value : base64_encode($value);
             $platformName = $this->sqlPeristence->getPlatForm()->getName();
             $params = array(':data' => $encoded, ':time' => $expire, ':id' => $id);
             
@@ -126,8 +127,10 @@ class common_persistence_SqlKvDriver implements common_persistence_KvDriver
             $statement = $this->sqlPeristence->getPlatForm()->limitStatement($statement,1);
             $sessionValue = $this->sqlPeristence->query($statement,array($id));
             while ($row = $sessionValue->fetch()) {
-                if ($row["kv_time"] == 0 || $row["kv_time"] >= time() ) {
-                    return base64_decode($row["kv_value"]);
+                if ($row['kv_time'] == 0 || $row['kv_time'] >= time() ) {
+                    return filter_var($row['kv_value'], FILTER_VALIDATE_INT) !== false
+                        ? (int)$row['kv_value']
+                        : base64_decode($row['kv_value']);
                 }
             }
         }
@@ -182,7 +185,9 @@ class common_persistence_SqlKvDriver implements common_persistence_KvDriver
     public function incr($id)
     {
         $params = [':id' => $id];
-        $statement = 'UPDATE kv_store SET kv_value = kv_value + 1 WHERE kv_id = :id';
+        $platformName = $this->sqlPeristence->getPlatForm()->getName();
+        $intVal = $platformName == 'postgresql' ? 'kv_value::integer' : 'kv_value';
+        $statement = 'UPDATE kv_store SET kv_value = '.$intVal.' + 1 WHERE kv_id = :id';
         return $this->sqlPeristence->exec($statement, $params);
     }
 
@@ -193,7 +198,9 @@ class common_persistence_SqlKvDriver implements common_persistence_KvDriver
      */
     public function decr($id) {
         $params = [':id' => $id];
-        $statement = 'UPDATE kv_store SET kv_value = kv_value - 1 WHERE kv_id = :id';
+        $platformName = $this->sqlPeristence->getPlatForm()->getName();
+        $intVal = $platformName == 'postgresql' ? 'kv_value::integer' : 'kv_value';
+        $statement = 'UPDATE kv_store SET kv_value = '.$intVal.' - 1 WHERE kv_id = :id';
         return $this->sqlPeristence->exec($statement, $params);
     }
 

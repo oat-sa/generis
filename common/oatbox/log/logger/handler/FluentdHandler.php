@@ -62,7 +62,6 @@ class FluentdHandler extends AbstractProcessingHandler
             $logRecord['level'] = Logger::getLevelName($record['level']);
             $logRecord['message'] = $record['message'];
         }
-
         $this->logger->post($record['channel'], $logRecord);
     }
 }
