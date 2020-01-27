@@ -19,13 +19,13 @@
  * @author Lionel Lecaque  <lionel@taotesting.com>
  * @license GPLv2
  * @package generis
- 
+
  *
  */
 
 /**
- * Interface of drivers that provide the Kay Value Persistence 
- * 
+ * Interface of drivers that provide the Kay Value Persistence
+ *
  * @author Joel Bout <joel@taotesting.com>
  */
 interface common_persistence_KvDriver extends common_persistence_Driver
@@ -34,7 +34,7 @@ interface common_persistence_KvDriver extends common_persistence_Driver
     /**
      * Stores a value, implementing time to live and nx is optional
      * Should throw an exception if an option is not supported
-     * 
+     *
      * @param string $id
      * @param string $value
      * @param string $ttl time to live in seconds
@@ -46,7 +46,7 @@ interface common_persistence_KvDriver extends common_persistence_Driver
     /**
      * Returns a value from storage
      * or false if not found
-     * 
+     *
      * @param string $id
      * @return string
      */
@@ -54,7 +54,7 @@ interface common_persistence_KvDriver extends common_persistence_Driver
     
     /**
      * test whenever or not an entry exists
-     * 
+     *
      * @param string $id
      * @return boolean
      */
@@ -62,7 +62,7 @@ interface common_persistence_KvDriver extends common_persistence_Driver
 
     /**
      * Remove an  entry from storage
-     * 
+     *
      * @param string $id
      * @return boolean
      */
@@ -82,5 +82,4 @@ interface common_persistence_KvDriver extends common_persistence_Driver
      * @return boolean
      */
     public function decr($id);
-
 }

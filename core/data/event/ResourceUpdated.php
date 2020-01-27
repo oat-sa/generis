@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,18 +32,18 @@ class ResourceUpdated implements Event
 {
     private $resource;
     
-	function __construct(\core_kernel_classes_Resource $resource)
-	{
-	    $this->resource = $resource;
-	}
+    function __construct(\core_kernel_classes_Resource $resource)
+    {
+        $this->resource = $resource;
+    }
     
-	function getResource()
-	{
-	    return $this->resource;
-	}
+    function getResource()
+    {
+        return $this->resource;
+    }
 
-	function getName()
-	{
-	    return __CLASS__;
-	}
+    function getName()
+    {
+        return __CLASS__;
+    }
 }

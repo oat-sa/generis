@@ -1,22 +1,22 @@
 <?php
-/**  
+/**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
  * of the License (non-upgradable).
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- * 
+ *
  * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- * 
+ *
  */
 
 /**
@@ -27,7 +27,7 @@
  * @author Jerome Bogaerts <jerome@taotesting.com>
  * @package generis
  * @since 2.3
- 
+
  */
 class common_ext_Manifest
 {
@@ -94,7 +94,7 @@ class common_ext_Manifest
      * @access private
      * @var array
      */
-    private $dependencies = array();
+    private $dependencies = [];
 
     /**
      * The RDF models that are required by the Extension the manifest describes.
@@ -102,7 +102,7 @@ class common_ext_Manifest
      * @access private
      * @var array
      */
-    private $models = array();
+    private $models = [];
 
     /**
      * The files corresponding to the RDF models to be imported at installation time.
@@ -110,7 +110,7 @@ class common_ext_Manifest
      * @access private
      * @var array
      */
-    private $installModelFiles = array();
+    private $installModelFiles = [];
 
     /**
      * The configuration checks that have to be performed prior to installation.
@@ -118,7 +118,7 @@ class common_ext_Manifest
      * @access private
      * @var array
      */
-    private $installChecks = array();
+    private $installChecks = [];
 
     /**
      * The paths to PHP Scripts to be run at installation time.
@@ -126,7 +126,7 @@ class common_ext_Manifest
      * @access private
      * @var array
      */
-    private $installPHPFiles = array();
+    private $installPHPFiles = [];
     
     /**
      * The data associated with the uninstall
@@ -150,7 +150,7 @@ class common_ext_Manifest
      * @access private
      * @var array
      */
-    private $routes = array();
+    private $routes = [];
     
     /**
      * The constants to be defined for the described extension.
@@ -158,7 +158,7 @@ class common_ext_Manifest
      * @access private
      * @var array
      */
-    private $constants = array();
+    private $constants = [];
 
     /**
      * The Management Role of the extension described by the manifest.
@@ -175,36 +175,36 @@ class common_ext_Manifest
      * @access private
      * @var array
      */
-    private $localData = array();
+    private $localData = [];
     
     /**
      * The RDFS Classes that are considered optimizable for the described Extension.
-     * 
+     *
      * @access private
      * @var array
      */
-    private $optimizableClasses = array();
+    private $optimizableClasses = [];
     
     /**
      * The RDF Properties that are considered optimizable for the described Extension.
      * @access private
      * @var array
      */
-    private $optimizableProperties = array();
+    private $optimizableProperties = [];
 
     /**
      * The Access Control Layer table
      * @access private
      * @var array
      */
-    private $acl = array();
+    private $acl = [];
     
     /**
      * Extra information, not consumed by the framework
      * @access private
      * @var array
      */
-    private $extra = array();
+    private $extra = [];
     
 
     /**
@@ -217,135 +217,129 @@ class common_ext_Manifest
     public function __construct($filePath)
     {
         
-    	// the file exists, we can refer to the $filePath.
-    	if (is_readable($filePath)){
-    		$this->setFilePath($filePath);
-    		$array = require($this->getFilePath());
-    		
-    		// legacy support
-    		if (isset($array['additional']) && is_array($array['additional'])) {
-				foreach ($array['additional'] as $key => $val) {
-					$array[$key] = $val;
-				}
-				unset($array['additional']);
-			}
-    		
-    		// mandatory
-    		if (!empty($array['name'])){
-    			$this->setName($array['name']);
-    		}
-    		else{
-    			throw new common_ext_MalformedManifestException("The 'name' component is mandatory in manifest located at '{$this->getFilePath()}'.");
-    		}
-    		
-    		
-    		if (!empty($array['label'])){
-    		    $this->setLabel($array['label']);
-    		}
-    		if (!empty($array['description'])){
-    			$this->setDescription($array['description']);
-    		}
-    		
-    		if (!empty($array['license'])){
-    		    $this->setLicense($array['license']);
-    		}
-    		
-    		if (!empty($array['author'])){
-    			$this->setAuthor($array['author']);	
-    		}
-    		
-    		// mandatory
-    		if (!empty($array['version'])){
-    			$this->setVersion($array['version']);
-    		}
-    		else{
-    			throw new common_ext_MalformedManifestException("The 'version' component is mandatory in manifest located at '{$this->getFilePath()}'.");
-    		}
-    		
-    		if (!empty($array['requires'])){
-    			$this->setDependencies($array['requires']);
-    		} elseif (!empty($array['dependencies'])){
-    			$this->setDependencies(array_fill_keys($array['dependencies'], '*'));
-    		} elseif (!empty($array['dependances'])){
-    			// legacy
-    			$this->setDependencies(array_fill_keys($array['dependances'], '*'));
-    		} 
-    		
-    		if (!empty($array['models'])){
-    			$this->setModels($array['models']);
-    		}
-    		
-    		if (!empty($array['acl'])){
-    		    $this->setAclTable($array['acl']);
-    		}
-    		
-    		if (!empty($array['install'])){
-    			if (!empty($array['install']['rdf'])){
-    				
-					$files = is_array($array['install']['rdf']) ? $array['install']['rdf'] : array($array['install']['rdf']);
-    				$this->setInstallModelFiles($files);
-    			}
-    			
-    			if (!empty($array['install']['checks'])){
-    				$this->setInstallChecks($array['install']['checks']);
-    			}
-    			
-    			if (!empty($array['install']['php'])){
-					$files = is_array($array['install']['php']) ? $array['install']['php'] : array($array['install']['php']);
-    				$this->setInstallPHPFiles($files);
-    			}
-    		}
-    		
-    		if (isset($array['uninstall'])){
-    		    $this->uninstallData = $array['uninstall']; 
-    		}
-    		
-    		if (isset($array['update'])){
-    		    $this->updateHandler = $array['update'];
-    		}
-    		
-    		if (!empty($array['local'])){
-    			$this->localData = $array['local']; 
-    		}
-    		
-    		if (!empty($array['routes'])){
-    		    $this->setRoutes($array['routes']);
-    		}
-    		
-    		if (!empty($array['constants'])){
-    			$this->setConstants($array['constants']);
-    		}
-    		
-    		if (!empty($array['extra'])){
-    		    $this->setExtra($array['extra']);
-    		}
-    		
-    		if (!empty($array['managementRole'])){
-    			$this->setManagementRole($array['managementRole']);
-    		}
-    		
-    		if (!empty($array['optimizableClasses'])){
-    			if (!is_array($array['optimizableClasses'])){
-    				throw new common_ext_MalformedManifestException("The 'optimizableClasses' component must be an array.");
-    			}
-    			else{
-    				$this->setOptimizableClasses($array['optimizableClasses']);
-    			}
-    		}
-    		
-    		if (!empty($array['optimizableProperties'])){
-    			if (!is_array($array['optimizableProperties'])){
-    				throw new common_ext_MalformedManifestException("The 'optimizableProperties' component must be an array.");
-    			}
-    			else{
-    				$this->setOptimizableProperties($array['optimizableProperties']);
-    			}
-    		}
-    	}
-    	else{
-    		throw new common_ext_ManifestNotFoundException("The Extension Manifest file located at '${filePath}' could not be read.");
-    	}
-    	
+        // the file exists, we can refer to the $filePath.
+        if (is_readable($filePath)) {
+            $this->setFilePath($filePath);
+            $array = require($this->getFilePath());
+            
+            // legacy support
+            if (isset($array['additional']) && is_array($array['additional'])) {
+                foreach ($array['additional'] as $key => $val) {
+                    $array[$key] = $val;
+                }
+                unset($array['additional']);
+            }
+            
+            // mandatory
+            if (!empty($array['name'])) {
+                $this->setName($array['name']);
+            } else {
+                throw new common_ext_MalformedManifestException("The 'name' component is mandatory in manifest located at '{$this->getFilePath()}'.");
+            }
+            
+            
+            if (!empty($array['label'])) {
+                $this->setLabel($array['label']);
+            }
+            if (!empty($array['description'])) {
+                $this->setDescription($array['description']);
+            }
+            
+            if (!empty($array['license'])) {
+                $this->setLicense($array['license']);
+            }
+            
+            if (!empty($array['author'])) {
+                $this->setAuthor($array['author']);
+            }
+            
+            // mandatory
+            if (!empty($array['version'])) {
+                $this->setVersion($array['version']);
+            } else {
+                throw new common_ext_MalformedManifestException("The 'version' component is mandatory in manifest located at '{$this->getFilePath()}'.");
+            }
+            
+            if (!empty($array['requires'])) {
+                $this->setDependencies($array['requires']);
+            } elseif (!empty($array['dependencies'])) {
+                $this->setDependencies(array_fill_keys($array['dependencies'], '*'));
+            } elseif (!empty($array['dependances'])) {
+                // legacy
+                $this->setDependencies(array_fill_keys($array['dependances'], '*'));
+            }
+            
+            if (!empty($array['models'])) {
+                $this->setModels($array['models']);
+            }
+            
+            if (!empty($array['acl'])) {
+                $this->setAclTable($array['acl']);
+            }
+            
+            if (!empty($array['install'])) {
+                if (!empty($array['install']['rdf'])) {
+                    $files = is_array($array['install']['rdf']) ? $array['install']['rdf'] : [$array['install']['rdf']];
+                    $this->setInstallModelFiles($files);
+                }
+                
+                if (!empty($array['install']['checks'])) {
+                    $this->setInstallChecks($array['install']['checks']);
+                }
+                
+                if (!empty($array['install']['php'])) {
+                    $files = is_array($array['install']['php']) ? $array['install']['php'] : [$array['install']['php']];
+                    $this->setInstallPHPFiles($files);
+                }
+            }
+            
+            if (isset($array['uninstall'])) {
+                $this->uninstallData = $array['uninstall'];
+            }
+            
+            if (isset($array['update'])) {
+                $this->updateHandler = $array['update'];
+            }
+            
+            if (!empty($array['local'])) {
+                $this->localData = $array['local'];
+            }
+            
+            if (!empty($array['routes'])) {
+                $this->setRoutes($array['routes']);
+            }
+            
+            if (!empty($array['constants'])) {
+                $this->setConstants($array['constants']);
+            }
+            
+            if (!empty($array['extra'])) {
+                $this->setExtra($array['extra']);
+            }
+            
+            if (!empty($array['managementRole'])) {
+                $this->setManagementRole($array['managementRole']);
+            }
+            
+            if (!empty($array['optimizableClasses'])) {
+                if (!is_array($array['optimizableClasses'])) {
+                    throw new common_ext_MalformedManifestException("The 'optimizableClasses' component must be an array.");
+                } else {
+                    $this->setOptimizableClasses($array['optimizableClasses']);
+                }
+            }
+            
+            if (!empty($array['optimizableProperties'])) {
+                if (!is_array($array['optimizableProperties'])) {
+                    throw new common_ext_MalformedManifestException("The 'optimizableProperties' component must be an array.");
+                } else {
+                    $this->setOptimizableProperties($array['optimizableProperties']);
+                }
+            }
+        } else {
+            throw new common_ext_ManifestNotFoundException("The Extension Manifest file located at '${filePath}' could not be read.");
+        }
+        
         $this->setFilePath($filePath);
     }
 
@@ -360,8 +354,8 @@ class common_ext_Manifest
     {
         $returnValue = (string) '';
 
-        if (!empty($this->filePath)){
-        	$returnValue = $this->filePath;
+        if (!empty($this->filePath)) {
+            $returnValue = $this->filePath;
         }
 
         return (string) $returnValue;
@@ -390,11 +384,10 @@ class common_ext_Manifest
     {
         $returnValue = (string) '';
 
-        if (!empty($this->name)){
-        	$returnValue = $this->name;
-        }
-        else{
-        	$returnValue = null;
+        if (!empty($this->name)) {
+            $returnValue = $this->name;
+        } else {
+            $returnValue = null;
         }
 
         return (string) $returnValue;
@@ -445,8 +438,8 @@ class common_ext_Manifest
     {
         $returnValue = (string) '';
 
-        if (!empty($this->description)){
-        	$returnValue = $this->description;
+        if (!empty($this->description)) {
+            $returnValue = $this->description;
         }
 
         return (string) $returnValue;
@@ -545,8 +538,8 @@ class common_ext_Manifest
     {
         $returnValue = (string) '';
 
-        if (!empty($this->version)){
-        	$returnValue = $this->version;
+        if (!empty($this->version)) {
+            $returnValue = $this->version;
         }
 
         return (string) $returnValue;
@@ -566,7 +559,7 @@ class common_ext_Manifest
 
     /**
      * Get the dependencies of the Extension the manifest describes.
-     * 
+     *
      * The content of the array are extensionIDs, represented as strings.
      *
      * @access public
@@ -575,7 +568,7 @@ class common_ext_Manifest
      */
     public function getDependencies()
     {
-        $returnValue = array();
+        $returnValue = [];
 
         $returnValue = $this->dependencies;
 
@@ -596,7 +589,7 @@ class common_ext_Manifest
 
     /**
      * Get the models related to the Extension the manifest describes.
-     * 
+     *
      * The returned value is an array containing model URIs as strings.
      *
      * @access public
@@ -605,7 +598,7 @@ class common_ext_Manifest
      */
     public function getModels()
     {
-        $returnValue = array();
+        $returnValue = [];
 
         $returnValue = $this->models;
 
@@ -614,7 +607,7 @@ class common_ext_Manifest
 
     /**
      * Set the models related to the Extension the manifest describes.
-     * 
+     *
      * The $models parameter must be an array of strings that represent model URIs.
      *
      * @access private
@@ -637,7 +630,7 @@ class common_ext_Manifest
      */
     public function getInstallModelFiles()
     {
-        $returnValue = array();
+        $returnValue = [];
 
         $returnValue = $this->installModelFiles;
 
@@ -654,18 +647,18 @@ class common_ext_Manifest
      */
     private function setInstallModelFiles($installModelFiles)
     {
-        $this->installModelFiles = array();
-        $installModelFiles = is_array($installModelFiles) ? $installModelFiles : array($installModelFiles);
-		foreach ($installModelFiles as $row) {
-			if (is_string($row)) {
-				$rdfpath = $row;
-			} elseif (is_array($row) && isset($row['file'])) {
-				$rdfpath = $row['file'];
-			} else {
-				throw new common_ext_InstallationException('Error in definition of model to add into the ontology for '.$this->extension->getId(), 'INSTALL');
-			}
-    		$this->installModelFiles[] = $rdfpath;
-		}
+        $this->installModelFiles = [];
+        $installModelFiles = is_array($installModelFiles) ? $installModelFiles : [$installModelFiles];
+        foreach ($installModelFiles as $row) {
+            if (is_string($row)) {
+                $rdfpath = $row;
+            } elseif (is_array($row) && isset($row['file'])) {
+                $rdfpath = $row['file'];
+            } else {
+                throw new common_ext_InstallationException('Error in definition of model to add into the ontology for ' . $this->extension->getId(), 'INSTALL');
+            }
+            $this->installModelFiles[] = $rdfpath;
+        }
     }
 
     /**
@@ -677,7 +670,7 @@ class common_ext_Manifest
      */
     public function getInstallChecks()
     {
-        $returnValue = array();
+        $returnValue = [];
 
         $returnValue = $this->installChecks;
 
@@ -694,86 +687,80 @@ class common_ext_Manifest
     private function setInstallChecks($installChecks)
     {
         // Check if the content is well formed.
-    	if (!is_array($installChecks)){
-    		throw new common_ext_MalformedManifestException("The 'install->checks' component must be an array.");	
-    	}
-    	else{
-    		foreach ($installChecks as $check){
-    			// Mandatory fields for any kind of check are 'id' (string), 
-    			// 'type' (string), 'value' (array).
-    			if (empty($check['type'])){
-    				throw new common_ext_MalformedManifestException("The 'install->checks->type' component is mandatory.");	
-    			}else if (!is_string($check['type'])){
-    				throw new common_ext_MalformedManifestException("The 'install->checks->type' component must be a string.");
-    			}
-    			
-    			if (empty($check['value'])){
-    				throw new common_ext_MalformedManifestException("The 'install->checks->value' component is mandatory.");
-    			}
-    			else if (!is_array($check['value'])){
-    				throw new common_ext_MalformedManifestException("The 'install->checks->value' component must be an array.");	
-    			}
-    			
-    			if (empty($check['value']['id'])){
-    				throw new common_ext_MalformedManifestException("The 'install->checks->value->id' component is mandatory.");	
-    			}
-    			else if (!is_string($check['value']['id'])){
-    				throw new common_ext_MalformedManifestException("The 'install->checks->value->id' component must be a string.");	
-    			}
-    			
-    			switch ($check['type']){
-    				case 'CheckPHPRuntime':
-    					if (empty($check['value']['min'])){
-    						throw new common_ext_MalformedManifestException("The 'install->checks->value->min' component is mandatory for PHPRuntime checks.");	
-    					}
-    				break;
-    				
-    				case 'CheckPHPExtension':
-    					if (empty($check['value']['name'])){
-    						throw new common_ext_MalformedManifestException("The 'install->checks->value->name' component is mandatory for PHPExtension checks.");
-    					}
-    				break;
-    				
-    				case 'CheckPHPINIValue':
-    					if (empty($check['value']['name'])){
-    						throw new common_ext_MalformedManifestException("The 'install->checks->value->name' component is mandatory for PHPINIValue checks.");
-    					}
-    					else if ($check['value']['value'] == ''){
-    						throw new common_ext_MalformedManifestException("The 'install->checks->value->value' component is mandatory for PHPINIValue checks.");
-    					}
-    				break;
-    				
-    				case 'CheckFileSystemComponent':
-    					if (empty($check['value']['location'])){
-    						throw new common_ext_MalformedManifestException("The 'install->checks->value->location' component is mandatory for FileSystemComponent checks.");	
-    					}
-    					else if (empty($check['value']['rights'])){
-    						throw new common_ext_MalformedManifestException("The 'install->checks->value->rights' component is mandatory for FileSystemComponent checks.");	
-    					}
-    				break;
-    				
-    				case 'CheckCustom':
-    					if (empty($check['value']['name'])){
-    						throw new common_ext_MalformedManifestException("The 'install->checks->value->name' component is mandatory for Custom checks.");	
-    					}
-    					else if (empty($check['value']['extension'])){
-    						throw new common_ext_MalformedManifestException("The 'install->checks->value->extension' component is mandatory for Custom checks.");		
-    					}
-    				break;
-    				
-    				default:
-    					throw new common_ext_MalformedManifestException("The 'install->checks->type' component value is unknown.");	
-    				break;
-    			}
-    		}
-    	}
-    	
+        if (!is_array($installChecks)) {
+            throw new common_ext_MalformedManifestException("The 'install->checks' component must be an array.");
+        } else {
+            foreach ($installChecks as $check) {
+                // Mandatory fields for any kind of check are 'id' (string),
+                // 'type' (string), 'value' (array).
+                if (empty($check['type'])) {
+                    throw new common_ext_MalformedManifestException("The 'install->checks->type' component is mandatory.");
+                } elseif (!is_string($check['type'])) {
+                    throw new common_ext_MalformedManifestException("The 'install->checks->type' component must be a string.");
+                }
+                
+                if (empty($check['value'])) {
+                    throw new common_ext_MalformedManifestException("The 'install->checks->value' component is mandatory.");
+                } elseif (!is_array($check['value'])) {
+                    throw new common_ext_MalformedManifestException("The 'install->checks->value' component must be an array.");
+                }
+                
+                if (empty($check['value']['id'])) {
+                    throw new common_ext_MalformedManifestException("The 'install->checks->value->id' component is mandatory.");
+                } elseif (!is_string($check['value']['id'])) {
+                    throw new common_ext_MalformedManifestException("The 'install->checks->value->id' component must be a string.");
+                }
+                
+                switch ($check['type']) {
+                    case 'CheckPHPRuntime':
+                        if (empty($check['value']['min'])) {
+                            throw new common_ext_MalformedManifestException("The 'install->checks->value->min' component is mandatory for PHPRuntime checks.");
+                        }
+                        break;
+                    
+                    case 'CheckPHPExtension':
+                        if (empty($check['value']['name'])) {
+                            throw new common_ext_MalformedManifestException("The 'install->checks->value->name' component is mandatory for PHPExtension checks.");
+                        }
+                        break;
+                    
+                    case 'CheckPHPINIValue':
+                        if (empty($check['value']['name'])) {
+                            throw new common_ext_MalformedManifestException("The 'install->checks->value->name' component is mandatory for PHPINIValue checks.");
+                        } elseif ($check['value']['value'] == '') {
+                            throw new common_ext_MalformedManifestException("The 'install->checks->value->value' component is mandatory for PHPINIValue checks.");
+                        }
+                        break;
+                    
+                    case 'CheckFileSystemComponent':
+                        if (empty($check['value']['location'])) {
+                            throw new common_ext_MalformedManifestException("The 'install->checks->value->location' component is mandatory for FileSystemComponent checks.");
+                        } elseif (empty($check['value']['rights'])) {
+                            throw new common_ext_MalformedManifestException("The 'install->checks->value->rights' component is mandatory for FileSystemComponent checks.");
+                        }
+                        break;
+                    
+                    case 'CheckCustom':
+                        if (empty($check['value']['name'])) {
+                            throw new common_ext_MalformedManifestException("The 'install->checks->value->name' component is mandatory for Custom checks.");
+                        } elseif (empty($check['value']['extension'])) {
+                            throw new common_ext_MalformedManifestException("The 'install->checks->value->extension' component is mandatory for Custom checks.");
+                        }
+                        break;
+                    
+                    default:
+                        throw new common_ext_MalformedManifestException("The 'install->checks->type' component value is unknown.");
+                    break;
+                }
+            }
+        }
+        
         $this->installChecks = $installChecks;
     }
 
     /**
      * Get a list of PHP files to be executed at installation time.
-     * 
+     *
      * The returned array contains absolute paths to the files to execute.
      *
      * @access public
@@ -787,7 +774,7 @@ class common_ext_Manifest
     
     /**
      * Return the uninstall data as an array if present, or null if not
-     * 
+     *
      * @return multitype:
      */
     public function getUninstallData()
@@ -805,13 +792,13 @@ class common_ext_Manifest
         return $this->updateHandler;
     }
     
-   /**
-     * PHP scripts to execute in order to add some sample data to an install
-     *
-     * @access public
-     * @author joel.bout <joel@taotesting.com>
-     * @return array
-     */
+    /**
+      * PHP scripts to execute in order to add some sample data to an install
+      *
+      * @access public
+      * @author joel.bout <joel@taotesting.com>
+      * @return array
+      */
     public function getLocalData()
     {
         return $this->localData;
@@ -819,7 +806,7 @@ class common_ext_Manifest
 
     /**
      * Set the PHP files to be run at installation time of the described Extension.
-     * 
+     *
      * The array must contain absolute paths to theses PHP files.
      *
      * @access private
@@ -861,7 +848,7 @@ class common_ext_Manifest
      */
     public function getConstants()
     {
-        $returnValue = array();
+        $returnValue = [];
 
         $returnValue = $this->constants;
 
@@ -903,7 +890,7 @@ class common_ext_Manifest
     private function setExtra($extra)
     {
         $this->extra = $extra;
-    }    
+    }
     
     /**
      * Extract checks from a given manifest file.
@@ -920,9 +907,8 @@ class common_ext_Manifest
             ? array_keys($manifest['requires'])
             : (isset($manifest['dependencies']) && is_array($manifest['dependencies'])
                 ? $manifest['dependencies']
-                : array()
+                : []
         );
-        
     }
 
     /**
@@ -937,29 +923,27 @@ class common_ext_Manifest
     {
         $returnValue = null;
 
-        if (is_readable($file)){
-        	$manifestPath = $file;
-	    	$content = file_get_contents($manifestPath);
-	    	$matches = array();
-	    	preg_match_all("/(?:\"|')\s*checks\s*(?:\"|')\s*=>(\s*array\s*\((\s*array\((?:.*)\s*\)\)\s*,{0,1})*\s*\))/", $content, $matches);
-	    	
-	    	if (!empty($matches[1][0])){
-	    		$returnValue = eval('return ' . $matches[1][0] . ';');
-	    		
-	    		foreach ($returnValue as &$component){
-		    		if (strpos($component['type'], 'FileSystemComponent') !== false){
-		    			$root = realpath(dirname(__FILE__) . '/../../../');
-	        			$component['value']['location'] = $root . '/' . $component['value']['location'];
-	        		}	
-	    		}
-	    	}
-	    	else{
-	    		$returnValue = array();	
-	    	}
-        }
-        else{
-        	$msg = "Extension Manifest file could not be found in '${file}'.";
-        	throw new common_ext_ManifestNotFoundException($msg);
+        if (is_readable($file)) {
+            $manifestPath = $file;
+            $content = file_get_contents($manifestPath);
+            $matches = [];
+            preg_match_all("/(?:\"|')\s*checks\s*(?:\"|')\s*=>(\s*array\s*\((\s*array\((?:.*)\s*\)\)\s*,{0,1})*\s*\))/", $content, $matches);
+            
+            if (!empty($matches[1][0])) {
+                $returnValue = eval('return ' . $matches[1][0] . ';');
+                
+                foreach ($returnValue as &$component) {
+                    if (strpos($component['type'], 'FileSystemComponent') !== false) {
+                        $root = realpath(dirname(__FILE__) . '/../../../');
+                        $component['value']['location'] = $root . '/' . $component['value']['location'];
+                    }
+                }
+            } else {
+                $returnValue = [];
+            }
+        } else {
+            $msg = "Extension Manifest file could not be found in '${file}'.";
+            throw new common_ext_ManifestNotFoundException($msg);
         }
 
         return $returnValue;
@@ -981,7 +965,7 @@ class common_ext_Manifest
     
     /**
      * Get the Role dedicated to manage this extension. Returns null if there is
-     * 
+     *
      * @return string
      */
     public function getManagementRoleUri()
@@ -1003,60 +987,60 @@ class common_ext_Manifest
     }
     
     /**
-     * Get an array of Class URIs (as strings) that are considered optimizable for the 
+     * Get an array of Class URIs (as strings) that are considered optimizable for the
      * described Extension.
-     * 
+     *
      * @access public
      * @author Jerome Bogaerts <jerome@taotesting.com>
      * @return array
      */
     public function getOptimizableClasses()
     {
-    	$returnValue = array();
-    	
-    	$returnValue = $this->optimizableClasses;
-    	
-    	return $returnValue;
+        $returnValue = [];
+        
+        $returnValue = $this->optimizableClasses;
+        
+        return $returnValue;
     }
     
     /**
      * Set the Classes that are considered optimizable for the described Extension.
-     * 
+     *
      * The array passed as a parameter must be a set of URIs (as strings) referencing
      * RDFS Classes.
-     * 
+     *
      * @param array $optimizableClasses
      */
     private function setOptimizableClasses(array $optimizableClasses)
-	{
-		$this->optimizableClasses = $optimizableClasses;
-	}
-	
-	/**
-	 * Get an array of Property URIs (as strings) that are considered optimizable for the
-	 * described Extension.
-	 * 
-	 * @return array
-	 */
-	public function getOptimizableProperties()
-	{
-		$returnValue = array();
-		
-		$returnValue = $this->optimizableProperties;
-		
-		return $returnValue;
-	}
-	
-	/**
-	 * Set the Properties that are considered optimizable for the described Extension.
-	 * 
-	 * The array passed as a parameter must be a set of URIs (as strings) referencing
-	 * RDF Properties.
-	 * 
-	 * @param array $optimizableProperties
-	 */
-	private function setOptimizableProperties(array $optimizableProperties)
-	{
-		$this->optimizableProperties = $optimizableProperties;
-	}
+    {
+        $this->optimizableClasses = $optimizableClasses;
+    }
+    
+    /**
+     * Get an array of Property URIs (as strings) that are considered optimizable for the
+     * described Extension.
+     *
+     * @return array
+     */
+    public function getOptimizableProperties()
+    {
+        $returnValue = [];
+        
+        $returnValue = $this->optimizableProperties;
+        
+        return $returnValue;
+    }
+    
+    /**
+     * Set the Properties that are considered optimizable for the described Extension.
+     *
+     * The array passed as a parameter must be a set of URIs (as strings) referencing
+     * RDF Properties.
+     *
+     * @param array $optimizableProperties
+     */
+    private function setOptimizableProperties(array $optimizableProperties)
+    {
+        $this->optimizableProperties = $optimizableProperties;
+    }
 }

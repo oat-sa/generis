@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,6 +21,7 @@
  * @license GPLv2
  * @package tao
  */
+
 namespace oat\generis\persistence\sql;
 
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
@@ -67,7 +69,7 @@ class SetupDb implements LoggerAwareInterface
     private function setupTables(\common_persistence_SqlPersistence $p)
     {
         $queries = $p->getPlatForm()->schemaToSql($this->getSchema($p));
-        foreach ($queries as $query){
+        foreach ($queries as $query) {
             $p->exec($query);
         }
     }
@@ -91,11 +93,11 @@ class SetupDb implements LoggerAwareInterface
     protected function addKeyValueStoreTable(Schema $schema)
     {
         $table = $schema->createTable("kv_store");
-        $table->addColumn('kv_id',"string",array("notnull" => null,"length" => 255));
-        $table->addColumn('kv_value',"text",array("notnull" => null));
-        $table->addColumn('kv_time',"integer",array("notnull" => null,"length" => 30));
-        $table->setPrimaryKey(array("kv_id"));
-        $table->addOption('engine' , 'MyISAM');
+        $table->addColumn('kv_id', "string", ["notnull" => null,"length" => 255]);
+        $table->addColumn('kv_value', "text", ["notnull" => null]);
+        $table->addColumn('kv_time', "integer", ["notnull" => null,"length" => 30]);
+        $table->setPrimaryKey(["kv_id"]);
+        $table->addOption('engine', 'MyISAM');
     }
 
     /**
@@ -105,7 +107,7 @@ class SetupDb implements LoggerAwareInterface
     private function dbExists(AbstractSchemaManager $schemaManager, $dbName)
     {
         try {
-            return in_array($dbName,$schemaManager->listDatabases());
+            return in_array($dbName, $schemaManager->listDatabases());
         } catch (ConnectionException $e) {
             $this->logWarning('Unable to connect to validate dbExists');
             return false;
@@ -119,7 +121,7 @@ class SetupDb implements LoggerAwareInterface
     {
         $schema = $p->getSchemaManager()->createSchema();
         $queries = $p->getPlatForm()->toDropSql($schema);
-        foreach ($queries as $query){
+        foreach ($queries as $query) {
             $p->exec($query);
         }
     }

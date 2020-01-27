@@ -1,17 +1,19 @@
 <?php
+
 /**
  * Default config header
  */
-return array(
-    'constrains' =>//constrains configuration params
-        array(
+
+return [
+    'constrains' => //constrains configuration params
+        [
             'length' => 4,
             'upper'  => false,
             'lower'  => true,
             'number' => false,
             'spec'   => false
-        ),
-    'generator'  => array(
+        ],
+    'generator'  => [
         'chars'      => 'abcdefghijklmnopqrstuvwxyz',
         'nums'       => '0123456789',
         'syms'       => '!@#$%^&*()-+?',
@@ -19,6 +21,6 @@ return array(
         'similar'    => 'iIl1Oo0',
         //used for human readable generator
         'dictionary' => '/usr/share/dict/words'
-    )
+    ]
 
-);
+];

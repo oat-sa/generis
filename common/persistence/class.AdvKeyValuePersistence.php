@@ -205,5 +205,4 @@ class common_persistence_AdvKeyValuePersistence extends common_persistence_KeyVa
     {
         return $key . '.' . $field;
     }
-
 }

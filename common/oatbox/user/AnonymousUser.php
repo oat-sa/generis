@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -18,6 +19,7 @@
  *
  *
  */
+
 namespace oat\oatbox\user;
 
 use oat\generis\model\GenerisRdf;
@@ -28,7 +30,8 @@ class AnonymousUser implements User
      * (non-PHPdoc)
      * @see \oat\oatbox\user\User::getIdentifier()
      */
-    public function getIdentifier() {
+    public function getIdentifier()
+    {
         return null;
     }
     
@@ -36,15 +39,17 @@ class AnonymousUser implements User
      * (non-PHPdoc)
      * @see \oat\oatbox\user\User::getRoles()
      */
-    public function getRoles() {
-        return array(GenerisRdf::INSTANCE_ROLE_ANONYMOUS);
+    public function getRoles()
+    {
+        return [GenerisRdf::INSTANCE_ROLE_ANONYMOUS];
     }
     
     /**
      * (non-PHPdoc)
      * @see \oat\oatbox\user\User::getPropertyValues()
      */
-    public function getPropertyValues($property) {
-        return array();
+    public function getPropertyValues($property)
+    {
+        return [];
     }
 }

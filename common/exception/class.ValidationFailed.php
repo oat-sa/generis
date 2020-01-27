@@ -21,7 +21,7 @@
  * @access public
  * @author Gyula Szucs, <gyula@taotesting.com>
  * @package generis
- 
+
  */
 class common_exception_ValidationFailed extends common_exception_BadRequest
 {

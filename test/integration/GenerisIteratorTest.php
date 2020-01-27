@@ -1,28 +1,30 @@
 <?php
-/**  
+
+/**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
  * of the License (non-upgradable).
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- * 
+ *
  * Copyright (c) 2017 (original work) Open Assessment Technologies SA;
- *               
- * 
+ *
+ *
  */
 
 use oat\generis\test\GenerisPhpUnitTestRunner;
 use oat\generis\model\GenerisRdf;
 
-class GenerisIteratorTest extends GenerisPhpUnitTestRunner {
+class GenerisIteratorTest extends GenerisPhpUnitTestRunner
+{
     
     /**
      * @var core_kernel_classes_Class
@@ -33,7 +35,7 @@ class GenerisIteratorTest extends GenerisPhpUnitTestRunner {
      * @var core_kernel_classes_Class
      */
     private $emptyClass;
-	
+    
     public function setUp()
     {
         GenerisPhpUnitTestRunner::initTest();
@@ -55,7 +57,8 @@ class GenerisIteratorTest extends GenerisPhpUnitTestRunner {
         $instance1c1_2 = $class1c1->createInstance('test instance 1c1.2');
     }
     
-    public function tearDown() {
+    public function tearDown()
+    {
         foreach ($this->topClass->getInstances(true) as $instance) {
             $instance->delete();
         }
@@ -68,7 +71,7 @@ class GenerisIteratorTest extends GenerisPhpUnitTestRunner {
     
     public function testClassIterator()
     {
-        $expected = array($this->topClass->getUri());
+        $expected = [$this->topClass->getUri()];
         foreach ($this->topClass->getSubClasses(true) as $resource) {
             $expected[] = $resource->getUri();
         }
@@ -76,7 +79,7 @@ class GenerisIteratorTest extends GenerisPhpUnitTestRunner {
         
         $iterator = new core_kernel_classes_ClassIterator($this->topClass);
          
-        $found1 = array();
+        $found1 = [];
         foreach ($iterator as $resource) {
             $this->assertIsA($resource, 'core_kernel_classes_Class');
             $found1[] = $resource->getUri();
@@ -87,64 +90,58 @@ class GenerisIteratorTest extends GenerisPhpUnitTestRunner {
 
         $iterator = new core_kernel_classes_ClassIterator($this->emptyClass);
         
-        $found2 = array();
+        $found2 = [];
         foreach ($iterator as $instance) {
             $found2[] = $instance->getUri();
         }
 
-        $this->assertEquals(1,$iterator->key());
-        $this->assertEquals(array($this->emptyClass->getUri()),$found2);
-        
+        $this->assertEquals(1, $iterator->key());
+        $this->assertEquals([$this->emptyClass->getUri()], $found2);
     }
     
-	public function testResourceIterator()
-	{
-	    $expected1 = array();
-	    foreach ($this->topClass->getInstances(true) as $resource) {
-	        $expected1[] = $resource->getUri();
-	    }
-	    sort($expected1);
-	    
-	    $iterator = new core_kernel_classes_ResourceIterator($this->topClass);
-	    
-	    $found1 = array();
-	    foreach ($iterator as $instance) {
-	        $this->assertIsA($instance, 'core_kernel_classes_Resource');
-	        $found1[] = $instance->getUri();
-	    }
-	    sort($found1);
-	    
-	    $this->assertEquals($expected1, $found1);
+    public function testResourceIterator()
+    {
+        $expected1 = [];
+        foreach ($this->topClass->getInstances(true) as $resource) {
+            $expected1[] = $resource->getUri();
+        }
+        sort($expected1);
+        
+        $iterator = new core_kernel_classes_ResourceIterator($this->topClass);
+        
+        $found1 = [];
+        foreach ($iterator as $instance) {
+            $this->assertIsA($instance, 'core_kernel_classes_Resource');
+            $found1[] = $instance->getUri();
+        }
+        sort($found1);
+        
+        $this->assertEquals($expected1, $found1);
 
-	    $found2 = array();
-	    foreach ($iterator as $instance) {
-	        $found2[] = $instance->getUri();
-	    }
-	    sort($found2);
-	    $this->assertEquals($expected1, $found2);
-	    
-	    $iterator = new core_kernel_classes_ResourceIterator($this->emptyClass);
-	    $this->assertFalse($iterator->valid());
-	    $this->assertEquals('1#0',$iterator->key());
-
-	   
-	}
-	
-	public function testResourceIteratorRewind()
-	{
-	    $iterator = new core_kernel_classes_ResourceIterator($this->topClass);
-	    
-	    $first = $iterator->current();
-	    
-	    $iterator->next();
-	    $second = $iterator->current();
-	    $this->assertNotEquals($first->getUri(), $second->getUri());
-	    
-	    $iterator->rewind();
-	    $first2 = $iterator->current();
-	    $this->assertEquals($first->getUri(), $first2->getUri());
-	     
-	}
-	
-	
+        $found2 = [];
+        foreach ($iterator as $instance) {
+            $found2[] = $instance->getUri();
+        }
+        sort($found2);
+        $this->assertEquals($expected1, $found2);
+        
+        $iterator = new core_kernel_classes_ResourceIterator($this->emptyClass);
+        $this->assertFalse($iterator->valid());
+        $this->assertEquals('1#0', $iterator->key());
+    }
+    
+    public function testResourceIteratorRewind()
+    {
+        $iterator = new core_kernel_classes_ResourceIterator($this->topClass);
+        
+        $first = $iterator->current();
+        
+        $iterator->next();
+        $second = $iterator->current();
+        $this->assertNotEquals($first->getUri(), $second->getUri());
+        
+        $iterator->rewind();
+        $first2 = $iterator->current();
+        $this->assertEquals($first->getUri(), $first2->getUri());
+    }
 }

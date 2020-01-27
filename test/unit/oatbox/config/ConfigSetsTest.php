@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -87,7 +88,6 @@ class ConfigSetsTest extends TestCase
         $this->assertEquals(null, $this->configurable->hashGet('handlers', 'handler_1_name'));
         $this->assertFalse($this->configurable->hashRemove('handlers', 'handler_1_name'));
     }
-
 }
 
 /**
@@ -98,4 +98,3 @@ class ConfigurableTestSample extends ConfigurableService
 {
     use ConfigSets;
 }
-

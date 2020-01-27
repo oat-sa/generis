@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -114,7 +115,7 @@ class core_kernel_classes_Class extends core_kernel_classes_Resource
      * @param  array params
      * @return \core_kernel_classes_Resource[]
      */
-    public function getInstances($recursive = false, $params = array())
+    public function getInstances($recursive = false, $params = [])
     {
         return (array) $this->getImplementation()->getInstances($this, $recursive, $params);
     }
@@ -206,7 +207,6 @@ class core_kernel_classes_Class extends core_kernel_classes_Resource
         $returnValue = $this->getImplementation()->createInstance($this, $label, $comment, $uri);
         $eventManager = $this->getServiceManager()->get(EventManager::SERVICE_ID);
         $eventManager->trigger(new ResourceCreated($returnValue));
-
         return $returnValue;
     }
 
@@ -225,7 +225,6 @@ class core_kernel_classes_Class extends core_kernel_classes_Resource
         $returnValue = $this->getImplementation()->createSubClass($this, $label, $comment, $uri);
         $eventManager = $this->getServiceManager()->get(EventManager::SERVICE_ID);
         $eventManager->trigger(new ResourceCreated($returnValue));
-
         return $returnValue;
     }
 
@@ -253,7 +252,7 @@ class core_kernel_classes_Class extends core_kernel_classes_Resource
      */
     public function getMethodes()
     {
-        return array( 'instanciate' => true , 'addSubclass' => true , 'addPropery' => true);
+        return [ 'instanciate' => true , 'addSubclass' => true , 'addPropery' => true];
     }
 
     /**
@@ -275,7 +274,7 @@ class core_kernel_classes_Class extends core_kernel_classes_Resource
      * @param  array options
      * @return \core_kernel_classes_Resource[]
      */
-    public function searchInstances($propertyFilters = array(), $options = array())
+    public function searchInstances($propertyFilters = [], $options = [])
     {
         return (array) $this->getImplementation()->searchInstances($this, $propertyFilters, $options);
     }
@@ -289,7 +288,7 @@ class core_kernel_classes_Class extends core_kernel_classes_Resource
      * @param  array options
      * @return integer
      */
-    public function countInstances($propertyFilters = array(), $options = array())
+    public function countInstances($propertyFilters = [], $options = [])
     {
         return $this->getImplementation()->countInstances($this, $propertyFilters, $options);
     }
@@ -305,7 +304,7 @@ class core_kernel_classes_Class extends core_kernel_classes_Resource
      * @param  array options
      * @return \core_kernel_classes_Resource[]
      */
-    public function getInstancesPropertyValues(core_kernel_classes_Property $property, $propertyFilters = array(), $options = array())
+    public function getInstancesPropertyValues(core_kernel_classes_Property $property, $propertyFilters = [], $options = [])
     {
         return (array) $this->getImplementation()->getInstancesPropertyValues($this, $property, $propertyFilters, $options);
     }
@@ -338,12 +337,11 @@ class core_kernel_classes_Class extends core_kernel_classes_Resource
     public function createInstanceWithProperties($properties)
     {
         $returnValue = null;
-
         // remove the additional types, because they might be implemented differently
 
-        $additionalTypes = array();
+        $additionalTypes = [];
         if (isset($properties[OntologyRdf::RDF_TYPE])) {
-            $types = is_array($properties[OntologyRdf::RDF_TYPE]) ? $properties[OntologyRdf::RDF_TYPE] : array($properties[OntologyRdf::RDF_TYPE]);
+            $types = is_array($properties[OntologyRdf::RDF_TYPE]) ? $properties[OntologyRdf::RDF_TYPE] : [$properties[OntologyRdf::RDF_TYPE]];
             foreach ($types as $type) {
                 $uri = is_object($type) ? $type->getUri() : $type;
                 if ($uri != $this->getUri()) {
@@ -354,13 +352,11 @@ class core_kernel_classes_Class extends core_kernel_classes_Resource
         }
         // create the instance
         $returnValue = $this->getImplementation()->createInstanceWithProperties($this, $properties);
-
         foreach ($additionalTypes as $type) {
             $returnValue->setType($type);
         }
         $eventManager = $this->getServiceManager()->get(EventManager::CONFIG_ID);
         $eventManager->trigger(new ResourceCreated($returnValue));
-
         return $returnValue;
     }
 

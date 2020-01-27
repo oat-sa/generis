@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -17,22 +18,23 @@
  * Copyright (c) 2018 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  *
  */
+
 namespace oat\generis\model\kernel\persistence\smoothsql\search\filter;
 
 use oat\search\helper\SupportedOperatorHelper;
 
 class FilterOperator extends SupportedOperatorHelper
 {
-	/** @var string */
-	protected $operator;
+    /** @var string */
+    protected $operator;
 
-	/**
-	 * @param string $operator
-	 */
-	protected function __construct($operator)
-	{
-		$this->operator = $operator;
-	}
+    /**
+     * @param string $operator
+     */
+    protected function __construct($operator)
+    {
+        $this->operator = $operator;
+    }
 
     /**
      * @return FilterOperator
@@ -138,35 +140,35 @@ class FilterOperator extends SupportedOperatorHelper
         return new self(static::IS_NULL);
     }
 
-	/**
-	 * @return FilterOperator
-	 */
-	public static function createGreaterThanEqual()
-	{
-		return new self(static::GREATER_THAN_EQUAL);
-	}
+    /**
+     * @return FilterOperator
+     */
+    public static function createGreaterThanEqual()
+    {
+        return new self(static::GREATER_THAN_EQUAL);
+    }
 
-	/**
-	 * @return FilterOperator
-	 */
-	public static function createEqual()
-	{
-		return new self(static::EQUAL);
-	}
+    /**
+     * @return FilterOperator
+     */
+    public static function createEqual()
+    {
+        return new self(static::EQUAL);
+    }
 
-	/**
-	 * @return FilterOperator
-	 */
-	public static function createLike()
-	{
-		return new self(static::CONTAIN);
-	}
+    /**
+     * @return FilterOperator
+     */
+    public static function createLike()
+    {
+        return new self(static::CONTAIN);
+    }
 
-	/**
-	 * @return string
-	 */
-	public function getValue()
-	{
-		return $this->operator;
-	}
+    /**
+     * @return string
+     */
+    public function getValue()
+    {
+        return $this->operator;
+    }
 }

@@ -20,30 +20,32 @@
  */
 
 /**
- * Iterates over a class(es) and its subclasses 
- * 
+ * Iterates over a class(es) and its subclasses
+ *
  * @author Joel Bout <joel@taotesting.com>
  */
 class core_kernel_classes_ClassIterator implements \Iterator
-{	
+{
+   
     /**
      * List of classes whose subclasses have not yet been exploded
-     * 
+     *
      * @var array
      */
-    private $todoClasses = array();
+    private $todoClasses = [];
     
-    private $classes = array();
+    private $classes = [];
 
-    private $currentId= -1;
+    private $currentId = -1;
     
     /**
      * Constructor of the iterator expecting a class or classes as argument
-     * 
+     *
      * @param mixed $classes array/instance of class(es) to iterate over
      */
-    public function __construct($classes) {
-        $classes = is_array($classes) ? $classes : array($classes);
+    public function __construct($classes)
+    {
+        $classes = is_array($classes) ? $classes : [$classes];
         foreach ($classes as $class) {
             $this->todoClasses[] = (is_object($class) && $class instanceof core_kernel_classes_Class) ? $class->getUri() : $class;
         }
@@ -54,7 +56,8 @@ class core_kernel_classes_ClassIterator implements \Iterator
      * (non-PHPdoc)
      * @see Iterator::rewind()
      */
-    function rewind() {
+    function rewind()
+    {
         $this->currentId = -1;
         $this->next();
     }
@@ -63,7 +66,8 @@ class core_kernel_classes_ClassIterator implements \Iterator
      * (non-PHPdoc)
      * @see Iterator::current()
      */
-    function current() {
+    function current()
+    {
         return new \core_kernel_classes_Class($this->classes[$this->currentId]);
     }
     
@@ -71,7 +75,8 @@ class core_kernel_classes_ClassIterator implements \Iterator
      * (non-PHPdoc)
      * @see Iterator::key()
      */
-    function key() {
+    function key()
+    {
         return $this->currentId;
     }
     
@@ -79,7 +84,8 @@ class core_kernel_classes_ClassIterator implements \Iterator
      * (non-PHPdoc)
      * @see Iterator::next()
      */
-    function next() {
+    function next()
+    {
         $this->currentId++;
         if (!isset($this->classes[$this->currentId]) && !empty($this->todoClasses)) {
             $newUri = array_shift($this->todoClasses);
@@ -97,7 +103,8 @@ class core_kernel_classes_ClassIterator implements \Iterator
      * (non-PHPdoc)
      * @see Iterator::valid()
      */
-    function valid() {
+    function valid()
+    {
         return isset($this->classes[$this->currentId]);
     }
 }

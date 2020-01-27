@@ -10,9 +10,8 @@
  *
  * @author plichart
  */
-abstract class common_exception_ExceptionHandler {
+abstract class common_exception_ExceptionHandler
+{
     //put your code here
-    public abstract function handle(common_Exception $exception);
+    abstract public function handle(common_Exception $exception);
 }
-
-?>

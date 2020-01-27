@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -15,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2016 (original work) Open Assessment Technologies SA
- * 
+ *
  */
 
 namespace oat\generis\model\resource;
@@ -32,9 +33,7 @@ use oat\generis\model\OntologyAwareTrait;
  *
  * @author Christophe GARCIA <christopheg@taotesting.com>
  */
-abstract class AbstractCreateOrReuse
-    extends ConfigurableService
-    implements CreateOrReuseInterface
+abstract class AbstractCreateOrReuse extends ConfigurableService implements CreateOrReuseInterface
 {
     use OntologyAwareTrait;
     
@@ -58,23 +57,25 @@ abstract class AbstractCreateOrReuse
      *
      * @return ComplexSearchService
      */
-    protected function getSearchService() {
+    protected function getSearchService()
+    {
         return $this->getModel()->getSearchInterface();
     }
     
     /**
-     * 
+     *
      * @param array $values
      * @return TaoResultSet
      */
-    protected function searchResource(array $values) {
+    protected function searchResource(array $values)
+    {
         
         $searchService = $this->getSearchService();
         $gateWay       = $searchService->getGateway();
         
         $searchQueryBuilder = $gateWay->query();
         
-        $searchService->searchType($searchQueryBuilder, $this->getRootClass()->getUri() , true);
+        $searchService->searchType($searchQueryBuilder, $this->getRootClass()->getUri(), true);
         
         $criterion = $searchQueryBuilder->newQuery();
         
@@ -85,7 +86,6 @@ abstract class AbstractCreateOrReuse
             } else {
                 \common_Logger::i('Predicate ' . $field . ' is not found.');
             }
-
         }
         
         $searchQueryBuilder->setCriteria($criterion)->setLimit(1);
@@ -98,48 +98,50 @@ abstract class AbstractCreateOrReuse
      * @param array $values
      * @return core_kernel_classes_Resource
      */
-    protected function createResource(array $values)  {
+    protected function createResource(array $values)
+    {
         return $this->getRootClass()->createInstanceWithProperties($values);
     }
 
     /**
-     * 
+     *
      * @param array $values
      * @return boolean
      * @throws DuplicateResourceException
      */
-    public function hasResource(array $values) {
+    public function hasResource(array $values)
+    {
         
         $result = $this->searchResource($values);
         $count = $result->count();
 
-        if($count === 1) {
+        if ($count === 1) {
             return true;
-        } elseif($count === 0) {
+        } elseif ($count === 0) {
             return false;
         } else {
-            throw new DuplicateResourceException($this->getRootClass()->getUri() , $values);
+            throw new DuplicateResourceException($this->getRootClass()->getUri(), $values);
         }
     }
     
     /**
-     * 
+     *
      * @param array $values
      * @return core_kernel_classes_Resource
      * @throws DuplicateResourceException
      */
-    public function getResource(array $values) {
+    public function getResource(array $values)
+    {
         
         $result = $this->searchResource($values);
         $count = $result->count();
 
-        if($count === 1) {
+        if ($count === 1) {
             return $result->current();
-        } elseif($count === 0) {
+        } elseif ($count === 0) {
             return $this->createResource($values);
         } else {
-            throw new DuplicateResourceException($this->getRootClass()->getUri() , $values);
+            throw new DuplicateResourceException($this->getRootClass()->getUri(), $values);
         }
     }
-    
 }

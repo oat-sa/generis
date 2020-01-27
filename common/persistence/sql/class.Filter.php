@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -175,7 +176,6 @@ class common_persistence_sql_Filter
     public function applyFilters(QueryBuilder $qb)
     {
         foreach ($this->getFilters() as $filter) {
-
             $type = null;
             $placeholder = $filter['valuePlaceholder'];
             if (is_array($filter['value'])) {
@@ -183,7 +183,7 @@ class common_persistence_sql_Filter
                 $filter['valuePlaceholder'] = '(' . $placeholder . ')';
             }
 
-            $qb->andWhere($filter['column'] .' '. $filter['operator'] .' '. $filter['valuePlaceholder'])
+            $qb->andWhere($filter['column'] . ' ' . $filter['operator'] . ' ' . $filter['valuePlaceholder'])
                 ->setParameter($placeholder, $filter['value'], $type);
         }
 

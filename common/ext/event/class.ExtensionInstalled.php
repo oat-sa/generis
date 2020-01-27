@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -15,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2016 Open Assessment Technologies SA
- * 
+ *
  */
 
 use oat\oatbox\event\Event;
@@ -25,23 +26,23 @@ use oat\oatbox\event\Event;
  */
 class common_ext_event_ExtensionInstalled implements Event
 {
-	/**
-	 * @var \common_ext_Extension
-	 */
+    /**
+     * @var \common_ext_Extension
+     */
     private $extension;
     
-	function __construct(\common_ext_Extension $extension)
-	{
-	    $this->extension = $extension;
-	}
+    function __construct(\common_ext_Extension $extension)
+    {
+        $this->extension = $extension;
+    }
     
-	function getExtension()
-	{
-	    return $this->extension;
-	}
+    function getExtension()
+    {
+        return $this->extension;
+    }
 
-	function getName()
-	{
-	    return __CLASS__;
-	}
+    function getName()
+    {
+        return __CLASS__;
+    }
 }

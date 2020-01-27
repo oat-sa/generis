@@ -1,19 +1,20 @@
 <?php
+
 /**
  * Default config header
  *
  * To replace this add a file /home/christophe/Projects/tao/generis/config/header/complexSearch.conf.php
  */
 
-return new oat\generis\model\kernel\persistence\smoothsql\search\ComplexSearchService(array(
-    'shared' => array(
+return new oat\generis\model\kernel\persistence\smoothsql\search\ComplexSearchService([
+    'shared' => [
         'search.query.query' => false,
         'search.query.builder' => false,
         'search.query.criterion' => false,
         'search.tao.serialyser' => false,
         'search.tao.result' => false
-    ),
-    'invokables' => array(
+    ],
+    'invokables' => [
         'search.query.query' => '\\oat\\search\\Query',
         'search.query.builder' => '\\oat\\search\\QueryBuilder',
         'search.query.criterion' => '\\oat\\search\\QueryCriterion',
@@ -26,14 +27,14 @@ return new oat\generis\model\kernel\persistence\smoothsql\search\ComplexSearchSe
         'search.factory.criterion' => '\\oat\\search\\factory\\QueryCriterionFactory',
         'search.tao.gateway' => '\\oat\\generis\\model\\kernel\\persistence\\smoothsql\\search\\GateWay',
         'search.tao.result' => '\\oat\\generis\\model\\kernel\\persistence\\smoothsql\\search\\TaoResultSet'
-    ),
-    'abstract_factories' => array(
+    ],
+    'abstract_factories' => [
         '\\oat\\search\\Command\\OperatorAbstractfactory'
-    ),
-    'services' => array(
-        'search.options' => array(
+    ],
+    'services' => [
+        'search.options' => [
             'table' => 'statements',
             'driver' => 'taoRdf'
-        )
-    )
-));
+        ]
+    ]
+]);

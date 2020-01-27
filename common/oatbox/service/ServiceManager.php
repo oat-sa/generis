@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -50,7 +51,7 @@ class ServiceManager implements ServiceLocatorInterface, ContainerInterface
         self::$instance = $serviceManager;
     }
 
-    private $services = array();
+    private $services = [];
 
     /**
      * @var \common_persistence_KeyValuePersistence
@@ -85,7 +86,8 @@ class ServiceManager implements ServiceLocatorInterface, ContainerInterface
      * @param string $serviceKey
      * @return string
      */
-    private function getServiceId($serviceKey) {
+    private function getServiceId($serviceKey)
+    {
         return ((interface_exists($serviceKey) || class_exists($serviceKey)) && defined($serviceKey . '::SERVICE_ID'))
             ? $serviceKey::SERVICE_ID
             : (string)$serviceKey
@@ -157,13 +159,13 @@ class ServiceManager implements ServiceLocatorInterface, ContainerInterface
     {
         $parts = explode('/', $serviceKey, 2);
         if (count($parts) < 2) {
-            throw new \common_Exception('Invalid servicekey '.$serviceKey);
+            throw new \common_Exception('Invalid servicekey ' . $serviceKey);
         }
         $this->propagate($service);
         $this->services[$serviceKey] = $service;
         $success = $this->getConfig()->set($serviceKey, $service);
         if (!$success) {
-            throw new \common_exception_Error('Unable to write '.$serviceKey);
+            throw new \common_exception_Error('Unable to write ' . $serviceKey);
         }
     }
 
@@ -191,7 +193,7 @@ class ServiceManager implements ServiceLocatorInterface, ContainerInterface
      */
     public function propagate($service)
     {
-        if(is_object($service) &&  ($service instanceof ServiceLocatorAwareInterface)){
+        if (is_object($service) &&  ($service instanceof ServiceLocatorAwareInterface)) {
             $service->setServiceLocator($this);
         }
         return $service;
@@ -205,7 +207,7 @@ class ServiceManager implements ServiceLocatorInterface, ContainerInterface
      * @param array $options
      * @return mixed
      */
-    public function build($className , array $options = [] )
+    public function build($className, array $options = [])
     {
         if (is_a($className, Configurable::class, true)) {
             $service = new $className($options);

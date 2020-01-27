@@ -1,23 +1,25 @@
 <?php
-/**  
+
+/**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
  * of the License (non-upgradable).
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- * 
+ *
  * Copyright (c) 2014 (original work) Open Assessment Technologies SA;
- *               
- * 
+ *
+ *
  */
+
 namespace oat\oatbox\task;
  
 use oat\oatbox\service\ConfigurableService;
@@ -48,7 +50,7 @@ class TaskService extends ConfigurableService
     public function runQueue()
     {
         $count = 0;
-        $statistics = array();
+        $statistics = [];
         $queue = $this->getServiceManager()->get(Queue::CONFIG_ID);
         $report = new Report(Report::TYPE_SUCCESS);
         $limit = $this->getLimit();
@@ -81,7 +83,6 @@ class TaskService extends ConfigurableService
     private function getLimit()
     {
         $limit = $this->hasOption(self::OPTION_LIMIT) ? $this->getOption(self::OPTION_LIMIT) : 0;
-        return (integer) $limit;
+        return (int) $limit;
     }
-
 }

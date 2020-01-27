@@ -1,23 +1,23 @@
 <?php
-/**  
+/**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
  * of the License (non-upgradable).
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- * 
+ *
  * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
  *               2013 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- * 
+ *
  */
 
 /**
@@ -26,12 +26,13 @@
  * @access public
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
  * @package generis
- 
+
  */
 class common_ext_NamespaceManager
 {
+
     // --- ASSOCIATIONS ---
-    // generateAssociationEnd : 
+    // generateAssociationEnd :
 
     // --- ATTRIBUTES ---
 
@@ -49,7 +50,7 @@ class common_ext_NamespaceManager
      * @access protected
      * @var array
      */
-    protected $namespaces = array();
+    protected $namespaces = [];
 
     // --- OPERATIONS ---
 
@@ -77,9 +78,9 @@ class common_ext_NamespaceManager
 
         
         
-        if(is_null(self::$instance)){
-        	$class = __CLASS__;				//used in case of subclassing
-        	self::$instance = new $class();
+        if (is_null(self::$instance)) {
+            $class = __CLASS__;             //used in case of subclassing
+            self::$instance = new $class();
         }
         $returnValue = self::$instance;
         
@@ -97,24 +98,24 @@ class common_ext_NamespaceManager
      */
     public function getAllNamespaces()
     {
-        $returnValue = array();
+        $returnValue = [];
 
         
         
-        if(count($this->namespaces) == 0){
-        	$db = core_kernel_classes_DbWrapper::singleton();
-        	$query = 'SELECT modelid, modeluri FROM models';
-			$result = $db->query($query);
-			
-			while ($row = $result->fetch()){	
-				$id 	= $row['modelid'];
-				$uri 	= $row['modeluri'];
-				$this->namespaces[$id] = $uri;
-			}
+        if (count($this->namespaces) == 0) {
+            $db = core_kernel_classes_DbWrapper::singleton();
+            $query = 'SELECT modelid, modeluri FROM models';
+            $result = $db->query($query);
+            
+            while ($row = $result->fetch()) {
+                $id     = $row['modelid'];
+                $uri    = $row['modeluri'];
+                $this->namespaces[$id] = $uri;
+            }
         }
         
-        foreach($this->namespaces as $id => $uri){
-        	$returnValue[$uri] = new common_ext_Namespace($id, $uri);
+        foreach ($this->namespaces as $id => $uri) {
+            $returnValue[$uri] = new common_ext_Namespace($id, $uri);
         }
 
         
@@ -131,11 +132,11 @@ class common_ext_NamespaceManager
      */
     public function getLocalNamespace()
     {
-		$localModelUri = LOCAL_NAMESPACE;
-		if (substr($localModelUri, -1) != '#') {
-		    $localModelUri.= '#';
-		}
-		return $this->getNamespace($localModelUri);
+        $localModelUri = LOCAL_NAMESPACE;
+        if (substr($localModelUri, -1) != '#') {
+            $localModelUri .= '#';
+        }
+        return $this->getNamespace($localModelUri);
     }
 
     /**
@@ -150,20 +151,20 @@ class common_ext_NamespaceManager
     {
         $returnValue = null;
     
-        if(count($this->namespaces) == 0){
-        	$this->getAllNamespaces();	//load the namespaces attribute 
-       	}
-        
-        //get modelId from modelUri
-        if(is_string($modelid)){
-        	$modelid = array_search($modelid, $this->namespaces);
+        if (count($this->namespaces) == 0) {
+            $this->getAllNamespaces();  //load the namespaces attribute
         }
         
-    	//get namespace from modelId
-    	if(is_int($modelid)){
-        	if(isset($this->namespaces[$modelid])){
-        		$returnValue = new common_ext_Namespace($modelid, $this->namespaces[$modelid]);
-        	}
+        //get modelId from modelUri
+        if (is_string($modelid)) {
+            $modelid = array_search($modelid, $this->namespaces);
+        }
+        
+        //get namespace from modelId
+        if (is_int($modelid)) {
+            if (isset($this->namespaces[$modelid])) {
+                $returnValue = new common_ext_Namespace($modelid, $this->namespaces[$modelid]);
+            }
         }
 
         return $returnValue;
@@ -179,8 +180,6 @@ class common_ext_NamespaceManager
     public function reset()
     {
         
-        $this->namespaces = array();
-        
+        $this->namespaces = [];
     }
-
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -78,7 +79,6 @@ class File extends FileSystemHandler
             if ($this->getFileSystem()->has($path)) {
                 return $this->getFileSystem()->get($path)->getMetadata();
             }
-
         } catch (FileNotFoundException $e) {
         }
         return false;
@@ -101,10 +101,8 @@ class File extends FileSystemHandler
 
         if (is_string($mixed)) {
             return $this->getFileSystem()->write($this->getPrefix(), $mixed, $config);
-
         } elseif (is_resource($mixed)) {
             return $this->getFileSystem()->writeStream($this->getPrefix(), $mixed, $config);
-
         } elseif ($mixed instanceof StreamInterface) {
             if (!$mixed->isReadable()) {
                 throw new \common_Exception('Stream is not readable. Write to filesystem aborted.');
@@ -119,7 +117,6 @@ class File extends FileSystemHandler
                 throw new \common_Exception('Unable to create resource from the given stream. Write to filesystem aborted.');
             }
             return $this->getFileSystem()->writeStream($this->getPrefix(), $resource, $config);
-
         } else {
             throw new \InvalidArgumentException('Value to be written has to be: string, resource or StreamInterface, ' .
                 '"' . gettype($mixed) . '" given.');
@@ -273,7 +270,8 @@ class File extends FileSystemHandler
     {
         try {
             return $this->getFileSystem()->delete($this->getPrefix());
-        } catch (FileNotFoundException $e) {}
+        } catch (FileNotFoundException $e) {
+        }
 
         return false;
     }

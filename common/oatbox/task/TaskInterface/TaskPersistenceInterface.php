@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -56,7 +57,7 @@ interface TaskPersistenceInterface extends ServiceLocatorAwareInterface
      * @param null $sortOrder
      * @return array
      */
-    public function search(array $filterTask, $rows = null, $page = null , $sortBy = null , $sortOrder = null);
+    public function search(array $filterTask, $rows = null, $page = null, $sortBy = null, $sortOrder = null);
 
     /**
      * @deprecated since version 7.10.0, to be removed in 8.0.
@@ -73,7 +74,7 @@ interface TaskPersistenceInterface extends ServiceLocatorAwareInterface
      * @param $status
      * @return boolean
      */
-    public function update($taskId , $status);
+    public function update($taskId, $status);
 
     /**
      * @deprecated since version 7.10.0, to be removed in 8.0.
@@ -82,7 +83,7 @@ interface TaskPersistenceInterface extends ServiceLocatorAwareInterface
      * @param \common_report_Report $report
      * @return boolean
      */
-    public function setReport($taskId , \common_report_Report $report);
+    public function setReport($taskId, \common_report_Report $report);
 
     /**
      * @deprecated since version 7.10.0, to be removed in 8.0.
@@ -98,5 +99,4 @@ interface TaskPersistenceInterface extends ServiceLocatorAwareInterface
      * @return array
      */
     public function getAll();
-
 }

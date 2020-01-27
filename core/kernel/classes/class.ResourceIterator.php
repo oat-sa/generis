@@ -53,17 +53,18 @@ class core_kernel_classes_ResourceIterator implements \Iterator
     
     /**
      * Whenever we already moved the pointer, used to prevent unnecessary rewinds
-     * 
+     *
      * @var boolean
      */
     private $unmoved = true;
     
     /**
      * Constructor of the iterator expecting a class or classes as argument
-     * 
+     *
      * @param mixed $classes array/instance of class(es) to iterate over
      */
-    public function __construct($classes) {
+    public function __construct($classes)
+    {
         $this->classIterator = new core_kernel_classes_ClassIterator($classes);
     }
     
@@ -71,7 +72,8 @@ class core_kernel_classes_ResourceIterator implements \Iterator
      * (non-PHPdoc)
      * @see Iterator::rewind()
      */
-    function rewind() {
+    function rewind()
+    {
         if (!$this->unmoved) {
             $this->classIterator->rewind();
             $this->ensureNotEmpty();
@@ -98,15 +100,17 @@ class core_kernel_classes_ResourceIterator implements \Iterator
      * (non-PHPdoc)
      * @see Iterator::key()
      */
-    function key() {
-        return $this->classIterator->key().'#'.$this->currentInstance;
+    function key()
+    {
+        return $this->classIterator->key() . '#' . $this->currentInstance;
     }
     
     /**
      * (non-PHPdoc)
      * @see Iterator::next()
      */
-    function next() {
+    function next()
+    {
         $this->unmoved = false;
         if ($this->valid()) {
             $this->currentInstance++;
@@ -125,11 +129,12 @@ class core_kernel_classes_ResourceIterator implements \Iterator
     
     /**
      * While there are remaining classes there are instances to load
-     * 
+     *
      * (non-PHPdoc)
      * @see Iterator::valid()
      */
-    function valid() {
+    function valid()
+    {
         if ($this->instanceCache === null) {
             $this->ensureNotEmpty();
         }
@@ -142,7 +147,8 @@ class core_kernel_classes_ResourceIterator implements \Iterator
      * Ensure the class iterator is pointin to a non empty class
      * Loads the first resource block to test this
      */
-    protected function ensureNotEmpty() {
+    protected function ensureNotEmpty()
+    {
         $this->currentInstance = 0;
         while ($this->classIterator->valid() && !$this->load($this->classIterator->current(), 0)) {
             $this->classIterator->next();
@@ -159,7 +165,7 @@ class core_kernel_classes_ResourceIterator implements \Iterator
     protected function load(core_kernel_classes_Class $class, $offset)
     {
         $results = $this->loadResources($class, $offset);
-        $this->instanceCache = array();
+        $this->instanceCache = [];
         foreach ($results as $resource) {
             $this->instanceCache[$offset] = $resource->getUri();
             $offset++;

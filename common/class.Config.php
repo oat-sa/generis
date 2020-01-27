@@ -22,17 +22,18 @@
  *
  */
 
-class common_Config {
-	/**
-	 * @access
-	 * @author "Lionel Lecaque, <lionel@taotesting.com>"
-	 */
-	public static function load($config=null)
+class common_Config
+{
+    /**
+     * @access
+     * @author "Lionel Lecaque, <lionel@taotesting.com>"
+     */
+    public static function load($config = null)
     {
-	    if (! is_null($config) && is_readable($config)) {
+        if (! is_null($config) && is_readable($config)) {
             include_once $config;
         } else {
-            include_once dirname ( __FILE__ ) . '/../../config/generis.conf.php';
+            include_once dirname(__FILE__) . '/../../config/generis.conf.php';
         }
-	}
+    }
 }

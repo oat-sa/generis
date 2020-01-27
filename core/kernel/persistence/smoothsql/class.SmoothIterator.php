@@ -20,22 +20,22 @@
 
 /**
  * Iterator over all triples
- * 
+ *
  * @author joel bout <joel@taotesting.com>
  * @package generis
  */
-class core_kernel_persistence_smoothsql_SmoothIterator
-    extends common_persistence_sql_QueryIterator
+class core_kernel_persistence_smoothsql_SmoothIterator extends common_persistence_sql_QueryIterator
 {
     /**
      * Constructor of the iterator expecting the model ids
-     * 
+     *
      * @param array $modelIds
      */
-    public function __construct(common_persistence_SqlPersistence $persistence, $modelIds = null) {
+    public function __construct(common_persistence_SqlPersistence $persistence, $modelIds = null)
+    {
         $query = 'SELECT * FROM statements '
-            .(is_null($modelIds) ? '' : 'WHERE modelid IN ('.implode(',', $modelIds).') ')
-            .'ORDER BY id';
+            . (is_null($modelIds) ? '' : 'WHERE modelid IN (' . implode(',', $modelIds) . ') ')
+            . 'ORDER BY id';
         parent::__construct($persistence, $query);
     }
     
@@ -44,7 +44,8 @@ class core_kernel_persistence_smoothsql_SmoothIterator
      * @see Iterator::current()
      * @return core_kernel_classes_Triple
      */
-    function current() {
+    function current()
+    {
         $statement = parent::current();
         
         $triple = new core_kernel_classes_Triple();

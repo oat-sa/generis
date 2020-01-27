@@ -19,4 +19,4 @@
 class common_exception_NotFound extends common_Exception
 {
 
-} 
+}

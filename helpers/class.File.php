@@ -43,7 +43,7 @@ class helpers_File
      * matches [A-Za-z] | - | _
      * @var array
      */
-    private static $ALLOWED_CHARACTERS = array('A' => '','B' => '','C' => '','D' => '','E' => '','F' => '','G' => '','H' => '','I' => '','J' => '','K' => '','L' => '','M' => '','N' => '','O' => '','P' => '','Q' => '','R' => '','S' => '','T' => '','U' => '','V' => '','W' => '','X' => '','Y' => '','Z' => '','a' => '','b' => '','c' => '','d' => '','e' => '','f' => '','g' => '','h' => '','i' => '','j' => '','k' => '','l' => '','m' => '','n' => '','o' => '','p' => '','q' => '','r' => '','s' => '','t' => '','u' => '','v' => '','w' => '','x' => '','y' => '','z' => '',0 => '',1 => '',2 => '',3 => '',4 => '',5 => '',6 => '',7 => '',8 => '',9 => '','_' => '','-' => '');
+    private static $ALLOWED_CHARACTERS = ['A' => '','B' => '','C' => '','D' => '','E' => '','F' => '','G' => '','H' => '','I' => '','J' => '','K' => '','L' => '','M' => '','N' => '','O' => '','P' => '','Q' => '','R' => '','S' => '','T' => '','U' => '','V' => '','W' => '','X' => '','Y' => '','Z' => '','a' => '','b' => '','c' => '','d' => '','e' => '','f' => '','g' => '','h' => '','i' => '','j' => '','k' => '','l' => '','m' => '','n' => '','o' => '','p' => '','q' => '','r' => '','s' => '','t' => '','u' => '','v' => '','w' => '','x' => '','y' => '','z' => '',0 => '',1 => '',2 => '',3 => '',4 => '',5 => '',6 => '',7 => '',8 => '',9 => '','_' => '','-' => ''];
 
     /**
      * Directory Mode
@@ -75,7 +75,7 @@ class helpers_File
      * @param string to
      * @return string
      */
-    static public function getRelPath($from, $to)
+    public static function getRelPath($from, $to)
     {
         $returnValue = (string) '';
 
@@ -102,7 +102,7 @@ class helpers_File
      * @param $directory
      * @return bool
      */
-    static public function isFileInsideDirectory($filename, $directory)
+    public static function isFileInsideDirectory($filename, $directory)
     {
         $canonicalDirectory = realpath($directory);
         if (false === $canonicalDirectory) {
@@ -123,7 +123,7 @@ class helpers_File
      * @param string path
      * @return boolean
      */
-    static public function remove($path)
+    public static function remove($path)
     {
         $returnValue = (bool) false;
 
@@ -160,7 +160,7 @@ class helpers_File
      * @param boolean $ignoreSystemFiles
      * @return boolean
      */
-    static public function emptyDirectory($path, $ignoreSystemFiles = false)
+    public static function emptyDirectory($path, $ignoreSystemFiles = false)
     {
         $success = true;
         $handle = opendir($path);
@@ -188,9 +188,9 @@ class helpers_File
      * @param boolean ignoreSystemFiles
      * @return boolean
      */
-    static public function copy($source, $destination, $recursive = true, $ignoreSystemFiles = true)
+    public static function copy($source, $destination, $recursive = true, $ignoreSystemFiles = true)
     {
-        if(!is_readable($source)){
+        if (!is_readable($source)) {
             return false;
         }
 
@@ -266,9 +266,9 @@ class helpers_File
      * @param array options
      * @return array An array of paths.
      */
-    static public function scandir($path, $options = array())
+    public static function scandir($path, $options = [])
     {
-        $returnValue = array();
+        $returnValue = [];
 
         $recursive = isset($options['recursive']) ? $options['recursive'] : false;
         $only = isset($options['only']) ? $options['only'] : null;
@@ -312,7 +312,7 @@ class helpers_File
      * @param string $path
      * @return string
      */
-    static public function urlToPath($path)
+    public static function urlToPath($path)
     {
         $path = parse_url($path);
         return $path === null ? null : str_replace('/', DIRECTORY_SEPARATOR, $path['path']);
@@ -327,32 +327,32 @@ class helpers_File
      * @param string $path The original path.
      * @return string The resolved path.
      */
-    static public function truePath($path)
+    public static function truePath($path)
     {
         // From Magento Mass Import utils (MIT)
         // http://sourceforge.net/p/magmi/git/ci/master/tree/magmi-0.8/inc/magmi_utils.php
 
         // whether $path is unix or not
-        $unipath = strlen( $path ) == 0 || $path{0} != '/';
+        $unipath = strlen($path) == 0 || $path{0} != '/';
         // attempts to detect if path is relative in which case, add cwd
-        if ( strpos( $path, ':' ) === false && $unipath ){
+        if (strpos($path, ':') === false && $unipath) {
             $path = getcwd() . DIRECTORY_SEPARATOR . $path;
         }
         // resolve path parts (single dot, double dot and double delimiters)
-        $path      = str_replace( array( '/', '\\' ), DIRECTORY_SEPARATOR, $path );
-        $parts     = array_filter( explode( DIRECTORY_SEPARATOR, $path ), 'strlen' );
-        $absolutes = array();
-        foreach ( $parts as $part ) {
-            if ( '.' == $part ) {
+        $path      = str_replace([ '/', '\\' ], DIRECTORY_SEPARATOR, $path);
+        $parts     = array_filter(explode(DIRECTORY_SEPARATOR, $path), 'strlen');
+        $absolutes = [];
+        foreach ($parts as $part) {
+            if ('.' == $part) {
                 continue;
             }
-            if ( '..' == $part ) {
-                array_pop( $absolutes );
+            if ('..' == $part) {
+                array_pop($absolutes);
             } else {
                 $absolutes[ ] = $part;
             }
         }
-        $path = implode( DIRECTORY_SEPARATOR, $absolutes );
+        $path = implode(DIRECTORY_SEPARATOR, $absolutes);
         // put initial separator that could have been lost
         $path = !$unipath ? '/' . $path : $path;
         return $path;
@@ -365,10 +365,11 @@ class helpers_File
      * @param string $key
      * @return string
      */
-    static public function sanitizeInjectively($string) {
+    public static function sanitizeInjectively($string)
+    {
         $sanitized = '';
         foreach (str_split($string) as $char) {
-            $sanitized .= isset(self::$ALLOWED_CHARACTERS[$char]) ? $char : '='.base64_encode($char);
+            $sanitized .= isset(self::$ALLOWED_CHARACTERS[$char]) ? $char : '=' . base64_encode($char);
         }
         return $sanitized;
     }
@@ -384,17 +385,17 @@ class helpers_File
      * @param boolean $recursive Whether or not scan the directory recursively.
      * @return boolean
      */
-    static public function containsFileType($path, $types = array(), $recursive = true)
+    public static function containsFileType($path, $types = [], $recursive = true)
     {
         if (!is_array($types)) {
-            $types = array($types);
+            $types = [$types];
         }
 
         if (!is_dir($path)) {
             return false;
         }
 
-        foreach (self::scandir($path, array('absolute' => true, 'recursive' => $recursive)) as $item) {
+        foreach (self::scandir($path, ['absolute' => true, 'recursive' => $recursive]) as $item) {
             if (is_file($item)) {
                 $pathParts = pathinfo($item);
 
@@ -417,12 +418,12 @@ class helpers_File
      * @param  string $originalName
      * @return string
      */
-    static public function createFileName($originalName)
+    public static function createFileName($originalName)
     {
         $returnValue = uniqid(hash('crc32', $originalName));
 
         $ext = @pathinfo($originalName, PATHINFO_EXTENSION);
-        if (!empty($ext)){
+        if (!empty($ext)) {
             $returnValue .= '.' . $ext;
         }
 
@@ -433,7 +434,7 @@ class helpers_File
      * @param string $type
      * @return boolean
      */
-    static public function isZipMimeType($type)
+    public static function isZipMimeType($type)
     {
         return in_array($type, [
             'application/zip', 'application/x-zip', 'application/x-zip-compressed', 'application/octet-stream'

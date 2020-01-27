@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,7 +26,7 @@ use oat\oatbox\log\TaoLoggerAwareInterface;
 
 /**
  * Configurable base class
- * 
+ *
  * inspired by Solarium\Core\Configurable by Bas de Nooijer
  * https://github.com/basdenooijer/solarium/blob/master/library/Solarium/Core/Configurable.php
  *
@@ -35,18 +36,21 @@ abstract class Configurable implements PhpSerializable, TaoLoggerAwareInterface
 {
     use LoggerAwareTrait;
 
-    private $options = array();
+
+    private $options = [];
     
     /**
      * public constructor to allow the object to be recreated from php code
-     * 
+     *
      * @param array $options
      */
-    public function __construct($options = array()) {
+    public function __construct($options = [])
+    {
         $this->setOptions($options);
     }
 
-    public function setOption($name, $value) {
+    public function setOption($name, $value)
+    {
         $this->options[$name] = $value;
     }
 
@@ -57,12 +61,13 @@ abstract class Configurable implements PhpSerializable, TaoLoggerAwareInterface
      * @return void
      * @throws \common_exception_Error
      */
-    public function setOptions(array $options) {
+    public function setOptions(array $options)
+    {
         if (!is_array($options)) {
             if (is_object($options) && method_exists($options, 'toArray')) {
                 $options = $options->toArray();
             } else {
-                throw new \common_exception_Error('Options submitted to '.get_called_class().' must be an array or implement toArray');
+                throw new \common_exception_Error('Options submitted to ' . get_called_class() . ' must be an array or implement toArray');
             }
         }
         $this->options = $options;
@@ -74,7 +79,8 @@ abstract class Configurable implements PhpSerializable, TaoLoggerAwareInterface
      * @param  string $name
      * @return boolean
     */
-    public function hasOption($name) {
+    public function hasOption($name)
+    {
         return isset($this->options[$name]);
     }
     
@@ -86,7 +92,8 @@ abstract class Configurable implements PhpSerializable, TaoLoggerAwareInterface
      * @param  string $name
      * @return mixed
     */
-    public function getOption($name) {
+    public function getOption($name)
+    {
         return isset($this->options[$name]) ? $this->options[$name] : null;
     }
     
@@ -95,7 +102,8 @@ abstract class Configurable implements PhpSerializable, TaoLoggerAwareInterface
      *
      * @return array
     */
-    public function getOptions() {
+    public function getOptions()
+    {
         return $this->options;
     }
     
@@ -103,9 +111,10 @@ abstract class Configurable implements PhpSerializable, TaoLoggerAwareInterface
      * (non-PHPdoc)
      * @see \oat\oatbox\PhpSerializable::__toPhpCode()
      */
-    public function __toPhpCode() {
+    public function __toPhpCode()
+    {
         $options = $this->getOptions();
         $params = empty($options) ? '' : \common_Utils::toHumanReadablePhpString($options);
-        return 'new '.get_class($this).'('.$params.')';
+        return 'new ' . get_class($this) . '(' . $params . ')';
     }
 }

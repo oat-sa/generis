@@ -1,24 +1,26 @@
 <?php
 
 use oat\generis\model\data\Model;
+
 class helpers_RdfDiff
 {
-    private $added = array();
+    private $added = [];
 
-    private $removed = array();
+    private $removed = [];
 
-    private $toAdd = array();
+    private $toAdd = [];
 
-    private $toRemove = array();
+    private $toRemove = [];
 
     /**
      * Creates a diff from a set of triples to a set of troples
-     * 
-     * 
+     *
+     *
      * @param Traversable $from
      * @param Traversable $to
      */
-    public static function create(Traversable $from, Traversable $to) {
+    public static function create(Traversable $from, Traversable $to)
+    {
         $diff = new self();
         
         foreach ($to as $triple) {
@@ -35,14 +37,16 @@ class helpers_RdfDiff
     /**
      * @return Iterator
      */
-    public function getTriplesToAdd() {
+    public function getTriplesToAdd()
+    {
         return new ArrayIterator($this->toAdd);
     }
     
     /**
      * @return Iterator
      */
-    public function getTriplesToRemove() {
+    public function getTriplesToRemove()
+    {
         return new ArrayIterator($this->toRemove);
     }
     
@@ -68,25 +72,28 @@ class helpers_RdfDiff
         }
     }
     
-    protected function generateSerial(core_kernel_classes_Triple $triple) {
-        return md5(implode(' ', array($triple->subject, $triple->predicate, $triple->object, $triple->lg, $triple->modelid)));
+    protected function generateSerial(core_kernel_classes_Triple $triple)
+    {
+        return md5(implode(' ', [$triple->subject, $triple->predicate, $triple->object, $triple->lg, $triple->modelid]));
     }
     
-    public function getSummary() {
-        return count($this->toAdd).' triples to add and '.count($this->toRemove).' triples to remove';
+    public function getSummary()
+    {
+        return count($this->toAdd) . ' triples to add and ' . count($this->toRemove) . ' triples to remove';
     }
     
-    public function dump() {
+    public function dump()
+    {
         foreach ($this->toAdd as $triple) {
-            echo '+ '.str_pad($triple->subject, 80).' '.str_pad($triple->predicate, 80).' '.str_pad($triple->object, 80).PHP_EOL;
+            echo '+ ' . str_pad($triple->subject, 80) . ' ' . str_pad($triple->predicate, 80) . ' ' . str_pad($triple->object, 80) . PHP_EOL;
         }
         foreach ($this->toRemove as $triple) {
-            echo '- '.str_pad($triple->subject, 80).' '.str_pad($triple->predicate, 80).' '.str_pad($triple->object, 80).PHP_EOL;
+            echo '- ' . str_pad($triple->subject, 80) . ' ' . str_pad($triple->predicate, 80) . ' ' . str_pad($triple->object, 80) . PHP_EOL;
         }
-        
     }
     
-    public function applyTo(Model $model) {
+    public function applyTo(Model $model)
+    {
         $rdf = $model->getRdfInterface();
         foreach ($this->getTriplesToRemove() as $triple) {
             $rdf->remove($triple);

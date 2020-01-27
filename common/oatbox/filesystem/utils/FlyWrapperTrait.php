@@ -1,8 +1,10 @@
 <?php
+
 namespace oat\oatbox\filesystem\utils;
 
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\Config;
+
 /**
  * A trait to facilitate creation of adapter wrappers
  *

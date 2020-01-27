@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,11 +23,11 @@ namespace oat\generis\model;
 
 interface OntologyRdf
 {
-	const RDF_TYPE = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type';
-	const RDF_PROPERTY = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#Property';
-	const RDF_VALUE = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#value';
-	const RDF_STATEMENT = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#Statement';
-	const RDF_FIRST = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#first';
-	const RDF_REST = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#rest';
-	const RDF_LIST = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#List';
+    const RDF_TYPE = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type';
+    const RDF_PROPERTY = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#Property';
+    const RDF_VALUE = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#value';
+    const RDF_STATEMENT = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#Statement';
+    const RDF_FIRST = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#first';
+    const RDF_REST = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#rest';
+    const RDF_LIST = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#List';
 }
