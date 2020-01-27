@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,7 +31,7 @@ class EnvironmentVariable implements PhpSerializable
 
     public function __construct($name)
     {
-        if(!is_string($name)) {
+        if (!is_string($name)) {
             throw new InvalidArgumentException('Environment variable name must be a string.');
         }
 

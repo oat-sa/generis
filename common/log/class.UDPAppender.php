@@ -28,8 +28,7 @@
  * @package generis
 
  */
-class common_log_UDPAppender
-    extends common_log_BaseAppender
+class common_log_UDPAppender extends common_log_BaseAppender
 {
     // --- ASSOCIATIONS ---
 
@@ -75,15 +74,15 @@ class common_log_UDPAppender
         $returnValue = (bool) false;
 
 
-    	if (isset($configuration['host'])) {
-    		$this->host = $configuration['host'];
-    	}
+        if (isset($configuration['host'])) {
+            $this->host = $configuration['host'];
+        }
 
-    	if (isset($configuration['port'])) {
-    		$this->port = $configuration['port'];
-    	}
+        if (isset($configuration['port'])) {
+            $this->port = $configuration['port'];
+        }
 
-    	$returnValue = parent::init($configuration);
+        $returnValue = parent::init($configuration);
 
 
         return (bool) $returnValue;
@@ -97,27 +96,26 @@ class common_log_UDPAppender
      * @param  Item item
      * @return mixed
      */
-    public function doLog( common_log_Item $item)
+    public function doLog(common_log_Item $item)
     {
 
         if (is_null($this->resource)) {
-        	$this->resource  = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
-        	socket_set_nonblock($this->resource);
+            $this->resource  = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
+            socket_set_nonblock($this->resource);
         }
         if ($this->resource !== false) {
-        	$message = json_encode(array(
-        		's' => $item->getSeverity(),
-        		'd' => $item->getDescription(),
-        		'p' => $this->prefix,
-        		't' => $item->getTags(),
-        		'f' => $item->getCallerFile(),
-        		'l' => $item->getCallerLine(),
-        		'b' => $item->getBacktrace()
-        	));
-        	@socket_sendto($this->resource, $message, strlen($message), 0, $this->host, $this->port);
-        	//ignore errors, socket might already be closed because php is shutting down
+            $message = json_encode([
+                's' => $item->getSeverity(),
+                'd' => $item->getDescription(),
+                'p' => $this->prefix,
+                't' => $item->getTags(),
+                'f' => $item->getCallerFile(),
+                'l' => $item->getCallerLine(),
+                'b' => $item->getBacktrace()
+            ]);
+            @socket_sendto($this->resource, $message, strlen($message), 0, $this->host, $this->port);
+            //ignore errors, socket might already be closed because php is shutting down
         }
-
     }
 
     /**
@@ -133,11 +131,9 @@ class common_log_UDPAppender
         // don't close since we might still need it
         /*
         if (!is_null($this->resource) && $this->resource !== false) {
-    		socket_close($this->resource);
+            socket_close($this->resource);
         }
         parent::__destruct();
         */
-
     }
-
 }

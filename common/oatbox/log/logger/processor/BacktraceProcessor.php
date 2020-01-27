@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -114,18 +115,18 @@ class BacktraceProcessor
             }
 
             if (isset($trace[$key]['args'])) {
-                $vars = array();
+                $vars = [];
                 foreach ($trace[$key]['args'] as $k => $v) {
                     switch (gettype($v)) {
-                        case 'boolean' :
-                        case 'integer' :
-                        case 'double' :
+                        case 'boolean':
+                        case 'integer':
+                        case 'double':
                             $vars[$k] = (string)$v;
                             break;
-                        case 'string' :
-                            $vars[$k] = strlen($v) > 128 ? 'string('.strlen($v).')' : $v;
+                        case 'string':
+                            $vars[$k] = strlen($v) > 128 ? 'string(' . strlen($v) . ')' : $v;
                             break;
-                        case 'class' :
+                        case 'class':
                             $vars[$k] = get_class($v);
                             break;
                         default:
@@ -139,9 +140,9 @@ class BacktraceProcessor
         // we should have the call source now
         $record['extra'] = array_merge(
             $record['extra'],
-            array(
+            [
                 static::TRACE_OFFSET => array_values($trace)
-            )
+            ]
         );
 
         return $record;

@@ -1,21 +1,22 @@
 <?php
-/**  
+
+/**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
  * of the License (non-upgradable).
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- * 
+ *
  * Copyright (c) 2017 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- * 
+ *
  */
 
 namespace oat\oatbox\extension\script;
@@ -33,25 +34,25 @@ abstract class ScriptAction extends AbstractAction
     private $options;
     private $optionsDescription;
     
-    protected abstract function provideOptions();
+    abstract protected function provideOptions();
     
-    protected abstract function provideDescription();
+    abstract protected function provideDescription();
     
     /**
      * Run Script.
-     * 
+     *
      * Run the userland script. Implementers will use this method
      * to implement the main logic of the script.
-     * 
+     *
      * @return \common_report_Report
      */
-    protected abstract function run();
+    abstract protected function run();
     
     /**
      * Invoke
-     * 
+     *
      * This method makes the script invokable programatically.
-     * 
+     *
      * @return \common_report_Report
      */
     public function __invoke($params)
@@ -67,7 +68,7 @@ abstract class ScriptAction extends AbstractAction
         // Build option container.
         try {
             $this->options = new OptionContainer(
-                $this->optionsDescription, 
+                $this->optionsDescription,
                 $params
             );
         } catch (\Exception $e) {
@@ -106,8 +107,8 @@ abstract class ScriptAction extends AbstractAction
     protected function provideUsage()
     {
         return [];
-	}
-	
+    }
+    
     protected function provideUsageOptionName()
     {
         return 'help';
@@ -117,7 +118,7 @@ abstract class ScriptAction extends AbstractAction
     {
         return false;
     }
-	
+    
     private function displayUsage(array $params)
     {
         $usageDescription = $this->provideUsage();
@@ -198,7 +199,6 @@ abstract class ScriptAction extends AbstractAction
         $string = "\"${value}\"";
         
         switch (gettype($value)) {
-            
             case 'boolean':
                 $string = ($value === true) ? 'true' : 'false';
                 break;

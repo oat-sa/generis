@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -73,28 +74,28 @@ class TaoLog extends ConfigurableService implements LoggerInterface
             $errorFile = $errorLine = 'undefined';
         }
 
-		if(PHP_SAPI !== 'cli'){
-			$requestURI = $_SERVER['REQUEST_URI'];
-		} else {
-			$requestURI = implode(' ', $_SERVER['argv']);
-		}
-		
-		//reformat input
-		if(is_object($message)){
-			$message = 'Message is object of type ' . gettype($message);
+        if (PHP_SAPI !== 'cli') {
+            $requestURI = $_SERVER['REQUEST_URI'];
+        } else {
+            $requestURI = implode(' ', $_SERVER['argv']);
+        }
+        
+        //reformat input
+        if (is_object($message)) {
+            $message = 'Message is object of type ' . gettype($message);
 
             //show content of logged object only from debug level
-            if($level <= \common_Logger::DEBUG_LEVEL){
+            if ($level <= \common_Logger::DEBUG_LEVEL) {
                 $message .= ' : ' . PHP_EOL . var_export($message, true);
             }
-        //same for arrays
-	    } else if (is_array($message) && $level <= \common_Logger::DEBUG_LEVEL){
-			$message = 'Message is an array : ' . PHP_EOL . var_export($message, true);
-		} else{
-			$message = (string) $message;
-		}
-		$level = \common_log_Logger2Psr::getCommonFromPsrLevel($level);
-		$this->getDispatcher()->log(new \common_log_Item($message, $level, time(), $stack, $context, $requestURI, $errorFile, $errorLine));
+            //same for arrays
+        } elseif (is_array($message) && $level <= \common_Logger::DEBUG_LEVEL) {
+            $message = 'Message is an array : ' . PHP_EOL . var_export($message, true);
+        } else {
+            $message = (string) $message;
+        }
+        $level = \common_log_Logger2Psr::getCommonFromPsrLevel($level);
+        $this->getDispatcher()->log(new \common_log_Item($message, $level, time(), $stack, $context, $requestURI, $errorFile, $errorLine));
     }
     
     /**
@@ -102,7 +103,8 @@ class TaoLog extends ConfigurableService implements LoggerInterface
      *
      * @return Appender
      */
-    private function getDispatcher() {
+    private function getDispatcher()
+    {
         if (is_null($this->dispatcher)) {
             $this->dispatcher = new \common_log_Dispatcher($this->getOption(self::OPTION_APPENDERS));
         }

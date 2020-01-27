@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,13 +20,15 @@
  */
 
 use oat\generis\Helper\SystemHelper;
+
 /**
  * This helper aims at providing utility methods to render
  * reports into TXT.
- * 
+ *
  *
  */
-class helpers_Report {
+class helpers_Report
+{
    
     const AUTOSENSE = 'autosense';
     
@@ -37,7 +40,8 @@ class helpers_Report {
      * @param integer $intend the intend of the message.
      * @return string The shell output of $report.
      */
-    public static function renderToCommandLine(common_report_Report $report, $useColor = self::AUTOSENSE, $intend = 0) {
+    public static function renderToCommandLine(common_report_Report $report, $useColor = self::AUTOSENSE, $intend = 0)
+    {
         switch ($report->getType()) {
             case common_report_Report::TYPE_SUCCESS:
                 $color = '0;32'; // green
@@ -58,14 +62,13 @@ class helpers_Report {
             $useColor = getenv('TAO_CONSOLE') !== 'nocolor' && !SystemHelper::isWindows();
         }
             
-        $output =  ($useColor ? "\033[".$color.'m' : '')
-            .($intend > 0 ? str_repeat(' ', $intend) : '')
-            .$report->getMessage()
-            .($useColor ? "\033[0m" : '').PHP_EOL;
+        $output =  ($useColor ? "\033[" . $color . 'm' : '')
+            . ($intend > 0 ? str_repeat(' ', $intend) : '')
+            . $report->getMessage()
+            . ($useColor ? "\033[0m" : '') . PHP_EOL;
         foreach ($report as $child) {
             $output .= self::renderToCommandline($child, $useColor, $intend + 2);
         }
         return $output;
     }
-    
 }

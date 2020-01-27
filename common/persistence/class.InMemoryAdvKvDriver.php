@@ -26,7 +26,8 @@ class common_persistence_InMemoryAdvKvDriver extends common_persistence_InMemory
      *
      * @see common_persistence_Driver::connect()
      */
-    function connect($id, array $params){
+    function connect($id, array $params)
+    {
         return new \common_persistence_AdvKeyValuePersistence($params, $this);
     }
 
@@ -55,7 +56,8 @@ class common_persistence_InMemoryAdvKvDriver extends common_persistence_InMemory
 
     public function hGet($key, $field)
     {
-        if (! isset($this->persistence[$key])
+        if (
+            ! isset($this->persistence[$key])
             || ! isset($this->persistence[$key][self::HPREFIX . $field])
         ) {
             return false;

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,19 +31,19 @@ use \common_ext_ExtensionsManager;
 class BasicRegistry extends AbstractRegistry
 {
     /**
-     * 
+     *
      * @see \oat\oatbox\AbstractRegistry::getConfigId()
      */
-    protected  function getConfigId()
+    protected function getConfigId()
     {
         return 'basic_registry';
     }
     
-    /** 
-     * 
+    /**
+     *
      * @see \oat\oatbox\AbstractRegistry::getExtension()
      */
-    protected  function getExtension()
+    protected function getExtension()
     {
         return common_ext_ExtensionsManager::singleton()->getExtensionById('generis');
     }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -17,6 +18,7 @@
  * Copyright (c) 2015 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  *
  */
+
 namespace oat\oatbox\action;
 
 use oat\oatbox\service\ConfigurableService;
@@ -27,10 +29,10 @@ class ActionService extends ConfigurableService
 {
     const SERVICE_ID = 'generis/actionService';
     
-    static $blackList = array('\\oatbox\\composer\\ExtensionInstaller','\\oatbox\\composer\\ExtensionInstallerPlugin');
+    static $blackList = ['\\oatbox\\composer\\ExtensionInstaller','\\oatbox\\composer\\ExtensionInstallerPlugin'];
     
     /**
-     * 
+     *
      * @param string $actionIdentifier
      * @return Action
      */
@@ -45,7 +47,7 @@ class ActionService extends ConfigurableService
                 $action->setServiceLocator($this->getServiceLocator());
             }
         } else {
-            throw new ResolutionException('Unknown action '.$actionIdentifier);
+            throw new ResolutionException('Unknown action ' . $actionIdentifier);
         }
         return $action;
     }
@@ -55,11 +57,11 @@ class ActionService extends ConfigurableService
         if ($this->getCache()->has(__FUNCTION__)) {
             $actions = $this->getCache()->get(__FUNCTION__);
         } else {
-            $actions = array();
+            $actions = [];
             foreach (\common_ext_ExtensionsManager::singleton()->getInstalledExtensions() as $ext) {
                 $actions = array_merge($actions, $this->getActionsInDirectory($ext->getDir()));
             }
-            $actions = array_merge($actions, $this->getActionsInDirectory(VENDOR_PATH.'oat-sa'));
+            $actions = array_merge($actions, $this->getActionsInDirectory(VENDOR_PATH . 'oat-sa'));
             $this->getCache()->put($actions, __FUNCTION__);
         }
         return $actions;
@@ -75,14 +77,14 @@ class ActionService extends ConfigurableService
     
     protected function getActionsInDirectory($dir)
     {
-        $classNames = array();
+        $classNames = [];
         $recIt = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($dir));
         $regexIt = new \RegexIterator($recIt, '/^.+\.php$/i', \RecursiveRegexIterator::GET_MATCH);
         foreach ($regexIt as $entry) {
             $info = \helpers_PhpTools::getClassInfo($entry[0]);
             $fullname = empty($info['ns'])
             ? $info['class']
-            : $info['ns'].'\\'.$info['class'];
+            : $info['ns'] . '\\' . $info['class'];
             if (!in_array($fullname, self::$blackList) && is_subclass_of($fullname, Action::class)) {
                 $classNames[] = $fullname;
             }

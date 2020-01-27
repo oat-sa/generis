@@ -20,12 +20,11 @@
 
 /**
  * Iterator over all triples
- * 
+ *
  * @author joel bout <joel@taotesting.com>
  * @package generis
  */
-class common_persistence_sql_QueryIterator
-    implements Iterator
+class common_persistence_sql_QueryIterator implements Iterator
 {
     const CACHE_SIZE = 100;
     
@@ -50,24 +49,25 @@ class common_persistence_sql_QueryIterator
     
     /**
      * Id of the current instance
-     * 
+     *
      * @var int
      */
     private $currentResult = null;
 
     /**
      * Return statements of the last query
-     * 
+     *
      * @var array
      */
     private $cache = null;
     
     /**
      * Constructor of the iterator expecting the model ids
-     * 
+     *
      * @param array $modelIds
      */
-    public function __construct(common_persistence_SqlPersistence $persistence, $query, $params = array()) {
+    public function __construct(common_persistence_SqlPersistence $persistence, $query, $params = [])
+    {
         $this->persistence = $persistence;
         $this->query = $query;
         $this->params = $params;
@@ -78,7 +78,8 @@ class common_persistence_sql_QueryIterator
      * (non-PHPdoc)
      * @see Iterator::rewind()
      */
-    function rewind() {
+    function rewind()
+    {
         $this->load(0);
     }
     
@@ -87,7 +88,8 @@ class common_persistence_sql_QueryIterator
      * @see Iterator::current()
      * @return core_kernel_classes_Triple
      */
-    function current() {
+    function current()
+    {
         return $this->cache[$this->currentResult];
     }
     
@@ -95,7 +97,8 @@ class common_persistence_sql_QueryIterator
      * (non-PHPdoc)
      * @see Iterator::key()
      */
-    function key() {
+    function key()
+    {
         return $this->currentResult;
     }
     
@@ -103,12 +106,13 @@ class common_persistence_sql_QueryIterator
      * (non-PHPdoc)
      * @see Iterator::next()
      */
-    function next() {
+    function next()
+    {
         if ($this->valid()) {
             $last = $this->key();
             $this->currentResult++;
             if (!isset($this->cache[$this->currentResult])) {
-                $this->load($last+1);
+                $this->load($last + 1);
             }
         }
     }
@@ -117,21 +121,23 @@ class common_persistence_sql_QueryIterator
      * (non-PHPdoc)
      * @see Iterator::valid()
      */
-    function valid() {
+    function valid()
+    {
         return !empty($this->cache);
     }
     
     /**
      * Loads the next n results, starting with $offset
-     * 
+     *
      * @param int $offset
      */
-    protected function load($offset) {
+    protected function load($offset)
+    {
 
         $query = $this->persistence->getPlatForm()->limitStatement($this->query, self::CACHE_SIZE, $offset);
         $result = $this->persistence->query($query, $this->params);
 
-        $this->cache = array();
+        $this->cache = [];
         $pos = $offset;
         while ($statement = $result->fetch()) {
             $this->cache[$pos++] = $statement;

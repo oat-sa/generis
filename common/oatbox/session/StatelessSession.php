@@ -18,6 +18,7 @@
  * Copyright (c) 2019 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  *
  */
+
 namespace oat\oatbox\session;
 
 /**

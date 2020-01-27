@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,7 +26,8 @@
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DBALException;
 
-class common_persistence_sql_Platform {
+class common_persistence_sql_Platform
+{
     
     const TRANSACTION_PLATFORM_DEFAULT = 0;
     
@@ -37,17 +39,18 @@ class common_persistence_sql_Platform {
     
     const TRANSACTION_SERIALIZABLE = Connection::TRANSACTION_SERIALIZABLE;
     
-    protected  $dbalPlatform;
+    protected $dbalPlatform;
 
     /** @var \Doctrine\DBAL\Connection */
-    protected  $dbalConnection;
+    protected $dbalConnection;
 
     
     /**
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
      * @param $dbalConnection \Doctrine\DBAL\Connection
      */
-    public function __construct($dbalConnection){
+    public function __construct($dbalConnection)
+    {
         $this->dbalPlatform = $dbalConnection->getDatabasePlatform();
         $this->dbalConnection = $dbalConnection;
     }
@@ -72,42 +75,47 @@ class common_persistence_sql_Platform {
      * @param  int $offset Limit upper bound.
      * @return string
      */
-    public function limitStatement($statement, $limit, $offset = 0){
+    public function limitStatement($statement, $limit, $offset = 0)
+    {
         return $this->dbalPlatform->modifyLimitQuery($statement, $limit, $offset);
     }
     /**
      *  Dbal Text type  returnedf stream in oracle this method handle others DBMS
-     *  
+     *
      *  @param string $text
      *  @return string
      */
-    public function getPhpTextValue($text){
-    	return $text;
+    public function getPhpTextValue($text)
+    {
+        return $text;
     }
     
     /**
-     * 
+     *
      * @author Lionel Lecaque, lionel@taotesting.com
      * @return string
      */
-	public function getObjectTypeCondition(){
-		return 'object ';
-	}
+    public function getObjectTypeCondition()
+    {
+        return 'object ';
+    }
     /**
-     * 
+     *
      * @return string
      */
-    public function getNullString(){
-    	return "''";
+    public function getNullString()
+    {
+        return "''";
     }
     
     /**
-     * 
+     *
      * @param string $columnName
      * @return string
      */
-    public function isNullCondition($columnName){
-    	return $columnName . ' = ' .$this->getNullString(); 
+    public function isNullCondition($columnName)
+    {
+        return $columnName . ' = ' . $this->getNullString();
     }
 
     /**
@@ -115,7 +123,8 @@ class common_persistence_sql_Platform {
      * @param string $parameter
      * @return string
      */
-    public function quoteIdentifier($parameter){
+    public function quoteIdentifier($parameter)
+    {
         return $this->dbalPlatform->quoteIdentifier($parameter);
     }
 
@@ -124,7 +133,8 @@ class common_persistence_sql_Platform {
      * @param \Doctrine\DBAL\Schema\Schema $schema
      * @return array
      */
-    public function schemaToSql($schema){
+    public function schemaToSql($schema)
+    {
         return $schema->toSql($this->dbalPlatform);
     }
 
@@ -133,7 +143,8 @@ class common_persistence_sql_Platform {
      * @param \Doctrine\DBAL\Schema\Schema $schema
      * @return array
      */
-    public function toDropSql($schema){
+    public function toDropSql($schema)
+    {
         return $schema->toDropSql($this->dbalPlatform);
     }
 
@@ -143,16 +154,18 @@ class common_persistence_sql_Platform {
      * @param \Doctrine\DBAL\Schema\Schema $toSchema
      * @return array
      */
-    public function getMigrateSchemaSql($fromSchema,$toSchema){
-        return $fromSchema->getMigrateToSql($toSchema,$this->dbalPlatform);     
+    public function getMigrateSchemaSql($fromSchema, $toSchema)
+    {
+        return $fromSchema->getMigrateToSql($toSchema, $this->dbalPlatform);
     }
     
     /**
      * Return driver name mysql, postgresql, oracle, mssql
-     * 
+     *
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
      */
-    public function getName(){
+    public function getName()
+    {
         return $this->dbalPlatform->getName();
     }
 
@@ -160,7 +173,8 @@ class common_persistence_sql_Platform {
      * @author Lionel Lecaque, lionel@taotesting.com
      * @return string
      */
-    public function getNowExpression(){
+    public function getNowExpression()
+    {
         // We can't use $this->dbalPlatform->getNowExpression() because sqlite,
         // at least used for the tests, returns `datetime('now')` which can
         // not be parsed as a regular date.
@@ -196,7 +210,8 @@ class common_persistence_sql_Platform {
      * @param string $functionName
      * @return string
      */
-    public function getSqlFunction($functionName){
+    public function getSqlFunction($functionName)
+    {
         return "SELECT " . $functionName . '(?)';
     }
 
@@ -229,7 +244,7 @@ class common_persistence_sql_Platform {
 
     /**
      * Starts a transaction by suspending auto-commit mode.
-     * 
+     *
      * @return void
      */
     public function beginTransaction()
@@ -239,15 +254,15 @@ class common_persistence_sql_Platform {
     
     /**
      * Sets the transaction isolation level for the current connection.
-     * 
+     *
      * Transaction levels are:
-     * 
+     *
      * * common_persistence_sql_Platform::TRANSACTION_PLATFORM_DEFAULT
      * * common_persistence_sql_Platform::TRANSACTION_READ_UNCOMMITTED
      * * common_persistence_sql_Platform::TRANSACTION_READ_COMMITTED
      * * common_persistence_sql_Platform::TRANSACTION_REPEATABLE_READ
      * * common_persistence_sql_Platform::TRANSACTION_SERIALIZABLE
-     * 
+     *
      * IT IS EXTREMELY IMPORTANT than after calling commit() or rollback(),
      * or in error handly, the developer sets back the initial transaction
      * level that was in force prior the call to beginTransaction().
@@ -256,7 +271,8 @@ class common_persistence_sql_Platform {
      *
      * @return integer
      */
-    public function setTransactionIsolation($level) {
+    public function setTransactionIsolation($level)
+    {
         if ($level === self::TRANSACTION_PLATFORM_DEFAULT) {
             $level = $this->dbalPlatform->getDefaultTransactionIsolationLevel();
         }

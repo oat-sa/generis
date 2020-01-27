@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,7 +34,6 @@ use oat\oatbox\filesystem\FileSystemHandler;
  */
 class CleanUpOrphanFiles extends ScriptAction
 {
-
     use OntologyAwareTrait;
 
     private $wetRun = false;
@@ -43,7 +43,7 @@ class CleanUpOrphanFiles extends ScriptAction
     private $affectedCount = 0;
     private $errorsCount = 0;
     private $report;
-    private $markedTobeRemoved =[];
+    private $markedTobeRemoved = [];
 
     protected function provideOptions()
     {
@@ -105,7 +105,6 @@ class CleanUpOrphanFiles extends ScriptAction
                 } else {
                     $this->manageOrphan($subject, $file);
                 }
-
             } catch (\Exception $exception) {
                 $this->errorsCount++;
                 $this->report->add(Report::createFailure($exception->getMessage()));
@@ -127,7 +126,6 @@ class CleanUpOrphanFiles extends ScriptAction
             $this->wetRun = true;
         }
         $this->verbose = $this->getOption('verbose');
-
     }
 
     protected function showTime()
@@ -168,8 +166,8 @@ class CleanUpOrphanFiles extends ScriptAction
      */
     private function markForRemoval(core_kernel_classes_Resource $resource)
     {
-            $this->markedTobeRemoved[]= $resource;
-        }
+            $this->markedTobeRemoved[] = $resource;
+    }
 
     /**
      * @param core_kernel_classes_Resource $resource
@@ -203,14 +201,14 @@ class CleanUpOrphanFiles extends ScriptAction
         }
     }
 
-    private function cleanUp(){
+    private function cleanUp()
+    {
         if ($this->wetRun) {
-            foreach ($this->markedTobeRemoved as $resource){
+            foreach ($this->markedTobeRemoved as $resource) {
                 $resource->delete();
                 $this->removedCount++;
                 $this->getLogger()->info(sprintf('%s has been removed', $resource->getUri()));
             }
-
         }
     }
 
@@ -235,5 +233,4 @@ class CleanUpOrphanFiles extends ScriptAction
             $this->report->add(new Report(Report::TYPE_ERROR, sprintf('%s errors happened, check details above', $this->errorsCount)));
         }
     }
-
 }

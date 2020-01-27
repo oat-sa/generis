@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,12 +26,11 @@ use oat\generis\model\data\Ontology;
 
 /**
  * transitory model for the smooth sql implementation
- * 
+ *
  * @author joel bout <joel@taotesting.com>
  * @package generis
  */
-class core_kernel_persistence_smoothsql_SmoothModel extends ConfigurableService
-    implements Ontology
+class core_kernel_persistence_smoothsql_SmoothModel extends ConfigurableService implements Ontology
 {
     const OPTION_PERSISTENCE = 'persistence';
     const OPTION_READABLE_MODELS = 'readable';
@@ -46,7 +46,7 @@ class core_kernel_persistence_smoothsql_SmoothModel extends ConfigurableService
 
     /**
      * Persistence to use for the smoothmodel
-     * 
+     *
      * @var common_persistence_SqlPersistence
      */
     private $persistence;
@@ -57,19 +57,22 @@ class core_kernel_persistence_smoothsql_SmoothModel extends ConfigurableService
     
     private static $updatableSubModels = null;
     
-    function getResource($uri) {
+    function getResource($uri)
+    {
         $resource = new \core_kernel_classes_Resource($uri);
         $resource->setModel($this);
         return $resource;
     }
 
-    function getClass($uri) {
+    function getClass($uri)
+    {
         $class = new \core_kernel_classes_Class($uri);
         $class->setModel($this);
         return $class;
     }
 
-    function getProperty($uri) {
+    function getProperty($uri)
+    {
         $property = new \core_kernel_classes_Property($uri);
         $property->setModel($this);
         return $property;
@@ -78,7 +81,8 @@ class core_kernel_persistence_smoothsql_SmoothModel extends ConfigurableService
     /**
      * @return common_persistence_SqlPersistence
      */
-    public function getPersistence() {
+    public function getPersistence()
+    {
         if (is_null($this->persistence)) {
             $this->persistence = $this->getServiceLocator()->get(common_persistence_Manager::SERVICE_ID)->getPersistenceById($this->getOption(self::OPTION_PERSISTENCE));
         }
@@ -88,7 +92,8 @@ class core_kernel_persistence_smoothsql_SmoothModel extends ConfigurableService
     /**
      * @return common_cache_Cache
      */
-    public function getCache() {
+    public function getCache()
+    {
         if (is_null($this->cache)) {
             $this->cache = $this->getServiceLocator()->get($this->getOption(self::OPTION_CACHE_SERVICE));
         }
@@ -99,7 +104,8 @@ class core_kernel_persistence_smoothsql_SmoothModel extends ConfigurableService
      * (non-PHPdoc)
      * @see \oat\generis\model\data\Model::getRdfInterface()
      */
-    public function getRdfInterface() {
+    public function getRdfInterface()
+    {
         return new core_kernel_persistence_smoothsql_SmoothRdf($this);
     }
     
@@ -107,14 +113,16 @@ class core_kernel_persistence_smoothsql_SmoothModel extends ConfigurableService
      * (non-PHPdoc)
      * @see \oat\generis\model\data\Model::getRdfsInterface()
      */
-    public function getRdfsInterface() {
+    public function getRdfsInterface()
+    {
         return new core_kernel_persistence_smoothsql_SmoothRdfs($this);
     }
     
     /**
      * @return ComplexSearchService
      */
-    public function getSearchInterface() {
+    public function getSearchInterface()
+    {
         $search = $this->getServiceLocator()->get($this->getOption(self::OPTION_SEARCH_SERVICE));
         $search->setModel($this);
         return $search;
@@ -124,18 +132,21 @@ class core_kernel_persistence_smoothsql_SmoothModel extends ConfigurableService
     
     /**
      * Returns the id of the model to add to
-     * 
+     *
      * @return string
      */
-    public function getNewTripleModelId() {
+    public function getNewTripleModelId()
+    {
         return $this->getOption(self::OPTION_NEW_TRIPLE_MODEL);
     }
     
-    public function getReadableModels() {
+    public function getReadableModels()
+    {
         return $this->getOption(self::OPTION_READABLE_MODELS);
     }
 
-    public function getWritableModels() {
+    public function getWritableModels()
+    {
         return $this->getOption(self::OPTION_WRITEABLE_MODELS);
     }
     
@@ -144,12 +155,13 @@ class core_kernel_persistence_smoothsql_SmoothModel extends ConfigurableService
      *
      * @param string $id
      */
-    public function addReadableModel($id) {
+    public function addReadableModel($id)
+    {
     
-        common_Logger::i('ADDING MODEL '.$id);
+        common_Logger::i('ADDING MODEL ' . $id);
     
         $readables = $this->getOption(self::OPTION_READABLE_MODELS);
-        $this->setOption(self::OPTION_READABLE_MODELS, array_unique(array_merge($readables, array($id))));
+        $this->setOption(self::OPTION_READABLE_MODELS, array_unique(array_merge($readables, [$id])));
     
         // update in persistence
         ModelManager::setModel($this);
@@ -157,32 +169,34 @@ class core_kernel_persistence_smoothsql_SmoothModel extends ConfigurableService
     
     //
     // Deprecated functions
-    // 
+    //
     
     /**
      * Returns the submodel ids that are readable
-     * 
+     *
      * @deprecated
      * @return array()
      */
-    public static function getReadableModelIds() {
+    public static function getReadableModelIds()
+    {
         $model = ModelManager::getModel();
         if (!$model instanceof self) {
-            throw new common_exception_Error(__FUNCTION__.' called on '.get_class($model).' model implementation');
+            throw new common_exception_Error(__FUNCTION__ . ' called on ' . get_class($model) . ' model implementation');
         }
         return $model->getReadableModels();
     }
     
     /**
      * Returns the submodel ids that are updatable
-     * 
+     *
      * @deprecated
      * @return array()
      */
-    public static function getUpdatableModelIds() {
+    public static function getUpdatableModelIds()
+    {
         $model = ModelManager::getModel();
         if (!$model instanceof self) {
-            throw new common_exception_Error(__FUNCTION__.' called on '.get_class($model).' model implementation');
+            throw new common_exception_Error(__FUNCTION__ . ' called on ' . get_class($model) . ' model implementation');
         }
         return $model->getWritableModels();
     }

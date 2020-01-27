@@ -1,23 +1,23 @@
 <?php
-/**  
+/**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
  * of the License (non-upgradable).
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- * 
+ *
  * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
  *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- * 
+ *
  */
 
 /**
@@ -26,13 +26,12 @@
  * @access public
  * @author patrick.plichart@tudor.lu
  * @package generis
- 
+
  */
-class core_kernel_classes_ContainerCollection
-    extends common_Collection
+class core_kernel_classes_ContainerCollection extends common_Collection
 {
     // --- ASSOCIATIONS ---
-    // generateAssociationEnd : 
+    // generateAssociationEnd :
 
     // --- ATTRIBUTES ---
 
@@ -46,11 +45,10 @@ class core_kernel_classes_ContainerCollection
      * @param  Object element
      * @return void
      */
-    public function add( common_Object $element)
+    public function add(common_Object $element)
     {
         
         parent::add($element);
-        
     }
 
 
@@ -62,13 +60,13 @@ class core_kernel_classes_ContainerCollection
      * @param  Collection collection
      * @return core_kernel_classes_ContainerCollection
      */
-    public function union( common_Collection $collection)
+    public function union(common_Collection $collection)
     {
         $returnValue = null;
 
         
-        $returnValue = new core_kernel_classes_ContainerCollection($this);     
-        $returnValue->sequence = array_merge($this->sequence, $collection->sequence );      
+        $returnValue = new core_kernel_classes_ContainerCollection($this);
+        $returnValue->sequence = array_merge($this->sequence, $collection->sequence);
         
 
         return $returnValue;
@@ -82,7 +80,7 @@ class core_kernel_classes_ContainerCollection
      * @param  Collection collection
      * @return core_kernel_classes_ContainerCollection
      */
-    public function intersect( common_Collection $collection)
+    public function intersect(common_Collection $collection)
     {
         $returnValue = null;
 
@@ -102,19 +100,19 @@ class core_kernel_classes_ContainerCollection
      * @param  Object resource
      * @return Integer
      */
-    public function indexOf( common_Object $resource)
+    public function indexOf(common_Object $resource)
     {
         $returnValue = null;
 
         
         $returnValue = -1;
-        foreach($this->sequence as $index => $_resource){
-        	if ($_resource instanceof  core_kernel_classes_Resource){
-				if($resource->equals($_resource)){
-					return $index;
-				}
-        	}
-		}
+        foreach ($this->sequence as $index => $_resource) {
+            if ($_resource instanceof  core_kernel_classes_Resource) {
+                if ($resource->equals($_resource)) {
+                    return $index;
+                }
+            }
+        }
         
 
         return $returnValue;
@@ -137,5 +135,4 @@ class core_kernel_classes_ContainerCollection
 
         return (string) $returnValue;
     }
-
 }

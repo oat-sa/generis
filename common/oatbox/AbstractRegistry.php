@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -17,8 +18,8 @@
  * Copyright (c) 2014 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  *
  */
-namespace oat\oatbox;
 
+namespace oat\oatbox;
 
 /**
  *
@@ -33,7 +34,7 @@ abstract class AbstractRegistry
      *
      * @var array
      */
-    private static $registries = array();
+    private static $registries = [];
     
     /**
      *
@@ -65,21 +66,21 @@ abstract class AbstractRegistry
      * @author Lionel Lecaque, lionel@taotesting.com
      * @return common_ext_Extension
      */
-    protected abstract  function getExtension();
+    abstract protected function getExtension();
     
     /**
-     * 
-     * config file in which the data will be stored 
-     * 
+     *
+     * config file in which the data will be stored
+     *
      * @author Lionel Lecaque, lionel@taotesting.com
      * @return string
      */
-    protected abstract function getConfigId();
+    abstract protected function getConfigId();
 
     /**
-     * 
+     *
      * Get the config of dedicated extensions
-     * 
+     *
      * @author Lionel Lecaque, lionel@taotesting.com
      */
     protected function getConfig()
@@ -88,7 +89,7 @@ abstract class AbstractRegistry
     }
 
     /**
-     * 
+     *
      * @author Lionel Lecaque, lionel@taotesting.com
      * @param array $map
      */
@@ -98,9 +99,9 @@ abstract class AbstractRegistry
     }
 
     /**
-     * 
+     *
      * Remove a element from the array
-     * 
+     *
      * @author Lionel Lecaque, lionel@taotesting.com
      * @param string $id
      */
@@ -114,7 +115,7 @@ abstract class AbstractRegistry
     }
 
     /**
-     * Get the complete array 
+     * Get the complete array
      *
      * @author Lionel Lecaque, lionel@taotesting.com
      * @return array
@@ -122,12 +123,12 @@ abstract class AbstractRegistry
     public function getMap()
     {
         $map = $this->getConfig();
-        return is_array($map) ? $map : array();
+        return is_array($map) ? $map : [];
     }
 
     /**
      * Add a value to the config with given id
-     * 
+     *
      * @author Lionel Lecaque, lionel@taotesting.com
      * @param string $id
      * @param string $value
@@ -141,7 +142,7 @@ abstract class AbstractRegistry
 
     /**
      * Check if the config element exist
-     * 
+     *
      * @author Lionel Lecaque, lionel@taotesting.com
      * @param unknown $id
      */
@@ -152,17 +153,16 @@ abstract class AbstractRegistry
     
     
     /**
-     * 
+     *
      * Retrieve the given element from the array in config
-     * 
+     *
      * @author Lionel Lecaque, lionel@taotesting.com
      * @param string $id
-     * @return string 
+     * @return string
      */
     public function get($id)
     {
         $map = $this->getMap();
         return isset($map[$id]) ? $map[$id] : '';
     }
-    
 }

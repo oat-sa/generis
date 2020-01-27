@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -56,12 +57,11 @@ class KeyValuePersistenceTest extends TestCase
          * In memory persistence
          */
             $this->largeValuePersistence = new \common_persistence_KeyValuePersistence(
-            array(
+                [
                 \common_persistence_KeyValuePersistence::MAX_VALUE_SIZE => 100
-            ),
-            $this->driver
-        );
-        
+                ],
+                $this->driver
+            );
     }
 
     public function tearDown()
@@ -114,13 +114,13 @@ class KeyValuePersistenceTest extends TestCase
     public function testMapMapControl()
     {
         $this->largeValuePersistence = new \common_persistence_KeyValuePersistence(
-            array(
+            [
                 \common_persistence_KeyValuePersistence::MAX_VALUE_SIZE => 100,
                 \common_persistence_KeyValuePersistence::MAP_IDENTIFIER => 'iamamap',
                 \common_persistence_KeyValuePersistence::START_MAP_DELIMITER => 'mapbegin',
                 \common_persistence_KeyValuePersistence::END_MAP_DELIMITER => 'mapend',
 
-            ),
+            ],
             $this->driver
         );
 

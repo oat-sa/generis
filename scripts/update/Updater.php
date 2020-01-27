@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -271,7 +272,7 @@ class Updater extends common_ext_ExtensionUpdater
 
         if ($this->isVersion('4.1.4')) {
             /** Rdf synchronization was moved to version 4.4.1 (see below) because OntologyUpdater is in tao extension */
-//            OntologyUpdater::syncModels();
+            //            OntologyUpdater::syncModels();
             $this->setVersion('4.2.0');
         }
         $this->skip('4.2.0', '4.4.0');
@@ -317,7 +318,6 @@ class Updater extends common_ext_ExtensionUpdater
                 $header = $this->getExtension()->getConfigHeader('log');
                 $logger->setHeader($header);
                 $this->getServiceManager()->register(LoggerService::SERVICE_ID, $logger);
-
             }
             $this->setVersion('6.9.0');
         }
@@ -377,7 +377,7 @@ class Updater extends common_ext_ExtensionUpdater
 
         $this->skip('10.0.0', '10.1.0');
 
-        if ($this->isBetween('10.1.0','11.0.0')) {
+        if ($this->isBetween('10.1.0', '11.0.0')) {
             /** @var \common_persistence_Manager $persistenceManager */
             $persistenceManager = $this->getServiceManager()->get(\common_persistence_Manager::SERVICE_ID);
 
@@ -400,12 +400,12 @@ class Updater extends common_ext_ExtensionUpdater
         $this->skip('11.0.0', '11.1.1');
 
         if ($this->isVersion('11.1.1')) {
-//            $service = new LockService([
-//                LockService::OPTION_PERSISTENCE_CLASS => PdoStore::class,
-//                LockService::OPTION_PERSISTENCE_OPTIONS => 'default',
-//            ]);
-//            $this->getServiceManager()->register(LockService::SERVICE_ID, $service);
-//            $service->install();
+            //            $service = new LockService([
+            //                LockService::OPTION_PERSISTENCE_CLASS => PdoStore::class,
+            //                LockService::OPTION_PERSISTENCE_OPTIONS => 'default',
+            //            ]);
+            //            $this->getServiceManager()->register(LockService::SERVICE_ID, $service);
+            //            $service->install();
             $this->setVersion('11.2.0');
         }
 
@@ -427,7 +427,7 @@ class Updater extends common_ext_ExtensionUpdater
             $persistenceManagerConfig = $persistenceManager->getOption('persistences');
 
             foreach ($persistenceManagerConfig as $persistenceId => $persistenceParams) {
-                $persistenceManager->registerPersistence($persistenceId,$persistenceParams);
+                $persistenceManager->registerPersistence($persistenceId, $persistenceParams);
             }
 
             $this->getServiceManager()->register(\common_persistence_Manager::SERVICE_ID, $persistenceManager);
@@ -444,16 +444,16 @@ class Updater extends common_ext_ExtensionUpdater
 
         $this->skip('11.6.0', '12.1.0');
 
-        if ($this->isBetween('12.1.0','12.2.0')) {
+        if ($this->isBetween('12.1.0', '12.2.0')) {
             $fs = $this->getServiceManager()->get(FileSystemService::SERVICE_ID);
             $adapters = $fs->getOption(FileSystemService::OPTION_ADAPTERS);
             if (!isset($adapters['default'])) {
                 if (get_class($fs) == FileSystemService::class) {
                     // override default behavior to ensure an adapter and not a directory is created
-                    $adapters['default'] = array(
+                    $adapters['default'] = [
                         'class' => Local::class,
-                        'options' => array('root' => $fs->getOption(FileSystemService::OPTION_FILE_PATH))
-                    );
+                        'options' => ['root' => $fs->getOption(FileSystemService::OPTION_FILE_PATH)]
+                    ];
                     $fs->setOption(FileSystemService::OPTION_ADAPTERS, $adapters);
                 } else {
                     $fs->createFileSystem('default', '');

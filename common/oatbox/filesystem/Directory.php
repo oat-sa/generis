@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -72,7 +73,7 @@ class Directory extends FileSystemHandler implements \IteratorAggregate
      * @param null $flags
      * @return \ArrayIterator
      */
-    public function getFlyIterator($flags=null)
+    public function getFlyIterator($flags = null)
     {
         if (is_null($flags)) {
             $flags = self::ITERATOR_DIRECTORY | self::ITERATOR_FILE;
@@ -82,7 +83,7 @@ class Directory extends FileSystemHandler implements \IteratorAggregate
         $withDirectories = ($flags & self::ITERATOR_DIRECTORY);
         $withFiles = ($flags & self::ITERATOR_FILE);
 
-        $iterator = array();
+        $iterator = [];
         $contents = $this->getFileSystem()->listContents($this->getPrefix(), $recursive);
 
         if (!empty($contents)) {
@@ -170,7 +171,7 @@ class Directory extends FileSystemHandler implements \IteratorAggregate
         $filePaths = [];
         foreach ($contents as $content) {
             if ($content['type'] === 'file') {
-                $filePaths[]= [
+                $filePaths[] = [
                     'source' => $content['path'],
                     'destination' => str_replace($this->getPrefix(), $path, $content['path'])];
             }

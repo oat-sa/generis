@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -120,10 +121,9 @@ abstract class FileSystemHandler implements ServiceLocatorAwareInterface
     {
         $path = str_replace(DIRECTORY_SEPARATOR, '/', $path);
 
-        $path = preg_replace('/'.preg_quote('./', '/').'/', '', $path, 1);
+        $path = preg_replace('/' . preg_quote('./', '/') . '/', '', $path, 1);
         $path = trim($path, '/');
 
         return $path;
     }
-
 }

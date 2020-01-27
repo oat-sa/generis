@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -18,7 +19,6 @@
  */
 
 namespace oat\generis\scripts\update;
-
 
 use common_persistence_Manager;
 use common_persistence_SqlKvDriver;
@@ -101,8 +101,10 @@ class RegisterDefaultKvPersistence extends InstallAction
         /** @var common_persistence_Manager $persistenceManager */
         $persistenceManager = $this->getServiceManager()->get(common_persistence_Manager::SERVICE_ID);
         $persistencesConfig = $persistenceManager->getOption('persistences');
-        if (!$persistenceManager->hasPersistence($persistenceId)
-            || $persistencesConfig[$persistenceId]['driver'] == 'phpfile') {
+        if (
+            !$persistenceManager->hasPersistence($persistenceId)
+            || $persistencesConfig[$persistenceId]['driver'] == 'phpfile'
+        ) {
             return false;
         }
 

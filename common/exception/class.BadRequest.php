@@ -23,8 +23,7 @@
  * @author Patrick Plichart
  * @package generis
  */
-class common_exception_BadRequest
-    extends common_exception_ClientException
+class common_exception_BadRequest extends common_exception_ClientException
 {
     /**
      * Get the human-readable message for the end-user. It is supposed
@@ -37,5 +36,4 @@ class common_exception_BadRequest
     {
         return __("Wrong request type, try again please or contact your system administrator");
     }
-
-} 
+}
