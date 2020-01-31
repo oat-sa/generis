@@ -54,8 +54,8 @@ class LockServiceTest extends TestCase
         pclose($pipe3);
         pclose($pipe4);
         $consumedTime = (time() - $time);
-        $this->assertTrue($consumedTime >= ($sleep*3));
-        $this->assertTrue($consumedTime < ($sleep*4));
+        $this->assertTrue($consumedTime >= ($sleep * 3));
+        $this->assertTrue($consumedTime < ($sleep * 4));
     }
 
     public function testNoLock()
@@ -72,7 +72,7 @@ class LockServiceTest extends TestCase
         pclose($pipe3);
         $consumedTime = (time() - $time);
         $this->assertTrue($consumedTime >= $sleep);
-        $this->assertTrue($consumedTime < ($sleep*3));
+        $this->assertTrue($consumedTime < ($sleep * 3));
     }
 
     /**
@@ -83,7 +83,7 @@ class LockServiceTest extends TestCase
     public function getInstance($class, $dir = null)
     {
         $config = new \common_persistence_KeyValuePersistence([], new \common_persistence_InMemoryKvDriver());
-        $config->set(\common_persistence_Manager::SERVICE_ID, new \common_persistence_Manager);
+        $config->set(\common_persistence_Manager::SERVICE_ID, new \common_persistence_Manager());
         $serviceManager = new ServiceManager($config);
 
         $service = new LockService([
@@ -94,5 +94,4 @@ class LockServiceTest extends TestCase
         $service->install();
         return $service;
     }
-
 }

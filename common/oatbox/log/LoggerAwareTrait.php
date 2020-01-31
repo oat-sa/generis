@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -15,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2016 (original work) Open Assessment Technologies SA
- * 
+ *
  */
 
 namespace oat\oatbox\log;
@@ -66,46 +67,46 @@ trait LoggerAwareTrait
     
     /**
      * Logs an emergency
-     * 
+     *
      * @param string $message
      * @param array $context
      */
-    public function logEmergency($message, $context = array())
+    public function logEmergency($message, $context = [])
     {
         $this->getLogger()->emergency($message, $context);
     }
     
-    public function logAlert($message, $context = array())
+    public function logAlert($message, $context = [])
     {
         $this->getLogger()->alert($message, $context);
     }
     
-    public function logCritical($message, $context = array())
+    public function logCritical($message, $context = [])
     {
         $this->getLogger()->critical($message, $context);
     }
     
-    public function logError($message, $context = array())
+    public function logError($message, $context = [])
     {
         $this->getLogger()->error($message, $context);
     }
     
-    public function logWarning($message, $context = array())
+    public function logWarning($message, $context = [])
     {
         $this->getLogger()->warning($message, $context);
     }
     
-    public function logNotice($message, $context = array())
+    public function logNotice($message, $context = [])
     {
         $this->getLogger()->notice($message, $context);
     }
     
-    public function logInfo($message, $context = array())
+    public function logInfo($message, $context = [])
     {
         $this->getLogger()->info($message, $context);
     }
     
-    public function logDebug($message, $context = array())
+    public function logDebug($message, $context = [])
     {
         $this->getLogger()->debug($message, $context);
     }

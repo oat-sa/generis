@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -17,6 +18,7 @@
  * Copyright (c) 2015 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  *
  */
+
 namespace oat\oatbox\filesystem;
 
 use oat\oatbox\service\ConfigurableService;
@@ -25,6 +27,7 @@ use common_exception_Error;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use \League\Flysystem\Filesystem as FlyFileSystem;
 use League\Flysystem\FilesystemInterface;
+
  /**
  * A service to reference and retrieve filesystems
  */
@@ -42,10 +45,10 @@ class FileSystemService extends ConfigurableService
 
     const FLYSYSTEM_LOCAL_ADAPTER = 'Local';
 
-    private $filesystems = array();
+    private $filesystems = [];
 
     /**
-     * 
+     *
      * @param $id
      * @return \oat\oatbox\filesystem\Directory
      */
@@ -125,21 +128,21 @@ class FileSystemService extends ConfigurableService
 
     /**
      * Create a new local file system
-     * 
+     *
      * @deprecated never rely on a directory being local, use addDir instead
      * @param string $id
      * @return FilesystemInterface
      */
     public function createLocalFileSystem($id)
     {
-        $path = $this->getOption(self::OPTION_FILE_PATH).\helpers_File::sanitizeInjectively($id);
+        $path = $this->getOption(self::OPTION_FILE_PATH) . \helpers_File::sanitizeInjectively($id);
         $this->registerLocalFileSystem($id, $path);
         return $this->getFileSystem($id);
     }
     
     /**
      * Registers a local file system, used for transition
-     * 
+     *
      * @deprecated never rely on a directory being local, use addDir instead
      * @param string $id
      * @param string $path
@@ -147,18 +150,18 @@ class FileSystemService extends ConfigurableService
      */
     public function registerLocalFileSystem($id, $path)
     {
-        $adapters = $this->hasOption(self::OPTION_ADAPTERS) ? $this->getOption(self::OPTION_ADAPTERS) : array();
-        $adapters[$id] = array(
+        $adapters = $this->hasOption(self::OPTION_ADAPTERS) ? $this->getOption(self::OPTION_ADAPTERS) : [];
+        $adapters[$id] = [
             'class' => self::FLYSYSTEM_LOCAL_ADAPTER,
-            'options' => array('root' => $path)
-        );
+            'options' => ['root' => $path]
+        ];
         $this->setOption(self::OPTION_ADAPTERS, $adapters);
         return true;
     }
 
     /**
      * Remove a filesystem adapter
-     * 
+     *
      * @param string $id
      * @return boolean
      */
@@ -208,7 +211,7 @@ class FileSystemService extends ConfigurableService
 
     /**
      * inspired by burzum/storage-factory
-     * 
+     *
      * @param string $id
      * @throws \common_exception_NotFound if adapter doesn't exist
      * @throws \common_exception_Error if adapter is not valid
@@ -218,7 +221,7 @@ class FileSystemService extends ConfigurableService
     {
         $fsConfig = $this->getOption(self::OPTION_ADAPTERS);
         if (!isset($fsConfig[$id])) {
-            throw new \common_exception_NotFound('Undefined filesystem "'.$id.'"');
+            throw new \common_exception_NotFound('Undefined filesystem "' . $id . '"');
         }
         $adapterConfig = $fsConfig[$id];
         // alias?
@@ -226,20 +229,20 @@ class FileSystemService extends ConfigurableService
             $adapterConfig = $fsConfig[$adapterConfig];
         }
         $class = $adapterConfig['class'];
-        $options = isset($adapterConfig['options']) ? $adapterConfig['options'] : array();
+        $options = isset($adapterConfig['options']) ? $adapterConfig['options'] : [];
 
         if (!class_exists($class)) {
-            if (class_exists(self::FLYSYSTEM_ADAPTER_NS.$class)) {
-                $class = self::FLYSYSTEM_ADAPTER_NS.$class;
-            } elseif (class_exists(self::FLYSYSTEM_ADAPTER_NS.$class.'\\'.$class.'Adapter')) {
-                $class = self::FLYSYSTEM_ADAPTER_NS.$class.'\\'.$class.'Adapter';
+            if (class_exists(self::FLYSYSTEM_ADAPTER_NS . $class)) {
+                $class = self::FLYSYSTEM_ADAPTER_NS . $class;
+            } elseif (class_exists(self::FLYSYSTEM_ADAPTER_NS . $class . '\\' . $class . 'Adapter')) {
+                $class = self::FLYSYSTEM_ADAPTER_NS . $class . '\\' . $class . 'Adapter';
             } else {
-                throw new common_exception_Error('Unknown Flysystem adapter "'.$class.'"');
+                throw new common_exception_Error('Unknown Flysystem adapter "' . $class . '"');
             }
         }
 
         if (!is_subclass_of($class, 'League\Flysystem\AdapterInterface')) {
-            throw new common_exception_Error('"'.$class.'" is not a flysystem adapter');
+            throw new common_exception_Error('"' . $class . '" is not a flysystem adapter');
         }
         $adapter = (new \ReflectionClass($class))->newInstanceArgs($options);
         if ($adapter instanceof ServiceLocatorAwareInterface) {

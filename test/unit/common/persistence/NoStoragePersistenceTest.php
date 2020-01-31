@@ -1,34 +1,35 @@
 <?php
-/**  
+
+/**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
  * of the License (non-upgradable).
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- * 
+ *
  * Copyright (c) 2015 (original work) Open Assessment Technologies SA;
- *               
- * 
+ *
+ *
  */
+
 namespace oat\generis\test\unit\common\persistence;
 
 use \common_persistence_NoStorageKvDriver;
 use oat\generis\test\TestCase;
 
-
 class NoStaragePersistenceTest extends TestCase
 {
     
     /**
-     * 
+     *
      * @author Lionel Lecaque, lionel@taotesting.com
      * @return \common_persistence_KeyValuePersistence
      */
@@ -36,7 +37,7 @@ class NoStaragePersistenceTest extends TestCase
     {
 
         $driver = new common_persistence_NoStorageKvDriver();
-        $persistence = $driver->connect('test',array());
+        $persistence = $driver->connect('test', []);
         $this->assertInstanceOf('common_persistence_KeyValuePersistence', $persistence);
         return $persistence;
     }
@@ -48,8 +49,7 @@ class NoStaragePersistenceTest extends TestCase
      */
     public function testSet($persistence)
     {
-        $this->assertFalse($persistence->set('fakeKeyName','value'));
-        
+        $this->assertFalse($persistence->set('fakeKeyName', 'value'));
     }
     
     /**
@@ -71,7 +71,6 @@ class NoStaragePersistenceTest extends TestCase
     public function testExists($persistence)
     {
         $this->assertFalse($persistence->exists('fakeKeyName'));
-        
     }
     
     /**
@@ -94,5 +93,4 @@ class NoStaragePersistenceTest extends TestCase
     {
         $this->assertTrue($persistence->purge());
     }
-    
 }

@@ -22,16 +22,16 @@
  */
 
 /**
- * Interface of drivers that can purge their content 
+ * Interface of drivers that can purge their content
  */
-interface common_persistence_Purgable {
+interface common_persistence_Purgable
+{
 
     /**
      * Remove an  entry from storage
-     * 
+     *
      * @param string $id
      * @return boolean
      */
     public function purge();
-
 }

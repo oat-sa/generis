@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,12 +33,14 @@ class ServiceNotFoundException extends ZendException implements NotFoundExceptio
 {
     private $serviceKey;
 
-    public function __construct($serviceKey, $message = '') {
-        parent::__construct('Service "'.$serviceKey.'" not found'. (empty($message) ? '' : ': '.$message));
+    public function __construct($serviceKey, $message = '')
+    {
+        parent::__construct('Service "' . $serviceKey . '" not found' . (empty($message) ? '' : ': ' . $message));
         $this->serviceKey = $serviceKey;
     }
 
-    public function getServiceKey() {
+    public function getServiceKey()
+    {
         return $this->serviceKey;
     }
 }

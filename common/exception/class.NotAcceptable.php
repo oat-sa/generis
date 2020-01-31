@@ -21,7 +21,7 @@
  * @access public
  * @author Patrick Plichart
  * @package generis
- 
+
  */
 class common_exception_NotAcceptable extends common_exception_BadRequest
 {
@@ -30,6 +30,4 @@ class common_exception_NotAcceptable extends common_exception_BadRequest
     {
         return __("The requested content encoding cannot be satisfied");
     }
-} 
-
-?>
+}

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,7 +30,7 @@ trait SqlSanitizeHelperTrait
      * @param string $rawOrderDir
      * @return string
      */
-    static private function sanitizeOrderDirection($rawOrderDir)
+    private static function sanitizeOrderDirection($rawOrderDir)
     {
         return in_array(strtoupper($rawOrderDir), ['ASC', 'DESC']) ? $rawOrderDir : 'ASC';
     }

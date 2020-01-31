@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,24 +29,25 @@ use Psr\Log\LogLevel;
  * This logger stores messages in an internal registry that can be queried.
  * It can be used to, for example, assert that specific messages have been logged in unit tests
  */
-class TestLogger implements LoggerInterface {
-
+class TestLogger implements LoggerInterface
+{
     use LoggerTrait;
 
-    private $registry = array();
+    private $registry = [];
 
     /**
      * TestLogger constructor.
      */
-    public function __construct() {
-        $this->registry[LogLevel::EMERGENCY] = array();
-        $this->registry[LogLevel::ALERT]     = array();
-        $this->registry[LogLevel::CRITICAL]  = array();
-        $this->registry[LogLevel::ERROR]     = array();
-        $this->registry[LogLevel::WARNING]   = array();
-        $this->registry[LogLevel::NOTICE]    = array();
-        $this->registry[LogLevel::INFO]      = array();
-        $this->registry[LogLevel::DEBUG]     = array();
+    public function __construct()
+    {
+        $this->registry[LogLevel::EMERGENCY] = [];
+        $this->registry[LogLevel::ALERT]     = [];
+        $this->registry[LogLevel::CRITICAL]  = [];
+        $this->registry[LogLevel::ERROR]     = [];
+        $this->registry[LogLevel::WARNING]   = [];
+        $this->registry[LogLevel::NOTICE]    = [];
+        $this->registry[LogLevel::INFO]      = [];
+        $this->registry[LogLevel::DEBUG]     = [];
     }
 
     /**
@@ -58,7 +60,7 @@ class TestLogger implements LoggerInterface {
      * @return void
      * @throws common_exception_InconsistentData
      */
-    public function log($level, $message, array $context = array())
+    public function log($level, $message, array $context = [])
     {
         if (! array_key_exists($level, $this->registry)) {
             $level = LogLevel::ERROR;
@@ -76,7 +78,8 @@ class TestLogger implements LoggerInterface {
      * @return array
      * @throws common_exception_InconsistentData
      */
-    public function get($level) {
+    public function get($level)
+    {
         if (isset($this->registry[$level])) {
             return $this->registry[$level];
         } else {
@@ -92,7 +95,8 @@ class TestLogger implements LoggerInterface {
      * @return bool
      * @throws common_exception_InconsistentData
      */
-    public function has($level, $message) {
+    public function has($level, $message)
+    {
         if (isset($this->registry[$level]) && count($this->registry[$level]) > 0) {
             foreach ($this->registry[$level] as $logEntry) {
                 if ($logEntry['message'] == $message) {
@@ -104,5 +108,4 @@ class TestLogger implements LoggerInterface {
             throw new common_exception_InconsistentData('Unknown level ' . $level);
         }
     }
-
 }

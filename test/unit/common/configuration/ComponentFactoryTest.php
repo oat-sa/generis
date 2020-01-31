@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -125,22 +126,22 @@ class ComponentFactoryTest extends TestCase
 
     public function testBuildFromArray()
     {
-        $output = $this->subject->buildFromArray(['type' => 'PHPRuntime', 'value'=> ['min' => 1, 'max' => 2]]);
+        $output = $this->subject->buildFromArray(['type' => 'PHPRuntime', 'value' => ['min' => 1, 'max' => 2]]);
         $this->assertInstanceOf(common_configuration_PHPRuntime::class, $output);
 
-        $output = $this->subject->buildFromArray(['type' => 'PHPINIValue', 'value'=> ['name' => 'name', 'value' => 'value']]);
+        $output = $this->subject->buildFromArray(['type' => 'PHPINIValue', 'value' => ['name' => 'name', 'value' => 'value']]);
         $this->assertInstanceOf(common_configuration_PHPINIValue::class, $output);
 
-        $output = $this->subject->buildFromArray(['type' => 'PHPExtension', 'value'=> ['name' => 'name', 'min' => 1, 'max' => 2]]);
+        $output = $this->subject->buildFromArray(['type' => 'PHPExtension', 'value' => ['name' => 'name', 'min' => 1, 'max' => 2]]);
         $this->assertInstanceOf(common_configuration_PHPExtension::class, $output);
 
-        $output = $this->subject->buildFromArray(['type' => 'PHPDatabaseDriver', 'value'=> ['name' => 'name']]);
+        $output = $this->subject->buildFromArray(['type' => 'PHPDatabaseDriver', 'value' => ['name' => 'name']]);
         $this->assertInstanceOf(common_configuration_PHPDatabaseDriver::class, $output);
 
-        $output = $this->subject->buildFromArray(['type' => 'FileSystemComponent', 'value'=> ['location' => '/path', 'rights' => 'rw']]);
+        $output = $this->subject->buildFromArray(['type' => 'FileSystemComponent', 'value' => ['location' => '/path', 'rights' => 'rw']]);
         $this->assertInstanceOf(common_configuration_FileSystemComponent::class, $output);
 
-        $output = $this->subject->buildFromArray(['type' => 'Mock', 'value'=> ['status' => '/status']]);
+        $output = $this->subject->buildFromArray(['type' => 'Mock', 'value' => ['status' => '/status']]);
         $this->assertInstanceOf(common_configuration_Mock::class, $output);
     }
 

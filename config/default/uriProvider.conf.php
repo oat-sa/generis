@@ -1,4 +1,5 @@
 <?php
+
 use oat\generis\model\kernel\uri\Bin2HexUriProvider;
 
 /**
@@ -6,6 +7,7 @@ use oat\generis\model\kernel\uri\Bin2HexUriProvider;
  *
  * To replace this add a file generis/conf/header/uriProvider.conf.php
  */
+
 return new Bin2HexUriProvider([
-    Bin2HexUriProvider::OPTION_NAMESPACE => LOCAL_NAMESPACE.'#'
+    Bin2HexUriProvider::OPTION_NAMESPACE => LOCAL_NAMESPACE . '#'
 ]);

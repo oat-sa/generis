@@ -1,22 +1,22 @@
 <?php
 
-/**  
+/**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
  * of the License (non-upgradable).
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- * 
+ *
  * Copyright (c) 2013 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- * 
+ *
  */
 
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
@@ -28,7 +28,7 @@ use oat\oatbox\service\ServiceManager;
  * @access private
  * @author Joel Bout, <joel@taotesting.com>
  * @package generis
- 
+
  */
 abstract class common_session_SessionManager
 {
@@ -39,7 +39,7 @@ abstract class common_session_SessionManager
 
     /**
      * Retrurns the current session
-     * 
+     *
      * @throws common_exception_Error
      * @return common_session_Session
      */
@@ -60,21 +60,21 @@ abstract class common_session_SessionManager
             self::$session->setServiceLocator(ServiceManager::getServiceManager());
         }
         return self::$session;
-    } 
+    }
     
     /**
      * Starts a new session and stores it in the session if stateful
-     * 
+     *
      * @param common_session_Session $session
      * @return boolean
      */
-    public static function startSession(common_session_Session $session) {
+    public static function startSession(common_session_Session $session)
+    {
 
         self::$session = $session;
         // do not start session in cli mode (testcase script)
-        if(PHP_SAPI != 'cli'){
+        if (PHP_SAPI != 'cli') {
             if ($session instanceof common_session_StatefulSession) {
-                
                 // start session if not yet started
                 if (session_id() === '') {
                     session_name(GENERIS_SESSION_NAME);
@@ -92,13 +92,14 @@ abstract class common_session_SessionManager
     
     /**
      * Ends the session by replacing it with an anonymous session
-     * 
+     *
      * @return boolean
      */
-    public static function endSession() {
+    public static function endSession()
+    {
 
         // clean session data.
-        if (session_id() != ''){
+        if (session_id() != '') {
             session_destroy();
         }
         
@@ -107,11 +108,11 @@ abstract class common_session_SessionManager
     
     /**
      * Is the current session anonymous or associated to a user?
-     * 
+     *
      * @return boolean
      */
-    public static function isAnonymous() {
+    public static function isAnonymous()
+    {
         return is_null(self::getSession()->getUserUri());
-    }    
-    
+    }
 }

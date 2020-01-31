@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -17,42 +18,45 @@
  * Copyright (c) 2018 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  *
  */
+
 namespace   oat\generis\model\kernel\persistence\smoothsql\install;
 
 use Doctrine\DBAL\Schema\Schema;
+
 /**
  * Helper to setup the required tables for generis smoothsql
  */
-class SmoothRdsModel {
+class SmoothRdsModel
+{
 
     /**
-     * 
+     *
      * @param Schema $schema
      * @return \Doctrine\DBAL\Schema\Schema
      */
     public static function addSmoothTables(Schema $schema)
     {
         $table = $schema->createTable("models");
-        $table->addColumn('modelid', "integer",["notnull" => true,"autoincrement" => true]);
+        $table->addColumn('modelid', "integer", ["notnull" => true,"autoincrement" => true]);
         $table->addColumn('modeluri', "string", ["length" => 255,"default" => null]);
-        $table->addOption('engine' , 'MyISAM');
+        $table->addOption('engine', 'MyISAM');
         $table->setPrimaryKey(['modelid']);
 
         $table = $schema->createTable("statements");
-        $table->addColumn("modelid", "integer",["notnull" => true,"default" => 0]);
-        $table->addColumn("subject", "string",["length" => 255,"default" => null]);
-        $table->addColumn("predicate", "string",["length" => 255,"default" => null]);
+        $table->addColumn("modelid", "integer", ["notnull" => true,"default" => 0]);
+        $table->addColumn("subject", "string", ["length" => 255,"default" => null]);
+        $table->addColumn("predicate", "string", ["length" => 255,"default" => null]);
         $table->addColumn("object", "text", ["default" => null,"notnull" => false]);
             
-        $table->addColumn("l_language", "string",["length" => 255,"default" => null,"notnull" => false]);
-        $table->addColumn("id", "integer",["notnull" => true,"autoincrement" => true]);
-        $table->addColumn("author", "string",["length" => 255,"default" => null,"notnull" => false]);
+        $table->addColumn("l_language", "string", ["length" => 255,"default" => null,"notnull" => false]);
+        $table->addColumn("id", "integer", ["notnull" => true,"autoincrement" => true]);
+        $table->addColumn("author", "string", ["length" => 255,"default" => null,"notnull" => false]);
         $table->setPrimaryKey(["id"]);
-        $table->addOption('engine' , 'MyISAM');
-        $table->addColumn("epoch", "string" , ["notnull" => null]);
+        $table->addOption('engine', 'MyISAM');
+        $table->addColumn("epoch", "string", ["notnull" => null]);
 
-        $table->addIndex(["subject","predicate"],"k_sp", [], ['lengths' => [164,164]]);
-        $table->addIndex(["predicate","object"],"k_po", [], ['lengths' => [164,164]]);
+        $table->addIndex(["subject","predicate"], "k_sp", [], ['lengths' => [164,164]]);
+        $table->addIndex(["predicate","object"], "k_po", [], ['lengths' => [164,164]]);
         return $schema;
     }
 }

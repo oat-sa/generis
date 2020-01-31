@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -17,6 +18,7 @@
  * Copyright (c) 2015 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  *
  */
+
 namespace oat\oatbox\install;
 
 use oat\oatbox\service\ConfigurableService;
@@ -30,7 +32,7 @@ use common_report_Report as Report;
 
  /**
  * A service to install oatbox functionality
- * 
+ *
  * Sets up:
  *   configuration
  *   filesystems
@@ -68,10 +70,10 @@ class Installer extends ConfigurableService
                 throw new \common_exception_Error('Unable to empty ' . $configPath . ' folder.');
             }
             $driver = new ServiceConfigDriver();
-            $configService = $driver->connect('config', array(
+            $configService = $driver->connect('config', [
                 'dir' => $configPath,
                 'humanReadable' => true
-            ));
+            ]);
 
             $this->setServiceManager(new ServiceManager($configService));
         }
@@ -89,18 +91,18 @@ class Installer extends ConfigurableService
     protected function installFilesystem()
     {
         try {
-            if(! ($this->getServiceManager()->get(FileSystemService::SERVICE_ID) instanceof FileSystemService)) {
+            if (! ($this->getServiceManager()->get(FileSystemService::SERVICE_ID) instanceof FileSystemService)) {
                 throw new InvalidService('Your service must be a oat\oatbox\filesystem\FileSystemService');
             }
-        } catch(ServiceNotFoundException $e){
+        } catch (ServiceNotFoundException $e) {
             $fileSystemService = new FileSystemService([
                 FileSystemService::OPTION_FILE_PATH => $this->getOption('file_path'),
                 FileSystemService::OPTION_ADAPTERS => [
                     'default' => [
                         'class' => 'Local',
-                        'options' => array(
+                        'options' => [
                             'root' => $this->getOption('file_path')
-                        )
+                        ]
                     ]
                 ]
             ]);
@@ -135,5 +137,4 @@ class Installer extends ConfigurableService
         }
         return rtrim($this->getOption('root_path'), '/\\') . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR;
     }
-    
 }

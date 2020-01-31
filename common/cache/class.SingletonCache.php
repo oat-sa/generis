@@ -15,7 +15,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2014 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- * 
+ *
  */
 
 /**
@@ -25,7 +25,7 @@
  * @access public
  * @author Joel Bout, <joel@taotesting.com>
  * @package generis
- 
+
  */
 abstract class common_cache_SingletonCache
 {
@@ -40,7 +40,7 @@ abstract class common_cache_SingletonCache
      * @access private
      * @var array
      */
-    private static $instances = array();
+    private static $instances = [];
 
     // --- OPERATIONS ---
 
@@ -58,7 +58,7 @@ abstract class common_cache_SingletonCache
         
         $cacheName = get_called_class();
         if (!isset(self::$instances[$cacheName])) {
-        	self::$instances[$cacheName] = new $cacheName();
+            self::$instances[$cacheName] = new $cacheName();
         }
         
         $returnValue = self::$instances[$cacheName];
@@ -79,23 +79,23 @@ abstract class common_cache_SingletonCache
         $returnValue = null;
 
         
-		$args = func_get_args();
-		array_shift($args);
-        if (!is_string($function)){
+        $args = func_get_args();
+        array_shift($args);
+        if (!is_string($function)) {
             $r = new ReflectionFunction($function);
             $serial = md5(
-              $r->getFileName().
-              $r->getStartLine().
-              serialize($args)
+                $r->getFileName() .
+                $r->getStartLine() .
+                serialize($args)
             );
         } else {
-            $serial = md5($function.serialize($args));
+            $serial = md5($function . serialize($args));
         }
         if (static::singleton()->has($serial)) {
-        	$returnValue = static::singleton()->has($serial);
-        } else { 
-	        $returnValue = call_user_func_array($fn, $args);
-	        static::singleton()->put($serial, $returnValue);
+            $returnValue = static::singleton()->has($serial);
+        } else {
+            $returnValue = call_user_func_array($fn, $args);
+            static::singleton()->put($serial, $returnValue);
         }
         
 
@@ -111,10 +111,5 @@ abstract class common_cache_SingletonCache
      */
     private function __construct()
     {
-        
-        
     }
-
 } /* end of abstract class common_cache_SingletonCache */
-
-?>

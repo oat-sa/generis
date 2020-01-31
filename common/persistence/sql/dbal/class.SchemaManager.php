@@ -1,4 +1,5 @@
 <?php
+
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
 
 /**
@@ -23,7 +24,8 @@ use Doctrine\DBAL\Schema\AbstractSchemaManager;
  * @package generis
  *
  */
- class common_persistence_sql_dbal_SchemaManager extends common_persistence_sql_SchemaManager{
+class common_persistence_sql_dbal_SchemaManager extends common_persistence_sql_SchemaManager
+{
     
     private $dbalSchemaManager;
     
@@ -32,7 +34,8 @@ use Doctrine\DBAL\Schema\AbstractSchemaManager;
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
      * @param AbstractSchemaManager $dbalSchemaManager
      */
-    public function __construct($dbalSchemaManager){
+    public function __construct($dbalSchemaManager)
+    {
         $this->dbalSchemaManager = $dbalSchemaManager;
     }
     
@@ -41,7 +44,8 @@ use Doctrine\DBAL\Schema\AbstractSchemaManager;
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
      * @return AbstractSchemaManager
      */
-    protected function getSchemaManager() {
+    protected function getSchemaManager()
+    {
         return $this->dbalSchemaManager;
     }
     
@@ -69,16 +73,4 @@ use Doctrine\DBAL\Schema\AbstractSchemaManager;
     {
         return '42703';
     }
-       
-
-
-
-    
-
-
-
-    
-
-    
-    
 }

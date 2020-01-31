@@ -1,4 +1,5 @@
 <?php
+
 /**
  *
  * To set the platform logger use the logger service to specify a PSR3 compliant logger

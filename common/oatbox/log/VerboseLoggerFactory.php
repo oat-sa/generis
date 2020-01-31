@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,7 +21,6 @@
 
 namespace oat\oatbox\log;
 
-
 use Psr\Log\LogLevel;
 
 class VerboseLoggerFactory
@@ -28,7 +28,7 @@ class VerboseLoggerFactory
     /**
      * @var array   The verbose parameters and the connected log levels.
      */
-    private static $levels = array(
+    private static $levels = [
         '-vvvv'       => LogLevel::DEBUG,
         '--verbose 4' => LogLevel::DEBUG,
 
@@ -40,7 +40,7 @@ class VerboseLoggerFactory
 
         '-v'          => LogLevel::ERROR,
         '--verbose 1' => LogLevel::ERROR,
-    );
+    ];
 
     /**
      * Make sure it can't be instantiated.
