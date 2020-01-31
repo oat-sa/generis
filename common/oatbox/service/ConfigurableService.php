@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -17,6 +18,7 @@
  * Copyright (c) 2015 (original work) Open Assessment Technologies SA;
  *
  */
+
 namespace oat\oatbox\service;
 
 use oat\oatbox\Configurable;
@@ -39,17 +41,17 @@ abstract class ConfigurableService extends Configurable implements ServiceLocato
     use ServiceManagerAwareTrait;
 
     /** @var string Documentation header */
+    
+
     protected $header = null;
-
     private $subServices = [];
-
     /**
-     * Get the service manager
-     *
-     * @deprecated Use $this->propagate instead
-     *
-     * @param $serviceManager
-     */
+         * Get the service manager
+         *
+         * @deprecated Use $this->propagate instead
+         *
+         * @param $serviceManager
+         */
     public function setServiceManager($serviceManager)
     {
         $this->setServiceLocator($serviceManager);
@@ -112,10 +114,10 @@ abstract class ConfigurableService extends Configurable implements ServiceLocato
      */
     protected function getDefaultHeader()
     {
-        return '<?php'.PHP_EOL
-            .'/**'.PHP_EOL
-            .' * Default config header created during install'.PHP_EOL
-            .' */'.PHP_EOL;
+        return '<?php' . PHP_EOL
+            . '/**' . PHP_EOL
+            . ' * Default config header created during install' . PHP_EOL
+            . ' */' . PHP_EOL;
     }
 
     /**

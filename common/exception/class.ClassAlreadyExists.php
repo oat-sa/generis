@@ -37,17 +37,16 @@ class common_exception_ClassAlreadyExists extends common_Exception
     {
         $this->class = $class;
         if ($message === null) {
-            $message = 'Class already exists. Class uri: ' .$class->getUri();
+            $message = 'Class already exists. Class uri: ' . $class->getUri();
         }
         parent::__construct($message);
-
     }
 
     /**
      * @return core_kernel_classes_Class
      */
-    public function  getClass()
+    public function getClass()
     {
         return $this->class;
     }
-} 
+}

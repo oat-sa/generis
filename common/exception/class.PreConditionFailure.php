@@ -28,7 +28,7 @@
  *
  * @author patrick,
  * @package generis
- 
+
  */
 
 
@@ -46,13 +46,13 @@
  * @access public
  * @author Patrick Plichart
  * @package generis
- 
+
  */
-class common_exception_PreConditionFailure
-    extends common_exception_ClientException
+class common_exception_PreConditionFailure extends common_exception_ClientException
 {
   
-       public function getUserMessage() {
-	return __("One of the precondition for this type of request was not satisfied");
+    public function getUserMessage()
+    {
+        return __("One of the precondition for this type of request was not satisfied");
     }
-} 
+}

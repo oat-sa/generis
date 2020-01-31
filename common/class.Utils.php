@@ -1,22 +1,24 @@
 <?php
+
 use oat\oatbox\PhpSerializable;
 use oat\oatbox\service\ServiceManager;
 use oat\generis\model\kernel\uri\UriProvider;
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
  * of the License (non-upgradable).
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- * 
+ *
  * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
  *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
@@ -33,7 +35,7 @@ use oat\generis\model\kernel\uri\UriProvider;
  *
  * @author lionel.lecaque@tudor.lu
  * @package generis
- 
+
  * @see @license  GNU General Public (GPL) Version 2 http://www.opensource.org/licenses/gpl-2.0.php
  */
 
@@ -58,17 +60,18 @@ class common_Utils
     {
         $returnValue = (bool) false;
         $uri = trim($strarg);
-        if(!empty($uri)){
-        	if( (preg_match("/^(http|https|file|ftp):\/\/[\/:.A-Za-z0-9_-]+#[A-Za-z0-9_-]+$/", $uri) && strpos($uri,'#')>0) || strpos($uri,"#")===0){
-        		$returnValue = true;
-        	}
+        if (!empty($uri)) {
+            if ((preg_match("/^(http|https|file|ftp):\/\/[\/:.A-Za-z0-9_-]+#[A-Za-z0-9_-]+$/", $uri) && strpos($uri, '#') > 0) || strpos($uri, "#") === 0) {
+                $returnValue = true;
+            }
         }
         return (bool) $returnValue;
     }
     
-    public static function toResource($value) {
+    public static function toResource($value)
+    {
         if (is_array($value)) {
-            $returnValue = array();
+            $returnValue = [];
             foreach ($value as $val) {
                 $returnValue[] = self::toResource($val);
             }
@@ -120,37 +123,37 @@ class common_Utils
      */
     public static function toPHPVariableString($value)
     {
-		switch (gettype($value)) {
-        	case "string" :
-        	    $returnValue = '\''.str_replace('\'', '\\\'', str_replace('\\', '\\\\', $value)).'\'';
-        		break;
-        	case "boolean" :
-        		$returnValue = $value ? 'true' : 'false';
-        		break;
-        	case "integer" :
-        	case "double" :
-        		$returnValue = $value;
-        		break;
-        	case "array" :
-				$string = "";
-				foreach ($value as $key => $val) {
-					$string .= self::toPHPVariableString($key)." => ".self::toPHPVariableString($val).",";
-				}
-				$returnValue = "array(".substr($string, 0, -1).")";
-				break;
-        	case "NULL" :
-        		$returnValue = 'null';
-				break;
-        	case "object" :
-        	    if ($value instanceof PhpSerializable) {
-        	       $returnValue = $value->__toPhpCode();
-        	    } else {
-        	       $returnValue =  'unserialize('.self::toPHPVariableString(serialize($value)).')';
-        	    }
-        		break;
-        	default:
-    			// resource and unexpected types
-        		throw new common_exception_Error("Could not convert variable of type ".gettype($value)." to PHP variable string");
+        switch (gettype($value)) {
+            case "string":
+                $returnValue = '\'' . str_replace('\'', '\\\'', str_replace('\\', '\\\\', $value)) . '\'';
+                break;
+            case "boolean":
+                $returnValue = $value ? 'true' : 'false';
+                break;
+            case "integer":
+            case "double":
+                $returnValue = $value;
+                break;
+            case "array":
+                $string = "";
+                foreach ($value as $key => $val) {
+                    $string .= self::toPHPVariableString($key) . " => " . self::toPHPVariableString($val) . ",";
+                }
+                $returnValue = "array(" . substr($string, 0, -1) . ")";
+                break;
+            case "NULL":
+                $returnValue = 'null';
+                break;
+            case "object":
+                if ($value instanceof PhpSerializable) {
+                    $returnValue = $value->__toPhpCode();
+                } else {
+                    $returnValue =  'unserialize(' . self::toPHPVariableString(serialize($value)) . ')';
+                }
+                break;
+            default:
+                // resource and unexpected types
+                throw new common_exception_Error("Could not convert variable of type " . gettype($value) . " to PHP variable string");
         }
 
         return (string) $returnValue;
@@ -159,7 +162,7 @@ class common_Utils
     /**
      * Same as toPHPVariableString except the sting
      * is easier for humans to read
-     * 
+     *
      * @param mixed $value
      * @param number indentation
      * @return string
@@ -172,26 +175,25 @@ class common_Utils
             $string = "";
             if ($assocArray) {
                 foreach ($value as $key => $val) {
-                	$string .= PHP_EOL.str_repeat('    ', $indentation+1)
-                       .self::toPHPVariableString($key)
-                	   ." => "
-                       .self::toHumanReadablePhpString($val, $indentation+1).",";
+                    $string .= PHP_EOL . str_repeat('    ', $indentation + 1)
+                       . self::toPHPVariableString($key)
+                       . " => "
+                       . self::toHumanReadablePhpString($val, $indentation + 1) . ",";
                 }
             } else {
                 foreach ($value as $val) {
-                    $string .= PHP_EOL.str_repeat('    ', $indentation+1)
-                        .self::toHumanReadablePhpString($val, $indentation+1).",";
+                    $string .= PHP_EOL . str_repeat('    ', $indentation + 1)
+                        . self::toHumanReadablePhpString($val, $indentation + 1) . ",";
                 }
             }
-            $returnValue = "array(".substr($string, 0, -1).PHP_EOL.str_repeat('    ', $indentation).")";
+            $returnValue = "array(" . substr($string, 0, -1) . PHP_EOL . str_repeat('    ', $indentation) . ")";
         } elseif (is_string($value)) {
             $returnValue = self::toPHPVariableString($value);
         } else {
             $lines = explode(PHP_EOL, self::toPHPVariableString($value));
-            $returnValue = implode(PHP_EOL.str_repeat('    ', $indentation), $lines);
+            $returnValue = implode(PHP_EOL . str_repeat('    ', $indentation), $lines);
         }
         
         return (string) $returnValue;
     }
-
 }

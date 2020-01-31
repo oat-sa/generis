@@ -1,28 +1,29 @@
 <?php
-/**  
+
+/**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
  * of the License (non-upgradable).
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- * 
+ *
  * Copyright (c) 2017 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- * 
+ *
  */
 
 namespace oat\oatbox\extension\script;
 
 /**
  * Option Container Class
- * 
+ *
  * This class implements a container for options provided through CLI scripts.
  */
 class OptionContainer
@@ -39,22 +40,23 @@ class OptionContainer
     
     /**
      * Constructor
-     * 
+     *
      * Create a new OptionContainer object.
-     * 
+     *
      * @param array $options
      * @param array $values
      */
-    public function __construct(array $options, array $values) {
+    public function __construct(array $options, array $values)
+    {
         $this->data = self::extract($options, $values);
         $this->options = $options;
     }
     
     /**
      * Has Option
-     * 
+     *
      * Wheter an option with name $optionName is extracted.
-     * 
+     *
      * @param string $optionName
      */
     public function has($optionName)
@@ -64,10 +66,10 @@ class OptionContainer
     
     /**
      * Get Option
-     * 
+     *
      * Returns the value of option with name $optionName. In case of
      * such a value does not exist, null is returned.
-     * 
+     *
      * @return mixed
      */
     public function get($optionName)
@@ -77,9 +79,9 @@ class OptionContainer
     
     /**
      * Get Options
-     * 
+     *
      * Get all options.
-     * 
+     *
      * @return array
      */
     public function getOptions()
@@ -89,7 +91,7 @@ class OptionContainer
     
     /**
      * Is Flag
-     * 
+     *
      * Wheter an option with name $optionName is a flag.
      */
     public function isFlag($optionName)
@@ -102,10 +104,8 @@ class OptionContainer
         $returnValue = [];
         
         foreach ($options as $optionName => $optionParams) {
-            
             // Ignore non string-indexed options.
             if (is_string($optionName)) {
-                
                 $prefix = empty($optionParams['prefix']) ? '' : $optionParams['prefix'];
                 $longPrefix = empty($optionParams['longPrefix']) ? '' : $optionParams['longPrefix'];
                 
@@ -133,7 +133,6 @@ class OptionContainer
                     } else {
                         $valueIndex = $optionIndex + 1;
                         if ($optionIndex !== false && isset($values[$valueIndex])) {
-
                             $returnValue[$optionName] = self::cast($values[$valueIndex], $castTo);
                         } else {
                             // Edge case. Option found, but it is the last value of the $value array.

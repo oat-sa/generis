@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
@@ -92,7 +93,7 @@ class FileRdfTest extends GenerisPhpUnitTestRunner
     public function testSearch()
     {
         $rdf = new FileRdf('test');
-        $rdf->search(null,null);
+        $rdf->search(null, null);
     }
     
     /**
@@ -102,9 +103,7 @@ class FileRdfTest extends GenerisPhpUnitTestRunner
     public function testGetIterator()
     {
         $dir = GenerisPhpUnitTestRunner::getSampleDir();
-        $rdf = new FileRdf($dir.'/rdf/sample.rdf');
+        $rdf = new FileRdf($dir . '/rdf/sample.rdf');
         $this->assertInstanceOf('oat\generis\model\kernel\persistence\file\FileIterator', $rdf->getIterator());
     }
 }
-
-?>

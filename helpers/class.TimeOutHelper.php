@@ -19,10 +19,11 @@
  * @author "Lionel Lecaque, <lionel@taotesting.com>"
  * @license GPLv2
  * @package generis
- 
+
  *
  */
-class helpers_TimeOutHelper{
+class helpers_TimeOutHelper
+{
     
     const LONG = 200;
     const MEDIUM = 100;
@@ -31,18 +32,18 @@ class helpers_TimeOutHelper{
    
         
     
-    public static function setTimeOutLimit($value = self::LONG){
+    public static function setTimeOutLimit($value = self::LONG)
+    {
         $configValue = ini_get('max_execution_time');
-        if($value > 0 && $configValue > 0){
-            set_time_limit(max($configValue,$value));
-        }
-        else  {
+        if ($value > 0 && $configValue > 0) {
+            set_time_limit(max($configValue, $value));
+        } else {
             set_time_limit(self::NO_TIMEOUT);
         }
     }
     
-    public static function reset(){
+    public static function reset()
+    {
         set_time_limit(ini_get('max_execution_time'));
     }
-    
 }

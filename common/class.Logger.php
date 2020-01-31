@@ -4,21 +4,21 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
  * of the License (non-upgradable).
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- * 
+ *
  * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
  *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
  *               2013 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- * 
+ *
  */
 
 /**
@@ -46,7 +46,7 @@ class common_Logger
      * @access private
      * @var array
      */
-    private $stateStack = array();
+    private $stateStack = [];
 
     /**
      * instance of the class Logger, to implement the singleton pattern
@@ -127,7 +127,7 @@ class common_Logger
      * @access private
      * @var array
      */
-    private $ACCEPTABLE_WARNINGS = array();
+    private $ACCEPTABLE_WARNINGS = [];
 
     // --- OPERATIONS ---
 
@@ -167,12 +167,11 @@ class common_Logger
      */
     public function register()
     {
-		// initialize the logger here to prevent fatal errors that occure if:
-		// while autoloading any class, an error gets thrown
-		// the logger initializes to handle this error,  and failes to autoload his files
-        set_error_handler(array($this, 'handlePHPErrors'));
-		register_shutdown_function(array($this, 'handlePHPShutdown'));
-        
+        // initialize the logger here to prevent fatal errors that occure if:
+        // while autoloading any class, an error gets thrown
+        // the logger initializes to handle this error,  and failes to autoload his files
+        set_error_handler([$this, 'handlePHPErrors']);
+        register_shutdown_function([$this, 'handlePHPShutdown']);
     }
 
     /**
@@ -218,9 +217,8 @@ class common_Logger
     public function enable()
     {
         
-		$this->stateStack[] = self::singleton()->enabled;
-		$this->enabled = true;
-        
+        $this->stateStack[] = self::singleton()->enabled;
+        $this->enabled = true;
     }
 
     /**
@@ -233,9 +231,8 @@ class common_Logger
     public function disable()
     {
         
-		$this->stateStack[] = self::singleton()->enabled;
-		$this->enabled = false;
-        
+        $this->stateStack[] = self::singleton()->enabled;
+        $this->enabled = false;
     }
 
     /**
@@ -248,12 +245,11 @@ class common_Logger
     public function restore()
     {
         
-		if (count($this->stateStack) > 0) {
-			$this->enabled = array_pop($this->stateStack);
-		} else {
-			self::e("Tried to restore Log state that was never changed");
-		}
-        
+        if (count($this->stateStack) > 0) {
+            $this->enabled = array_pop($this->stateStack);
+        } else {
+            self::e("Tried to restore Log state that was never changed");
+        }
     }
 
     /**
@@ -265,11 +261,10 @@ class common_Logger
      * @param  array $tags
      * @return mixed
      */
-    public static function t($message, $tags = array())
+    public static function t($message, $tags = [])
     {
         
-		self::singleton()->log(self::TRACE_LEVEL, $message, $tags);
-        
+        self::singleton()->log(self::TRACE_LEVEL, $message, $tags);
     }
 
     /**
@@ -281,11 +276,10 @@ class common_Logger
      * @param  array $tags
      * @return mixed
      */
-    public static function d($message, $tags = array())
+    public static function d($message, $tags = [])
     {
         
-		self::singleton()->log(self::DEBUG_LEVEL, $message, $tags);
-        
+        self::singleton()->log(self::DEBUG_LEVEL, $message, $tags);
     }
 
 
@@ -299,11 +293,10 @@ class common_Logger
      * @param  array $tags
      * @return mixed
      */
-    public static function i($message, $tags = array())
+    public static function i($message, $tags = [])
     {
         
-		self::singleton()->log(self::INFO_LEVEL, $message, $tags);
-        
+        self::singleton()->log(self::INFO_LEVEL, $message, $tags);
     }
 
     /**
@@ -315,11 +308,10 @@ class common_Logger
      * @param  array $tags
      * @return mixed
      */
-    public static function w($message, $tags = array())
+    public static function w($message, $tags = [])
     {
         
-		self::singleton()->log(self::WARNING_LEVEL, $message, $tags);
-        
+        self::singleton()->log(self::WARNING_LEVEL, $message, $tags);
     }
 
     /**
@@ -331,7 +323,7 @@ class common_Logger
      * @param  array $tags
      * @return mixed
      */
-    public static function e($message, $tags = array())
+    public static function e($message, $tags = [])
     {
         self::singleton()->log(self::ERROR_LEVEL, $message, self::addTrace($tags));
     }
@@ -359,9 +351,9 @@ class common_Logger
      * @param  array $tags
      * @return mixed
      */
-    public static function f($message, $tags = array())
+    public static function f($message, $tags = [])
     {
-		self::singleton()->log(self::FATAL_LEVEL, $message, self::addTrace($tags));
+        self::singleton()->log(self::FATAL_LEVEL, $message, self::addTrace($tags));
     }
 
     /**
@@ -406,7 +398,7 @@ class common_Logger
         $errorString,
         $errorFile = null,
         $errorLine = null,
-        $errorContext = array()
+        $errorContext = []
     ) {
         if (error_reporting() !== 0) {
             if ($errorNumber === E_STRICT) {
@@ -470,11 +462,10 @@ class common_Logger
         $error = error_get_last();
         if (($error['type'] & (E_COMPILE_ERROR | E_ERROR | E_PARSE | E_CORE_ERROR)) != 0) {
             $msg = (isset($error['file']) && isset($error['line']))
-               ? 'php error('.$error['type'].') in '.$error['file'].'@'.$error['line'].': '.$error['message']
-               : 'php error('.$error['type'].'): '.$error['message'];
-            self::singleton()->log(self::FATAL_LEVEL, $msg, array('PHPERROR'));
+               ? 'php error(' . $error['type'] . ') in ' . $error['file'] . '@' . $error['line'] . ': ' . $error['message']
+               : 'php error(' . $error['type'] . '): ' . $error['message'];
+            self::singleton()->log(self::FATAL_LEVEL, $msg, ['PHPERROR']);
         }
-        
     }
 
     /**

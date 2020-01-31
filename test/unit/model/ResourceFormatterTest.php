@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -77,51 +78,50 @@ class ResourceFormatterTest extends TestCase
 
         $typeProphecy = $this->createClassProphecy('#typeUri');
         $typeProphecy->getProperties(true)->willReturn(
-            array(
+            [
                 $propertyProphecy->reveal(),
                 $propertyProphecy2->reveal()
-            )
+            ]
         );
 
         $typeProphecy2 = $typeProphecy = $this->createClassProphecy('#typeUri2');
-        $typeProphecy->getProperties(true)->willReturn(array());
+        $typeProphecy->getProperties(true)->willReturn([]);
 
         $prop1 = $propertyProphecy->reveal();
         $prop2 = $propertyProphecy2->reveal();
 
         $typeProphecy2->getProperties(true)->willReturn(
-            array(
+            [
                 $prop1,
                 $prop2
-            )
+            ]
         );
         $resourceDescProphecy->getTypes()->willReturn(
-            array(
+            [
                 $typeProphecy->reveal(),
                 $typeProphecy2->reveal()
-            )
+            ]
         );
         if ($withNoValue) {
             $resourceDescProphecy->getPropertiesValues(
-                array(
+                [
                     "#propertyUri" => $prop1,
                     "#propertyUri2" => $prop2
-                )
-            )->willReturn(array());
-
+                ]
+            )->willReturn([]);
         } else {
-            $resourceDescProphecy->getPropertiesValues(array(
+            $resourceDescProphecy->getPropertiesValues([
                 "#propertyUri" => $prop1,
                 "#propertyUri2" => $prop2
-            ))->willReturn(array(
-                '#propertyUri' => array(
+            ])->willReturn([
+                '#propertyUri' => [
                     new \core_kernel_classes_Literal('value1'),
                     new \core_kernel_classes_Literal('value2')
-                ),
-                '#propertyUri2' => array(
+                ],
+                '#propertyUri2' => [
                     new \core_kernel_classes_Resource(GenerisRdf::GENERIS_BOOLEAN)
-                )
-            ));
+                ]
+            ]);
         }
         return $resourceDescProphecy->reveal();
     }
@@ -176,7 +176,6 @@ class ResourceFormatterTest extends TestCase
         $this->assertInstanceOf('stdClass', $result->properties[1]->values[0]);
         $this->assertAttributeEquals('resource', 'valueType', $result->properties[1]->values[0]);
         $this->assertAttributeEquals(GenerisRdf::GENERIS_BOOLEAN, 'value', $result->properties[1]->values[0]);
-
     }
 
     /**
@@ -186,7 +185,7 @@ class ResourceFormatterTest extends TestCase
     public function testGetResourceDesciptionNoContentTripple()
     {
         $resourceDescProphecy = $this->createResourceProphecy('#fakeUri');
-        $resourceDescProphecy->getRdfTriples()->willReturn(array());
+        $resourceDescProphecy->getRdfTriples()->willReturn([]);
         $formatter = new core_kernel_classes_ResourceFormatter();
 
         $result = $formatter->getResourceDescription($resourceDescProphecy->reveal(), false);
@@ -199,7 +198,7 @@ class ResourceFormatterTest extends TestCase
      */
     private function generateTriple()
     {
-        $returnValue = array();
+        $returnValue = [];
         for ($i = 0; $i < 3; $i++) {
             $triple = new \core_kernel_classes_Triple();
             $triple->subject = '#subject' . $i;
@@ -248,5 +247,3 @@ class ResourceFormatterTest extends TestCase
         }
     }
 }
-
-?>

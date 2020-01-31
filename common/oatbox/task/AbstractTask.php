@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,7 +31,7 @@ namespace oat\oatbox\task;
  *
  * @deprecated since version 7.10.0, to be removed in 8.0. Use \oat\tao\model\taskQueue\Task\AbstractTask instead.
  */
-abstract class AbstractTask implements Task , \JsonSerializable
+abstract class AbstractTask implements Task, \JsonSerializable
 {
 
     /**
@@ -77,7 +78,7 @@ abstract class AbstractTask implements Task , \JsonSerializable
      * @param Action|string $invocable
      * @param array $params
      */
-    public function __construct($invocable = null, $params  = null)
+    public function __construct($invocable = null, $params = null)
     {
         $this->id = \common_Utils::getNewUri();
         $this->setOwner(\common_session_SessionManager::getSession()->getUser()->getIdentifier());
@@ -107,14 +108,16 @@ abstract class AbstractTask implements Task , \JsonSerializable
     /**
      * @param string $label
      */
-    public function setLabel($label) {
+    public function setLabel($label)
+    {
         $this->label = $label;
     }
 
     /**
      * @return string
      */
-    public function getLabel() {
+    public function getLabel()
+    {
         return $this->label;
     }
 
@@ -256,7 +259,7 @@ abstract class AbstractTask implements Task , \JsonSerializable
      */
     public static function restore(array $data)
     {
-        if (!isset($data['invocable'], $data['params'])){
+        if (!isset($data['invocable'], $data['params'])) {
             return null;
         }
         /**
@@ -288,7 +291,7 @@ abstract class AbstractTask implements Task , \JsonSerializable
         if (isset($data['added'])) {
             $task->setType($data['added']);
         }
-        if(isset($data['invocable'])) {
+        if (isset($data['invocable'])) {
             $task->setInvocable($data['invocable']);
         }
         if (isset($data['params'])) {
@@ -296,5 +299,4 @@ abstract class AbstractTask implements Task , \JsonSerializable
         }
         return $task;
     }
-    
 }

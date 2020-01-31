@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,15 +22,16 @@
  * @package generis
  *
  */
-return array(
-    array(
+
+return [
+    [
         'driver' => 'oat\\generis\\model\\user\\AuthAdapter',
         'user_factory' => 'generis/userFactory'
-    ),
+    ],
     /*
     array(
-	    'driver' => 'oat\authKeyValue\AuthKeyValueAdapter',
-	    'persistence' => 'authKeyValue'
-	),
-	*/
-);
+        'driver' => 'oat\authKeyValue\AuthKeyValueAdapter',
+        'persistence' => 'authKeyValue'
+    ),
+    */
+];

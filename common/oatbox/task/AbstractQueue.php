@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,9 +37,7 @@ use oat\generis\model\OntologyAwareTrait;
  *
  * @deprecated since version 7.10.0, to be removed in 8.0. Use \oat\tao\model\taskQueue\QueueDispatcher instead.
  */
-abstract class AbstractQueue
-    extends ConfigurableService
-    implements TaskQueue
+abstract class AbstractQueue extends ConfigurableService implements TaskQueue
 {
     use OntologyAwareTrait;
 
@@ -67,26 +66,25 @@ abstract class AbstractQueue
      * @param array $options
      * @throws BadTaskQueueOption
      */
-    public function __construct(array $options = array())
+    public function __construct(array $options = [])
     {
         parent::__construct($options);
-        if($this->hasOption('runner')) {
+        if ($this->hasOption('runner')) {
             $classRunner       = $this->getOption('runner');
-            if(!is_a($classRunner , TaskRunnerInterface::class,true)) {
+            if (!is_a($classRunner, TaskRunnerInterface::class, true)) {
                 throw new BadTaskQueueOption('task runner must implement ' . TaskRunnerInterface::class);
             }
             $this->runner      = new $classRunner();
         }
 
-        if($this->hasOption('persistence') && $this->hasOption('config')) {
+        if ($this->hasOption('persistence') && $this->hasOption('config')) {
             $classPersistence = $this->getOption('persistence');
-            if(!is_a($classPersistence , TaskPersistenceInterface::class, true)) {
+            if (!is_a($classPersistence, TaskPersistenceInterface::class, true)) {
                 throw new BadTaskQueueOption('task persistence must implement ' . TaskPersistenceInterface::class);
             }
             $configPersistence = $this->getOption('config');
             $this->persistence = new $classPersistence($configPersistence);
         }
-
     }
 
     /**
@@ -155,7 +153,7 @@ abstract class AbstractQueue
     public function updateTaskStatus($taskId, $status)
     {
         if ($this->getPersistence()->has($taskId)) {
-            $this->getPersistence()->update($taskId , $status);
+            $this->getPersistence()->update($taskId, $status);
         }
         return $this;
     }
@@ -188,7 +186,6 @@ abstract class AbstractQueue
     public function getTask($taskId)
     {
         return $this->getPersistence()->get($taskId);
-
     }
 
     /**
@@ -216,13 +213,13 @@ abstract class AbstractQueue
     public function getPayload($currentUserId = null)
     {
         $class = $this->getOption('payload');
-        if(!is_a($class , TaskPayLoad::class , true)) {
+        if (!is_a($class, TaskPayLoad::class, true)) {
             throw new BadTaskQueueOption('task payload must implement ' . TaskPayLoad::class);
         }
         /**
          * @var $payload TaskPayLoad
          */
-        $payload = new $class($this->getPersistence() , $currentUserId);
+        $payload = new $class($this->getPersistence(), $currentUserId);
         $payload->setServiceLocator($this->getServiceLocator());
         /**
          * @var TaskPayLoad $payload
@@ -299,5 +296,4 @@ abstract class AbstractQueue
         }
         return $taskResource;
     }
-
 }

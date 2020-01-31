@@ -9,7 +9,7 @@ use oat\oatbox\mutex\NoLockStorage;
 
 array_shift($argv);
 $actionId = $argv[0];
-$sleep = (integer) $argv[1];
+$sleep = (int) $argv[1];
 $implementation = (string) $argv[2];
 $dir = isset($argv[3]) ? $argv[3] : null;
 
@@ -35,7 +35,7 @@ $lock->release();
 function getInstance($class, $dir)
 {
     $config = new \common_persistence_KeyValuePersistence([], new \common_persistence_InMemoryKvDriver());
-    $config->set(\common_persistence_Manager::SERVICE_ID, new \common_persistence_Manager);
+    $config->set(\common_persistence_Manager::SERVICE_ID, new \common_persistence_Manager());
     $serviceManager = new ServiceManager($config);
     $service = new LockService([
         LockService::OPTION_PERSISTENCE_CLASS => $class,

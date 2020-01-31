@@ -20,23 +20,22 @@
  *
  * @author patrick,
  * @package generis
- 
+
  */
 
 
 
 /**
- * 
+ *
  * @access public
  * @author Patrick Plichart
  * @package generis
- 
+
  */
-class common_exception_NoContent
-    extends common_exception_ClientException
+class common_exception_NoContent extends common_exception_ClientException
 {
-    public function getUserMessage(){
-       return __("No content was found for your request");
-   }
-   
-} 
+    public function getUserMessage()
+    {
+        return __("No content was found for your request");
+    }
+}

@@ -17,8 +17,7 @@
  * Copyright (c) 2019 (original work) Open Assessment Technologies SA ;
  */
 
-class common_exception_ResourceNotFound extends \common_exception_NotFound
-    implements \common_exception_UserReadableException
+class common_exception_ResourceNotFound extends \common_exception_NotFound implements \common_exception_UserReadableException
 {
     /**
      * @inheritdoc

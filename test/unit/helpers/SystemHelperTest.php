@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -17,6 +18,7 @@
  * Copyright (c) 2018 (original work) Open Assessment Technologies SA;
  *
  */
+
 namespace oat\generis\test\unit\helpers;
 
 use oat\generis\Helper\SystemHelper;
@@ -33,7 +35,7 @@ class SystemHelperTest extends TestCase
         $reflection = new \ReflectionClass(SystemHelper::class);
         $method = $reflection->getMethod('toBytes');
         $method->setAccessible(true);
-        $bytes = $method->invokeArgs(null, array($phpString));
+        $bytes = $method->invokeArgs(null, [$phpString]);
         $this->assertEquals($size, $bytes);
     }
 

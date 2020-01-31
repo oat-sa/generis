@@ -27,18 +27,17 @@
 
 
 /**
- * 
+ *
  * @access public
  * @author Patrick Plichart
  * @package generis
- 
+
  */
-class common_exception_Unauthorized
-    extends common_exception_ClientException
+class common_exception_Unauthorized extends common_exception_ClientException
 {
 
-   public function getUserMessage(){
-       return __("You are not authorized to perform this operation");
-   }
-   
+    public function getUserMessage()
+    {
+        return __("You are not authorized to perform this operation");
+    }
 }

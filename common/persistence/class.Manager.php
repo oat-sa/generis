@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,6 +22,7 @@
 use oat\oatbox\service\ServiceManager;
 use oat\oatbox\service\ServiceNotFoundException;
 use oat\generis\persistence\PersistenceManager;
+
  /**
  * A backward compatibility wrapper for our persistence factory
  *
@@ -43,9 +45,9 @@ class common_persistence_Manager extends PersistenceManager
         try {
             $manager = ServiceManager::getServiceManager()->get(self::SERVICE_ID);
         } catch (ServiceNotFoundException $ex) {
-            $manager = new self(array(
-                self::OPTION_PERSISTENCES => array()
-            ));
+            $manager = new self([
+                self::OPTION_PERSISTENCES => []
+            ]);
             $manager->setServiceManager(ServiceManager::getServiceManager());
         }
         return $manager;

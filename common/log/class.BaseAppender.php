@@ -29,8 +29,7 @@
  * @package generis
 
  */
-abstract class common_log_BaseAppender
-        implements common_log_Appender
+abstract class common_log_BaseAppender implements common_log_Appender
 {
     // --- ASSOCIATIONS ---
 
@@ -53,7 +52,7 @@ abstract class common_log_BaseAppender
      * @access public
      * @var array
      */
-    public $tags = array();
+    public $tags = [];
 
     /**
      * the prefix that will be added to each log message.
@@ -74,13 +73,14 @@ abstract class common_log_BaseAppender
      * @return mixed
      * @see doLog
      */
-    public function log( common_log_Item $item)
+    public function log(common_log_Item $item)
     {
-    	if ((1<<$item->getSeverity() & $this->mask) > 0
-    		&& (empty($this->tags) || count(array_intersect($item->getTags(), $this->tags))) > 0) {
-        	$this->doLog($item);
-    	}
-
+        if (
+            (1 << $item->getSeverity() & $this->mask) > 0
+            && (empty($this->tags) || count(array_intersect($item->getTags(), $this->tags))) > 0
+        ) {
+            $this->doLog($item);
+        }
     }
 
     /**
@@ -96,8 +96,8 @@ abstract class common_log_BaseAppender
 
 
         $threshold = 0;
-        while (($this->mask & 1<<$threshold) == 0){
-        	$threshold++;
+        while (($this->mask & 1 << $threshold) == 0) {
+            $threshold++;
         }
         $returnValue = $threshold;
 
@@ -118,25 +118,25 @@ abstract class common_log_BaseAppender
         $returnValue = (bool) false;
 
 
-    	if (isset($configuration['mask']) && is_numeric($configuration['mask'])) {
-    		// take over the mask
-    		$this->mask = intval($configuration['mask']);
-    	} elseif (isset($configuration['threshold']) && is_numeric($configuration['threshold'])) {
-    		// map the threshold to a mask
-    		$this->mask = max(0,(1<<common_Logger::FATAL_LEVEL +1) - (1<<$configuration['threshold']));
-    	} else {
-    		// log everything
-    		$this->mask = (1<<common_Logger::FATAL_LEVEL + 1) - 1;
-    	}
+        if (isset($configuration['mask']) && is_numeric($configuration['mask'])) {
+            // take over the mask
+            $this->mask = intval($configuration['mask']);
+        } elseif (isset($configuration['threshold']) && is_numeric($configuration['threshold'])) {
+            // map the threshold to a mask
+            $this->mask = max(0, (1 << common_Logger::FATAL_LEVEL + 1) - (1 << $configuration['threshold']));
+        } else {
+            // log everything
+            $this->mask = (1 << common_Logger::FATAL_LEVEL + 1) - 1;
+        }
 
-    	if (isset($configuration['tags'])) {
-    		$this->tags = is_array($configuration['tags']) ? $configuration['tags'] : array($configuration['tags']);
-    	}
+        if (isset($configuration['tags'])) {
+            $this->tags = is_array($configuration['tags']) ? $configuration['tags'] : [$configuration['tags']];
+        }
 
-    	if (isset($configuration['prefix'])) {
-    	    $this->prefix = $configuration['prefix'];
-    	}
-    	$returnValue = true;
+        if (isset($configuration['prefix'])) {
+            $this->prefix = $configuration['prefix'];
+        }
+        $returnValue = true;
 
 
         return (bool) $returnValue;
@@ -151,6 +151,5 @@ abstract class common_log_BaseAppender
      * @param  Item item
      * @return mixed
      */
-    public abstract function doLog( common_log_Item $item);
-
+    abstract public function doLog(common_log_Item $item);
 }

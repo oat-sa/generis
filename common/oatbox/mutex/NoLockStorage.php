@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,7 +37,6 @@ class NoLockStorage implements StoreInterface
      */
     public function save(Key $key)
     {
-
     }
 
     /**
@@ -44,7 +44,6 @@ class NoLockStorage implements StoreInterface
      */
     public function waitAndSave(Key $key)
     {
-
     }
 
     /**
@@ -52,7 +51,6 @@ class NoLockStorage implements StoreInterface
      */
     public function putOffExpiration(Key $key, $ttl)
     {
-
     }
 
     /**
@@ -60,7 +58,6 @@ class NoLockStorage implements StoreInterface
      */
     public function delete(Key $key)
     {
-
     }
 
     /**

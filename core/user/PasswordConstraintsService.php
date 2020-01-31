@@ -18,6 +18,7 @@
  * Copyright (c) 2015 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  * @author Mikhail Kamarouski, <kamarouski@1pt.com>
  */
+
 namespace oat\generis\model\user;
 
 use common_ext_ExtensionException;
@@ -32,13 +33,13 @@ class PasswordConstraintsService extends \tao_models_classes_Service
     /**
      * @var array
      */
-    protected $validators = array();
+    protected $validators = [];
 
     protected function __construct()
     {
         parent::__construct();
         $config = $this->getConfig();
-        $this->register( $config );
+        $this->register($config);
     }
 
 
@@ -49,15 +50,15 @@ class PasswordConstraintsService extends \tao_models_classes_Service
      *
      * @return bool
      */
-    public function validate( $password )
+    public function validate($password)
     {
         $result = true;
         /** @var \tao_helpers_form_Validator $validator */
         foreach ($this->validators as $validator) {
-            $result &= $validator->evaluate( $password );
+            $result &= $validator->evaluate($password);
         }
 
-        return (boolean) $result;
+        return (bool) $result;
     }
 
     /**
@@ -67,59 +68,64 @@ class PasswordConstraintsService extends \tao_models_classes_Service
      */
     protected function register($config)
     {
-        $this->validators = array();
+        $this->validators = [];
 
-        if (array_key_exists( 'length', $config ) && (int) $config['length']) {
-            $this->validators[] = new \tao_helpers_form_validators_Length( array( 'min' => (int) $config['length'] ) );
+        if (array_key_exists('length', $config) && (int) $config['length']) {
+            $this->validators[] = new \tao_helpers_form_validators_Length([ 'min' => (int) $config['length'] ]);
         }
 
-        if (( array_key_exists( 'upper', $config ) && $config['upper'] )
-            || ( array_key_exists( 'lower', $config ) && $config['lower'] )
+        if (
+            ( array_key_exists('upper', $config) && $config['upper'] )
+            || ( array_key_exists('lower', $config) && $config['lower'] )
         ) {
             $this->validators[] = new \tao_helpers_form_validators_Regex(
-                array(
-                    'message' => __( 'Must include at least one letter' ),
+                [
+                    'message' => __('Must include at least one letter'),
                     'format'  => '/\pL/'
-                ), 'letters'
+                ],
+                'letters'
             );
         }
 
-        if (( array_key_exists( 'upper', $config ) && $config['upper'] )) {
+        if (( array_key_exists('upper', $config) && $config['upper'] )) {
             $this->validators[] = new \tao_helpers_form_validators_Regex(
-                array(
-                    'message' => __( 'Must include upper case letters' ),
+                [
+                    'message' => __('Must include upper case letters'),
                     'format'  => '/(\p{Lu}+)/',
-                ), 'caseUpper'
+                ],
+                'caseUpper'
             );
         }
 
-        if (( array_key_exists( 'lower', $config ) && $config['lower'] )) {
+        if (( array_key_exists('lower', $config) && $config['lower'] )) {
             $this->validators[] = new \tao_helpers_form_validators_Regex(
-                array(
-                    'message' => __( 'Must include lower case letters' ),
+                [
+                    'message' => __('Must include lower case letters'),
                     'format'  => '/(\p{Ll}+)/'
-                ), 'caseLower'
+                ],
+                'caseLower'
             );
         }
 
-        if (array_key_exists( 'number', $config ) && $config['number']) {
+        if (array_key_exists('number', $config) && $config['number']) {
             $this->validators[] = new \tao_helpers_form_validators_Regex(
-                array(
-                    'message' => __( 'Must include at least one number' ),
+                [
+                    'message' => __('Must include at least one number'),
                     'format'  => '/\pN/'
-                ), 'number'
+                ],
+                'number'
             );
         }
 
-        if (array_key_exists( 'spec', $config ) && $config['spec']) {
+        if (array_key_exists('spec', $config) && $config['spec']) {
             $this->validators[] = new \tao_helpers_form_validators_Regex(
-                array(
-                    'message' => __( 'Must include at least one special letter' ),
+                [
+                    'message' => __('Must include at least one special letter'),
                     'format'  => '/[^p{Ll}\p{Lu}\pL\pN]/'
-                ), 'spec'
+                ],
+                'spec'
             );
         }
-
     }
 
     /**
@@ -128,7 +134,7 @@ class PasswordConstraintsService extends \tao_models_classes_Service
      */
     public function getErrors()
     {
-        $errors = array();
+        $errors = [];
         /** @var \tao_helpers_form_Validator $validator */
         foreach ($this->validators as $validator) {
             $errors[] = $validator->getMessage();
@@ -158,10 +164,9 @@ class PasswordConstraintsService extends \tao_models_classes_Service
                 ->getExtensionById('generis');
             $config = $ext->getConfig('passwords');
         } else {
-            $config = require_once( __DIR__ . '/../../config/default/passwords.conf.php' );
+            $config = require_once(__DIR__ . '/../../config/default/passwords.conf.php');
         }
 
         return (array) $config['constrains'];
     }
-
 }

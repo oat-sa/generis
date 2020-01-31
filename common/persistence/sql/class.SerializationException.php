@@ -20,7 +20,7 @@
  
 /**
  * SQL Serialization Exception
- * 
+ *
  * This exception class represents the typical error when concurrent
  * transactions using the SERIALIZATION Isolation Level are producing
  * conflicts (SQLSTATE 40001).

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,6 +21,7 @@
 
 namespace oat\generis\model\user;
 
-class PasswordConstraintsException extends \common_exception_Error{
+class PasswordConstraintsException extends \common_exception_Error
+{
 
 }

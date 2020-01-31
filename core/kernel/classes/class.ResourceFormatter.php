@@ -24,14 +24,14 @@ class core_kernel_classes_ResourceFormatter
     
 
     
-    public function getResourceDescription(core_kernel_classes_Resource $resource,$fromDefinition = true)
+    public function getResourceDescription(core_kernel_classes_Resource $resource, $fromDefinition = true)
     {
-        $returnValue = new stdClass;
-        $properties =array();
-        if ($fromDefinition){
-            $types = $resource->getTypes();    
-            foreach ($types as $type){
-                foreach ($type->getProperties(true) as $property){
+        $returnValue = new stdClass();
+        $properties = [];
+        if ($fromDefinition) {
+            $types = $resource->getTypes();
+            foreach ($types as $type) {
+                foreach ($type->getProperties(true) as $property) {
                     //$this->$$property->getUri() = array($property->getLabel(),$this->getPropertyValues());
                     $properties[$property->getUri()] = $property;
                 }
@@ -39,18 +39,17 @@ class core_kernel_classes_ResourceFormatter
             //var_dump($properties);
             $properties = array_unique($properties);
             $propertiesValues =  $resource->getPropertiesValues($properties);
-            if (count($propertiesValues)==0) {
+            if (count($propertiesValues) == 0) {
                 throw new common_exception_NoContent();
             }
             $propertiesValuesStdClasses = $this->propertiesValuestoStdClasses($propertiesValues);
-        }
-        else	//get effective triples and map the returned information into the same structure
+        } else //get effective triples and map the returned information into the same structure
         {
             $triples = $resource->getRdfTriples();
-            if (count( $triples)==0) {
+            if (count($triples) == 0) {
                 throw new common_exception_NoContent();
             }
-            foreach ($triples as $triple){
+            foreach ($triples as $triple) {
                 $properties[$triple->predicate][] = common_Utils::isUri($triple->object)
                 ? new core_kernel_classes_Resource($triple->object)
                 : new core_kernel_classes_Literal($triple->object);
@@ -69,20 +68,18 @@ class core_kernel_classes_ResourceFormatter
      */
     private function propertiesValuestoStdClasses($propertiesValues = null)
     {
-        $returnValue =array();
+        $returnValue = [];
         foreach ($propertiesValues as $uri => $values) {
-            $propStdClass = new stdClass;
+            $propStdClass = new stdClass();
             $propStdClass->predicateUri = $uri;
-            foreach ($values as $value){
-                $stdValue = new stdClass;
-                $stdValue->valueType = (get_class($value)=="core_kernel_classes_Literal") ? "literal" : "resource";
-                $stdValue->value = (get_class($value)=="core_kernel_classes_Literal") ? $value->__toString() : $value->getUri();
-                $propStdClass->values[]= $stdValue;
+            foreach ($values as $value) {
+                $stdValue = new stdClass();
+                $stdValue->valueType = (get_class($value) == "core_kernel_classes_Literal") ? "literal" : "resource";
+                $stdValue->value = (get_class($value) == "core_kernel_classes_Literal") ? $value->__toString() : $value->getUri();
+                $propStdClass->values[] = $stdValue;
             }
-            $returnValue[]=$propStdClass;
+            $returnValue[] = $propStdClass;
         }
         return $returnValue;
     }
 }
-
-?>

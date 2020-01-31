@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -15,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2016 (original work) Open Assessment Technologies SA
- * 
+ *
  */
 
 namespace oat\oatbox\log;
@@ -28,7 +29,7 @@ use Psr\Log\LoggerTrait;
 
 /**
  * An aggregator that broadcast logs to multiple loggers
- * 
+ *
  * @author Joel Bout <joel@taotesting.com>
  */
 class LoggerAggregator extends ConfigurableService implements LoggerInterface
@@ -46,13 +47,13 @@ class LoggerAggregator extends ConfigurableService implements LoggerInterface
      * @param LoggerInterface[] $options
      * @throws \common_Exception If one of logger isnot a Psr3 logger
      */
-    public function __construct($options = array())
+    public function __construct($options = [])
     {
         parent::__construct($options);
 
         foreach ($this->getOptions() as $logger) {
             if (!$logger instanceof LoggerInterface) {
-                throw new \common_Exception('Non PSR-3 compatible logger ' . get_class($logger) . ' added to '.__CLASS__);
+                throw new \common_Exception('Non PSR-3 compatible logger ' . get_class($logger) . ' added to ' . __CLASS__);
             }
         }
 
@@ -63,10 +64,10 @@ class LoggerAggregator extends ConfigurableService implements LoggerInterface
      * (non-PHPdoc)
      * @see \Psr\Log\LoggerInterface::log()
      */
-    public function log($level, $message, array $context = array())
+    public function log($level, $message, array $context = [])
     {
-         foreach ($this->loggers as $logger) {
-             $logger->log($level, $message, $context);
-         }
+        foreach ($this->loggers as $logger) {
+            $logger->log($level, $message, $context);
+        }
     }
 }

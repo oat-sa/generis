@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,7 +47,8 @@ class SystemHelper
      * Returns whenever or not Tao is installed on windows
      * @return boolean
      */
-    public static function isWindows() {
+    public static function isWindows()
+    {
         return strtoupper(substr(PHP_OS, 0, 3)) == 'WIN';
     }
 

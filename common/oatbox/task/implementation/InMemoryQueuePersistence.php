@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,7 +39,7 @@ class InMemoryQueuePersistence implements TaskPersistenceInterface
 
     public function get($taskId)
     {
-        if(array_key_exists($taskId , $this->taskList)) {
+        if (array_key_exists($taskId, $this->taskList)) {
             return $this->taskList[$taskId];
         }
         return null;
@@ -46,36 +47,36 @@ class InMemoryQueuePersistence implements TaskPersistenceInterface
 
     public function add(Task $task)
     {
-        $taskId = (microtime(true) * 10000) . rand(100000 , 999999);
+        $taskId = (microtime(true) * 10000) . rand(100000, 999999);
         $task->setId($taskId);
         $this->taskList[$taskId] = $task;
         return $task;
     }
 
-    public function search(array $filterTask, $rows = null, $page = null , $sortBy = null , $sortOrder = null)
+    public function search(array $filterTask, $rows = null, $page = null, $sortBy = null, $sortOrder = null)
     {
 
-        $taskList = array_filter($this->taskList , function($elem) use($filterTask){
+        $taskList = array_filter($this->taskList, function ($elem) use ($filterTask) {
             /**
              * @var $elem Task
              */
 
-            if(isset($filterTask['status'])) {
+            if (isset($filterTask['status'])) {
                 $result = ($elem->getStatus() === $filterTask['status']);
             } else {
                 $result = ($elem->getStatus() !== Task::STATUS_ARCHIVED);
             }
 
-            if(isset($filterTask['type'])) {
+            if (isset($filterTask['type'])) {
                 $result = ($elem->getType() === $filterTask['type']);
             }
 
-            if(isset($filterTask['owner'])) {
+            if (isset($filterTask['owner'])) {
                 $result = ($elem->getOwner() === $filterTask['owner']);
             }
 
-            if(isset($filterTask['label'])) {
-                $result = (strpos(strtolower($filterTask['label']) , strtotime($elem->getLabel())) !== false);
+            if (isset($filterTask['label'])) {
+                $result = (strpos(strtolower($filterTask['label']), strtotime($elem->getLabel())) !== false);
             }
 
             return $result;
@@ -92,7 +93,7 @@ class InMemoryQueuePersistence implements TaskPersistenceInterface
     public function update($taskId, $status)
     {
         $task = $this->get($taskId);
-        if(!is_null($task)) {
+        if (!is_null($task)) {
             $task->setStatus($status);
             return true;
         }
@@ -102,7 +103,7 @@ class InMemoryQueuePersistence implements TaskPersistenceInterface
     public function setReport($taskId, \common_report_Report $report)
     {
         $task = $this->get($taskId);
-        if(!is_null($task)) {
+        if (!is_null($task)) {
             $task->setReport($report);
             return true;
         }
@@ -119,5 +120,4 @@ class InMemoryQueuePersistence implements TaskPersistenceInterface
     {
         return $this->taskList;
     }
-
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -57,7 +58,7 @@ trait ServiceManagerAwareTrait
             return $serviceManager;
         }
         $msg = is_null($serviceManager)
-            ? 'ServiceLocator not initialized for '.get_class($this)
+            ? 'ServiceLocator not initialized for ' . get_class($this)
             : 'Alternate service locator not compatible with getServiceManager() in ' . __CLASS__;
         throw new InvalidServiceManagerException($msg);
     }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -17,6 +18,7 @@
  * Copyright (c) 2017 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  *
  */
+
 namespace oat\oatbox\service;
 
 use common_Utils;
@@ -62,6 +64,6 @@ class ServiceConfigDriver extends \common_persistence_PhpFileDriver implements C
         foreach ($parts as $part) {
             $path .= DIRECTORY_SEPARATOR . $this->sanitizeReadableFileName($part);
         }
-        return $path.'.conf.php';
+        return $path . '.conf.php';
     }
 }

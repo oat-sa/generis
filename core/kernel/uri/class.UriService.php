@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -17,22 +18,23 @@
  * Copyright (c) 2015 (original work) Open Assessment Technologies SA;
  *
  */
+
 use oat\generis\model\kernel\uri\UriProvider;
 use oat\oatbox\service\ServiceManager;
 
 /**
  * Provides backward compatibility to generates a URI
- * 
+ *
  * @author Joel Bout <joel@taotesting.com>
  * @deprecated
  */
 class core_kernel_uri_UriService
 {
     const CONFIG_KEY = 'uriProvider';
-    	
-    static private $instance; 
+        
+    private static $instance;
     
-    static public function singleton()
+    public static function singleton()
     {
         if (is_null(self::$instance)) {
             self::$instance = new self();
@@ -44,18 +46,17 @@ class core_kernel_uri_UriService
     
     /**
      * Generate a new URI with the UriProvider in force.
-     * 
+     *
      * @return string
      */
     public function generateUri()
     {
         return (string) $this->getUriProvider()->provide();
-        
     }
     
     /**
      * Set the UriProvider in force.
-     * 
+     *
      * @param UriProvider $provider
      */
     public function setUriProvider(UriProvider $provider)
@@ -66,7 +67,7 @@ class core_kernel_uri_UriService
     
     /**
      * Get the UriProvider in force.
-     * 
+     *
      * @return UriProvider
      */
     public function getUriProvider()

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,7 +28,8 @@ use oat\generis\test\TestCase;
  */
 class TestLoggerTest extends TestCase
 {
-    public function testArbitraryLogger() {
+    public function testArbitraryLogger()
+    {
         $logger = new TestLogger();
 
         $logger->log(LogLevel::EMERGENCY, 'testEmergency1', ["context1" => "value1", "context2" => "value2"]);
@@ -55,7 +57,8 @@ class TestLoggerTest extends TestCase
         $this->assertFalse($logger->has(LogLevel::EMERGENCY, 'I haven\'t been logged'));
     }
 
-    public function testLogBadLevel() {
+    public function testLogBadLevel()
+    {
         $logger = new TestLogger();
         $logger->log('BAD_LEVEL', 'testMessage');
 
@@ -65,7 +68,8 @@ class TestLoggerTest extends TestCase
     /**
      * @expectedException common_exception_InconsistentData
      */
-    public function testGetBadLevel() {
+    public function testGetBadLevel()
+    {
         $logger = new TestLogger();
         $logger->get('BAD_LEVEL');
     }
@@ -73,7 +77,8 @@ class TestLoggerTest extends TestCase
     /**
      * @expectedException common_exception_InconsistentData
      */
-    public function testHasBadLevel() {
+    public function testHasBadLevel()
+    {
         $logger = new TestLogger();
         $logger->has('BAD_LEVEL', 'testMessage');
     }
