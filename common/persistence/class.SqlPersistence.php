@@ -22,24 +22,24 @@
 
 /**
  * Persistence base on SQL
- * 
+ *
  * @author Lionel Lecaque  <lionel@taotesting.com>
  * @license GPLv2
- * @package generis 
+ * @package generis
  *
  */
 class common_persistence_SqlPersistence extends common_persistence_Persistence
 {
 
     /**
-     * 
+     *
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
      * @param string $statement
      * @param array $params
      */
-    public function exec($statement,$params = array(), array $types = [])
+    public function exec($statement, $params = [], array $types = [])
     {
-        return $this->getDriver()->exec($statement,$params, $types);
+        return $this->getDriver()->exec($statement, $params, $types);
     }
 
     
@@ -47,7 +47,8 @@ class common_persistence_SqlPersistence extends common_persistence_Persistence
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
      * @return common_persistence_sql_SchemaManager
      */
-    public function getSchemaManager(){
+    public function getSchemaManager()
+    {
         return $this->getDriver()->getSchemaManager();
     }
     
@@ -55,12 +56,13 @@ class common_persistence_SqlPersistence extends common_persistence_Persistence
      * @author Lionel Lecaque, <lionel@taotesting.com>
      * @return common_persistence_sql_Platform
      */
-    public function getPlatForm(){
+    public function getPlatForm()
+    {
         return $this->getDriver()->getPlatform();
     }
     
     /**
-     * 
+     *
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
      * @param string $tableName
      * @param array $data
@@ -88,15 +90,15 @@ class common_persistence_SqlPersistence extends common_persistence_Persistence
     }
 
     /**
-     * 
+     *
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
      * @param string $statement
      * @param array $params
      * @return \Doctrine\DBAL\Driver\Statement
      */
-    public function query($statement,$params= array(), array $types = [])
+    public function query($statement, $params = [], array $types = [])
     {
-        return $this->getDriver()->query($statement,$params, $types);
+        return $this->getDriver()->query($statement, $params, $types);
     }
     
 
@@ -108,7 +110,8 @@ class common_persistence_SqlPersistence extends common_persistence_Persistence
      * @param int $parameter_type A PDO PARAM_XX constant.
      * @return string The quoted string.
      */
-    public function quote($parameter, $parameter_type = PDO::PARAM_STR){
+    public function quote($parameter, $parameter_type = PDO::PARAM_STR)
+    {
         return $this->getDriver()->quote($parameter, $parameter_type);
     }
     
@@ -120,9 +123,10 @@ class common_persistence_SqlPersistence extends common_persistence_Persistence
      * @param string $name
      * @return string The quoted string.
      */
-      public function lastInsertId($name = null){
-          return $this->getDriver()->lastInsertId($name);
-      }
+    public function lastInsertId($name = null)
+    {
+        return $this->getDriver()->lastInsertId($name);
+    }
 
     /**
      * Execute a function within a transaction.

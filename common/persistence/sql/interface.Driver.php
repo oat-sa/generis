@@ -24,19 +24,19 @@
 interface common_persistence_sql_Driver extends common_persistence_Driver
 {
     
-    public function query($statement,$params);
+    public function query($statement, $params);
     
-    public function exec($statement,$params);
+    public function exec($statement, $params);
     
     /**
      * Insert a single row into the database.
-     * 
+     *
      * column names and values will be encoded
-     * 
+     *
      * @param string $tableName name of the table
      * @param array $data An associative array containing column-value pairs.
      * @param array $types
-     * @return integer The number of affected rows. 
+     * @return integer The number of affected rows.
      */
     public function insert($tableName, array $data, array $types = []);
     

@@ -1,24 +1,26 @@
 <?php
-/**  
+
+/**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
  * of the License (non-upgradable).
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- * 
+ *
  * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- * 				 2013-2014 (update and modification) Open Assessment Technologies SA;
- * 
+ *               2013-2014 (update and modification) Open Assessment Technologies SA;
+ *
  */
+
 use oat\generis\model\data\ModelManager;
 use oat\generis\model\kernel\persistence\smoothsql\search\ComplexSearchService;
 use oat\oatbox\service\ServiceManager;
@@ -29,7 +31,7 @@ use oat\oatbox\service\ServiceManager;
  * @access public
  * @author Joel Bout, <joel.bout@tudor.lu>
  * @package generis
- *         
+ *
  */
 class common_ext_GenerisInstaller extends common_ext_ExtensionInstaller
 {
@@ -53,14 +55,14 @@ class common_ext_GenerisInstaller extends common_ext_ExtensionInstaller
         $modelFactory = new \core_kernel_api_ModelFactory();
         $writableModelId = $modelFactory->getModelId(LOCAL_NAMESPACE);
 
-        $model = new \core_kernel_persistence_smoothsql_SmoothModel(array(
+        $model = new \core_kernel_persistence_smoothsql_SmoothModel([
             \core_kernel_persistence_smoothsql_SmoothModel::OPTION_PERSISTENCE => 'default',
             \core_kernel_persistence_smoothsql_SmoothModel::OPTION_READABLE_MODELS => [$writableModelId],
             \core_kernel_persistence_smoothsql_SmoothModel::OPTION_WRITEABLE_MODELS => [$writableModelId],
             \core_kernel_persistence_smoothsql_SmoothModel::OPTION_NEW_TRIPLE_MODEL => $writableModelId,
             \core_kernel_persistence_smoothsql_SmoothModel::OPTION_SEARCH_SERVICE => ComplexSearchService::SERVICE_ID,
             \core_kernel_persistence_smoothsql_SmoothModel::OPTION_CACHE_SERVICE => common_cache_Cache::SERVICE_ID
-        ));
+        ]);
         $model->setServiceLocator(ServiceManager::getServiceManager());
         ModelManager::setModel($model);
         

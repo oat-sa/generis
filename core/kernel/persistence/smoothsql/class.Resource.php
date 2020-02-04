@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,8 +34,7 @@ use oat\generis\model\kernel\uri\UriProvider;
  * @author  Joel Bout, <joel.bout@tudor.lu>
  * @package generis
  */
-class core_kernel_persistence_smoothsql_Resource
-    implements core_kernel_persistence_ResourceInterface
+class core_kernel_persistence_smoothsql_Resource implements core_kernel_persistence_ResourceInterface
 {
     /** @var ModelFactory */
     protected $modelFactory;
@@ -66,12 +66,16 @@ class core_kernel_persistence_smoothsql_Resource
 
     protected function getModelReadSqlCondition()
     {
-        return 'modelid IN (' . implode(',', array_map(function ($a) { return "'" . $a . "'"; }, $this->model->getReadableModels())) . ')';
+        return 'modelid IN (' . implode(',', array_map(function ($a) {
+            return "'" . $a . "'";
+        }, $this->model->getReadableModels())) . ')';
     }
 
     protected function getModelWriteSqlCondition()
     {
-        return 'modelid IN (' . implode(',', array_map(function ($a) { return "'" . $a . "'"; }, $this->model->getWritableModels())) . ')';
+        return 'modelid IN (' . implode(',', array_map(function ($a) {
+            return "'" . $a . "'";
+        }, $this->model->getWritableModels())) . ')';
     }
 
     protected function getNewTripleModelId()
@@ -100,7 +104,7 @@ class core_kernel_persistence_smoothsql_Resource
         while ($row = $sth->fetch()) {
             $uri = $this->getPersistence()->getPlatForm()->getPhpTextValue($row['object']);
             $returnValue[$uri] = $this->getModel()->getClass($uri);
-        }        
+        }
 
         return (array)$returnValue;
     }
@@ -583,7 +587,7 @@ class core_kernel_persistence_smoothsql_Resource
         }
 
         /*foreach($properties as $property){
-        	$returnValue[$property->getUri()] = $this->getPropertyValues($resource, $property);
+            $returnValue[$property->getUri()] = $this->getPropertyValues($resource, $property);
         }*/
 
         $predicatesQuery = '';
