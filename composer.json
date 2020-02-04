@@ -53,6 +53,12 @@
   "extra": {
     "tao-extension-name": "generis"
   },
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "git@github.com:oat-sa/lib-dbal-spanner.git"
+    }
+  ],
   "require": {
     "clearfw/clearfw": "~1.2.0",
     "easyrdf/easyrdf": "^0.9.0",
@@ -60,10 +66,11 @@
     "doctrine/annotations": "~1.6.0",
     "zendframework/zend-servicemanager": "~2.5.0",
     "league/flysystem": "~1.0",
+    "oat-sa/lib-dbal-spanner": "dev-feature/NEX-84/spanner-query-refactoring",
     "oat-sa/oatbox-extension-installer": "~1.1||dev-master",
     "php": "^7.1",
     "psr/log": "~1.0",
-    "oat-sa/lib-generis-search": "^2.0.1",
+    "oat-sa/lib-generis-search": "dev-develop",
     "monolog/monolog": "^1.23.0",
     "fluent/logger": "^1.0.1",
     "symfony/lock": "^3.4",
@@ -97,5 +104,6 @@
     "psr-4": {
       "oat\\generis\\test\\": "generis/test/"
     }
-  }
+  },
+  "minimum-stability" : "dev"
 }

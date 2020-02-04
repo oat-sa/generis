@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,24 +36,23 @@ use oat\search\TaoSearchGateWay;
  *
  * @author Christophe GARCIA <christopheg@taotesting.com>
  */
-class GateWay extends TaoSearchGateWay
-{
+class GateWay extends TaoSearchGateWay {
     
     /**
      *
-     * @var common_persistence_SqlPersistence
+     * @var common_persistence_SqlPersistence 
      */
     protected $connector;
     /**
      * parser service or className
-     * @var string
+     * @var string 
      */
     protected $parserList = [
         'taoRdf' => 'search.tao.parser'
     ];
     /**
      * driver escaper list
-     * @var array
+     * @var array 
      */
     protected $driverList = [
         'taoRdf' => 'search.driver.tao'
@@ -62,12 +60,11 @@ class GateWay extends TaoSearchGateWay
     
     /**
      * resultSet service or className
-     * @var string
+     * @var string 
      */
     protected $resultSetClassName = '\\oat\\generis\\model\\kernel\\persistence\\smoothsql\\search\\TaoResultSet';
     
-    public function __construct()
-    {
+    public function __construct() {
         $this->connector = ServiceManager::getServiceManager()
                 ->get(common_persistence_Manager::SERVICE_ID)
                 ->getPersistenceById('default');
@@ -80,18 +77,16 @@ class GateWay extends TaoSearchGateWay
      * @throws SearchGateWayExeption
      * @return $this
      */
-    public function connect()
-    {
+    public function connect() {
         return !is_null($this->connector);
     }
     
     /**
      * execute Parsed Query
-     *
+     * 
      * @return type
      */
-    public function search(QueryBuilderInterface $Builder)
-    {
+    public function search(QueryBuilderInterface $Builder) {
         $this->serialyse($Builder);
         $statement = $this->connector->query($this->parsedQuery);
         $result    = $this->statementToArray($statement);
@@ -103,21 +98,17 @@ class GateWay extends TaoSearchGateWay
     }
 
     /**
-     *
-     * @param \PDOStatement $statement
      * @return array
      */
-    protected function statementToArray(\PDOStatement $statement)
-    {
+    protected function statementToArray($statement) {
         $result = [];
-        while ($row = $statement->fetch(\PDO::FETCH_OBJ)) {
+        while($row = $statement->fetch(\PDO::FETCH_OBJ)) {
             $result[] = $row;
         }
         return $result;
     }
     
-    public function fetchQuery($query)
-    {
+    public function fetchQuery($query) {
         $statement = $this->connector->query($query);
         $result = $statement->fetch(\PDO::FETCH_ASSOC);
         return $result;
@@ -128,8 +119,7 @@ class GateWay extends TaoSearchGateWay
      * @param QueryBuilderInterface $Builder
      * @return integer
      */
-    public function count(QueryBuilderInterface $Builder)
-    {
+    public function count(QueryBuilderInterface $Builder) {
         $this->parsedQuery = $this->getSerialyser()->setCriteriaList($Builder)->count(true)->serialyse();
         $statement = $this->connector->query($this->parsedQuery);
         $result    = $this->statementToArray($statement);
@@ -137,8 +127,7 @@ class GateWay extends TaoSearchGateWay
     }
     
         
-    public function getJoiner()
-    {
+    public function getJoiner() {
         $joiner = new QueryJoiner();
         $options = $this->getOptions();
         $joiner->setDriverEscaper($this->getDriverEscaper())->setOptions($options);
@@ -146,8 +135,7 @@ class GateWay extends TaoSearchGateWay
         return $joiner;
     }
     
-    public function join(QueryJoiner $joiner)
-    {
+    public function join(QueryJoiner $joiner) {
         
         $query = $joiner->execute();
         $statement = $this->connector->query($query);
@@ -163,9 +151,9 @@ class GateWay extends TaoSearchGateWay
      * return parsed query as string
      * @return $this
      */
-    public function printQuery()
-    {
+    public function printQuery() {
         echo $this->parsedQuery;
         return $this;
     }
+    
 }
