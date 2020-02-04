@@ -156,7 +156,6 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
         return new common_persistence_sql_dbal_SchemaManager($this->connection->getSchemaManager());
     }
 
-
     /**
      * Execute the statement with provided params
      *
