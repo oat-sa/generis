@@ -15,26 +15,26 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2020 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
+ * Copyright (c) 2020 (original work) Open Assessment Technologies SA;
  *
- * @author "Julien Sébire, <julien@taotesting.com>"
+ * @author Moyon Camille <camille@taotesting.com>
  */
 
-namespace oat\generis\Helper;
+namespace oat\generis\test\unit\helpers;
 
-use Exception;
-use Ramsey\Uuid\Uuid;
+use oat\generis\Helper\UuidPrimaryKeyTrait;
+use oat\generis\test\TestCase;
 
-trait UuidPrimaryKeyTrait
+class UuidPrimaryKeyTraitTest extends TestCase
 {
-    /**
-     * Generates a unique, not auto-increment based, primary key.
-     *
-     * @return string
-     * @throws Exception
-     */
-    public function getUniquePrimaryKey()
+    public function testGetUniquePrimaryKey()
     {
-        return (string)Uuid::uuid4();
+        $fixture = new class {
+            use UuidPrimaryKeyTrait;
+        };
+
+        $uuid = $fixture->getUniquePrimaryKey();
+        $this->assertTrue(is_string($fixture->getUniquePrimaryKey()));
+        $this->assertEquals(36, strlen($uuid));
     }
 }
