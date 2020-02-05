@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -14,9 +15,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2013 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
+ * Copyright (c) 2013-2020 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  *
  */
+
+use Doctrine\DBAL\ParameterType;
 
 /**
  * A key value driver based upon an existing sql persistence
@@ -31,8 +34,8 @@ class common_persistence_SqlKvDriver implements common_persistence_KvDriver
     /**
      * @var common_persistence_SqlPersistence
      */
-    private $sqlPeristence;
-    
+    private $sqlPersistence;
+
     /**
      * Probability of garbage collection to be triggered
      * stores the inverse element
@@ -40,8 +43,8 @@ class common_persistence_SqlKvDriver implements common_persistence_KvDriver
      * @var int
      */
     private $garbageCollection;
-    
-   
+
+
     /**
      * (non-PHPdoc)
      * @see common_persistence_Driver::connect()
@@ -51,11 +54,11 @@ class common_persistence_SqlKvDriver implements common_persistence_KvDriver
         if (!isset($params[self::OPTION_PERSISTENCE_SQL])) {
             throw new common_exception_Error('Missing underlying sql persistence');
         }
-        
-        $this->sqlPeristence = common_persistence_SqlPersistence::getPersistence($params['sqlPersistence']);
+
+        $this->sqlPersistence = common_persistence_SqlPersistence::getPersistence($params['sqlPersistence']);
         $this->garbageCollection = isset($params['gc']) ? $params['gc'] : self::DEFAULT_GC_PROBABILITY;
 
-        
+
         return new common_persistence_KeyValuePersistence($params, $this);
     }
     /**
@@ -63,7 +66,8 @@ class common_persistence_SqlKvDriver implements common_persistence_KvDriver
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
      * @param string $id
      * @param string $value
-     * @param int $ttl
+     * @param int|null $ttl
+     * @param boolean $nx
      * @throws common_Exception
      * @return boolean
      */
@@ -76,30 +80,32 @@ class common_persistence_SqlKvDriver implements common_persistence_KvDriver
         try {
             $expire = is_null($ttl) ? 0 : time() + $ttl;
 
-            // we need int to have safe incr and decr methods
-            $encoded = is_int($value) ? $value : base64_encode($value);
-            $platformName = $this->sqlPeristence->getPlatForm()->getName();
+            $encoded = base64_encode($value);
+            $platformName = $this->sqlPersistence->getPlatForm()->getName();
             $params = [':data' => $encoded, ':time' => $expire, ':id' => $id];
-            
-            
+
+
             if ($platformName == 'mysql') {
                 //query found in Symfony PdoSessionHandler
                 $statement = "INSERT INTO kv_store (kv_id, kv_value, kv_time) VALUES (:id, :data, :time) 
                     ON DUPLICATE KEY UPDATE kv_value = VALUES(kv_value), kv_time = VALUES(kv_time)";
-                $returnValue = $this->sqlPeristence->exec($statement, $params);
+                $returnValue = $this->sqlPersistence->exec($statement, $params);
             } elseif ($platformName == 'oracle') {
                 $statement = "MERGE INTO kv_store USING DUAL ON(kv_id = :id) 
                     WHEN NOT MATCHED THEN INSERT (kv_id, kv_value, kv_time) VALUES (:id, :data, sysdate) 
                     WHEN MATHED THEN UPDATE SET kv_value = :data WHERE kv_id = :id";
             } else {
                 $statement = 'UPDATE kv_store SET kv_value = :data , kv_time = :time WHERE kv_id = :id';
-                $returnValue = $this->sqlPeristence->exec($statement, $params);
-                if ($returnValue == 0) {
-                    $returnValue = $this->sqlPeristence->insert('kv_store', ['kv_id' => $id, 'kv_time' => $expire, 'kv_value' => $encoded]);
+                $returnValue = $this->sqlPersistence->exec($statement, $params, ['data' => ParameterType::STRING, 'time' => ParameterType::INTEGER, 'id' => ParameterType::STRING]);
+                if (0 === $returnValue) {
+                    $returnValue = $this->sqlPersistence->insert(
+                        'kv_store',
+                        ['kv_id' => $id, 'kv_time' => $expire, 'kv_value' => $encoded],
+                        ['kv_id' => ParameterType::STRING, 'kv_time' => ParameterType::INTEGER, 'kv_value' => ParameterType::STRING]
+                    );
                 }
             }
-            
-          
+
             if ($this->garbageCollection != 0 && rand(0, $this->garbageCollection) == 1) {
                 $this->gc();
             }
@@ -119,13 +125,11 @@ class common_persistence_SqlKvDriver implements common_persistence_KvDriver
     {
         try {
             $statement = 'SELECT kv_value, kv_time FROM kv_store WHERE kv_id = ?';
-            $statement = $this->sqlPeristence->getPlatForm()->limitStatement($statement, 1);
-            $sessionValue = $this->sqlPeristence->query($statement, [$id]);
+            $statement = $this->sqlPersistence->getPlatForm()->limitStatement($statement, 1);
+            $sessionValue = $this->sqlPersistence->query($statement, [$id]);
             while ($row = $sessionValue->fetch()) {
-                if ($row['kv_time'] == 0 || $row['kv_time'] >= time()) {
-                    return filter_var($row['kv_value'], FILTER_VALIDATE_INT) !== false
-                        ? (int)$row['kv_value']
-                        : base64_decode($row['kv_value']);
+                if ($row["kv_time"] == 0 || $row["kv_time"] >= time()) {
+                    return base64_decode($row["kv_value"]);
                 }
             }
         } catch (Exception $e) {
@@ -144,8 +148,8 @@ class common_persistence_SqlKvDriver implements common_persistence_KvDriver
     {
         try {
             $statement = 'SELECT kv_value FROM kv_store WHERE kv_id = ?';
-            $statement = $this->sqlPeristence->getPlatForm()->limitStatement($statement, 1);
-            $sessionValue = $this->sqlPeristence->query($statement, [$id]);
+            $statement = $this->sqlPersistence->getPlatForm()->limitStatement($statement, 1);
+            $sessionValue = $this->sqlPersistence->query($statement, [$id]);
             return ($sessionValue->fetch() !== false);
         } catch (Exception $e) {
             throw new common_Exception("Unable to read value from key value storage");
@@ -162,7 +166,7 @@ class common_persistence_SqlKvDriver implements common_persistence_KvDriver
     {
         try {
             $statement = 'DELETE FROM kv_store WHERE kv_id = ?';
-            $sessionValue = $this->sqlPeristence->exec($statement, [$id]);
+            $sessionValue = $this->sqlPersistence->exec($statement, [$id]);
             return (bool)$sessionValue;
         } catch (Exception $e) {
             throw new common_Exception("Unable to write the key value table in the database " . $e->getMessage());
@@ -178,10 +182,8 @@ class common_persistence_SqlKvDriver implements common_persistence_KvDriver
     public function incr($id)
     {
         $params = [':id' => $id];
-        $platformName = $this->sqlPeristence->getPlatForm()->getName();
-        $intVal = $platformName == 'postgresql' ? 'kv_value::integer' : 'kv_value';
-        $statement = 'UPDATE kv_store SET kv_value = ' . $intVal . ' + 1 WHERE kv_id = :id';
-        return $this->sqlPeristence->exec($statement, $params);
+        $statement = 'UPDATE kv_store SET kv_value = kv_value + 1 WHERE kv_id = :id';
+        return $this->sqlPersistence->exec($statement, $params);
     }
 
     /**
@@ -192,10 +194,8 @@ class common_persistence_SqlKvDriver implements common_persistence_KvDriver
     public function decr($id)
     {
         $params = [':id' => $id];
-        $platformName = $this->sqlPeristence->getPlatForm()->getName();
-        $intVal = $platformName == 'postgresql' ? 'kv_value::integer' : 'kv_value';
-        $statement = 'UPDATE kv_store SET kv_value = ' . $intVal . ' - 1 WHERE kv_id = :id';
-        return $this->sqlPeristence->exec($statement, $params);
+        $statement = 'UPDATE kv_store SET kv_value = kv_value - 1 WHERE kv_id = :id';
+        return $this->sqlPersistence->exec($statement, $params);
     }
 
     /**
@@ -206,6 +206,6 @@ class common_persistence_SqlKvDriver implements common_persistence_KvDriver
     protected function gc()
     {
         $statement = 'DELETE FROM kv_store WHERE kv_time > 0 AND kv_time <  ? ';
-        return (bool)$this->sqlPeristence->exec($statement, [time()]);
+        return (bool)$this->sqlPersistence->exec($statement, [time()]);
     }
 }
