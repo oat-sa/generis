@@ -52,7 +52,7 @@ class common_ext_Namespace
      */
     public function __construct($id = '', $uri = '')
     {
-        $this->modelId = $id;
+        $this->modelId = (string) $id;
         $this->uri = $uri;
     }
 
