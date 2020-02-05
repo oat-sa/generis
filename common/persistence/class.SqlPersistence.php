@@ -24,7 +24,6 @@
 
 use Doctrine\DBAL\Driver\Statement;
 
-
 /**
  * Persistence base on SQL
  */
