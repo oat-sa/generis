@@ -67,13 +67,24 @@ class core_kernel_persistence_smoothsql_SmoothRdf implements RdfInterface
         if (!in_array($triple->modelid, $this->model->getReadableModels())) {
             $this->model->addReadableModel($triple->modelid);
         }
-        $query = "INSERT INTO statements ( modelId, subject, predicate, object, l_language, epoch, author) VALUES ( ? , ? , ? , ? , ? , ?, ?);";
-        $success = $this->getPersistence()->exec($query, [$triple->modelid, $triple->subject, $triple->predicate, $triple->object, is_null($triple->lg) ? '' : $triple->lg, $this->getPersistence()->getPlatForm()->getNowExpression(), is_null($triple->author) ? '' : $triple->author]);
+
+        // TODO: inject ModelFactory
+        $modelFactory = new core_kernel_api_ModelFactory();
+        $returnValue = $modelFactory->addStatement(
+            $triple->modelid,
+            $triple->subject,
+            $triple->predicate,
+            $triple->object,
+            is_null($triple->lg) ? '' : $triple->lg,
+            is_null($triple->author) ? '' : $triple->author
+        );
+
         if ($triple->predicate == OntologyRdfs::RDFS_SUBCLASSOF || $triple->predicate == OntologyRdf::RDF_TYPE) {
             $eventManager = $this->model->getServiceLocator()->get(EventManager::SERVICE_ID);
             $eventManager->trigger(new ResourceCreated($this->model->getResource($triple->subject)));
         }
-        return $success;
+
+        return $returnValue;
     }
     
     /**
