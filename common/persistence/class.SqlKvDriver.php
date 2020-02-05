@@ -44,7 +44,6 @@ class common_persistence_SqlKvDriver implements common_persistence_KvDriver
      */
     private $garbageCollection;
 
-
     /**
      * (non-PHPdoc)
      * @see common_persistence_Driver::connect()
@@ -61,6 +60,7 @@ class common_persistence_SqlKvDriver implements common_persistence_KvDriver
 
         return new common_persistence_KeyValuePersistence($params, $this);
     }
+
     /**
      *
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
@@ -83,7 +83,6 @@ class common_persistence_SqlKvDriver implements common_persistence_KvDriver
             $encoded = base64_encode($value);
             $platformName = $this->sqlPersistence->getPlatForm()->getName();
             $params = [':data' => $encoded, ':time' => $expire, ':id' => $id];
-
 
             if ($platformName == 'mysql') {
                 //query found in Symfony PdoSessionHandler
@@ -114,6 +113,7 @@ class common_persistence_SqlKvDriver implements common_persistence_KvDriver
         }
         return (bool)$returnValue;
     }
+
     /**
      *
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
@@ -137,6 +137,7 @@ class common_persistence_SqlKvDriver implements common_persistence_KvDriver
         }
         return false;
     }
+
     /**
      *
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
@@ -155,6 +156,7 @@ class common_persistence_SqlKvDriver implements common_persistence_KvDriver
             throw new common_Exception("Unable to read value from key value storage");
         }
     }
+
     /**
      *
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
