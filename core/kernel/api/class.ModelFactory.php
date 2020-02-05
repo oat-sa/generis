@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,55 +17,75 @@
  *
  * Copyright (c) 2013 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  *
- * @author "Lionel Lecaque, <lionel@taotesting.com>"
+ * @author  "Lionel Lecaque, <lionel@taotesting.com>"
  * @license GPLv2
  * @package generis
-
  *
  */
+
+use oat\generis\Helper\UuidPrimaryKeyTrait;
+
 class core_kernel_api_ModelFactory
 {
-    
-    
-    /**
-     * @author "Lionel Lecaque, <lionel@taotesting.com>"
-     * @param string $namespace
-     * @return string
-     */
-    private function getModelId($namespace)
+    use UuidPrimaryKeyTrait;
+
+    const DEFAULT_AUTHOR = 'http://www.tao.lu/Ontologies/TAO.rdf#installator';
+
+    /** @var core_kernel_classes_DbWrapper */
+    private $dbWrapper;
+
+    public function __construct()
     {
-        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
-        
+        // @TODO: inject dbWrapper as a dependency.
+        $this->dbWrapper = core_kernel_classes_DbWrapper::singleton();
+    }
+
+    /**
+     * @param $namespace
+     * @return mixed
+     * @author "Lionel Lecaque, <lionel@taotesting.com>"
+     */
+    public function getModelId($namespace)
+    {
+        if (substr($namespace, -1) !== '#') {
+            $namespace .= '#';
+        }
+
         $query = 'SELECT modelid FROM models WHERE (modeluri = ?)';
-        $results = $dbWrapper->query($query, [$namespace]);
-       
+        $results = $this->dbWrapper->query($query, [$namespace]);
+
         return $results->fetchColumn(0);
     }
-    
+
     /**
-     * @author "Lionel Lecaque, <lionel@taotesting.com>"
      * @param string $namespace
-     */
-    private function addNewModel($namespace)
-    {
-        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
-        $results = $dbWrapper->insert('models', ['modeluri' => $namespace]);
-    }
-    
-    /**
+     *
+     * @return string new added model id
+     * @throws Exception
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
+     */
+    public function addNewModel($namespace)
+    {
+        $modelId = $this->getUniquePrimaryKey();
+
+        $this->dbWrapper->insert('models', ['modelid' => $modelId, 'modeluri' => $namespace]);
+
+        return $modelId;
+    }
+
+    /**
      * @param string $namespace
      * @param string $data xml content
+     * @return bool Were triples added?
+     * @throws EasyRdf_Exception
+     * @author "Lionel Lecaque, <lionel@taotesting.com>"
      */
     public function createModel($namespace, $data)
     {
-
         $modelId = $this->getModelId($namespace);
         if ($modelId === false) {
             common_Logger::d('modelId not found, need to add namespace ' . $namespace);
-            $this->addNewModel($namespace);
-            //TODO bad way, need to find better
-            $modelId = $this->getModelId($namespace);
+            $modelId = $this->addNewModel($namespace);
         }
         $modelDefinition = new EasyRdf_Graph($namespace);
         if (is_file($data)) {
@@ -72,56 +93,69 @@ class core_kernel_api_ModelFactory
         } else {
             $modelDefinition->parse($data);
         }
-        $graph = $modelDefinition->toRdfPhp();
-        $resources = $modelDefinition->resources();
         $format = EasyRdf_Format::getFormat('php');
-        
+
         $data = $modelDefinition->serialise($format);
-        
+
+        $returnValue = false;
+
         foreach ($data as $subjectUri => $propertiesValues) {
             foreach ($propertiesValues as $prop => $values) {
-                foreach ($values as $k => $v) {
-                    $this->addStatement($modelId, $subjectUri, $prop, $v['value'], isset($v['lang']) ? $v['lang'] : null);
+                foreach ($values as $v) {
+                    $returnValue |= $this->addStatement($modelId, $subjectUri, $prop, $v['value'], isset($v['lang']) ? $v['lang'] : null);
                 }
             }
         }
-        
-        return true;
+
+        return $returnValue;
     }
-    
+
     /**
      * Adds a statement to the ontology if it does not exist yet
      *
-     * @author "Joel Bout, <joel@taotesting.com>"
      * @param int $modelId
      * @param string $subject
      * @param string $predicate
      * @param string $object
      * @param string $lang
+     * @param string $author
+     * @return bool Was a row added?
+     *
+     * @throws Exception
+     * @author "Joel Bout, <joel@taotesting.com>"
      */
-    private function addStatement($modelId, $subject, $predicate, $object, $lang = null)
+    public function addStatement($modelId, $subject, $predicate, $object, $lang = null, $author = self::DEFAULT_AUTHOR)
     {
-        $result = core_kernel_classes_DbWrapper::singleton()->query(
-            'SELECT count(*) FROM statements WHERE modelid = ? AND subject = ? AND predicate = ? AND object = ? AND l_language = ?',
-            [$modelId, $subject, $predicate, $object, (is_null($lang)) ? '' : $lang]
-        );
-        
-        if (intval($result->fetchColumn()) === 0) {
-            $dbWrapper = core_kernel_classes_DbWrapper::singleton();
-            $date = $dbWrapper->getPlatForm()->getNowExpression();
-
-            $dbWrapper->insert(
-                'statements',
-                [
-                    'modelid' =>  $modelId,
-                    'subject' => $subject,
-                    'predicate' => $predicate,
-                    'object' => $object,
-                    'l_language' => is_null($lang) ? '' : $lang,
-                    'author' => 'http://www.tao.lu/Ontologies/TAO.rdf#installator',
-                    'epoch' => $date
-                ]
-            );
+        // Casting values and types.
+        $object = (string) $object;
+        if (is_null($lang)) {
+            $lang = '';
         }
+
+        // TODO: refactor this to use a triple store abstraction.
+        $result = $this->dbWrapper->query(
+            'SELECT count(*) FROM statements WHERE modelid = ? AND subject = ? AND predicate = ? AND object = ? AND l_language = ?',
+            [$modelId, $subject, $predicate, $object, $lang]
+        );
+
+        if (intval($result->fetchColumn()) > 0) {
+            return false;
+        }
+
+        $date = $this->dbWrapper->getPlatForm()->getNowExpression();
+
+        return (bool) $this->dbWrapper->insert(
+            'statements',
+            [
+                'id' => $this->getUniquePrimaryKey(),
+                'modelid' => $modelId,
+                'subject' => $subject,
+                'predicate' => $predicate,
+                'object' => $object,
+                'l_language' => $lang,
+                'author' => is_null($author) ? '' : $author,
+                'epoch' => $date,
+            ]
+        );
     }
 }
