@@ -36,7 +36,7 @@ use oat\generis\test\GenerisPhpUnitTestRunner;
 class ClassTest extends GenerisPhpUnitTestRunner
 {
     protected $object;
-    
+
     protected function setUp()
     {
 
@@ -45,25 +45,25 @@ class ClassTest extends GenerisPhpUnitTestRunner
         $this->object = new core_kernel_classes_Class(OntologyRdfs::RDFS_RESOURCE);
         $this->object->debug = __METHOD__;
     }
-    
+
     public function testGetSubClasses()
     {
 
         $generisResource = new core_kernel_classes_Class(GenerisRdf::CLASS_GENERIS_RESOURCE);
-    
+
         $subClass0 = $generisResource->createSubClass('test0', 'test0 Comment');
         $subClass1 = $subClass0->createSubClass('test1', 'test1 Comment');
 
-    
+
         $subClass2 = $subClass0->createSubClass('test2', 'test2 Comment');
         $subClass3 = $subClass2->createSubClass('test3', 'test3 Comment');
         $subClass4 = $subClass3->createSubClass('test4', 'test4 Comment');
-        
+
         $subClassesArray = $subClass0->getSubClasses();
         foreach ($subClassesArray as $subClass) {
             $this->assertTrue($subClass->isSubClassOf($subClass0));
         }
-        
+
         $subClassesArray2 = $subClass0->getSubClasses(true);
         foreach ($subClassesArray2 as $subClass) {
             if ($subClass->getLabel() == 'test1') {
@@ -100,7 +100,7 @@ class ClassTest extends GenerisPhpUnitTestRunner
             $this->assertInstanceOf('core_kernel_classes_Class', $parentClass);
             $this->assertTrue(in_array($parentClass->getUri(), $expectedResult));
         }
-        
+
         $directParentClass = $class->getParentClasses();
         $this->assertEquals(1, count($directParentClass));
         foreach ($directParentClass as $parentClass) {
@@ -108,9 +108,9 @@ class ClassTest extends GenerisPhpUnitTestRunner
             $this->assertEquals(GenerisRdf::CLASS_GENERIS_RESOURCE, $parentClass->getUri());
         }
     }
-    
 
-    
+
+
 
     public function testGetProperties()
     {
@@ -118,7 +118,7 @@ class ClassTest extends GenerisPhpUnitTestRunner
         $properties = $list->getProperties();
         $this->assertTrue(count($properties) == 2);
         $expectedResult =  [   OntologyRdf::RDF_FIRST, OntologyRdf::RDF_REST];
-    
+
         foreach ($properties as $property) {
             $this->assertTrue($property instanceof core_kernel_classes_Property);
             $this->assertTrue(in_array($property->getUri(), $expectedResult));
@@ -133,18 +133,18 @@ class ClassTest extends GenerisPhpUnitTestRunner
                 $this->assertEquals($property->getComment(), 'The rest of the subject RDF list after the first item.');
             }
         }
-        
-        
+
+
         $class = $list->createSubClass('toto', 'toto');
         $properties2 = $class->getProperties(true);
         $this->assertFalse(empty($properties2));
-        
+
         $class->delete();
     }
 
-    
 
-    
+
+
     public function testGetInstances()
     {
         $class = new core_kernel_classes_Class(WidgetRdf::CLASS_URI_WIDGET);
@@ -152,13 +152,13 @@ class ClassTest extends GenerisPhpUnitTestRunner
         $instances = $class->getInstances();
         $subclass = $class->createSubClass('subTest Class', 'subTest Class');
         $subclassInstance = $subclass->createInstance('test3', 'comment3');
-        
+
 
         $this->assertTrue(count($instances)  > 0);
 
         foreach ($instances as $k => $instance) {
             $this->assertTrue($instance instanceof core_kernel_classes_Resource);
-                        
+
             if ($instance->getUri() === WidgetRdf::PROPERTY_WIDGET_COMBO) {
                 $this->assertEquals($instance->getLabel(), 'Drop down menu');
                 $this->assertEquals($instance->getComment(), 'In drop down menu, one may select 1 to N options');
@@ -180,7 +180,7 @@ class ClassTest extends GenerisPhpUnitTestRunner
                 $this->assertEquals($instance->getComment(), 'comment3');
             }
         }
-        
+
         $instances2 = $class->getInstances(true);
         $this->assertTrue(count($instances2)  > 0);
         foreach ($instances2 as $k => $instance) {
@@ -210,14 +210,14 @@ class ClassTest extends GenerisPhpUnitTestRunner
                 $this->assertEquals($instance->getComment(), 'comment');
             }
         }
-        
+
         $plop->delete();
         $subclass->delete();
         $subclassInstance->delete();
     }
-    
-    
-    
+
+
+
     public function testIsSubClassOf()
     {
         $class = new core_kernel_classes_Class(GenerisRdf::GENERIS_BOOLEAN);
@@ -228,25 +228,25 @@ class ClassTest extends GenerisPhpUnitTestRunner
         $this->assertTrue($subClass->isSubClassOf(new core_kernel_classes_Class(GenerisRdf::CLASS_GENERIS_RESOURCE)));
         $subClass->delete();
     }
-    
 
-    
+
+
     public function testSetSubClasseOf()
     {
         $class = new core_kernel_classes_Class('http://www.tao.lu/Ontologies/generis.rdf#Boolean');
         $subClass = $class->createSubClass('test', 'test');
         $subClass1 = $subClass->createSubClass('subclass of test', 'subclass of test');
         $subClass2 = $subClass->createSubClass('subclass of test2', 'subclass of test2');
-        
+
         $this->assertTrue($subClass->isSubClassOf($class));
         $this->assertTrue($subClass1->isSubClassOf($class));
         $this->assertTrue($subClass2->isSubClassOf($class));
-        
+
         $this->assertFalse($subClass2->isSubClassOf($subClass1));
         $subClass2->setSubClassOf($subClass1);
         $this->assertTrue($subClass2->isSubClassOf($subClass1));
 
-        
+
         $subClass->delete();
         $subClass1->delete();
         $subClass2->delete();
@@ -263,7 +263,7 @@ class ClassTest extends GenerisPhpUnitTestRunner
         $instance->delete();
         $instance2->delete();
     }
-    
+
     public function testCreateSubClass()
     {
         $class = new core_kernel_classes_Class('http://www.tao.lu/Ontologies/generis.rdf#Boolean');
@@ -291,13 +291,13 @@ class ClassTest extends GenerisPhpUnitTestRunner
         $property->delete();
         $property2->delete();
     }
-        
-        /**
-         * @group SearchInstances
-         */
+
+    /**
+     * @group SearchInstances
+     */
     public function testSearchInstances()
     {
-        
+
         $instance = $this->getMockForAbstractClass(
             \core_kernel_classes_Class::class,
             [],
@@ -307,27 +307,27 @@ class ClassTest extends GenerisPhpUnitTestRunner
             true,
             ['getImplementation']
         );
-        
+
         $mockResult = new \ArrayIterator([1,2,3,4,5,6]);
-        
+
         $propertyFilter = [
             GenerisRdf::PROPERTY_IS_LG_DEPENDENT => GenerisRdf::GENERIS_TRUE
         ];
-        
+
         $options = ['like' => false, 'recursive' => false];
-       
+
         $prophetImplementation = $this->prophesize(\core_kernel_persistence_smoothsql_Class::class);
-        
+
         $prophetImplementation
-                ->searchInstances($instance, $propertyFilter, $options)
-                ->willReturn($mockResult);
-        
+            ->searchInstances($instance, $propertyFilter, $options)
+            ->willReturn($mockResult);
+
         $ImplementationMock = $prophetImplementation->reveal();
-        
+
         $instance->expects($this->once())->method('getImplementation')->willReturn($ImplementationMock);
         $this->assertSame([1,2,3,4,5,6], $instance->searchInstances($propertyFilter, $options));
     }
-    
+
     //Test search instances with a model shared between smooth and hard implentation
     public function testSearchInstancesMultipleImpl()
     {
@@ -338,7 +338,7 @@ class ClassTest extends GenerisPhpUnitTestRunner
         $sub2ClazzInstance = $sub2Clazz->createInstance('test case instance');
         $sub3Clazz = $sub2Clazz->createSubClass();
         $sub3ClazzInstance = $sub3Clazz->createInstance('test case instance');
-        
+
         $options = [
             'recursive'             => true,
             'append'                => true,
@@ -346,7 +346,7 @@ class ClassTest extends GenerisPhpUnitTestRunner
             'referencesAllTypes'            => true,
             'rmSources'             => true
         ];
-        
+
         //Test the search instances on the smooth impl
         $propertyFilter = [
             OntologyRdfs::RDFS_LABEL => 'test case instance'
@@ -364,7 +364,7 @@ class ClassTest extends GenerisPhpUnitTestRunner
         $sub2Clazz->delete(true);
         $sub3Clazz->delete(true);
     }
-    
+
     //Test the function getInstancesPropertyValues of the class Class with literal properties
     public function testGetInstancesPropertyValuesWithLiteralProperties()
     {
@@ -392,7 +392,7 @@ class ClassTest extends GenerisPhpUnitTestRunner
         $i2->setPropertyValue($p2, "p22 litteral");
         $i2->setPropertyValue($p3, "p31 litteral");
         $i2->getLabel();
-        
+
         // Search * P1 for P1=P11 litteral
         // Expected 2 results, but 1 possibility
         $propertyFilters =  [
@@ -401,84 +401,84 @@ class ClassTest extends GenerisPhpUnitTestRunner
         $result = $subClass->getInstancesPropertyValues($p1, $propertyFilters);
         $this->assertEquals(count($result), 2);
         $this->assertTrue(in_array("p11 litteral", $result));
-        
+
         // Search * P1 for P1=P11 litteral WITH DISTINCT options
         // Expected 1 results, and 1 possibility
         $propertyFilters =  [
             LOCAL_NAMESPACE . "#P1" => "p11 litteral"
         ];
-        $result = $subClass->getInstancesPropertyValues($p1, $propertyFilters, ["distinct" => true]);
+        $result = $subClass->getInstancesPropertyValues($p1, $propertyFilters,  ["distinct" => true]);
         $this->assertEquals(count($result), 1);
         $this->assertTrue(in_array("p11 litteral", $result));
-        
+
         // Search * P2 for P1=P11 litteral WITH DISTINCT options
         // Expected 2 results, and 2 possibilities
         $propertyFilters =  [
             LOCAL_NAMESPACE . "#P1" => "p11 litteral"
         ];
-        $result = $subClass->getInstancesPropertyValues($p2, $propertyFilters, ["distinct" => true]);
+        $result = $subClass->getInstancesPropertyValues($p2, $propertyFilters,  ["distinct" => true]);
         $this->assertEquals(count($result), 2);
         $this->assertTrue(in_array("p21 litteral", $result));
         $this->assertTrue(in_array("p22 litteral", $result));
-        
+
         // Search * P2 for P1=P12 litteral WITH DISTINCT options
         // Expected 0 results, and 0 possibilities
         $propertyFilters =  [
             LOCAL_NAMESPACE . "#P1" => "p12 litteral"
         ];
-        $result = $subClass->getInstancesPropertyValues($p2, $propertyFilters, ["distinct" => true]);
+        $result = $subClass->getInstancesPropertyValues($p2, $propertyFilters,  ["distinct" => true]);
         $this->assertEquals(count($result), 0);
-        
+
         // Search * P1 for P2=P21 litteral WITH DISTINCT options
         // Expected 1 results, and 1 possibilities
         $propertyFilters =  [
             LOCAL_NAMESPACE . "#P2" => "p21 litteral"
         ];
-        $result = $subClass->getInstancesPropertyValues($p1, $propertyFilters, ["distinct" => true]);
+        $result = $subClass->getInstancesPropertyValues($p1, $propertyFilters,  ["distinct" => true]);
         $this->assertEquals(count($result), 1);
         $this->assertTrue(in_array("p11 litteral", $result));
-        
+
         // Search * P1 for P2=P22 litteral WITH DISTINCT options
         // Expected 1 results, and 1 possibilities
         $propertyFilters =  [
             LOCAL_NAMESPACE . "#P2" => "p22 litteral"
         ];
-        $result = $subClass->getInstancesPropertyValues($p1, $propertyFilters, ["distinct" => true]);
+        $result = $subClass->getInstancesPropertyValues($p1, $propertyFilters,  ["distinct" => true]);
         $this->assertEquals(count($result), 1);
         $this->assertTrue(in_array("p11 litteral", $result));
-        
+
         // Search * P3 for P1=P11 & P2=P21 litteral WITH DISTINCT options
         // Expected 1 results, and 1 possibilities
         $propertyFilters =  [
             LOCAL_NAMESPACE . "#P1" => "p11 litteral"
             , LOCAL_NAMESPACE . "#P2" => "p21 litteral"
         ];
-        $result = $subClass->getInstancesPropertyValues($p3, $propertyFilters, ["distinct" => true]);
+        $result = $subClass->getInstancesPropertyValues($p3, $propertyFilters,  ["distinct" => true]);
         $this->assertEquals(count($result), 1);
         $this->assertTrue(in_array("p31 litteral", $result));
-        
+
         // Search * P2 for P1=P11 & P3=P31 litteral WITH DISTINCT options
         // Expected 2 results, and 2 possibilities
         $propertyFilters =  [
             LOCAL_NAMESPACE . "#P1" => "p11 litteral"
             , LOCAL_NAMESPACE . "#P3" => "p31 litteral"
         ];
-        $result = $subClass->getInstancesPropertyValues($p2, $propertyFilters, ["distinct" => true]);
+        $result = $subClass->getInstancesPropertyValues($p2, $propertyFilters,  ["distinct" => true]);
         $this->assertEquals(count($result), 2);
         $this->assertTrue(in_array("p21 litteral", $result));
         $this->assertTrue(in_array("p22 litteral", $result));
-        
+
         // Clean the model
         $i1->delete();
         $i2->delete();
-        
+
         $p1->delete();
         $p2->delete();
         $p3->delete();
-        
+
         $subClass->delete();
     }
-    
+
     //Test the function getInstancesPropertyValues of the class Class  with resource properties
     public function testGetInstancesPropertyValuesWithResourceProperties()
     {
@@ -506,7 +506,7 @@ class ClassTest extends GenerisPhpUnitTestRunner
         $i2->setPropertyValue($p2, new core_kernel_classes_Class(GenerisRdf::GENERIS_FALSE));
         $i2->setPropertyValue($p3, "p31 litteral");
         $i2->getLabel();
-        
+
         // Search * P1 for P1=GenerisRdf::GENERIS_TRUE
         // Expected 2 results, but 1 possibility
         $propertyFilters =  [
@@ -522,54 +522,54 @@ class ClassTest extends GenerisPhpUnitTestRunner
         $propertyFilters =  [
             LOCAL_NAMESPACE . "#P1" => GenerisRdf::GENERIS_TRUE
         ];
-        $result = $subClass->getInstancesPropertyValues($p1, $propertyFilters, ["distinct" => true]);
+        $result = $subClass->getInstancesPropertyValues($p1, $propertyFilters,  ["distinct" => true]);
         $this->assertEquals(count($result), 1);
         $this->assertTrue($result[0]->getUri() == GenerisRdf::GENERIS_TRUE);
-        
+
         // Search * P2 for P1=GenerisRdf::GENERIS_TRUE WITH DISTINCT options
         // Expected 2 results, and 2 possibilities
         $propertyFilters =  [
             LOCAL_NAMESPACE . "#P1" => GenerisRdf::GENERIS_TRUE
         ];
-        $result = $subClass->getInstancesPropertyValues($p2, $propertyFilters, ["distinct" => true]);
+        $result = $subClass->getInstancesPropertyValues($p2, $propertyFilters,  ["distinct" => true]);
         $this->assertEquals(count($result), 2);
         foreach ($result as $property) {
             $this->assertTrue($property->getUri() == GenerisRdf::GENERIS_TRUE || $property->getUri() == GenerisRdf::GENERIS_FALSE);
         }
-        
+
         // Search * P2 for P1=NotExistingProperty litteral WITH DISTINCT options
         // Expected 1 results, and 1 possibilities
         $propertyFilters =  [
             LOCAL_NAMESPACE . "#P1" => "NotExistingProperty"
         ];
-        $result = $subClass->getInstancesPropertyValues($p2, $propertyFilters, ["distinct" => true]);
+        $result = $subClass->getInstancesPropertyValues($p2, $propertyFilters,  ["distinct" => true]);
         $this->assertEquals(count($result), 0);
-        
+
         // Search * P1 for P2=GenerisRdf::GENERIS_TRUE litteral WITH DISTINCT options
         // Expected 1 results, and 1 possibilities
         $propertyFilters =  [
             LOCAL_NAMESPACE . "#P2" => GenerisRdf::GENERIS_TRUE
         ];
-        $result = $subClass->getInstancesPropertyValues($p1, $propertyFilters, ["distinct" => true]);
+        $result = $subClass->getInstancesPropertyValues($p1, $propertyFilters,  ["distinct" => true]);
         $this->assertEquals(count($result), 1);
         $this->assertTrue($result[0]->getUri() == GenerisRdf::GENERIS_TRUE);
-        
+
         // Search * P1 for P2=GenerisRdf::GENERIS_FALSE WITH DISTINCT options
         // Expected 1 results, and 1 possibilities
         $propertyFilters =  [
             LOCAL_NAMESPACE . "#P2" => GenerisRdf::GENERIS_FALSE
         ];
-        $result = $subClass->getInstancesPropertyValues($p1, $propertyFilters, ["distinct" => true]);
+        $result = $subClass->getInstancesPropertyValues($p1, $propertyFilters,  ["distinct" => true]);
         $this->assertEquals(count($result), 1);
         $this->assertTrue($result[0]->getUri() == GenerisRdf::GENERIS_TRUE);
-        
+
         // Search * P3 for P1=GenerisRdf::GENERIS_TRUE & P2=GenerisRdf::GENERIS_TRUE litteral WITH DISTINCT options
         // Expected 1 results, and 1 possibilities
         $propertyFilters =  [
             LOCAL_NAMESPACE . "#P1" => GenerisRdf::GENERIS_TRUE
             , LOCAL_NAMESPACE . "#P2" => GenerisRdf::GENERIS_TRUE
         ];
-        $result = $subClass->getInstancesPropertyValues($p3, $propertyFilters, ["distinct" => true]);
+        $result = $subClass->getInstancesPropertyValues($p3, $propertyFilters,  ["distinct" => true]);
         $this->assertEquals(count($result), 1);
         $this->assertTrue(in_array("p31 litteral", $result));
 
@@ -579,65 +579,65 @@ class ClassTest extends GenerisPhpUnitTestRunner
             LOCAL_NAMESPACE . "#P1" => GenerisRdf::GENERIS_TRUE
             , LOCAL_NAMESPACE . "#P3" => "p31 litteral"
         ];
-        $result = $subClass->getInstancesPropertyValues($p2, $propertyFilters, ["distinct" => true]);
+        $result = $subClass->getInstancesPropertyValues($p2, $propertyFilters,  ["distinct" => true]);
         $this->assertEquals(count($result), 2);
         foreach ($result as $property) {
             $this->assertTrue($property->getUri() == GenerisRdf::GENERIS_TRUE || $property->getUri() == GenerisRdf::GENERIS_FALSE);
         }
-        
+
         // Clean the model
         $i1->delete();
         $i2->delete();
-        
+
         $p1->delete();
         $p2->delete();
         $p3->delete();
-        
+
         $subClass->delete();
     }
-    
+
     public function testDeleteInstances()
     {
         $taoClass = new core_kernel_classes_Class(GenerisRdf::CLASS_GENERIS_RESOURCE);
         $creativeWorkClass = $taoClass->createSubClass('Creative Work');
         $authorProperty = $taoClass->createProperty('Author');
         $relatedWorksProperty = $creativeWorkClass->createProperty('Related Works');
-        
+
         $bookLotr = $creativeWorkClass->createInstance('The Lord of The Rings (book)');
         $bookLotr->setPropertyValue($authorProperty, 'J.R.R. Tolkien');
-        
+
         $movieLotr = $creativeWorkClass->createInstance('The Lord of The Rings (movie)');
         $movieLotr->setPropertyValue($authorProperty, 'Peter Jackson');
-        
+
         $movieLotr->setPropertyValue($relatedWorksProperty, $bookLotr);
         $bookLotr->setPropertyValue($relatedWorksProperty, $movieLotr);
-        
+
         $movieMinorityReport = $creativeWorkClass->createInstance('Minority Report');
         $movieMinorityReport->setPropertyValue($authorProperty, 'Steven Spielberg');
 
         $this->assertEquals(count($creativeWorkClass->getInstances()), 3);
-        
+
         // delete the LOTR movie with its references.
         $relatedWorks = $bookLotr->getPropertyValuesCollection($relatedWorksProperty);
         $this->assertEquals($relatedWorks->sequence[0]->getLabel(), 'The Lord of The Rings (movie)');
         $creativeWorkClass->deleteInstances([$movieLotr], true);
         $relatedWorks = $bookLotr->getPropertyValues($relatedWorksProperty);
         $this->assertEquals(count($relatedWorks), 0);
-        
+
         // Only 1 resource deleted ?
         $this->assertFalse($movieLotr->exists());
         $this->assertTrue($bookLotr->exists());
         $this->assertTrue($movieMinorityReport->exists());
-        
+
         // Remove the rest.
         $creativeWorkClass->deleteInstances([$bookLotr, $movieMinorityReport]);
         $this->assertEquals(count($creativeWorkClass->getInstances()), 0);
         $this->assertFalse($bookLotr->exists());
         $this->assertFalse($movieMinorityReport->exists());
-        
+
         $this->assertTrue($authorProperty->delete());
         $this->assertTrue($relatedWorksProperty->delete());
-        
+
         $creativeWorkClass->delete(true);
     }
 }

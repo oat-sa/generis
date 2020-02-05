@@ -53,8 +53,6 @@
   "extra": {
     "tao-extension-name": "generis"
   },
-  "repositories": [
-  ],
   "require": {
     "clearfw/clearfw": "~1.2.0",
     "easyrdf/easyrdf": "^0.9.0",
@@ -99,6 +97,5 @@
     "psr-4": {
       "oat\\generis\\test\\": "generis/test/"
     }
-  },
-  "minimum-stability" : "dev"
+  }
 }

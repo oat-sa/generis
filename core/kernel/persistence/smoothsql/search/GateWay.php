@@ -39,7 +39,7 @@ use oat\search\TaoSearchGateWay;
  */
 class GateWay extends TaoSearchGateWay
 {
-    
+
     /**
      *
      * @var common_persistence_SqlPersistence
@@ -59,21 +59,21 @@ class GateWay extends TaoSearchGateWay
     protected $driverList = [
         'taoRdf' => 'search.driver.tao'
     ];
-    
+
     /**
      * resultSet service or className
      * @var string
      */
     protected $resultSetClassName = '\\oat\\generis\\model\\kernel\\persistence\\smoothsql\\search\\TaoResultSet';
-    
+
     public function __construct()
     {
         $this->connector = ServiceManager::getServiceManager()
-                ->get(common_persistence_Manager::SERVICE_ID)
-                ->getPersistenceById('default');
+            ->get(common_persistence_Manager::SERVICE_ID)
+            ->getPersistenceById('default');
     }
 
-        /**
+    /**
      * try to connect to database. throw an exception
      * if connection failed.
      *
@@ -84,7 +84,7 @@ class GateWay extends TaoSearchGateWay
     {
         return !is_null($this->connector);
     }
-    
+
     /**
      * execute Parsed Query
      *
@@ -103,9 +103,11 @@ class GateWay extends TaoSearchGateWay
     }
 
     /**
+     *
+     * @param \PDOStatement $statement
      * @return array
      */
-    protected function statementToArray($statement)
+    protected function statementToArray(\PDOStatement $statement)
     {
         $result = [];
         while ($row = $statement->fetch(\PDO::FETCH_OBJ)) {
@@ -113,7 +115,7 @@ class GateWay extends TaoSearchGateWay
         }
         return $result;
     }
-    
+
     public function fetchQuery($query)
     {
         $statement = $this->connector->query($query);
@@ -133,8 +135,8 @@ class GateWay extends TaoSearchGateWay
         $result    = $this->statementToArray($statement);
         return (int)reset($result)->cpt;
     }
-    
-        
+
+
     public function getJoiner()
     {
         $joiner = new QueryJoiner();
@@ -143,10 +145,10 @@ class GateWay extends TaoSearchGateWay
         $joiner->setParent($this);
         return $joiner;
     }
-    
+
     public function join(QueryJoiner $joiner)
     {
-        
+
         $query = $joiner->execute();
         $statement = $this->connector->query($query);
         $result    = $this->statementToArray($statement);
@@ -157,7 +159,7 @@ class GateWay extends TaoSearchGateWay
         return $resultSet;
     }
 
-        /**
+    /**
      * return parsed query as string
      * @return $this
      */
