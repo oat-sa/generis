@@ -407,7 +407,7 @@ class ClassTest extends GenerisPhpUnitTestRunner
         $propertyFilters =  [
             LOCAL_NAMESPACE . "#P1" => "p11 litteral"
         ];
-        $result = $subClass->getInstancesPropertyValues($p1, $propertyFilters,  ["distinct" => true]);
+        $result = $subClass->getInstancesPropertyValues($p1, $propertyFilters, ["distinct" => true]);
         $this->assertEquals(count($result), 1);
         $this->assertTrue(in_array("p11 litteral", $result));
         
@@ -416,7 +416,7 @@ class ClassTest extends GenerisPhpUnitTestRunner
         $propertyFilters =  [
             LOCAL_NAMESPACE . "#P1" => "p11 litteral"
         ];
-        $result = $subClass->getInstancesPropertyValues($p2, $propertyFilters,  ["distinct" => true]);
+        $result = $subClass->getInstancesPropertyValues($p2, $propertyFilters, ["distinct" => true]);
         $this->assertEquals(count($result), 2);
         $this->assertTrue(in_array("p21 litteral", $result));
         $this->assertTrue(in_array("p22 litteral", $result));
@@ -426,7 +426,7 @@ class ClassTest extends GenerisPhpUnitTestRunner
         $propertyFilters =  [
             LOCAL_NAMESPACE . "#P1" => "p12 litteral"
         ];
-        $result = $subClass->getInstancesPropertyValues($p2, $propertyFilters,  ["distinct" => true]);
+        $result = $subClass->getInstancesPropertyValues($p2, $propertyFilters, ["distinct" => true]);
         $this->assertEquals(count($result), 0);
         
         // Search * P1 for P2=P21 litteral WITH DISTINCT options
@@ -434,7 +434,7 @@ class ClassTest extends GenerisPhpUnitTestRunner
         $propertyFilters =  [
             LOCAL_NAMESPACE . "#P2" => "p21 litteral"
         ];
-        $result = $subClass->getInstancesPropertyValues($p1, $propertyFilters,  ["distinct" => true]);
+        $result = $subClass->getInstancesPropertyValues($p1, $propertyFilters, ["distinct" => true]);
         $this->assertEquals(count($result), 1);
         $this->assertTrue(in_array("p11 litteral", $result));
         
@@ -443,7 +443,7 @@ class ClassTest extends GenerisPhpUnitTestRunner
         $propertyFilters =  [
             LOCAL_NAMESPACE . "#P2" => "p22 litteral"
         ];
-        $result = $subClass->getInstancesPropertyValues($p1, $propertyFilters,  ["distinct" => true]);
+        $result = $subClass->getInstancesPropertyValues($p1, $propertyFilters, ["distinct" => true]);
         $this->assertEquals(count($result), 1);
         $this->assertTrue(in_array("p11 litteral", $result));
         
@@ -453,7 +453,7 @@ class ClassTest extends GenerisPhpUnitTestRunner
             LOCAL_NAMESPACE . "#P1" => "p11 litteral"
             , LOCAL_NAMESPACE . "#P2" => "p21 litteral"
         ];
-        $result = $subClass->getInstancesPropertyValues($p3, $propertyFilters,  ["distinct" => true]);
+        $result = $subClass->getInstancesPropertyValues($p3, $propertyFilters, ["distinct" => true]);
         $this->assertEquals(count($result), 1);
         $this->assertTrue(in_array("p31 litteral", $result));
         
@@ -463,7 +463,7 @@ class ClassTest extends GenerisPhpUnitTestRunner
             LOCAL_NAMESPACE . "#P1" => "p11 litteral"
             , LOCAL_NAMESPACE . "#P3" => "p31 litteral"
         ];
-        $result = $subClass->getInstancesPropertyValues($p2, $propertyFilters,  ["distinct" => true]);
+        $result = $subClass->getInstancesPropertyValues($p2, $propertyFilters, ["distinct" => true]);
         $this->assertEquals(count($result), 2);
         $this->assertTrue(in_array("p21 litteral", $result));
         $this->assertTrue(in_array("p22 litteral", $result));
@@ -522,7 +522,7 @@ class ClassTest extends GenerisPhpUnitTestRunner
         $propertyFilters =  [
             LOCAL_NAMESPACE . "#P1" => GenerisRdf::GENERIS_TRUE
         ];
-        $result = $subClass->getInstancesPropertyValues($p1, $propertyFilters,  ["distinct" => true]);
+        $result = $subClass->getInstancesPropertyValues($p1, $propertyFilters, ["distinct" => true]);
         $this->assertEquals(count($result), 1);
         $this->assertTrue($result[0]->getUri() == GenerisRdf::GENERIS_TRUE);
         
@@ -531,7 +531,7 @@ class ClassTest extends GenerisPhpUnitTestRunner
         $propertyFilters =  [
             LOCAL_NAMESPACE . "#P1" => GenerisRdf::GENERIS_TRUE
         ];
-        $result = $subClass->getInstancesPropertyValues($p2, $propertyFilters,  ["distinct" => true]);
+        $result = $subClass->getInstancesPropertyValues($p2, $propertyFilters, ["distinct" => true]);
         $this->assertEquals(count($result), 2);
         foreach ($result as $property) {
             $this->assertTrue($property->getUri() == GenerisRdf::GENERIS_TRUE || $property->getUri() == GenerisRdf::GENERIS_FALSE);
@@ -542,7 +542,7 @@ class ClassTest extends GenerisPhpUnitTestRunner
         $propertyFilters =  [
             LOCAL_NAMESPACE . "#P1" => "NotExistingProperty"
         ];
-        $result = $subClass->getInstancesPropertyValues($p2, $propertyFilters,  ["distinct" => true]);
+        $result = $subClass->getInstancesPropertyValues($p2, $propertyFilters, ["distinct" => true]);
         $this->assertEquals(count($result), 0);
         
         // Search * P1 for P2=GenerisRdf::GENERIS_TRUE litteral WITH DISTINCT options
@@ -550,7 +550,7 @@ class ClassTest extends GenerisPhpUnitTestRunner
         $propertyFilters =  [
             LOCAL_NAMESPACE . "#P2" => GenerisRdf::GENERIS_TRUE
         ];
-        $result = $subClass->getInstancesPropertyValues($p1, $propertyFilters,  ["distinct" => true]);
+        $result = $subClass->getInstancesPropertyValues($p1, $propertyFilters, ["distinct" => true]);
         $this->assertEquals(count($result), 1);
         $this->assertTrue($result[0]->getUri() == GenerisRdf::GENERIS_TRUE);
         
@@ -559,7 +559,7 @@ class ClassTest extends GenerisPhpUnitTestRunner
         $propertyFilters =  [
             LOCAL_NAMESPACE . "#P2" => GenerisRdf::GENERIS_FALSE
         ];
-        $result = $subClass->getInstancesPropertyValues($p1, $propertyFilters,  ["distinct" => true]);
+        $result = $subClass->getInstancesPropertyValues($p1, $propertyFilters, ["distinct" => true]);
         $this->assertEquals(count($result), 1);
         $this->assertTrue($result[0]->getUri() == GenerisRdf::GENERIS_TRUE);
         
@@ -569,7 +569,7 @@ class ClassTest extends GenerisPhpUnitTestRunner
             LOCAL_NAMESPACE . "#P1" => GenerisRdf::GENERIS_TRUE
             , LOCAL_NAMESPACE . "#P2" => GenerisRdf::GENERIS_TRUE
         ];
-        $result = $subClass->getInstancesPropertyValues($p3, $propertyFilters,  ["distinct" => true]);
+        $result = $subClass->getInstancesPropertyValues($p3, $propertyFilters, ["distinct" => true]);
         $this->assertEquals(count($result), 1);
         $this->assertTrue(in_array("p31 litteral", $result));
 
@@ -579,7 +579,7 @@ class ClassTest extends GenerisPhpUnitTestRunner
             LOCAL_NAMESPACE . "#P1" => GenerisRdf::GENERIS_TRUE
             , LOCAL_NAMESPACE . "#P3" => "p31 litteral"
         ];
-        $result = $subClass->getInstancesPropertyValues($p2, $propertyFilters,  ["distinct" => true]);
+        $result = $subClass->getInstancesPropertyValues($p2, $propertyFilters, ["distinct" => true]);
         $this->assertEquals(count($result), 2);
         foreach ($result as $property) {
             $this->assertTrue($property->getUri() == GenerisRdf::GENERIS_TRUE || $property->getUri() == GenerisRdf::GENERIS_FALSE);

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,22 +22,27 @@
  * @package generis
  *
  */
+
+use \oat\generis\Helper\UuidPrimaryKeyTrait;
+
 abstract class common_persistence_Persistence
 {
+    use UuidPrimaryKeyTrait;
+
     /**
      * Driver of the persistence
      *
      * @var common_persistence_Driver
      */
     private $driver;
-    
+
     /**
      * Persistence parameters
      *
      * @var array
      */
     private $params = [];
-    
+
     public static function getPersistence($driverId)
     {
         $returnValue = common_persistence_Manager::getPersistence($driverId);
@@ -90,7 +96,7 @@ abstract class common_persistence_Persistence
      *
      * @access protected
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
-     * @return multitype:
+     * @return array:
      */
     protected function getParams()
     {
@@ -107,15 +113,5 @@ abstract class common_persistence_Persistence
     protected function setParams($params)
     {
         $this->params = $params;
-    }
-
-    /**
-     * Generates a unique, not auto-increment based, primary key.
-     *
-     * @return string
-     */
-    public function getUniquePrimaryKey()
-    {
-        return strrev(uniqid('', true));
     }
 }
