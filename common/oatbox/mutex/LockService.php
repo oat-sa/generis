@@ -21,6 +21,7 @@
 
 namespace oat\oatbox\mutex;
 
+use oat\oatbox\log\LoggerAwareTrait;
 use oat\oatbox\service\ConfigurableService;
 use Symfony\Component\Lock\Factory;
 use Symfony\Component\Lock\Store\FlockStore;
@@ -39,6 +40,8 @@ use Symfony\Component\Lock\Store\RetryTillSaveStore;
  */
 class LockService extends ConfigurableService
 {
+    use LoggerAwareTrait;
+
     const SERVICE_ID = 'generis/LockService';
     const OPTION_PERSISTENCE_CLASS = 'persistence_class';
     const OPTION_PERSISTENCE_OPTIONS = 'persistence_options';
@@ -59,6 +62,7 @@ class LockService extends ConfigurableService
     {
         if ($this->factory === null) {
             $this->factory = new Factory(new RetryTillSaveStore($this->getStore()));
+            $this->factory->setLogger($this->getLogger());
         }
         return $this->factory;
     }
