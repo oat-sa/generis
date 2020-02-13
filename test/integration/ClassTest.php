@@ -355,7 +355,8 @@ class ClassTest extends GenerisPhpUnitTestRunner {
         $sub2Clazz->delete(true);
         $sub3Clazz->delete(true);
     }
-	
+<<<<<<< HEAD
+
 	//Test the function getInstancesPropertyValues of the class Class with literal properties
 	public function testGetInstancesPropertyValuesWithLiteralProperties () {
 		// create a class
@@ -602,6 +603,258 @@ class ClassTest extends GenerisPhpUnitTestRunner {
 		
 		$movieMinorityReport = $creativeWorkClass->createInstance('Minority Report');
 		$movieMinorityReport->setPropertyValue($authorProperty, 'Steven Spielberg');
+=======
+    
+    //Test the function getInstancesPropertyValues of the class Class with literal properties
+    public function testGetInstancesPropertyValuesWithLiteralProperties()
+    {
+        // create a class
+        $class = new core_kernel_classes_Class(GenerisRdf::CLASS_GENERIS_RESOURCE);
+        $subClass = $class->createSubClass('GetInstancesPropertyValuesClass', 'GetInstancesPropertyValues_Class');
+        // create a first property for this class
+        $p1 = core_kernel_classes_ClassFactory::createProperty($subClass, 'GetInstancesPropertyValues_Property1', 'GetInstancesPropertyValues_Property1', false, LOCAL_NAMESPACE . "#P1");
+        $p1->setRange(new core_kernel_classes_Class(OntologyRdfs::RDFS_LITERAL));
+        // create a second property for this class
+        $p2 = core_kernel_classes_ClassFactory::createProperty($subClass, 'GetInstancesPropertyValues_Property2', 'GetInstancesPropertyValues_Property2', false, LOCAL_NAMESPACE . "#P2");
+        $p2->setRange(new core_kernel_classes_Class(OntologyRdfs::RDFS_LITERAL));
+        // create a second property for this class
+        $p3 = core_kernel_classes_ClassFactory::createProperty($subClass, 'GetInstancesPropertyValues_Property3', 'GetInstancesPropertyValues_Property3', false, LOCAL_NAMESPACE . "#P3");
+        $p2->setRange(new core_kernel_classes_Class(OntologyRdfs::RDFS_LITERAL));
+        // $i1
+        $i1 = $subClass->createInstance("i1", "i1");
+        $i1->setPropertyValue($p1, "p11 litteral");
+        $i1->setPropertyValue($p2, "p21 litteral");
+        $i1->setPropertyValue($p3, "p31 litteral");
+        $i1->getLabel();
+        // $i2
+        $i2 = $subClass->createInstance("i2", "i2");
+        $i2->setPropertyValue($p1, "p11 litteral");
+        $i2->setPropertyValue($p2, "p22 litteral");
+        $i2->setPropertyValue($p3, "p31 litteral");
+        $i2->getLabel();
+        
+        // Search * P1 for P1=P11 litteral
+        // Expected 2 results, but 1 possibility
+        $propertyFilters =  [
+            LOCAL_NAMESPACE . "#P1" => "p11 litteral"
+        ];
+        $result = $subClass->getInstancesPropertyValues($p1, $propertyFilters);
+        $this->assertEquals(count($result), 2);
+        $this->assertTrue(in_array("p11 litteral", $result));
+        
+        // Search * P1 for P1=P11 litteral WITH DISTINCT options
+        // Expected 1 results, and 1 possibility
+        $propertyFilters =  [
+            LOCAL_NAMESPACE . "#P1" => "p11 litteral"
+        ];
+        $result = $subClass->getInstancesPropertyValues($p1, $propertyFilters, ["distinct" => true]);
+        $this->assertEquals(count($result), 1);
+        $this->assertTrue(in_array("p11 litteral", $result));
+        
+        // Search * P2 for P1=P11 litteral WITH DISTINCT options
+        // Expected 2 results, and 2 possibilities
+        $propertyFilters =  [
+            LOCAL_NAMESPACE . "#P1" => "p11 litteral"
+        ];
+        $result = $subClass->getInstancesPropertyValues($p2, $propertyFilters, ["distinct" => true]);
+        $this->assertEquals(count($result), 2);
+        $this->assertTrue(in_array("p21 litteral", $result));
+        $this->assertTrue(in_array("p22 litteral", $result));
+        
+        // Search * P2 for P1=P12 litteral WITH DISTINCT options
+        // Expected 0 results, and 0 possibilities
+        $propertyFilters =  [
+            LOCAL_NAMESPACE . "#P1" => "p12 litteral"
+        ];
+        $result = $subClass->getInstancesPropertyValues($p2, $propertyFilters, ["distinct" => true]);
+        $this->assertEquals(count($result), 0);
+        
+        // Search * P1 for P2=P21 litteral WITH DISTINCT options
+        // Expected 1 results, and 1 possibilities
+        $propertyFilters =  [
+            LOCAL_NAMESPACE . "#P2" => "p21 litteral"
+        ];
+        $result = $subClass->getInstancesPropertyValues($p1, $propertyFilters, ["distinct" => true]);
+        $this->assertEquals(count($result), 1);
+        $this->assertTrue(in_array("p11 litteral", $result));
+        
+        // Search * P1 for P2=P22 litteral WITH DISTINCT options
+        // Expected 1 results, and 1 possibilities
+        $propertyFilters =  [
+            LOCAL_NAMESPACE . "#P2" => "p22 litteral"
+        ];
+        $result = $subClass->getInstancesPropertyValues($p1, $propertyFilters, ["distinct" => true]);
+        $this->assertEquals(count($result), 1);
+        $this->assertTrue(in_array("p11 litteral", $result));
+        
+        // Search * P3 for P1=P11 & P2=P21 litteral WITH DISTINCT options
+        // Expected 1 results, and 1 possibilities
+        $propertyFilters =  [
+            LOCAL_NAMESPACE . "#P1" => "p11 litteral"
+            , LOCAL_NAMESPACE . "#P2" => "p21 litteral"
+        ];
+        $result = $subClass->getInstancesPropertyValues($p3, $propertyFilters, ["distinct" => true]);
+        $this->assertEquals(count($result), 1);
+        $this->assertTrue(in_array("p31 litteral", $result));
+        
+        // Search * P2 for P1=P11 & P3=P31 litteral WITH DISTINCT options
+        // Expected 2 results, and 2 possibilities
+        $propertyFilters =  [
+            LOCAL_NAMESPACE . "#P1" => "p11 litteral"
+            , LOCAL_NAMESPACE . "#P3" => "p31 litteral"
+        ];
+        $result = $subClass->getInstancesPropertyValues($p2, $propertyFilters, ["distinct" => true]);
+        $this->assertEquals(count($result), 2);
+        $this->assertTrue(in_array("p21 litteral", $result));
+        $this->assertTrue(in_array("p22 litteral", $result));
+        
+        // Clean the model
+        $i1->delete();
+        $i2->delete();
+        
+        $p1->delete();
+        $p2->delete();
+        $p3->delete();
+        
+        $subClass->delete();
+    }
+    
+    //Test the function getInstancesPropertyValues of the class Class  with resource properties
+    public function testGetInstancesPropertyValuesWithResourceProperties()
+    {
+        // create a class
+        $class = new core_kernel_classes_Class(GenerisRdf::CLASS_GENERIS_RESOURCE);
+        $subClass = $class->createSubClass('GetInstancesPropertyValuesClass', 'GetInstancesPropertyValues_Class');
+        // create a first property for this class
+        $p1 = core_kernel_classes_ClassFactory::createProperty($subClass, 'GetInstancesPropertyValues_Property1', 'GetInstancesPropertyValues_Property1', false, LOCAL_NAMESPACE . "#P1");
+        $p1->setRange(new core_kernel_classes_Class(GenerisRdf::GENERIS_BOOLEAN));
+        // create a second property for this class
+        $p2 = core_kernel_classes_ClassFactory::createProperty($subClass, 'GetInstancesPropertyValues_Property2', 'GetInstancesPropertyValues_Property2', false, LOCAL_NAMESPACE . "#P2");
+        $p1->setRange(new core_kernel_classes_Class(GenerisRdf::GENERIS_BOOLEAN));
+        // create a second property for this class
+        $p3 = core_kernel_classes_ClassFactory::createProperty($subClass, 'GetInstancesPropertyValues_Property3', 'GetInstancesPropertyValues_Property3', false, LOCAL_NAMESPACE . "#P3");
+        $p1->setRange(new core_kernel_classes_Class(OntologyRdfs::RDFS_LITERAL));
+        // $i1
+        $i1 = $subClass->createInstance("i1", "i1");
+        $i1->setPropertyValue($p1, GenerisRdf::GENERIS_TRUE);
+        $i1->setPropertyValue($p2, new core_kernel_classes_Class(GenerisRdf::GENERIS_TRUE));
+        $i1->setPropertyValue($p3, "p31 litteral");
+        $i1->getLabel();
+        // $i2
+        $i2 = $subClass->createInstance("i2", "i2");
+        $i2->setPropertyValue($p1, GenerisRdf::GENERIS_TRUE);
+        $i2->setPropertyValue($p2, new core_kernel_classes_Class(GenerisRdf::GENERIS_FALSE));
+        $i2->setPropertyValue($p3, "p31 litteral");
+        $i2->getLabel();
+        
+        // Search * P1 for P1=GenerisRdf::GENERIS_TRUE
+        // Expected 2 results, but 1 possibility
+        $propertyFilters =  [
+            LOCAL_NAMESPACE . "#P1" => GenerisRdf::GENERIS_TRUE
+        ];
+        $result = $subClass->getInstancesPropertyValues($p1, $propertyFilters);
+        $this->assertEquals(count($result), 2);
+        foreach ($result as $property) {
+            $this->assertTrue($property->getUri() == GenerisRdf::GENERIS_TRUE);
+        }
+        // Search * P1 for P1=GenerisRdf::GENERIS_TRUE WITH DISTINCT options
+        // Expected 1 results, and 1 possibility
+        $propertyFilters =  [
+            LOCAL_NAMESPACE . "#P1" => GenerisRdf::GENERIS_TRUE
+        ];
+        $result = $subClass->getInstancesPropertyValues($p1, $propertyFilters, ["distinct" => true]);
+        $this->assertEquals(count($result), 1);
+        $this->assertTrue($result[0]->getUri() == GenerisRdf::GENERIS_TRUE);
+        
+        // Search * P2 for P1=GenerisRdf::GENERIS_TRUE WITH DISTINCT options
+        // Expected 2 results, and 2 possibilities
+        $propertyFilters =  [
+            LOCAL_NAMESPACE . "#P1" => GenerisRdf::GENERIS_TRUE
+        ];
+        $result = $subClass->getInstancesPropertyValues($p2, $propertyFilters, ["distinct" => true]);
+        $this->assertEquals(count($result), 2);
+        foreach ($result as $property) {
+            $this->assertTrue($property->getUri() == GenerisRdf::GENERIS_TRUE || $property->getUri() == GenerisRdf::GENERIS_FALSE);
+        }
+        
+        // Search * P2 for P1=NotExistingProperty litteral WITH DISTINCT options
+        // Expected 1 results, and 1 possibilities
+        $propertyFilters =  [
+            LOCAL_NAMESPACE . "#P1" => "NotExistingProperty"
+        ];
+        $result = $subClass->getInstancesPropertyValues($p2, $propertyFilters, ["distinct" => true]);
+        $this->assertEquals(count($result), 0);
+        
+        // Search * P1 for P2=GenerisRdf::GENERIS_TRUE litteral WITH DISTINCT options
+        // Expected 1 results, and 1 possibilities
+        $propertyFilters =  [
+            LOCAL_NAMESPACE . "#P2" => GenerisRdf::GENERIS_TRUE
+        ];
+        $result = $subClass->getInstancesPropertyValues($p1, $propertyFilters, ["distinct" => true]);
+        $this->assertEquals(count($result), 1);
+        $this->assertTrue($result[0]->getUri() == GenerisRdf::GENERIS_TRUE);
+        
+        // Search * P1 for P2=GenerisRdf::GENERIS_FALSE WITH DISTINCT options
+        // Expected 1 results, and 1 possibilities
+        $propertyFilters =  [
+            LOCAL_NAMESPACE . "#P2" => GenerisRdf::GENERIS_FALSE
+        ];
+        $result = $subClass->getInstancesPropertyValues($p1, $propertyFilters, ["distinct" => true]);
+        $this->assertEquals(count($result), 1);
+        $this->assertTrue($result[0]->getUri() == GenerisRdf::GENERIS_TRUE);
+        
+        // Search * P3 for P1=GenerisRdf::GENERIS_TRUE & P2=GenerisRdf::GENERIS_TRUE litteral WITH DISTINCT options
+        // Expected 1 results, and 1 possibilities
+        $propertyFilters =  [
+            LOCAL_NAMESPACE . "#P1" => GenerisRdf::GENERIS_TRUE
+            , LOCAL_NAMESPACE . "#P2" => GenerisRdf::GENERIS_TRUE
+        ];
+        $result = $subClass->getInstancesPropertyValues($p3, $propertyFilters, ["distinct" => true]);
+        $this->assertEquals(count($result), 1);
+        $this->assertTrue(in_array("p31 litteral", $result));
+
+        // Search * P2 for P1=P11 & P3=P31 litteral WITH DISTINCT options
+        // Expected 2 results, and 2 possibilities
+        $propertyFilters =  [
+            LOCAL_NAMESPACE . "#P1" => GenerisRdf::GENERIS_TRUE
+            , LOCAL_NAMESPACE . "#P3" => "p31 litteral"
+        ];
+        $result = $subClass->getInstancesPropertyValues($p2, $propertyFilters, ["distinct" => true]);
+        $this->assertEquals(count($result), 2);
+        foreach ($result as $property) {
+            $this->assertTrue($property->getUri() == GenerisRdf::GENERIS_TRUE || $property->getUri() == GenerisRdf::GENERIS_FALSE);
+        }
+        
+        // Clean the model
+        $i1->delete();
+        $i2->delete();
+        
+        $p1->delete();
+        $p2->delete();
+        $p3->delete();
+        
+        $subClass->delete();
+    }
+    
+    public function testDeleteInstances()
+    {
+        $taoClass = new core_kernel_classes_Class(GenerisRdf::CLASS_GENERIS_RESOURCE);
+        $creativeWorkClass = $taoClass->createSubClass('Creative Work');
+        $authorProperty = $taoClass->createProperty('Author');
+        $relatedWorksProperty = $creativeWorkClass->createProperty('Related Works');
+        
+        $bookLotr = $creativeWorkClass->createInstance('The Lord of The Rings (book)');
+        $bookLotr->setPropertyValue($authorProperty, 'J.R.R. Tolkien');
+        
+        $movieLotr = $creativeWorkClass->createInstance('The Lord of The Rings (movie)');
+        $movieLotr->setPropertyValue($authorProperty, 'Peter Jackson');
+        
+        $movieLotr->setPropertyValue($relatedWorksProperty, $bookLotr);
+        $bookLotr->setPropertyValue($relatedWorksProperty, $movieLotr);
+        
+        $movieMinorityReport = $creativeWorkClass->createInstance('Minority Report');
+        $movieMinorityReport->setPropertyValue($authorProperty, 'Steven Spielberg');
+>>>>>>> a153c1cf7a416085ad29ae8772145fc887e4213e
 
 		$this->assertEquals(count($creativeWorkClass->getInstances()), 3);
 		

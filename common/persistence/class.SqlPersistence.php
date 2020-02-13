@@ -19,7 +19,6 @@
  *
  */
 
-
 /**
  * Persistence base on SQL
  *

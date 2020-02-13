@@ -26,6 +26,7 @@ use oat\generis\model\OntologyRdf;
 use oat\oatbox\session\SessionService;
 use oat\oatbox\user\UserLanguageServiceInterface;
 use oat\generis\model\kernel\uri\UriProvider;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Short description of class core_kernel_persistence_smoothsql_Resource
@@ -84,13 +85,17 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
     }
 
     /**
-     * returns an array of types the ressource has
+     * returns an array of types the resource has
      *
      * @access public
      * @author Joel Bout, <joel.bout@tudor.lu>
+<<<<<<< HEAD
      *
      * @param  Resource resource
      *
+=======
+     * @param  core_kernel_classes_Resource resource
+>>>>>>> a153c1cf7a416085ad29ae8772145fc887e4213e
      * @return array
      */
     public function getTypes(core_kernel_classes_Resource $resource)
@@ -113,14 +118,12 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
      * Short description of method getPropertyValues
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
-     *
-     * @param  core_kernel_classes_Resource resource
-     * @param  core_kernel_classes_Property property
-     * @param  array options
-     *
+     * @param core_kernel_classes_Resource $resource
+     * @param core_kernel_classes_Property $property
+     * @param array $options
      * @return array
      * @throws core_kernel_persistence_Exception
+     * @author Joel Bout, <joel.bout@tudor.lu>
      */
     public function getPropertyValues(core_kernel_classes_Resource $resource, core_kernel_classes_Property $property, $options = [])
     {
@@ -180,20 +183,17 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
      * Short description of method getPropertyValuesByLg
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
-     *
-     * @param  core_kernel_classes_Resource resource
-     * @param  core_kernel_classes_Property property
-     * @param  string lg
-     *
+     * @param core_kernel_classes_Resource $resource
+     * @param core_kernel_classes_Property $property
+     * @param string $lg
      * @return core_kernel_classes_ContainerCollection
+     * @throws core_kernel_persistence_Exception
+     * @author Joel Bout, <joel.bout@tudor.lu>
      */
     public function getPropertyValuesByLg(core_kernel_classes_Resource $resource, core_kernel_classes_Property $property, $lg)
     {
-        $returnValue = null;
-
-        $options = ['lg' => $lg];
-
+        $options =  ['lg' => $lg];
+        
         $returnValue = new core_kernel_classes_ContainerCollection($resource);
         foreach ($this->getPropertyValues($resource, $property, $options) as $value) {
             $returnValue->add(common_Utils::toResource($value));
@@ -206,14 +206,12 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
      * Short description of method setPropertyValue
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
-     *
-     * @param  core_kernel_classes_Resource resource
-     * @param  core_kernel_classes_Property property
-     * @param  string object
-     * @param  string lg
-     *
+     * @param core_kernel_classes_Resource $resource
+     * @param core_kernel_classes_Property $property
+     * @param $object
+     * @param null $lg
      * @return boolean
+     * @author Joel Bout, <joel.bout@tudor.lu>
      */
     public function setPropertyValue(core_kernel_classes_Resource $resource, core_kernel_classes_Property $property, $object, $lg = null)
     {
@@ -244,12 +242,10 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
      * Short description of method setPropertiesValues
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
-     *
-     * @param  core_kernel_classes_Resource resource
-     * @param  array properties
-     *
+     * @param core_kernel_classes_Resource $resource
+     * @param Resource resource
      * @return boolean
+     * @author Joel Bout, <joel.bout@tudor.lu>
      */
     public function setPropertiesValues(core_kernel_classes_Resource $resource, $properties)
     {
@@ -265,24 +261,23 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
             foreach ($properties as $propertyUri => $value) {
                 $property = $this->getModel()->getProperty($propertyUri);
                 $lang = ($property->isLgDependent() ? $session->getDataLanguage() : '');
-                $formatedValues = [];
+                $formattedValues = [];
 
-                // @TODO: refactor this
                 if ($value instanceof core_kernel_classes_Resource) {
-                    $formatedValues[] = $value->getUri();
+                    $formattedValues[] = $value->getUri();
                 } elseif (is_array($value)) {
                     foreach ($value as $val) {
-                        $formatedValues[] = $val instanceof core_kernel_classes_Resource
+                        $formattedValues[] = $val instanceof core_kernel_classes_Resource
                             ? $val->getUri()
                             : $val;
                     }
                 } else {
-                    $formatedValues[] = ($value == null) ? '' : $value;
+                    $formattedValues[] = ($value == null) ? '' : $value;
                 }
 
                 $predicate = $property->getUri();
 
-                foreach ($formatedValues as $object) {
+                foreach ($formattedValues as $object) {
                     $returnValue |= $this->modelFactory->addStatement($modelId, $subject, $predicate, $object, $lang, $author);
                 }
             }
@@ -295,14 +290,12 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
      * Short description of method setPropertyValueByLg
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
-     *
-     * @param  core_kernel_classes_Resource resource
-     * @param  core_kernel_classes_Property property
-     * @param  string value
-     * @param  string lg
-     *
+     * @param core_kernel_classes_Resource $resource
+     * @param core_kernel_classes_Property $property
+     * @param $value
+     * @param $lg
      * @return boolean
+     * @author Joel Bout, <joel.bout@tudor.lu>
      */
     public function setPropertyValueByLg(core_kernel_classes_Resource $resource, core_kernel_classes_Property $property, $value, $lg)
     {
@@ -322,18 +315,14 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
      * Short description of method removePropertyValues
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
-     *
-     * @param  core_kernel_classes_Resource resource
-     * @param  core_kernel_classes_Property property
-     * @param  array options
-     *
+     * @param core_kernel_classes_Resource $resource
+     * @param core_kernel_classes_Property $property
+     * @param array options
      * @return boolean
+     * @author Joel Bout, <joel.bout@tudor.lu>
      */
     public function removePropertyValues(core_kernel_classes_Resource $resource, core_kernel_classes_Property $property, $options = [])
     {
-        $returnValue = (bool)false;
-
         // Optional params
         $pattern = isset($options['pattern']) && !is_null($options['pattern']) ? $options['pattern'] : null;
         $like = isset($options['like']) && $options['like'] == true ? true : false;
@@ -395,14 +384,12 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
      * Short description of method removePropertyValueByLg
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
-     *
-     * @param  core_kernel_classes_Resource resource
-     * @param  core_kernel_classes_Property property
-     * @param  string lg
-     * @param  array options
-     *
+     * @param core_kernel_classes_Resource $resource
+     * @param core_kernel_classes_Property $property
+     * @param Resource resource
+     * @param array $options
      * @return boolean
+     * @author Joel Bout, <joel.bout@tudor.lu>
      */
     public function removePropertyValueByLg(core_kernel_classes_Resource $resource, core_kernel_classes_Property $property, $lg, $options = [])
     {
@@ -432,8 +419,6 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
      */
     public function getRdfTriples(core_kernel_classes_Resource $resource)
     {
-        $returnValue = null;
-
         // TODO: refactor this to use a triple store abstraction
         $query = 'SELECT * FROM statements WHERE subject = ? AND ' . $this->getModelReadSqlCondition() . ' ORDER BY predicate';
         $result = $this->getPersistence()->query($query, [$resource->getUri()]);
@@ -459,12 +444,10 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
      * Short description of method getUsedLanguages
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
-     *
-     * @param  core_kernel_classes_Resource resource
-     * @param  core_kernel_classes_Property property
-     *
+     * @param core_kernel_classes_Resource $resource
+     * @param core_kernel_classes_Property $property
      * @return array
+     * @author Joel Bout, <joel.bout@tudor.lu>
      */
     public function getUsedLanguages(core_kernel_classes_Resource $resource, core_kernel_classes_Property $property)
     {
@@ -482,20 +465,18 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
             }
         }
 
-        return (array)$returnValue;
+        return $returnValue;
     }
 
     /**
      * Short description of method duplicate
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
-     *
-     * @param  core_kernel_classes_Resource resource
-     * @param  array excludedProperties
-     *
+     * @param core_kernel_classes_Resource $resource
+     * @param array excludedProperties
      * @return core_kernel_classes_Resource|null
      * @throws common_exception_Error
+     * @author Joel Bout, <joel.bout@tudor.lu>
      */
     public function duplicate(core_kernel_classes_Resource $resource, $excludedProperties = [])
     {
@@ -534,12 +515,10 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
      * Short description of method delete
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
-     *
-     * @param  core_kernel_classes_Resource resource
-     * @param  boolean deleteReference
-     *
+     * @param core_kernel_classes_Resource $resource
+     * @param boolean deleteReference
      * @return boolean
+     * @author Joel Bout, <joel.bout@tudor.lu>
      */
     public function delete(core_kernel_classes_Resource $resource, $deleteReference = false)
     {
@@ -549,33 +528,30 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
 
         //if no rows affected return false
         if (!$returnValue) {
-            $returnValue = false;
-        } else {
-            if ($deleteReference) {
-                // TODO: refactor this to use a triple store abstraction
-                $sqlQuery = 'DELETE FROM statements WHERE ' . $this->getPersistence()->getPlatForm()->getObjectTypeCondition() . ' = ? AND ' . $this->getModelWriteSqlCondition();
-                $return = $this->getPersistence()->exec($sqlQuery, [$resource->getUri()]);
+            return false;
+        }
 
-                if ($return !== false) {
-                    $returnValue = true;
-                }
+        if ($deleteReference) {
+            // TODO: refactor this to use a triple store abstraction
+            $sqlQuery = 'DELETE FROM statements WHERE ' . $this->getPersistence()->getPlatForm()->getObjectTypeCondition() . ' = ? AND ' . $this->getModelWriteSqlCondition();
+            $return = $this->getPersistence()->exec($sqlQuery, [$resource->getUri()]);
+
+            if ($return !== false) {
+                return true;
             }
         }
 
-        return (bool)$returnValue;
+        return (bool )$returnValue;
     }
 
     /**
      * Short description of method getPropertiesValues
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
-     *
-     * @param  core_kernel_classes_Resource resource
-     * @param  array properties
-     *
+     * @param core_kernel_classes_Resource $resource
+     * @param Resource resource
      * @return array
-     * @throws common_exception_Error
+     * @author Joel Bout, <joel.bout@tudor.lu>
      */
     public function getPropertiesValues(core_kernel_classes_Resource $resource, $properties)
     {
@@ -585,10 +561,6 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
         if (count($properties) == 0) {
             return [];
         }
-
-        /*foreach($properties as $property){
-            $returnValue[$property->getUri()] = $this->getPropertyValues($resource, $property);
-        }*/
 
         $predicatesQuery = '';
         //build the predicate query
@@ -632,12 +604,10 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
      * Short description of method setType
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
-     *
-     * @param  core_kernel_classes_Resource resource
-     * @param  core_kernel_classes_Class class
-     *
+     * @param core_kernel_classes_Resource $resource
+     * @param core_kernel_classes_Class $class
      * @return boolean
+     * @author Joel Bout, <joel.bout@tudor.lu>
      */
     public function setType(core_kernel_classes_Resource $resource, core_kernel_classes_Class $class)
     {
@@ -648,12 +618,10 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
      * Short description of method removeType
      *
      * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
-     *
-     * @param  core_kernel_classes_Resource resource
-     * @param  core_kernel_classes_Class class
-     *
+     * @param core_kernel_classes_Resource $resource
+     * @param core_kernel_classes_Class $class
      * @return boolean
+     * @author Joel Bout, <joel.bout@tudor.lu>
      */
     public function removeType(core_kernel_classes_Resource $resource, core_kernel_classes_Class $class)
     {
@@ -670,13 +638,11 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
             $class->getUri(),
         ]);
 
-        $returnValue = true;
-
         return (bool)$returnValue;
     }
 
     /**
-     * @return \Zend\ServiceManager\ServiceLocatorInterface
+     * @return ServiceLocatorInterface
      */
     public function getServiceLocator()
     {
