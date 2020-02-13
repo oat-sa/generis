@@ -95,7 +95,7 @@ class core_kernel_classes_DbWrapper
      * @var boolean
      */
     public $debug = false;
-
+    
     /**
      *
      * @var common_persistence_SqlPersistence
@@ -189,14 +189,14 @@ class core_kernel_classes_DbWrapper
     {
         $returnValue = null;
 
-
+        
         //         $trace=debug_backtrace();
         //         $caller=array_shift($trace);
         //         $caller=array_shift($trace);
         //         common_Logger::d('trace : '. $caller['function'] .$caller['class'] );
         //         common_Logger::d($statement . implode('|', $params));
         $sth = $this->persistence->query($statement, $params);
-
+        
         if (!empty($sth)) {
             $returnValue = $sth;
         }
@@ -218,23 +218,21 @@ class core_kernel_classes_DbWrapper
     public function exec($statement, $params = [])
     {
         $this->debug($statement);
-
+        
         $returnValue = $this->persistence->exec($statement, $params);
 
         $this->incrementNrOfQueries();
         return (int) $returnValue;
     }
-
+    
     /**
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
      * @param string $tableName
      * @param array $data
-     * @return int
      */
     public function insert($tableName, array $data)
     {
         $this->incrementNrOfQueries();
-
         return $this->persistence->insert($tableName, $data);
     }
 
@@ -253,8 +251,8 @@ class core_kernel_classes_DbWrapper
     }
 
 
-
-
+    
+    
     /**
      * Returns the column names of a given table
      *
@@ -375,7 +373,7 @@ class core_kernel_classes_DbWrapper
         }
         return $this->platform;
     }
-
+    
     /**
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
      * return common_persistence_sql_SchemaManager
@@ -476,7 +474,7 @@ class core_kernel_classes_DbWrapper
         $result->closeCursor();
         return (int) $returnValue;
     }
-
+    
     /**
      * Convenience access to lastInsertId.
      *
@@ -488,7 +486,7 @@ class core_kernel_classes_DbWrapper
     {
         return $this->persistence->lastInsertId($name);
     }
-
+    
     /**
      * Convenience access to platForm quote.
      *
@@ -501,7 +499,7 @@ class core_kernel_classes_DbWrapper
     {
         return $this->persistence->quote($parameter);
     }
-
+    
     public function quoteIdentifier($parameter)
     {
         return $this->persistence->getPlatForm()->quoteIdentifier($parameter);

@@ -23,9 +23,9 @@
  */
 interface common_persistence_sql_Driver extends common_persistence_Driver
 {
-
+    
     public function query($statement, $params, array $types = []);
-
+    
     public function exec($statement, $params, array $types = []);
 
     /**
@@ -39,7 +39,7 @@ interface common_persistence_sql_Driver extends common_persistence_Driver
      * @return integer The number of affected rows.
      */
     public function insert($tableName, array $data, array $types = []);
-
+    
     public function insertMultiple($tableName, array $data);
 
     /**
@@ -51,11 +51,11 @@ interface common_persistence_sql_Driver extends common_persistence_Driver
     public function updateMultiple($tableName, array $data);
 
     public function getSchemaManager();
-
+    
     public function getPlatForm();
-
+    
     public function lastInsertId($name = null);
-
+    
     public function quote($parameter, $parameter_type = PDO::PARAM_STR);
 
     /**

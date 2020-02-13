@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -14,70 +15,78 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2013 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
+ * Copyright (c) 2013-2020 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  *
+ * @author Lionel Lecaque  <lionel@taotesting.com>
+ * @author Jerome Bogaerts, <jerome@taotesting.com>
  *
  */
+
+use Doctrine\DBAL\Driver\Statement;
 
 /**
  * Persistence base on SQL
- *
- * @author Lionel Lecaque  <lionel@taotesting.com>
- * @license GPLv2
- * @package generis
- *
  */
 class common_persistence_SqlPersistence extends common_persistence_Persistence
 {
-
     /**
-     *
-     * @author "Lionel Lecaque, <lionel@taotesting.com>"
-     * @param string $statement
-     * @param array $params
-     */
-    public function exec($statement, $params = [], array $types = [])
-    {
-        return $this->getDriver()->exec($statement, $params, $types);
-    }
-
-    
-    /**
-     * @author "Lionel Lecaque, <lionel@taotesting.com>"
      * @return common_persistence_sql_SchemaManager
      */
     public function getSchemaManager()
     {
         return $this->getDriver()->getSchemaManager();
     }
-    
+
     /**
-     * @author Lionel Lecaque, <lionel@taotesting.com>
      * @return common_persistence_sql_Platform
      */
     public function getPlatForm()
     {
         return $this->getDriver()->getPlatform();
     }
-    
+
     /**
+     * Execute a statement.
      *
-     * @author "Lionel Lecaque, <lionel@taotesting.com>"
+     * @param string $statement
+     * @param array $params
+     * @param array $types
+     * @return int number of updated rows
+     */
+    public function exec($statement, array $params = [], array $types = [])
+    {
+        return $this->getDriver()->exec($statement, $params, $types);
+    }
+
+    /**
+     * Inserts one row.
+     *
      * @param string $tableName
      * @param array $data
-     * @return int
+     * @param array $types
+     * @return int number of updated rows
      */
     public function insert($tableName, array $data, array $types = [])
     {
         return $this->getDriver()->insert($tableName, $data, $types);
     }
-    
+
+    /**
+     * Inserts multiple rows.
+     *
+     * @param $tableName
+     * @param array $data
+     * @param array $types
+     * @return int number of updated rows
+     */
     public function insertMultiple($tableName, array $data, array $types = [])
     {
         return $this->getDriver()->insertMultiple($tableName, $data, $types);
     }
 
     /**
+     * Update multiple rows.
+     *
      * @param string $table
      * @param array $data
      * @return bool
@@ -89,11 +98,12 @@ class common_persistence_SqlPersistence extends common_persistence_Persistence
     }
 
     /**
+     * Executes parameterized query.
      *
-     * @author "Lionel Lecaque, <lionel@taotesting.com>"
      * @param string $statement
      * @param array $params
-     * @return \Doctrine\DBAL\Driver\Statement
+     * @param array $types
+     * @return Statement
      */
     public function query($statement, $params = [], array $types = [])
     {
@@ -104,7 +114,6 @@ class common_persistence_SqlPersistence extends common_persistence_Persistence
     /**
      * Convenience access to quote.
      *
-     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @param string $parameter The parameter to quote.
      * @param int $parameter_type A PDO PARAM_XX constant.
      * @return string The quoted string.
@@ -118,7 +127,6 @@ class common_persistence_SqlPersistence extends common_persistence_Persistence
     /**
      * Convenience access to lastInsertId.
      *
-     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @param string $name
      * @return string The quoted string.
      */
