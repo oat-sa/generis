@@ -63,11 +63,12 @@
     "oat-sa/oatbox-extension-installer": "~1.1||dev-master",
     "php": "^7.1",
     "psr/log": "~1.0",
-    "oat-sa/lib-generis-search": "^2.0.1",
+    "oat-sa/lib-generis-search": "^2.1.0",
     "monolog/monolog": "^1.23.0",
     "fluent/logger": "^1.0.1",
     "symfony/lock": "^3.4",
-    "psr/container": "^1.0.0"
+    "psr/container": "^1.0.0",
+    "ramsey/uuid": "^3.8"
   },
   "require-dev": {
     "mikey179/vfsstream": "1.4.0",

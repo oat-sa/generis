@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -14,23 +15,27 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2013 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
+ * Copyright (c) 2013-2020 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
+ *
+ * @author Lionel Lecaque  <lionel@taotesting.com>
+ * @author Jerome Bogaerts, <jerome@taotesting.com>
+ *
  */
+
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Driver\ResultStatement;
+use Doctrine\DBAL\Driver\Statement;
 
 /**
  * Dbal Driver
- *
- * @author Lionel Lecaque  <lionel@taotesting.com>
- * @license GPLv2
- * @package generis
- *
  */
 class common_persistence_sql_dbal_Driver implements common_persistence_sql_Driver
 {
     use common_persistence_sql_MultipleOperations;
 
     /**
-     * @var \Doctrine\DBAL\Connection
+     * @var Connection
      */
     protected $connection;
 
@@ -45,7 +50,7 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
      * @param string $id
      * @param array $params
      * @return common_persistence_Persistence|common_persistence_SqlPersistence
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws DBALException
      */
     public function connect($id, array $params)
     {
@@ -71,7 +76,7 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
      * Endless connection
      *
      * @param $connectionParams
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws DBALException
      */
     protected function persistentConnect($connectionParams)
     {
@@ -84,12 +89,12 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
 
         while (true) {
             try {
-                /** @var \Doctrine\DBAL\Connection connection */
+                /** @var Connection connection */
                 $this->connection = $this->getConnection($connectionParams, $config);
                 // to generate DBALException if no connection
                 $this->connection->ping();
                 break;
-            } catch (\Doctrine\DBAL\DBALException $e) {
+            } catch (DBALException $e) {
                 $this->connection = null;
                 $counter++;
 
@@ -104,9 +109,9 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
     /**
      * @param $params
      * @param $config
-     * @return \Doctrine\DBAL\Connection
+     * @return Connection
      *
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws DBALException
      *
      */
     private function getConnection($params, $config)
@@ -150,38 +155,39 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
     {
         return new common_persistence_sql_dbal_SchemaManager($this->connection->getSchemaManager());
     }
-    
-   
+
     /**
      * Execute the statement with provided params
      *
-     * @author "Lionel Lecaque, <lionel@taotesting.com>"
      * @param mixed $statement
      * @param array $params
+     * @param array $types
      * @return integer number of affected row
+     * @throws DBALException
      */
-    public function exec($statement, $params = [])
+    public function exec($statement, $params = [], array $types = [])
     {
-        return $this->connection->executeUpdate($statement, $params);
+        return $this->connection->executeUpdate($statement, $params, $types);
     }
-    
-    
+
+
     /**
      * Query  the statement with provided params
      *
-     * @author "Lionel Lecaque, <lionel@taotesting.com>"
-     * @param mixed $statement
-     * @return \Doctrine\DBAL\Driver\Statement
+     * @param Statement $statement
+     * @param array $params
+     * @param array $types
+     * @return ResultStatement
+     * @throws DBALException
      */
-    public function query($statement, $params = [])
+    public function query($statement, $params = [], array $types = [])
     {
-        return $this->connection->executeQuery($statement, $params);
+        return $this->connection->executeQuery($statement, $params, $types);
     }
     
     /**
      * Convenience access to PDO::quote.
      *
-     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @param string $parameter The parameter to quote.
      * @param int $parameter_type A PDO PARAM_XX constant.
      * @return string The quoted string.
@@ -190,26 +196,31 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
     {
         return $this->connection->quote($parameter, $parameter_type);
     }
-    
-    
 
     /**
-     * (non-PHPdoc)
-     * @see common_persistence_sql_Driver::insert()
+     * Insert a single row into the database.
+     *
+     * column names and values will be encoded
+     *
+     * @param string $tableName name of the table
+     * @param array $data An associative array containing column-value pairs.
+     * @param array $types
+     * @return integer The number of affected rows.
+     *
+     * @throws DBALException
      */
-    public function insert($tableName, array $data)
+    public function insert($tableName, array $data, array $types = [])
     {
         $cleanColumns = [];
         foreach ($data as $columnName => $value) {
             $cleanColumns[$this->getPlatForm()->quoteIdentifier($columnName)] = $value;
         }
-        return $this->connection->insert($tableName, $cleanColumns);
+        return $this->connection->insert($tableName, $cleanColumns, $types);
     }
     
     /**
      * Convenience access to PDO::lastInsertId.
      *
-     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @param string $name
      * @return string The quoted string.
      */
@@ -219,7 +230,7 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
     }
 
     /**
-     * @return \Doctrine\DBAL\Connection
+     * @return Connection
      */
     public function getDbalConnection()
     {
