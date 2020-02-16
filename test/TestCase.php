@@ -114,4 +114,13 @@ abstract class TestCase extends UnitTestCase
             ->setMethods($methods)
             ->getMock();
     }
+
+    /**
+     * @param $originalClassName
+     * @return MockObject
+     */
+    protected function getMock($originalClassName): MockObject
+    {
+        return $this->getMockBuilder($originalClassName)->getMock();
+    }
 }
