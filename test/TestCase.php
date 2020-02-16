@@ -21,29 +21,30 @@
 
 namespace oat\generis\test;
 
+use Doctrine\DBAL\DBALException;
+use oat\generis\persistence\PersistenceManager;
 use Prophecy\Argument;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use common_persistence_Manager;
 use common_persistence_sql_dbal_Driver;
 use PHPUnit\Framework\TestCase as UnitTestCase;
-use oat\generis\test\MockObject;
+use \PHPUnit\Framework\MockObject\MockObject;
 
 abstract class TestCase extends UnitTestCase
 {
     /**
-     * Forward compatibility function for PHPUnit 7.0
+     * backward compatibility function for PHPUnit 4.0
      * @param string $exception
      */
-    public function expectException($exception)
+    public function setExpectedException($exception)
     {
-        $this->setExpectedException($exception);
+        $this->expectException($exception);
     }
 
     /**
      * @param array $services
      * @return ServiceLocatorInterface
      */
-    public function getServiceLocatorMock(array $services = [])
+    public function getServiceLocatorMock(array $services = []): ServiceLocatorInterface
     {
         $serviceLocatorProphecy = $this->prophesize(ServiceLocatorInterface::class);
         foreach ($services as $key => $service) {
@@ -59,7 +60,8 @@ abstract class TestCase extends UnitTestCase
      * Returns a persistence Manager with a mocked sql persistence
      *
      * @param string $key identifier of the persistence
-     * @return common_persistence_Manager
+     * @return PersistenceManager
+     * @throws DBALException
      */
     public function getSqlMock($key)
     {
@@ -68,7 +70,7 @@ abstract class TestCase extends UnitTestCase
         }
         $driver = new common_persistence_sql_dbal_Driver();
         $persistence = $driver->connect($key, ['connection' => ['url' => 'sqlite:///:memory:']]);
-        $pmProphecy = $this->prophesize(common_persistence_Manager::class);
+        $pmProphecy = $this->prophesize(PersistenceManager::class);
         $pmProphecy->setServiceLocator(Argument::any())->willReturn(null);
         $pmProphecy->getPersistenceById($key)->willReturn($persistence);
 
@@ -82,10 +84,9 @@ abstract class TestCase extends UnitTestCase
      *
      * @param string $originalClassName
      * @return MockObject
-     * @throws \PHPUnit_Framework_Exception
      * @since Method available since Release 5.4.0
      */
-    protected function createMock($originalClassName)
+    protected function createMock($originalClassName): MockObject
     {
         return $this->getMockBuilder($originalClassName)
             ->disableOriginalConstructor()
@@ -104,7 +105,7 @@ abstract class TestCase extends UnitTestCase
      * @return MockObject
      * @since Method available since Release 5.4.0
      */
-    protected function createPartialMock($originalClassName, array $methods = [])
+    protected function createPartialMock($originalClassName, array $methods = []): MockObject
     {
         return $this->getMockBuilder($originalClassName)
             ->disableOriginalConstructor()
