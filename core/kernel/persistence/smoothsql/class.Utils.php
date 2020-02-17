@@ -216,11 +216,15 @@ class core_kernel_persistence_smoothsql_Utils
         if (empty($lang) === false) {
             $sqlLang = ' AND (' . self::buildLanguagePattern($persistence, $lang) . ')';
         }
-        
-        $query = "SELECT DISTINCT subject FROM statements WHERE (predicate = ${predicate}) AND (${sqlValues}${sqlLang})"
-            . ' AND modelid IN (' . implode(',', $model->getReadableModels()) . ')';
-        
-        return $query;
+
+        $readableModelIds = implode(',', array_map(function ($a) {
+                return "'" . $a . "'";
+            }, $model->getReadableModels()));
+
+        return 'SELECT DISTINCT subject FROM statements ' .
+            'WHERE (predicate = ${predicate}) ' .
+            'AND ( ' . $sqlValues . $sqlLang . ' ) ' .
+            'AND modelid IN (' . $readableModelIds . ')';
     }
     
     public static function buildLanguagePattern(common_persistence_SqlPersistence $persistence, $lang = '')
