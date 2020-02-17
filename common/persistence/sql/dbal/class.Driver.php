@@ -245,4 +245,19 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
     {
         return $this->connection->getDatabase();
     }
+
+    /**
+     * Execute a function within a transaction.
+     *
+     * @param Closure $func The function to execute in a transactional way.
+     *
+     * @return mixed The value returned by $func
+     *
+     * @throws Exception
+     * @throws Throwable
+     */
+    public function transactional(Closure $func)
+    {
+        return $this->connection->transactional($func);
+    }
 }
