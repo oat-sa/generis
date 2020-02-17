@@ -80,7 +80,9 @@ class common_persistence_SqlKvDriver implements common_persistence_KvDriver
         try {
             $expire = is_null($ttl) ? 0 : time() + $ttl;
 
-            $encoded = base64_encode($value);
+            // we need int to have safe incr and decr methods
+            $encoded = is_int($value) ? $value : base64_encode($value);
+
             $platformName = $this->sqlPersistence->getPlatForm()->getName();
             $params = [':data' => $encoded, ':time' => $expire, ':id' => $id];
 
@@ -186,7 +188,9 @@ class common_persistence_SqlKvDriver implements common_persistence_KvDriver
     public function incr($id)
     {
         $params = [':id' => $id];
-        $statement = 'UPDATE kv_store SET kv_value = kv_value + 1 WHERE kv_id = :id';
+        $platformName = $this->sqlPersistence->getPlatForm()->getName();
+        $intVal = $platformName == 'postgresql' ? 'kv_value::integer' : 'kv_value';
+        $statement = sprintf('UPDATE kv_store SET kv_value = %s + 1 WHERE kv_id = :id', $intVal);
         return $this->sqlPersistence->exec($statement, $params);
     }
 
@@ -198,7 +202,9 @@ class common_persistence_SqlKvDriver implements common_persistence_KvDriver
     public function decr($id)
     {
         $params = [':id' => $id];
-        $statement = 'UPDATE kv_store SET kv_value = kv_value - 1 WHERE kv_id = :id';
+        $platformName = $this->sqlPersistence->getPlatForm()->getName();
+        $intVal = $platformName == 'postgresql' ? 'kv_value::integer' : 'kv_value';
+        $statement = sprintf('UPDATE kv_store SET kv_value = %s - 1 WHERE kv_id = :id', $intVal);
         return $this->sqlPersistence->exec($statement, $params);
     }
 
