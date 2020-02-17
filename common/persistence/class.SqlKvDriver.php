@@ -80,8 +80,7 @@ class common_persistence_SqlKvDriver implements common_persistence_KvDriver
         try {
             $expire = is_null($ttl) ? 0 : time() + $ttl;
 
-            // we need int to have safe incr and decr methods
-            $encoded = is_int($value) ? $value : base64_encode($value);
+            $encoded = base64_encode($value);
 
             $platformName = $this->sqlPersistence->getPlatForm()->getName();
             $params = [':data' => $encoded, ':time' => $expire, ':id' => $id];
@@ -183,29 +182,33 @@ class common_persistence_SqlKvDriver implements common_persistence_KvDriver
     /**
      * Increment existing value
      * @param string $id
-     * @return mixed
+     * @return boolean
+     *
+     * @throws common_Exception
      */
     public function incr($id)
     {
-        $params = [':id' => $id];
-        $platformName = $this->sqlPersistence->getPlatForm()->getName();
-        $intVal = $platformName == 'postgresql' ? 'kv_value::integer' : 'kv_value';
-        $statement = sprintf('UPDATE kv_store SET kv_value = %s + 1 WHERE kv_id = :id', $intVal);
-        return $this->sqlPersistence->exec($statement, $params);
+        $value = filter_var($this->get($id), FILTER_VALIDATE_INT);
+        if ($value !== false) {
+            return $this->set($id, $value + 1);
+        }
+        return false;
     }
 
     /**
      * Decrement existing value
      * @param $id
-     * @return mixed
+     * @return boolean
+     *
+     * @throws common_Exception
      */
     public function decr($id)
     {
-        $params = [':id' => $id];
-        $platformName = $this->sqlPersistence->getPlatForm()->getName();
-        $intVal = $platformName == 'postgresql' ? 'kv_value::integer' : 'kv_value';
-        $statement = sprintf('UPDATE kv_store SET kv_value = %s - 1 WHERE kv_id = :id', $intVal);
-        return $this->sqlPersistence->exec($statement, $params);
+        $value = filter_var($this->get($id), FILTER_VALIDATE_INT);
+        if ($value !== false) {
+            return $this->set($id, $value - 1);
+        }
+        return false;
     }
 
     /**
