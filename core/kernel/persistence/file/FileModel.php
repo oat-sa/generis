@@ -41,12 +41,12 @@ class FileModel implements Model
      * @var string
      */
     private $file;
-
+    
     public static function fromFile($filePath)
     {
         return new self(['file' => $filePath]);
     }
-
+    
     public static function toFile($filePath, $triples)
     {
         $graph = new \EasyRdf_Graph();
@@ -62,7 +62,7 @@ class FileModel implements Model
         $format = \EasyRdf_Format::getFormat('rdfxml');
         return file_put_contents($filePath, $graph->serialise($format));
     }
-
+    
     /**
      * Constructor of the smooth model, expects a persistence in the configuration
      *
@@ -76,7 +76,7 @@ class FileModel implements Model
         }
         $this->file = $options['file'];
     }
-
+    
     /**
      * (non-PHPdoc)
      * @see \oat\generis\model\data\Model::getConfig()
@@ -87,7 +87,7 @@ class FileModel implements Model
             'file' => $this->file
         ];
     }
-
+    
     /**
      * (non-PHPdoc)
      * @see \oat\generis\model\data\Model::getRdfInterface()
@@ -96,7 +96,7 @@ class FileModel implements Model
     {
         return new FileRdf($this->file);
     }
-
+    
     /**
      * (non-PHPdoc)
      * @see \oat\generis\model\data\Model::getRdfsInterface()
@@ -105,7 +105,7 @@ class FileModel implements Model
     {
         throw new \common_exception_NoImplementation('Rdfs interface not implemented for ' . __CLASS__);
     }
-
+    
     /**
      * (non-PHPdoc)
      * @see \oat\generis\model\data\Model::getSearchInterface()
@@ -116,9 +116,8 @@ class FileModel implements Model
     }
 
     // helper
-
+    
     /**
-     *
      * @param string $file
      * @throws common_exception_Error
      */
@@ -131,13 +130,14 @@ class FileModel implements Model
         }
         $namespaceUri = (string) $attrs['base'];
         $modelId = null;
-
         $namespaceManager = \common_ext_NamespaceManager::singleton();
+
         foreach ($namespaceManager->getAllNamespaces() as $namespace) {
             if ($namespace->getUri() == $namespaceUri) {
                 $modelId = $namespace->getModelId();
             }
         }
+
         if (is_null($modelId)) {
             \common_Logger::d('modelId not found, need to add namespace ' . $namespaceUri);
 
