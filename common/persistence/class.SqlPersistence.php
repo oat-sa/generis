@@ -134,4 +134,19 @@ class common_persistence_SqlPersistence extends common_persistence_Persistence
     {
         return $this->getDriver()->lastInsertId($name);
     }
+
+
+    /**
+     * Execute a function within a transaction.
+     *
+     * @param Closure $func The function to execute in a transactional way.
+     *
+     * @return mixed The value returned by $func
+     *
+     * @throws Throwable
+     */
+    public function transactional(Closure $func)
+    {
+        return $this->getDriver()->transactional($func);
+    }
 }
