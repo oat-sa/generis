@@ -184,12 +184,12 @@ class common_persistence_SqlKvDriver implements common_persistence_KvDriver
     /**
      * Increment existing value
      * @param string $id
-     * @return boolean
+     * @return int The number of affected rows.
      */
     public function incr($id)
     {
         switch ($this->sqlPersistence->getPlatForm()->getName()) {
-            case 'psql':
+            case 'postgresql':
                 $statement = 'UPDATE kv_store SET kv_value = kv_value::integer + 1 WHERE kv_id = :id';
                 break;
             case 'gcp-spanner':
@@ -205,12 +205,12 @@ class common_persistence_SqlKvDriver implements common_persistence_KvDriver
     /**
      * Decrement existing value
      * @param $id
-     * @return boolean
+     * @return int The number of affected rows.
      */
     public function decr($id)
     {
         switch ($this->sqlPersistence->getPlatForm()->getName()) {
-            case 'psql':
+            case 'postgresql':
                 $statement = 'UPDATE kv_store SET kv_value = kv_value::integer - 1 WHERE kv_id = :id';
                 break;
             case 'gcp-spanner':
