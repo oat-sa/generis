@@ -39,7 +39,7 @@ class core_kernel_persistence_smoothsql_SmoothModel extends ConfigurableService 
     const OPTION_SEARCH_SERVICE = 'search';
 
     const DEFAULT_WRITABLE_MODEL = 1;
-    const DEFAULT_READABLE_MODEL = 2;
+    const DEFAULT_READ_ONLY_MODEL = 2;
 
     /**
      * Cache service to use
@@ -55,10 +55,6 @@ class core_kernel_persistence_smoothsql_SmoothModel extends ConfigurableService 
     private $persistence;
     
     private $cache;
-
-    private static $readableSubModels = null;
-    
-    private static $updatableSubModels = null;
     
     function getResource($uri)
     {
@@ -151,11 +147,6 @@ class core_kernel_persistence_smoothsql_SmoothModel extends ConfigurableService 
     public function getWritableModels()
     {
         return $this->getOption(self::OPTION_WRITEABLE_MODELS);
-    }
-
-    public function getDefaultReadableModel()
-    {
-        return self::DEFAULT_READABLE_MODEL;
     }
     
     //

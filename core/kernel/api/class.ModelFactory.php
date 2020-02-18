@@ -34,7 +34,7 @@ class core_kernel_api_ModelFactory
      */
     public function createModel($namespace, $data)
     {
-        $modelId = SmoothModel::DEFAULT_READABLE_MODEL;
+        $modelId = SmoothModel::DEFAULT_READ_ONLY_MODEL;
 
         $modelDefinition = new EasyRdf_Graph($namespace);
         if (is_file($data)) {

@@ -124,6 +124,6 @@ class FileModel implements Model
      */
     public static function getModelIdFromXml($file)
     {
-       return SmoothModel::DEFAULT_READABLE_MODEL;
+       return SmoothModel::DEFAULT_READ_ONLY_MODEL;
     }
 }

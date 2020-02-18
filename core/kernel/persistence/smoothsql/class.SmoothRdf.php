@@ -66,7 +66,7 @@ class core_kernel_persistence_smoothsql_SmoothRdf implements RdfInterface
     public function add(\core_kernel_classes_Triple $triple)
     {
         if (!in_array($triple->modelid, $this->model->getReadableModels())) {
-            $triple->modelid = SmoothModel::DEFAULT_READABLE_MODEL;
+            $triple->modelid = SmoothModel::DEFAULT_READ_ONLY_MODEL;
         }
         $query = "INSERT INTO statements ( modelId, subject, predicate, object, l_language, epoch, author) VALUES ( ? , ? , ? , ? , ? , ?, ?);";
         $success = $this->getPersistence()->exec($query, [$triple->modelid, $triple->subject, $triple->predicate, $triple->object, is_null($triple->lg) ? '' : $triple->lg, $this->getPersistence()->getPlatForm()->getNowExpression(), is_null($triple->author) ? '' : $triple->author]);
