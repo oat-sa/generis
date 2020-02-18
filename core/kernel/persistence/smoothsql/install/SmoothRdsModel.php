@@ -36,11 +36,11 @@ class SmoothRdsModel
      */
     public static function addSmoothTables(Schema $schema)
     {
-        $table = $schema->createTable("models");
-        $table->addColumn('modelid', "integer", ["notnull" => true,"autoincrement" => true]);
-        $table->addColumn('modeluri', "string", ["length" => 255,"default" => null]);
-        $table->addOption('engine', 'MyISAM');
-        $table->setPrimaryKey(['modelid']);
+//        $table = $schema->createTable("models");
+//        $table->addColumn('modelid', "integer", ["notnull" => true,"autoincrement" => true]);
+//        $table->addColumn('modeluri', "string", ["length" => 255,"default" => null]);
+//        $table->addOption('engine', 'MyISAM');
+//        $table->setPrimaryKey(['modelid']);
 
         $table = $schema->createTable("statements");
         $table->addColumn("modelid", "integer", ["notnull" => true,"default" => 0]);

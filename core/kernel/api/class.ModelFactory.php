@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -14,43 +15,18 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2013 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
+ * Copyright (c) 2013-2020 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  *
  * @author "Lionel Lecaque, <lionel@taotesting.com>"
  * @license GPLv2
  * @package generis
-
  *
  */
+
+use core_kernel_persistence_smoothsql_SmoothModel as SmoothModel;
+
 class core_kernel_api_ModelFactory
 {
-    
-    
-    /**
-     * @author "Lionel Lecaque, <lionel@taotesting.com>"
-     * @param string $namespace
-     * @return string
-     */
-    private function getModelId($namespace)
-    {
-        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
-        
-        $query = 'SELECT modelid FROM models WHERE (modeluri = ?)';
-        $results = $dbWrapper->query($query, [$namespace]);
-       
-        return $results->fetchColumn(0);
-    }
-    
-    /**
-     * @author "Lionel Lecaque, <lionel@taotesting.com>"
-     * @param string $namespace
-     */
-    private function addNewModel($namespace)
-    {
-        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
-        $results = $dbWrapper->insert('models', ['modeluri' => $namespace]);
-    }
-    
     /**
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
      * @param string $namespace
@@ -58,14 +34,8 @@ class core_kernel_api_ModelFactory
      */
     public function createModel($namespace, $data)
     {
+        $modelId = SmoothModel::DEFAULT_READABLE_MODEL;
 
-        $modelId = $this->getModelId($namespace);
-        if ($modelId === false) {
-            common_Logger::d('modelId not found, need to add namespace ' . $namespace);
-            $this->addNewModel($namespace);
-            //TODO bad way, need to find better
-            $modelId = $this->getModelId($namespace);
-        }
         $modelDefinition = new EasyRdf_Graph($namespace);
         if (is_file($data)) {
             $modelDefinition->parseFile($data);
