@@ -21,10 +21,6 @@
 
 namespace oat\oatbox\install;
 
-use common_Exception;
-use oat\generis\model\data\Ontology;
-use oat\generis\model\kernel\persistence\smoothsql\install\SmoothRdsModel;
-use oat\generis\model\kernel\persistence\smoothsql\search\ComplexSearchService;
 use oat\oatbox\service\ConfigurableService;
 use oat\oatbox\service\exception\InvalidService;
 use oat\oatbox\service\exception\InvalidServiceManagerException;
@@ -33,10 +29,8 @@ use oat\oatbox\service\ServiceManager;
 use oat\oatbox\filesystem\FileSystemService;
 use oat\oatbox\service\ServiceNotFoundException;
 use common_report_Report as Report;
-use core_kernel_persistence_smoothsql_SmoothModel as SmoothModel;
-use common_cache_Cache as CommonCache;
 
-/**
+ /**
  * A service to install oatbox functionality
  *
  * Sets up:
@@ -55,7 +49,6 @@ class Installer extends ConfigurableService
 
         $this->setupServiceManager($this->getConfigPath());
         $this->installFilesystem();
-        $this->configureOntology();
 
         return new Report(Report::TYPE_SUCCESS, 'Oatbox installed successfully');
     }
@@ -93,7 +86,7 @@ class Installer extends ConfigurableService
      *
      * @throws InvalidService If installed filesystem is not a FileSystemService
      * @throws InvalidServiceManagerException
-     * @throws common_Exception
+     * @throws \common_Exception
      */
     protected function installFilesystem()
     {
@@ -114,33 +107,6 @@ class Installer extends ConfigurableService
                 ]
             ]);
             $this->getServiceManager()->register(FileSystemService::SERVICE_ID, $fileSystemService);
-        }
-    }
-
-    /**
-     * @throws InvalidService
-     * @throws InvalidServiceManagerException
-     * @throws common_Exception
-     */
-    protected function configureOntology()
-    {
-        try {
-            if (! ($this->getServiceManager()->get(Ontology::SERVICE_ID) instanceof SmoothModel)) {
-                throw new InvalidService('Your service must be a ' . SmoothModel::class);
-            }
-        } catch (ServiceNotFoundException $e) {
-            $smoothModel = new \core_kernel_persistence_smoothsql_SmoothModel([
-                SmoothModel::OPTION_PERSISTENCE => 'default',
-                SmoothModel::OPTION_READABLE_MODELS =>
-                    [SmoothModel::DEFAULT_WRITABLE_MODEL, SmoothModel::DEFAULT_READABLE_MODEL],
-                SmoothModel::OPTION_WRITEABLE_MODELS =>
-                    [SmoothModel::DEFAULT_WRITABLE_MODEL],
-                SmoothModel::OPTION_NEW_TRIPLE_MODEL =>
-                    SmoothModel::DEFAULT_WRITABLE_MODEL,
-                SmoothModel::OPTION_SEARCH_SERVICE => ComplexSearchService::SERVICE_ID,
-                SmoothModel::OPTION_CACHE_SERVICE => CommonCache::SERVICE_ID
-            ]);
-            $this->getServiceManager()->register(Ontology::SERVICE_ID, $smoothModel);
         }
     }
 
