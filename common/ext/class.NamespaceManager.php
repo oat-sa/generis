@@ -20,9 +20,6 @@
  *
  */
 
-use oat\generis\model\data\Ontology;
-use oat\oatbox\service\ServiceManager;
-
 /**
  * Enables you to manage the module namespaces
  *
@@ -34,30 +31,6 @@ use oat\oatbox\service\ServiceManager;
  */
 class common_ext_NamespaceManager
 {
-
-    // --- ASSOCIATIONS ---
-    // generateAssociationEnd :
-
-    // --- ATTRIBUTES ---
-
-    /**
-     * the single instance of the NamespaceManager
-     *
-     * @access private
-     * @var NamespaceManager
-     */
-    private static $instance = null;
-
-    /**
-     * Stock the list of all module's namespace, to be retrieved more
-     *
-     * @access protected
-     * @var array
-     */
-    protected $namespaces = [];
-
-    // --- OPERATIONS ---
-
     /**
      * Private constructor to force the use of the singleton
      *
@@ -70,7 +43,7 @@ class common_ext_NamespaceManager
     }
 
     /**
-     * Main entry point to retrieve the unique NamespaceManager instance
+     * Main entry point to retrieve the NamespaceManager instance
      *
      * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
@@ -78,11 +51,7 @@ class common_ext_NamespaceManager
      */
     public static function singleton()
     {
-        if (is_null(self::$instance)) {
-            $class = __CLASS__;             //used in case of subclassing
-            self::$instance = new $class();
-        }
-        return self::$instance;
+        return new self();
     }
 
     /**
@@ -106,7 +75,10 @@ class common_ext_NamespaceManager
      */
     public function getLocalNamespace()
     {
-        return new common_ext_Namespace(1,LOCAL_NAMESPACE . '#' );
+        return new common_ext_Namespace(
+            core_kernel_persistence_smoothsql_SmoothModel::DEFAULT_WRITABLE_MODEL,
+            LOCAL_NAMESPACE . '#'
+        );
     }
 
     /**
@@ -114,7 +86,7 @@ class common_ext_NamespaceManager
      *
      * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  modelid
+     * @param  $modelid
      * @return common_ext_Namespace
      */
     public function getNamespace($modelid)
@@ -131,6 +103,5 @@ class common_ext_NamespaceManager
      */
     public function reset()
     {
-        $this->namespaces = [];
     }
 }
