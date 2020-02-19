@@ -53,7 +53,6 @@ class common_ext_GenerisInstaller extends common_ext_ExtensionInstaller
         }
  
         $this->installLoadDefaultConfig();
-        $this->configureOntology();
         $this->installOntology();
         $this->installRegisterExt();
         
@@ -61,26 +60,5 @@ class common_ext_GenerisInstaller extends common_ext_ExtensionInstaller
         
         $this->log('d', 'Installing custom script for extension ' . $this->extension->getId());
         $this->installCustomScript();
-    }
-
-    /**
-     * @throws common_Exception
-     */
-    protected function configureOntology()
-    {
-        if (!$this->getServiceManager()->has(Ontology::SERVICE_ID)) {
-            $smoothModel = new \core_kernel_persistence_smoothsql_SmoothModel([
-                SmoothModel::OPTION_PERSISTENCE => 'default',
-                SmoothModel::OPTION_READABLE_MODELS =>
-                    [SmoothModel::DEFAULT_WRITABLE_MODEL, SmoothModel::DEFAULT_READ_ONLY_MODEL],
-                SmoothModel::OPTION_WRITEABLE_MODELS =>
-                    [SmoothModel::DEFAULT_WRITABLE_MODEL],
-                SmoothModel::OPTION_NEW_TRIPLE_MODEL =>
-                    SmoothModel::DEFAULT_WRITABLE_MODEL,
-                SmoothModel::OPTION_SEARCH_SERVICE => ComplexSearchService::SERVICE_ID,
-                SmoothModel::OPTION_CACHE_SERVICE => CommonCache::SERVICE_ID
-            ]);
-            $this->getServiceManager()->register(Ontology::SERVICE_ID, $smoothModel);
-        }
     }
 }
