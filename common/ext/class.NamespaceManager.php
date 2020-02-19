@@ -20,13 +20,17 @@
  *
  */
 
+use oat\generis\model\data\Ontology;
+use oat\oatbox\service\ServiceManager;
+
 /**
  * Enables you to manage the module namespaces
  *
  * @access public
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
  * @package generis
-
+ *
+ * @deprecated
  */
 class common_ext_NamespaceManager
 {
@@ -74,19 +78,11 @@ class common_ext_NamespaceManager
      */
     public static function singleton()
     {
-        $returnValue = null;
-
-        
-        
         if (is_null(self::$instance)) {
             $class = __CLASS__;             //used in case of subclassing
             self::$instance = new $class();
         }
-        $returnValue = self::$instance;
-        
-        
-
-        return $returnValue;
+        return self::$instance;
     }
 
     /**
@@ -98,29 +94,7 @@ class common_ext_NamespaceManager
      */
     public function getAllNamespaces()
     {
-        $returnValue = [];
-
-        
-        
-        if (count($this->namespaces) == 0) {
-            $db = core_kernel_classes_DbWrapper::singleton();
-            $query = 'SELECT modelid, modeluri FROM models';
-            $result = $db->query($query);
-            
-            while ($row = $result->fetch()) {
-                $id     = $row['modelid'];
-                $uri    = $row['modeluri'];
-                $this->namespaces[$id] = $uri;
-            }
-        }
-        
-        foreach ($this->namespaces as $id => $uri) {
-            $returnValue[$uri] = new common_ext_Namespace($id, $uri);
-        }
-
-        
-
-        return (array) $returnValue;
+        return [];
     }
 
     /**
@@ -132,11 +106,7 @@ class common_ext_NamespaceManager
      */
     public function getLocalNamespace()
     {
-        $localModelUri = LOCAL_NAMESPACE;
-        if (substr($localModelUri, -1) != '#') {
-            $localModelUri .= '#';
-        }
-        return $this->getNamespace($localModelUri);
+        return new common_ext_Namespace(1,LOCAL_NAMESPACE . '#' );
     }
 
     /**
@@ -149,25 +119,7 @@ class common_ext_NamespaceManager
      */
     public function getNamespace($modelid)
     {
-        $returnValue = null;
-    
-        if (count($this->namespaces) == 0) {
-            $this->getAllNamespaces();  //load the namespaces attribute
-        }
-        
-        //get modelId from modelUri
-        if (is_string($modelid)) {
-            $modelid = array_search($modelid, $this->namespaces);
-        }
-        
-        //get namespace from modelId
-        if (is_int($modelid)) {
-            if (isset($this->namespaces[$modelid])) {
-                $returnValue = new common_ext_Namespace($modelid, $this->namespaces[$modelid]);
-            }
-        }
-
-        return $returnValue;
+        return null;
     }
 
     /**
@@ -179,7 +131,6 @@ class common_ext_NamespaceManager
      */
     public function reset()
     {
-        
         $this->namespaces = [];
     }
 }
