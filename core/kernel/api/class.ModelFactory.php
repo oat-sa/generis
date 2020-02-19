@@ -28,7 +28,6 @@ use core_kernel_persistence_smoothsql_SmoothModel as SmoothModel;
 class core_kernel_api_ModelFactory
 {
     /**
-     * @author "Lionel Lecaque, <lionel@taotesting.com>"
      * @param string $namespace
      * @param string $data xml content
      */

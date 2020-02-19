@@ -21,15 +21,9 @@
  *
  */
 
-use oat\generis\model\data\Ontology;
-use oat\generis\model\kernel\persistence\smoothsql\search\ComplexSearchService;
-use core_kernel_persistence_smoothsql_SmoothModel as SmoothModel;
-use common_cache_Cache as CommonCache;
-
 /**
  * Custom extension installer for generis
  *
- * @access public
  * @author Joel Bout, <joel.bout@tudor.lu>
  * @package generis
  *
@@ -40,7 +34,6 @@ class common_ext_GenerisInstaller extends common_ext_ExtensionInstaller
     /**
      * Setup the ontology configuration
      *
-     * @access public
      * @throws common_Exception
      * @throws common_ext_ExtensionException
      * @throws common_ext_InstallationException
