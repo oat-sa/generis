@@ -28,7 +28,6 @@ use common_ext_ExtensionsManager;
 use common_ext_ExtensionUpdater;
 use core_kernel_impl_ApiModelOO;
 use core_kernel_persistence_smoothsql_SmoothModel;
-use Doctrine\DBAL\Schema\MySqlSchemaManager;
 use EasyRdf_Exception;
 use oat\generis\model\data\ModelManager;
 use oat\generis\model\fileReference\FileReferenceSerializer;
@@ -53,9 +52,7 @@ use oat\oatbox\user\UserLanguageService;
 use oat\oatbox\session\SessionService;
 use oat\generis\model\data\Ontology;
 use oat\oatbox\mutex\LockService;
-//use Symfony\Component\Lock\Store\PdoStore;
 use oat\oatbox\mutex\NoLockStorage;
-use oat\generis\scripts\update\RegisterDefaultKvPersistence;
 use League\Flysystem\Adapter\Local;
 use oat\generis\model\kernel\uri\UriProvider;
 use oat\oatbox\config\ConfigurationService;
@@ -477,9 +474,9 @@ class Updater extends common_ext_ExtensionUpdater
             }
             $this->setVersion('12.4.1');
         }
-        $this->skip('12.4.1', '12.12.0');
+        $this->skip('12.4.1', '12.11.0');
 
-        if ($this->isVersion('12.12.0')) {
+        if ($this->isVersion('12.11.0')) {
             /** @var \common_persistence_Persistence $defaultPersistence */
             $defaultPersistence = $this->getServiceManager()
                 ->get(PersistenceManager::SERVICE_ID)
@@ -488,10 +485,10 @@ class Updater extends common_ext_ExtensionUpdater
             $schemaManager = $defaultPersistence->getDriver()->getSchemaManager();
             $schema = $schemaManager->createSchema();
             $fromSchema = clone $schema;
-            $schema->dropTable('model');
+            $schema->dropTable('models');
             $queries = $defaultPersistence->getPlatform()->getMigrateSchemaSql($fromSchema, $schema);
             foreach ($queries as $query) {
-                $this->getPersistence()->exec($query);
+                $defaultPersistence->exec($query);
             }
             $this->setVersion('12.12.0');
         }
