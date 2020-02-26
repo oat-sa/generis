@@ -35,6 +35,7 @@ use oat\generis\model\fileReference\ResourceFileSerializer;
 use oat\generis\model\kernel\persistence\smoothsql\search\ComplexSearchService;
 use oat\generis\model\user\AuthAdapter;
 use oat\generis\model\user\UserFactoryService;
+use oat\generis\persistence\PersistenceManager;
 use oat\oatbox\action\ActionService;
 use oat\oatbox\filesystem\FileSystemService;
 use oat\oatbox\log\LoggerService;
@@ -51,9 +52,7 @@ use oat\oatbox\user\UserLanguageService;
 use oat\oatbox\session\SessionService;
 use oat\generis\model\data\Ontology;
 use oat\oatbox\mutex\LockService;
-//use Symfony\Component\Lock\Store\PdoStore;
 use oat\oatbox\mutex\NoLockStorage;
-use oat\generis\scripts\update\RegisterDefaultKvPersistence;
 use League\Flysystem\Adapter\Local;
 use oat\generis\model\kernel\uri\UriProvider;
 use oat\oatbox\config\ConfigurationService;
@@ -475,6 +474,25 @@ class Updater extends common_ext_ExtensionUpdater
             }
             $this->setVersion('12.4.1');
         }
-        $this->skip('12.4.1', '12.10.1');
+        $this->skip('12.4.1', '12.11.0');
+
+        if ($this->isVersion('12.11.0')) {
+            /** @var \common_persistence_Persistence $defaultPersistence */
+            $defaultPersistence = $this->getServiceManager()
+                ->get(PersistenceManager::SERVICE_ID)
+                ->getPersistenceById('default');
+            /** @var \common_persistence_sql_SchemaManager $schemaManager */
+            $schemaManager = $defaultPersistence->getDriver()->getSchemaManager();
+            $schema = $schemaManager->createSchema();
+            $fromSchema = clone $schema;
+            $schema->dropTable('models');
+            $queries = $defaultPersistence->getPlatform()->getMigrateSchemaSql($fromSchema, $schema);
+            foreach ($queries as $query) {
+                $defaultPersistence->exec($query);
+            }
+            $this->setVersion('12.12.0');
+        }
+
+        $this->skip('12.12.0', '12.12.1');
     }
 }

@@ -36,13 +36,6 @@ class SmoothRdsModel
      */
     public static function addSmoothTables(Schema $schema)
     {
-        // Models table.
-        $table = $schema->createTable('models');
-        $table->addColumn('modelid', 'string', ['length' => 36, 'notnull' => true]);
-        $table->addColumn('modeluri', 'string', ['length' => 255]);
-        $table->setPrimaryKey(['modelid']);
-        $table->addOption('engine', 'MyISAM');
-
         // Statements table.
         $table = $schema->createTable('statements');
         $table->addColumn('id', 'string', ['length' => 36, 'notnull' => true]);

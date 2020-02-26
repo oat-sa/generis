@@ -38,6 +38,9 @@ class core_kernel_persistence_smoothsql_SmoothModel extends ConfigurableService 
     const OPTION_NEW_TRIPLE_MODEL = 'addTo';
     const OPTION_SEARCH_SERVICE = 'search';
 
+    const DEFAULT_WRITABLE_MODEL = 1;
+    const DEFAULT_READ_ONLY_MODEL = 2;
+
     /**
      * Cache service to use
      * @var string
@@ -52,10 +55,6 @@ class core_kernel_persistence_smoothsql_SmoothModel extends ConfigurableService 
     private $persistence;
     
     private $cache;
-
-    private static $readableSubModels = null;
-    
-    private static $updatableSubModels = null;
     
     function getResource($uri)
     {
@@ -150,6 +149,10 @@ class core_kernel_persistence_smoothsql_SmoothModel extends ConfigurableService 
         return $this->getOption(self::OPTION_WRITEABLE_MODELS);
     }
     
+    //
+    // Deprecated functions
+    //
+
     /**
      * Defines a model as readable
      *
@@ -157,20 +160,16 @@ class core_kernel_persistence_smoothsql_SmoothModel extends ConfigurableService 
      */
     public function addReadableModel($id)
     {
-    
+
         common_Logger::i('ADDING MODEL ' . $id);
-    
+
         $readables = $this->getOption(self::OPTION_READABLE_MODELS);
         $this->setOption(self::OPTION_READABLE_MODELS, array_unique(array_merge($readables, [$id])));
-    
+
         // update in persistence
         ModelManager::setModel($this);
     }
-    
-    //
-    // Deprecated functions
-    //
-    
+
     /**
      * Returns the submodel ids that are readable
      *

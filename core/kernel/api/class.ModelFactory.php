@@ -15,7 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2013 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
+ * Copyright (c) 2013-2020 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  *
  * @author  "Lionel Lecaque, <lionel@taotesting.com>"
  * @license GPLv2
@@ -23,72 +23,18 @@
  *
  */
 
-use oat\generis\Helper\UuidPrimaryKeyTrait;
+use core_kernel_persistence_smoothsql_SmoothModel as SmoothModel;
 
 class core_kernel_api_ModelFactory
 {
-    use UuidPrimaryKeyTrait;
-
-    const DEFAULT_AUTHOR = 'http://www.tao.lu/Ontologies/TAO.rdf#installator';
-
-    /** @var core_kernel_classes_DbWrapper */
-    private $dbWrapper;
-
-    public function __construct()
-    {
-        // @TODO: inject dbWrapper as a dependency.
-        $this->dbWrapper = core_kernel_classes_DbWrapper::singleton();
-    }
-
     /**
-     * @author "Lionel Lecaque, <lionel@taotesting.com>"
-     *
-     * @param string $namespace
-     *
-     * @return string
-     */
-    public function getModelId($namespace)
-    {
-        if (substr($namespace, -1) !== '#') {
-            $namespace .= '#';
-        }
-
-        $query = 'SELECT modelid FROM models WHERE (modeluri = ?)';
-        $results = $this->dbWrapper->query($query, [$namespace]);
-
-        return $results->fetchColumn(0);
-    }
-
-    /**
-     * @author "Lionel Lecaque, <lionel@taotesting.com>"
-     *
-     * @param string $namespace
-     *
-     * @return string new added model id
-     */
-    public function addNewModel($namespace)
-    {
-        $modelId = $this->getUniquePrimaryKey();
-
-        $this->dbWrapper->insert('models', ['modelid' => $modelId, 'modeluri' => $namespace]);
-
-        return $modelId;
-    }
-
-    /**
-     * @author "Lionel Lecaque, <lionel@taotesting.com>"
-     *
      * @param string $namespace
      * @param string $data xml content
      * @return bool Were triples added?
      */
     public function createModel($namespace, $data)
     {
-        $modelId = $this->getModelId($namespace);
-        if ($modelId === false) {
-            common_Logger::d('modelId not found, need to add namespace ' . $namespace);
-            $modelId = $this->addNewModel($namespace);
-        }
+        $modelId = SmoothModel::DEFAULT_READ_ONLY_MODEL;
         $modelDefinition = new EasyRdf_Graph($namespace);
         if (is_file($data)) {
             $modelDefinition->parseFile($data);

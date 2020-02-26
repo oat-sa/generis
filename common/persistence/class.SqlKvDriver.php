@@ -24,6 +24,7 @@ use Doctrine\DBAL\ParameterType;
 /**
  * A key value driver based upon an existing sql persistence
  *
+ * @todo : Refactor driver specific stuff to dedicated implementation
  */
 class common_persistence_SqlKvDriver implements common_persistence_KvDriver
 {
@@ -81,7 +82,9 @@ class common_persistence_SqlKvDriver implements common_persistence_KvDriver
         try {
             $expire = is_null($ttl) ? 0 : time() + $ttl;
 
-            $encoded = base64_encode($value);
+            // we need int to have safe incr and decr methods
+            $encoded = is_int($value) ? $value : base64_encode($value);
+
             $platformName = $this->sqlPersistence->getPlatForm()->getName();
             $params = [':data' => $encoded, ':time' => $expire, ':id' => $id];
 
@@ -180,24 +183,42 @@ class common_persistence_SqlKvDriver implements common_persistence_KvDriver
     /**
      * Increment existing value
      * @param string $id
-     * @return mixed
+     * @return int The number of affected rows.
      */
     public function incr($id)
     {
+        switch ($this->sqlPersistence->getPlatForm()->getName()) {
+            case 'postgresql':
+                $statement = 'UPDATE kv_store SET kv_value = kv_value::integer + 1 WHERE kv_id = :id';
+                break;
+            case 'gcp-spanner':
+                $statement = 'UPDATE kv_store SET kv_value = CAST(CAST(kv_value as INT64) + 1 as string) WHERE kv_id = :id';
+                break;
+            default:
+                $statement = 'UPDATE kv_store SET kv_value = kv_value + 1 WHERE kv_id = :id';
+        }
         $params = [':id' => $id];
-        $statement = 'UPDATE kv_store SET kv_value = kv_value + 1 WHERE kv_id = :id';
         return $this->sqlPersistence->exec($statement, $params);
     }
 
     /**
      * Decrement existing value
      * @param $id
-     * @return mixed
+     * @return int The number of affected rows.
      */
     public function decr($id)
     {
+        switch ($this->sqlPersistence->getPlatForm()->getName()) {
+            case 'postgresql':
+                $statement = 'UPDATE kv_store SET kv_value = kv_value::integer - 1 WHERE kv_id = :id';
+                break;
+            case 'gcp-spanner':
+                $statement = 'UPDATE kv_store SET kv_value = CAST(CAST(kv_value as INT64) - 1 as string) WHERE kv_id = :id';
+                break;
+            default:
+                $statement = 'UPDATE kv_store SET kv_value = kv_value - 1 WHERE kv_id = :id';
+        }
         $params = [':id' => $id];
-        $statement = 'UPDATE kv_store SET kv_value = kv_value - 1 WHERE kv_id = :id';
         return $this->sqlPersistence->exec($statement, $params);
     }
 

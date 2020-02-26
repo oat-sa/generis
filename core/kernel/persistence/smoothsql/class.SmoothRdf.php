@@ -15,7 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2017 (original work) Open Assessment Technologies SA
+ * Copyright (c) 2017-2020 (original work) Open Assessment Technologies SA
  *
  */
 
@@ -64,21 +64,8 @@ class core_kernel_persistence_smoothsql_SmoothRdf implements RdfInterface
      */
     public function add(\core_kernel_classes_Triple $triple)
     {
-        if (!in_array($triple->modelid, $this->model->getReadableModels())) {
-            $this->model->addReadableModel($triple->modelid);
-        }
-
-        // TODO: inject ModelFactory
-        $modelFactory = new core_kernel_api_ModelFactory();
-        $returnValue = $modelFactory->addStatement(
-            $triple->modelid,
-            $triple->subject,
-            $triple->predicate,
-            $triple->object,
-            is_null($triple->lg) ? '' : $triple->lg,
-            is_null($triple->author) ? '' : $triple->author
-        );
-
+        $query = "INSERT INTO statements ( modelId, subject, predicate, object, l_language, epoch, author) VALUES ( ? , ? , ? , ? , ? , ?, ?);";
+        $success = $this->getPersistence()->exec($query, [$triple->modelid, $triple->subject, $triple->predicate, $triple->object, is_null($triple->lg) ? '' : $triple->lg, $this->getPersistence()->getPlatForm()->getNowExpression(), is_null($triple->author) ? '' : $triple->author]);
         if ($triple->predicate == OntologyRdfs::RDFS_SUBCLASSOF || $triple->predicate == OntologyRdf::RDF_TYPE) {
             $eventManager = $this->getServiceManager()->get(EventManager::CONFIG_ID);
             $eventManager->trigger(new ResourceCreated(new core_kernel_classes_Resource($triple->subject)));
