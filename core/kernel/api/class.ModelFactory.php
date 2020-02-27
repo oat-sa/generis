@@ -30,7 +30,6 @@ class core_kernel_api_ModelFactory
     /**
      * @param string $namespace
      * @param string $data xml content
-     * @return bool Were triples added?
      */
     public function createModel($namespace, $data)
     {
@@ -54,22 +53,18 @@ class core_kernel_api_ModelFactory
             }
         }
 
-        return $returnValue;
+        return true;
     }
 
     /**
      * Adds a statement to the ontology if it does not exist yet
      *
      * @author "Joel Bout, <joel@taotesting.com>"
-     *
-     * @param int    $modelId
+     * @param int $modelId
      * @param string $subject
      * @param string $predicate
      * @param string $object
      * @param string $lang
-     * @param string $author
-     *
-     * @return bool Was a row added?
      */
     private function addStatement($modelId, $subject, $predicate, $object, $lang = null)
     {
@@ -78,9 +73,9 @@ class core_kernel_api_ModelFactory
             [$modelId, $subject, $predicate, $object, (is_null($lang)) ? '' : $lang]
         );
 
-        if (intval($result->fetchColumn()) > 0) {
-            return false;
-        }
+        if (intval($result->fetchColumn()) === 0) {
+            $dbWrapper = core_kernel_classes_DbWrapper::singleton();
+            $date = $dbWrapper->getPlatForm()->getNowExpression();
 
             $dbWrapper->insert(
                 'statements',
@@ -91,7 +86,7 @@ class core_kernel_api_ModelFactory
                     'object' => $object,
                     'l_language' => is_null($lang) ? '' : $lang,
                     'author' => 'http://www.tao.lu/Ontologies/TAO.rdf#installator',
-                    'epoch' => $date
+                    'epoch' => $date,
                 ]
             );
         }
