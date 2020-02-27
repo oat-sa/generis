@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,14 +38,14 @@ class PlatformTest extends TestCase
     {
         $service = $this->getPersistenceManager();
         $service->registerPersistence('mysql', ['driver' => 'dbal', 'connection' => ['driver' => 'pdo_mysql']]);
-        $this->assertEquals('utf8',$service->getOption('persistences')['mysql']['connection']['charset']);
+        $this->assertEquals('utf8', $service->getOption('persistences')['mysql']['connection']['charset']);
     }
 
     public function testNotMysqlPersistenceWithCharset()
     {
         $service = $this->getPersistenceManager();
         $service->registerPersistence('notMysql', ['driver' => 'dbal', 'connection' => ['driver' => 'pdo_not_mysql']]);
-        $this->assertArrayNotHasKey('charset',$service->getOption('persistences')['notMysql']['connection']);
+        $this->assertArrayNotHasKey('charset', $service->getOption('persistences')['notMysql']['connection']);
     }
 
     public function testGetNowExpression()

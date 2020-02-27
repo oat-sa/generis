@@ -19,14 +19,14 @@
  * @author Patrick Plichart  <patrick@taotesting.com>
  * @license GPLv2
  * @package generis
- 
+
  *
  */
 
 /**
- * Interface of drivers that provide the advanced Key Value Persistence 
- * Some Key value provide hash possibilities 
- * 
+ * Interface of drivers that provide the advanced Key Value Persistence
+ * Some Key value provide hash possibilities
+ *
  * @author Patrick Plichart <patrick@taotesting.com>
  */
 interface common_persistence_AdvKvDriver extends common_persistence_KvDriver

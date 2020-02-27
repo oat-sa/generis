@@ -19,8 +19,8 @@
  *
  *
  */
-namespace oat\oatbox\task\TaskInterface;
 
+namespace oat\oatbox\task\TaskInterface;
 
 use oat\oatbox\task\Task;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
@@ -37,6 +37,4 @@ interface TaskRunner extends ServiceLocatorAwareInterface
      * @return \common_report_Report
      */
     public function run(Task $task);
-
-
 }

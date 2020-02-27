@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,7 +26,6 @@ use common_Exception;
 use common_exception_Error;
 use common_report_Report as Report;
 use common_report_Report;
-
 use oat\generis\model\fileReference\FileReferenceSerializer;
 use oat\generis\model\fileReference\UrlFileSerializer;
 use oat\oatbox\extension\script\ScriptAction;

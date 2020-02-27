@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -17,18 +18,18 @@
  * Copyright (c) 2013 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  *
  */
+
 use oat\oatbox\service\ConfigurableService;
 
 /**
  * Session implementation as a Key Value storage and using the persistence
- * 
+ *
  * @author Joel Bout <joel@taotesting.com>
  * @package generis
  */
-class common_session_php_KeyValueSessionHandler extends ConfigurableService
-    implements common_session_php_SessionHandler
+class common_session_php_KeyValueSessionHandler extends ConfigurableService implements common_session_php_SessionHandler
 {
-    const OPTION_PERSISTENCE = 'persistence'; 
+    const OPTION_PERSISTENCE = 'persistence';
     
     const KEY_NAMESPACE = "generis:session:";
     
@@ -37,7 +38,8 @@ class common_session_php_KeyValueSessionHandler extends ConfigurableService
      */
     private $sessionPersistence = null;
     
-    protected function getPersistence() {
+    protected function getPersistence()
+    {
         if (is_null($this->sessionPersistence)) {
             $this->sessionPersistence = common_persistence_KeyValuePersistence::getPersistence($this->getOption(self::OPTION_PERSISTENCE));
         }
@@ -48,7 +50,8 @@ class common_session_php_KeyValueSessionHandler extends ConfigurableService
      * (non-PHPdoc)
      * @see common_session_storage_SessionStorage::open()
      */
-    public function open($savePath, $sessionName){
+    public function open($savePath, $sessionName)
+    {
            return true;
     }
 
@@ -67,7 +70,7 @@ class common_session_php_KeyValueSessionHandler extends ConfigurableService
      */
     public function read($id)
     {
-        $session = $this->getPersistence()->get(self::KEY_NAMESPACE.$id); 
+        $session = $this->getPersistence()->get(self::KEY_NAMESPACE . $id);
         return is_string($session) ? $session : '';
     }
 
@@ -76,16 +79,17 @@ class common_session_php_KeyValueSessionHandler extends ConfigurableService
      * @see common_session_storage_SessionStorage::write()
      */
     public function write($id, $data)
-    {  
-        return $this->getPersistence()->set(self::KEY_NAMESPACE.$id, $data, (int) ini_get('session.gc_maxlifetime'));
+    {
+        return $this->getPersistence()->set(self::KEY_NAMESPACE . $id, $data, (int) ini_get('session.gc_maxlifetime'));
     }
 
     /**
      * (non-PHPdoc)
      * @see common_session_storage_SessionStorage::destroy()
      */
-    public function destroy($id){
-        $this->getPersistence()->del(self::KEY_NAMESPACE.$id);
+    public function destroy($id)
+    {
+        $this->getPersistence()->del(self::KEY_NAMESPACE . $id);
         return true;
     }
 
@@ -94,11 +98,11 @@ class common_session_php_KeyValueSessionHandler extends ConfigurableService
      * @see common_session_storage_SessionStorage::gc()
      */
     public function gc($maxlifetime)
-    { 
+    {
         //
-        //problem here either 
-        // solution 1 : do two explicit handlers for each specific persistence (Redis, SQL) 
-        // solution 2 : Check if the eprsistence is capable of autonomous garbage  
+        //problem here either
+        // solution 1 : do two explicit handlers for each specific persistence (Redis, SQL)
+        // solution 2 : Check if the eprsistence is capable of autonomous garbage
         //
         return true;
     }

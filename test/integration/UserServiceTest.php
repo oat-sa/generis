@@ -1,19 +1,20 @@
 <?php
-/**  
+
+/**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
  * of the License (non-upgradable).
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- * 
+ *
  * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
  *               2012-2017 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
@@ -282,38 +283,38 @@ class UserServiceTestCase extends GenerisPhpUnitTestRunner
         $subRole11 = new core_kernel_classes_Resource($prefix . 'subRole11');
         $subRole12 = new core_kernel_classes_Resource($prefix . 'subRole12');
         $subRole13 = new core_kernel_classes_Resource($prefix . 'subRole13');
-        $allRolesOf13 = array(
+        $allRolesOf13 = [
             $baseRole,
             $subRole1,
             $subRole11,
             $subRole12,
             $subRole13
-        );
+        ];
         
         $this->assertTrue($baseRole->exists());
         $this->assertTrue($subRole1->exists());
         
         $user = $this->service->addUser('user', 'password', $baseRole);
         $this->assertTrue($this->service->userHasRoles($user, $baseRole));
-        $this->assertFalse($this->service->userHasRoles($user, array(
+        $this->assertFalse($this->service->userHasRoles($user, [
             $baseRole,
             $subRole1
-        )));
+        ]));
         $user->delete();
         
         $user = $this->service->addUser('user', 'password', $subRole1);
         $this->assertTrue($this->service->userHasRoles($user, $baseRole));
         $this->assertTrue($this->service->userHasRoles($user, $subRole1));
         $this->assertFalse($this->service->userHasRoles($user, $subRole2));
-        $this->assertTrue($this->service->userHasRoles($user, array(
+        $this->assertTrue($this->service->userHasRoles($user, [
             $baseRole,
             $subRole1
-        )));
-        $this->assertFalse($this->service->userHasRoles($user, array(
+        ]));
+        $this->assertFalse($this->service->userHasRoles($user, [
             $baseRole,
             $subRole1,
             $subRole2
-        )));
+        ]));
         $user->delete();
         
         $user = $this->service->addUser('user', 'password', $subRole13);
@@ -501,7 +502,7 @@ class UserServiceTestCase extends GenerisPhpUnitTestRunner
     public function testClearRoles()
     {
         $prefix = LOCAL_NAMESPACE . '#';
-        $roleUris = array(
+        $roleUris = [
             $prefix . 'baseRole',
             $prefix . 'subRole1',
             $prefix . 'subRole2',
@@ -509,7 +510,7 @@ class UserServiceTestCase extends GenerisPhpUnitTestRunner
             $prefix . 'subRole11',
             $prefix . 'subRole12',
             $prefix . 'subRole13'
-        );
+        ];
         
         foreach ($roleUris as $ru) {
             $r = new core_kernel_classes_Class($ru);

@@ -1,23 +1,24 @@
 <?php
-/**  
+
+/**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
  * of the License (non-upgradable).
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- * 
+ *
  * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
  *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- * 
+ *
  */
 
 use oat\generis\model\data\ModelManager;
@@ -32,10 +33,9 @@ use oat\generis\model\WidgetRdf;
  * @access public
  * @author patrick.plichart@tudor.lu
  * @package generis
- 
+
  */
-class core_kernel_classes_Property
-    extends core_kernel_classes_Resource
+class core_kernel_classes_Property extends core_kernel_classes_Resource
 {
     // --- ASSOCIATIONS ---
 
@@ -51,7 +51,7 @@ class core_kernel_classes_Property
     public $domain = null;
 
     /**
-     * The property's range defines either the possibles class' instances 
+     * The property's range defines either the possibles class' instances
      * or a literal value if the range is the Literal class
      *
      * @access public
@@ -61,7 +61,7 @@ class core_kernel_classes_Property
 
     /**
      * The widget the can be used to represents the property.
-     * 
+     *
      * Dev note: this property is set to false because null is also a possible
      * valid value for this property. This will prevent the widget to be property
      * to be retrieved even if in cache, when no widget is set for the property.
@@ -92,7 +92,8 @@ class core_kernel_classes_Property
     /**
      * @return core_kernel_persistence_PropertyInterface
      */
-    private function getImplementation() {
+    private function getImplementation()
+    {
         return $this->getModel()->getRdfsInterface()->getPropertyImplementation();
     }
     
@@ -109,14 +110,13 @@ class core_kernel_classes_Property
     public function __construct($uri, $debug = '')
     {
         
-		parent::__construct($uri,$debug);
-		$this->lgDependent = null;
-		$this->multiple = null;
-        
+        parent::__construct($uri, $debug);
+        $this->lgDependent = null;
+        $this->multiple = null;
     }
 
     /**
-     * 
+     *
      * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      */
     public function feed()
@@ -125,7 +125,6 @@ class core_kernel_classes_Property
         $this->getRange();
         $this->getDomain();
         $this->isLgDependent();
-        
     }
 
     /**
@@ -138,14 +137,14 @@ class core_kernel_classes_Property
     public function getDomain()
     {
         $returnValue = null;
-        if (is_null($this->domain)){
-        	$this->domain = new core_kernel_classes_ContainerCollection(new common_Object(__METHOD__));
-			$domainValues = $this->getPropertyValues($this->getProperty(OntologyRdfs::RDFS_DOMAIN));
-			foreach ($domainValues as $domainValue){
-				$this->domain->add($this->getClass($domainValue));
-			}
-		}
-		$returnValue = $this->domain;
+        if (is_null($this->domain)) {
+            $this->domain = new core_kernel_classes_ContainerCollection(new common_Object(__METHOD__));
+            $domainValues = $this->getPropertyValues($this->getProperty(OntologyRdfs::RDFS_DOMAIN));
+            foreach ($domainValues as $domainValue) {
+                $this->domain->add($this->getClass($domainValue));
+            }
+        }
+        $returnValue = $this->domain;
         
 
         return $returnValue;
@@ -159,24 +158,24 @@ class core_kernel_classes_Property
      * @param  Class class
      * @return boolean
      */
-    public function setDomain( core_kernel_classes_Class $class)
+    public function setDomain(core_kernel_classes_Class $class)
     {
         $returnValue = (bool) false;
  
-        if(!is_null($class)){
-        	foreach($this->getDomain()->getIterator() as $domainClass){
-        		if ($class->equals($domainClass)) {
-        			$returnValue = true;
-        			break;
-        		}
-        	}
-        	if(!$returnValue){
-        		$this->setPropertyValue($this->getProperty(OntologyRdfs::RDFS_DOMAIN), $class->getUri());
-        		if(!is_null($this->domain)){
-        			$this->domain->add($class);
-        		}
-        		$returnValue = true;
-        	}
+        if (!is_null($class)) {
+            foreach ($this->getDomain()->getIterator() as $domainClass) {
+                if ($class->equals($domainClass)) {
+                    $returnValue = true;
+                    break;
+                }
+            }
+            if (!$returnValue) {
+                $this->setPropertyValue($this->getProperty(OntologyRdfs::RDFS_DOMAIN), $class->getUri());
+                if (!is_null($this->domain)) {
+                    $this->domain->add($class);
+                }
+                $returnValue = true;
+            }
         }
         return (bool) $returnValue;
     }
@@ -192,16 +191,16 @@ class core_kernel_classes_Property
     {
         $returnValue = null;
    
-		if (is_null($this->range)){
-			$rangeProperty = $this->getProperty(OntologyRdfs::RDFS_RANGE);
+        if (is_null($this->range)) {
+            $rangeProperty = $this->getProperty(OntologyRdfs::RDFS_RANGE);
             $rangeValues = $this->getPropertyValues($rangeProperty);
 
-            if(sizeOf($rangeValues)>0){
+            if (sizeOf($rangeValues) > 0) {
                 $returnValue = $this->getClass($rangeValues[0]);
             }
-			$this->range = $returnValue;
-		}
-		$returnValue = $this->range;
+            $this->range = $returnValue;
+        }
+        $returnValue = $this->range;
         return $returnValue;
     }
 
@@ -213,12 +212,12 @@ class core_kernel_classes_Property
      * @param  Class class
      * @return boolean
      */
-    public function setRange( core_kernel_classes_Class $class)
+    public function setRange(core_kernel_classes_Class $class)
     {
-        $returnValue = (bool) false;  
+        $returnValue = (bool) false;
         $returnValue = $this->getImplementation()->setRange($this, $class);
-        if ($returnValue){
-        	$this->range = $class;
+        if ($returnValue) {
+            $this->range = $class;
         }
         return (bool) $returnValue;
     }
@@ -234,10 +233,10 @@ class core_kernel_classes_Property
     public function getWidget()
     {
         if ($this->widget === false) {
-			$this->widget = $this->getOnePropertyValue($this->getProperty(WidgetRdf::PROPERTY_WIDGET));
-		}
-		
-		return $this->widget;
+            $this->widget = $this->getOnePropertyValue($this->getProperty(WidgetRdf::PROPERTY_WIDGET));
+        }
+        
+        return $this->widget;
     }
 
     /**
@@ -266,7 +265,7 @@ class core_kernel_classes_Property
     public function setLgDependent($isLgDependent)
     {
         $this->getImplementation()->setLgDependent($this, $isLgDependent);
-    	$this->lgDependent = $isLgDependent;
+        $this->lgDependent = $isLgDependent;
     }
 
     /**
@@ -280,17 +279,16 @@ class core_kernel_classes_Property
     {
         $returnValue = (bool) false;
 
-        if(is_null($this->multiple )){
-        	$multipleProperty = $this->getProperty(GenerisRdf::PROPERTY_MULTIPLE);
-			$multiple = $this->getOnePropertyValue($multipleProperty);
-			 
-			if(is_null($multiple)){
-				$returnValue = false;
-			}
-			else{
-				$returnValue = ($multiple->getUri() == GenerisRdf::GENERIS_TRUE);
-			}
-        	$this->multiple = $returnValue;
+        if (is_null($this->multiple)) {
+            $multipleProperty = $this->getProperty(GenerisRdf::PROPERTY_MULTIPLE);
+            $multiple = $this->getOnePropertyValue($multipleProperty);
+             
+            if (is_null($multiple)) {
+                $returnValue = false;
+            } else {
+                $returnValue = ($multiple->getUri() == GenerisRdf::GENERIS_TRUE);
+            }
+            $this->multiple = $returnValue;
         }
  
         $returnValue = $this->multiple;
@@ -309,9 +307,8 @@ class core_kernel_classes_Property
     public function setMultiple($isMultiple)
     {
         
-    	$this->getImplementation()->setMultiple($this, $isMultiple);
-    	$this->multiple = $isMultiple;
-        
+        $this->getImplementation()->setMultiple($this, $isMultiple);
+        $this->multiple = $isMultiple;
     }
 
     /**
@@ -328,5 +325,4 @@ class core_kernel_classes_Property
         $returnValue = $this->getImplementation()->delete($this, $deleteReference);
         return (bool) $returnValue;
     }
-
 }

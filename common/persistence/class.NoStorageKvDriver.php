@@ -29,14 +29,15 @@
 class common_persistence_NoStorageKvDriver implements common_persistence_KvDriver, common_persistence_Purgable
 {
     /**
-     * 
+     *
      * @see common_persistence_Driver::connect()
      */
-    function connect($id, array $params){
+    function connect($id, array $params)
+    {
         return new common_persistence_KeyValuePersistence($params, $this);
     }
     /**
-     * 
+     *
      * @see common_persistence_KvDriver::set()
      */
     public function set($id, $value, $ttl = null, $nx = false)
@@ -45,26 +46,28 @@ class common_persistence_NoStorageKvDriver implements common_persistence_KvDrive
     }
     
     /**
-     * 
+     *
      * @see common_persistence_KvDriver::get()
      */
-    public function get($id){
+    public function get($id)
+    {
         return false;
     }
     
     /**
-     * 
+     *
      * @see common_persistence_KvDriver::exists()
      */
-    public function exists($id){
+    public function exists($id)
+    {
         return false;
-        
     }
     /**
-     * 
+     *
      * @see common_persistence_KvDriver::del()
      */
-    public function del($id){
+    public function del($id)
+    {
         return true;
     }
 
@@ -89,11 +92,11 @@ class common_persistence_NoStorageKvDriver implements common_persistence_KvDrive
     }
 
     /**
-     * 
+     *
      * @see common_persistence_Purgable::purge()
      */
-    public function purge(){
+    public function purge()
+    {
         return true;
-        
     }
 }

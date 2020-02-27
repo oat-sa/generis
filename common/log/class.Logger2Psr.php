@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -15,11 +16,12 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2016 (original work) Open Assessment Technologies SA
- * 
+ *
  */
 
 use Psr\Log\LogLevel;
 use Psr\Log\AbstractLogger;
+
 /**
  * A wrapper for the old Logger
  *
@@ -33,7 +35,7 @@ class common_log_Logger2Psr extends AbstractLogger
      * A map between the loggers
      * @var array
      */
-    private static $map = array(
+    private static $map = [
         LogLevel::EMERGENCY => common_Logger::FATAL_LEVEL,
         LogLevel::ALERT => common_Logger::FATAL_LEVEL,
         LogLevel::CRITICAL => common_Logger::ERROR_LEVEL,
@@ -42,12 +44,12 @@ class common_log_Logger2Psr extends AbstractLogger
         LogLevel::INFO => common_Logger::INFO_LEVEL,
         LogLevel::NOTICE => common_Logger::DEBUG_LEVEL,
         LogLevel::DEBUG => common_Logger::DEBUG_LEVEL,
-    );
+    ];
 
     /**
      * @var array   The common_logger level - PSR3 log level conversion.
      */
-    private static $reverseMap = array(
+    private static $reverseMap = [
         common_Logger::TRACE_LEVEL   => LogLevel::DEBUG,
         't'                          => LogLevel::DEBUG,
 
@@ -65,7 +67,7 @@ class common_log_Logger2Psr extends AbstractLogger
 
         common_Logger::FATAL_LEVEL   => LogLevel::CRITICAL,
         'f'                          => LogLevel::CRITICAL,
-    );
+    ];
 
     /**
      * @var common_Logger
@@ -81,7 +83,7 @@ class common_log_Logger2Psr extends AbstractLogger
      * (non-PHPdoc)
      * @see \Psr\Log\LoggerInterface::log()
      */
-    public function log($level, $message, array $context = array())
+    public function log($level, $message, array $context = [])
     {
         $errorLevel = isset(self::$map[$level]) ? self::$map[$level] : common_Logger::ERROR_LEVEL;
         $this->logger->log($errorLevel, $message, $context);

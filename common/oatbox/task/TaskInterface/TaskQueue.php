@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,7 +20,6 @@
  */
 
 namespace oat\oatbox\task\TaskInterface;
-
 
 use oat\oatbox\task\Queue;
 use oat\oatbox\task\Task;
@@ -102,5 +102,4 @@ interface TaskQueue extends Queue
      * @param \core_kernel_classes_Resource|null $resource - placeholder resource to be linked with task.
      */
     public function linkTask(Task $task, \core_kernel_classes_Resource $resource = null);
-
 }

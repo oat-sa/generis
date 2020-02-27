@@ -30,7 +30,6 @@ trait common_persistence_sql_MultipleOperations
     public function insertMultiple($tableName, array $data, array $types = [])
     {
         if (is_array($data) && count($data) > 0) {
-
             $platform = $this->getPlatform();
 
             $quotedColumnIdentifiers = array_map(

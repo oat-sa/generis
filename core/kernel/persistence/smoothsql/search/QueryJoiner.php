@@ -41,21 +41,21 @@ use oat\search\UsableTrait\SortableTrait;
  *
  * @author Christophe GARCIA <christopheg@taotesting.com>
  */
-class QueryJoiner implements DriverSensitiveInterface, SortableInterface, LimitableInterface, ParentFluateInterface, OptionsInterface {
-
+class QueryJoiner implements DriverSensitiveInterface, SortableInterface, LimitableInterface, ParentFluateInterface, OptionsInterface
+{
     use SortableTrait;
 
-use LimitableTrait;
+    use LimitableTrait;
 
-use ParentFluateTrait;
+    use ParentFluateTrait;
 
-use DriverSensitiveTrait;
+    use DriverSensitiveTrait;
 
-use OptionsTrait;
+    use OptionsTrait;
 
     /**
      *
-     * @var QueryBuilderInterface 
+     * @var QueryBuilderInterface
      */
     protected $query;
 
@@ -67,46 +67,50 @@ use OptionsTrait;
 
     /**
      *
-     * @var string 
+     * @var string
      */
     protected $on;
     protected $count = false;
 
     /**
-     * 
+     *
      * @param QueryBuilderInterface $query
      * @return $this
      */
-    public function setQuery(QueryBuilderInterface $query) {
+    public function setQuery(QueryBuilderInterface $query)
+    {
         $this->query = $query->sort([])->setOffset(null)->setLimit(null);
         return $this;
     }
 
     /**
-     * 
+     *
      * @param QueryBuilderInterface $query
      * @return $this
      */
-    public function join(QueryBuilderInterface $query) {
+    public function join(QueryBuilderInterface $query)
+    {
         $this->join = $query->sort([])->setOffset(null)->setLimit(null);
         return $this;
     }
 
     /**
-     * 
+     *
      * @param string $predicate1
      * @param string $predicate2
      * @return $this
      */
-    public function on($predicate) {
+    public function on($predicate)
+    {
         $this->on = $predicate;
         return $this;
     }
 
     /**
-     * 
+     *
      */
-    public function execute() {
+    public function execute()
+    {
         /* @var $gateWay GateWay */
         $gateWay = $this->getParent();
         $mainQuery = $gateWay->getSerialyser()->setCriteriaList($this->query)->serialyse();
@@ -114,7 +118,8 @@ use OptionsTrait;
         return $this->createMetaQuery($mainQuery, $joinQuery, false);
     }
 
-    public function count() {
+    public function count()
+    {
         /* @var $gateWay GateWay */
         $gateWay = $this->getParent();
         $mainQuery = $gateWay->getSerialyser()->setCriteriaList($this->query)->serialyse();
@@ -123,11 +128,12 @@ use OptionsTrait;
     }
 
     /**
-     * 
+     *
      * @param type $query
      * @return string
      */
-    protected function addLimit($query) {
+    protected function addLimit($query)
+    {
         $limit = $this->getLimit();
         $offset = $this->getOffset();
         if (intval($limit) > 0) {
@@ -143,7 +149,8 @@ use OptionsTrait;
      * create query begining
      * @return $this
      */
-    public function getLanguage() {
+    public function getLanguage()
+    {
         $options = $this->getOptions();
         $language = '';
         if (array_key_exists('language', $options)) {
@@ -158,12 +165,13 @@ use OptionsTrait;
 
     /**
      * return an SQL string with language filter condition
-     * 
+     *
      * @param string $language
      * @param boolean $emptyAvailable
      * @return string
      */
-    public function setLanguageCondition($language, $emptyAvailable = false) {
+    public function setLanguageCondition($language, $emptyAvailable = false)
+    {
         $languageField = $this->getDriverEscaper()->reserved('l_language');
         $languageValue = $this->getDriverEscaper()->escape($language);
         $sql = ' AND ( ';
@@ -176,9 +184,10 @@ use OptionsTrait;
     }
 
     /**
-     * 
+     *
      */
-    protected function sortedQuery($main, $join) {
+    protected function sortedQuery($main, $join)
+    {
 
         $sort = $this->getSort();
         $index = 1;
@@ -194,7 +203,6 @@ use OptionsTrait;
         $sortKeys = [];
 
         foreach ($sort as $predicate => $sortOrder) {
-
             $alias = 'J' . $index;
             $sorterAlias = 'sorter' . $index;
 
@@ -226,7 +234,6 @@ use OptionsTrait;
         $index = 1;
         $sortBy = [];
         foreach ($sort as $predicate => $sortOrder) {
-
             $alias = 'J' . $index;
             $orderSub = 'SUBJ' . $index;
             $orderAlias = 'ORDERJ' . $index;
@@ -257,7 +264,7 @@ use OptionsTrait;
                     $this->getDriverEscaper()->reserved('R') . '.' . $this->getDriverEscaper()->reserved('object') . ' ) ';
 
             $sortBy[] = $this->getDriverEscaper()->reserved('sorter' . $index) . ' ' . $this->getDriverEscaper()->dbCommand($sortOrder);
-            $index ++;
+            $index++;
         }
 
         $query .= $this->getDriverEscaper()->dbCommand('GROUP') . ' ' . $this->getDriverEscaper()->dbCommand('BY') . ' ' .
@@ -270,12 +277,13 @@ use OptionsTrait;
     }
 
     /**
-     * 
+     *
      * @param string $main
      * @param string $join
      * @return string
      */
-    protected function unSortedQuery($main, $join) {
+    protected function unSortedQuery($main, $join)
+    {
 
         $query = $this->getDriverEscaper()->dbCommand('SELECT') . ' ' .
                 $this->getDriverEscaper()->dbCommand('DISTINCT') . ' ' .
@@ -327,7 +335,8 @@ use OptionsTrait;
      * @param string $join
      * @return string
      */
-    protected function createMetaQuery($main, $join, $count) {
+    protected function createMetaQuery($main, $join, $count)
+    {
         $sort = $this->getSort();
 
         if (empty($sort)) {
@@ -345,5 +354,4 @@ use OptionsTrait;
         }
         return $this->addLimit($query);
     }
-
 }

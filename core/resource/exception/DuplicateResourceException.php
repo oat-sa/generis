@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -15,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2016 (original work) Open Assessment Technologies SA
- * 
+ *
  */
 
 namespace oat\generis\model\resource\exception;
@@ -23,16 +24,17 @@ namespace oat\generis\model\resource\exception;
 /**
  * @author Christophe GARCIA <christopheg@taotesting.com>
  */
-class DuplicateResourceException extends \common_Exception  {
+class DuplicateResourceException extends \common_Exception
+{
     
-    public function __construct($type , array $values) {
+    public function __construct($type, array $values)
+    {
         $message = 'Resource ' . $type . ' already duplicate for ';
         
         foreach ($values as $key => $value) {
-            $message .= $key . ' = ' . $value .' ';
+            $message .= $key . ' = ' . $value . ' ';
         }
         
         parent::__construct($message);
     }
-    
 }

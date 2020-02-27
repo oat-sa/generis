@@ -1,23 +1,23 @@
 <?php
-/**  
+/**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
  * of the License (non-upgradable).
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- * 
+ *
  * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
  *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- * 
+ *
  */
 
 /**
@@ -26,10 +26,9 @@
  * @access public
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
  * @package generis
- 
+
  */
-class common_configuration_FileSystemComponent
-    extends common_configuration_Component
+class common_configuration_FileSystemComponent extends common_configuration_Component
 {
     // --- ASSOCIATIONS ---
 
@@ -119,8 +118,8 @@ class common_configuration_FileSystemComponent
     }
     
     /**
-     * Set $this->recursive value 
-     * 
+     * Set $this->recursive value
+     *
      * @access public
      * @author Aleh Hutnikau, <hutnikau@1pt.com>
      * @param boolean $recursive
@@ -132,8 +131,8 @@ class common_configuration_FileSystemComponent
     }
     
     /**
-     * Get $this->recursive value 
-     * 
+     * Get $this->recursive value
+     *
      * @access public
      * @author Aleh Hutnikau, <hutnikau@1pt.com>
      * @return boolean
@@ -208,12 +207,10 @@ class common_configuration_FileSystemComponent
     {
         
         if (!empty($expectedRights) && preg_match('/^r*w*x*$/', $expectedRights) !== 0) {
-            $this->expectedRights = $expectedRights;    
-        }
-        else{
+            $this->expectedRights = $expectedRights;
+        } else {
             throw new common_configuration_MalformedRightsException("Malformed rights. Expected format is r|rw|rwx.");
         }
-        
     }
 
     /**
@@ -291,9 +288,10 @@ class common_configuration_FileSystemComponent
             $location = $this->getLocation();
         }
 
-        if (!file_exists($location) 
+        if (
+            !file_exists($location)
             || !is_readable($location)
-            || !isset($rule) 
+            || !isset($rule)
             || !is_string($rule)
             || !in_array($rule, ['Readable', 'Writable', 'Executable'])
         ) {
@@ -302,7 +300,6 @@ class common_configuration_FileSystemComponent
             $funcName = 'is_' . strtolower($rule);
             $returnValue = $funcName($location);
         } else {
-
             $iterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($location, \RecursiveDirectoryIterator::SKIP_DOTS));
 
             try {
@@ -316,7 +313,6 @@ class common_configuration_FileSystemComponent
             } catch (\UnexpectedValueException  $e) {
                 $returnValue = false;
             }
-
         }
 
         return $returnValue;
@@ -384,5 +380,4 @@ class common_configuration_FileSystemComponent
 
         return $returnValue;
     }
-
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,18 +37,18 @@ class UrlFileSerializer extends ConfigurableService implements FileReferenceSeri
         if ($abstraction instanceof File) {
             $baseDir = $this->getRootDirectory($abstraction->getFileSystemId());
 
-            return 'file://'.urlencode($abstraction->getFileSystemId()).'/'.urlencode(
-                    $baseDir->getRelPath($abstraction)
-                );
+            return 'file://' . urlencode($abstraction->getFileSystemId()) . '/' . urlencode(
+                $baseDir->getRelPath($abstraction)
+            );
         } elseif ($abstraction instanceof Directory) {
             $baseDir = $this->getRootDirectory($abstraction->getFileSystemId());
 
-            return 'dir://'.urlencode($abstraction->getFileSystemId()).'/'.urlencode(
-                    $baseDir->getRelPath($abstraction)
-                );
+            return 'dir://' . urlencode($abstraction->getFileSystemId()) . '/' . urlencode(
+                $baseDir->getRelPath($abstraction)
+            );
         } else {
             throw new FileSerializerException(
-                __CLASS__.'::'.__FUNCTION__.' expects parameter to be an instance of Directory or File'
+                __CLASS__ . '::' . __FUNCTION__ . ' expects parameter to be an instance of Directory or File'
             );
         }
     }
@@ -65,7 +66,7 @@ class UrlFileSerializer extends ConfigurableService implements FileReferenceSeri
         } elseif ($type == 'dir') {
             return $this->unserializeDirectory($serial);
         } else {
-            throw new FileSerializerException('Unsupported type "'.$type.'" in '.__CLASS__);
+            throw new FileSerializerException('Unsupported type "' . $type . '" in ' . __CLASS__);
         }
     }
 
@@ -105,7 +106,7 @@ class UrlFileSerializer extends ConfigurableService implements FileReferenceSeri
         } elseif ($serial instanceof \core_kernel_classes_Literal) {
             $serial = $serial->__toString();
         } elseif (!is_string($serial)) {
-            throw new FileSerializerException('Unsupported serial "'.gettype($serial).'" in '.__CLASS__);
+            throw new FileSerializerException('Unsupported serial "' . gettype($serial) . '" in ' . __CLASS__);
         }
 
         return $serial;
@@ -123,7 +124,7 @@ class UrlFileSerializer extends ConfigurableService implements FileReferenceSeri
         $serial = $this->cleanSerial($serial);
         $parts = explode('/', substr($serial, strpos($serial, '://') + 3), 2);
         if (count($parts) != 2) {
-            throw new FileSerializerException('Unsupported dir in '.__CLASS__);
+            throw new FileSerializerException('Unsupported dir in ' . __CLASS__);
         }
 
         return ['fs' => $parts[0], 'path' => $parts[1]];
@@ -148,5 +149,4 @@ class UrlFileSerializer extends ConfigurableService implements FileReferenceSeri
         // nothing to do
         return true;
     }
-
 }

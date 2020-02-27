@@ -7,8 +7,8 @@ use oat\oatbox\service\ServiceManager;
 
 array_shift($argv);
 $actionId = $argv[0];
-$sleep = (integer) $argv[1];
-$timeout = (integer) $argv[2];
+$sleep = (int) $argv[1];
+$timeout = (int) $argv[2];
 
 $service = getInstance();
 $factory = $service->getLockFactory();

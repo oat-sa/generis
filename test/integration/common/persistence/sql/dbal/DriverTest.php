@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,14 +20,14 @@
 
 namespace oat\generis\test\integration\common\persistence\sql\dbal;
 
-
 use common_persistence_sql_Platform;
 use common_persistence_SqlPersistence;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DBALException;
 use oat\generis\test\TestCase;
 
-class TestDbalDriver extends \common_persistence_sql_dbal_Driver  {
+class TestDbalDriver extends \common_persistence_sql_dbal_Driver
+{
     public function setDriverManagerClass($class)
     {
         parent::setDriverManagerClass($class);
@@ -45,7 +46,8 @@ class TestDbalDriverManager
      * @return mixed
      * @throws \Doctrine\DBAL\DBALException
      */
-    public static function getConnection($params, $conf) {
+    public static function getConnection($params, $conf)
+    {
         if (!self::$try || self::$try > self::$allowed) {
             self::$try++;
             throw new DBALException('Testing');
@@ -53,7 +55,8 @@ class TestDbalDriverManager
         return self::$connection;
     }
 
-    public static function setConnection($connection) {
+    public static function setConnection($connection)
+    {
         self::$try = 0;
         self::$connection = $connection;
     }

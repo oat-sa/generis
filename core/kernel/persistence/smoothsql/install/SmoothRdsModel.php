@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,7 +41,7 @@ class SmoothRdsModel
         $table->addColumn('modelid', 'string', ['length' => 36, 'notnull' => true]);
         $table->addColumn('modeluri', 'string', ['length' => 255]);
         $table->setPrimaryKey(['modelid']);
-        $table->addOption('engine' , 'MyISAM');
+        $table->addOption('engine', 'MyISAM');
 
         // Statements table.
         $table = $schema->createTable('statements');
@@ -58,7 +59,7 @@ class SmoothRdsModel
         $table->setPrimaryKey(['id']);
         $table->addIndex(['subject', 'predicate'], 'k_sp');
         $table->addIndex(['predicate', 'object'], 'k_po');
-        $table->addOption('engine' , 'MyISAM');
+        $table->addOption('engine', 'MyISAM');
 
         return $schema;
     }

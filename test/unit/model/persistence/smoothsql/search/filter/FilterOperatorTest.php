@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -17,6 +18,7 @@
  * Copyright (c) (original work) 2017 Open Assessment Technologies SA
  *
  */
+
 namespace oat\generis\test\integration\model\persistence\smoothsql\search\filter;
 
 use oat\generis\model\kernel\persistence\smoothsql\search\filter\FilterOperator;
@@ -24,15 +26,15 @@ use oat\generis\test\TestCase;
 
 class FilterOperatorTest extends TestCase
 {
-	public function testOperatorsCreateSuccessfully()
-	{
-		$this->assertInstanceOf(FilterOperator::class, FilterOperator::createEqual());
-		$this->assertSame(FilterOperator::EQUAL, FilterOperator::createEqual()->getValue());
+    public function testOperatorsCreateSuccessfully()
+    {
+        $this->assertInstanceOf(FilterOperator::class, FilterOperator::createEqual());
+        $this->assertSame(FilterOperator::EQUAL, FilterOperator::createEqual()->getValue());
 
-		$this->assertInstanceOf(FilterOperator::class, FilterOperator::createGreaterThanEqual());
-		$this->assertSame(FilterOperator::GREATER_THAN_EQUAL, FilterOperator::createGreaterThanEqual()->getValue());
+        $this->assertInstanceOf(FilterOperator::class, FilterOperator::createGreaterThanEqual());
+        $this->assertSame(FilterOperator::GREATER_THAN_EQUAL, FilterOperator::createGreaterThanEqual()->getValue());
 
-		$this->assertInstanceOf(FilterOperator::class, FilterOperator::createLike());
-		$this->assertSame(FilterOperator::CONTAIN, FilterOperator::createLike()->getValue());
-	}
+        $this->assertInstanceOf(FilterOperator::class, FilterOperator::createLike());
+        $this->assertSame(FilterOperator::CONTAIN, FilterOperator::createLike()->getValue());
+    }
 }

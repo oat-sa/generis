@@ -53,8 +53,8 @@ class LockServiceTest extends TestCase
         pclose($pipe2);
         pclose($pipe3);
         pclose($pipe4);
-        $this->assertTrue((time() - $time) >= ($sleep*3));
-        $this->assertTrue((time() - $time) < ($sleep*4));
+        $this->assertTrue((time() - $time) >= ($sleep * 3));
+        $this->assertTrue((time() - $time) < ($sleep * 4));
     }
 
     public function testLockTimeout()
@@ -112,5 +112,4 @@ class LockServiceTest extends TestCase
         $reflectionClass = new \ReflectionClass($service->getOption($service::OPTION_PERSISTENCE_CLASS));
         return $reflectionClass->getName() === NoLockStorage::class;
     }
-
 }

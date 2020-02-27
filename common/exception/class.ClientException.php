@@ -22,11 +22,9 @@
  * @access public
  * @author Patrick Plichart
  * @package generis
- 
+
  */
-abstract class common_exception_ClientException
-    extends common_Exception
-    implements common_exception_UserReadableException
+abstract class common_exception_ClientException extends common_Exception implements common_exception_UserReadableException
 {
 
     public function __construct($message = null, $code = 0)
@@ -36,6 +34,4 @@ abstract class common_exception_ClientException
         }
         parent::__construct($message, $code);
     }
-} 
-
-?>
+}

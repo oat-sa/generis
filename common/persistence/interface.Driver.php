@@ -19,7 +19,7 @@
  * @author Lionel Lecaque  <lionel@taotesting.com>
  * @license GPLv2
  * @package generis
- 
+
  *
  */
 
@@ -35,5 +35,4 @@ interface common_persistence_Driver
      * @return common_persistence_Persistence
      */
     function connect($id, array $params);
-
 }

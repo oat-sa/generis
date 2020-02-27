@@ -1,22 +1,24 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
  * of the License (non-upgradable).
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- * 
+ *
  * Copyright (c) 2018 (original work) Open Assessment Technologies SA;
- * 
+ *
  */
+
 namespace oat\generis\test;
 
 use oat\generis\model\kernel\persistence\smoothsql\install\SmoothRdsModel;
@@ -44,7 +46,7 @@ class GenerisTestCase extends TestCase
         $schema = $rds->getSchemaManager()->createSchema();
         $schema = SmoothRdsModel::addSmoothTables($schema);
         $queries = $rds->getPlatform()->schemaToSql($schema);
-        foreach ($queries as $query){
+        foreach ($queries as $query) {
             $rds->query($query);
         }
         
@@ -61,9 +63,9 @@ class GenerisTestCase extends TestCase
         $session->setServiceLocator($sl);
         $model = new \core_kernel_persistence_smoothsql_SmoothModel([
             \core_kernel_persistence_smoothsql_SmoothModel::OPTION_PERSISTENCE => 'mockSql',
-            \core_kernel_persistence_smoothsql_SmoothModel::OPTION_READABLE_MODELS=> [123],
-            \core_kernel_persistence_smoothsql_SmoothModel::OPTION_WRITEABLE_MODELS=> [123],
-            \core_kernel_persistence_smoothsql_SmoothModel::OPTION_NEW_TRIPLE_MODEL=> 123,
+            \core_kernel_persistence_smoothsql_SmoothModel::OPTION_READABLE_MODELS => [123],
+            \core_kernel_persistence_smoothsql_SmoothModel::OPTION_WRITEABLE_MODELS => [123],
+            \core_kernel_persistence_smoothsql_SmoothModel::OPTION_NEW_TRIPLE_MODEL => 123,
             'cache' => 'smoothcache'
         ]);
         $model->setServiceLocator($sl);

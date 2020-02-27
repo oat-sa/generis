@@ -1,22 +1,24 @@
 <?php
-/**  
+
+/**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
  * of the License (non-upgradable).
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- * 
+ *
  * Copyright (c) (original work) 2015 Open Assessment Technologies SA
- * 
+ *
  */
+
 namespace oat\generis\test\unit\model\persistence\smoothsql;
 
 use \core_kernel_persistence_smoothsql_SmoothRdf;
@@ -28,7 +30,7 @@ class SmoothRdfTest extends TestCase
     /**
      * @expectedException common_Exception
      * @expectedExceptionMessage Not implemented
-     * 
+     *
      * @author Lionel Lecaque, lionel@taotesting.com
      */
     public function testGet()
@@ -46,7 +48,7 @@ class SmoothRdfTest extends TestCase
     /**
      * @expectedException common_Exception
      * @expectedExceptionMessage Not implemented
-     * 
+     *
      * @author Lionel Lecaque, lionel@taotesting.com
      */
     public function testSearch()
@@ -62,7 +64,7 @@ class SmoothRdfTest extends TestCase
     }
     
     /**
-     * 
+     *
      * @author Lionel Lecaque, lionel@taotesting.com
      */
     public function testAdd()
@@ -80,7 +82,7 @@ class SmoothRdfTest extends TestCase
         $triple->predicate = 'predicateUri';
         $triple->object = 'objectUri';
         
-        $persistence->exec($query, array(
+        $persistence->exec($query, [
             22,
             'subjectUri',
             'predicateUri',
@@ -88,10 +90,10 @@ class SmoothRdfTest extends TestCase
             '',
             'now',
             ''
-        ))->willReturn(true);
+        ])->willReturn(true);
         
         $model = $this->prophesize('\core_kernel_persistence_smoothsql_SmoothModel');
-        $model->getReadableModels()->willReturn(array(22));
+        $model->getReadableModels()->willReturn([22]);
         $model->getPersistence()->willReturn($persistence->reveal());
         
         $rdf = new core_kernel_persistence_smoothsql_SmoothRdf($model->reveal());
@@ -119,7 +121,7 @@ class SmoothRdfTest extends TestCase
         $triple->object = 'objectUri';
         $triple->author = 'JohnDoe';
 
-        $persistence->exec($query, array(
+        $persistence->exec($query, [
             22,
             'subjectUri',
             'predicateUri',
@@ -127,10 +129,10 @@ class SmoothRdfTest extends TestCase
             '',
             'now',
             'JohnDoe'
-        ))->willReturn(true);
+        ])->willReturn(true);
 
         $model = $this->prophesize('\core_kernel_persistence_smoothsql_SmoothModel');
-        $model->getReadableModels()->willReturn(array(22));
+        $model->getReadableModels()->willReturn([22]);
         $model->getPersistence()->willReturn($persistence->reveal());
 
         $rdf = new core_kernel_persistence_smoothsql_SmoothRdf($model->reveal());
@@ -139,7 +141,7 @@ class SmoothRdfTest extends TestCase
     }
     
     /**
-     * 
+     *
      * @author Lionel Lecaque, lionel@taotesting.com
      */
     public function testRemove()
@@ -154,12 +156,12 @@ class SmoothRdfTest extends TestCase
         $triple->predicate = 'predicateUri';
         $triple->object = 'objectUri';
         
-        $persistence->exec($query, array(
+        $persistence->exec($query, [
             'subjectUri',
             'predicateUri',
             'objectUri',
             ''
-        ))->willReturn(true);
+        ])->willReturn(true);
         
         $model = $prophet->prophesize('\core_kernel_persistence_smoothsql_SmoothModel');
         $model->getPersistence()->willReturn($persistence->reveal());
@@ -170,5 +172,3 @@ class SmoothRdfTest extends TestCase
         $this->assertTrue($rdf->remove($triple));
     }
 }
-
-?>
