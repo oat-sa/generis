@@ -19,6 +19,7 @@
  *
  */
 
+use oat\generis\Helper\UuidPrimaryKeyTrait;
 use oat\generis\model\data\RdfInterface;
 use oat\generis\model\OntologyRdf;
 use oat\generis\model\OntologyRdfs;
@@ -34,6 +35,7 @@ use oat\generis\model\data\event\ResourceCreated;
  */
 class core_kernel_persistence_smoothsql_SmoothRdf implements RdfInterface
 {
+    use UuidPrimaryKeyTrait;
     /**
      * @var core_kernel_persistence_smoothsql_SmoothModel
      */
@@ -64,14 +66,27 @@ class core_kernel_persistence_smoothsql_SmoothRdf implements RdfInterface
      */
     public function add(\core_kernel_classes_Triple $triple)
     {
-        $query = "INSERT INTO statements ( modelId, subject, predicate, object, l_language, epoch, author) VALUES ( ? , ? , ? , ? , ? , ?, ?);";
-        $success = $this->getPersistence()->exec($query, [$triple->modelid, $triple->subject, $triple->predicate, $triple->object, is_null($triple->lg) ? '' : $triple->lg, $this->getPersistence()->getPlatForm()->getNowExpression(), is_null($triple->author) ? '' : $triple->author]);
+        $query = 'INSERT INTO statements ( id, modelId, subject, predicate, object, l_language, epoch, author) VALUES ( ?, ? , ? , ? , ? , ? , ?, ?);';
+
+        $success = $this->getPersistence()
+            ->exec($query,
+                [
+                    $this->getUniquePrimaryKey(),
+                    $triple->modelid,
+                    $triple->subject,
+                    $triple->predicate,
+                    $triple->object,
+                    is_null($triple->lg) ? '' : $triple->lg,
+                    $this->getPersistence()->getPlatForm()->getNowExpression(),
+                    is_null($triple->author) ? '' : $triple->author
+                ]
+            );
         if ($triple->predicate == OntologyRdfs::RDFS_SUBCLASSOF || $triple->predicate == OntologyRdf::RDF_TYPE) {
             $eventManager = $this->model->getServiceLocator()->get(EventManager::SERVICE_ID);
             $eventManager->trigger(new ResourceCreated($this->model->getResource($triple->subject)));
         }
 
-        return $returnValue;
+        return $success;
     }
 
     /**

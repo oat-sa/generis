@@ -327,36 +327,18 @@ class core_kernel_impl_ApiModelOO extends core_kernel_impl_Api implements core_k
      */
     public function setStatement($subject, $predicate, $object, $language)
     {
-        $returnValue = (bool) false;
+        $onto = $this->getServiceLocator()->get(\oat\generis\model\data\Ontology::SERVICE_ID);
+        $localNs = common_ext_NamespaceManager::singleton()->getLocalNamespace();
 
-        
-        $dbWrapper  = core_kernel_classes_DbWrapper::singleton();
-        $platform   = $dbWrapper->getPlatForm();
-        $localNs    = common_ext_NamespaceManager::singleton()->getLocalNamespace();
-        $mask       = 'yyy[admin,administrators,authors]';  //now it's the default right mode
-        $query = 'INSERT INTO statements (modelid,subject,predicate,object,l_language,author,epoch)
-        			VALUES  (?, ?, ?, ?, ?, ? , ?);';
+        $triple = new core_kernel_classes_Triple();
+        $triple->subject = $subject;
+        $triple->predicate = $predicate;
+        $triple->object = $object;
+        $triple->modelid = $localNs->getModelId();
+        $triple->author = \common_session_SessionManager::getSession()->getUserUri();
+        $triple->lg = $language;
 
-        try {
-            $returnValue = $dbWrapper->exec($query, [
-                $localNs->getModelId(),
-                $subject,
-                $predicate,
-                $object,
-                $language,
-                \common_session_SessionManager::getSession()->getUserUri(),
-                $platform->getNowExpression()
-
-            ]);
-        } catch (DBALException $e) {
-            if ($e->getCode() !== '00000') {
-                throw new common_Exception("Unable to setStatement (SPO) {$subject}, {$predicate}, {$object} : " . $e->getMessage());
-            }
-        }
-        
-        
-
-        return (bool) $returnValue;
+        return $onto->add($triple);
     }
 
     /**
@@ -525,5 +507,10 @@ class core_kernel_impl_ApiModelOO extends core_kernel_impl_Api implements core_k
      */
     private function __construct()
     {
+    }
+
+    public function getServiceLocator()
+    {
+        return \oat\oatbox\service\ServiceManager::getServiceManager();
     }
 }
