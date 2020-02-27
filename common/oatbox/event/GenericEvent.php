@@ -36,11 +36,11 @@ class GenericEvent implements Event
      * @var string
      */
     private $eventName;
-/**
-     * Parameters of the event
-     *
-     * @var array()
-     */
+    /**
+         * Parameters of the event
+         *
+         * @var array()
+         */
     private $params;
     
     /**

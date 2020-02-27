@@ -40,18 +40,18 @@ abstract class ConfigurableService extends Configurable implements ServiceLocato
 {
     use ServiceManagerAwareTrait;
 
-/** @var string Documentation header */
-    
+    /** @var string Documentation header */
+
 
     protected $header = null;
     private $subServices = [];
-/**
-     * Get the service manager
-     *
-     * @deprecated Use $this->propagate instead
-     *
-     * @param $serviceManager
-     */
+    /**
+         * Get the service manager
+         *
+         * @deprecated Use $this->propagate instead
+         *
+         * @param $serviceManager
+         */
     public function setServiceManager($serviceManager)
     {
         $this->setServiceLocator($serviceManager);

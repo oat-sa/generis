@@ -34,7 +34,7 @@ class TermFactoryTest extends GenerisPhpUnitTestRunner
     {
         GenerisPhpUnitTestRunner::initTest();
     }
-    
+
     public function testCreateConst()
     {
         $constantResource = core_kernel_rules_TermFactory::createConst('test1');
@@ -42,45 +42,45 @@ class TermFactoryTest extends GenerisPhpUnitTestRunner
         $typeUri = array_keys($constantResource->getTypes());
         $this->assertEquals($typeUri[0], RulesRdf::CLASS_TERM_CONST);
         $this->assertTrue(count($typeUri) == 1);
-            
+
         $termValueProperty = new core_kernel_classes_Property(RulesRdf::PROPERTY_TERM_VALUE);
         $logicalOperatorProperty = new core_kernel_classes_Property(RulesRdf::PROPERTY_HASLOGICALOPERATOR);
         $terminalExpressionProperty = new core_kernel_classes_Property(RulesRdf::PROPERTY_TERMINAL_EXPRESSION);
-        
+
         $term = $constantResource->getUniquePropertyValue($termValueProperty);
         $this->assertIsA($term, 'core_kernel_classes_Literal');
         $this->assertEquals($term, 'test1');
-        
+
         $operator = $constantResource->getUniquePropertyValue($logicalOperatorProperty);
         $this->assertIsA($operator, 'core_kernel_classes_Resource');
         $this->assertEquals($operator->getUri(), RulesRdf::INSTANCE_EXISTS_OPERATOR_URI);
-    
+
         $terminalExpression = $constantResource->getUniquePropertyValue($terminalExpressionProperty);
         $this->assertIsA($terminalExpression, 'core_kernel_classes_Resource');
         $this->assertEquals($terminalExpression->getUri(), $constantResource->getUri());
 
         $constantResource->delete();
     }
-    
+
     public function testCreateSPX()
     {
         $booleanClass = new core_kernel_classes_Class(GenerisRdf::GENERIS_BOOLEAN);
         $maybe = core_kernel_classes_ResourceFactory::create($booleanClass, 'testCase testCreateSPX', __METHOD__);
-        
+
         $SPXResource = core_kernel_rules_TermFactory::createSPX($maybe, new core_kernel_classes_Property(OntologyRdfs::RDFS_COMMENT));
         $this->assertIsA($SPXResource, 'core_kernel_rules_Term');
-        
+
         $subjectProperty = new core_kernel_classes_Property(RulesRdf::PROPERTY_TERM_SPX_SUBJET);
         $predicateProperty = new core_kernel_classes_Property(RulesRdf::PROPERTY_TERM_SPX_PREDICATE);
-        
+
         $subject = $SPXResource->getUniquePropertyValue($subjectProperty);
-         $this->assertIsA($subject, 'core_kernel_classes_Resource');
+        $this->assertIsA($subject, 'core_kernel_classes_Resource');
         $this->assertEquals($subject->getUri(), $maybe->getUri());
-        
-         $predicate = $SPXResource->getUniquePropertyValue($predicateProperty);
+
+        $predicate = $SPXResource->getUniquePropertyValue($predicateProperty);
         $this->assertIsA($predicate, 'core_kernel_classes_Resource');
         $this->assertEquals($predicate->getUri(), OntologyRdfs::RDFS_COMMENT);
-        
+
         $SPXResource->delete();
         $maybe->delete();
     }

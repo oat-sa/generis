@@ -41,7 +41,7 @@ class common_report_Report implements IteratorAggregate, JsonSerializable
      * @var int
      */
     private $type;
-    
+
     /**
      * message of the report
      * @var string
@@ -53,13 +53,13 @@ class common_report_Report implements IteratorAggregate, JsonSerializable
      * @var array
      */
     private $elements;
-    
+
     /**
      * Attached data
      * @var mixed
      */
     private $data = null;
-    
+
     /**
      * convenience method to create a simple success report
      *
@@ -71,7 +71,7 @@ class common_report_Report implements IteratorAggregate, JsonSerializable
     {
         return new static(self::TYPE_SUCCESS, $message, $data);
     }
-    
+
     /**
      * convenience method to create a simple failure report
      *
@@ -87,7 +87,7 @@ class common_report_Report implements IteratorAggregate, JsonSerializable
         }
         return $report;
     }
-    
+
     /**
      * convenience method to create a simple info report
      *
@@ -99,7 +99,7 @@ class common_report_Report implements IteratorAggregate, JsonSerializable
     {
         return new static(self::TYPE_INFO, $message, $data);
     }
-    
+
     public function __construct($type, $message = '', $data = null)
     {
         $this->type = $type;
@@ -107,7 +107,7 @@ class common_report_Report implements IteratorAggregate, JsonSerializable
         $this->elements = [];
         $this->data = $data;
     }
-    
+
     /**
      * Change the title of the report
      * @deprecated
@@ -117,7 +117,7 @@ class common_report_Report implements IteratorAggregate, JsonSerializable
     {
         $this->setMessage($message);
     }
-    
+
     /**
      * please use getMessage instead
      *
@@ -128,7 +128,7 @@ class common_report_Report implements IteratorAggregate, JsonSerializable
     {
         return $this->getMessage();
     }
-    
+
     /**
      * Change the message
      *
@@ -138,7 +138,7 @@ class common_report_Report implements IteratorAggregate, JsonSerializable
     {
         $this->message = $message;
     }
-    
+
     /**
      * Get report message
      *
@@ -148,7 +148,7 @@ class common_report_Report implements IteratorAggregate, JsonSerializable
     {
         return $this->message;
     }
-    
+
     /**
      * change the type of the report
      *
@@ -158,7 +158,7 @@ class common_report_Report implements IteratorAggregate, JsonSerializable
     {
         $this->type = $type;
     }
-    
+
     /**
      * returns the type of the report
      * @return int
@@ -167,12 +167,12 @@ class common_report_Report implements IteratorAggregate, JsonSerializable
     {
         return $this->type;
     }
-    
+
     public function getData()
     {
         return $this->data;
     }
-    
+
     public function setData($data = null)
     {
         $this->data = $data;
@@ -251,7 +251,7 @@ class common_report_Report implements IteratorAggregate, JsonSerializable
             \RecursiveIteratorIterator::SELF_FIRST
         );
     }
-    
+
     /**
      * Whenever or not teh report contains errors
      * @return boolean
@@ -269,7 +269,7 @@ class common_report_Report implements IteratorAggregate, JsonSerializable
     {
         return $this->contains(self::TYPE_SUCCESS);
     }
-    
+
     /**
      * Whenever or not the type can be found in the report
      *
@@ -285,8 +285,8 @@ class common_report_Report implements IteratorAggregate, JsonSerializable
         }
         return false;
     }
-    
-    
+
+
     /**
      * Add something to the report
      * @param mixed $mixed accepts Arrays, Reports, ReportElements and Exceptions
@@ -304,7 +304,7 @@ class common_report_Report implements IteratorAggregate, JsonSerializable
             }
         }
     }
-    
+
     /**
      * Returns an iterator over the children
      *
@@ -314,7 +314,7 @@ class common_report_Report implements IteratorAggregate, JsonSerializable
     {
         return new ArrayIterator($this->elements);
     }
-    
+
     /**
      * Whenever or not there are child reports
      *
@@ -346,7 +346,7 @@ class common_report_Report implements IteratorAggregate, JsonSerializable
      * @param Json|Array $data
      * @return common_report_Report|null
      * @throws common_exception_Error
-        */
+     */
     public static function jsonUnserialize($data)
     {
 
@@ -372,7 +372,7 @@ class common_report_Report implements IteratorAggregate, JsonSerializable
      * Prepares object data for valid converting to json
      *
      * @return array - prepared array for json_encode function
-        */
+     */
     public function JsonSerialize()
     {
         return [

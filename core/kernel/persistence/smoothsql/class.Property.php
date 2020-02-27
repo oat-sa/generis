@@ -46,7 +46,7 @@ class core_kernel_persistence_smoothsql_Property extends core_kernel_persistence
      * @var Resource
      */
     public static $instance = null;
-// --- OPERATIONS ---
+    // --- OPERATIONS ---
 
 
     /**
@@ -114,10 +114,13 @@ class core_kernel_persistence_smoothsql_Property extends core_kernel_persistence
     public function delete(core_kernel_classes_Resource $resource, $deleteReference = false)
     {
         $returnValue = (bool) false;
-//delete all values of the property to delete
-        if ($deleteReference) {
-            $query = 'DELETE FROM "statements" WHERE "predicate" = ? AND ' . $this->getModelWriteSqlCondition();
-            $returnValue = $this->getPersistence()->exec($query, [$resource->getUri()]);
+
+        
+        
+        //delete all values of the property to delete
+        if ($deleteReference){
+			$query = 'DELETE FROM "statements" WHERE "predicate" = ? AND '.$this->getModelWriteSqlCondition();
+	        $returnValue = $this->getPersistence()->exec($query, array($resource->getUri()));
         }
         $returnValue = parent::delete($resource, $deleteReference);
         return (bool) $returnValue;

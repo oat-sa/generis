@@ -15,28 +15,32 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2016 (original work) Open Assessment Technologies SA;
+ * Copyright (c) 2020 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  *
  */
 
-namespace oat\oatbox\event;
+namespace oat\oatbox\user;
 
-use oat\oatbox\service\ServiceManager;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-
-/**
- * Trait EventManagerAwareTrait
- * @package tao
- */
-trait EventManagerAwareTrait
+interface UserService
 {
+    const SERVICE_ID = 'generis/UserService';
+
     /**
-     * @return EventManager
+     * Will return the list of the first X users matching the search string
+     * @param string $searchString
+     * @return User[] List of user matching the search string
      */
-    public function getEventManager()
-    {
-        return ($this instanceof ServiceLocatorAwareInterface)
-            ? $this->getServiceLocator()->get(EventManager::SERVICE_ID)
-            : ServiceManager::getServiceManager()->get(EventManager::SERVICE_ID);
-    }
+    public function findUser($searchString);
+
+    /**
+     * @param string $userId
+     * @return User
+     */
+    public function getUser($userId);
+
+    /**
+     * @param string[] $userIds
+     * @return User[]
+     */
+    public function getUsers($userIds);
 }

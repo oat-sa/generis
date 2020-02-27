@@ -44,7 +44,7 @@ class core_kernel_rules_Rule extends core_kernel_classes_Resource
      * @var Expression
      */
     public $expression = null;
-// --- OPERATIONS ---
+    // --- OPERATIONS ---
 
     /**
      * Short description of method getExpression

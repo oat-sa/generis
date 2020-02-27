@@ -170,14 +170,14 @@ to test the pasword entered
      * @return array
      */
     public function getAllowedRoles();
-/**
-     * Returns a Role (as a Resource) which represents the default role of the
-     * If a user has to be created but no Role is given to him, it will receive
-     * role.
-     *
-     * @access public
-     * @author Jerome Bogaerts, <jerome@taotesting.com>
-     * @return core_kernel_classes_Resource
-    */
+    /**
+         * Returns a Role (as a Resource) which represents the default role of the
+         * If a user has to be created but no Role is given to him, it will receive
+         * role.
+         *
+         * @access public
+         * @author Jerome Bogaerts, <jerome@taotesting.com>
+         * @return core_kernel_classes_Resource
+        */
     public function getDefaultRole();
 } /* end of interface core_kernel_users_UsersManagement */

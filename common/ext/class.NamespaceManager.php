@@ -26,34 +26,11 @@
  * @access public
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
  * @package generis
-
+ *
+ * @deprecated
  */
 class common_ext_NamespaceManager
 {
-
-    // --- ASSOCIATIONS ---
-    // generateAssociationEnd :
-
-    // --- ATTRIBUTES ---
-
-    /**
-     * the single instance of the NamespaceManager
-     *
-     * @access private
-     * @var NamespaceManager
-     */
-    private static $instance = null;
-
-    /**
-     * Stock the list of all module's namespace, to be retrieved more
-     *
-     * @access protected
-     * @var array
-     */
-    protected $namespaces = [];
-
-    // --- OPERATIONS ---
-
     /**
      * Private constructor to force the use of the singleton
      *
@@ -66,7 +43,7 @@ class common_ext_NamespaceManager
     }
 
     /**
-     * Main entry point to retrieve the unique NamespaceManager instance
+     * Main entry point to retrieve the NamespaceManager instance
      *
      * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
@@ -74,19 +51,7 @@ class common_ext_NamespaceManager
      */
     public static function singleton()
     {
-        $returnValue = null;
-
-        
-        
-        if (is_null(self::$instance)) {
-            $class = __CLASS__;             //used in case of subclassing
-            self::$instance = new $class();
-        }
-        $returnValue = self::$instance;
-        
-        
-
-        return $returnValue;
+        return new self();
     }
 
     /**
@@ -98,29 +63,7 @@ class common_ext_NamespaceManager
      */
     public function getAllNamespaces()
     {
-        $returnValue = [];
-
-        
-        
-        if (count($this->namespaces) == 0) {
-            $db = core_kernel_classes_DbWrapper::singleton();
-            $query = 'SELECT modelid, modeluri FROM models';
-            $result = $db->query($query);
-            
-            while ($row = $result->fetch()) {
-                $id     = $row['modelid'];
-                $uri    = $row['modeluri'];
-                $this->namespaces[$id] = $uri;
-            }
-        }
-        
-        foreach ($this->namespaces as $id => $uri) {
-            $returnValue[$uri] = new common_ext_Namespace($id, $uri);
-        }
-
-        
-
-        return (array) $returnValue;
+        return [];
     }
 
     /**
@@ -132,11 +75,11 @@ class common_ext_NamespaceManager
      */
     public function getLocalNamespace()
     {
-        $localModelUri = LOCAL_NAMESPACE;
-        if (substr($localModelUri, -1) != '#') {
-            $localModelUri .= '#';
-        }
-        return $this->getNamespace($localModelUri);
+
+        return new common_ext_Namespace(
+            core_kernel_persistence_smoothsql_SmoothModel::DEFAULT_WRITABLE_MODEL,
+            LOCAL_NAMESPACE . '#'
+        );
     }
 
     /**
@@ -144,30 +87,12 @@ class common_ext_NamespaceManager
      *
      * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  modelid
+     * @param  $modelid
      * @return common_ext_Namespace
      */
     public function getNamespace($modelid)
     {
-        $returnValue = null;
-    
-        if (count($this->namespaces) == 0) {
-            $this->getAllNamespaces();  //load the namespaces attribute
-        }
-        
-        //get modelId from modelUri
-        if (is_string($modelid)) {
-            $modelid = array_search($modelid, $this->namespaces);
-        }
-        
-        //get namespace from modelId
-        if (is_int($modelid)) {
-            if (isset($this->namespaces[$modelid])) {
-                $returnValue = new common_ext_Namespace($modelid, $this->namespaces[$modelid]);
-            }
-        }
-
-        return $returnValue;
+        return null;
     }
 
     /**
@@ -179,7 +104,5 @@ class common_ext_NamespaceManager
      */
     public function reset()
     {
-        
-        $this->namespaces = [];
     }
 }

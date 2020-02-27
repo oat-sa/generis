@@ -47,8 +47,8 @@ class FilterTest extends TestCase
     {
         $operatorMock = $this->getMockBuilder(FilterOperator::class)->disableOriginalConstructor()->getMock();
         $operatorMock
-        ->method('getValue')
-        ->willReturn($operator);
+            ->method('getValue')
+            ->willReturn($operator);
         $filter = new Filter($key, $value, $operatorMock, $orConditions);
 
         return $filter;

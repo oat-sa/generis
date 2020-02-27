@@ -57,7 +57,7 @@ class core_kernel_users_AuthAdapter implements common_user_auth_Adapter
      * @var $password
      */
     private $password;
-    
+
     /**
      *
      * @param unknown $login
@@ -68,20 +68,20 @@ class core_kernel_users_AuthAdapter implements common_user_auth_Adapter
         $this->username = $login;
         $this->password = $password;
     }
-    
+
     /**
-        * (non-PHPdoc)
-        * @see common_user_auth_Adapter::authenticate()
-        */
+     * (non-PHPdoc)
+     * @see common_user_auth_Adapter::authenticate()
+     */
     public function authenticate()
     {
-        
+
         $userClass = new core_kernel_classes_Class(GenerisRdf::CLASS_GENERIS_USER);
         $filters = [GenerisRdf::PROPERTY_USER_LOGIN => $this->username];
         $options = ['like' => false, 'recursive' => true];
         $users = $userClass->searchInstances($filters, $options);
-        
-        
+
+
         if (count($users) > 1) {
             // Multiple users matching
             throw new common_exception_InconsistentData("Multiple Users found with the same login '" . $this->username . "'.");
@@ -96,13 +96,13 @@ class core_kernel_users_AuthAdapter implements common_user_auth_Adapter
             // should never happen, added for integrity
             throw new core_kernel_users_InvalidLoginException();
         }
-        
+
         $userResource = current($users);
         $hash = $userResource->getUniquePropertyValue(new core_kernel_classes_Property(GenerisRdf::PROPERTY_USER_PASSWORD));
         if (!core_kernel_users_Service::getPasswordHash()->verify($this->password, $hash)) {
             throw new core_kernel_users_InvalidLoginException();
         }
-        
+
         return new core_kernel_users_GenerisUser($userResource);
     }
 }

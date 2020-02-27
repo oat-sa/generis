@@ -54,19 +54,19 @@ class common_uri_MicrotimeUriProvider implements common_uri_UriProvider
         $uriExist = false;
         do {
             list($usec, $sec) = explode(" ", microtime());
-               $uri = $modelUri . 'i' . (str_replace(".", "", $sec . "" . $usec));
+            $uri = $modelUri . 'i' . (str_replace(".", "", $sec . "" . $usec));
             $sqlResult = $dbWrapper->query("SELECT COUNT(subject) AS num FROM statements WHERE subject = '" . $uri . "'");
-            
+
             if ($row = $sqlResult->fetch()) {
                 $found = (int)$row['num'];
                 if ($found > 0) {
                     $uriExist = true;
                 }
-                
+
                 $sqlResult->closeCursor();
             }
         } while ($uriExist);
-        
+
         $returnValue = $uri;
         
 

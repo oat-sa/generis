@@ -452,7 +452,7 @@ class common_ext_Extension implements ServiceManagerAwareInterface
                 try {
                     $this->getExtensionManager()->getExtensionById($extId);
                 } catch (common_ext_ManifestNotFoundException $e) {
-                    throw new common_ext_MissingExtensionException($e->getExtensionId() . ' not found but required for ' . $this->getId());
+                    throw new common_ext_MissingExtensionException($e->getExtensionId() . ' not found but required for ' . $this->getId(), $e->getExtensionId());
                 }
             }
             

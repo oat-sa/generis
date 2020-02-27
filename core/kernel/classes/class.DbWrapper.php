@@ -189,7 +189,7 @@ class core_kernel_classes_DbWrapper
     {
         $returnValue = null;
 
-
+        
         //         $trace=debug_backtrace();
         //         $caller=array_shift($trace);
         //         $caller=array_shift($trace);
@@ -234,7 +234,6 @@ class core_kernel_classes_DbWrapper
     public function insert($tableName, array $data)
     {
         $this->incrementNrOfQueries();
-
         return $this->persistence->insert($tableName, $data);
     }
 
@@ -501,7 +500,7 @@ class core_kernel_classes_DbWrapper
     {
         return $this->persistence->quote($parameter);
     }
-
+    
     public function quoteIdentifier($parameter)
     {
         return $this->persistence->getPlatForm()->quoteIdentifier($parameter);

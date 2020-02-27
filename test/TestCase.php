@@ -48,7 +48,9 @@ abstract class TestCase extends UnitTestCase
         $serviceLocatorProphecy = $this->prophesize(ServiceLocatorInterface::class);
         foreach ($services as $key => $service) {
             $serviceLocatorProphecy->get($key)->willReturn($service);
+            $serviceLocatorProphecy->has($key)->willReturn(true);
         }
+        $serviceLocatorProphecy->has(Argument::any())->willReturn(false);
 
         return $serviceLocatorProphecy->reveal();
     }

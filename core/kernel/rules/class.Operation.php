@@ -45,21 +45,21 @@ class core_kernel_rules_Operation extends core_kernel_rules_Term
      * @var Term
      */
     private $firstOperation = null;
-/**
-     * Short description of attribute secondOperation
-     *
-     * @access private
-     * @var Term
-     */
+    /**
+         * Short description of attribute secondOperation
+         *
+         * @access private
+         * @var Term
+         */
     private $secondOperation = null;
-/**
-     * Short description of attribute arithmeticOperator
-     *
-     * @access private
-     * @var Resource
-     */
+    /**
+         * Short description of attribute arithmeticOperator
+         *
+         * @access private
+         * @var Resource
+         */
     private $arithmeticOperator = null;
-// --- OPERATIONS ---
+    // --- OPERATIONS ---
 
     /**
      * Short description of method getFirstOperation
@@ -136,7 +136,7 @@ class core_kernel_rules_Operation extends core_kernel_rules_Term
         $firstPart = $this->getFirstOperation()->evaluate($variable);
         $secondPart = $this->getSecondOperation()->evaluate($variable);
         if ($firstPart instanceof core_kernel_classes_ContainerCollection) {
-        //if we have more than one result we only take the Literal label
+            //if we have more than one result we only take the Literal label
             $nbLiteral = 0;
             $iterator = $firstPart->getIterator();
             foreach ($iterator as $first) {
@@ -152,9 +152,9 @@ class core_kernel_rules_Operation extends core_kernel_rules_Term
         }
 
 
-          
+
         if ($secondPart instanceof core_kernel_classes_ContainerCollection) {
-//if we have more than one result we only take the resource label
+            //if we have more than one result we only take the resource label
             $nbLiteral = 0;
             $iterator = $secondPart->getIterator();
             foreach ($secondPart->getIterator() as $second) {
@@ -173,7 +173,7 @@ class core_kernel_rules_Operation extends core_kernel_rules_Term
         common_Logger::d('Second Part : ' . $secondPart, ['Generis Operation']);
         $returnValue = $this->evaluateRecursiveOperation($firstPart, $secondPart, $operator);
         common_Logger::i('Operation value: ' . $returnValue, ['Generis Operation']);
-      
+
         return $returnValue;
     }
 
@@ -220,7 +220,7 @@ class core_kernel_rules_Operation extends core_kernel_rules_Term
                 break;
 
             }
-                          
+
             default : {
                 throw new common_Exception('problem evaluating operation, operator do not match with operands');
 

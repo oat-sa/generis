@@ -58,15 +58,15 @@ class core_kernel_classes_ClassFactory
         $newUri = (!empty($uri)) ? self::checkProvidedUri($uri) : common_Utils::getNewUri();
         $newResource = new core_kernel_classes_Class($newUri);
         $propertiesValues = [OntologyRdf::RDF_TYPE => $clazz->getUri()];
-      
+
         if (!empty($label)) {
             $propertiesValues[OntologyRdfs::RDFS_LABEL] = $label;
         }
-     
+
         if (!empty($comment)) {
             $propertiesValues[OntologyRdfs::RDFS_COMMENT] = $comment;
         }
-       
+
         $check = $newResource->setPropertiesValues($propertiesValues);
         if ($check) {
             $returnValue = $newResource;

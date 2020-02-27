@@ -105,13 +105,13 @@ class common_log_UDPAppender extends common_log_BaseAppender
         }
         if ($this->resource !== false) {
             $message = json_encode([
-            's' => $item->getSeverity(),
-            'd' => $item->getDescription(),
-            'p' => $this->prefix,
-            't' => $item->getTags(),
-            'f' => $item->getCallerFile(),
-            'l' => $item->getCallerLine(),
-            'b' => $item->getBacktrace()
+                's' => $item->getSeverity(),
+                'd' => $item->getDescription(),
+                'p' => $this->prefix,
+                't' => $item->getTags(),
+                'f' => $item->getCallerFile(),
+                'l' => $item->getCallerLine(),
+                'b' => $item->getBacktrace()
             ]);
             @socket_sendto($this->resource, $message, strlen($message), 0, $this->host, $this->port);
             //ignore errors, socket might already be closed because php is shutting down
@@ -131,7 +131,7 @@ class common_log_UDPAppender extends common_log_BaseAppender
         // don't close since we might still need it
         /*
         if (!is_null($this->resource) && $this->resource !== false) {
-        socket_close($this->resource);
+            socket_close($this->resource);
         }
         parent::__destruct();
         */

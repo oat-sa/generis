@@ -79,7 +79,7 @@ class TaoLog extends ConfigurableService implements LoggerInterface
         } else {
             $requestURI = implode(' ', $_SERVER['argv']);
         }
-        
+
         //reformat input
         if (is_object($message)) {
             $message = 'Message is object of type ' . gettype($message);
@@ -88,7 +88,7 @@ class TaoLog extends ConfigurableService implements LoggerInterface
             if ($level <= \common_Logger::DEBUG_LEVEL) {
                 $message .= ' : ' . PHP_EOL . var_export($message, true);
             }
-              //same for arrays
+            //same for arrays
         } elseif (is_array($message) && $level <= \common_Logger::DEBUG_LEVEL) {
             $message = 'Message is an array : ' . PHP_EOL . var_export($message, true);
         } else {

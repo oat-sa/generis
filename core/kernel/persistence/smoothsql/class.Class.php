@@ -124,7 +124,7 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
     public function getParentClasses(core_kernel_classes_Class $resource, $recursive = false)
     {
         $returnValue = [];
-        
+
         $sqlQuery = 'SELECT object FROM statements WHERE subject = ?  AND predicate = ?';
 
         $sqlResult = $this->getPersistence()->query($sqlQuery, [$resource->getUri(), OntologyRdfs::RDFS_SUBCLASSOF]);
@@ -259,10 +259,10 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
         if ($uri == '') {
             $subject = $this->getServiceLocator()->get(UriProvider::SERVICE_ID)->provide();
         } elseif ($uri[0] == '#') { //$uri should start with # and be well formed
-            $modelUri = common_ext_NamespaceManager::singleton()->getLocalNamespace()->getUri();
-            $subject = rtrim($modelUri, '#') . $uri;
+                $modelUri = common_ext_NamespaceManager::singleton()->getLocalNamespace()->getUri();
+                $subject = rtrim($modelUri, '#') . $uri;
         } else {
-            $subject = $uri;
+                $subject = $uri;
         }
 
         $returnValue = $this->getModel()->getResource($subject);
@@ -459,12 +459,12 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
         if ($class->exists()) {
             $inValues = implode(',', $uris);
             $query = 'DELETE FROM statements WHERE subject IN (' . $inValues . ')';
-            
+
             if (true === $deleteReference) {
                 $params[] = $resource->getUri();
                 $query .= ' OR object IN (' . $inValues . ')';
             }
-            
+
             try {
                 // Even if now rows are affected, we consider the resources
                 // as deleted.
@@ -495,7 +495,7 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
                 $rdftypes[] = $subClass->getUri();
             }
         }
-    
+
         // Check additional classes...
         if (isset($options['additionalClasses'])) {
             foreach ($options['additionalClasses'] as $aC) {
@@ -517,7 +517,7 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
         $order = (isset($options['order']) === false) ? '' : $options['order'];
         $orderdir = (isset($options['orderdir']) === false) ? 'ASC' : $options['orderdir'];
 
-        if (ServiceManager::getServiceManager()->has(ComplexSearchService::SERVICE_ID)) {
+        if(ServiceManager::getServiceManager()->has(ComplexSearchService::SERVICE_ID)) {
             $search = $this->getModel()->getSearchInterface();
             $query = $search->getQuery($this->getModel(), $rdftypes, $propertyFilters, $and, $like, $lang, $offset, $limit, $order, $orderdir);
         } else {

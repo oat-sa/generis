@@ -266,12 +266,12 @@ class common_configuration_ComponentFactory
                             case 'PHPRuntime':
                                 $max = null;
                                 if (!empty($values['max'])) {
-                                          $max = $values['max'];
+                                    $max = $values['max'];
                                 }
                                 
                                 if (empty($values['min'])) {
-                                       $msg = "Mandatory attribute 'min' is missing.";
-                                       throw new common_configuration_ComponentFactoryException($msg);
+                                    $msg = "Mandatory attribute 'min' is missing.";
+                                    throw new common_configuration_ComponentFactoryException($msg);
                                 }
                                 
                                 $returnValue = self::buildPHPRuntime($values['min'], $max, $optional);
@@ -297,12 +297,12 @@ class common_configuration_ComponentFactory
                                     throw new common_configuration_ComponentFactoryException($msg);
                                 }
                                 
-                                   $min = null;
+                                $min = null;
                                 if (!empty($values['min'])) {
                                     $min = $values['min'];
                                 }
                                 
-                                   $max = null;
+                                $max = null;
                                 if (!empty($values['max'])) {
                                     $max = $values['max'];
                                 }

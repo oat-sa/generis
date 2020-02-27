@@ -52,7 +52,7 @@ class common_ext_Namespace
      */
     public function __construct($id = '', $uri = '')
     {
-        $this->modelId = $id;
+        $this->modelId = (string) $id;
         $this->uri = $uri;
     }
 
@@ -108,10 +108,7 @@ class common_ext_Namespace
         }
 
         // TODO refactor this to use triple store abstraction.
-        if (false === $db->exec("DELETE FROM models WHERE modelid = ?", [$this->getModelId()])) {
-            return false;
-        }
 
-        return true;
+        return $db->exec("DELETE FROM models WHERE modelid = ?", [$this->getModelId()]);
     }
 }

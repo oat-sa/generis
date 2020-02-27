@@ -115,8 +115,8 @@ abstract class common_cache_PartitionedCachable implements common_Serializable
                     $serials = [];
                     foreach ($value as $key => $subvalue) {
                         if (is_object($subvalue) && $subvalue instanceof self) {
-                               $containsSerializable = true;
-                               $serials[$key] = $subvalue->getSerial();
+                            $containsSerializable = true;
+                            $serials[$key] = $subvalue->getSerial();
                         } else {
                             $containsNonSerializable = true;
                         }
@@ -207,7 +207,7 @@ abstract class common_cache_PartitionedCachable implements common_Serializable
                         }
                     }
                 } elseif (is_object($value) && $value instanceof self) {
-                     $returnValue[] = $value;
+                        $returnValue[] = $value;
                 }
             }
         }

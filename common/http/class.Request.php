@@ -219,9 +219,8 @@ class common_http_Request
                     }
                 }
 
-                   
-                 //analyse if there is a body or structured postfields
-                   
+                //analyse if there is a body or structured postfields
+
                 break;
             }
             case "PUT":{
@@ -265,7 +264,7 @@ class common_http_Request
         switch ($format) {
             default:
                 return http_build_query($parameters, null, '&');
-            break;
+                break;
         }
     }
 

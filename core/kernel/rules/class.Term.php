@@ -58,39 +58,39 @@ class core_kernel_rules_Term extends core_kernel_classes_Resource
         switch ($termType->getUri()) {
             case RulesRdf::CLASS_TERM : {
                 throw new common_Exception("Forbidden Type of Term");
-              
+
                 break;
 
             }
             case RulesRdf::CLASS_TERM_SUJET_PREDICATE_X : {
-                $returnValue = $this->evaluateSPX($variable);
+                    $returnValue = $this->evaluateSPX($variable);
                 break;
 
             }
             case RulesRdf::CLASS_URI_TERM_X_PREDICATE_OBJECT : {
-                $returnValue = $this->evaluateXPO();
+                    $returnValue = $this->evaluateXPO();
                 break;
 
             }
             case RulesRdf::CLASS_URI_CONSTRUCTED_SET : {
-                $returnValue = $this->evaluateSet();
+                    $returnValue = $this->evaluateSet();
                 break;
 
             }
             case RulesRdf::CLASS_TERM_CONST : {
-                $returnValue = $this->evaluateConst();
+                    $returnValue = $this->evaluateConst();
                 break;
 
             }
             case RulesRdf::CLASS_OPERATION : {
-                $returnValue = $this->evaluateOperation($variable);
+                    $returnValue = $this->evaluateOperation($variable);
                 break;
 
             }
             default:
                 throw new common_Exception('problem evaluating Term');
         }
-       
+
         return $returnValue;
     }
 
@@ -141,7 +141,7 @@ class core_kernel_rules_Term extends core_kernel_classes_Resource
                 common_Logger::d('Variable repaced uri : ' .  $resource->getUri(), ['Generis Term evaluateSPX']);
                 common_Logger::d('Variable repaced name : ' .  $resource->getLabel(), ['Generis Term evaluateSPX']);
             }
-         
+
             try {
                 $propertyInstance = $this->getUniquePropertyValue(new core_kernel_classes_Property(RulesRdf::PROPERTY_TERM_SPX_PREDICATE));
             } catch (common_Exception $e) {
@@ -195,7 +195,7 @@ class core_kernel_rules_Term extends core_kernel_classes_Resource
         if ($obj instanceof core_kernel_classes_Resource) {
             $objValue = $pred->getUri();
         }
-      
+
         $returnValue = new core_kernel_classes_ContainerCollection(new common_Object(__METHOD__));
         $terms = $classTerm->searchInstances([$pred->getUri() => $objValue], ['like' => false]);
         foreach ($terms as $term) {
@@ -233,7 +233,7 @@ class core_kernel_rules_Term extends core_kernel_classes_Resource
                 throw new common_Exception('Bad Type , waiting for a Resource ');
             }
         }
-       
+
         return $returnValue;
     }
 

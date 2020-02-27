@@ -85,15 +85,15 @@ trait ConfigSets
      * @return mixed
      */
     abstract public function getOption($name);
-/**
-     * @param string $name
-     * @return boolean
-     */
+    /**
+         * @param string $name
+         * @return boolean
+         */
     abstract public function hasOption($name);
-/**
-     * @param string $name
-     * @param mixed $value
-     */
+    /**
+         * @param string $name
+         * @param mixed $value
+         */
     abstract public function setOption($name, $value);
 
     /**

@@ -45,7 +45,7 @@ class core_kernel_users_Cache
      * @var string
      */
     const SERIAL_PREFIX_INCLUDED_ROLES = 'roles-ir';
-// --- OPERATIONS ---
+    // --- OPERATIONS ---
 
     /**
      * Retrieve roles included in a given Generis Role from the Cache memory.
@@ -66,7 +66,7 @@ class core_kernel_users_Cache
         try {
             $serial = self::buildIncludedRolesSerial($role);
             $fromCache = ServiceManager::getServiceManager()->get('generis/cache')->get($serial);
-        // array of URIs.
+            // array of URIs.
 
             foreach ($fromCache as $uri) {
                 $returnValue[$uri] = new core_kernel_classes_Resource($uri);

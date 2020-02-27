@@ -12,8 +12,8 @@ class FilterFactoryTest extends TestCase
     {
         $filterMock = $this->getMockBuilder(Filter::class)->disableOriginalConstructor()->getMock();
         $filtersRaw = [
-        'another rdf key' => 'another rdf value',
-        $filterMock,
+            'another rdf key' => 'another rdf value',
+            $filterMock,
         ];
 
         $filters = FilterFactory::buildFilters($filtersRaw, $isLikeOperatorDefaultForLegacy = true);
@@ -26,7 +26,7 @@ class FilterFactoryTest extends TestCase
     public function testBuildFiltersSupportsLegacyWayWithLike()
     {
         $filtersRaw = [
-        'another rdf key' => 'another rdf value'
+            'another rdf key' => 'another rdf value'
         ];
 
         $filters = FilterFactory::buildFilters($filtersRaw, $isLikeOperator = true);
@@ -43,7 +43,7 @@ class FilterFactoryTest extends TestCase
     public function testBuildFiltersSupportsLegacyWayWithEquals()
     {
         $filtersRaw = [
-        'another rdf key' => 'another rdf value'
+            'another rdf key' => 'another rdf value'
         ];
 
         $filters = FilterFactory::buildFilters($filtersRaw, $isLikeOperator = false);
@@ -59,7 +59,7 @@ class FilterFactoryTest extends TestCase
     public function testBuildFiltersSupportsLegacyWayWithOrConditions()
     {
         $filtersRaw = [
-        'another rdf key' => ['another rdf value', 'value1', 'value2']
+            'another rdf key' => ['another rdf value', 'value1', 'value2']
         ];
 
         $filters = FilterFactory::buildFilters($filtersRaw, $isLikeOperatorDefaultForLegacy = false);

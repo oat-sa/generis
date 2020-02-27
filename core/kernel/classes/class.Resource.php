@@ -287,7 +287,7 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
     {
         $returnValue = new core_kernel_classes_ContainerCollection($this);
         foreach ($this->getPropertyValues($property, $options) as $value) {
-            $returnValue->add(common_Utils::toResource($value));
+            $returnValue->add($this->toResource($value));
         }
         return $returnValue;
     }
@@ -340,14 +340,14 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
         };
         
         $options = [
-        'forceDefaultLg' => true,
-        'one' => true
+            'forceDefaultLg' => true,
+            'one' => true
         ];
 
         $value = $this->getPropertyValues($property, $options);
-        
+
         if (count($value)) {
-            $returnValue = common_Utils::toResource(current($value));
+            $returnValue = $this->toResource(current($value));
         }
 
         return $returnValue;
@@ -737,6 +737,28 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
         return ($this->getModel() instanceof ServiceLocatorAwareInterface)
             ? $this->getModel()->getServiceLocator()
             : ServiceManager::getServiceManager();
+    }
+
+    /**
+     * Moved from common_Utils to not break dependency ingestion chain
+     * @param string $value
+     * @return core_kernel_classes_Literal|core_kernel_classes_Resource
+     */
+    protected function toResource($value)
+    {
+        if (is_array($value)) {
+            $returnValue = [];
+            foreach ($value as $val) {
+                $returnValue[] = $this->toResource($val);
+            }
+            return $returnValue;
+        } else {
+            if (common_Utils::isUri($value)) {
+                return $this->getResource($value);
+            } else {
+                return new core_kernel_classes_Literal($value);
+            }
+        }
     }
 
     private function onUpdate()

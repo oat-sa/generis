@@ -109,7 +109,7 @@ class core_kernel_classes_ContainerCollection extends common_Collection
         foreach ($this->sequence as $index => $_resource) {
             if ($_resource instanceof  core_kernel_classes_Resource) {
                 if ($resource->equals($_resource)) {
-                       return $index;
+                    return $index;
                 }
             }
         }

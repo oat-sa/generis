@@ -15,17 +15,16 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2015 (original work) Open Assessment Technologies SA
+ * Copyright (c) 2015-2020 (original work) Open Assessment Technologies SA
  *
  */
 
 namespace oat\generis\model\kernel\persistence\file;
 
 use oat\generis\model\data\Model;
-use \common_ext_NamespaceManager;
 use \common_exception_MissingParameter;
 use \common_exception_Error;
-use oat\generis\model\kernel\persistence\file\FileRdf;
+use core_kernel_persistence_smoothsql_SmoothModel as SmoothModel;
 
 /**
  * transitory model for the smooth sql implementation
@@ -118,35 +117,13 @@ class FileModel implements Model
     // helper
     
     /**
+     * @deprecated
      *
      * @param string $file
      * @throws common_exception_Error
      */
     public static function getModelIdFromXml($file)
     {
-        $xml = simplexml_load_file($file);
-        $attrs = $xml->attributes('xml', true);
-        if (!isset($attrs['base']) || empty($attrs['base'])) {
-            throw new common_exception_Error('The namespace of ' . $file . ' has to be defined with the "xml:base" attribute of the ROOT node');
-        }
-        $namespaceUri = (string) $attrs['base'];
-        $modelId = null;
-
-        $namespaceManager = \common_ext_NamespaceManager::singleton();
-        foreach ($namespaceManager->getAllNamespaces() as $namespace) {
-            if ($namespace->getUri() == $namespaceUri) {
-                $modelId = $namespace->getModelId();
-            }
-        }
-        if (is_null($modelId)) {
-            \common_Logger::d('modelId not found, need to add namespace ' . $namespaceUri);
-
-            // TODO: inject ModelFactory as a dependency.
-            $modelFactory = new \core_kernel_api_ModelFactory();
-            $modelId = $modelFactory->addNewModel($namespaceUri);
-            $namespaceManager->reset();
-        }
-
-        return $modelId;
+       return SmoothModel::DEFAULT_READ_ONLY_MODEL;
     }
 }

@@ -337,7 +337,7 @@ class core_kernel_classes_Class extends core_kernel_classes_Resource
     public function createInstanceWithProperties($properties)
     {
         $returnValue = null;
-// remove the additional types, because they might be implemented differently
+        // remove the additional types, because they might be implemented differently
 
         $additionalTypes = [];
         if (isset($properties[OntologyRdf::RDF_TYPE])) {

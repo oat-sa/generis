@@ -935,7 +935,7 @@ class common_ext_Manifest
                 foreach ($returnValue as &$component) {
                     if (strpos($component['type'], 'FileSystemComponent') !== false) {
                         $root = realpath(dirname(__FILE__) . '/../../../');
-                           $component['value']['location'] = $root . '/' . $component['value']['location'];
+                        $component['value']['location'] = $root . '/' . $component['value']['location'];
                     }
                 }
             } else {

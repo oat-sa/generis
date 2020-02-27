@@ -23,6 +23,7 @@ namespace oat\generis\model;
 
 use oat\generis\model\data\ModelManager;
 use oat\generis\model\data\Ontology;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
 
 /**
  * Trait for classes that want to access the ontology
@@ -43,7 +44,9 @@ trait OntologyAwareTrait
     function getModel()
     {
         if (is_null($this->ontology)) {
-            return ModelManager::getModel();
+            return ($this instanceof ServiceLocatorAwareInterface && !is_null($this->getServiceLocator()))
+                ? $this->getServiceLocator()->get(Ontology::SERVICE_ID)
+                : ModelManager::getModel();
         }
         return $this->ontology;
     }

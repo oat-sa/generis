@@ -162,8 +162,11 @@ class ComplexSearchService extends ConfigurableService
      * @param string $defaultLanguage
      * @return $this
      */
-    public function setLanguage(QueryBuilderInterface $query, $userLanguage = '', $defaultLanguage = \DEFAULT_LANG)
+    public function setLanguage(QueryBuilderInterface $query, $userLanguage = '', $defaultLanguage = null)
     {
+        if (is_null($defaultLanguage)) {
+            $defaultLanguage = DEFAULT_LANG;
+        }
         $options = $this->getGateway()->getOptions();
         if (!empty($userLanguage)) {
             $options['language'] = $userLanguage;
@@ -253,8 +256,8 @@ class ComplexSearchService extends ConfigurableService
             $count++;
             if ($and === false && $maxLength > $count) {
                 $criteria = $query->newQuery()
-                ->add('http://www.w3.org/1999/02/22-rdf-syntax-ns#type')
-                ->in($classUri);
+                    ->add('http://www.w3.org/1999/02/22-rdf-syntax-ns#type')
+                    ->in($classUri);
                 $query->setOr($criteria);
             }
         }

@@ -57,12 +57,12 @@ class common_ext_ExtensionInstaller extends common_ext_ExtensionHandler
      *
      * @access public
      * @author Jerome Bogaerts, <jerome@taotesting.com>
-        *
-        * @throws common_ext_ForbiddenActionException When the installable extension is generis.
-        * @throws common_ext_AlreadyInstalledException When the extension is already installed.
-        *
-        * @return void
-        */
+     *
+     * @throws common_ext_ForbiddenActionException When the installable extension is generis.
+     * @throws common_ext_AlreadyInstalledException When the extension is already installed.
+     *
+     * @return void
+     */
     public function install()
     {
         $this->log('i', 'Installing extension ' . $this->extension->getId());

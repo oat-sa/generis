@@ -15,28 +15,26 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2016 (original work) Open Assessment Technologies SA;
+ * Copyright (c) 2020 (original work) Open Assessment Technologies SA;
  *
+ * @author Moyon Camille <camille@taotesting.com>
  */
 
-namespace oat\oatbox\event;
+namespace oat\generis\test\unit\helpers;
 
-use oat\oatbox\service\ServiceManager;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use oat\generis\Helper\UuidPrimaryKeyTrait;
+use oat\generis\test\TestCase;
 
-/**
- * Trait EventManagerAwareTrait
- * @package tao
- */
-trait EventManagerAwareTrait
+class UuidPrimaryKeyTraitTest extends TestCase
 {
-    /**
-     * @return EventManager
-     */
-    public function getEventManager()
+    public function testGetUniquePrimaryKey()
     {
-        return ($this instanceof ServiceLocatorAwareInterface)
-            ? $this->getServiceLocator()->get(EventManager::SERVICE_ID)
-            : ServiceManager::getServiceManager()->get(EventManager::SERVICE_ID);
+        $fixture = new class {
+            use UuidPrimaryKeyTrait;
+        };
+
+        $uuid = $fixture->getUniquePrimaryKey();
+        $this->assertTrue(is_string($fixture->getUniquePrimaryKey()));
+        $this->assertEquals(36, strlen($uuid));
     }
 }

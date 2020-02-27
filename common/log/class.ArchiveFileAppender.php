@@ -129,9 +129,9 @@ class common_log_ArchiveFileAppender extends common_log_SingleFileAppender
                 $zip = new ZipArchive();
                 $res = $zip->open($this->getAvailableArchiveFileName(), ZipArchive::CREATE);
                 if ($res === true) {
-                       $zip->addFile($this->filename, basename($this->filename));
-                       $zip->close();
-                       unlink($this->filename);
+                    $zip->addFile($this->filename, basename($this->filename));
+                    $zip->close();
+                    unlink($this->filename);
                 } else {
                     //fail silently
                     return false;

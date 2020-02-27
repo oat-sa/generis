@@ -68,7 +68,7 @@ class helpers_VersionedFile
         $returnValue = (bool) false;
 
         
-        
+
         if (is_file($path)) {
             if (preg_match('/^\//', $path)) {
                 $returnValue = @unlink($path);
@@ -86,7 +86,7 @@ class helpers_VersionedFile
                 $returnValue = @rmdir($path);
             }
         }
-                        
+
         
 
         return (bool) $returnValue;
@@ -108,13 +108,13 @@ class helpers_VersionedFile
         $returnValue = (bool) false;
 
         
-        
+
         if (file_exists($source)) {
             if (is_dir($source) && $recursive) {
                 foreach (scandir($source) as $file) {
                     if ($file != '.' && $file != '..' && $file != '.svn') {
                         if (!$ignoreSystemFiles && $file[0] == '.') {
-                               continue;
+                            continue;
                         } else {
                             self::cpWorkingCopy($source . '/' . $file, $destination . '/' . $file, true, $ignoreSystemFiles);
                         }
@@ -130,7 +130,7 @@ class helpers_VersionedFile
                 }
             }
         }
-        
+
         
 
         return (bool) $returnValue;

@@ -35,7 +35,7 @@ use oat\generis\test\GenerisPhpUnitTestRunner;
 class CreateInstanceTest extends GenerisPhpUnitTestRunner
 {
     protected $class;
-    
+
     protected function setUp()
     {
 
@@ -46,7 +46,7 @@ class CreateInstanceTest extends GenerisPhpUnitTestRunner
         $this->assertTrue($this->class->hasType(new core_kernel_classes_Class(OntologyRdfs::RDFS_CLASS)));
         common_Logger::i('using class ' . $this->class->getUri() . ' for Create instance Tests');
     }
-    
+
     public function testCreateInstance()
     {
         $class = $this->class;
@@ -58,7 +58,7 @@ class CreateInstanceTest extends GenerisPhpUnitTestRunner
         $instance->delete();
         $instance2->delete();
     }
-    
+
     public function testCreateInstanceViaFactory()
     {
         $class = $this->class;
@@ -72,110 +72,110 @@ class CreateInstanceTest extends GenerisPhpUnitTestRunner
         $instance->delete();
         $instance2->delete();
     }
-    
+
     public function testCreateInstanceWithProperties()
     {
-        
+
         // simple case, without params
 
         $class          = $this->class;
         $litproperty    = new core_kernel_classes_Property(core_kernel_classes_ResourceFactory::create(new core_kernel_classes_Class(OntologyRdf::RDF_PROPERTY))->getUri());
         $property       = new core_kernel_classes_Property(core_kernel_classes_ResourceFactory::create(new core_kernel_classes_Class(OntologyRdf::RDF_PROPERTY))->getUri());
-        
+
         $instance = $class->createInstanceWithProperties([]);
         $this->assertTrue($instance->hasType($class));
-        
+
         // simple literal properties
         $instance1 = $class->createInstanceWithProperties([
             OntologyRdfs::RDFS_LABEL        => 'testlabel',
             OntologyRdfs::RDFS_COMMENT  => 'testcomment'
         ]);
-        
+
         $this->assertTrue($instance1->hasType($class));
         $this->assertEquals($instance1->getLabel(), 'testlabel');
         $this->assertEquals($instance1->getComment(), 'testcomment');
-        
+
         // multiple literal properties
         $instance2 = $class->createInstanceWithProperties([
             OntologyRdfs::RDFS_LABEL                => 'testlabel',
-        $litproperty->getUri()  => ['testlit1', 'testlit2']
+            $litproperty->getUri()  => ['testlit1', 'testlit2']
         ]);
         $this->assertTrue($instance2->hasType($class));
         $this->assertEquals($instance2->getLabel(), 'testlabel');
         $comments = $instance2->getPropertyValues($litproperty);
         sort($comments);
         $this->assertEquals($comments, ['testlit1', 'testlit2']);
-        
+
         // single ressource properties
         $propInst = core_kernel_classes_ResourceFactory::create($class);
         $instance3 = $class->createInstanceWithProperties([
             OntologyRdfs::RDFS_LABEL            => 'testlabel',
             OntologyRdfs::RDFS_COMMENT      => 'testcomment',
-        $property->getUri() => $propInst
+            $property->getUri() => $propInst
         ]);
         $this->assertTrue($instance3->hasType($class));
         $this->assertEquals($instance3->getLabel(), 'testlabel');
         $propActual = $instance3->getUniquePropertyValue($property); // returns a ressource
         $this->assertEquals($propInst->getUri(), $propActual->getUri());
-        
+
         // multiple ressource properties
         $propInst2 = core_kernel_classes_ResourceFactory::create($class);
         $instance4 = $class->createInstanceWithProperties([
             OntologyRdfs::RDFS_LABEL            => 'testlabel',
             OntologyRdfs::RDFS_COMMENT      => 'testcomment',
-        $property->getUri() => [$propInst, $propInst2]
+            $property->getUri() => [$propInst, $propInst2]
         ]);
         $this->assertTrue($instance4->hasType($class));
         $this->assertEquals($instance4->getLabel(), 'testlabel');
-        
+
         $propActual = array_values($instance4->getPropertyValues($property));// returns uris
         $propNormative = [$propInst->getUri(), $propInst2->getUri()];
         sort($propActual);
         sort($propNormative);
         $this->assertEquals($propActual, $propNormative);
-        
+
         // multiple classes
         $classres = core_kernel_classes_ResourceFactory::create(new core_kernel_classes_Class(OntologyRdfs::RDFS_CLASS), 'TestClass2');
         $class2 = new core_kernel_classes_Class($classres);
         $classres = core_kernel_classes_ResourceFactory::create(new core_kernel_classes_Class(OntologyRdfs::RDFS_CLASS), 'TestClass3');
         $class3 = new core_kernel_classes_Class($classres);
-        
+
         // 2 classes (by ressource)
         $instance5 = $class->createInstanceWithProperties([
             OntologyRdfs::RDFS_LABEL            => 'testlabel5',
-        OntologyRdf::RDF_TYPE           => $classres
+            OntologyRdf::RDF_TYPE           => $classres
         ]);
 
-        
+
         $this->assertTrue($instance5->hasType($class));
         $this->assertTrue($instance5->hasType($class3));
         $this->assertEquals($instance5->getLabel(), 'testlabel5');
-        
+
         // 3 classes (by uri + class)
         $instance6 = $class->createInstanceWithProperties([
             OntologyRdfs::RDFS_LABEL            => 'testlabel6',
-        OntologyRdf::RDF_TYPE           => [$class2, $class3->getUri()]
+            OntologyRdf::RDF_TYPE           => [$class2, $class3->getUri()]
         ]);
         $this->assertTrue($instance6->hasType($class));
         $this->assertTrue($instance6->hasType($class2));
         $this->assertTrue($instance6->hasType($class3));
         $this->assertEquals($instance6->getLabel(), 'testlabel6');
-        
+
         $instance->delete();
         $instance1->delete();
         $instance2->delete();
-        
+
         $propInst->delete();
         $propInst2->delete();
         $property->delete();
         $litproperty->delete();
-        
+
         $instance5->delete();
         $instance6->delete();
         $class2->delete();
         $class3->delete();
     }
-    
+
     public function after($pMethode)
     {
         common_Logger::i('Cleaning up class ' . $this->class->getUri() . ' for Create instance Tests');

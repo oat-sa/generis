@@ -28,21 +28,21 @@ use \oat\generis\Helper\UuidPrimaryKeyTrait;
 abstract class common_persistence_Persistence
 {
     use UuidPrimaryKeyTrait;
-    
+
     /**
      * Driver of the persistence
      *
      * @var common_persistence_Driver
      */
     private $driver;
-    
+
     /**
      * Persistence parameters
      *
      * @var array
      */
     private $params = [];
-    
+
     public static function getPersistence($driverId)
     {
         $returnValue = common_persistence_Manager::getPersistence($driverId);
@@ -96,7 +96,7 @@ abstract class common_persistence_Persistence
      *
      * @access protected
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
-     * @return multitype:
+     * @return array:
      */
     protected function getParams()
     {
