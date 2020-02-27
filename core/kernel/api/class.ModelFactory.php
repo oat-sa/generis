@@ -63,14 +63,15 @@ class core_kernel_api_ModelFactory
     /**
      * Adds a statement to the ontology if it does not exist yet
      *
-     * @author "Joel Bout, <joel@taotesting.com>"
      * @param int $modelId
      * @param string $subject
      * @param string $predicate
      * @param string $object
      * @param string $lang
+     * @return
+     * @author "Joel Bout, <joel@taotesting.com>"
      */
-    private function addStatement($modelId, $subject, $predicate, $object, $lang = null)
+    public function addStatement($modelId, $subject, $predicate, $object, $lang = null)
     {
         $onto = $this->getServiceLocator()->get(Ontology::SERVICE_ID);
         $triple = new core_kernel_classes_Triple();

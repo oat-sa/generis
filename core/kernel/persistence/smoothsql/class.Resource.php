@@ -26,7 +26,6 @@ use oat\generis\model\OntologyRdf;
 use oat\oatbox\session\SessionService;
 use oat\oatbox\user\UserLanguageServiceInterface;
 use oat\generis\model\kernel\uri\UriProvider;
-use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Short description of class core_kernel_persistence_smoothsql_Resource
@@ -34,7 +33,6 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  * @access  public
  * @author  Joel Bout, <joel.bout@tudor.lu>
  * @package generis
-
  */
 class core_kernel_persistence_smoothsql_Resource implements core_kernel_persistence_ResourceInterface
 {
@@ -45,12 +43,14 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
      * @var core_kernel_persistence_smoothsql_SmoothModel
      */
     private $model;
-    
+
     public function __construct(core_kernel_persistence_smoothsql_SmoothModel $model)
     {
+        // TODO: inject ModelFactory
+        $this->modelFactory = new ModelFactory();
         $this->model = $model;
     }
-    
+
     protected function getModel()
     {
         return $this->model;
@@ -63,28 +63,34 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
     {
         return $this->model->getPersistence();
     }
-    
+
     protected function getModelReadSqlCondition()
     {
-        return 'modelid IN (' . implode(',', $this->model->getReadableModels()) . ')';
+        return 'modelid IN (' . implode(',', array_map(function ($a) {
+            return "'" . $a . "'";
+        }, $this->model->getReadableModels())) . ')';
     }
-    
+
     protected function getModelWriteSqlCondition()
     {
-        return 'modelid IN (' . implode(',', $this->model->getWritableModels()) . ')';
+        return 'modelid IN (' . implode(',', array_map(function ($a) {
+            return "'" . $a . "'";
+        }, $this->model->getWritableModels())) . ')';
     }
-    
+
     protected function getNewTripleModelId()
     {
         return $this->model->getNewTripleModelId();
     }
 
     /**
-     * returns an array of types the resource has
+     * returns an array of types the ressource has
      *
      * @access public
      * @author Joel Bout, <joel.bout@tudor.lu>
-     * @param  core_kernel_classes_Resource resource
+     *
+     * @param  Resource resource
+     *
      * @return array
      */
     public function getTypes(core_kernel_classes_Resource $resource)
@@ -99,7 +105,6 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
             $uri = $this->getPersistence()->getPlatForm()->getPhpTextValue($row['object']);
             $returnValue[$uri] = $this->getModel()->getClass($uri);
         }
-        
 
         return (array)$returnValue;
     }
@@ -108,12 +113,14 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
      * Short description of method getPropertyValues
      *
      * @access public
-     * @param core_kernel_classes_Resource $resource
-     * @param core_kernel_classes_Property $property
-     * @param array $options
+     * @author Joel Bout, <joel.bout@tudor.lu>
+     *
+     * @param  core_kernel_classes_Resource resource
+     * @param  core_kernel_classes_Property property
+     * @param  array options
+     *
      * @return array
      * @throws core_kernel_persistence_Exception
-     * @author Joel Bout, <joel.bout@tudor.lu>
      */
     public function getPropertyValues(core_kernel_classes_Resource $resource, core_kernel_classes_Property $property, $options = [])
     {
@@ -136,7 +143,7 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
         }
 
         // TODO: refactor this to use a triple retrieving method.
-        $query =  'SELECT object, l_language
+        $query = 'SELECT object, l_language
         			FROM statements 
 		    		WHERE subject = ? 
 		    		AND predicate = ?
@@ -145,7 +152,7 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
 
         if ($one) {
             // Select first
-            $query .= ' ORDER BY id DESC';
+            $query .= ' ORDER BY epoch DESC';
             $query = $platform->limitStatement($query, 1, 0);
             $result = $this->getPersistence()->query($query, [$resource->getUri(), $property->getUri(), $lang]);
         } else {
@@ -173,17 +180,20 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
      * Short description of method getPropertyValuesByLg
      *
      * @access public
-     * @param core_kernel_classes_Resource $resource
-     * @param core_kernel_classes_Property $property
-     * @param string $lg
-     * @return core_kernel_classes_ContainerCollection
-     * @throws core_kernel_persistence_Exception
      * @author Joel Bout, <joel.bout@tudor.lu>
+     *
+     * @param  core_kernel_classes_Resource resource
+     * @param  core_kernel_classes_Property property
+     * @param  string lg
+     *
+     * @return core_kernel_classes_ContainerCollection
      */
     public function getPropertyValuesByLg(core_kernel_classes_Resource $resource, core_kernel_classes_Property $property, $lg)
     {
-        $options =  ['lg' => $lg];
-        
+        $returnValue = null;
+
+        $options = ['lg' => $lg];
+
         $returnValue = new core_kernel_classes_ContainerCollection($resource);
         foreach ($this->getPropertyValues($resource, $property, $options) as $value) {
             $returnValue->add(common_Utils::toResource($value));
@@ -196,20 +206,22 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
      * Short description of method setPropertyValue
      *
      * @access public
-     * @param core_kernel_classes_Resource $resource
-     * @param core_kernel_classes_Property $property
-     * @param $object
-     * @param null $lg
-     * @return boolean
      * @author Joel Bout, <joel.bout@tudor.lu>
+     *
+     * @param  core_kernel_classes_Resource resource
+     * @param  core_kernel_classes_Property property
+     * @param  string object
+     * @param  string lg
+     *
+     * @return boolean
      */
     public function setPropertyValue(core_kernel_classes_Resource $resource, core_kernel_classes_Property $property, $object, $lg = null)
     {
         $userId = $this->getServiceLocator()->get(SessionService::SERVICE_ID)->getCurrentUser()->getIdentifier();
-        $object  = $object instanceof core_kernel_classes_Resource ? $object->getUri() : (string) $object;
-        $platform = $this->getPersistence()->getPlatForm();
-        $lang = "";
+        $object = $object instanceof core_kernel_classes_Resource ? $object->getUri() : (string)$object;
+
         // Define language if required
+        $lang = '';
         if ($property->isLgDependent()) {
             if ($lg != null) {
                 $lang = $lg;
@@ -218,29 +230,21 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
             }
         }
 
-        $returnValue = $this->getPersistence()->exec($query, [
-            $this->getNewTripleModelId(),
-            $resource->getUri(),
-            $property->getUri(),
-            $object,
-            $lang,
-            $userId,
-            $platform->getNowExpression()
-        ]);
-        
-        
-
-        return (bool) $returnValue;
+        return $this->modelFactory->addStatement(
+            $this->getNewTripleModelId(), $resource->getUri(), $property->getUri(), $object, $lang, $userId
+        );
     }
 
     /**
      * Short description of method setPropertiesValues
      *
      * @access public
-     * @param core_kernel_classes_Resource $resource
-     * @param Resource resource
-     * @return boolean
      * @author Joel Bout, <joel.bout@tudor.lu>
+     *
+     * @param  core_kernel_classes_Resource resource
+     * @param  array properties
+     *
+     * @return boolean
      */
     public function setPropertiesValues(core_kernel_classes_Resource $resource, $properties)
     {
@@ -256,34 +260,29 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
             foreach ($properties as $propertyUri => $value) {
                 $property = $this->getModel()->getProperty($propertyUri);
                 $lang = ($property->isLgDependent() ? $session->getDataLanguage() : '');
-                $formattedValues = [];
-                
+                $formatedValues = [];
+
+                // @TODO: refactor this
                 if ($value instanceof core_kernel_classes_Resource) {
-                    $formattedValues[] = $value->getUri();
+                    $formatedValues[] = $value->getUri();
                 } elseif (is_array($value)) {
                     foreach ($value as $val) {
-                        $formattedValues[] = $val instanceof core_kernel_classes_Resource
+                        $formatedValues[] = $val instanceof core_kernel_classes_Resource
                             ? $val->getUri()
                             : $val;
                     }
                 } else {
-                    $formattedValues[] = ($value == null) ? '' : $value;
+                    $formatedValues[] = ($value == null) ? '' : $value;
                 }
-                
-                foreach ($formattedValues as $object) {
-                    $valuesToInsert[] = [
-                        'modelid' => $this->getNewTripleModelId(),
-                        'subject' => $resource->getUri(),
-                        'predicate' => $property->getUri(),
-                        'object' => $object,
-                        'l_language' => $lang,
-                        'author' => $session->getUser()->getIdentifier(),
-                        'epoch' => $platform->getNowExpression()
-                    ];
+
+                $predicate = $property->getUri();
+
+                foreach ($formatedValues as $object) {
+                    $returnValue |= $this->modelFactory->addStatement($modelId, $subject, $predicate, $object, $lang, $author);
                 }
             }
         }
-        
+
         return $returnValue;
     }
 
@@ -291,46 +290,40 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
      * Short description of method setPropertyValueByLg
      *
      * @access public
-     * @param core_kernel_classes_Resource $resource
-     * @param core_kernel_classes_Property $property
-     * @param $value
-     * @param $lg
-     * @return boolean
      * @author Joel Bout, <joel.bout@tudor.lu>
+     *
+     * @param  core_kernel_classes_Resource resource
+     * @param  core_kernel_classes_Property property
+     * @param  string value
+     * @param  string lg
+     *
+     * @return boolean
      */
     public function setPropertyValueByLg(core_kernel_classes_Resource $resource, core_kernel_classes_Property $property, $value, $lg)
     {
-        $platform = $this->getPersistence()->getPlatForm();
         $userId = $this->getServiceLocator()->get(SessionService::SERVICE_ID)->getCurrentUser()->getIdentifier();
-        
-        $query = 'INSERT INTO statements (modelid,subject,predicate,object,l_language,author,epoch)
-        			VALUES  (?, ?, ?, ?, ?, ?, ?)';
 
-        $returnValue = $this->getPersistence()->exec($query, [
-            $this->getNewTripleModelId(),
-            $resource->getUri(),
-            $property->getUri(),
-            $value,
-            ($property->isLgDependent() ? $lg : ''),
-            $userId,
-            $platform->getNowExpression()
-        ]);
-
-        return (bool) $returnValue;
+        return $this->modelFactory->addStatement(
+            $this->getNewTripleModelId(), $resource->getUri(), $property->getUri(), $value, ($property->isLgDependent() ? $lg : ''), $userId
+        );
     }
 
     /**
      * Short description of method removePropertyValues
      *
      * @access public
-     * @param core_kernel_classes_Resource $resource
-     * @param core_kernel_classes_Property $property
-     * @param array options
-     * @return boolean
      * @author Joel Bout, <joel.bout@tudor.lu>
+     *
+     * @param  core_kernel_classes_Resource resource
+     * @param  core_kernel_classes_Property property
+     * @param  array options
+     *
+     * @return boolean
      */
     public function removePropertyValues(core_kernel_classes_Resource $resource, core_kernel_classes_Property $property, $options = [])
     {
+        $returnValue = (bool)false;
+
         // Optional params
         $pattern = isset($options['pattern']) && !is_null($options['pattern']) ? $options['pattern'] : null;
         $like = isset($options['like']) && $options['like'] == true ? true : false;
@@ -347,7 +340,7 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
             }
         } elseif (is_array($pattern)) {
             if (count($pattern) > 0) {
-                $multiCondition =  "( ";
+                $multiCondition = "( ";
                 foreach ($pattern as $i => $patternToken) {
                     $searchPattern = core_kernel_persistence_smoothsql_Utils::buildSearchPattern($this->getPersistence(), $patternToken, $like);
                     if ($i > 0) {
@@ -367,17 +360,17 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
         $query .= ' AND ' . $this->getModelWriteSqlCondition();
 
         if ($property->isLgDependent()) {
-            $query .=  ' AND (l_language = ? OR l_language = ?) ';
+            $query .= ' AND (l_language = ? OR l_language = ?) ';
             $returnValue = $this->getPersistence()->exec($query, [
                 $resource->getUri(),
                 $property->getUri(),
                 '',
-                $this->getServiceLocator()->get(SessionService::SERVICE_ID)->getCurrentSession()->getDataLanguage()
+                $this->getServiceLocator()->get(SessionService::SERVICE_ID)->getCurrentSession()->getDataLanguage(),
             ]);
         } else {
             $returnValue = $this->getPersistence()->exec($query, [
                 $resource->getUri(),
-                $property->getUri()
+                $property->getUri(),
             ]);
         }
 
@@ -392,15 +385,18 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
      * Short description of method removePropertyValueByLg
      *
      * @access public
-     * @param core_kernel_classes_Resource $resource
-     * @param core_kernel_classes_Property $property
-     * @param Resource resource
-     * @param array $options
-     * @return boolean
      * @author Joel Bout, <joel.bout@tudor.lu>
+     *
+     * @param  core_kernel_classes_Resource resource
+     * @param  core_kernel_classes_Property property
+     * @param  string lg
+     * @param  array options
+     *
+     * @return boolean
      */
     public function removePropertyValueByLg(core_kernel_classes_Resource $resource, core_kernel_classes_Property $property, $lg, $options = [])
     {
+        // TODO: refactor this to use a triple store abstraction
         $sqlQuery = 'DELETE FROM statements WHERE subject = ? and predicate = ? and l_language = ?';
         //be sure the property we try to remove is included in an updatable model
         $sqlQuery .= ' AND ' . $this->getModelWriteSqlCondition();
@@ -410,10 +406,6 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
             $property->getUri(),
             ($property->isLgDependent() ? $lg : ''),
         ]);
-
-        if (!$returnValue) {
-            $returnValue = false;
-        }
 
         return (bool)$returnValue;
     }
@@ -430,10 +422,12 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
      */
     public function getRdfTriples(core_kernel_classes_Resource $resource)
     {
+        $returnValue = null;
+
         // TODO: refactor this to use a triple store abstraction
         $query = 'SELECT * FROM statements WHERE subject = ? AND ' . $this->getModelReadSqlCondition() . ' ORDER BY predicate';
         $result = $this->getPersistence()->query($query, [$resource->getUri()]);
-        
+
         $returnValue = new core_kernel_classes_ContainerCollection(new common_Object(__METHOD__));
         while ($statement = $result->fetch()) {
             $triple = new core_kernel_classes_Triple();
@@ -455,15 +449,18 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
      * Short description of method getUsedLanguages
      *
      * @access public
-     * @param core_kernel_classes_Resource $resource
-     * @param core_kernel_classes_Property $property
-     * @return array
      * @author Joel Bout, <joel.bout@tudor.lu>
+     *
+     * @param  core_kernel_classes_Resource resource
+     * @param  core_kernel_classes_Property property
+     *
+     * @return array
      */
     public function getUsedLanguages(core_kernel_classes_Resource $resource, core_kernel_classes_Property $property)
     {
         $returnValue = [];
 
+        // TODO: refactor this to use a triple store abstraction
         $sqlQuery = 'SELECT l_language FROM statements WHERE subject = ? AND predicate = ? ';
         $sqlResult = $this->getPersistence()->query($sqlQuery, [
             $resource->getUri(),
@@ -475,73 +472,78 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
             }
         }
 
-        return $returnValue;
+        return (array)$returnValue;
     }
 
     /**
      * Short description of method duplicate
      *
      * @access public
-     * @param core_kernel_classes_Resource $resource
-     * @param array excludedProperties
-     * @return core_kernel_classes_Resource
      * @author Joel Bout, <joel.bout@tudor.lu>
+     *
+     * @param  core_kernel_classes_Resource resource
+     * @param  array excludedProperties
+     *
+     * @return core_kernel_classes_Resource|null
+     * @throws common_exception_Error
      */
     public function duplicate(core_kernel_classes_Resource $resource, $excludedProperties = [])
     {
         $newUri = $this->getServiceLocator()->get(UriProvider::SERVICE_ID)->provide();
         $collection = $this->getRdfTriples($resource);
 
-        if ($collection->count() > 0) {
-            $platform = $this->getPersistence()->getPlatForm();
-            $user = $this->getServiceLocator()->get(SessionService::SERVICE_ID)->getCurrentUser()->getIdentifier();
-            $valuesToInsert = [];
+        if ($collection->count() === 0) {
+            return null;
+        }
 
-            foreach ($collection->getIterator() as $triple) {
-                if (!in_array($triple->predicate, $excludedProperties)) {
-                    $valuesToInsert[] = [
-                        'modelid' => $this->getNewTripleModelId(),
-                        'subject' => $newUri,
-                        'predicate' => $triple->predicate,
-                        'object' => ($triple->object == null) ? '' : $triple->object,
-                        'l_language' => ($triple->lg == null) ? '' : $triple->lg,
-                        'author' => $user,
-                        'epoch' => $platform->getNowExpression(),
-                    ];
-                }
-            }
+        $user = $this->getServiceLocator()->get(SessionService::SERVICE_ID)->getCurrentUser()->getIdentifier();
+        $modelId = $this->getNewTripleModelId();
+        $addedRows = false;
 
-            if ($this->getPersistence()->insertMultiple('statements', $valuesToInsert)) {
-                $returnValue = $this->getModel()->getResource($newUri);
+        foreach ($collection->getIterator() as $triple) {
+            if (!in_array($triple->predicate, $excludedProperties)) {
+                $addedRows |= $this->modelFactory->addStatement(
+                    $modelId, $newUri, $triple->predicate, ($triple->object == null) ? '' : $triple->object, ($triple->lg == null) ? '' : $triple->lg, $user
+                );
             }
         }
-        
-        return $returnValue;
+
+        if ($addedRows) {
+            return new core_kernel_classes_Resource($newUri);
+        }
+
+        return null;
     }
 
     /**
      * Short description of method delete
      *
      * @access public
-     * @param core_kernel_classes_Resource $resource
-     * @param boolean deleteReference
-     * @return boolean
      * @author Joel Bout, <joel.bout@tudor.lu>
+     *
+     * @param  core_kernel_classes_Resource resource
+     * @param  boolean deleteReference
+     *
+     * @return boolean
      */
     public function delete(core_kernel_classes_Resource $resource, $deleteReference = false)
     {
+        // TODO: refactor this to use a triple store abstraction
         $query = 'DELETE FROM statements WHERE subject = ? AND ' . $this->getModelWriteSqlCondition();
         $returnValue = $this->getPersistence()->exec($query, [$resource->getUri()]);
 
         //if no rows affected return false
         if (!$returnValue) {
             $returnValue = false;
-        } elseif ($deleteReference) {
-            $sqlQuery = 'DELETE FROM statements WHERE ' . $this->getPersistence()->getPlatForm()->getObjectTypeCondition() . ' = ? AND ' . $this->getModelWriteSqlCondition();
-            $return = $this->getPersistence()->exec($sqlQuery, [$resource->getUri()]);
+        } else {
+            if ($deleteReference) {
+                // TODO: refactor this to use a triple store abstraction
+                $sqlQuery = 'DELETE FROM statements WHERE ' . $this->getPersistence()->getPlatForm()->getObjectTypeCondition() . ' = ? AND ' . $this->getModelWriteSqlCondition();
+                $return = $this->getPersistence()->exec($sqlQuery, [$resource->getUri()]);
 
-            if ($return !== false) {
-                $returnValue = true;
+                if ($return !== false) {
+                    $returnValue = true;
+                }
             }
         }
 
@@ -552,10 +554,13 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
      * Short description of method getPropertiesValues
      *
      * @access public
-     * @param core_kernel_classes_Resource $resource
-     * @param Resource resource
-     * @return array
      * @author Joel Bout, <joel.bout@tudor.lu>
+     *
+     * @param  core_kernel_classes_Resource resource
+     * @param  array properties
+     *
+     * @return array
+     * @throws common_exception_Error
      */
     public function getPropertiesValues(core_kernel_classes_Resource $resource, $properties)
     {
@@ -565,7 +570,11 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
         if (count($properties) == 0) {
             return [];
         }
-        
+
+        /*foreach($properties as $property){
+            $returnValue[$property->getUri()] = $this->getPropertyValues($resource, $property);
+        }*/
+
         $predicatesQuery = '';
         //build the predicate query
         //$predicatesQuery = implode(',', $properties);
@@ -588,11 +597,11 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
                 subject = ' . $this->getPersistence()->quote($resource->getUri()) . ' 
                 AND predicate IN (' . $predicatesQuery . ')
                 AND (l_language = ' . $this->getPersistence()->quote('') .
-                    ' OR l_language = ' . $this->getPersistence()->quote($default) .
-                    ' OR l_language = ' . $this->getPersistence()->quote($lang) . ')
+            ' OR l_language = ' . $this->getPersistence()->quote($default) .
+            ' OR l_language = ' . $this->getPersistence()->quote($lang) . ')
                 AND ' . $this->getModelReadSqlCondition();
         $result = $this->getPersistence()->query($query);
-        
+
         $rows = $result->fetchAll();
         foreach ($rows as $row) {
             $value = $platform->getPhpTextValue($row['object']);
@@ -608,10 +617,12 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
      * Short description of method setType
      *
      * @access public
-     * @param core_kernel_classes_Resource $resource
-     * @param core_kernel_classes_Class $class
-     * @return boolean
      * @author Joel Bout, <joel.bout@tudor.lu>
+     *
+     * @param  core_kernel_classes_Resource resource
+     * @param  core_kernel_classes_Class class
+     *
+     * @return boolean
      */
     public function setType(core_kernel_classes_Resource $resource, core_kernel_classes_Class $class)
     {
@@ -622,32 +633,35 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
      * Short description of method removeType
      *
      * @access public
-     * @param core_kernel_classes_Resource $resource
-     * @param core_kernel_classes_Class $class
-     * @return boolean
      * @author Joel Bout, <joel.bout@tudor.lu>
+     *
+     * @param  core_kernel_classes_Resource resource
+     * @param  core_kernel_classes_Class class
+     *
+     * @return boolean
      */
     public function removeType(core_kernel_classes_Resource $resource, core_kernel_classes_Class $class)
     {
-        $query =  'DELETE FROM statements 
+        // TODO: refactor this to use a triple store abstraction
+        $query = 'DELETE FROM statements 
 		    		WHERE subject = ? AND predicate = ? AND ' . $this->getPersistence()->getPlatForm()->getObjectTypeCondition() . ' = ?';
-        
+
         //be sure the property we try to remove is included in an updatable model
         $query .= ' AND ' . $this->getModelWriteSqlCondition();
 
         $returnValue = $this->getPersistence()->exec($query, [
             $resource->getUri(),
             OntologyRdf::RDF_TYPE,
-            $class->getUri()
+            $class->getUri(),
         ]);
-        
+
         $returnValue = true;
 
-        return $returnValue;
+        return (bool)$returnValue;
     }
 
     /**
-     * @return ServiceLocatorInterface
+     * @return \Zend\ServiceManager\ServiceLocatorInterface
      */
     public function getServiceLocator()
     {
