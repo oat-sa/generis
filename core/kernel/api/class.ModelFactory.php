@@ -24,9 +24,13 @@
  */
 
 use core_kernel_persistence_smoothsql_SmoothModel as SmoothModel;
+use oat\generis\model\data\Ontology;
+use oat\oatbox\service\ServiceManager;
 
 class core_kernel_api_ModelFactory
 {
+    const HARDCODED_AUTHOR = 'http://www.tao.lu/Ontologies/TAO.rdf#installator';
+
     /**
      * @param string $namespace
      * @param string $data xml content
@@ -68,27 +72,20 @@ class core_kernel_api_ModelFactory
      */
     private function addStatement($modelId, $subject, $predicate, $object, $lang = null)
     {
-        $result = core_kernel_classes_DbWrapper::singleton()->query(
-            'SELECT count(*) FROM statements WHERE modelid = ? AND subject = ? AND predicate = ? AND object = ? AND l_language = ?',
-            [$modelId, $subject, $predicate, $object, (is_null($lang)) ? '' : $lang]
-        );
+        $onto = $this->getServiceLocator()->get(Ontology::SERVICE_ID);
+        $triple = new core_kernel_classes_Triple();
+        $triple->subject = $subject;
+        $triple->predicate = $predicate;
+        $triple->object = $object;
+        $triple->modelid = $modelId;
+        $triple->author = self::HARDCODED_AUTHOR;
+        $triple->lg = is_null($lang) ? '' : $lang;
 
-        if (intval($result->fetchColumn()) === 0) {
-            $dbWrapper = core_kernel_classes_DbWrapper::singleton();
-            $date = $dbWrapper->getPlatForm()->getNowExpression();
+        return $onto->add($triple);
+    }
 
-            $dbWrapper->insert(
-                'statements',
-                [
-                    'modelid' =>  $modelId,
-                    'subject' => $subject,
-                    'predicate' => $predicate,
-                    'object' => $object,
-                    'l_language' => is_null($lang) ? '' : $lang,
-                    'author' => 'http://www.tao.lu/Ontologies/TAO.rdf#installator',
-                    'epoch' => $date,
-                ]
-            );
-        }
+    private function getServiceLocator()
+    {
+        return ServiceManager::getServiceManager();
     }
 }
