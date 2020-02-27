@@ -54,10 +54,6 @@
     "tao-extension-name": "generis"
   },
   "repositories": [
-    {
-      "type": "vcs",
-      "url": "git@github.com:oat-sa/lib-dbal-spanner.git"
-    }
   ],
   "require": {
     "clearfw/clearfw": "~1.2.0",
@@ -66,7 +62,6 @@
     "doctrine/annotations": "~1.6.0",
     "zendframework/zend-servicemanager": "~2.5.0",
     "league/flysystem": "~1.0",
-    "oat-sa/lib-dbal-spanner": "0.1.0",
     "oat-sa/oatbox-extension-installer": "~1.1||dev-master",
     "php": "^7.1",
     "psr/log": "~1.0",
