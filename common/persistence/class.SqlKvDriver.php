@@ -21,8 +21,6 @@
 
 use Doctrine\DBAL\ParameterType;
 
-use Doctrine\DBAL\ParameterType;
-
 /**
  * A key value driver based upon an existing sql persistence
  *

@@ -108,7 +108,6 @@ class common_ext_Namespace
         }
 
         // TODO refactor this to use triple store abstraction.
-
         return $db->exec("DELETE FROM models WHERE modelid = ?", [$this->getModelId()]);
     }
 }

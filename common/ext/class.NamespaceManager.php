@@ -75,7 +75,6 @@ class common_ext_NamespaceManager
      */
     public function getLocalNamespace()
     {
-
         return new common_ext_Namespace(
             core_kernel_persistence_smoothsql_SmoothModel::DEFAULT_WRITABLE_MODEL,
             LOCAL_NAMESPACE . '#'

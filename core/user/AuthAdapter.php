@@ -70,7 +70,7 @@ class AuthAdapter extends Configurable implements LoginAdapter
      * @var $password
      */
     protected $password;
-    
+
     /**
      * (non-PHPdoc)
      * @see \oat\oatbox\user\auth\LoginAdapter::setCredentials()
@@ -99,7 +99,8 @@ class AuthAdapter extends Configurable implements LoginAdapter
         $filters = [GenerisRdf::PROPERTY_USER_LOGIN => $this->username];
         $options = ['like' => false, 'recursive' => true];
         $users = $userClass->searchInstances($filters, $options);
-        
+
+
         if (count($users) > 1) {
             // Multiple users matching
             throw new common_exception_InconsistentData("Multiple Users found with the same login '" . $this->username . "'.");
@@ -114,7 +115,7 @@ class AuthAdapter extends Configurable implements LoginAdapter
             // should never happen, added for integrity
             throw new core_kernel_users_InvalidLoginException('Inexisting user did not fail password check, this should not happen');
         }
-        
+
         $userResource = current($users);
         $hash = $userResource->getUniquePropertyValue(new core_kernel_classes_Property(GenerisRdf::PROPERTY_USER_PASSWORD));
         if (!core_kernel_users_Service::getPasswordHash()->verify($this->password, $hash)) {

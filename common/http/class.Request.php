@@ -219,7 +219,8 @@ class common_http_Request
                     }
                 }
 
-                //analyse if there is a body or structured postfields
+                   
+                   //analyse if there is a body or structured postfields
 
                 break;
             }

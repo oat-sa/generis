@@ -42,7 +42,7 @@ class SmoothRdsModel
         $table->addColumn("subject", "string", ["length" => 255,"default" => null]);
         $table->addColumn("predicate", "string", ["length" => 255,"default" => null]);
         $table->addColumn("object", "text", ["default" => null,"notnull" => false]);
-
+            
         $table->addColumn("l_language", "string", ["length" => 255,"default" => null,"notnull" => false]);
         $table->addColumn("id", "integer", ["notnull" => true,"autoincrement" => true]);
         $table->addColumn("author", "string", ["length" => 255,"default" => null,"notnull" => false]);
