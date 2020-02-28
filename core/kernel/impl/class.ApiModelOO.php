@@ -25,6 +25,10 @@
 use oat\generis\model\OntologyRdf;
 use oat\generis\model\OntologyRdfs;
 use Doctrine\DBAL\DBALException;
+use oat\generis\model\kernel\persistence\file\FileIterator;
+use oat\oatbox\service\ServiceManager;
+use Zend\ServiceManager\ServiceLocatorInterface;
+use oat\generis\model\data\Ontology;
 
 error_reporting(E_ALL);
 
@@ -43,7 +47,7 @@ error_reporting(E_ALL);
  * @package generis
 
  */
-class core_kernel_impl_ApiModelOO extends core_kernel_impl_Api implements core_kernel_api_ApiModel
+class core_kernel_impl_ApiModelOO
 {
     // --- ASSOCIATIONS ---
 
@@ -62,35 +66,6 @@ class core_kernel_impl_ApiModelOO extends core_kernel_impl_Api implements core_k
 
 
     /**
-     * build xml rdf containing rdf:Description of all meta-data the conected
-     * may get
-     *
-     * @deprecated
-     * @access public
-     * @author firstname and lastname of author, <author@example.org>
-     * @param  array sourceNamespaces
-     * @return string
-     */
-    public function exportXmlRdf($sourceNamespaces = [])
-    {
-        $modelIds = [];
-        foreach ($sourceNamespaces as $namespace) {
-            if (!preg_match("/\#$/", $namespace)) {
-                $namespace .= "#";
-            }
-
-            $result = $dbWrapper->query('SELECT * FROM "models"  WHERE "modeluri" = ?', [
-                $namespace
-            ]);
-            if ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-                $modelIds[] = $row['modelid'];
-                $result->closeCursor();
-            }
-        }
-        return $xml = core_kernel_api_ModelExporter::exportXmlRdf($modelIds);
-    }
-
-    /**
      * import xml rdf files into the knowledge base
      *
      * @access public
@@ -101,20 +76,18 @@ class core_kernel_impl_ApiModelOO extends core_kernel_impl_Api implements core_k
      */
     public function importXmlRdf($targetNameSpace, $fileLocation)
     {
-        $returnValue = (bool) false;
+        $returnValue = true;
 
         if (!file_exists($fileLocation) || !is_readable($fileLocation)) {
             throw new common_Exception("Unable to load ontology : $fileLocation");
         }
+        $iterator = new FileIterator($fileLocation);
+        $rdf = $this->getServiceLocator()->get(Ontology::SERVICE_ID)->getRdfInterface();
         
-        if (!preg_match("/#$/", $targetNameSpace)) {
-            $targetNameSpace .= '#';
+        /* @var \core_kernel_classes_Triple $triple */
+        foreach ($iterator as $triple) {
+            $returnValue &= $rdf->add($triple);
         }
-        $modFactory = new core_kernel_api_ModelFactory();
-        $returnValue = $modFactory->createModel($targetNameSpace, file_get_contents($fileLocation));
-        
-
-
         return (bool) $returnValue;
     }
 
@@ -287,85 +260,6 @@ class core_kernel_impl_ApiModelOO extends core_kernel_impl_Api implements core_k
     }
 
     /**
-     * returns classes that are not subclasses of other classes
-     *
-     * @access public
-     * @author patrick.plichart@tudor.lu
-     * @return core_kernel_classes_ContainerCollection
-     */
-    public function getRootClasses()
-    {
-        $returnValue = null;
-
-        
-    
-        $returnValue = new core_kernel_classes_ContainerCollection(new core_kernel_classes_Container(__METHOD__), __METHOD__);
-        
-        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
-        
-        $query =  "SELECT DISTINCT subject FROM statements WHERE (predicate = ? AND object = ?) 
-        			AND subject NOT IN (SELECT subject FROM statements WHERE predicate = ?)";
-        $result = $dbWrapper->query($query, [
-            OntologyRdf::RDF_TYPE,
-            OntologyRdfs::RDFS_CLASS,
-            OntologyRdfs::RDFS_SUBCLASSOF
-        ]);
-        
-        while ($row = $result->fetch()) {
-            $returnValue->add(new core_kernel_classes_Class($row['subject']));
-        }
-        
-        
-
-        return $returnValue;
-    }
-
-    /**
-     * add a new statment to the knowledge base
-     *
-     * @access public
-     * @author patrick.plichart@tudor.lu
-     * @param  string subject
-     * @param  string predicate
-     * @param  string object
-     * @param  string language
-     * @return boolean
-     */
-    public function setStatement($subject, $predicate, $object, $language)
-    {
-        $returnValue = (bool) false;
-
-        
-        $dbWrapper  = core_kernel_classes_DbWrapper::singleton();
-        $platform   = $dbWrapper->getPlatForm();
-        $localNs    = common_ext_NamespaceManager::singleton()->getLocalNamespace();
-        $mask       = 'yyy[admin,administrators,authors]';  //now it's the default right mode
-        $query = 'INSERT INTO statements (modelid,subject,predicate,object,l_language,author,epoch)
-        			VALUES  (?, ?, ?, ?, ?, ? , ?);';
-
-        try {
-            $returnValue = $dbWrapper->exec($query, [
-                $localNs->getModelId(),
-                $subject,
-                $predicate,
-                $object,
-                $language,
-                \common_session_SessionManager::getSession()->getUserUri(),
-                $platform->getNowExpression()
-                 
-            ]);
-        } catch (DBALException $e) {
-            if ($e->getCode() !== '00000') {
-                throw new common_Exception("Unable to setStatement (SPO) {$subject}, {$predicate}, {$object} : " . $e->getMessage());
-            }
-        }
-        
-        
-
-        return (bool) $returnValue;
-    }
-
-    /**
      * Short description of method getAllClasses
      *
      * @access public
@@ -532,5 +426,13 @@ class core_kernel_impl_ApiModelOO extends core_kernel_impl_Api implements core_k
      */
     private function __construct()
     {
+    }
+
+    /**
+     * @return ServiceLocatorInterface
+     */
+    public function getServiceLocator()
+    {
+        return ServiceManager::getServiceManager();
     }
 }
