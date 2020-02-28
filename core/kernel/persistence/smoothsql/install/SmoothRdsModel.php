@@ -19,7 +19,7 @@
  *
  */
 
-namespace   oat\generis\model\kernel\persistence\smoothsql\install;
+namespace oat\generis\model\kernel\persistence\smoothsql\install;
 
 use Doctrine\DBAL\Schema\Schema;
 
@@ -36,13 +36,7 @@ class SmoothRdsModel
      */
     public static function addSmoothTables(Schema $schema)
     {
-        $table = $schema->createTable("models");
-        $table->addColumn('modelid', "integer", ["notnull" => true,"autoincrement" => true]);
-        $table->addColumn('modeluri', "string", ["length" => 255,"default" => null]);
-        $table->addOption('engine', 'MyISAM');
-        $table->setPrimaryKey(['modelid']);
-
-        $table = $schema->createTable("statements");
+         $table = $schema->createTable("statements");
         $table->addColumn("modelid", "integer", ["notnull" => true,"default" => 0]);
         $table->addColumn("subject", "string", ["length" => 255,"default" => null]);
         $table->addColumn("predicate", "string", ["length" => 255,"default" => null]);
