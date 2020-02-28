@@ -1,5 +1,9 @@
 <?php
 
+use oat\generis\persistence\PersistenceManager;
+use oat\generis\model\data\Ontology;
+use oat\generis\persistence\sql\SchemaAwareInterface;
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,12 +50,24 @@ class common_ext_GenerisInstaller extends common_ext_ExtensionInstaller
         }
  
         $this->installLoadDefaultConfig();
+        $this->setupSchema();
         $this->installOntology();
         $this->installRegisterExt();
-        
+
         common_cache_FileCache::singleton()->purge();
         
         $this->log('d', 'Installing custom script for extension ' . $this->extension->getId());
         $this->installCustomScript();
+    }
+
+    public function setupSchema()
+    {
+        $pm = $this->getServiceManager()->get(PersistenceManager::SERVICE_ID);
+        $schemaCollection = $pm->getSqlSchemas();
+        $ontology = $this->getServiceManager()->get(Ontology::SERVICE_ID);
+        if ($ontology instanceof SchemaAwareInterface) {
+            $ontology->touchSchemas($schemaCollection);
+        }
+        $pm->applySchemas($schemaCollection);
     }
 }

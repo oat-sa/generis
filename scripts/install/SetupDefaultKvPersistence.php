@@ -25,6 +25,8 @@ use common_persistence_SqlKvDriver;
 use common_report_Report as Report;
 use Exception;
 use oat\oatbox\extension\InstallAction;
+use oat\generis\persistence\PersistenceManager;
+use oat\generis\persistence\sql\SchemaAwareInterface;
 
 class SetupDefaultKvPersistence extends InstallAction
 {
@@ -47,6 +49,12 @@ class SetupDefaultKvPersistence extends InstallAction
             $persistenceManager->registerPersistence('default_kv', $newPersistenceConfig);
             $report->add(Report::createInfo('Setup new "default_kv" persistence.'));
         }
+        $schemaCollection = $persistenceManager->getSqlSchemas();
+        $kvdriver = $persistenceManager->getPersistenceById('default_kv')->getDriver();
+        if ($kvdriver instanceof SchemaAwareInterface) {
+            $kvdriver->touchSchemas($schemaCollection);
+        }
+        $persistenceManager->applySchemas($schemaCollection);
 
         return $report;
     }
