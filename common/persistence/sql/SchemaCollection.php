@@ -26,6 +26,10 @@ use Doctrine\DBAL\Schema\Schema;
 use \IteratorAggregate;
 use ArrayIterator;
 
+/**
+ * A collection of multiple schemas, in order to accomodate for the possibility
+ * of multiple RDS databases with different schemas
+ */
 class SchemaCollection implements IteratorAggregate
 {
     /**

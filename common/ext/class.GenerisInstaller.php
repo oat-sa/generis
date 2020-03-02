@@ -1,9 +1,5 @@
 <?php
 
-use oat\generis\persistence\PersistenceManager;
-use oat\generis\model\data\Ontology;
-use oat\generis\persistence\sql\SchemaAwareInterface;
-
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,6 +20,10 @@ use oat\generis\persistence\sql\SchemaAwareInterface;
  *               2013-2020 (update and modification) Open Assessment Technologies SA;
  *
  */
+
+use oat\generis\persistence\PersistenceManager;
+use oat\generis\model\data\Ontology;
+use oat\generis\persistence\sql\SchemaAwareInterface;
 
 /**
  * Custom extension installer for generis
