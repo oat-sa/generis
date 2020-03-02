@@ -153,7 +153,8 @@ class PersistenceManager extends ConfigurableService
      * Adapt the databases to the SQL schemas
      * @param SchemaCollection $schemaCollection
      */
-    public function applySchemas(SchemaCollection $schemaCollection) {
+    public function applySchemas(SchemaCollection $schemaCollection): void 
+    {
         $this->logInfo('Applying schame changes');
         foreach ($schemaCollection as $id => $schema) {
             $p = $this->getPersistenceById($id);

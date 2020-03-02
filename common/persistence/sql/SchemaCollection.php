@@ -46,7 +46,6 @@ class SchemaCollection implements IteratorAggregate
      * Get a schema as it was when it was added
      * @param string  $id
      * @throws \common_exception_InconsistentData
-     * @return Schema
      */
     public function getOriginalSchema($id) : Schema
     {

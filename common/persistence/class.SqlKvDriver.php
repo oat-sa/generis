@@ -244,6 +244,11 @@ class common_persistence_SqlKvDriver implements common_persistence_KvDriver, Sch
         return (bool)$this->sqlPersistence->exec($statement, [time()]);
     }
 
+    /**
+     * @inheritdoc
+     *
+     * @throws common_exception_InconsistentData
+     */
     public function touchSchemas(SchemaCollection $schemaCollection)
     {
         $schema = $schemaCollection->getSchema($this->sqlPersistenceId);
