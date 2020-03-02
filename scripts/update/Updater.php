@@ -26,7 +26,6 @@ use common_Exception;
 use common_exception_NotImplemented;
 use common_ext_ExtensionsManager;
 use common_ext_ExtensionUpdater;
-use core_kernel_impl_ApiModelOO;
 use core_kernel_persistence_smoothsql_SmoothModel;
 use EasyRdf_Exception;
 use oat\generis\model\data\ModelManager;
@@ -56,6 +55,7 @@ use oat\oatbox\mutex\NoLockStorage;
 use League\Flysystem\Adapter\Local;
 use oat\generis\model\kernel\uri\UriProvider;
 use oat\oatbox\config\ConfigurationService;
+use oat\generis\model\kernel\persistence\file\RdfFileImporter;
 
 /**
  * @author Joel Bout <joel@taotesting.com>
@@ -282,8 +282,8 @@ class Updater extends common_ext_ExtensionUpdater
                 'core' . DIRECTORY_SEPARATOR .
                 'ontology' . DIRECTORY_SEPARATOR .
                 'taskqueue.rdf';
-            $api = core_kernel_impl_ApiModelOO::singleton();
-            $api->importXmlRdf('http://www.tao.lu/Ontologies/taskqueue.rdf', $file);
+            $fileImporter = new RdfFileImporter();
+            $fileImporter->setServiceLocator($this->getServiceLocator())->import($file);
             $this->setVersion('4.4.1');
         }
 
@@ -295,8 +295,8 @@ class Updater extends common_ext_ExtensionUpdater
                 'core' . DIRECTORY_SEPARATOR .
                 'ontology' . DIRECTORY_SEPARATOR .
                 'generis.rdf';
-            $api = core_kernel_impl_ApiModelOO::singleton();
-            $api->importXmlRdf('http://www.tao.lu/Ontologies/generis.rdf', $file);
+            $fileImporter = new RdfFileImporter();
+            $fileImporter->setServiceLocator($this->getServiceLocator())->import($file);
             $this->setVersion('6.8.0');
         }
 

@@ -24,11 +24,9 @@
 
 use oat\generis\model\OntologyRdf;
 use oat\generis\model\OntologyRdfs;
-use Doctrine\DBAL\DBALException;
-use oat\generis\model\kernel\persistence\file\FileIterator;
 use oat\oatbox\service\ServiceManager;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use oat\generis\model\data\Ontology;
+use oat\generis\model\kernel\persistence\file\RdfFileImporter;
 
 error_reporting(E_ALL);
 
@@ -58,7 +56,7 @@ class core_kernel_impl_ApiModelOO
      * Short description of attribute instance
      *
      * @access private
-     * @var ApiModelOO
+     * @var core_kernel_impl_ApiModelOO
      */
     private static $instance = null;
 
@@ -76,19 +74,9 @@ class core_kernel_impl_ApiModelOO
      */
     public function importXmlRdf($targetNameSpace, $fileLocation)
     {
-        $returnValue = true;
-
-        if (!file_exists($fileLocation) || !is_readable($fileLocation)) {
-            throw new common_Exception("Unable to load ontology : $fileLocation");
-        }
-        $iterator = new FileIterator($fileLocation);
-        $rdf = $this->getServiceLocator()->get(Ontology::SERVICE_ID)->getRdfInterface();
-        
-        /* @var \core_kernel_classes_Triple $triple */
-        foreach ($iterator as $triple) {
-            $returnValue &= $rdf->add($triple);
-        }
-        return (bool) $returnValue;
+        $fileImporter = new RdfFileImporter();
+        $fileImporter->setServiceLocator($this->getServiceLocator());
+        return $fileImporter->import($fileLocation);
     }
 
 
