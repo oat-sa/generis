@@ -24,12 +24,21 @@ namespace oat\generis\persistence\sql;
 
 use Doctrine\DBAL\Schema\Schema;
 use \IteratorAggregate;
+use ArrayIterator;
 
 class SchemaCollection implements IteratorAggregate
 {
-    private $schemas;
-
+    /**
+     * Schemas as they were originally added, prior to modifications
+     * @var Schema[]
+     */
     private $originals;
+
+    /**
+     * Schemas per database, might have been modified
+     * @var Schema[]
+     */
+    private $schemas;
 
     /**
      * Add a schema to the collection
@@ -75,6 +84,6 @@ class SchemaCollection implements IteratorAggregate
      */
     public function getIterator()
     {
-        return new \ArrayIterator($this->schemas);
+        return new ArrayIterator($this->schemas);
     }
 }

@@ -135,7 +135,6 @@ class PersistenceManager extends ConfigurableService
 
     /**
      * Return a collection of all SQL schemas
-     * @return SchemaCollection
      */
     public function getSqlSchemas() : SchemaCollection
     {
@@ -151,7 +150,6 @@ class PersistenceManager extends ConfigurableService
 
     /**
      * Adapt the databases to the SQL schemas
-     * @param SchemaCollection $schemaCollection
      */
     public function applySchemas(SchemaCollection $schemaCollection): void 
     {

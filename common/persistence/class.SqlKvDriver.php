@@ -64,8 +64,8 @@ class common_persistence_SqlKvDriver implements common_persistence_KvDriver, Sch
             throw new common_exception_Error('Missing underlying sql persistence');
         }
 
-        $this->sqlPersistenceId = $params['sqlPersistence'];
-        $this->sqlPersistence = common_persistence_SqlPersistence::getPersistence($params['sqlPersistence']);
+        $this->sqlPersistenceId = $params[self::OPTION_PERSISTENCE_SQL];
+        $this->sqlPersistence = common_persistence_SqlPersistence::getPersistence($params[self::OPTION_PERSISTENCE_SQL]);
         $this->garbageCollection = isset($params['gc']) ? $params['gc'] : self::DEFAULT_GC_PROBABILITY;
 
 
