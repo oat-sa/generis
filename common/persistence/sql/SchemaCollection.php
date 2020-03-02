@@ -49,7 +49,7 @@ class SchemaCollection implements IteratorAggregate
      * @param string $id
      * @param Schema $schema
      */
-    public function addSchema($id, Schema $schema)
+    public function addSchema($id, Schema $schema) : void
     {
         $this->originals[$id] = clone $schema;
         $this->schemas[$id] = $schema;
