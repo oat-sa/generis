@@ -98,8 +98,8 @@ class helpers_File
     /**
      * Helps prevent 'path traversal' attacks
      *
-     * @param $filename
-     * @param $directory
+     * @param string $filename  path to file relative to $directory
+     * @param string $directory absolute path to directory
      * @return bool
      */
     public static function isFileInsideDirectory($filename, $directory)
@@ -112,6 +112,28 @@ class helpers_File
         if (false === $canonicalFilename) {
             return false;
         }
+
+        return 0 === strpos($canonicalFilename, $canonicalDirectory);
+    }
+
+    /**
+     * Helps prevent 'path traversal' attacks
+     *
+     * @param string $filename  absolute path to file
+     * @param string $directory absolute path to directory
+     * @return bool
+     */
+    public static function isAbsoluteFileInsideDirectory($filename, $directory)
+    {
+        $canonicalDirectory = realpath($directory);
+        if (false === $canonicalDirectory) {
+            return false;
+        }
+        $canonicalFilename = realpath($filename);
+        if (false === $canonicalFilename) {
+            return false;
+        }
+
         return 0 === strpos($canonicalFilename, $canonicalDirectory);
     }
 
