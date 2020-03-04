@@ -20,7 +20,7 @@
  */
 
 use Doctrine\DBAL\ParameterType;
-use oat\generis\persistence\sql\SchemaAwareInterface;
+use oat\generis\persistence\sql\SchemaProviderInterface;
 use oat\generis\persistence\sql\SchemaCollection;
 
 /**
@@ -28,7 +28,7 @@ use oat\generis\persistence\sql\SchemaCollection;
  *
  * @todo : Refactor driver specific stuff to dedicated implementation
  */
-class common_persistence_SqlKvDriver implements common_persistence_KvDriver, SchemaAwareInterface
+class common_persistence_SqlKvDriver implements common_persistence_KvDriver, SchemaProviderInterface
 {
 
     const DEFAULT_GC_PROBABILITY = 1000;
@@ -249,7 +249,7 @@ class common_persistence_SqlKvDriver implements common_persistence_KvDriver, Sch
      *
      * @throws common_exception_InconsistentData
      */
-    public function touchSchemas(SchemaCollection $schemaCollection)
+    public function provideSchema(SchemaCollection $schemaCollection)
     {
         $schema = $schemaCollection->getSchema($this->sqlPersistenceId);
         $table = $schema->createTable("kv_store");

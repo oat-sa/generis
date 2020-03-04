@@ -23,7 +23,7 @@
 
 use oat\generis\persistence\PersistenceManager;
 use oat\generis\model\data\Ontology;
-use oat\generis\persistence\sql\SchemaAwareInterface;
+use oat\generis\persistence\sql\SchemaProviderInterface;
 
 /**
  * Custom extension installer for generis
@@ -65,8 +65,8 @@ class common_ext_GenerisInstaller extends common_ext_ExtensionInstaller
         $pm = $this->getServiceManager()->get(PersistenceManager::SERVICE_ID);
         $schemaCollection = $pm->getSqlSchemas();
         $ontology = $this->getServiceManager()->get(Ontology::SERVICE_ID);
-        if ($ontology instanceof SchemaAwareInterface) {
-            $ontology->touchSchemas($schemaCollection);
+        if ($ontology instanceof SchemaProviderInterface) {
+            $ontology->provideSchema($schemaCollection);
         }
         $pm->applySchemas($schemaCollection);
     }

@@ -26,7 +26,7 @@ use common_report_Report as Report;
 use Exception;
 use oat\oatbox\extension\InstallAction;
 use oat\generis\persistence\PersistenceManager;
-use oat\generis\persistence\sql\SchemaAwareInterface;
+use oat\generis\persistence\sql\SchemaProviderInterface;
 
 class SetupDefaultKvPersistence extends InstallAction
 {
@@ -51,8 +51,8 @@ class SetupDefaultKvPersistence extends InstallAction
         }
         $schemaCollection = $persistenceManager->getSqlSchemas();
         $kvdriver = $persistenceManager->getPersistenceById('default_kv')->getDriver();
-        if ($kvdriver instanceof SchemaAwareInterface) {
-            $kvdriver->touchSchemas($schemaCollection);
+        if ($kvdriver instanceof SchemaProviderInterface) {
+            $kvdriver->provideSchema($schemaCollection);
         }
         $persistenceManager->applySchemas($schemaCollection);
 
