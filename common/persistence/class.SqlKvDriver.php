@@ -30,7 +30,6 @@ use oat\generis\persistence\sql\SchemaCollection;
  */
 class common_persistence_SqlKvDriver implements common_persistence_KvDriver, SchemaProviderInterface
 {
-
     const DEFAULT_GC_PROBABILITY = 1000;
 
     const OPTION_PERSISTENCE_SQL = 'sqlPersistence';

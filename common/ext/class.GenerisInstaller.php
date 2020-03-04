@@ -62,12 +62,19 @@ class common_ext_GenerisInstaller extends common_ext_ExtensionInstaller
 
     public function setupSchema()
     {
-        $pm = $this->getServiceManager()->get(PersistenceManager::SERVICE_ID);
-        $schemaCollection = $pm->getSqlSchemas();
+        $schemaCollection = $this->getPersistenceManager()->getSqlSchemas();
         $ontology = $this->getServiceManager()->get(Ontology::SERVICE_ID);
         if ($ontology instanceof SchemaProviderInterface) {
             $ontology->provideSchema($schemaCollection);
         }
-        $pm->applySchemas($schemaCollection);
+        $this->getPersistenceManager()->applySchemas($schemaCollection);
+    }
+
+    /**
+     * @return PersistenceManager
+     */
+    protected function getPersistenceManager()
+    {
+        return $this->getServiceManager()->get(PersistenceManager::SERVICE_ID);
     }
 }

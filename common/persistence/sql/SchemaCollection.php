@@ -25,6 +25,7 @@ namespace oat\generis\persistence\sql;
 use Doctrine\DBAL\Schema\Schema;
 use \IteratorAggregate;
 use ArrayIterator;
+use \common_exception_InconsistentData;
 
 /**
  * A collection of multiple schemas, in order to accomodate for the possibility
@@ -58,12 +59,12 @@ class SchemaCollection implements IteratorAggregate
     /**
      * Get a schema as it was when it was added
      * @param string  $id
-     * @throws \common_exception_InconsistentData
+     * @throws common_exception_InconsistentData
      */
     public function getOriginalSchema($id) : Schema
     {
         if (!isset($this->originals[$id])) {
-            throw new \common_exception_InconsistentData('Expected original schema '.$id.' not found');
+            throw new common_exception_InconsistentData('Expected original schema '.$id.' not found');
         }
         return $this->originals[$id];
     }
@@ -71,13 +72,13 @@ class SchemaCollection implements IteratorAggregate
     /**
      * Get a schema in its current form, might have been changed
      * @param string $id
-     * @throws \common_exception_InconsistentData
+     * @throws common_exception_InconsistentData
      * @return Schema
      */
     public function getSchema($id) : Schema
     {
         if (!isset($this->schemas[$id])) {
-            throw new \common_exception_InconsistentData('Expected schema '.$id.' not found');
+            throw new common_exception_InconsistentData('Expected schema '.$id.' not found');
         }
         return $this->schemas[$id];
     }
