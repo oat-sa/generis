@@ -30,7 +30,7 @@ use oat\oatbox\event\EventManager;
 use oat\generis\model\data\event\ResourceCreated;
 
 /**
- * New SQL rdf interface
+ * NewSQL rdf interface
  */
 class NewSqlRdf extends core_kernel_persistence_smoothsql_SmoothRdf
 {
