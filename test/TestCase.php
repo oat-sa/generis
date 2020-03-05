@@ -30,6 +30,14 @@ use PHPUnit\Framework\MockObject\MockObject;
 
 abstract class TestCase extends UnitTestCase
 {
+    /**
+     * Backward compatibility method
+     * @param string $exception
+     */
+    public function setExpectedException(string $exception)
+    {
+        $this->expectException($exception);
+    }
 
     /**
      * @param array $services
@@ -84,6 +92,21 @@ abstract class TestCase extends UnitTestCase
             ->disableOriginalClone()
             ->disableArgumentCloning()
             ->getMock();
+    }
+
+    /**
+     * Backward compatibility function for PHPUnit 5.4+
+     *
+     * Returns a test double for the specified class.
+     *
+     * @param string $originalClassName
+     *
+     * @return MockObject
+     * @since Method available since Release 5.4.0
+     */
+    protected function getMock(string $originalClassName): MockObject
+    {
+        return $this->createMock($originalClassName);
     }
 
     /**

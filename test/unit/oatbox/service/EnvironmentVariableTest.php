@@ -48,7 +48,8 @@ class EnvironmentVariableTest extends TestCase
 
     public function testConstructorWithNonStringKeyThrowsException()
     {
-        $this->setExpectedException(InvalidArgumentException::class, 'Environment variable name must be a string.');
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Environment variable name must be a string.');
         new EnvironmentVariable([]);
     }
 
