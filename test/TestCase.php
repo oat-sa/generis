@@ -30,14 +30,6 @@ use PHPUnit\Framework\MockObject\MockObject;
 
 abstract class TestCase extends UnitTestCase
 {
-    /**
-     * Forward compatibility function for PHPUnit 7.0
-     * @param string $exception
-     */
-    public function expectException($exception): void
-    {
-        $this->setExpectedException($exception);
-    }
 
     /**
      * @param array $services
