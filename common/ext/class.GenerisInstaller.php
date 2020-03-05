@@ -21,6 +21,10 @@
  *
  */
 
+use oat\generis\persistence\PersistenceManager;
+use oat\generis\model\data\Ontology;
+use oat\generis\persistence\sql\SchemaProviderInterface;
+
 /**
  * Custom extension installer for generis
  *
@@ -46,12 +50,31 @@ class common_ext_GenerisInstaller extends common_ext_ExtensionInstaller
         }
  
         $this->installLoadDefaultConfig();
+        $this->setupSchema();
         $this->installOntology();
         $this->installRegisterExt();
-        
-        common_cache_FileCache::singleton()->purge();
+
+        $this->getServiceManager()->get(common_cache_Cache::SERVICE_ID)->purge();
         
         $this->log('d', 'Installing custom script for extension ' . $this->extension->getId());
         $this->installCustomScript();
+    }
+
+    public function setupSchema()
+    {
+        $schemaCollection = $this->getPersistenceManager()->getSqlSchemas();
+        $ontology = $this->getServiceManager()->get(Ontology::SERVICE_ID);
+        if ($ontology instanceof SchemaProviderInterface) {
+            $ontology->provideSchema($schemaCollection);
+        }
+        $this->getPersistenceManager()->applySchemas($schemaCollection);
+    }
+
+    /**
+     * @return PersistenceManager
+     */
+    protected function getPersistenceManager()
+    {
+        return $this->getServiceManager()->get(PersistenceManager::SERVICE_ID);
     }
 }
