@@ -25,6 +25,7 @@ use oat\generis\model\OntologyRdfs;
 use oat\oatbox\service\ServiceManager;
 use oat\oatbox\event\EventManager;
 use oat\generis\model\data\event\ResourceCreated;
+use oat\generis\model\data\Ontology;
 
 /**
  * Implementation of the RDF interface for the smooth sql driver
@@ -96,9 +97,12 @@ class core_kernel_persistence_smoothsql_SmoothRdf implements RdfInterface
     {
         return new core_kernel_persistence_smoothsql_SmoothIterator($this->getPersistence());
     }
-    
-    public function getServiceManager()
+
+    /**
+     * @return Ontology
+     */
+    public function getModel()
     {
-        return ServiceManager::getServiceManager();
+        return $this->model;
     }
 }

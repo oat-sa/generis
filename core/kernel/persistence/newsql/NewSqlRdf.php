@@ -55,8 +55,8 @@ class NewSqlRdf extends core_kernel_persistence_smoothsql_SmoothRdf
             ]
         );
         if ($triple->predicate == OntologyRdfs::RDFS_SUBCLASSOF || $triple->predicate == OntologyRdf::RDF_TYPE) {
-            $eventManager = $this->model->getServiceLocator()->get(EventManager::SERVICE_ID);
-            $eventManager->trigger(new ResourceCreated($this->model->getResource($triple->subject)));
+            $eventManager = $this->getModel()->getServiceLocator()->get(EventManager::SERVICE_ID);
+            $eventManager->trigger(new ResourceCreated($this->getModel()->getResource($triple->subject)));
         }
 
         return $success;
