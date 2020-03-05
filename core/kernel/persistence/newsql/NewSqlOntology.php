@@ -30,9 +30,22 @@ use oat\generis\persistence\sql\SchemaCollection;
  */
 class NewSqlOntology extends core_kernel_persistence_smoothsql_SmoothModel
 {
+    /**
+     * {@inheritDoc}
+     * @see core_kernel_persistence_smoothsql_SmoothModel::getRdfInterface()
+     */
     public function getRdfInterface()
     {
         return new NewSqlRdf($this);
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see core_kernel_persistence_smoothsql_SmoothModel::getRdfsInterface()
+     */
+    public function getRdfsInterface()
+    {
+        return new NewSqlRdfs($this);
     }
 
     /**

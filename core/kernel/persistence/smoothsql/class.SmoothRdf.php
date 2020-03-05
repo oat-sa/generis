@@ -101,7 +101,7 @@ class core_kernel_persistence_smoothsql_SmoothRdf implements RdfInterface
     /**
      * @return Ontology
      */
-    public function getModel()
+    protected function getModel()
     {
         return $this->model;
     }
