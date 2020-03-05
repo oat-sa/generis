@@ -26,7 +26,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 use common_persistence_Manager;
 use common_persistence_sql_dbal_Driver;
 use PHPUnit\Framework\TestCase as UnitTestCase;
-use oat\generis\test\MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 
 abstract class TestCase extends UnitTestCase
 {
@@ -34,7 +34,7 @@ abstract class TestCase extends UnitTestCase
      * Forward compatibility function for PHPUnit 7.0
      * @param string $exception
      */
-    public function expectException($exception)
+    public function expectException($exception): void
     {
         $this->setExpectedException($exception);
     }
@@ -85,7 +85,7 @@ abstract class TestCase extends UnitTestCase
      * @throws \PHPUnit_Framework_Exception
      * @since Method available since Release 5.4.0
      */
-    protected function createMock($originalClassName)
+    protected function createMock($originalClassName): MockObject
     {
         return $this->getMockBuilder($originalClassName)
             ->disableOriginalConstructor()
@@ -104,7 +104,7 @@ abstract class TestCase extends UnitTestCase
      * @return MockObject
      * @since Method available since Release 5.4.0
      */
-    protected function createPartialMock($originalClassName, array $methods = [])
+    protected function createPartialMock($originalClassName, array $methods = []): MockObject
     {
         return $this->getMockBuilder($originalClassName)
             ->disableOriginalConstructor()
