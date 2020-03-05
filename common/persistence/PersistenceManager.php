@@ -137,7 +137,7 @@ class PersistenceManager extends ConfigurableService
     /**
      * Return a collection of all SQL schemas
      */
-    public function getSqlSchemas() : SchemaCollection
+    public function getSqlSchemas()
     {
         $schemas = new SchemaCollection();
         foreach (array_keys($this->getOption(self::OPTION_PERSISTENCES)) as $id) {
@@ -152,7 +152,7 @@ class PersistenceManager extends ConfigurableService
     /**
      * Adapt the databases to the SQL schemas
      */
-    public function applySchemas(SchemaCollection $schemaCollection): void 
+    public function applySchemas(SchemaCollection $schemaCollection)
     {
         $this->logInfo('Applying schame changes');
         foreach ($schemaCollection as $id => $schema) {
