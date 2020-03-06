@@ -22,8 +22,10 @@
 
 namespace oat\generis\model\kernel\persistence\newsql;
 
+use core_kernel_classes_Triple;
 use core_kernel_persistence_smoothsql_SmoothRdf;
 use oat\generis\Helper\UuidPrimaryKeyTrait;
+use oat\generis\model\data\Traversable;
 use oat\generis\model\OntologyRdfs;
 use oat\generis\model\OntologyRdf;
 use oat\oatbox\event\EventManager;
@@ -36,7 +38,7 @@ class NewSqlRdf extends core_kernel_persistence_smoothsql_SmoothRdf
 {
     use UuidPrimaryKeyTrait;
 
-    public function add(\core_kernel_classes_Triple $triple)
+    public function add(core_kernel_classes_Triple $triple)
     {
         $query = 'INSERT INTO statements ( id, modelId, subject, predicate, object, l_language, epoch, author) VALUES ( ?, ? , ? , ? , ? , ? , ?, ?);';
 
