@@ -41,15 +41,6 @@ class NewSqlOntology extends core_kernel_persistence_smoothsql_SmoothModel
 
     /**
      * {@inheritDoc}
-     * @see core_kernel_persistence_smoothsql_SmoothModel::getRdfsInterface()
-     */
-    public function getRdfsInterface()
-    {
-        return new NewSqlRdfs($this);
-    }
-
-    /**
-     * {@inheritDoc}
      * @see core_kernel_persistence_smoothsql_SmoothModel::provideSchema()
      */
     public function provideSchema(SchemaCollection $schemaCollection)
