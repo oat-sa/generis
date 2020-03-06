@@ -287,23 +287,14 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
      */
     public function setPropertyValueByLg(core_kernel_classes_Resource $resource, core_kernel_classes_Property $property, $value, $lg)
     {
-        $platform = $this->getPersistence()->getPlatForm();
-        $userId = $this->getServiceLocator()->get(SessionService::SERVICE_ID)->getCurrentUser()->getIdentifier();
-        
-        $query = 'INSERT INTO statements (modelid,subject,predicate,object,l_language,author,epoch)
-        			VALUES  (?, ?, ?, ?, ?, ?, ?)';
-
-        $returnValue = $this->getPersistence()->exec($query, [
+        $triple = core_kernel_classes_Triple::getTriple(
             $this->getNewTripleModelId(),
             $resource->getUri(),
             $property->getUri(),
             $value,
-            ($property->isLgDependent() ? $lg : ''),
-            $userId,
-            $platform->getNowExpression()
-        ]);
-
-        return (bool) $returnValue;
+            ($property->isLgDependent() ? $lg : '')
+        );
+        return $this->getModel()->getRdfInterface()->add($triple);
     }
 
     /**
