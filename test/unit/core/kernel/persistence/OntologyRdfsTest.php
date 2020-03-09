@@ -19,7 +19,7 @@
  *
  */
 
-namespace oat\generis\test\unit;
+namespace oat\generis\test\unit\core\kernel\persistence;
 
 use oat\generis\model\data\Model;
 use oat\generis\test\GenerisTestCase;
@@ -28,20 +28,14 @@ use oat\generis\model\data\Ontology;
 /**
  *
  */
-class OntologyMockTest extends GenerisTestCase
+class OntologyRdfsTest extends GenerisTestCase
 {
-    public function testModel()
-    {
-        $model = $this->getOntologyMock();
-        $this->assertInstanceOf(Model::class, $model);
-        return $model;
-    }
-
     /**
-     * @depends testModel
+     * @dataProvider getOntologies
      */
     public function testSetLabel($model)
     {
+        $this->assertInstanceOf(Model::class, $model);
         $resource = $model->getResource('http://testing');
         $this->assertInstanceOf(\core_kernel_classes_Resource::class, $resource);
         $label = $resource->getLabel();
@@ -52,7 +46,7 @@ class OntologyMockTest extends GenerisTestCase
     }
 
     /**
-     * @depends testModel
+     * @dataProvider getOntologies
      */
     public function testCreateInstance($model)
     {
@@ -68,7 +62,7 @@ class OntologyMockTest extends GenerisTestCase
     }
 
     /**
-     * @depends testModel
+     * @dataProvider getOntologies
      */
     public function testDuplicateInstance(Ontology $model)
     {
@@ -83,12 +77,23 @@ class OntologyMockTest extends GenerisTestCase
     }
 
     /**
-     * @depends testCreateInstance
+     * @dataProvider getOntologies
      */
-    public function testDeleteInstance(\core_kernel_classes_Resource $resource)
+    public function testDeleteInstance(Ontology $model)
     {
+        $class = $model->getClass('http://testing#class');
+        $resource = $class->createInstance('sample');
+        $this->assertInstanceOf(\core_kernel_classes_Resource::class, $resource);
         $this->assertTrue($resource->exists());
         $resource->delete();
         $this->assertFalse($resource->exists());
+    }
+
+    public function getOntologies()
+    {
+        return [
+            [$this->getOntologyMock()],
+            [$this->getNewSqlMock()],
+        ];
     }
 }
