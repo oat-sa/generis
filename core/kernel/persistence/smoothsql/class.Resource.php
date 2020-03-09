@@ -647,8 +647,8 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
     private function buildTrippleArray(
         core_kernel_classes_Resource $resource,
         array $properties,
-        $userIdentifier,
-        $dataLanguage
+        string $userIdentifier,
+        string $dataLanguage
     )
     {
         $valuesToInsert = [];
@@ -671,14 +671,15 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
             }
 
             foreach ($formattedValues as $object) {
-                $valuesToInsert[] = [
-                    'modelid' => $this->getNewTripleModelId(),
-                    'subject' => $resource->getUri(),
-                    'predicate' => $property->getUri(),
-                    'object' => $object,
-                    'l_language' => $lang,
-                    'author' => $userIdentifier,
-                ];
+                $triple = new core_kernel_classes_Triple();
+                $triple->modelid = $this->getNewTripleModelId();
+                $triple->subject = $resource->getUri();
+                $triple->predicate = $property->getUri();
+                $triple->object = $object;
+                $triple->lg = $lang;
+                $triple->author = $userIdentifier;
+                $valuesToInsert[] = $triple;
+
             }
         }
 
