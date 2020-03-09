@@ -19,13 +19,12 @@
  *
  */
 
+use oat\generis\model\data\event\ResourceCreated;
+use oat\generis\model\data\Ontology;
 use oat\generis\model\data\RdfInterface;
 use oat\generis\model\OntologyRdf;
 use oat\generis\model\OntologyRdfs;
-use oat\oatbox\service\ServiceManager;
 use oat\oatbox\event\EventManager;
-use oat\generis\model\data\event\ResourceCreated;
-use oat\generis\model\data\Ontology;
 
 /**
  * Implementation of the RDF interface for the smooth sql driver
@@ -35,6 +34,7 @@ use oat\generis\model\data\Ontology;
  */
 class core_kernel_persistence_smoothsql_SmoothRdf implements RdfInterface
 {
+    const BATCH_SIZE = 100;
     /**
      * @var core_kernel_persistence_smoothsql_SmoothModel
      */
@@ -58,27 +58,74 @@ class core_kernel_persistence_smoothsql_SmoothRdf implements RdfInterface
     {
         throw new \common_Exception('Not implemented');
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see \oat\generis\model\data\RdfInterface::add()
      */
-    public function add(\core_kernel_classes_Triple $triple)
+    public function add(core_kernel_classes_Triple $triple)
     {
-        $query = "INSERT INTO statements ( modelId, subject, predicate, object, l_language, epoch, author) VALUES ( ? , ? , ? , ? , ? , ?, ?);";
-        $success = $this->getPersistence()->exec($query, [$triple->modelid, $triple->subject, $triple->predicate, $triple->object, is_null($triple->lg) ? '' : $triple->lg, $this->getPersistence()->getPlatForm()->getNowExpression(), is_null($triple->author) ? '' : $triple->author]);
-        if ($triple->predicate == OntologyRdfs::RDFS_SUBCLASSOF || $triple->predicate == OntologyRdf::RDF_TYPE) {
-            $eventManager = $this->model->getServiceLocator()->get(EventManager::SERVICE_ID);
-            $eventManager->trigger(new ResourceCreated($this->model->getResource($triple->subject)));
+        $query = "INSERT INTO statements ( modelId, subject, predicate, object, l_language, epoch, author) "
+            . " VALUES ( ? , ? , ? , ? , ? , ?, ?);";
+
+        $success = $this->getPersistence()->exec($query,
+            [
+                $triple->modelid,
+                $triple->subject,
+                $triple->predicate,
+                $triple->object,
+                is_null($triple->lg) ? '' : $triple->lg,
+                $this->getPersistence()->getPlatForm()->getNowExpression(),
+                is_null($triple->author) ? '' : $triple->author
+            ]
+        );
+
+        if ($success > 0) {
+            $this->checkResourceTriggers($triple);
         }
+
         return $success;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function addTripleCollection(iterable $triples)
+    {
+        $valuesToInsert = [];
+
+        foreach ($triples as $triple) {
+            $valuesToInsert[] = [
+                'modelid' => $triple->modelId,
+                'subject' => $triple->subject,
+                'predicate' => $triple->predicate,
+                'object' => $triple->object,
+                'l_language' => is_null($triple->lg) ? '' : $triple->lg,
+                'author' => is_null($triple->author) ? '' : $triple->author,
+                'epoch' => $this->getPersistence()->getPlatForm()->getNowExpression()
+            ];
+
+            if (count($valuesToInsert) >= self::BATCH_SIZE) {
+                $this->insertValues($valuesToInsert);
+                $valuesToInsert = [];
+            }
+        }
+
+        if (!empty($valuesToInsert)) {
+            $this->insertValues($valuesToInsert);
+        }
+    }
+
+    protected function insertValues(array $valuesToInsert)
+    {
+        return $this->getPersistence()->insertMultiple('statements', $valuesToInsert);
     }
     
     /**
      * (non-PHPdoc)
      * @see \oat\generis\model\data\RdfInterface::remove()
      */
-    public function remove(\core_kernel_classes_Triple $triple)
+    public function remove(core_kernel_classes_Triple $triple)
     {
         $query = "DELETE FROM statements WHERE subject = ? AND predicate = ? AND object = ? AND l_language = ?;";
         return $this->getPersistence()->exec($query, [$triple->subject, $triple->predicate, $triple->object, is_null($triple->lg) ? '' : $triple->lg]);
@@ -104,5 +151,16 @@ class core_kernel_persistence_smoothsql_SmoothRdf implements RdfInterface
     protected function getModel()
     {
         return $this->model;
+    }
+
+    /**
+     * @param core_kernel_classes_Triple $triple
+     */
+    private function checkResourceTriggers(core_kernel_classes_Triple $triple): void
+    {
+        if ($triple->predicate == OntologyRdfs::RDFS_SUBCLASSOF || $triple->predicate == OntologyRdf::RDF_TYPE) {
+            $eventManager = $this->model->getServiceLocator()->get(EventManager::SERVICE_ID);
+            $eventManager->trigger(new ResourceCreated($this->model->getResource($triple->subject)));
+        }
     }
 }

@@ -230,47 +230,28 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
     public function setPropertiesValues(core_kernel_classes_Resource $resource, $properties)
     {
         $returnValue = false;
+        $triples = [];
 
         if (is_array($properties) && count($properties) > 0) {
+
+            /** @var common_session_Session $session */
             $session = $this->getServiceLocator()->get(SessionService::SERVICE_ID)->getCurrentSession();
+
+            /** @var common_persistence_sql_Platform $platform */
             $platform = $this->getPersistence()->getPlatForm();
 
-            $valuesToInsert = [];
-
-            foreach ($properties as $propertyUri => $value) {
-                $property = $this->getModel()->getProperty($propertyUri);
-                
-                $lang = ($property->isLgDependent() ? $session->getDataLanguage() : '');
-                $formattedValues = [];
-                
-                if ($value instanceof core_kernel_classes_Resource) {
-                    $formattedValues[] = $value->getUri();
-                } elseif (is_array($value)) {
-                    foreach ($value as $val) {
-                        $formattedValues[] = $val instanceof core_kernel_classes_Resource
-                            ? $val->getUri()
-                            : $val;
-                    }
-                } else {
-                    $formattedValues[] = ($value == null) ? '' : $value;
-                }
-                
-                foreach ($formattedValues as $object) {
-                    $valuesToInsert[] = [
-                        'modelid' => $this->getNewTripleModelId(),
-                        'subject' => $resource->getUri(),
-                        'predicate' => $property->getUri(),
-                        'object' => $object,
-                        'l_language' => $lang,
-                        'author' => $session->getUser()->getIdentifier(),
-                        'epoch' => $platform->getNowExpression()
-                    ];
-                }
-            }
-
-            $returnValue = $this->getPersistence()->insertMultiple('statements', $valuesToInsert);
+            $triples = $this->buildTrippleArray(
+                $resource,
+                $properties,
+                (string)$session->getUser()->getIdentifier(),
+                $session->getDataLanguage()
+            );
         }
-        
+
+        if (!empty($triples)) {
+            $returnValue = $this->getModel()->getRdfInterface()->addTripleCollection($triples);
+        }
+
         return $returnValue;
     }
 
@@ -630,5 +611,54 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
     public function getServiceLocator()
     {
         return $this->getModel()->getServiceLocator();
+    }
+
+    /**
+     * @param core_kernel_classes_Resource $resource
+     * @param array $properties
+     * @param string $userIdentifier
+     * @param string $dataLanguage
+     * @return array
+     */
+    private function buildTrippleArray(
+        core_kernel_classes_Resource $resource,
+        array $properties,
+        string $userIdentifier,
+        string $dataLanguage
+    )
+    {
+        $valuesToInsert = [];
+        foreach ($properties as $propertyUri => $value) {
+            $property = $this->getModel()->getProperty($propertyUri);
+
+            $lang = ($property->isLgDependent() ? $dataLanguage : '');
+            $formattedValues = [];
+
+            if ($value instanceof core_kernel_classes_Resource) {
+                $formattedValues[] = $value->getUri();
+            } elseif (is_array($value)) {
+                foreach ($value as $val) {
+                    $formattedValues[] = $val instanceof core_kernel_classes_Resource
+                        ? $val->getUri()
+                        : $val;
+                }
+            } else {
+                $formattedValues[] = ($value == null) ? '' : $value;
+            }
+
+            foreach ($formattedValues as $object) {
+                $triple = new core_kernel_classes_Triple();
+                $triple->modelid = $this->getNewTripleModelId();
+                $triple->subject = $resource->getUri();
+                $triple->predicate = $property->getUri();
+                $triple->object = $object;
+                $triple->lg = $lang;
+                $triple->author = $userIdentifier;
+                $valuesToInsert[] = $triple;
+
+            }
+        }
+
+        return $valuesToInsert;
     }
 }

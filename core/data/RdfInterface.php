@@ -23,6 +23,7 @@
 namespace oat\generis\model\data;
 
 use core_kernel_classes_Triple;
+use Traversable;
 
 /**
  * Rdf interface to access the ontology
@@ -40,7 +41,14 @@ interface RdfInterface extends \IteratorAggregate
      * @param \core_kernel_classes_Triple $triple
      */
     public function add(\core_kernel_classes_Triple $triple);
-    
+
+    /**
+     * Adds a triples to the model
+     *
+     * @param core_kernel_classes_Triple[] $triples
+     */
+    public function addTripleCollection(Traversable $triples);
+
     /**
      * Removes the triple
      *
