@@ -237,9 +237,6 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
             /** @var common_session_Session $session */
             $session = $this->getServiceLocator()->get(SessionService::SERVICE_ID)->getCurrentSession();
 
-            /** @var common_persistence_sql_Platform $platform */
-            $platform = $this->getPersistence()->getPlatForm();
-
             $triples = $this->buildTrippleArray(
                 $resource,
                 $properties,
@@ -449,31 +446,30 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
         $returnValue = null;
         $newUri = $this->getServiceLocator()->get(UriProvider::SERVICE_ID)->provide();
         $collection = $this->getRdfTriples($resource);
-        
+
         if ($collection->count() > 0) {
-            $platform = $this->getPersistence()->getPlatForm();
             $user = $this->getServiceLocator()->get(SessionService::SERVICE_ID)->getCurrentUser()->getIdentifier();
-            $valuesToInsert = [];
-            
+            $triples = [];
+
             foreach ($collection->getIterator() as $triple) {
                 if (!in_array($triple->predicate, $excludedProperties)) {
-                    $valuesToInsert[] = [
-                        'modelid' => $this->getNewTripleModelId(),
-                        'subject' => $newUri,
-                        'predicate' => $triple->predicate,
-                        'object' => ($triple->object == null) ? '' : $triple->object,
-                        'l_language' => ($triple->lg == null) ? '' : $triple->lg,
-                        'author' => $user,
-                        'epoch' => $platform->getNowExpression(),
-                    ];
+                    $triples[] = core_kernel_classes_Triple::createTriple(
+                        $this->getNewTripleModelId(),
+                        $newUri,
+                        $triple->predicate,
+                        ($triple->object == null) ? '' : $triple->object,
+                        ($triple->lg == null) ? '' : $triple->lg,
+                        $user
+                    );
                 }
             }
-            
-            if ($this->getPersistence()->insertMultiple('statements', $valuesToInsert)) {
+
+            if (!empty($triples)) {
+                $this->getModel()->getRdfInterface()->addTripleCollection($triples);
                 $returnValue = $this->getModel()->getResource($newUri);
             }
         }
-        
+
         return $returnValue;
     }
 
@@ -627,38 +623,48 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
         string $dataLanguage
     )
     {
-        $valuesToInsert = [];
+        $triples = [];
         foreach ($properties as $propertyUri => $value) {
             $property = $this->getModel()->getProperty($propertyUri);
 
             $lang = ($property->isLgDependent() ? $dataLanguage : '');
-            $formattedValues = [];
 
-            if ($value instanceof core_kernel_classes_Resource) {
-                $formattedValues[] = $value->getUri();
-            } elseif (is_array($value)) {
-                foreach ($value as $val) {
-                    $formattedValues[] = $val instanceof core_kernel_classes_Resource
-                        ? $val->getUri()
-                        : $val;
-                }
-            } else {
-                $formattedValues[] = ($value == null) ? '' : $value;
-            }
+            $formattedValues = $this->normalizePropertyValues($value);
 
             foreach ($formattedValues as $object) {
-                $triple = new core_kernel_classes_Triple();
-                $triple->modelid = $this->getNewTripleModelId();
-                $triple->subject = $resource->getUri();
-                $triple->predicate = $property->getUri();
-                $triple->object = $object;
-                $triple->lg = $lang;
-                $triple->author = $userIdentifier;
-                $valuesToInsert[] = $triple;
-
+                $triples[] = core_kernel_classes_Triple::createTriple(
+                    $this->getNewTripleModelId(),
+                    $resource->getUri(),
+                    $property->getUri(),
+                    $object,
+                    $lang,
+                    $userIdentifier
+                );
             }
         }
 
-        return $valuesToInsert;
+        return $triples;
+    }
+
+    /**
+     * @param $value
+     * @param array $formattedValues
+     * @return array
+     */
+    private function normalizePropertyValues($value)
+    {
+        $normalizedValues = [];
+        if ($value instanceof core_kernel_classes_Resource) {
+            $normalizedValues[] = $value->getUri();
+        } elseif (is_array($value)) {
+            foreach ($value as $val) {
+                $normalizedValues[] = $val instanceof core_kernel_classes_Resource
+                    ? $val->getUri()
+                    : $val;
+            }
+        } else {
+            $normalizedValues[] = ($value == null) ? '' : $value;
+        }
+        return $normalizedValues;
     }
 }

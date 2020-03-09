@@ -96,7 +96,7 @@ class core_kernel_persistence_smoothsql_SmoothRdf implements RdfInterface
 
         foreach ($triples as $triple) {
             $valuesToInsert[] = [
-                'modelid' => $triple->modelId,
+                'modelid' => $triple->modelid,
                 'subject' => $triple->subject,
                 'predicate' => $triple->predicate,
                 'object' => $triple->object,
