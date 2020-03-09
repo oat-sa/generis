@@ -258,7 +258,7 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
             $triples = $this->buildTrippleArray(
                 $resource,
                 $properties,
-                $session->getUser()->getIdentifier(),
+                (string)$session->getUser()->getIdentifier(),
                 $session->getDataLanguage()
             );
         }
