@@ -25,7 +25,6 @@ namespace oat\generis\model\kernel\persistence\newsql;
 use core_kernel_classes_Triple;
 use core_kernel_persistence_smoothsql_SmoothRdf;
 use oat\generis\Helper\UuidPrimaryKeyTrait;
-use oat\generis\model\data\Traversable;
 use oat\generis\model\OntologyRdfs;
 use oat\generis\model\OntologyRdf;
 use oat\oatbox\event\EventManager;
@@ -62,5 +61,32 @@ class NewSqlRdf extends core_kernel_persistence_smoothsql_SmoothRdf
         }
 
         return $success;
+    }
+    
+    public function addTripleCollection(iterable $triples)
+    {
+        $valuesToInsert = [];
+        
+        foreach ($triples as $triple) {
+            $valuesToInsert[] = [
+                'id' => $this->getUniquePrimaryKey(),
+                'modelid' => $triple->modelid,
+                'subject' => $triple->subject,
+                'predicate' => $triple->predicate,
+                'object' => $triple->object,
+                'l_language' => is_null($triple->lg) ? '' : $triple->lg,
+                'author' => is_null($triple->author) ? '' : $triple->author,
+                'epoch' => $this->getPersistence()->getPlatForm()->getNowExpression()
+            ];
+            
+            if (count($valuesToInsert) >= self::BATCH_SIZE) {
+                $this->insertValues($valuesToInsert);
+                $valuesToInsert = [];
+            }
+        }
+        
+        if (!empty($valuesToInsert)) {
+            $this->insertValues($valuesToInsert);
+        }
     }
 }

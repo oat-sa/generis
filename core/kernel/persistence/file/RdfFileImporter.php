@@ -49,9 +49,7 @@ class RdfFileImporter implements ServiceLocatorAwareInterface
         $rdf = $this->getServiceLocator()->get(Ontology::SERVICE_ID)->getRdfInterface();
 
         $success = true;
-        foreach ($iterator as $triple) {
-            $success &= $rdf->add($triple);
-        }
+        $rdf->addTripleCollection($iterator);
         return $success;
     }
 }
