@@ -27,8 +27,6 @@ namespace oat\generis\persistence\sql;
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use oat\oatbox\log\LoggerAwareTrait;
 use Psr\Log\LoggerAwareInterface;
-use Doctrine\DBAL\Schema\Schema;
-use oat\generis\model\kernel\persistence\smoothsql\install\SmoothRdsModel;
 use Doctrine\DBAL\Exception\ConnectionException;
 
 class SetupDb implements LoggerAwareInterface
@@ -49,7 +47,6 @@ class SetupDb implements LoggerAwareInterface
         $dbName = $dbalDriver->getDataBase();
         $this->verifyDatabase($p, $dbName);
         $this->cleanDb($p);
-        $this->setupTables($p);
     }
 
     /**
@@ -61,43 +58,6 @@ class SetupDb implements LoggerAwareInterface
         if (!$this->dbExists($schemaManager, $dbName)) {
             throw new \tao_install_utils_Exception('Unable to find the database, make sure that the db exists and that the db user has the rights to use it.');
         }
-    }
-
-    /**
-     * @author "Lionel Lecaque, <lionel@taotesting.com>"
-     */
-    private function setupTables(\common_persistence_SqlPersistence $p)
-    {
-        $queries = $p->getPlatForm()->schemaToSql($this->getSchema($p));
-        foreach ($queries as $query) {
-            $p->exec($query);
-        }
-    }
-
-    /**
-     * Generate databse schema
-     * @return Schema
-     */
-    public function getSchema(\common_persistence_SqlPersistence $p)
-    {
-        $schema = $p->getSchemaManager()->createSchema();
-        SmoothRdsModel::addSmoothTables($schema);
-        $this->addKeyValueStoreTable($schema);
-        return $schema;
-    }
-
-    /**
-     * Add keyvalue rds implementation tables
-     * @param Schema $schema
-     */
-    protected function addKeyValueStoreTable(Schema $schema)
-    {
-        $table = $schema->createTable("kv_store");
-        $table->addColumn('kv_id', "string", ["notnull" => null,"length" => 255]);
-        $table->addColumn('kv_value', "text", ["notnull" => null]);
-        $table->addColumn('kv_time', "integer", ["notnull" => null,"length" => 30]);
-        $table->setPrimaryKey(["kv_id"]);
-        $table->addOption('engine', 'MyISAM');
     }
 
     /**

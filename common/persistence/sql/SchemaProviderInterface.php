@@ -15,25 +15,18 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2018 (original work) Open Assessment Technologies SA;
+ * Copyright (c) 2020 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  *
+ * @license GPLv2
  */
 
-namespace oat\generis\test\unit;
+namespace oat\generis\persistence\sql;
 
-use oat\generis\test\GenerisTestCase;
-
-/**
- * @deprecated backward compatibility class for unit tests extending a concrete unit test
- *
- */
-class OntologyMockTest extends GenerisTestCase
+interface SchemaProviderInterface
 {
     /**
-     * this is done for backward compatibility and it was done to prevent the failing of phpunit
-     * @doesNotPerformAssertions
+     * Allows a class to adapt the schemas as required
+     * @param SchemaCollection $schemaCollection
      */
-    public function testSampleCase()
-    {
-    }
+    public function provideSchema(SchemaCollection $schemaCollection);
 }
