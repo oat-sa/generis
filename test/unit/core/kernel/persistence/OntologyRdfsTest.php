@@ -93,8 +93,7 @@ class OntologyRdfsTest extends GenerisTestCase
     {
         return [
             [$this->getOntologyMock()],
-            //[$this->getNewSqlMock()],
-            //current step does not contain fully working new sql implementation intermediate step
+            [$this->getNewSqlMock()],
         ];
     }
 }

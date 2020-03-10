@@ -24,8 +24,8 @@ namespace oat\generis\model\kernel\persistence\newsql;
 
 use core_kernel_classes_Triple;
 use core_kernel_persistence_smoothsql_SmoothRdf;
+use Exception;
 use oat\generis\Helper\UuidPrimaryKeyTrait;
-use oat\generis\model\data\Traversable;
 use oat\generis\model\OntologyRdfs;
 use oat\generis\model\OntologyRdf;
 use oat\oatbox\event\EventManager;
@@ -62,5 +62,17 @@ class NewSqlRdf extends core_kernel_persistence_smoothsql_SmoothRdf
         }
 
         return $success;
+    }
+
+    /**
+     * @param core_kernel_classes_Triple $triple
+     * @return array
+     * @throws Exception
+     */
+    protected function tripleToValue(core_kernel_classes_Triple $triple)
+    {
+        $values = parent::tripleToValue($triple);
+        $values['id'] = $this->getUniquePrimaryKey();
+        return $values;
     }
 }

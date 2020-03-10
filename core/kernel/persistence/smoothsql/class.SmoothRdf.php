@@ -66,7 +66,7 @@ class core_kernel_persistence_smoothsql_SmoothRdf implements RdfInterface
     public function add(core_kernel_classes_Triple $triple)
     {
         $query = "INSERT INTO statements ( modelId, subject, predicate, object, l_language, epoch, author) "
-            . " VALUES ( ? , ? , ? , ? , ? , ?, ?);";
+            . "VALUES ( ? , ? , ? , ? , ? , ?, ?);";
 
         $success = $this->getPersistence()->exec($query,
             [
@@ -95,15 +95,7 @@ class core_kernel_persistence_smoothsql_SmoothRdf implements RdfInterface
         $valuesToInsert = [];
 
         foreach ($triples as $triple) {
-            $valuesToInsert[] = [
-                'modelid' => $triple->modelid,
-                'subject' => $triple->subject,
-                'predicate' => $triple->predicate,
-                'object' => $triple->object,
-                'l_language' => is_null($triple->lg) ? '' : $triple->lg,
-                'author' => is_null($triple->author) ? '' : $triple->author,
-                'epoch' => $this->getPersistence()->getPlatForm()->getNowExpression()
-            ];
+            $valuesToInsert [] = $this->tripleToValue($triple);
 
             if (count($valuesToInsert) >= self::BATCH_SIZE) {
                 $this->insertValues($valuesToInsert);
@@ -162,5 +154,23 @@ class core_kernel_persistence_smoothsql_SmoothRdf implements RdfInterface
             $eventManager = $this->model->getServiceLocator()->get(EventManager::SERVICE_ID);
             $eventManager->trigger(new ResourceCreated($this->model->getResource($triple->subject)));
         }
+    }
+
+    /**
+     * @param core_kernel_classes_Triple $triple
+     * @param array $valuesToInsert
+     * @return array
+     */
+    protected function tripleToValue(core_kernel_classes_Triple $triple)
+    {
+        return [
+            'modelid' => $triple->modelid,
+            'subject' => $triple->subject,
+            'predicate' => $triple->predicate,
+            'object' => $triple->object,
+            'l_language' => is_null($triple->lg) ? '' : $triple->lg,
+            'author' => is_null($triple->author) ? '' : $triple->author,
+            'epoch' => $this->getPersistence()->getPlatForm()->getNowExpression()
+        ];
     }
 }
