@@ -35,15 +35,6 @@ use core_kernel_classes_Triple;
 interface RdfInterface extends \IteratorAggregate
 {
     /**
-     * Returns an array of the triples with the given subject, predicate
-     *
-     * @param string $subject
-     * @param string $predicate
-     * @return array
-     */
-    public function get($subject, $predicate);
-    
-    /**
      * Adds a triple to the model
      *
      * @param \core_kernel_classes_Triple $triple
@@ -56,13 +47,4 @@ interface RdfInterface extends \IteratorAggregate
      * @param \core_kernel_classes_Triple $triple
      */
     public function remove(\core_kernel_classes_Triple $triple);
-    
-    /**
-     * Returns an array of the triples with the given predicate, object
-     *
-     * @param string $predicate
-     * @param string $object
-     * @return array
-     */
-    public function search($predicate, $object);
 }

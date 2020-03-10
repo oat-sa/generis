@@ -19,6 +19,7 @@
  *
  */
 
+use oat\generis\model\data\Ontology;
 use oat\generis\model\data\RdfsInterface;
 
 /**
@@ -64,5 +65,13 @@ class core_kernel_persistence_smoothsql_SmoothRdfs implements RdfsInterface
     public function getPropertyImplementation()
     {
         return new  \core_kernel_persistence_smoothsql_Property($this->model);
+    }
+
+    /**
+     * @return Ontology
+     */
+    protected function getModel()
+    {
+        return $this->model;
     }
 }
