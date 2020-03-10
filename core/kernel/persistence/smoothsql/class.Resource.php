@@ -459,7 +459,7 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
                         $triple->predicate,
                         ($triple->object == null) ? '' : $triple->object,
                         ($triple->lg == null) ? '' : $triple->lg,
-                        $user
+                        (string)$user
                     );
                 }
             }

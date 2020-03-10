@@ -66,7 +66,7 @@ class core_kernel_persistence_smoothsql_SmoothRdf implements RdfInterface
     public function add(core_kernel_classes_Triple $triple)
     {
         $query = "INSERT INTO statements ( modelId, subject, predicate, object, l_language, epoch, author) "
-            . " VALUES ( ? , ? , ? , ? , ? , ?, ?);";
+            . "VALUES ( ? , ? , ? , ? , ? , ?, ?);";
 
         $success = $this->getPersistence()->exec($query,
             [
