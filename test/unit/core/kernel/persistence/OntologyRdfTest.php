@@ -37,12 +37,12 @@ class OntologyRdfTest extends GenerisTestCase
     {
         $this->assertInstanceOf(Ontology::class, $ontology);
         $this->assertEquals(0, $this->getTripleCount($ontology));
-        $triple1 = core_kernel_classes_Triple::getTriple(0, 'subject', 'predicate', 'object');
+        $triple1 = core_kernel_classes_Triple::createTriple(0, 'subject', 'predicate', 'object');
         $ontology->getRdfInterface()->add($triple1);
         $this->assertEquals(1, $this->getTripleCount($ontology));
         $ontology->getRdfInterface()->remove($triple1);
         $this->assertEquals(0, $this->getTripleCount($ontology));
-        $triple2 = core_kernel_classes_Triple::getTriple(0, 'subject2', 'predicate2', 'object2');
+        $triple2 = core_kernel_classes_Triple::createTriple(0, 'subject2', 'predicate2', 'object2');
         $ontology->getRdfInterface()->addTripleCollection([$triple1, $triple2]);
         $this->assertEquals(2, $this->getTripleCount($ontology));
         $ontology->getRdfInterface()->remove($triple2);
