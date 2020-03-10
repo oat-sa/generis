@@ -21,74 +21,19 @@
 
 namespace oat\generis\test\unit;
 
-use oat\generis\model\data\Model;
 use oat\generis\test\GenerisTestCase;
-use oat\generis\model\data\Ontology;
 
 /**
+ * @deprecated backward compatibility class for unit tests extending a concrete unit test
  *
  */
 class OntologyMockTest extends GenerisTestCase
 {
-    public function testModel()
-    {
-        $model = $this->getOntologyMock();
-        $this->assertInstanceOf(Model::class, $model);
-        return $model;
-    }
-
     /**
-     * @depends testModel
+     * this is done for backward compatibility and it was done to prevent the failing of phpunit
+     * @doesNotPerformAssertions
      */
-    public function testSetLabel($model)
+    public function testSampleCase()
     {
-        $resource = $model->getResource('http://testing');
-        $this->assertInstanceOf(\core_kernel_classes_Resource::class, $resource);
-        $label = $resource->getLabel();
-        $this->assertEquals('', $label);
-        $resource->setLabel('magic');
-        $label = $resource->getLabel();
-        $this->assertEquals('magic', $label);
-    }
-
-    /**
-     * @depends testModel
-     */
-    public function testCreateInstance($model)
-    {
-        $class = $model->getClass('http://testing#class');
-        $this->assertInstanceOf(\core_kernel_classes_Class::class, $class);
-        // with URI
-        $resource = $class->createInstance('sample', 'comment', 'http://testing#resource');
-        $this->assertInstanceOf(\core_kernel_classes_Resource::class, $resource);
-        // without URI
-        $resource = $class->createInstance('sample');
-        $this->assertInstanceOf(\core_kernel_classes_Resource::class, $resource);
-        return $resource;
-    }
-
-    /**
-     * @depends testModel
-     */
-    public function testDuplicateInstance(Ontology $model)
-    {
-        $class = $model->getClass('http://testing#class');
-        $this->assertInstanceOf(\core_kernel_classes_Class::class, $class);
-        $resource = $class->createInstance('original');
-        $this->assertInstanceOf(\core_kernel_classes_Resource::class, $resource);
-        $resourceClone = $resource->duplicate();
-        $this->assertInstanceOf(\core_kernel_classes_Resource::class, $resourceClone);
-        $this->assertEquals($resource->getLabel(), $resourceClone->getLabel());
-        $this->assertNotEquals($resource, $resourceClone);
-    }
-
-    /**
-     * @depends testCreateInstance
-     */
-    public function testDeleteInstance(\core_kernel_classes_Resource $resource)
-    {
-        $this->assertTrue($resource->exists());
-        $resource->delete();
-        $this->assertFalse($resource->exists());
     }
 }
