@@ -43,13 +43,6 @@ class OntologyRdfTest extends GenerisTestCase
         $this->assertEquals(1, $this->getTripleCount($ontology));
         $ontology->getRdfInterface()->remove($triple1);
         $this->assertEquals(0, $this->getTripleCount($ontology));
-        $triple2 = core_kernel_classes_Triple::createTriple(0, 'subject2', 'predicate2', 'object2');
-        $ontology->getRdfInterface()->addTripleCollection([$triple1, $triple2]);
-        $this->assertEquals(2, $this->getTripleCount($ontology));
-        $ontology->getRdfInterface()->remove($triple2);
-        $this->assertEquals(1, $this->getTripleCount($ontology));
-        $ontology->getRdfInterface()->remove($triple1);
-        $this->assertEquals(0, $this->getTripleCount($ontology));
     }
 
 
@@ -71,6 +64,24 @@ class OntologyRdfTest extends GenerisTestCase
             $this->assertEquals($triple1->object, $testTriple->object);
             $this->assertEquals($triple1->lg, $testTriple->lg);
         }
+
+        $ontology->getRdfInterface()->remove($triple1);
+        $this->assertEquals(0, $this->getTripleCount($ontology));
+    }
+
+    /**
+     * @dataProvider getOntologies
+     */
+    public function testAddTripleCollection(Ontology $ontology)
+    {
+        $this->assertInstanceOf(Ontology::class, $ontology);
+        $this->assertEquals(0, $this->getTripleCount($ontology));
+
+        $triple1 = core_kernel_classes_Triple::createTriple(0, 'subject', 'predicate', 'object');
+        $triple2 = core_kernel_classes_Triple::createTriple(0, 'subject2', 'predicate2', 'object2');
+        $ontology->getRdfInterface()->addTripleCollection([$triple1, $triple2]);
+
+        $this->assertEquals(2, $this->getTripleCount($ontology));
     }
 
 
@@ -85,7 +96,7 @@ class OntologyRdfTest extends GenerisTestCase
         $ontology->getRdfInterface()->add($triple1);
         $this->assertEquals(1, $this->getTripleCount($ontology));
         $ontology->getRdfInterface()->remove($triple1);
-        $ontology->getRdfInterface()->remove($triple1);
+//        $ontology->getRdfInterface()->remove($triple1);
     }
 
     private function getTripleCount(Ontology $ontology)

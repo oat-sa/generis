@@ -95,17 +95,29 @@ class core_kernel_persistence_smoothsql_SmoothRdf implements RdfInterface
         $valuesToInsert = [];
 
         foreach ($triples as $triple) {
-            $valuesToInsert [] = $this->tripleToValue($triple);
+            $valuesToInsert [] = $triple;
 
             if (count($valuesToInsert) >= self::BATCH_SIZE) {
-                $this->insertValues($valuesToInsert);
+                $this->insertTriples($valuesToInsert);
                 $valuesToInsert = [];
             }
         }
 
         if (!empty($valuesToInsert)) {
-            $this->insertValues($valuesToInsert);
+            $this->insertTriples($valuesToInsert);
         }
+    }
+
+    protected function insertTriples(array $triples)
+    {
+        $values = array_map([$this,"tripleToValue"],$triples);
+        $isInsertionSuccessful = $this->insertValues($values);
+        if ($isInsertionSuccessful) {
+            foreach ($triples as $triple) {
+                $this->checkResourceTriggers($triple);
+            }
+        }
+        return $isInsertionSuccessful;
     }
 
     protected function insertValues(array $valuesToInsert)
