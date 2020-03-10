@@ -208,7 +208,7 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
                 ? $lg
                 : $this->getServiceLocator()->get(SessionService::SERVICE_ID)->getCurrentSession()->getDataLanguage())
             : '';
-        $triple = core_kernel_classes_Triple::getTriple(
+        $triple = core_kernel_classes_Triple::createTriple(
             $this->getNewTripleModelId(),
             $resource->getUri(),
             $property->getUri(),
