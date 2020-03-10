@@ -22,6 +22,7 @@
 namespace oat\generis\test\unit\core\kernel\persistence;
 
 use core_kernel_classes_Triple;
+use Countable;
 use oat\generis\test\GenerisTestCase;
 use oat\generis\model\data\Ontology;
 
@@ -51,13 +52,45 @@ class OntologyRdfTest extends GenerisTestCase
         $this->assertEquals(0, $this->getTripleCount($ontology));
     }
 
+
+    /**
+     * @dataProvider getOntologies
+     */
+    public function testAdd(Ontology $ontology)
+    {
+        $this->assertInstanceOf(Ontology::class, $ontology);
+        $this->assertEquals(0, $this->getTripleCount($ontology));
+        $triple1 = core_kernel_classes_Triple::createTriple(0, 'subject', 'predicate', 'object');
+        $ontology->getRdfInterface()->add($triple1);
+        $this->assertEquals(1, $this->getTripleCount($ontology));
+        $resource = $ontology->getRdfInterface();
+        /** @var core_kernel_classes_Triple $currentResource */
+        foreach ($resource as $testTriple) {
+            $this->assertEquals($triple1->subject, $testTriple->subject);
+            $this->assertEquals($triple1->predicate, $testTriple->predicate);
+            $this->assertEquals($triple1->object, $testTriple->object);
+            $this->assertEquals($triple1->lg, $testTriple->lg);
+        }
+    }
+
+
+    /**
+     * @dataProvider getOntologies
+     */
+    public function testRemoveWithException(Ontology $ontology)
+    {
+        $this->assertInstanceOf(Ontology::class, $ontology);
+        $this->assertEquals(0, $this->getTripleCount($ontology));
+        $triple1 = core_kernel_classes_Triple::createTriple(0, 'subject', 'predicate', 'object');
+        $ontology->getRdfInterface()->add($triple1);
+        $this->assertEquals(1, $this->getTripleCount($ontology));
+        $ontology->getRdfInterface()->remove($triple1);
+        $ontology->getRdfInterface()->remove($triple1);
+    }
+
     private function getTripleCount(Ontology $ontology)
     {
-        $count = 0;
-        foreach ($ontology->getRdfInterface() as $resource) {
-            $count++;
-        }
-        return $count;
+        return iterator_count($ontology->getRdfInterface()->getIterator());
     }
 
     public function getOntologies()
