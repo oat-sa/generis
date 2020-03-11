@@ -22,9 +22,16 @@
 namespace oat\generis\test\unit\core\kernel\persistence;
 
 use core_kernel_classes_Triple;
-use Countable;
-use oat\generis\test\GenerisTestCase;
+use oat\generis\model\data\event\ResourceCreated;
 use oat\generis\model\data\Ontology;
+use oat\generis\model\OntologyRdf;
+use oat\generis\model\OntologyRdfs;
+use oat\generis\test\GenerisTestCase;
+use oat\oatbox\action\Action;
+use oat\oatbox\event\EventManager;
+use oat\oatbox\event\GenericEvent;
+use Prophecy\Argument;
+use Prophecy\Prediction\CallTimesPrediction;
 
 /**
  *
@@ -74,21 +81,29 @@ class OntologyRdfTest extends GenerisTestCase
      */
     public function testAddTripleCollection(Ontology $ontology)
     {
+        $genericEvent = new GenericEvent('objEvent', ['param1' => '1']);
+
+        $callable = $this->prophesize(Action::class);
+        $callable->__invoke(Argument::any())->should(new CallTimesPrediction(2));
+        $eventManager = $ontology->getServiceLocator()->get(EventManager::SERVICE_ID);
+        $eventManager->attach(ResourceCreated::class, $callable->reveal());
+
         $this->assertInstanceOf(Ontology::class, $ontology);
         $this->assertEquals(0, $this->getTripleCount($ontology));
 
         $triple1 = core_kernel_classes_Triple::createTriple(0, 'subject', 'predicate', 'object');
-        $triple2 = core_kernel_classes_Triple::createTriple(0, 'subject2', 'predicate2', 'object2');
-        $ontology->getRdfInterface()->addTripleCollection([$triple1, $triple2]);
+        $triple2 = core_kernel_classes_Triple::createTriple(0, 'subject2', OntologyRdf::RDF_TYPE, 'object2');
+        $triple3 = core_kernel_classes_Triple::createTriple(0, 'subject3', OntologyRdfs::RDFS_SUBCLASSOF, 'object2');
+        $ontology->getRdfInterface()->addTripleCollection([$triple1, $triple2, $triple3]);
 
-        $this->assertEquals(2, $this->getTripleCount($ontology));
+        $this->assertEquals(3, $this->getTripleCount($ontology));
     }
 
 
     /**
      * @dataProvider getOntologies
      */
-    public function testRemoveWithException(Ontology $ontology)
+    public function testRemove(Ontology $ontology)
     {
         $this->assertInstanceOf(Ontology::class, $ontology);
         $this->assertEquals(0, $this->getTripleCount($ontology));
@@ -96,7 +111,6 @@ class OntologyRdfTest extends GenerisTestCase
         $ontology->getRdfInterface()->add($triple1);
         $this->assertEquals(1, $this->getTripleCount($ontology));
         $ontology->getRdfInterface()->remove($triple1);
-//        $ontology->getRdfInterface()->remove($triple1);
     }
 
     private function getTripleCount(Ontology $ontology)

@@ -160,9 +160,10 @@ class core_kernel_persistence_smoothsql_SmoothRdf implements RdfInterface
     /**
      * @param core_kernel_classes_Triple $triple
      */
-    private function checkResourceTriggers(core_kernel_classes_Triple $triple): void
+    private function checkResourceTriggers(core_kernel_classes_Triple $triple)
     {
         if ($triple->predicate == OntologyRdfs::RDFS_SUBCLASSOF || $triple->predicate == OntologyRdf::RDF_TYPE) {
+            /** @var EventManager $eventManager */
             $eventManager = $this->model->getServiceLocator()->get(EventManager::SERVICE_ID);
             $eventManager->trigger(new ResourceCreated($this->model->getResource($triple->subject)));
         }
