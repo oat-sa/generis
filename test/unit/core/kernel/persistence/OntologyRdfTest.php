@@ -34,7 +34,7 @@ use Prophecy\Argument;
 use Prophecy\Prediction\CallTimesPrediction;
 
 /**
- *
+ * Class OntologyRdfTest
  */
 class OntologyRdfTest extends GenerisTestCase
 {
@@ -43,7 +43,6 @@ class OntologyRdfTest extends GenerisTestCase
      */
     public function testRdfInterface(Ontology $ontology)
     {
-        $this->assertInstanceOf(Ontology::class, $ontology);
         $this->assertEquals(0, $this->getTripleCount($ontology));
         $triple1 = core_kernel_classes_Triple::createTriple(0, 'subject', 'predicate', 'object');
         $ontology->getRdfInterface()->add($triple1);
@@ -58,14 +57,13 @@ class OntologyRdfTest extends GenerisTestCase
      */
     public function testAdd(Ontology $ontology)
     {
-        $this->assertInstanceOf(Ontology::class, $ontology);
         $this->assertEquals(0, $this->getTripleCount($ontology));
         $triple1 = core_kernel_classes_Triple::createTriple(0, 'subject', 'predicate', 'object');
         $ontology->getRdfInterface()->add($triple1);
         $this->assertEquals(1, $this->getTripleCount($ontology));
-        $resource = $ontology->getRdfInterface();
+        $triples = $ontology->getRdfInterface();
         /** @var core_kernel_classes_Triple $currentResource */
-        foreach ($resource as $testTriple) {
+        foreach ($triples as $testTriple) {
             $this->assertEquals($triple1->subject, $testTriple->subject);
             $this->assertEquals($triple1->predicate, $testTriple->predicate);
             $this->assertEquals($triple1->object, $testTriple->object);
@@ -81,8 +79,6 @@ class OntologyRdfTest extends GenerisTestCase
      */
     public function testAddTripleCollection(Ontology $ontology)
     {
-        $genericEvent = new GenericEvent('objEvent', ['param1' => '1']);
-
         $callable = $this->prophesize(Action::class);
         $callable->__invoke(Argument::any())->should(new CallTimesPrediction(2));
         $eventManager = $ontology->getServiceLocator()->get(EventManager::SERVICE_ID);

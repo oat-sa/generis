@@ -82,7 +82,7 @@ class core_kernel_persistence_smoothsql_SmoothRdf implements RdfInterface
         );
 
         if ($success > 0) {
-            $this->checkResourceTriggers($triple);
+            $this->watchResourceCreated($triple);
         }
 
         return $success;
@@ -115,7 +115,7 @@ class core_kernel_persistence_smoothsql_SmoothRdf implements RdfInterface
         $isInsertionSuccessful = $this->insertValues($values);
         if ($isInsertionSuccessful) {
             foreach ($triples as $triple) {
-                $this->checkResourceTriggers($triple);
+                $this->watchResourceCreated($triple);
             }
         }
         return $isInsertionSuccessful;
@@ -161,7 +161,7 @@ class core_kernel_persistence_smoothsql_SmoothRdf implements RdfInterface
     /**
      * @param core_kernel_classes_Triple $triple
      */
-    private function checkResourceTriggers(core_kernel_classes_Triple $triple)
+    private function watchResourceCreated(core_kernel_classes_Triple $triple)
     {
         if ($triple->predicate == OntologyRdfs::RDFS_SUBCLASSOF || $triple->predicate == OntologyRdf::RDF_TYPE) {
             /** @var EventManager $eventManager */
