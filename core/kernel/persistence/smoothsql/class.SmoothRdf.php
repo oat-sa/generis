@@ -68,7 +68,8 @@ class core_kernel_persistence_smoothsql_SmoothRdf implements RdfInterface
         $query = "INSERT INTO statements ( modelId, subject, predicate, object, l_language, epoch, author) "
             . "VALUES ( ? , ? , ? , ? , ? , ?, ?);";
 
-        $success = $this->getPersistence()->exec($query,
+        $success = $this->getPersistence()->exec(
+            $query,
             [
                 $triple->modelid,
                 $triple->subject,
@@ -110,7 +111,7 @@ class core_kernel_persistence_smoothsql_SmoothRdf implements RdfInterface
 
     protected function insertTriples(array $triples)
     {
-        $values = array_map([$this,"tripleToValue"],$triples);
+        $values = array_map([$this,"tripleToValue"], $triples);
         $isInsertionSuccessful = $this->insertValues($values);
         if ($isInsertionSuccessful) {
             foreach ($triples as $triple) {
