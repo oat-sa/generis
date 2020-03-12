@@ -21,6 +21,8 @@
 namespace oat\generis\persistence;
 
 use oat\oatbox\service\ConfigurableService;
+use oat\generis\persistence\sql\SchemaCollection;
+use common_persistence_SqlPersistence;
 
 /**
  * The PersistenceManager is responsible for initializing all persistences
@@ -130,5 +132,36 @@ class PersistenceManager extends ConfigurableService
         }
         $driver = $this->propagate(new $driverClassName());
         return $driver->connect($persistenceId, $config);
+    }
+
+    /**
+     * Return a collection of all SQL schemas
+     */
+    public function getSqlSchemas()
+    {
+        $schemas = new SchemaCollection();
+        foreach (array_keys($this->getOption(self::OPTION_PERSISTENCES)) as $id) {
+            $persistence = $this->getPersistenceById($id);
+            if ($persistence instanceof common_persistence_SqlPersistence) {
+                $schemas->addSchema($id, $persistence->getSchemaManager()->createSchema());
+            }
+        }
+        return $schemas;
+    }
+
+    /**
+     * Adapt the databases to the SQL schemas
+     */
+    public function applySchemas(SchemaCollection $schemaCollection)
+    {
+        $this->logInfo('Applying schame changes');
+        foreach ($schemaCollection as $id => $schema) {
+            $persistence = $this->getPersistenceById($id);
+            $fromSchema = $schemaCollection->getOriginalSchema($id);
+            $queries = $persistence->getPlatForm()->getMigrateSchemaSql($fromSchema, $schema);
+            foreach ($queries as $query) {
+                $persistence->exec($query);
+            }
+        }
     }
 }
