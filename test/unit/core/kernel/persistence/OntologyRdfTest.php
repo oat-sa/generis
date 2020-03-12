@@ -45,7 +45,10 @@ class OntologyRdfTest extends GenerisTestCase
     {
         $this->assertEquals(0, $this->getTripleCount($ontology));
         $triple1 = core_kernel_classes_Triple::createTriple(0, 'subject', 'predicate', 'object');
+        $triple2 = core_kernel_classes_Triple::createTriple(0, 'subject', 'predicate', 'object2');
         $ontology->getRdfInterface()->add($triple1);
+        $this->assertEquals(1, $this->getTripleCount($ontology));
+        $ontology->getRdfInterface()->remove($triple2);
         $this->assertEquals(1, $this->getTripleCount($ontology));
         $ontology->getRdfInterface()->remove($triple1);
         $this->assertEquals(0, $this->getTripleCount($ontology));
@@ -79,11 +82,6 @@ class OntologyRdfTest extends GenerisTestCase
      */
     public function testAddTripleCollection(Ontology $ontology)
     {
-        $callable = $this->prophesize(Action::class);
-        $callable->__invoke(Argument::any())->should(new CallTimesPrediction(2));
-        $eventManager = $ontology->getServiceLocator()->get(EventManager::SERVICE_ID);
-        $eventManager->attach(ResourceCreated::class, $callable->reveal());
-
         $this->assertInstanceOf(Ontology::class, $ontology);
         $this->assertEquals(0, $this->getTripleCount($ontology));
 

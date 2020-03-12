@@ -202,35 +202,20 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
      */
     public function setPropertyValue(core_kernel_classes_Resource $resource, core_kernel_classes_Property $property, $object, $lg = null)
     {
-        $userId = $this->getServiceLocator()->get(SessionService::SERVICE_ID)->getCurrentUser()->getIdentifier();
         $object  = $object instanceof core_kernel_classes_Resource ? $object->getUri() : (string) $object;
-        $platform = $this->getPersistence()->getPlatForm();
-        $lang = "";
-        // Define language if required
-        if ($property->isLgDependent()) {
-            if ($lg != null) {
-                $lang = $lg;
-            } else {
-                $lang = $this->getServiceLocator()->get(SessionService::SERVICE_ID)->getCurrentSession()->getDataLanguage();
-            }
-        }
-        
-        $query = 'INSERT INTO statements (modelid, subject, predicate, object, l_language, author,epoch)
-        			VALUES  (?, ?, ?, ?, ?, ? , ?)';
-
-        $returnValue = $this->getPersistence()->exec($query, [
+        $lang = $property->isLgDependent()
+            ? ($lg != null
+                ? $lg
+                : $this->getServiceLocator()->get(SessionService::SERVICE_ID)->getCurrentSession()->getDataLanguage())
+            : '';
+        $triple = core_kernel_classes_Triple::createTriple(
             $this->getNewTripleModelId(),
             $resource->getUri(),
             $property->getUri(),
             $object,
-            $lang,
-            $userId,
-            $platform->getNowExpression()
-        ]);
-        
-        
-
-        return (bool) $returnValue;
+            $lang
+        );
+        return $this->getModel()->getRdfInterface()->add($triple);
     }
 
     /**
@@ -280,23 +265,14 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
      */
     public function setPropertyValueByLg(core_kernel_classes_Resource $resource, core_kernel_classes_Property $property, $value, $lg)
     {
-        $platform = $this->getPersistence()->getPlatForm();
-        $userId = $this->getServiceLocator()->get(SessionService::SERVICE_ID)->getCurrentUser()->getIdentifier();
-        
-        $query = 'INSERT INTO statements (modelid,subject,predicate,object,l_language,author,epoch)
-        			VALUES  (?, ?, ?, ?, ?, ?, ?)';
-
-        $returnValue = $this->getPersistence()->exec($query, [
+        $triple = core_kernel_classes_Triple::createTriple(
             $this->getNewTripleModelId(),
             $resource->getUri(),
             $property->getUri(),
             $value,
-            ($property->isLgDependent() ? $lg : ''),
-            $userId,
-            $platform->getNowExpression()
-        ]);
-
-        return (bool) $returnValue;
+            ($property->isLgDependent() ? $lg : '')
+        );
+        return $this->getModel()->getRdfInterface()->add($triple);
     }
 
     /**
