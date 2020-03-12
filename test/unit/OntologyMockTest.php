@@ -25,7 +25,15 @@ use oat\generis\test\GenerisTestCase;
 
 /**
  * @deprecated backward compatibility class for unit tests extending a concrete unit test
+ *
  */
 class OntologyMockTest extends GenerisTestCase
 {
+    /**
+     * this is done for backward compatibility and it was done to prevent the failing of phpunit
+     * @doesNotPerformAssertions
+     */
+    public function testSampleCase()
+    {
+    }
 }

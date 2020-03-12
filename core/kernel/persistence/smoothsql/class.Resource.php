@@ -621,8 +621,7 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
         array $properties,
         string $userIdentifier,
         string $dataLanguage
-    )
-    {
+    ) {
         $triples = [];
         foreach ($properties as $propertyUri => $value) {
             $property = $this->getModel()->getProperty($propertyUri);

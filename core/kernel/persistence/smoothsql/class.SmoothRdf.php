@@ -68,7 +68,8 @@ class core_kernel_persistence_smoothsql_SmoothRdf implements RdfInterface
         $query = "INSERT INTO statements ( modelId, subject, predicate, object, l_language, epoch, author) "
             . "VALUES ( ? , ? , ? , ? , ? , ?, ?);";
 
-        $success = $this->getPersistence()->exec($query,
+        $success = $this->getPersistence()->exec(
+            $query,
             [
                 $triple->modelid,
                 $triple->subject,
@@ -95,25 +96,29 @@ class core_kernel_persistence_smoothsql_SmoothRdf implements RdfInterface
         $valuesToInsert = [];
 
         foreach ($triples as $triple) {
-            $valuesToInsert[] = [
-                'modelid' => $triple->modelid,
-                'subject' => $triple->subject,
-                'predicate' => $triple->predicate,
-                'object' => $triple->object,
-                'l_language' => is_null($triple->lg) ? '' : $triple->lg,
-                'author' => is_null($triple->author) ? '' : $triple->author,
-                'epoch' => $this->getPersistence()->getPlatForm()->getNowExpression()
-            ];
+            $valuesToInsert [] = $triple;
 
             if (count($valuesToInsert) >= self::BATCH_SIZE) {
-                $this->insertValues($valuesToInsert);
+                $this->insertTriples($valuesToInsert);
                 $valuesToInsert = [];
             }
         }
 
         if (!empty($valuesToInsert)) {
-            $this->insertValues($valuesToInsert);
+            $this->insertTriples($valuesToInsert);
         }
+    }
+
+    protected function insertTriples(array $triples)
+    {
+        $values = array_map([$this,"tripleToValue"], $triples);
+        $isInsertionSuccessful = $this->insertValues($values);
+        if ($isInsertionSuccessful) {
+            foreach ($triples as $triple) {
+                $this->checkResourceTriggers($triple);
+            }
+        }
+        return $isInsertionSuccessful;
     }
 
     protected function insertValues(array $valuesToInsert)
@@ -156,11 +161,30 @@ class core_kernel_persistence_smoothsql_SmoothRdf implements RdfInterface
     /**
      * @param core_kernel_classes_Triple $triple
      */
-    private function checkResourceTriggers(core_kernel_classes_Triple $triple): void
+    private function checkResourceTriggers(core_kernel_classes_Triple $triple)
     {
         if ($triple->predicate == OntologyRdfs::RDFS_SUBCLASSOF || $triple->predicate == OntologyRdf::RDF_TYPE) {
+            /** @var EventManager $eventManager */
             $eventManager = $this->model->getServiceLocator()->get(EventManager::SERVICE_ID);
             $eventManager->trigger(new ResourceCreated($this->model->getResource($triple->subject)));
         }
+    }
+
+    /**
+     * @param core_kernel_classes_Triple $triple
+     * @param array $valuesToInsert
+     * @return array
+     */
+    protected function tripleToValue(core_kernel_classes_Triple $triple)
+    {
+        return [
+            'modelid' => $triple->modelid,
+            'subject' => $triple->subject,
+            'predicate' => $triple->predicate,
+            'object' => $triple->object,
+            'l_language' => is_null($triple->lg) ? '' : $triple->lg,
+            'author' => is_null($triple->author) ? '' : $triple->author,
+            'epoch' => $this->getPersistence()->getPlatForm()->getNowExpression()
+        ];
     }
 }

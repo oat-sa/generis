@@ -24,6 +24,7 @@ namespace oat\generis\model\kernel\persistence\newsql;
 
 use core_kernel_classes_Triple;
 use core_kernel_persistence_smoothsql_SmoothRdf;
+use Exception;
 use oat\generis\Helper\UuidPrimaryKeyTrait;
 use oat\generis\model\OntologyRdfs;
 use oat\generis\model\OntologyRdf;
@@ -62,11 +63,23 @@ class NewSqlRdf extends core_kernel_persistence_smoothsql_SmoothRdf
 
         return $success;
     }
-    
+
+    /**
+     * @param core_kernel_classes_Triple $triple
+     * @return array
+     * @throws Exception
+     */
+    protected function tripleToValue(core_kernel_classes_Triple $triple)
+    {
+        $values = parent::tripleToValue($triple);
+        $values['id'] = $this->getUniquePrimaryKey();
+        return $values;
+    }
+
     public function addTripleCollection(iterable $triples)
     {
         $valuesToInsert = [];
-        
+
         foreach ($triples as $triple) {
             $valuesToInsert[] = [
                 'id' => $this->getUniquePrimaryKey(),
@@ -78,13 +91,13 @@ class NewSqlRdf extends core_kernel_persistence_smoothsql_SmoothRdf
                 'author' => is_null($triple->author) ? '' : $triple->author,
                 'epoch' => $this->getPersistence()->getPlatForm()->getNowExpression()
             ];
-            
+
             if (count($valuesToInsert) >= self::BATCH_SIZE) {
                 $this->insertValues($valuesToInsert);
                 $valuesToInsert = [];
             }
         }
-        
+
         if (!empty($valuesToInsert)) {
             $this->insertValues($valuesToInsert);
         }

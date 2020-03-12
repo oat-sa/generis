@@ -36,7 +36,7 @@ class common_exception_ValidationFailed extends common_exception_BadRequest
     {
         $this->field = $field;
         if (! $message) {
-            $message = printf("Validation for field '%s' has failed.", $field);
+            $message = sprintf("Validation for field '%s' has failed.", $field);
         }
         parent::__construct($message, $code);
     }
