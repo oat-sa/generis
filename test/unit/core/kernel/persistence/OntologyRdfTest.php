@@ -22,16 +22,10 @@
 namespace oat\generis\test\unit\core\kernel\persistence;
 
 use core_kernel_classes_Triple;
-use oat\generis\model\data\event\ResourceCreated;
 use oat\generis\model\data\Ontology;
 use oat\generis\model\OntologyRdf;
 use oat\generis\model\OntologyRdfs;
 use oat\generis\test\GenerisTestCase;
-use oat\oatbox\action\Action;
-use oat\oatbox\event\EventManager;
-use oat\oatbox\event\GenericEvent;
-use Prophecy\Argument;
-use Prophecy\Prediction\CallTimesPrediction;
 
 /**
  * Class OntologyRdfTest
