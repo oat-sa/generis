@@ -24,6 +24,7 @@ use oat\generis\model\data\ModelManager;
 use oat\oatbox\service\ServiceManager;
 use oat\oatbox\event\EventManager;
 use oat\oatbox\service\ConfigurableService;
+use oat\generis\model\data\import\RdfImporter;
 
 /**
  * Generis installer of extensions
@@ -152,10 +153,8 @@ class common_ext_ExtensionInstaller extends common_ext_ExtensionHandler
     protected function installOntology()
     {
         helpers_TimeOutHelper::setTimeOutLimit(helpers_TimeOutHelper::MEDIUM);
-        $rdf = ModelManager::getModel()->getRdfInterface();
-        foreach ($this->getExtensionModel() as $triple) {
-            $rdf->add($triple);
-        }
+        $rdfImporter = $this->getServiceManager()->get(RdfImporter::class);
+        $rdfImporter->importTriples($this->getExtensionModel());
         helpers_TimeOutHelper::reset();
     }
 

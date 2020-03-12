@@ -80,11 +80,6 @@ class core_kernel_persistence_smoothsql_SmoothRdf implements RdfInterface
                 is_null($triple->author) ? '' : $triple->author
             ]
         );
-
-        if ($success > 0) {
-            $this->watchResourceCreated($triple);
-        }
-
         return $success;
     }
 
@@ -113,11 +108,6 @@ class core_kernel_persistence_smoothsql_SmoothRdf implements RdfInterface
     {
         $values = array_map([$this,"tripleToValue"], $triples);
         $isInsertionSuccessful = $this->insertValues($values);
-        if ($isInsertionSuccessful) {
-            foreach ($triples as $triple) {
-                $this->watchResourceCreated($triple);
-            }
-        }
         return $isInsertionSuccessful;
     }
 
@@ -156,18 +146,6 @@ class core_kernel_persistence_smoothsql_SmoothRdf implements RdfInterface
     protected function getModel()
     {
         return $this->model;
-    }
-
-    /**
-     * @param core_kernel_classes_Triple $triple
-     */
-    private function watchResourceCreated(core_kernel_classes_Triple $triple)
-    {
-        if ($triple->predicate == OntologyRdfs::RDFS_SUBCLASSOF || $triple->predicate == OntologyRdf::RDF_TYPE) {
-            /** @var EventManager $eventManager */
-            $eventManager = $this->model->getServiceLocator()->get(EventManager::SERVICE_ID);
-            $eventManager->trigger(new ResourceCreated($this->model->getResource($triple->subject)));
-        }
     }
 
     /**
