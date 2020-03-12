@@ -28,6 +28,7 @@ use oat\oatbox\service\ServiceManager;
  * instead of managing full models, it only handles the rdfs interfaces
  *
  * @author Joel Bout <joel@taotesting.com>
+ * @deprecated
  */
 class ModelManager
 {
