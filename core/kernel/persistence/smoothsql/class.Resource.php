@@ -127,7 +127,7 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
         if (isset($options['lg'])) {
             $lang = $options['lg'];
         } else {
-            $lang = $this->getServiceLocator()->get(SessionService::SERVICE_ID)->getCurrentSession()->getDataLanguage();
+            $lang = $this->getDataLanguage();
             $default = $this->getServiceLocator()->get(UserLanguageServiceInterface::SERVICE_ID)->getDefaultLanguage();
             $defaultLg = ' OR l_language = ' . $this->getPersistence()->quote($default);
         }
@@ -203,11 +203,13 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
     public function setPropertyValue(core_kernel_classes_Resource $resource, core_kernel_classes_Property $property, $object, $lg = null)
     {
         $object  = $object instanceof core_kernel_classes_Resource ? $object->getUri() : (string) $object;
-        $lang = $property->isLgDependent()
-            ? ($lg != null
+        if ($property->isLgDependent()) {
+            $lang = ((null != $lg)
                 ? $lg
-                : $this->getServiceLocator()->get(SessionService::SERVICE_ID)->getCurrentSession()->getDataLanguage())
-            : '';
+                : $this->getDataLanguage());
+        } else {
+            $lang = '';
+        }
         $triple = core_kernel_classes_Triple::createTriple(
             $this->getNewTripleModelId(),
             $resource->getUri(),
@@ -328,7 +330,7 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
                 $resource->getUri(),
                 $property->getUri(),
                 '',
-                $this->getServiceLocator()->get(SessionService::SERVICE_ID)->getCurrentSession()->getDataLanguage()
+                $this->getDataLanguage()
             ]);
         } else {
             $returnValue = $this->getPersistence()->exec($query, [
@@ -532,7 +534,7 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
         $predicatesQuery = substr($predicatesQuery, 1);
 
         $platform = $this->getPersistence()->getPlatForm();
-        $lang = $this->getServiceLocator()->get(SessionService::SERVICE_ID)->getCurrentSession()->getDataLanguage();
+        $lang = $this->getDataLanguage();
         $default = $this->getServiceLocator()->get(UserLanguageServiceInterface::SERVICE_ID)->getDefaultLanguage();
 
         // TODO: refactor this to use a triple store abstraction
@@ -665,5 +667,13 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
             $normalizedValues[] = ($value == null) ? '' : $value;
         }
         return $normalizedValues;
+    }
+
+    /**
+     * @return mixed
+     */
+    private function getDataLanguage()
+    {
+        return $this->getServiceLocator()->get(SessionService::SERVICE_ID)->getCurrentSession()->getDataLanguage();
     }
 }
