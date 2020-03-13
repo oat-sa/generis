@@ -56,9 +56,9 @@ class RdfImporter extends ConfigurableService
     }
 
     /**
-     * 
+     *
      * @param iterable $triples
-     * @return boolean
+     * @return void
      */
     public function importTriples(iterable $triples) {
         $rdf = $this->getServiceLocator()->get(Ontology::SERVICE_ID)->getRdfInterface();
