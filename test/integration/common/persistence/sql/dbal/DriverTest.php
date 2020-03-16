@@ -95,12 +95,10 @@ class DriverTest extends TestCase
         $this->assertInstanceOf(common_persistence_sql_Platform::class, $platform);
     }
 
-    /**
-     * @expectedException  \Doctrine\DBAL\DBALException
-     * @expectedExceptionMessage Testing
-     */
     public function testMaxAttemptsToConnect()
     {
+        $this->expectException(DBALException::class);
+        $this->expectExceptionMessage('Testing');
         $driver = new TestDbalDriver();
 
         $connectionMock = $this->prophesize(Connection::class);

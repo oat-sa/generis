@@ -42,15 +42,15 @@ abstract class GenerisPhpUnitTestRunner extends TestCase
      * @var boolean
      */
     private static $connected = false;
-    
+
     private $config;
-    
+
     private $files = [];
 
     /**
      * @inheritdoc
      */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         self::loadGenerisConfig();
     }
@@ -68,21 +68,21 @@ abstract class GenerisPhpUnitTestRunner extends TestCase
             $tmpfname = sys_get_temp_dir() . DIRECTORY_SEPARATOR . $name;
         }
         $this->files[] = $tmpfname;
-    
+
         if (!empty($pContent)) {
             $handle = fopen($tmpfname, "w");
             fwrite($handle, $pContent);
             fclose($handle);
         }
-    
+
         return $tmpfname;
     }
-    
+
     protected function getSampleDir()
     {
         return __DIR__ . '/samples';
     }
-    
+
     /**
      * Cleanup of files
      * @see SimpleTestCase::after()
@@ -106,12 +106,12 @@ abstract class GenerisPhpUnitTestRunner extends TestCase
             self::$connected = true;
         }
     }
-    
+
     public function restoreTestSession()
     {
         return common_session_SessionManager::startSession(new common_test_TestUserSession());
     }
-    
+
     /**
      *
      * @author Lionel Lecaque, lionel@taotesting.com
@@ -123,7 +123,7 @@ abstract class GenerisPhpUnitTestRunner extends TestCase
     {
         $this->assertInstanceOf($className, $var);
     }
-    
+
     public function installExtension($extid)
     {
         if (!common_ext_ExtensionsManager::singleton()->isInstalled($extid)) {
@@ -132,7 +132,7 @@ abstract class GenerisPhpUnitTestRunner extends TestCase
             $installer->install();
         }
     }
-    
+
     public function uninstallExtension($extid)
     {
         if (common_ext_ExtensionsManager::singleton()->isInstalled($extid)) {
@@ -141,7 +141,7 @@ abstract class GenerisPhpUnitTestRunner extends TestCase
             $installer->uninstall();
         }
     }
-    
+
     protected function disableCache()
     {
         $ext = common_ext_ExtensionsManager::singleton()->getExtensionById('generis') ;
@@ -150,7 +150,7 @@ abstract class GenerisPhpUnitTestRunner extends TestCase
         if (isset($conf['cache']) && isset($conf['cache']['driver'])) {
             $conf['cache']['driver'] = 'no_storage';
             \common_Logger::i('Set cache on NO STORAGE');
-        
+
             $ext->setConfig(_common_persistence_Manager::SERVICE_ID, $conf);
         }
     }

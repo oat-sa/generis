@@ -11,7 +11,7 @@ abstract class UpdateMultipleTestAbstract extends TestCase
     /** @var common_persistence_sql_dbal_Driver|common_persistence_sql_pdo_sqlite_Driver */
     protected $driver;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->setUpDriver();
@@ -63,7 +63,7 @@ abstract class UpdateMultipleTestAbstract extends TestCase
         return $this->driver->lastInsertId();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
         $this->setUpDriver();

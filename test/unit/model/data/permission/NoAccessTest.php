@@ -32,11 +32,11 @@ class NoAccessTest extends TestCase
      */
     private $user;
 
-    public function setUp()
+    public function setUp(): void
     {
         $user = $this->prophesize('oat\oatbox\user\User');
         $user->getIdentifier()->willReturn('tastIdentifier\\_of_//User');
-        
+
         $this->user = $user->reveal();
     }
 
@@ -45,7 +45,7 @@ class NoAccessTest extends TestCase
         $model = new NoAccess();
         $this->assertInstanceOf('oat\generis\model\data\permission\PermissionInterface', $model);
     }
-    
+
     public function testGetPermissions()
     {
         $model = new NoAccess();

@@ -39,7 +39,7 @@ class CollectionTest extends TestCase
      * Setting the collection to test
      *
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->object = new common_Collection(new common_Object(__METHOD__));
         $this->toto =  new core_kernel_classes_Literal('toto', __METHOD__);
@@ -47,7 +47,7 @@ class CollectionTest extends TestCase
         $this->object->sequence[0] = $this->toto;
         $this->object->sequence[1] = $this->tata;
     }
-    
+
     /**
      * Test common_Collection->add
      *
@@ -58,7 +58,7 @@ class CollectionTest extends TestCase
         $this->object->add($titi);
         $this->assertEquals($this->object->sequence[2], $titi);
     }
-    
+
     /**
      * Test common_Collection->count
      *
@@ -67,7 +67,7 @@ class CollectionTest extends TestCase
     {
         $this->assertTrue($this->object->count() == 2);
     }
-    
+
     /**
      * Test common_Collection->indexOf
      *
@@ -78,7 +78,7 @@ class CollectionTest extends TestCase
         $this->assertTrue($this->object->indexOf($this->tata) == 1);
         $this->assertFalse($this->object->indexOf(new common_Object(__METHOD__)) == 2);
     }
-    
+
     /**
      * Test common_Collection->get
      *
@@ -88,7 +88,7 @@ class CollectionTest extends TestCase
         $this->assertEquals($this->object->get(0), $this->object->sequence[0]);
         $this->assertEquals($this->object->get(0)->literal, 'toto');
     }
-    
+
     /**
      * Test common_Collection->isEmtpy
      *
@@ -100,7 +100,7 @@ class CollectionTest extends TestCase
         $emtpy->add(new common_Object(__METHOD__));
         $this->assertFalse($emtpy->isEmpty());
     }
-    
+
     /**
      * Test common_Collection->remove
      *
@@ -110,7 +110,7 @@ class CollectionTest extends TestCase
         $this->object->remove($this->toto);
         $this->assertFalse($this->object->indexOf($this->toto) == 0);
     }
-    
+
      /**
       * Test common_Collection->union
       */
@@ -126,7 +126,7 @@ class CollectionTest extends TestCase
         $this->assertTrue($results->get($results->indexOf($this->tata))->literal == 'tata');
         $this->assertTrue($results->get(2)->literal == 'plop');
     }
-    
+
      /**
       * Test common_Collection->intersect
       */

@@ -29,7 +29,7 @@ class InMemoryAdvKvDriverTest extends TestCase
      */
     private $driver;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->driver = new \common_persistence_InMemoryAdvKvDriver();
     }

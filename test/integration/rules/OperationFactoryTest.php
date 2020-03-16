@@ -28,11 +28,11 @@ class OperationFactoryTestCase extends GenerisPhpUnitTestRunner
 {
 
 
-    public function setUp()
+    public function setUp(): void
     {
         GenerisPhpUnitTestRunner::initTest();
     }
-    
+
     public function testCreateOperation()
     {
         $constant5 = core_kernel_rules_TermFactory::createConst('5');
@@ -43,23 +43,23 @@ class OperationFactoryTestCase extends GenerisPhpUnitTestRunner
             new core_kernel_classes_Resource(RulesRdf::INSTANCE_OPERATOR_ADD)
         );
         $this->assertIsA($operation, 'core_kernel_rules_Operation');
-        
+
         $firstOperand = new core_kernel_classes_Property(RulesRdf::PROPERTY_OPERATION_FIRST_OP);
         $secondOperand = new core_kernel_classes_Property(RulesRdf::PROPERTY_OPERATION_SECOND_OP);
         $operatorProperty = new core_kernel_classes_Property(RulesRdf::PROPERTY_OPERATION_OPERATOR);
-        
+
         $operator = $operation->getUniquePropertyValue($operatorProperty);
         $this->assertIsA($operator, 'core_kernel_classes_Resource');
         $this->assertEquals($operator->getUri(), RulesRdf::INSTANCE_OPERATOR_ADD);
-        
+
         $term1 = $operation->getUniquePropertyValue($firstOperand);
         $this->assertIsA($term1, 'core_kernel_classes_Resource');
         $this->assertEquals($term1->getUri(), $constant5->getUri());
-        
+
         $term2 = $operation->getUniquePropertyValue($secondOperand);
         $this->assertIsA($term2, 'core_kernel_classes_Resource');
         $this->assertEquals($term2->getUri(), $constant12->getUri());
-        
+
         $constant5->delete();
         $constant12->delete();
         $operation->delete();

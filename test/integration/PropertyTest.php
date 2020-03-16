@@ -33,7 +33,7 @@ use \core_kernel_classes_Property;
 
 class PropertyTest extends GenerisPhpUnitTestRunner
 {
-    
+
     /**
      *
      * @var core_kernel_classes_Property
@@ -43,7 +43,7 @@ class PropertyTest extends GenerisPhpUnitTestRunner
      *
      * @author Lionel Lecaque, lionel@taotesting.com
      */
-    public function setUp()
+    public function setUp(): void
     {
         GenerisPhpUnitTestRunner::initTest();
         $this->object = new core_kernel_classes_Property(WidgetRdf::PROPERTY_WIDGET);
@@ -61,7 +61,7 @@ class PropertyTest extends GenerisPhpUnitTestRunner
         $this->assertEquals($domain->getLabel(), 'Property');
         $this->assertEquals($domain->getComment(), 'The class of RDF properties.');
     }
-    
+
     /**
      *
      * @author Lionel Lecaque, lionel@taotesting.com
@@ -74,18 +74,18 @@ class PropertyTest extends GenerisPhpUnitTestRunner
         $this->assertEquals(1, $domain->count());
         $this->assertEquals($class, $domain->get(0));
         $widget = new core_kernel_classes_Class(WidgetRdf::CLASS_URI_WIDGET, __METHOD__);
-         
+
         $this->assertTrue($prop->setDomain($widget));
         $this->assertEquals(2, $prop->getDomain()->count());
         $this->assertGreaterThanOrEqual(0, $prop->getDomain()->indexOf($widget));
         $this->assertGreaterThanOrEqual(0, $prop->getDomain()->indexOf($class));
-        
+
         //if domain already set return true
         $this->assertTrue($prop->setDomain($class));
         $this->assertEquals(2, $prop->getDomain()->count());
         $this->assertGreaterThanOrEqual(0, $prop->getDomain()->indexOf($widget));
         $this->assertGreaterThanOrEqual(0, $prop->getDomain()->indexOf($class));
-        
+
         $prop->delete(true);
     }
     /**
@@ -123,10 +123,10 @@ class PropertyTest extends GenerisPhpUnitTestRunner
         $multipleProperty = new core_kernel_classes_Property(GenerisRdf::PROPERTY_MULTIPLE);
 
         $this->assertEquals([], $prop->getPropertyValues($multipleProperty));
-         
+
         $prop->setMultiple(true);
         $this->assertEquals([GenerisRdf::GENERIS_TRUE], $prop->getPropertyValues($multipleProperty));
-        
+
         $prop->delete(true);
     }
     /**
@@ -140,10 +140,10 @@ class PropertyTest extends GenerisPhpUnitTestRunner
         $this->assertFalse($prop->isMultiple());
         $prop->setMultiple(true);
         $this->assertTrue($prop->isMultiple());
-        
+
         $new = new core_kernel_classes_Property($prop->getUri());
         $this->assertTrue($new->isMultiple());
-        
+
         $prop->delete(true);
     }
     /**
@@ -152,24 +152,24 @@ class PropertyTest extends GenerisPhpUnitTestRunner
      */
     public function testDelete()
     {
-    
+
         $class = new core_kernel_classes_Class(GenerisRdf::GENERIS_BOOLEAN, __METHOD__);
-        
+
         $prop = $class->createProperty('test', 'test');
-    
+
         $instance = $class->createInstance('test', 'test');
         $instance->setPropertyValue($prop, GenerisRdf::GENERIS_TRUE);
         $instance->setPropertyValue($prop, '3');
-        
+
         $this->assertArrayHasKey($prop->getUri(), $class->getProperties());
         $val = $instance->getPropertyValues($prop);
         $this->assertTrue(in_array(GenerisRdf::GENERIS_TRUE, $val));
         $this->assertTrue(in_array(3, $val));
-         
+
         $this->assertTrue($prop->delete(true));
         $this->assertEquals([], $instance->getPropertyValues($prop));
         $this->assertArrayNotHasKey($prop->getUri(), $class->getProperties());
-        
+
         $this->assertTrue($instance->delete());
     }
 }

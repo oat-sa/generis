@@ -33,7 +33,7 @@ class PersistenceManagerTest extends TestCase
      */
     private $pm;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->pm = new PersistenceManager([
             PersistenceManager::OPTION_PERSISTENCES => [

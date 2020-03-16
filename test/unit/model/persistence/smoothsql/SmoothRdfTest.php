@@ -21,6 +21,7 @@
 
 namespace oat\generis\test\unit\model\persistence\smoothsql;
 
+use common_Exception;
 use \core_kernel_persistence_smoothsql_SmoothRdf;
 use Prophecy\Prophet;
 use oat\generis\test\TestCase;
@@ -28,41 +29,39 @@ use oat\generis\test\TestCase;
 class SmoothRdfTest extends TestCase
 {
     /**
-     * @expectedException common_Exception
-     * @expectedExceptionMessage Not implemented
-     *
      * @author Lionel Lecaque, lionel@taotesting.com
      */
     public function testGet()
     {
+        $this->expectException(common_Exception::class);
+        $this->expectExceptionMessage('Not implemented');
         $prophet = new Prophet();
         $persistence = $prophet->prophesize('\common_persistence_SqlPersistence');
-        
+
         $model = $prophet->prophesize('\core_kernel_persistence_smoothsql_SmoothModel');
         $model->getPersistence()->willReturn($persistence->reveal());
-        
+
         $rdf = new core_kernel_persistence_smoothsql_SmoothRdf($model->reveal());
         $rdf->get(null, null);
     }
 
     /**
-     * @expectedException common_Exception
-     * @expectedExceptionMessage Not implemented
-     *
      * @author Lionel Lecaque, lionel@taotesting.com
      */
     public function testSearch()
     {
+        $this->expectException(common_Exception::class);
+        $this->expectExceptionMessage('Not implemented');
         $prophet = new Prophet();
         $persistence = $prophet->prophesize('\common_persistence_SqlPersistence');
-        
+
         $model = $prophet->prophesize('\core_kernel_persistence_smoothsql_SmoothModel');
         $model->getPersistence()->willReturn($persistence->reveal());
-        
+
         $rdf = new core_kernel_persistence_smoothsql_SmoothRdf($model->reveal());
         $rdf->search(null, null);
     }
-    
+
     /**
      *
      * @author Lionel Lecaque, lionel@taotesting.com
@@ -71,17 +70,17 @@ class SmoothRdfTest extends TestCase
     {
         $platform = $this->prophesize('\common_persistence_sql_Platform');
         $platform->getNowExpression()->willReturn('now');
-        
+
         $persistence = $this->prophesize('\common_persistence_SqlPersistence');
         $persistence->getPlatForm()->willReturn($platform->reveal());
         $query = "INSERT INTO statements ( modelId, subject, predicate, object, l_language, epoch, author) VALUES ( ? , ? , ? , ? , ? , ?, ?);";
-        
+
         $triple = new \core_kernel_classes_Triple();
         $triple->modelid = 22;
         $triple->subject = 'subjectUri';
         $triple->predicate = 'predicateUri';
         $triple->object = 'objectUri';
-        
+
         $persistence->exec($query, [
             22,
             'subjectUri',
@@ -91,13 +90,13 @@ class SmoothRdfTest extends TestCase
             'now',
             ''
         ])->willReturn(true);
-        
+
         $model = $this->prophesize('\core_kernel_persistence_smoothsql_SmoothModel');
         $model->getReadableModels()->willReturn([22]);
         $model->getPersistence()->willReturn($persistence->reveal());
-        
+
         $rdf = new core_kernel_persistence_smoothsql_SmoothRdf($model->reveal());
-        
+
         $this->assertTrue($rdf->add($triple));
     }
 
@@ -139,7 +138,7 @@ class SmoothRdfTest extends TestCase
 
         $this->assertTrue($rdf->add($triple));
     }
-    
+
     /**
      *
      * @author Lionel Lecaque, lionel@taotesting.com
@@ -149,26 +148,26 @@ class SmoothRdfTest extends TestCase
         $prophet = new Prophet();
         $persistence = $prophet->prophesize('\common_persistence_SqlPersistence');
         $query = "DELETE FROM statements WHERE subject = ? AND predicate = ? AND object = ? AND l_language = ?;";
-        
+
         $triple = new \core_kernel_classes_Triple();
         $triple->modelid = 22;
         $triple->subject = 'subjectUri';
         $triple->predicate = 'predicateUri';
         $triple->object = 'objectUri';
-        
+
         $persistence->exec($query, [
             'subjectUri',
             'predicateUri',
             'objectUri',
             ''
         ])->willReturn(true);
-        
+
         $model = $prophet->prophesize('\core_kernel_persistence_smoothsql_SmoothModel');
         $model->getPersistence()->willReturn($persistence->reveal());
-        
-        
+
+
         $rdf = new core_kernel_persistence_smoothsql_SmoothRdf($model->reveal());
-        
+
         $this->assertTrue($rdf->remove($triple));
     }
 }

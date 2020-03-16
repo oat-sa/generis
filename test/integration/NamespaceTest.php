@@ -33,8 +33,8 @@ use oat\generis\test\TestCase;
 
 class NamespaceTest extends TestCase
 {
-    
-    public function setUp()
+
+    public function setUp(): void
     {
     }
 
@@ -45,13 +45,13 @@ class NamespaceTest extends TestCase
     {
         $namespaceManager = common_ext_NamespaceManager::singleton();
         $this->assertInstanceOf('common_ext_NamespaceManager', $namespaceManager);
-        
+
         //$this->assertReference($namespaceManager, common_ext_NamespaceManager::singleton());
-        
+
         $tempNamesapce = new common_ext_Namespace();
         $this->assertInstanceOf('common_ext_Namespace', $tempNamesapce);
     }
-    
+
     /**
      * test the manager retrieving methods and the namespace setters/getters
      */
@@ -60,17 +60,17 @@ class NamespaceTest extends TestCase
         $namespaceManager = common_ext_NamespaceManager::singleton();
         $namespaces = $namespaceManager->getAllNamespaces();
         $this->assertTrue(count($namespaces) > 0);
-        
+
         foreach ($namespaces as $namespace) {
             $this->assertInstanceOf('common_ext_Namespace', $namespace);
         }
-        
+
         $localNs = $namespaceManager->getLocalNamespace();
         $this->assertInstanceOf('common_ext_Namespace', $localNs);
 
         $otherLocalNs = $namespaceManager->getNamespace($localNs->getModelId());
         $this->assertInstanceOf('common_ext_Namespace', $otherLocalNs);
-        
+
         $this->assertEquals((string)$otherLocalNs, (string)$localNs);
     }
 }

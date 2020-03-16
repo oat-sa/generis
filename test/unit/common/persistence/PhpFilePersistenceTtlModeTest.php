@@ -41,7 +41,7 @@ class PhpFilePersistenceTtlModeTest extends TestCase
 
     private $root;
 
-    public function setUp()
+    public function setUp(): void
     {
         if (!class_exists('org\bovigo\vfs\vfsStream')) {
             $this->markTestSkipped(

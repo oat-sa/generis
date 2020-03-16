@@ -25,18 +25,18 @@ use oat\generis\model\GenerisRdf;
 
 class GenerisIteratorTest extends GenerisPhpUnitTestRunner
 {
-    
+
     /**
      * @var core_kernel_classes_Class
      */
     private $topClass;
-    
+
     /**
      * @var core_kernel_classes_Class
      */
     private $emptyClass;
-    
-    public function setUp()
+
+    public function setUp(): void
     {
         GenerisPhpUnitTestRunner::initTest();
         $class = new core_kernel_classes_Class(GenerisRdf::CLASS_GENERIS_RESOURCE);
@@ -45,9 +45,9 @@ class GenerisIteratorTest extends GenerisPhpUnitTestRunner
         $class1a = $this->topClass->createSubClass('test class 1a');
         $class1b = $this->topClass->createSubClass('test class 1b');
         $class1c = $this->topClass->createSubClass('test class 1c');
-        
+
         $class1c1 = $class1c->createSubClass('test class 1c1');
-         
+
         $instance1_1 = $this->topClass->createInstance('test instance 1.1');
         $instance1_2 = $this->topClass->createInstance('test instance 1.2');
         $instance1_3 = $this->topClass->createInstance('test instance 1.3');
@@ -56,8 +56,8 @@ class GenerisIteratorTest extends GenerisPhpUnitTestRunner
         $instance1c1_1 = $class1c1->createInstance('test instance 1c1.1');
         $instance1c1_2 = $class1c1->createInstance('test instance 1c1.2');
     }
-    
-    public function tearDown()
+
+    public function tearDown(): void
     {
         foreach ($this->topClass->getInstances(true) as $instance) {
             $instance->delete();
@@ -68,7 +68,7 @@ class GenerisIteratorTest extends GenerisPhpUnitTestRunner
         $this->topClass->delete();
         $this->emptyClass->delete();
     }
-    
+
     public function testClassIterator()
     {
         $expected = [$this->topClass->getUri()];
@@ -76,20 +76,20 @@ class GenerisIteratorTest extends GenerisPhpUnitTestRunner
             $expected[] = $resource->getUri();
         }
         sort($expected);
-        
+
         $iterator = new core_kernel_classes_ClassIterator($this->topClass);
-         
+
         $found1 = [];
         foreach ($iterator as $resource) {
             $this->assertIsA($resource, 'core_kernel_classes_Class');
             $found1[] = $resource->getUri();
         }
         sort($found1);
-         
+
         $this->assertEquals($expected, $found1);
 
         $iterator = new core_kernel_classes_ClassIterator($this->emptyClass);
-        
+
         $found2 = [];
         foreach ($iterator as $instance) {
             $found2[] = $instance->getUri();
@@ -98,7 +98,7 @@ class GenerisIteratorTest extends GenerisPhpUnitTestRunner
         $this->assertEquals(1, $iterator->key());
         $this->assertEquals([$this->emptyClass->getUri()], $found2);
     }
-    
+
     public function testResourceIterator()
     {
         $expected1 = [];
@@ -106,16 +106,16 @@ class GenerisIteratorTest extends GenerisPhpUnitTestRunner
             $expected1[] = $resource->getUri();
         }
         sort($expected1);
-        
+
         $iterator = new core_kernel_classes_ResourceIterator($this->topClass);
-        
+
         $found1 = [];
         foreach ($iterator as $instance) {
             $this->assertIsA($instance, 'core_kernel_classes_Resource');
             $found1[] = $instance->getUri();
         }
         sort($found1);
-        
+
         $this->assertEquals($expected1, $found1);
 
         $found2 = [];
@@ -124,22 +124,22 @@ class GenerisIteratorTest extends GenerisPhpUnitTestRunner
         }
         sort($found2);
         $this->assertEquals($expected1, $found2);
-        
+
         $iterator = new core_kernel_classes_ResourceIterator($this->emptyClass);
         $this->assertFalse($iterator->valid());
         $this->assertEquals('1#0', $iterator->key());
     }
-    
+
     public function testResourceIteratorRewind()
     {
         $iterator = new core_kernel_classes_ResourceIterator($this->topClass);
-        
+
         $first = $iterator->current();
-        
+
         $iterator->next();
         $second = $iterator->current();
         $this->assertNotEquals($first->getUri(), $second->getUri());
-        
+
         $iterator->rewind();
         $first2 = $iterator->current();
         $this->assertEquals($first->getUri(), $first2->getUri());
