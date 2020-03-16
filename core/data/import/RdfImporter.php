@@ -69,7 +69,7 @@ class RdfImporter extends ConfigurableService
     }
 
     /**
-     *
+     * This will generate a Event if condition is meet
      * @param core_kernel_classes_Triple $triple
      */
     private function watchResourceCreated(core_kernel_classes_Triple $triple)
