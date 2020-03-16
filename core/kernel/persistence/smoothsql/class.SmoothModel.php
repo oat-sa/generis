@@ -86,7 +86,9 @@ class core_kernel_persistence_smoothsql_SmoothModel extends ConfigurableService 
     public function getPersistence()
     {
         if (is_null($this->persistence)) {
-            $this->persistence = $this->getServiceLocator()->get(common_persistence_Manager::SERVICE_ID)->getPersistenceById($this->getOption(self::OPTION_PERSISTENCE));
+            $this->persistence = $this->getServiceLocator()
+                ->get(common_persistence_Manager::SERVICE_ID)
+                ->getPersistenceById($this->getOption(self::OPTION_PERSISTENCE));
         }
         return $this->persistence;
     }

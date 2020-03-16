@@ -98,4 +98,26 @@ class core_kernel_classes_Triple extends core_kernel_classes_Container
      * @var string
      */
     public $epoch = '';
+
+    /**
+     * Helper to quickly hydrate a Triple
+     * @return core_kernel_classes_Triple
+     */
+    public static function createTriple(
+        int $modelId,
+        string $subject,
+        string $predicate,
+        string $object,
+        string $lg = '',
+        string $author = ''
+    ) {
+        $triple = new self();
+        $triple->modelid = $modelId;
+        $triple->subject = $subject;
+        $triple->predicate = $predicate;
+        $triple->object = $object;
+        $triple->lg = $lg;
+        $triple->author = $author;
+        return $triple;
+    }
 }
