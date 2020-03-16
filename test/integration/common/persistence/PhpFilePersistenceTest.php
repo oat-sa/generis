@@ -22,6 +22,7 @@
 
 namespace oat\generis\test\integration\common\persistence;
 
+use common_exception_NotImplemented;
 use oat\generis\test\GenerisPhpUnitTestRunner;
 use \common_persistence_Persistence;
 use \common_persistence_PhpFileDriver;
@@ -66,7 +67,7 @@ class PhpFilePersistenceTest extends GenerisPhpUnitTestRunner
      */
     public function testSetException($persistence)
     {
-        $this->expectException(\common_exception_NotImplemented::class);
+        $this->expectException(common_exception_NotImplemented::class);
         $persistence->set('empty', 'empty', 6);
     }
 
