@@ -22,7 +22,9 @@
 
 namespace oat\generis\model\kernel\persistence\newsql;
 
+use core_kernel_classes_Triple;
 use core_kernel_persistence_smoothsql_SmoothRdf;
+use Exception;
 use oat\generis\Helper\UuidPrimaryKeyTrait;
 use oat\generis\model\OntologyRdfs;
 use oat\generis\model\OntologyRdf;
@@ -36,7 +38,7 @@ class NewSqlRdf extends core_kernel_persistence_smoothsql_SmoothRdf
 {
     use UuidPrimaryKeyTrait;
 
-    public function add(\core_kernel_classes_Triple $triple)
+    public function add(core_kernel_classes_Triple $triple)
     {
         $query = 'INSERT INTO statements ( id, modelId, subject, predicate, object, l_language, epoch, author) VALUES ( ?, ? , ? , ? , ? , ? , ?, ?);';
 
@@ -60,5 +62,17 @@ class NewSqlRdf extends core_kernel_persistence_smoothsql_SmoothRdf
         }
 
         return $success;
+    }
+
+    /**
+     * @param core_kernel_classes_Triple $triple
+     * @return array
+     * @throws Exception
+     */
+    protected function tripleToValue(core_kernel_classes_Triple $triple)
+    {
+        $values = parent::tripleToValue($triple);
+        $values['id'] = $this->getUniquePrimaryKey();
+        return $values;
     }
 }
