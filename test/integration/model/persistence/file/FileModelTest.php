@@ -32,7 +32,7 @@ class FileModelTest extends GenerisPhpUnitTestRunner
      *
      * @see PHPUnit_Framework_TestCase::setUp()
      */
-    public function setUp()
+    public function setUp(): void
     {
     }
 
@@ -81,13 +81,13 @@ class FileModelTest extends GenerisPhpUnitTestRunner
 
     /**
      * @depends testConstruct
-     * @expectedException common_exception_NoImplementation
      *
      * @author Lionel Lecaque, lionel@taotesting.com
      * @param array $model
      */
     public function testGetRdfsInterface($model)
     {
+        $this->expectException(\common_exception_NoImplementation::class);
         $model->getRdfsInterface();
     }
 

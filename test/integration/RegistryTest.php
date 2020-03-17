@@ -30,10 +30,10 @@ class RegistryTest extends TestCase
      *
      * @author Lionel Lecaque, lionel@taotesting.com
      */
-    public function setUp()
+    public function setUp(): void
     {
     }
-    
+
     /**
      *
      * @author Lionel Lecaque, lionel@taotesting.com
@@ -44,7 +44,7 @@ class RegistryTest extends TestCase
         $data = BasicRegistry::getRegistry()->getMap();
         $this->assertEquals('value', $data['key']);
     }
-    
+
     /**
      * @depends testSet
      *
@@ -55,7 +55,7 @@ class RegistryTest extends TestCase
         $value = BasicRegistry::getRegistry()->get('key');
         $this->assertEquals('value', $value);
     }
-    
+
     /**
      * @depends testSet
      *
@@ -63,7 +63,7 @@ class RegistryTest extends TestCase
      */
     public function testRemove()
     {
-        
+
         $data = BasicRegistry::getRegistry()->getMap();
         $this->assertTrue(isset($data['key']));
         BasicRegistry::getRegistry()->remove('key');

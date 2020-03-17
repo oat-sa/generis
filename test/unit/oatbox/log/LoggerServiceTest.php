@@ -27,13 +27,13 @@ use oat\generis\test\TestCase;
 
 class LoggerServiceTest extends TestCase
 {
-    
+
     const RUNS = 1000;
-    
-    protected function setUp()
+
+    protected function setUp(): void
     {
     }
-    
+
     public function testFileAppender()
     {
         $dfile = tempnam(sys_get_temp_dir(), "logtest");
@@ -118,7 +118,7 @@ class LoggerServiceTest extends TestCase
         unlink($efile);
         unlink($cfile);
     }
-    
+
     public function testLogTags()
     {
         $dfile = tempnam(sys_get_temp_dir(), "logtest");
@@ -139,7 +139,7 @@ class LoggerServiceTest extends TestCase
 
         $logger->logDebug('message');
         $this->assertEntriesInFile($dfile, 0);
-        
+
         $logger->logDebug('message', ['WRONGTAG']);
         $this->assertEntriesInFile($dfile, 0);
 
@@ -156,7 +156,7 @@ class LoggerServiceTest extends TestCase
 
         unlink($dfile);
     }
-    
+
     public function assertEntriesInFile($pFile, $pCount)
     {
         if (file_exists($pFile)) {

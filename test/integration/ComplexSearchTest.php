@@ -25,33 +25,33 @@ use oat\oatbox\service\ServiceManager;
 
 class ComplexSearchTest extends GenerisPhpUnitTestRunner
 {
-   
+
     private $search;
-    
-    protected function setUp()
+
+    protected function setUp(): void
     {
         GenerisPhpUnitTestRunner::initTest();
 
         $this->object = new core_kernel_classes_Class(OntologyRdfs::RDFS_RESOURCE);
         $this->object->debug = __METHOD__;
-        
+
         $this->search = ServiceManager::getServiceManager()->get(\oat\generis\model\kernel\persistence\smoothsql\search\ComplexSearchService::SERVICE_ID);
     }
-    
+
     public function testRandomized()
     {
         $queryBuilder = $this->search->query();
         $query = $this->search->searchType($queryBuilder, 'http://www.w3.org/2000/01/rdf-schema#Resource', true);
         $queryBuilder->setCriteria($query)->setRandom();
         $queryBuilder->setCriteria($query)->setLimit(10);
-        
+
         // Initial call
         $result = $result = $this->search->getGateway()->search($queryBuilder);
         $pickup = [];
         foreach ($result as $r) {
             $pickup[] = $r->getUri();
         }
-        
+
         for ($i = 0; $i < 10; $i++) {
             // Leave when result different from initial one.
             $result = $result = $this->search->getGateway()->search($queryBuilder);
@@ -59,12 +59,12 @@ class ComplexSearchTest extends GenerisPhpUnitTestRunner
             foreach ($result as $r) {
                 $newPickup[] = $r->getUri();
             }
-            
+
             if ($pickup !== $newPickup) {
                 break;
             }
         }
-        
+
         if ($i >= 10) {
             $this->fail('The Complex Search API randomization failed.');
         } else {

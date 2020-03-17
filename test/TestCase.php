@@ -15,7 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2018 (original work) Open Assessment Technologies SA;
+ * Copyright (c) 2020 (original work) Open Assessment Technologies SA;
  *
  */
 
@@ -23,22 +23,10 @@ namespace oat\generis\test;
 
 use Prophecy\Argument;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use common_persistence_sql_dbal_Driver;
 use PHPUnit\Framework\TestCase as UnitTestCase;
-use oat\generis\persistence\PersistenceManager;
-use PHPUnit\Framework\MockObject\MockObject;
 
 abstract class TestCase extends UnitTestCase
 {
-    /**
-     * Backward compatibility method
-     * @param string $exception
-     */
-    public function setExpectedException(string $exception)
-    {
-        $this->expectException($exception);
-    }
-
     /**
      * @param array $services
      * @return ServiceLocatorInterface
@@ -53,79 +41,5 @@ abstract class TestCase extends UnitTestCase
         $serviceLocatorProphecy->has(Argument::any())->willReturn(false);
 
         return $serviceLocatorProphecy->reveal();
-    }
-
-    /**
-     * Returns a persistence Manager with a mocked sql persistence
-     *
-     * @param string $key identifier of the persistence
-     * @return PersistenceManager
-     */
-    public function getSqlMock($key)
-    {
-        if (!extension_loaded('pdo_sqlite')) {
-            $this->markTestSkipped('sqlite not found, tests skipped.');
-        }
-        $driver = new common_persistence_sql_dbal_Driver();
-        $persistence = $driver->connect($key, ['connection' => ['url' => 'sqlite:///:memory:']]);
-        $pmProphecy = $this->prophesize(PersistenceManager::class);
-        $pmProphecy->setServiceLocator(Argument::any())->willReturn(null);
-        $pmProphecy->getPersistenceById($key)->willReturn($persistence);
-
-        return $pmProphecy->reveal();
-    }
-
-    /**
-     * Forward compatibility function for PHPUnit 5.4+
-     *
-     * Returns a test double for the specified class.
-     *
-     * @param string $originalClassName
-     * @return MockObject
-     * @throws \PHPUnit_Framework_Exception
-     * @since Method available since Release 5.4.0
-     */
-    protected function createMock($originalClassName): MockObject
-    {
-        return $this->getMockBuilder($originalClassName)
-            ->disableOriginalConstructor()
-            ->disableOriginalClone()
-            ->disableArgumentCloning()
-            ->getMock();
-    }
-
-    /**
-     * Backward compatibility function for PHPUnit 5.4+
-     *
-     * Returns a test double for the specified class.
-     *
-     * @param string $originalClassName
-     *
-     * @return MockObject
-     * @since Method available since Release 5.4.0
-     */
-    protected function getMock(string $originalClassName): MockObject
-    {
-        return $this->createMock($originalClassName);
-    }
-
-    /**
-     * Forward compatibility function for PHPUnit 5.4+
-     *
-     * Returns a partial test double for the specified class.
-     *
-     * @param string $originalClassName
-     * @param array $methods
-     * @return MockObject
-     * @since Method available since Release 5.4.0
-     */
-    protected function createPartialMock($originalClassName, array $methods = []): MockObject
-    {
-        return $this->getMockBuilder($originalClassName)
-            ->disableOriginalConstructor()
-            ->disableOriginalClone()
-            ->disableArgumentCloning()
-            ->setMethods($methods)
-            ->getMock();
     }
 }

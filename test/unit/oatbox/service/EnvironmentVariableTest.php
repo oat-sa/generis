@@ -32,7 +32,7 @@ class EnvironmentVariableTest extends TestCase
     /** @var EnvironmentVariable */
     private $subject;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->subject = new EnvironmentVariable(self::VAR_NAME);
     }

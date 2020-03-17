@@ -28,16 +28,16 @@ class OperationTest extends GenerisPhpUnitTestRunner
 {
 
 
-    public function setUp()
+    public function setUp(): void
     {
         GenerisPhpUnitTestRunner::initTest();
     }
-    
+
     public function testEvaluate()
     {
         $constant5 = core_kernel_rules_TermFactory::createConst('5');
         $constant12 = core_kernel_rules_TermFactory::createConst('12');
-        
+
         //5 + 12
         $operation = core_kernel_rules_OperationFactory::createOperation(
             $constant5,
@@ -47,7 +47,7 @@ class OperationTest extends GenerisPhpUnitTestRunner
         $result = $operation->evaluate();
         $this->assertIsA($result, 'core_kernel_classes_Literal');
         $this->assertEquals($result->literal, '17');
-        
+
         //5 - 12
         $operation = core_kernel_rules_OperationFactory::createOperation(
             $constant5,
@@ -57,7 +57,7 @@ class OperationTest extends GenerisPhpUnitTestRunner
         $result = $operation->evaluate();
         $this->assertIsA($result, 'core_kernel_classes_Literal');
         $this->assertEquals($result->literal, '-7');
-        
+
         //5 * 12
         $operation = core_kernel_rules_OperationFactory::createOperation(
             $constant5,
@@ -67,7 +67,7 @@ class OperationTest extends GenerisPhpUnitTestRunner
         $result = $operation->evaluate();
         $this->assertIsA($result, 'core_kernel_classes_Literal');
         $this->assertEquals($result->literal, '60');
-        
+
         //60 / 12
         $constant60 = core_kernel_rules_TermFactory::createConst('60');
         $operation = core_kernel_rules_OperationFactory::createOperation(
@@ -78,7 +78,7 @@ class OperationTest extends GenerisPhpUnitTestRunner
         $result = $operation->evaluate();
         $this->assertIsA($result, 'core_kernel_classes_Literal');
         $this->assertEquals($result->literal, '5');
-        
+
         // 60 concat 12
         $operation = core_kernel_rules_OperationFactory::createOperation(
             $constant60,
@@ -88,14 +88,14 @@ class OperationTest extends GenerisPhpUnitTestRunner
         $result = $operation->evaluate();
         $this->assertIsA($result, 'core_kernel_classes_Literal');
         $this->assertEquals($result->literal, '60 12');
-        
+
         // raise excption bad operator
         $operation = core_kernel_rules_OperationFactory::createOperation(
             $constant60,
             $constant12,
             new core_kernel_classes_Resource(RulesRdf::INSTANCE_OPERATOR_UNION)
         );
-        
+
         try {
             $operation->evaluate();
             $this->fail('should raise exception : problem evaluating operation, operator do not match with operands');
@@ -103,8 +103,8 @@ class OperationTest extends GenerisPhpUnitTestRunner
             $this->assertEquals($e->getMessage(), 'problem evaluating operation, operator do not match with operands');
         }
 
-        
-        
+
+
         $constant60->delete();
         $constant5->delete();
         $constant12->delete();
