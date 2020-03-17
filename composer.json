@@ -72,7 +72,7 @@
   },
   "require-dev": {
     "mikey179/vfsstream": "1.4.0",
-    "phpunit/phpunit": "^4.8",
+    "phpunit/phpunit": "^8.5",
     "php-mock/php-mock": "^2.0",
     "symfony/cache": "~4.1"
   },

@@ -28,14 +28,6 @@ use PHPUnit\Framework\TestCase as UnitTestCase;
 abstract class TestCase extends UnitTestCase
 {
     use SqlMockTrait;
-    /**
-     * Forward compatibility function for PHPUnit 7.0
-     * @param string $exception
-     */
-    public function expectException($exception)
-    {
-        $this->setExpectedException($exception);
-    }
 
     /**
      * @param array $services
@@ -52,43 +44,5 @@ abstract class TestCase extends UnitTestCase
 
         return $serviceLocatorProphecy->reveal();
     }
-
-    /**
-     * Forward compatibility function for PHPUnit 5.4+
-     *
-     * Returns a test double for the specified class.
-     *
-     * @param string $originalClassName
-     * @return MockObject
-     * @throws \PHPUnit_Framework_Exception
-     * @since Method available since Release 5.4.0
-     */
-    protected function createMock($originalClassName)
-    {
-        return $this->getMockBuilder($originalClassName)
-            ->disableOriginalConstructor()
-            ->disableOriginalClone()
-            ->disableArgumentCloning()
-            ->getMock();
-    }
-
-    /**
-     * Forward compatibility function for PHPUnit 5.4+
-     *
-     * Returns a partial test double for the specified class.
-     *
-     * @param string $originalClassName
-     * @param array $methods
-     * @return MockObject
-     * @since Method available since Release 5.4.0
-     */
-    protected function createPartialMock($originalClassName, array $methods = [])
-    {
-        return $this->getMockBuilder($originalClassName)
-            ->disableOriginalConstructor()
-            ->disableOriginalClone()
-            ->disableArgumentCloning()
-            ->setMethods($methods)
-            ->getMock();
-    }
+    
 }

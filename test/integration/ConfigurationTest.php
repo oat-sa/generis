@@ -37,7 +37,7 @@ class ConfigurationTest extends GenerisPhpUnitTestRunner
      */
     const UNSUPPORTED_PHP_MAJOR_VERSION = 9;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         GenerisPhpUnitTestRunner::initTest();
     }

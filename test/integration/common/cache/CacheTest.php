@@ -22,6 +22,7 @@
 
 namespace oat\generis\test\integration\common\cache;
 
+use common_cache_NotFoundException;
 use oat\generis\test\GenerisPhpUnitTestRunner;
 use \common_cache_FileCache;
 
@@ -29,7 +30,7 @@ use \common_cache_FileCache;
 
 class CacheTest extends GenerisPhpUnitTestRunner
 {
-    
+
     /**
      * @dataProvider keyProvider
      */
@@ -41,12 +42,12 @@ class CacheTest extends GenerisPhpUnitTestRunner
         $this->assertTrue($cache->has($key));
         $this->assertEquals('data', $cache->get($key));
         $this->assertTrue($cache->remove($key));
-        $this->setExpectedException('common_cache_NotFoundException');
+        $this->expectException(common_cache_NotFoundException::class);
         $cache->get($key);
         $this->assertFalse($cache->has($key));
     }
-    
-    
+
+
     public function keyProvider()
     {
         return [

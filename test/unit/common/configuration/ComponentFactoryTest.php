@@ -40,7 +40,7 @@ class ComponentFactoryTest extends TestCase
     /** @var common_configuration_ComponentFactory */
     private $subject;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

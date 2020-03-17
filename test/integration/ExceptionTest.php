@@ -24,12 +24,12 @@ use oat\generis\test\GenerisPhpUnitTestRunner;
 
 class ExceptionTest extends GenerisPhpUnitTestRunner
 {
-    
-    public function setUp()
+
+    public function setUp(): void
     {
         GenerisPhpUnitTestRunner::initTest();
     }
-    
+
     // Method used in the testInvalidArgumentTypeException
     private function wrongArgumentType($object)
     {
@@ -41,7 +41,7 @@ class ExceptionTest extends GenerisPhpUnitTestRunner
             throw new common_exception_InvalidArgumentType(__CLASS__, __METHOD__, 1, 'common_Object', $object);
         }
     }
-    
+
     public function testInvalidArgumentTypeException()
     {
         try {

@@ -21,6 +21,7 @@
 
 namespace oat\generis\test\unit\helpers;
 
+use common_exception_Error;
 use oat\generis\test\TestCase;
 
 class ExtensionHelperTest extends TestCase
@@ -34,23 +35,18 @@ class ExtensionHelperTest extends TestCase
         $this->assertEquals([$ext1,$ext2,$ext3], array_values($sorted));
     }
 
-    /**
-     * @expectedException common_exception_Error
-     */
     public function testCyclicDependencies()
     {
-        $ext1 = $this->mockExtension('ext0', ['ext1']);
+        $this->expectException(common_exception_Error::class);
         $ext1 = $this->mockExtension('ext1', ['ext2']);
         $ext2 = $this->mockExtension('ext2', ['ext3']);
         $ext3 = $this->mockExtension('ext3', ['ext1']);
         $sorted = \helpers_ExtensionHelper::sortByDependencies([$ext2,$ext3,$ext1]);
     }
 
-    /**
-     * @expectedException common_exception_Error
-     */
     public function testMissingDependencies()
     {
+        $this->expectException(common_exception_Error::class);
         $ext1 = $this->mockExtension('ext1', []);
         $ext2 = $this->mockExtension('ext2', ['ext4']);
         $ext3 = $this->mockExtension('ext3', ['ext2','ext4']);

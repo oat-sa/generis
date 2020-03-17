@@ -31,7 +31,7 @@ class SmoothModelTest extends GenerisPhpUnitTestRunner
      *
      * @see PHPUnit_Framework_TestCase::setUp()
      */
-    public function setUp()
+    public function setUp(): void
     {
         GenerisPhpUnitTestRunner::initTest();
     }
