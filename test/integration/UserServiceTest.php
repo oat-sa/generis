@@ -36,7 +36,7 @@ class UserServiceTestCase extends GenerisPhpUnitTestRunner
 
     private $sampleUser;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
         self::initRoles();

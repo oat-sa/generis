@@ -60,7 +60,7 @@ abstract class UpdateMultipleTestAbstract extends TestCase
             ':value_6' => 'value_6_3',
         ]);
 
-        return $this->driver->lastInsertId();
+        $this->driver->lastInsertId();
     }
 
     public function tearDown(): void

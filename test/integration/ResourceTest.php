@@ -52,7 +52,7 @@ class ResourceTest extends GenerisPhpUnitTestRunner
         $this->clazz = $clazz->createSubClass($clazz);
     }
 
-    function tearDown()
+    function tearDown(): void
     {
         $this->clazz->delete();
     }
