@@ -34,23 +34,23 @@ class ApiModelTest extends GenerisPhpUnitTestRunner
     {
         parent::__construct();
     }
-    
+
     /**
      * Setting the Api to test
      *
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         GenerisPhpUnitTestRunner::initTest();
-        
+
         $this->object = core_kernel_impl_ApiModelOO::singleton();
     }
-    
+
     public function testGetRootClass()
     {
         $localModel = common_ext_NamespaceManager::singleton()->getLocalNamespace()->getUri();
         $this->assertFalse(empty($localModel));
-        
+
         $rootClasses = $this->object->getRootClasses();
         $this->assertInstanceOf('common_Collection', $rootClasses);
         $expectedResult =   [
@@ -59,14 +59,14 @@ class ApiModelTest extends GenerisPhpUnitTestRunner
             OntologyRdfs::RDFS_RESOURCE,
             WidgetRdf::CLASS_URI_WIDGET_RENDERER
         ];
-        
+
         $pattern = "/^" . preg_quote($localModel, '/') . "/";
         foreach ($rootClasses->getIterator() as $rootClass) {
             $this->assertInstanceOf('core_kernel_classes_Class', $rootClass);
-            
+
             $parentClasses = $rootClass->getParentClasses(true);
             $this->assertEquals(0, count($parentClasses));
-            
+
             $types = $rootClass->getTypes(true);
             $this->assertEquals(1, count($types));
             foreach ($types as $uri => $parent) {
@@ -78,7 +78,7 @@ class ApiModelTest extends GenerisPhpUnitTestRunner
             }
         }
     }
-    
+
     public function testGetMetaClasses()
     {
         $metaClasses = $this->object->getMetaClasses();
@@ -91,7 +91,7 @@ class ApiModelTest extends GenerisPhpUnitTestRunner
             }
         }
     }
-    
+
     public function testSetStatement()
     {
         $true = new core_kernel_classes_Resource(GenerisRdf::GENERIS_TRUE, __METHOD__);
@@ -101,10 +101,10 @@ class ApiModelTest extends GenerisPhpUnitTestRunner
             $this->object->setStatement($true->getUri(), $predicate, 'test', DEFAULT_LANG),
             "setStatement should be able to set a value."
         );
-        
+
         $values = $true->getPropertyValues($property);
         $this->assertTrue(count($values) > 0);
-        
+
         $tripleFound = false;
         foreach ($values as $value) {
             if (!common_Utils::isUri($value) && $value == 'test') {
@@ -112,13 +112,13 @@ class ApiModelTest extends GenerisPhpUnitTestRunner
                 break;
             }
         }
-        
+
         $this->assertTrue($tripleFound, "A property value for property " . $property->getUri() .
                                         " should be found for resource " . $true->getUri());
-        
+
         $this->object->removeStatement($true->getUri(), $predicate, 'test', DEFAULT_LANG);
     }
-    
+
     public function testRemoveStatement()
     {
         $true = new core_kernel_classes_Resource(GenerisRdf::GENERIS_TRUE, __METHOD__);
@@ -130,7 +130,7 @@ class ApiModelTest extends GenerisPhpUnitTestRunner
         $value = $true->getPropertyValuesCollection($property);
         $this->assertTrue($value->isEmpty());
     }
-    
+
     public function testGetSubject()
     {
         $set = $this->object->getSubject(OntologyRdfs::RDFS_LABEL, 'True');

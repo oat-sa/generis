@@ -22,27 +22,27 @@
 namespace oat\generis\test;
 
 use Prophecy\Argument;
-use Zend\ServiceManager\ServiceLocatorInterface;
-use PHPUnit\Framework\TestCase as UnitTestCase;
+use common_persistence_sql_dbal_Driver;
+use oat\generis\persistence\PersistenceManager;
 
-abstract class TestCase extends UnitTestCase
+trait SqlMockTrait
 {
-    use SqlMockTrait;
-
     /**
-     * @param array $services
-     * @return ServiceLocatorInterface
+     * Returns a persistence Manager with a mocked sql persistence
+     *
+     * @param string $key identifier of the persistence
+     * @return PersistenceManager
      */
-    public function getServiceLocatorMock(array $services = [])
+    public function getSqlMock($key)
     {
-        $serviceLocatorProphecy = $this->prophesize(ServiceLocatorInterface::class);
-        foreach ($services as $key => $service) {
-            $serviceLocatorProphecy->get($key)->willReturn($service);
-            $serviceLocatorProphecy->has($key)->willReturn(true);
+        if (!extension_loaded('pdo_sqlite')) {
+            $this->markTestSkipped('sqlite not found, tests skipped.');
         }
-        $serviceLocatorProphecy->has(Argument::any())->willReturn(false);
-
-        return $serviceLocatorProphecy->reveal();
+        $driver = new common_persistence_sql_dbal_Driver();
+        $persistence = $driver->connect($key, ['connection' => ['url' => 'sqlite:///:memory:']]);
+        $pmProphecy = $this->prophesize(PersistenceManager::class);
+        $pmProphecy->setServiceLocator(Argument::any())->willReturn(null);
+        $pmProphecy->getPersistenceById($key)->willReturn($persistence);
+        return $pmProphecy->reveal();
     }
-    
 }

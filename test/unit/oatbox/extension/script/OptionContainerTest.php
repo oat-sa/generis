@@ -26,21 +26,21 @@ use oat\generis\test\TestCase;
 
 class OptionContainerTest extends TestCase
 {
-    
+
     /**
      * @dataProvider instantiateProvider
      */
     public function testInstantiate(array $options, array $values, array $expectedOptions)
     {
         $optionContainer = new OptionContainer($options, $values);
-        
+        $this->assertIsArray($expectedOptions);
         // Check flags.
         foreach ($expectedOptions as $optionName => $optionValue) {
             $this->assertTrue($optionContainer->has($optionName));
             $this->assertSame($optionValue, $optionContainer->get($optionName));
         }
     }
-    
+
     public function instantiateProvider()
     {
         return [

@@ -22,6 +22,7 @@
 
 namespace oat\generis\test\integration\common\persistence;
 
+use common_exception_NotImplemented;
 use oat\generis\test\GenerisPhpUnitTestRunner;
 use \common_persistence_Persistence;
 use \common_persistence_PhpFileDriver;
@@ -30,8 +31,8 @@ use org\bovigo\vfs\vfsStream;
 class PhpFilePersistenceTest extends GenerisPhpUnitTestRunner
 {
     private $root;
-    
-    public function setUp()
+
+    public function setUp(): void
     {
         if (!class_exists('org\bovigo\vfs\vfsStream')) {
             $this->markTestSkipped(
@@ -40,14 +41,14 @@ class PhpFilePersistenceTest extends GenerisPhpUnitTestRunner
         }
         $this->root = vfsStream::setup('data');
     }
-    
+
     public function testGetPersistence()
     {
         $driver = common_persistence_Persistence::getPersistence('cache');
         $this->assertInstanceOf('common_persistence_KeyValuePersistence', $driver);
     }
-    
-    
+
+
     public function testConnect()
     {
         $params = [
@@ -61,15 +62,15 @@ class PhpFilePersistenceTest extends GenerisPhpUnitTestRunner
     }
     /**
      * @depends testConnect
-     * @expectedException     common_exception_NotImplemented
      * @author Lionel Lecaque, lionel@taotesting.com
      * @param common_persistence_KeyValuePersistence $persistence
      */
     public function testSetException($persistence)
     {
+        $this->expectException(common_exception_NotImplemented::class);
         $persistence->set('empty', 'empty', 6);
     }
-    
+
     /**
      * @depends testConnect
      * @author Lionel Lecaque, lionel@taotesting.com
@@ -83,7 +84,7 @@ class PhpFilePersistenceTest extends GenerisPhpUnitTestRunner
         $this->assertEquals("<?php return 'value';" . PHP_EOL, $content);
         $this->assertTrue($return);
     }
-    
+
     /**
      * @depends testConnect
      * @author Lionel Lecaque, lionel@taotesting.com
@@ -94,8 +95,8 @@ class PhpFilePersistenceTest extends GenerisPhpUnitTestRunner
         $this->assertTrue($persistence->set('fakeKeyName', 'value'));
         $this->assertEquals('value', $persistence->get('fakeKeyName'));
     }
-    
-    
+
+
     /**
      * @depends testConnect
      * @author Lionel Lecaque, lionel@taotesting.com
@@ -107,7 +108,7 @@ class PhpFilePersistenceTest extends GenerisPhpUnitTestRunner
         $this->assertTrue($persistence->set('fakeKeyName', 'value'));
         $this->assertTrue($persistence->exists('fakeKeyName'));
     }
-    
+
     /**
      * @depends testConnect
      * @author Lionel Lecaque, lionel@taotesting.com
@@ -115,7 +116,7 @@ class PhpFilePersistenceTest extends GenerisPhpUnitTestRunner
      */
     public function testDel($persistence)
     {
-       
+
         $this->assertTrue($persistence->set('fakeKeyName', 'value'));
         $this->assertTrue($persistence->exists('fakeKeyName'));
         $this->assertTrue($persistence->del('fakeKeyName'));
@@ -157,7 +158,7 @@ class PhpFilePersistenceTest extends GenerisPhpUnitTestRunner
      */
     public function testPurge($persistence)
     {
-         
+
         $this->assertTrue($persistence->set('fakeKeyName', 'value'));
         $this->assertTrue($persistence->set('fakeKeyName2', 'value'));
         $this->assertTrue($persistence->exists('fakeKeyName'));
@@ -165,7 +166,7 @@ class PhpFilePersistenceTest extends GenerisPhpUnitTestRunner
         $this->assertTrue($persistence->purge());
         $this->assertFalse($this->root->hasChildren());
     }
-    
+
     /**
      *
      * @author Lionel Lecaque, lionel@taotesting.com
@@ -178,7 +179,7 @@ class PhpFilePersistenceTest extends GenerisPhpUnitTestRunner
         ];
         $driver = new common_persistence_PhpFileDriver();
         $persistence = $driver->connect('test', $params);
-        
+
         $persistence->set('fakeKeyName', 'value');
         $this->assertEquals('value', $persistence->get('fakeKeyName'));
     }

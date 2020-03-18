@@ -29,15 +29,15 @@ class TermTest extends GenerisPhpUnitTestRunner
 {
 
 
-    public function setUp()
+    public function setUp(): void
     {
         GenerisPhpUnitTestRunner::initTest();
     }
-    
+
     public function testEvaluate()
     {
-        
-        
+
+
         //bad term
         $badTermResource = core_kernel_classes_ResourceFactory::create(
             new core_kernel_classes_Class(RulesRdf::CLASS_TERM),
@@ -51,23 +51,23 @@ class TermTest extends GenerisPhpUnitTestRunner
         } catch (common_Exception $e) {
             $this->assertEquals($e->getMessage(), 'Forbidden Type of Term');
         }
-        
+
         // eval const
         $constantResource = core_kernel_rules_TermFactory::createConst('test1');
         $term = $constantResource->evaluate();
         $this->assertIsA($term, 'core_kernel_classes_Literal');
         $this->assertEquals($term, 'test1');
         $constantResource->delete();
-        
+
         //eval SPX
         $booleanClass = new core_kernel_classes_Class(GenerisRdf::GENERIS_BOOLEAN);
-        
+
         $maybe = core_kernel_classes_ResourceFactory::create($booleanClass, 'testCase testCreateSPX', __METHOD__);
         $SPXResource = core_kernel_rules_TermFactory::createSPX($maybe, new core_kernel_classes_Property(OntologyRdfs::RDFS_COMMENT));
         $spxResult = $SPXResource->evaluate();
         $this->assertIsA($spxResult, 'core_kernel_classes_Literal');
         $this->assertEquals($spxResult, __METHOD__);
-        
+
         // eval operation
         $constant5 = core_kernel_rules_TermFactory::createConst('5');
         $constant12 = core_kernel_rules_TermFactory::createConst('12');
@@ -79,8 +79,8 @@ class TermTest extends GenerisPhpUnitTestRunner
         $operationTerm = new core_kernel_rules_Term($operation->getUri());
         $result = $operationTerm->evaluate();
         $this->assertEquals($result->literal, '17');
-        
-        
+
+
         $fakeTerm = new core_kernel_rules_Term($maybe->getUri());
         try {
             $fakeTerm->evaluate();
@@ -88,7 +88,7 @@ class TermTest extends GenerisPhpUnitTestRunner
         } catch (common_Exception $e) {
             $this->assertEquals($e->getMessage(), 'problem evaluating Term');
         }
-        
+
         $badTermResource->delete();
         $constant5->delete();
         $constant12->delete();

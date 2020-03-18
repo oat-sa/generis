@@ -30,7 +30,7 @@ class KeyValuePersistenceTest extends TestCase
     /** @var \common_persistence_Driver */
     protected $driver;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->driver = new \common_persistence_InMemoryKvDriver();
 
@@ -64,7 +64,7 @@ class KeyValuePersistenceTest extends TestCase
             );
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         unset($this->largeValuePersistence);
     }
@@ -126,11 +126,11 @@ class KeyValuePersistenceTest extends TestCase
 
         $this->testDelExistsLarge();
     }
-    
+
     public function testSetValueLengthEqualsMax()
     {
         $str = str_repeat('a', 100);
-        
+
         $this->largeValuePersistence->set('equalsMax', $str);
         $this->assertEquals($str, $this->largeValuePersistence->get('equalsMax'));
         $this->assertTrue($this->largeValuePersistence->del('equalsMax'));

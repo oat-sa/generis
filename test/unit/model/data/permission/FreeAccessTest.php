@@ -32,11 +32,11 @@ class FreeAccessTest extends TestCase
      */
     private $user;
 
-    public function setUp()
+    public function setUp(): void
     {
         $user = $this->prophesize('oat\oatbox\user\User');
         $user->getIdentifier()->willReturn('tastIdentifier\\_of_//User');
-        
+
         $this->user = $user->reveal();
     }
 
@@ -45,7 +45,7 @@ class FreeAccessTest extends TestCase
         $model = new FreeAccess();
         $this->assertInstanceOf('oat\generis\model\data\permission\PermissionInterface', $model);
     }
-    
+
     public function testGetPermissions()
     {
         $model = new FreeAccess();
@@ -58,12 +58,12 @@ class FreeAccessTest extends TestCase
         $model = new FreeAccess();
         $this->assertEquals([], $model->getSupportedRights());
     }
-    
+
     public function testPhpSerialize()
     {
         $phpCode = \common_Utils::toPHPVariableString(new FreeAccess());
         $restoredModel = eval('return ' . $phpCode . ';');
-        
+
         $this->assertInstanceOf('oat\generis\model\data\permission\PermissionInterface', $restoredModel);
         $this->assertEquals([], $restoredModel->getSupportedRights());
         $this->assertEquals(['res1' => [FreeAccess::RIGHT_UNSUPPORTED]], $restoredModel->getPermissions($this->user, ['res1']));

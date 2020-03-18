@@ -19,12 +19,11 @@
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
  *               2017 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
-?>
-<?php
 
 use oat\generis\model\OntologyRdf;
 use oat\generis\model\OntologyRdfs;
 use Doctrine\DBAL\DBALException;
+use oat\generis\model\data\import\RdfImporter;
 
 error_reporting(E_ALL);
 
@@ -101,21 +100,8 @@ class core_kernel_impl_ApiModelOO extends core_kernel_impl_Api implements core_k
      */
     public function importXmlRdf($targetNameSpace, $fileLocation)
     {
-        $returnValue = (bool) false;
-
-        if (!file_exists($fileLocation) || !is_readable($fileLocation)) {
-            throw new common_Exception("Unable to load ontology : $fileLocation");
-        }
-        
-        if (!preg_match("/#$/", $targetNameSpace)) {
-            $targetNameSpace .= '#';
-        }
-        $modFactory = new core_kernel_api_ModelFactory();
-        $returnValue = $modFactory->createModel($targetNameSpace, file_get_contents($fileLocation));
-        
-
-
-        return (bool) $returnValue;
+        $importer = $this->getServiceLocator()->get(RdfImporter::class);
+        return $importer->importFile($fileLocation);
     }
 
 
@@ -532,5 +518,13 @@ class core_kernel_impl_ApiModelOO extends core_kernel_impl_Api implements core_k
      */
     private function __construct()
     {
+    }
+
+    /**
+     * @return ServiceLocatorInterface
+     */
+    public function getServiceLocator()
+    {
+        return ServiceManager::getServiceManager();
     }
 }
