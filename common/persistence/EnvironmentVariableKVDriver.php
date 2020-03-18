@@ -17,7 +17,6 @@
  *
  * Copyright (c) 2020 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  *
- * @author Lionel Lecaque <lionel@taotesting.com>
  * @license GPLv2
  *
  */
@@ -32,42 +31,56 @@ class EnvironmentVariableKVDriver implements common_persistence_KvDriver
 {
 
     /**
-     *
-     * @param $id
-     * @param array $params
-     * @return common_persistence_KeyValuePersistence
-     * @see common_persistence_Driver::connect()
+     * @inheritDoc
      */
     public function connect($id, array $params)
     {
         return new common_persistence_KeyValuePersistence($params, $this);
     }
 
+    /**
+     * @inheritDoc
+     */
     public function set($id, $value, $ttl = null, $nx = false)
     {
         throw new common_exception_NoImplementation(__METHOD__ . '@' . __CLASS__ . 'not implemented');
     }
 
+    /**
+     * @inheritDoc
+     */
     public function get($id)
     {
         return $this->exists($id) ? $_ENV[$id] : false;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function exists($id)
     {
         return array_key_exists($id, $_ENV);
     }
 
+    /**
+     * @inheritDoc
+     */
     public function del($id)
     {
         throw new common_exception_NoImplementation(__METHOD__ . '@' . __CLASS__ . 'not implemented');
     }
 
+    /**
+     * @inheritDoc
+     */
     public function incr($id)
     {
         throw new common_exception_NoImplementation(__METHOD__ . '@' . __CLASS__ . 'not implemented');
     }
 
+    /**
+     * @inheritDoc
+     */
     public function decr($id)
     {
         throw new common_exception_NoImplementation(__METHOD__ . '@' . __CLASS__ . 'not implemented');
