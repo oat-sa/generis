@@ -107,6 +107,17 @@ class common_report_Report implements IteratorAggregate, JsonSerializable
         $this->elements = [];
         $this->data = $data;
     }
+
+    /**
+     * @param string $message
+     * @param mixed|null $data
+     *
+     * @return static
+     */
+    public static function createWarning($message = '', $data = null): self
+    {
+        return new static(self::TYPE_WARNING, $message, $data);
+    }
     
     /**
      * Change the title of the report
