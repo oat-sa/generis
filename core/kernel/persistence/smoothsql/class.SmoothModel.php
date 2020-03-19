@@ -23,6 +23,9 @@ use oat\generis\model\data\ModelManager;
 use oat\oatbox\service\ConfigurableService;
 use oat\generis\model\kernel\persistence\smoothsql\search\ComplexSearchService;
 use oat\generis\model\data\Ontology;
+use oat\generis\persistence\sql\SchemaProviderInterface;
+use oat\generis\persistence\sql\SchemaCollection;
+use oat\generis\model\kernel\persistence\smoothsql\install\SmoothRdsModel;
 
 /**
  * transitory model for the smooth sql implementation
@@ -30,7 +33,7 @@ use oat\generis\model\data\Ontology;
  * @author joel bout <joel@taotesting.com>
  * @package generis
  */
-class core_kernel_persistence_smoothsql_SmoothModel extends ConfigurableService implements Ontology
+class core_kernel_persistence_smoothsql_SmoothModel extends ConfigurableService implements Ontology, SchemaProviderInterface
 {
     const OPTION_PERSISTENCE = 'persistence';
     const OPTION_READABLE_MODELS = 'readable';
@@ -83,7 +86,9 @@ class core_kernel_persistence_smoothsql_SmoothModel extends ConfigurableService 
     public function getPersistence()
     {
         if (is_null($this->persistence)) {
-            $this->persistence = $this->getServiceLocator()->get(common_persistence_Manager::SERVICE_ID)->getPersistenceById($this->getOption(self::OPTION_PERSISTENCE));
+            $this->persistence = $this->getServiceLocator()
+                ->get(common_persistence_Manager::SERVICE_ID)
+                ->getPersistenceById($this->getOption(self::OPTION_PERSISTENCE));
         }
         return $this->persistence;
     }
@@ -199,4 +204,11 @@ class core_kernel_persistence_smoothsql_SmoothModel extends ConfigurableService 
         }
         return $model->getWritableModels();
     }
+
+    public function provideSchema(SchemaCollection $schemaCollection)
+    {
+        $schema = $schemaCollection->getSchema($this->getOption(self::OPTION_PERSISTENCE));
+        SmoothRdsModel::addSmoothTables($schema);
+    }
+
 }

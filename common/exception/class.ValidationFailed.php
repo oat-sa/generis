@@ -21,7 +21,6 @@
  * @access public
  * @author Gyula Szucs, <gyula@taotesting.com>
  * @package generis
-
  */
 class common_exception_ValidationFailed extends common_exception_BadRequest
 {
@@ -32,12 +31,21 @@ class common_exception_ValidationFailed extends common_exception_BadRequest
      */
     private $field;
 
+    /**
+     * common_exception_ValidationFailed constructor.
+     *
+     * @param string $field
+     * @param string|null $message
+     * @param int $code
+     */
     public function __construct($field, $message = null, $code = 0)
     {
         $this->field = $field;
-        if (! $message) {
-            $message = printf("Validation for field '%s' has failed.", $field);
+
+        if (!$message) {
+            $message = sprintf("Validation for field '%s' has failed.", $field);
         }
+
         parent::__construct($message, $code);
     }
 
@@ -49,6 +57,9 @@ class common_exception_ValidationFailed extends common_exception_BadRequest
         return $this->field;
     }
 
+    /**
+     * @return string
+     */
     public function getUserMessage()
     {
         return __("Validation for field '%s' has failed.", $this->field);

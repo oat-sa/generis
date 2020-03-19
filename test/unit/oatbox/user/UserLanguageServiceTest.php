@@ -33,7 +33,7 @@ use oat\generis\test\TestCase;
 class UserLanguageServiceTest extends TestCase
 {
 
-    public function setUp()
+    public function setUp(): void
     {
         if (!defined('DEFAULT_LANG')) {
             define('DEFAULT_LANG', 'en-US');

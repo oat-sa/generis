@@ -23,21 +23,11 @@ namespace oat\generis\test;
 
 use Prophecy\Argument;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use common_persistence_Manager;
-use common_persistence_sql_dbal_Driver;
 use PHPUnit\Framework\TestCase as UnitTestCase;
-use oat\generis\test\MockObject;
 
 abstract class TestCase extends UnitTestCase
 {
-    /**
-     * Forward compatibility function for PHPUnit 7.0
-     * @param string $exception
-     */
-    public function expectException($exception)
-    {
-        $this->setExpectedException($exception);
-    }
+    use SqlMockTrait;
 
     /**
      * @param array $services
@@ -54,63 +44,5 @@ abstract class TestCase extends UnitTestCase
 
         return $serviceLocatorProphecy->reveal();
     }
-
-    /**
-     * Returns a persistence Manager with a mocked sql persistence
-     *
-     * @param string $key identifier of the persistence
-     * @return common_persistence_Manager
-     */
-    public function getSqlMock($key)
-    {
-        if (!extension_loaded('pdo_sqlite')) {
-            $this->markTestSkipped('sqlite not found, tests skipped.');
-        }
-        $driver = new common_persistence_sql_dbal_Driver();
-        $persistence = $driver->connect($key, ['connection' => ['url' => 'sqlite:///:memory:']]);
-        $pmProphecy = $this->prophesize(common_persistence_Manager::class);
-        $pmProphecy->setServiceLocator(Argument::any())->willReturn(null);
-        $pmProphecy->getPersistenceById($key)->willReturn($persistence);
-
-        return $pmProphecy->reveal();
-    }
-
-    /**
-     * Forward compatibility function for PHPUnit 5.4+
-     *
-     * Returns a test double for the specified class.
-     *
-     * @param string $originalClassName
-     * @return MockObject
-     * @throws \PHPUnit_Framework_Exception
-     * @since Method available since Release 5.4.0
-     */
-    protected function createMock($originalClassName)
-    {
-        return $this->getMockBuilder($originalClassName)
-            ->disableOriginalConstructor()
-            ->disableOriginalClone()
-            ->disableArgumentCloning()
-            ->getMock();
-    }
-
-    /**
-     * Forward compatibility function for PHPUnit 5.4+
-     *
-     * Returns a partial test double for the specified class.
-     *
-     * @param string $originalClassName
-     * @param array $methods
-     * @return MockObject
-     * @since Method available since Release 5.4.0
-     */
-    protected function createPartialMock($originalClassName, array $methods = [])
-    {
-        return $this->getMockBuilder($originalClassName)
-            ->disableOriginalConstructor()
-            ->disableOriginalClone()
-            ->disableArgumentCloning()
-            ->setMethods($methods)
-            ->getMock();
-    }
+    
 }

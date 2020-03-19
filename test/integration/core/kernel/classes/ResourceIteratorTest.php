@@ -34,7 +34,7 @@ class ResourceIteratorTest extends TaoPhpUnitTestRunner
 
     protected static $sampleClass = 'http://www.tao.lu/Ontologies/TAO.rdf#ResourceIteratorTest';
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->removeResources();
     }

@@ -20,18 +20,26 @@
  */
 
 use Doctrine\DBAL\ParameterType;
+use oat\generis\persistence\sql\SchemaProviderInterface;
+use oat\generis\persistence\sql\SchemaCollection;
 
 /**
  * A key value driver based upon an existing sql persistence
  *
  * @todo : Refactor driver specific stuff to dedicated implementation
  */
-class common_persistence_SqlKvDriver implements common_persistence_KvDriver
+class common_persistence_SqlKvDriver implements common_persistence_KvDriver, SchemaProviderInterface
 {
-
     const DEFAULT_GC_PROBABILITY = 1000;
 
     const OPTION_PERSISTENCE_SQL = 'sqlPersistence';
+
+    /**
+     * Identifier of the sql persitence used
+     * @var string
+     */
+    private $sqlPersistenceId;
+
     /**
      * @var common_persistence_SqlPersistence
      */
@@ -55,7 +63,8 @@ class common_persistence_SqlKvDriver implements common_persistence_KvDriver
             throw new common_exception_Error('Missing underlying sql persistence');
         }
 
-        $this->sqlPersistence = common_persistence_SqlPersistence::getPersistence($params['sqlPersistence']);
+        $this->sqlPersistenceId = $params[self::OPTION_PERSISTENCE_SQL];
+        $this->sqlPersistence = common_persistence_SqlPersistence::getPersistence($params[self::OPTION_PERSISTENCE_SQL]);
         $this->garbageCollection = isset($params['gc']) ? $params['gc'] : self::DEFAULT_GC_PROBABILITY;
 
 
@@ -232,5 +241,21 @@ class common_persistence_SqlKvDriver implements common_persistence_KvDriver
     {
         $statement = 'DELETE FROM kv_store WHERE kv_time > 0 AND kv_time <  ? ';
         return (bool)$this->sqlPersistence->exec($statement, [time()]);
+    }
+
+    /**
+     * @inheritdoc
+     *
+     * @throws common_exception_InconsistentData
+     */
+    public function provideSchema(SchemaCollection $schemaCollection)
+    {
+        $schema = $schemaCollection->getSchema($this->sqlPersistenceId);
+        $table = $schema->createTable("kv_store");
+        $table->addColumn('kv_id', "string", ["notnull" => null,"length" => 255]);
+        $table->addColumn('kv_value', "text", ["notnull" => null]);
+        $table->addColumn('kv_time', "integer", ["notnull" => null,"length" => 30]);
+        $table->setPrimaryKey(["kv_id"]);
+        $table->addOption('engine', 'MyISAM');
     }
 }

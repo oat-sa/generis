@@ -29,7 +29,7 @@ class AdvKeyValuePersistenceTest extends TestCase
      */
     protected $largeValuePersistence;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->largeValuePersistence = new \common_persistence_AdvKeyValuePersistence(
             [
@@ -39,7 +39,7 @@ class AdvKeyValuePersistenceTest extends TestCase
         );
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         unset($this->largeValuePersistence);
     }
