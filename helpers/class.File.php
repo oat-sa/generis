@@ -104,16 +104,7 @@ class helpers_File
      */
     public static function isFileInsideDirectory($filename, $directory)
     {
-        $canonicalDirectory = realpath($directory);
-        if (false === $canonicalDirectory) {
-            return false;
-        }
-        $canonicalFilename = realpath($canonicalDirectory . DIRECTORY_SEPARATOR . $filename);
-        if (false === $canonicalFilename) {
-            return false;
-        }
-
-        return 0 === strpos($canonicalFilename, $canonicalDirectory);
+        return self::isAbsoluteFileInsideDirectory($directory . DIRECTORY_SEPARATOR . $filename, $directory);
     }
 
     /**
