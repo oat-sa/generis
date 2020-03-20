@@ -43,7 +43,7 @@ class EnvironmentVariableKVDriver implements common_persistence_KvDriver
      */
     public function set($id, $value, $ttl = null, $nx = false)
     {
-        throw new common_exception_NoImplementation(__METHOD__ . '@' . __CLASS__ . 'not implemented');
+        throw new common_exception_NoImplementation(__METHOD__ . '@' . __CLASS__ . ' not implemented');
     }
 
     /**
