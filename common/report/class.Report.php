@@ -59,6 +59,22 @@ class common_report_Report implements IteratorAggregate, JsonSerializable
      * @var mixed
      */
     private $data = null;
+
+    /**
+     * common_report_Report constructor.
+     *
+     * @param string $type
+     * @param string $message
+     * @param mixed|null $data
+     */
+    public function __construct($type, $message = '', $data = null)
+    {
+        $this->type = $type;
+        $this->message = $message;
+        $this->data = $data;
+
+        $this->elements = [];
+    }
     
     /**
      * convenience method to create a simple success report
@@ -98,14 +114,6 @@ class common_report_Report implements IteratorAggregate, JsonSerializable
     public static function createInfo($message = '', $data = null)
     {
         return new static(self::TYPE_INFO, $message, $data);
-    }
-    
-    public function __construct($type, $message = '', $data = null)
-    {
-        $this->type = $type;
-        $this->message = $message;
-        $this->elements = [];
-        $this->data = $data;
     }
 
     /**
