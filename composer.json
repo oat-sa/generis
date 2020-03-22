@@ -68,7 +68,10 @@
     "fluent/logger": "^1.0.1",
     "symfony/lock": "^3.4",
     "psr/container": "^1.0.0",
-    "ramsey/uuid": "^3.8"
+    "ramsey/uuid": "^3.8",
+    "symfony/dependency-injection": "^5.1@dev",
+    "symfony/yaml": "^5.1@dev",
+    "symfony/config": "^5.1@dev"
   },
   "require-dev": {
     "mikey179/vfsstream": "1.4.0",
