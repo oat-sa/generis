@@ -66,9 +66,11 @@ class ServiceManager implements ServiceLocatorInterface, ContainerInterface
         $loader = new YamlFileLoader($this->symfonyContainer, new FileLocator(CONFIG_PATH));
         $configFiles = $this->get('generis/serviceContainers');
 
+        // just to make it faster. probably container extension is a better way
         foreach ($configFiles as $configFile) {
             $loader->load($configFile);
         }
+        $this->symfonyContainer->set('serviceLocator', $this);
         $this->symfonyContainer->compile();
     }
 
