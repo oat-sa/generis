@@ -63,8 +63,12 @@ class ServiceManager implements ServiceLocatorInterface, ContainerInterface
     {
         $this->symfonyContainer = new ContainerBuilder();
 
-        $loader = new YamlFileLoader($this->symfonyContainer, new FileLocator('/var/www/html/config/generis'));
-        $loader->load('services.yaml');
+        $loader = new YamlFileLoader($this->symfonyContainer, new FileLocator(CONFIG_PATH));
+        $configFiles = $this->get('generis/serviceContainers');
+
+        foreach ($configFiles as $configFile) {
+            $loader->load($configFile);
+        }
         $this->symfonyContainer->compile();
     }
 
