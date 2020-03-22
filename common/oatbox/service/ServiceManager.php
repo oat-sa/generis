@@ -21,7 +21,12 @@
 
 namespace oat\oatbox\service;
 
+use Exception;
 use oat\oatbox\Configurable;
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException as SymfomyServiceNotFoundException;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Psr\Container\ContainerInterface;
@@ -33,6 +38,10 @@ use Psr\Container\ContainerInterface;
 class ServiceManager implements ServiceLocatorInterface, ContainerInterface
 {
     private static $instance;
+    /**
+     * @var ContainerBuilder
+     */
+    private $symfonyContainer;
 
     /**
      * @return \oat\oatbox\service\ServiceManager
@@ -43,7 +52,30 @@ class ServiceManager implements ServiceLocatorInterface, ContainerInterface
         if (is_null(self::$instance)) {
             self::$instance = new ServiceManager(\common_ext_ConfigDriver::singleton());
         }
+
         return self::$instance;
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function loadSymfonyConfig()
+    {
+        $this->symfonyContainer = new ContainerBuilder();
+
+        $loader = new YamlFileLoader($this->symfonyContainer, new FileLocator(CONFIG_PATH));
+        try {
+            $configFiles = $this->get('generis/serviceContainers')->getOptions();
+        } catch (Exception $e) {
+            $configFiles = [];
+        }
+
+        // just to make it faster. probably container extension is a better way
+        foreach ($configFiles as $configFile) {
+            $loader->load($configFile);
+        }
+        $this->symfonyContainer->set('serviceLocator', $this);
+        $this->symfonyContainer->compile();
     }
 
     public static function setServiceManager(ServiceManager $serviceManager)
@@ -61,6 +93,8 @@ class ServiceManager implements ServiceLocatorInterface, ContainerInterface
     public function __construct($configService)
     {
         $this->configService = $configService;
+
+        $this->loadSymfonyConfig();
     }
 
     /**
@@ -76,7 +110,11 @@ class ServiceManager implements ServiceLocatorInterface, ContainerInterface
     {
         $serviceId = $this->getServiceId($serviceKey);
         if (!isset($this->services[$serviceId])) {
-            $this->services[$serviceId] = $this->load($serviceId, $serviceKey);
+            try {
+                $this->services[$serviceId] = $this->symfonyContainer->get($serviceKey);
+            } catch (SymfomyServiceNotFoundException $e) {
+                $this->services[$serviceId] = $this->load($serviceId, $serviceKey);
+            }
         }
         return $this->services[$serviceId];
     }

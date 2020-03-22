@@ -494,5 +494,17 @@ class Updater extends common_ext_ExtensionUpdater
         }
 
         $this->skip('12.12.0', '12.15.0');
+
+        if ($this->isVersion('12.15.0')) {
+            $serviceManager = $this->getServiceManager();
+            $containersConfig = 'generis/serviceContainers';
+            $containers = new ConfigurationService(['generis' => 'generis/services.yaml']);
+
+            copy(__DIR__ . '/../../config/default/services.yaml', CONFIG_PATH . 'generis/services.yaml');
+
+            $serviceManager->register($containersConfig, $containers);
+
+            $this->setVersion('12.16.0');
+        }
     }
 }
