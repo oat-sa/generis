@@ -41,7 +41,7 @@ class EnvironmentVariableKVDriver implements common_persistence_KvDriver
     /**
      * @inheritDoc
      */
-    public function set($id, $value, $ttl = null, $nx = false)
+    public function set($id, $value, $ttl = null, $nx = false): bool
     {
         throw new common_exception_NoImplementation(__METHOD__ . '@' . __CLASS__ . ' not implemented');
     }
@@ -49,7 +49,7 @@ class EnvironmentVariableKVDriver implements common_persistence_KvDriver
     /**
      * @inheritDoc
      */
-    public function get($id)
+    public function get($id): string
     {
         return $this->exists($id) ? $_ENV[$id] : false;
     }
@@ -57,7 +57,7 @@ class EnvironmentVariableKVDriver implements common_persistence_KvDriver
     /**
      * @inheritDoc
      */
-    public function exists($id)
+    public function exists($id): bool
     {
         return array_key_exists($id, $_ENV);
     }
@@ -65,7 +65,7 @@ class EnvironmentVariableKVDriver implements common_persistence_KvDriver
     /**
      * @inheritDoc
      */
-    public function del($id)
+    public function del($id): bool
     {
         throw new common_exception_NoImplementation(__METHOD__ . '@' . __CLASS__ . 'not implemented');
     }
@@ -73,7 +73,7 @@ class EnvironmentVariableKVDriver implements common_persistence_KvDriver
     /**
      * @inheritDoc
      */
-    public function incr($id)
+    public function incr($id): bool
     {
         throw new common_exception_NoImplementation(__METHOD__ . '@' . __CLASS__ . 'not implemented');
     }
@@ -81,7 +81,7 @@ class EnvironmentVariableKVDriver implements common_persistence_KvDriver
     /**
      * @inheritDoc
      */
-    public function decr($id)
+    public function decr($id): bool
     {
         throw new common_exception_NoImplementation(__METHOD__ . '@' . __CLASS__ . 'not implemented');
     }
