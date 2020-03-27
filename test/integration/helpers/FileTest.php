@@ -27,12 +27,12 @@ class FileTest extends TestCase
 {
     private $rootDir;
 
-    public function tearDown()
+    public function tearDown(): void
     {
         \tao_helpers_File::delTree($this->rootDir);
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->rootDir = uniqid(sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'test-file-inside-directory', true) . DIRECTORY_SEPARATOR;
         mkdir($this->rootDir);

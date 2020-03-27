@@ -20,6 +20,7 @@
 
 namespace oat\generis\test\unit\oatbox\log;
 
+use common_exception_InconsistentData;
 use Psr\Log\LogLevel;
 use oat\generis\test\TestCase;
 
@@ -65,20 +66,16 @@ class TestLoggerTest extends TestCase
         $this->assertEquals(1, count($logger->get(LogLevel::ERROR)));
     }
 
-    /**
-     * @expectedException common_exception_InconsistentData
-     */
     public function testGetBadLevel()
     {
+        $this->expectException(common_exception_InconsistentData::class);
         $logger = new TestLogger();
         $logger->get('BAD_LEVEL');
     }
 
-    /**
-     * @expectedException common_exception_InconsistentData
-     */
     public function testHasBadLevel()
     {
+        $this->expectException(common_exception_InconsistentData::class);
         $logger = new TestLogger();
         $logger->has('BAD_LEVEL', 'testMessage');
     }

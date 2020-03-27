@@ -32,44 +32,44 @@ class IntersectionTest extends TestCase
      */
     private $user;
 
-    public function setUp()
+    public function setUp(): void
     {
         $user = $this->prophesize('oat\oatbox\user\User');
         $user->getIdentifier()->willReturn('tastIdentifier\\_of_//User');
-        
+
         $this->user = $user->reveal();
     }
 
-   
+
     private function createIntersection()
     {
         $permissionModel1 = $this->prophesize('oat\generis\model\data\permission\PermissionInterface');
         $permissionModel1->getSupportedRights()->willReturn(['rightA', 'rightB', 'rightC', 'right']);
-        
+
         $permissionModel2 = $this->prophesize('oat\generis\model\data\permission\PermissionInterface');
         $permissionModel2->getSupportedRights()->willReturn(['rightB', 'rightC', 'rightD', 'rightAB']);
-        
+
         $permissionModel3 = $this->prophesize('oat\generis\model\data\permission\PermissionInterface');
         $permissionModel3->getSupportedRights()->willReturn(['rightC', 'rightD', 'rightE', 'rightABC']);
-        
+
         // res1
         $permissionModel1->getPermissions($this->user, ['res1'])->willReturn(['res1' => ['rightA']]);
         $permissionModel2->getPermissions($this->user, ['res1'])->willReturn(['res1' => ['rightB']]);
         $permissionModel3->getPermissions($this->user, ['res1'])->willReturn(['res1' => ['rightC']]);
-        
+
         // res2
         $permissionModel1->getPermissions($this->user, ['res1', 'res2'])->willReturn(['res1' => ['rightA', 'rightC'], 'res2' => []]);
         $permissionModel2->getPermissions($this->user, ['res1', 'res2'])->willReturn(['res1' => ['rightC'], 'res2' => []]);
         $permissionModel3->getPermissions($this->user, ['res1', 'res2'])->willReturn(['res1' => ['rightC', 'rightD'], 'res2' => []]);
-        
+
         return Intersection::spawn([$permissionModel1->reveal(), $permissionModel2->reveal(), $permissionModel3->reveal()]);
     }
-    
+
     public function testConstruct()
     {
         $this->assertInstanceOf('oat\generis\model\data\permission\PermissionInterface', $this->createIntersection());
     }
-    
+
     public function testGetPermissions()
     {
         $model = $this->createIntersection();
@@ -82,12 +82,12 @@ class IntersectionTest extends TestCase
         $model = $this->createIntersection();
         $this->assertEquals(['rightC'], $model->getSupportedRights());
     }
-    
+
     public function testOnResourceCreated()
     {
         $permissionModel = $this->prophesize('oat\generis\model\data\permission\PermissionInterface');
         $permissionModel2 = $this->prophesize('oat\generis\model\data\permission\PermissionInterface');
-        
+
         $model = Intersection::spawn([$permissionModel->reveal(),$permissionModel2->reveal()]);
         $resourceprophecy = $this->prophesize('core_kernel_classes_Resource');
         $resource = $resourceprophecy->reveal();
@@ -95,7 +95,10 @@ class IntersectionTest extends TestCase
         $permissionModel->onResourceCreated($resource)->shouldHaveBeenCalled();
         $permissionModel2->onResourceCreated($resource)->shouldHaveBeenCalled();
     }
-    
+
+    /**
+     * @doesNotPerformAssertions
+     */
     public function testPhpSerialize()
     {
         // no idea how to test

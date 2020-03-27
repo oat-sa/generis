@@ -25,20 +25,20 @@ use oat\generis\test\TestCase;
 
 class ManifestTest extends TestCase
 {
-    
+
     const SAMPLES_PATH = '/../../test/samples/manifests/';
     const MANIFEST_PATH_DOES_NOT_EXIST = 'idonotexist.php';
     const MANIFEST_PATH_LIGHTWEIGHT = 'lightweightManifest.php';
     const MANIFEST_PATH_COMPLEX = 'complexManifest.php';
-    
-    public function setUp()
+
+    public function setUp(): void
     {
     }
-    
+
     public function testManifestLoading()
     {
         $currentPath = dirname(__FILE__);
-        
+
         // try to load a manifest that does not exists.
         try {
             $manifestPath = $currentPath . self::SAMPLES_PATH . self::MANIFEST_PATH_DOES_NOT_EXIST;
@@ -47,7 +47,7 @@ class ManifestTest extends TestCase
         } catch (Exception $e) {
             $this->assertInstanceOf('common_ext_ManifestNotFoundException', $e);
         }
-        
+
         // Load a simple lightweight manifest that exists and is well formed.
         $manifestPath = $currentPath . self::SAMPLES_PATH . self::MANIFEST_PATH_LIGHTWEIGHT;
         try {
@@ -60,7 +60,7 @@ class ManifestTest extends TestCase
         } catch (common_ext_ManifestException $e) {
             $this->assertTrue(false, "Trying to load a manifest that exists and well formed should not raise an exception.");
         }
-        
+
         // Load a more complex manifest that exists and is well formed.
         $manifestPath = $currentPath . self::SAMPLES_PATH . self::MANIFEST_PATH_COMPLEX;
         try {
@@ -84,7 +84,7 @@ class ManifestTest extends TestCase
         } catch (common_ext_ManifestException $e) {
             $this->assertTrue(false, $e->getMessage());
         }
-        
+
         // Load a malformed manifest.
         // @TODO try to load a malformed manifest.
     }

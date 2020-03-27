@@ -32,7 +32,7 @@ use oat\generis\test\GenerisPhpUnitTestRunner;
 class DbWrapperTest extends GenerisPhpUnitTestRunner
 {
 
-    protected function setUp()
+    protected function setUp(): void
     {
         GenerisPhpUnitTestRunner::initTest();
         $dbWrapper = core_kernel_classes_DbWrapper::singleton();
@@ -108,23 +108,23 @@ class DbWrapperTest extends GenerisPhpUnitTestRunner
             $this->assertTrue($value['coluMn1'] == 'value' . $i);
         }
     }
-    
+
 
     public function testCreateIndex()
     {
         $dbWrapper = core_kernel_classes_DbWrapper::singleton();
         $dbWrapper->getSchemaManager();
-        
+
         $schema = new \Doctrine\DBAL\Schema\Schema();
         $table = $schema->createTable('dbtestcase2');
         $table->addColumn("id", "integer", ["notnull" => true,"autoincrement" => true]);
         $table->setPrimaryKey(["id"]);
         $table->addColumn("uri", "string", ["length" => 255, "notnull" => true]);
         $table->addColumn("content", "text", ["notnull" => false]);
-        
-        
+
+
         $sql = $dbWrapper->getPlatform()->schemaToSql($schema);
-        
+
 
         foreach ($sql as $q) {
             $dbWrapper->exec($q);
@@ -135,11 +135,11 @@ class DbWrapperTest extends GenerisPhpUnitTestRunner
         foreach ($indexes as $index) {
             $this->assertTrue(in_array($index->getName(), ['idx_content','dbtestcase2_pkey','PRIMARY']), $index->getName() . 'is missing');
         }
-        
+
         $dbWrapper->exec('DROP TABLE dbtestcase2');
     }
-    
-    protected function tearDown()
+
+    protected function tearDown(): void
     {
         $dbWrapper = core_kernel_classes_DbWrapper::singleton();
         //TODO need to connect to a dbWrapper a function dropTable that currently not exists
