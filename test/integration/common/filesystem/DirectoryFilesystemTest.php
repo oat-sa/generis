@@ -69,7 +69,7 @@ class DirectoryFilesystemTest extends GenerisTestCase
     {
         $this->generateFile('/testDirectory.exist/fileRename.txt');
         $directory = $this->tempDirectory->getDirectory('testDirectory.exist');
-        $this->expectExceptionObject(new \common_exception_FileSystemError("Unable to rename 'testDirectory.exist' into 'testDirectory.exist'. File already exists."));
+        $this->expectException(\common_exception_FileSystemError::class);
         $directory->rename('testDirectory.exist');
     }
 
