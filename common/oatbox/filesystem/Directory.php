@@ -186,10 +186,10 @@ class Directory extends FileSystemHandler implements \IteratorAggregate
         foreach ($filePaths as $renaming) {
             try {
                 if ($this->getFileSystem()->rename($renaming['source'], $renaming['destination']) === false) {
-                    throw new \common_exception_FileSystemError("Unable to rename '" . $this->getPrefix() . "' into '${path}'.");
+                    throw new \common_exception_FileSystemError("Unable to rename '" . $renaming['source'] . "' into '".$renaming['destination']."'.");
                 }
             } catch (FileExistsException $e) {
-                throw new \common_exception_FileSystemError("Unable to rename '" . $this->getPrefix() . "' into '${path}'. File already exists.");
+                throw new \common_exception_FileSystemError("Unable to rename '" . $renaming['source'] . "' into '".$renaming['destination']."'. File already exists.");
             }
         }
 
