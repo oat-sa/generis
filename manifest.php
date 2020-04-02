@@ -23,6 +23,7 @@
  */
 
 use oat\generis\scripts\install\SetupDefaultKvPersistence;
+use oat\generis\scripts\install\TaskQueue;
 
 /**
  *
@@ -37,34 +38,20 @@ return [
     'version' => '12.16.3',
     'author' => 'Open Assessment Technologies, CRP Henri Tudor',
     'requires' => [],
-    'models' => [
-        'http://www.w3.org/1999/02/22-rdf-syntax-ns',
-        'http://www.w3.org/2000/01/rdf-schema',
-        'http://www.tao.lu/datatypes/WidgetDefinitions.rdf',
-        'http://www.tao.lu/middleware/Rules.rdf',
-        'http://www.tao.lu/Ontologies/generis.rdf'],
     'install' => [
         'rdf' => [
-            ['ns' => 'http://www.w3.org/1999/02/22-rdf-syntax-ns','file' => dirname(__FILE__) . '/core/ontology/22-rdf-syntax-ns.rdf'],
-            ['ns' => 'http://www.w3.org/2000/01/rdf-schema','file' => dirname(__FILE__) . '/core/ontology/rdf-schema.rdf'],
-            ['ns' => 'http://www.tao.lu/datatypes/WidgetDefinitions.rdf','file' => dirname(__FILE__) . '/core/ontology/widgetdefinitions.rdf'],
-            ['ns' => 'http://www.tao.lu/middleware/Rules.rdf','file' => dirname(__FILE__) . '/core/ontology/rules.rdf'],
-            ['ns' => 'http://www.tao.lu/Ontologies/generis.rdf','file' => dirname(__FILE__) . '/core/ontology/generis.rdf'],
-            ['ns' => 'http://www.tao.lu/Ontologies/taskqueue.rdf','file' => dirname(__FILE__) . '/core/ontology/taskqueue.rdf'],
+            __DIR__ . '/core/ontology/22-rdf-syntax-ns.rdf',
+            __DIR__ . '/core/ontology/rdf-schema.rdf',
+            __DIR__ . '/core/ontology/widgetdefinitions.rdf',
+            __DIR__ . '/core/ontology/rules.rdf',
+            __DIR__ . '/core/ontology/generis.rdf',
+            __DIR__ . '/core/ontology/taskqueue.rdf',
         ],
         'checks' => [],
         'php' => [
-            oat\generis\scripts\install\TaskQueue::class,
-            \oat\generis\scripts\install\SetupUserFactoryService::class,
-            \oat\generis\scripts\install\RegisterLockService::class,
+            TaskQueue::class,
             SetupDefaultKvPersistence::class
         ],
     ],
     'update' => 'oat\\generis\\scripts\\update\\Updater',
-    'optimizableClasses' => [
-        'http://www.tao.lu/Ontologies/generis.rdf#User',
-        'http://www.tao.lu/Ontologies/generis.rdf#ClassRole'],
-    'optimizableProperties' => [
-        'http://www.tao.lu/Ontologies/generis.rdf#login',
-        'http://www.tao.lu/Ontologies/generis.rdf#password']
 ];
