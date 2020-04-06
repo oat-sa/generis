@@ -26,6 +26,8 @@ use oat\oatbox\service\ServiceManagerAwareTrait;
 use oat\oatbox\service\ServiceNotFoundException;
 use oat\oatbox\service\ConfigurableService;
 use oat\oatbox\config\ConfigurationService;
+use oat\oatbox\extension\exception\ManifestNotFoundException;
+use oat\oatbox\extension\Manifest;
 
 /**
  * Short description of class common_ext_Extension
@@ -65,7 +67,7 @@ class common_ext_Extension implements ServiceManagerAwareInterface
     /**
      * The manifest of the extension
      *
-     * @var common_ext_Manifest
+     * @var Manifest
      */
     protected $manifest;
 
@@ -368,19 +370,20 @@ class common_ext_Extension implements ServiceManagerAwareInterface
     /**
      * Returns the manifest of the extension
      *
-     * @return common_ext_Manifest
-     * @throws common_ext_ManifestNotFoundException
+     * @return Manifest
+     * @throws ManifestNotFoundException
      */
     public function getManifest()
     {
         if (! $this->manifest) {
             $manifestFile = $this->getDir() . self::MANIFEST_NAME;
             if (is_file($manifestFile) && is_readable($manifestFile)) {
-                $this->manifest = new common_ext_Manifest($manifestFile);
+                $this->manifest = new Manifest($manifestFile);
             } else {
-                throw new common_ext_ManifestNotFoundException("Extension Manifest not found for extension '" . $this->id . "'.", $this->id);
+                throw new ManifestNotFoundException("Extension Manifest not found for extension '" . $this->id . "'.", $this->id);
             }
         }
+        $this->manifest->setServiceLocator($this->getServiceLocator());
         return $this->manifest;
     }
 
@@ -394,7 +397,7 @@ class common_ext_Extension implements ServiceManagerAwareInterface
      * @author firstname and lastname of author, <author@example.org>
      * @return core_kernel_classes_Resource
      * @deprecated
-     * @see common_ext_Manifest::getManagementRoleUri()
+     * @see Manifest::getManagementRoleUri()
      */
     public function getManagementRole()
     {
@@ -451,7 +454,7 @@ class common_ext_Extension implements ServiceManagerAwareInterface
                 // triggers loading of extensions
                 try {
                     $this->getExtensionManager()->getExtensionById($extId);
-                } catch (common_ext_ManifestNotFoundException $e) {
+                } catch (ManifestNotFoundException $e) {
                     throw new common_ext_MissingExtensionException($e->getExtensionId() . ' not found but required for ' . $this->getId(), $e->getExtensionId());
                 }
             }

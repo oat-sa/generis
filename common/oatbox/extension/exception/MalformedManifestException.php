@@ -19,26 +19,16 @@
  *
  */
 
+namespace oat\oatbox\extension\exception;
+
 /**
- * This exception must be thrown when an Extension Manifest is requested but not found
+ * This exception must be thrown when a manifest is malformed e.g. missing
+ * data, syntax, ...
  *
  * @access public
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
  * @package generis
-
  */
-class common_ext_ManifestNotFoundException extends common_ext_ManifestException
+class MalformedManifestException extends ManifestException
 {
-
-    // --- ASSOCIATIONS ---
-
-
-    // --- ATTRIBUTES ---
-
-    // --- OPERATIONS ---
-
-    public function getSeverity()
-    {
-        return common_Logger::WARNING_LEVEL;
-    }
 }

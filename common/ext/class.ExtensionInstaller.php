@@ -20,11 +20,11 @@
  *
  */
 
-use oat\generis\model\data\ModelManager;
 use oat\oatbox\service\ServiceManager;
 use oat\oatbox\event\EventManager;
 use oat\oatbox\service\ConfigurableService;
 use oat\generis\model\data\import\RdfImporter;
+use oat\oatbox\extension\exception\ManifestNotFoundException;
 
 /**
  * Generis installer of extensions
@@ -179,7 +179,7 @@ class common_ext_ExtensionInstaller extends common_ext_ExtensionHandler
      * Executes custom install scripts specified in the Manifest
      *
      * @throws common_ext_InstallationException
-     * @throws common_ext_ManifestNotFoundException
+     * @throws ManifestNotFoundException
      */
     protected function installCustomScript()
     {

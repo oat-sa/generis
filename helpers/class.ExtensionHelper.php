@@ -27,7 +27,7 @@ class helpers_ExtensionHelper
     /**
      * Based on a list of extensions we generate an array of missing extensions
      *
-     * @param array $extensions
+     * @param common_ext_Extension[] $extensions
      * @return array array of missing extensions ids
      */
     public static function getMissingExtensionIds($extensions)

@@ -19,21 +19,16 @@
  *
  */
 
+namespace oat\oatbox\extension\exception;
+use common_ext_ExtensionException;
+
 /**
- * This exception must be thrown when a manifest is malformed e.g. missing
- * data, syntax, ...
+ * An exception that occurs in the context of Extension Manifests.
  *
  * @access public
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
  * @package generis
-
  */
-class common_ext_MalformedManifestException extends common_ext_ManifestException
+class ManifestException extends common_ext_ExtensionException
 {
-    // --- ASSOCIATIONS ---
-
-
-    // --- ATTRIBUTES ---
-
-    // --- OPERATIONS ---
 }

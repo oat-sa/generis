@@ -22,6 +22,8 @@
 
 use oat\oatbox\service\ServiceManager;
 use oat\oatbox\service\ConfigurableService;
+use oat\oatbox\extension\Manifest;
+use oat\oatbox\extension\Composer;
 
 /**
  * The ExtensionsManager class is dedicated to Extensions Management. It provides
@@ -33,11 +35,12 @@ use oat\oatbox\service\ConfigurableService;
  * @authorlionel@taotesting.com
  * @package generis
  * @see @license  GNU General Public (GPL) Version 2 http://www.opensource.org/licenses/gpl-2.0.php
-
  */
 class common_ext_ExtensionsManager extends ConfigurableService
 {
     const EXTENSIONS_CONFIG_KEY = 'installation';
+
+    const COMPOSER_LOCK = 'composer.lock';
 
     const SERVICE_ID = 'generis/extensionManager';
 
@@ -296,5 +299,28 @@ class common_ext_ExtensionsManager extends ConfigurableService
         $extensions = $this->getExtensionById('generis')->getConfig(self::EXTENSIONS_CONFIG_KEY);
         $extensions[$extension->getId()]['installed'] = $version;
         $this->getExtensionById('generis')->setConfig(self::EXTENSIONS_CONFIG_KEY, $extensions);
+    }
+
+    /**
+     * Call a service to retrieve a map array with extensions package id as a key and extension id as a value
+     * @access public
+     * @return array
+     */
+    public function getAvailablePackages()
+    {
+        $returnValue = [];
+        $dir = new DirectoryIterator(ROOT_PATH);
+        $composer = new Composer();
+        foreach ($dir as $fileInfo) {
+            if ($fileInfo->isDir() && !$fileInfo->isDot()) {
+                if (!file_exists($fileInfo->getRealPath().DIRECTORY_SEPARATOR.\common_ext_Extension::MANIFEST_NAME)) {
+                    continue;
+                }
+                $composerJson = $composer->getComposerJson($fileInfo->getRealPath());
+                $returnValue[$composerJson['name']] = $composerJson['extra']['tao-extension-name'];
+            }
+        }
+
+        return $returnValue;
     }
 }

@@ -22,6 +22,8 @@
  */
 
 use oat\generis\test\TestCase;
+use oat\oatbox\extension\exception\ManifestException;
+use oat\oatbox\extension\Manifest;
 
 class ManifestTest extends TestCase
 {
@@ -45,27 +47,27 @@ class ManifestTest extends TestCase
             $manifest = new common_ext_Manifest($manifestPath);
             $this->assertTrue(false, "Trying to load a manifest that does not exist should raise an exception");
         } catch (Exception $e) {
-            $this->assertInstanceOf('common_ext_ManifestNotFoundException', $e);
+            $this->assertInstanceOf(oat\oatbox\extension\exception\ManifestNotFoundException::class, $e);
         }
 
         // Load a simple lightweight manifest that exists and is well formed.
         $manifestPath = $currentPath . self::SAMPLES_PATH . self::MANIFEST_PATH_LIGHTWEIGHT;
         try {
-            $manifest = new common_ext_Manifest($manifestPath);
-            $this->assertInstanceOf('common_ext_Manifest', $manifest);
+            $manifest = new Manifest($manifestPath);
+            $this->assertInstanceOf(Manifest::class, $manifest);
             $this->assertEquals('lightweight', $manifest->getName());
             $this->assertEquals('lightweight testing manifest', $manifest->getDescription());
             $this->assertEquals('1.0', $manifest->getVersion());
             $this->assertEquals('TAO Team', $manifest->getAuthor());
-        } catch (common_ext_ManifestException $e) {
+        } catch (ManifestException $e) {
             $this->assertTrue(false, "Trying to load a manifest that exists and well formed should not raise an exception.");
         }
 
         // Load a more complex manifest that exists and is well formed.
         $manifestPath = $currentPath . self::SAMPLES_PATH . self::MANIFEST_PATH_COMPLEX;
         try {
-            $manifest = new common_ext_Manifest($manifestPath);
-            $this->assertInstanceOf('common_ext_Manifest', $manifest);
+            $manifest = new Manifest($manifestPath);
+            $this->assertInstanceOf(Manifest::class, $manifest);
             $this->assertEquals('complex', $manifest->getName());
             $this->assertEquals('complex testing manifest', $manifest->getDescription());
             $this->assertEquals('1.0', $manifest->getVersion());
@@ -81,7 +83,7 @@ class ManifestTest extends TestCase
             $this->assertEquals(['WS_ENDPOINT_TWITTER' => 'http://twitter.com/statuses/', 'WS_ENDPOINT_FACEBOOK' => 'http://api.facebook.com/restserver.php'], $manifest->getConstants());
             $this->assertEquals(['http://www.linkeddata.org/ontologies/data.rdf#myClass1','http://www.linkeddata.org/ontologies/data.rdf#myClass2'], $manifest->getOptimizableClasses());
             $this->assertEquals(['http://www.linkeddata.org/ontologies/props.rdf#myProp1','http://www.linkeddata.org/ontologies/props.rdf#myProp2'], $manifest->getOptimizableProperties());
-        } catch (common_ext_ManifestException $e) {
+        } catch (ManifestException $e) {
             $this->assertTrue(false, $e->getMessage());
         }
 
