@@ -165,14 +165,20 @@ class Directory extends FileSystemHandler implements \IteratorAggregate
         // This implementation supersedes the Flysystem's one. Indeed, while using connectors
         // such as the Amazon S3 (v3) connector, rename on directories does not work. A custom
         // implementation is then needed.
-        $contents = $this->getFileSystem()->listContents($this->getPrefix(), true);
 
+        $contents = $this->getFileSystem()->listContents($this->getPrefix(), true);
+        $fileSystemId = $this->getFileSystemId().'/';
         // Filter files only.
         $filePaths = [];
         foreach ($contents as $content) {
             if ($content['type'] === 'file') {
+                $contentPath = $content['path'];
+                if(strpos($contentPath, $fileSystemId) === 0) {
+                    $contentPath = substr($contentPath, strlen($fileSystemId));
+                }
+
                 $filePaths[] = [
-                    'source' => $content['path'],
+                    'source' => $contentPath,
                     'destination' => str_replace($this->getPrefix(), $path, $content['path'])];
             }
         }
@@ -180,10 +186,10 @@ class Directory extends FileSystemHandler implements \IteratorAggregate
         foreach ($filePaths as $renaming) {
             try {
                 if ($this->getFileSystem()->rename($renaming['source'], $renaming['destination']) === false) {
-                    throw new \common_exception_FileSystemError("Unable to rename '" . $this->getPrefix() . "' into '${path}'.");
+                    throw new \common_exception_FileSystemError("Unable to rename '" . $renaming['source'] . "' into '".$renaming['destination']."'.");
                 }
             } catch (FileExistsException $e) {
-                throw new \common_exception_FileSystemError("Unable to rename '" . $this->getPrefix() . "' into '${path}'. File already exists.");
+                throw new \common_exception_FileSystemError("Unable to rename '" . $renaming['source'] . "' into '".$renaming['destination']."'. File already exists.");
             }
         }
 
