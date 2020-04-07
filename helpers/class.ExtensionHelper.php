@@ -21,6 +21,9 @@
  * @package generis
  *
  */
+
+use oat\oatbox\extension\exception\ManifestNotFoundException;
+
 class helpers_ExtensionHelper
 {
 
@@ -136,21 +139,20 @@ class helpers_ExtensionHelper
         }
         return false;
     }
-    
+
     /**
      * Check if extension requirements are met
      * Always returns true, but throws exception on error
      *
      * @param common_ext_Extension $extension
-     * @throws common_ext_MissingExtensionException
-     * @throws common_ext_OutdatedVersionException
-     * @throws common_exception_Error
      * @return boolean
+     * @throws ManifestNotFoundException
+     * @throws common_ext_MissingExtensionException
      */
     public static function checkRequiredExtensions(common_ext_Extension $extension)
     {
         $extensionManager = common_ext_ExtensionsManager::singleton();
-        // read direct dependencies from manifest, do not check recursivly
+        // read direct dependencies from manifest, do not check recursively
         foreach ($extension->getManifest()->getDependencies() as $requiredExt => $requiredVersion) {
             $installedVersion = $extensionManager->getInstalledVersion($requiredExt);
             if (is_null($installedVersion)) {
@@ -158,23 +160,6 @@ class helpers_ExtensionHelper
                     'Extension ' . $requiredExt . ' is needed by the extension to be installed but is missing.',
                     'GENERIS'
                 );
-            }
-            if ($requiredVersion != '*') {
-                $conditions = is_array($requiredVersion) ? $requiredVersion : [$requiredVersion];
-                foreach ($conditions as $condition) {
-                    $matches = [];
-                    preg_match('/[0-9\.]+/', $condition, $matches, PREG_OFFSET_CAPTURE);
-                    if (count($matches) == 1) {
-                        $match = current($matches);
-                        $nr = $match[0];
-                        $operator = $match[1] > 0 ? substr($condition, 0, $match[1]) : '=';
-                        if (!version_compare($installedVersion, $nr, $operator)) {
-                            throw new common_ext_OutdatedVersionException('Installed version of ' . $requiredExt . ' ' . $installedVersion . ' does not satisfy required ' . $condition . ' for ' . $extension->getId());
-                        }
-                    } else {
-                        throw new common_exception_Error('Unsupported version requirement: "' . $condition . '"');
-                    }
-                }
             }
         }
         // always return true, or throws an exception

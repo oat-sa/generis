@@ -22,8 +22,8 @@
 
 use oat\oatbox\service\ServiceManager;
 use oat\oatbox\service\ConfigurableService;
-use oat\oatbox\extension\Manifest;
-use oat\oatbox\extension\Composer;
+use oat\oatbox\extension\exception\ManifestException;
+use oat\oatbox\extension\ComposerInfo;
 
 /**
  * The ExtensionsManager class is dedicated to Extensions Management. It provides
@@ -39,8 +39,6 @@ use oat\oatbox\extension\Composer;
 class common_ext_ExtensionsManager extends ConfigurableService
 {
     const EXTENSIONS_CONFIG_KEY = 'installation';
-
-    const COMPOSER_LOCK = 'composer.lock';
 
     const SERVICE_ID = 'generis/extensionManager';
 
@@ -302,25 +300,32 @@ class common_ext_ExtensionsManager extends ConfigurableService
     }
 
     /**
-     * Call a service to retrieve a map array with extensions package id as a key and extension id as a value
-     * @access public
+     * Call a service to retrieve a map array of all available extensions
+     * with extension package id as a key and extension id as a value
      * @return array
+     * @throws ManifestException
      */
     public function getAvailablePackages()
     {
-        $returnValue = [];
-        $dir = new DirectoryIterator(ROOT_PATH);
-        $composer = new Composer();
-        foreach ($dir as $fileInfo) {
-            if ($fileInfo->isDir() && !$fileInfo->isDot()) {
-                if (!file_exists($fileInfo->getRealPath().DIRECTORY_SEPARATOR.\common_ext_Extension::MANIFEST_NAME)) {
-                    continue;
+        /** @var \common_cache_Cache $cache */
+        $cache = $this->getServiceManager()->get(\common_cache_Cache::SERVICE_ID);
+        $key = static::class.'_getAvailablePackages';
+        if (!$cache->has($key)) {
+            $returnValue = [];
+            $dir = new DirectoryIterator(ROOT_PATH);
+            $composer = new ComposerInfo();
+            foreach ($dir as $fileInfo) {
+                if ($fileInfo->isDir() && !$fileInfo->isDot()) {
+                    if (!file_exists($fileInfo->getRealPath().DIRECTORY_SEPARATOR.\common_ext_Extension::MANIFEST_NAME)) {
+                        continue;
+                    }
+                    $composerJson = $composer->getComposerJson($fileInfo->getRealPath());
+                    $returnValue[$composerJson['name']] = $composerJson['extra']['tao-extension-name'];
                 }
-                $composerJson = $composer->getComposerJson($fileInfo->getRealPath());
-                $returnValue[$composerJson['name']] = $composerJson['extra']['tao-extension-name'];
             }
+            $cache->put($returnValue, $key);
         }
 
-        return $returnValue;
+        return $cache->get($key);
     }
 }

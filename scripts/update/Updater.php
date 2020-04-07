@@ -494,5 +494,9 @@ class Updater extends common_ext_ExtensionUpdater
         }
 
         $this->skip('12.12.0', '12.16.4');
+
+        $this->setVersion($this->getExtension()->getVersion());
     }
+
+
 }

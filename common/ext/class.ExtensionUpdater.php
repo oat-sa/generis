@@ -74,7 +74,8 @@ abstract class common_ext_ExtensionUpdater extends common_ext_ExtensionHandler
      */
     public function isVersion($version)
     {
-        return $version == common_ext_ExtensionsManager::singleton()->getInstalledVersion($this->getExtension()->getId());
+        $extensionsManager = $this->getServiceManager()->get(common_ext_ExtensionsManager::SERVICE_ID);
+        return $version == $extensionsManager->getInstalledVersion($this->getExtension()->getId());
     }
     
     /**

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /**
@@ -81,7 +82,7 @@ class Manifest implements ServiceLocatorAwareInterface
      * @access private
      * @var string
      */
-    private $version = '';
+    private $version = null;
     
     /**
      * The license of the Extension the manifest describes.
@@ -256,13 +257,6 @@ class Manifest implements ServiceLocatorAwareInterface
                 $this->setAuthor($array['author']);
             }
             
-            // mandatory
-            if (!empty($array['version'])) {
-                $this->setVersion($array['version']);
-            } else {
-                throw new exception\MalformedManifestException("The 'version' component is mandatory in manifest located at '{$this->getFilePath()}'.");
-            }
-
             if (!empty($array['models'])) {
                 $this->setModels($array['models']);
             }
@@ -508,29 +502,19 @@ class Manifest implements ServiceLocatorAwareInterface
     {
         return $this->acl;
     }
-    
+
     /**
      * Get the version of the Extension the manifest describes.
-     *
-     * @access public
-     * @author Jerome Bogaerts <jerome@taotesting.com>
      * @return string
+     * @throws ManifestException
      */
     public function getVersion()
     {
+        if ($this->version === null) {
+            $packageInfo = $this->getComposerInfo()->getPackageInfo($this->getPackageId());
+            $this->version = $packageInfo['version'];
+        }
         return (string) $this->version;
-    }
-
-    /**
-     * Set the version of the Extension the manifest describes.
-     *
-     * @access private
-     * @author Jerome Bogaerts <jerome@taotesting.com>
-     * @param  string $version A version number
-     */
-    private function setVersion($version)
-    {
-        $this->version = $version;
     }
 
     /**
@@ -546,10 +530,9 @@ class Manifest implements ServiceLocatorAwareInterface
     {
         if (empty($this->dependencies)) {
             /** @var \common_ext_ExtensionsManager $extensionsManager */
-            $extensionsManager = $this->getServiceLocator()->get(\common_ext_ExtensionsManager::SERVICE_ID);
+            $extensionsManager = $this->getServiceLocator()->get(\common_ext_ExtensionsManager::class);
             $availablePackages = $extensionsManager->getAvailablePackages();
-            $composer = new Composer();
-            $composerJson = $composer->getComposerJson(dirname($this->getFilePath()));
+            $composerJson = $this->getComposerInfo()->getComposerJson(dirname($this->getFilePath()));
             foreach ($composerJson['require'] as $packageId => $packageVersion) {
                 if (isset($availablePackages[$packageId])) {
                     $this->dependencies[$availablePackages[$packageId]] = $packageVersion;
@@ -979,7 +962,15 @@ class Manifest implements ServiceLocatorAwareInterface
     {
         return $this->optimizableProperties;
     }
-    
+
+    /**
+     * @return ComposerInfo
+     */
+    private function getComposerInfo()
+    {
+        return new ComposerInfo();
+    }
+
     /**
      * Set the Properties that are considered optimizable for the described Extension.
      *
@@ -991,6 +982,15 @@ class Manifest implements ServiceLocatorAwareInterface
     private function setOptimizableProperties(array $optimizableProperties)
     {
         $this->optimizableProperties = $optimizableProperties;
+    }
+
+    /**
+     * @return string
+     * @throws ManifestException
+     */
+    private function getPackageId()
+    {
+        return $this->getComposerInfo()->getComposerJson(dirname($this->getFilePath()))['name'];
     }
 
 }

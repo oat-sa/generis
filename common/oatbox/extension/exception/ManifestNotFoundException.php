@@ -25,9 +25,7 @@ namespace oat\oatbox\extension\exception;
  * This exception must be thrown when an Extension Manifest is requested but not found
  *
  * @access public
- * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
  * @package generis
-
  */
 class ManifestNotFoundException extends ManifestException
 {
