@@ -22,7 +22,7 @@
  */
 
 use oat\generis\test\TestCase;
-use oat\oatbox\extension\exception\ManifestException;
+use \oat\oatbox\extension\ComposerInfo;
 use oat\oatbox\extension\Manifest;
 
 class ManifestTest extends TestCase
@@ -33,8 +33,47 @@ class ManifestTest extends TestCase
     const MANIFEST_PATH_LIGHTWEIGHT = 'lightweightManifest.php';
     const MANIFEST_PATH_COMPLEX = 'complexManifest.php';
 
-    public function setUp(): void
+    private function getComposerInfoMock()
     {
+        $composerInfo = $this->getMockBuilder(ComposerInfo::class)->getMock();
+        $composerInfo->method('getComposerJson')->willReturn([
+            'name'=> 'oat-sa/extension-tao-lightweight',
+            'extra' => [
+                'tao-extension-name' => 'taoLightweight'
+            ],
+            'require'=> [
+                'oat-sa/oatbox-extension-installer'=> '~1.1||dev-master',
+                'oat-sa/extension-tao-taoItemBank'=> '*',
+                'oat-sa/extension-tao-taoDocuments'=> '*'
+            ]
+        ]);
+        $composerInfo->method('getPackageInfo')->will($this->returnValueMap(
+            [
+                [
+                    "oat-sa/extension-tao-lightweight", ROOT_PATH,
+                    [
+                        "name" => "oat-sa/extension-tao-lightweight",
+                        "version" => "v1.0"
+                    ]
+                ],
+                [
+                    "oat-sa/extension-tao-taoItemBank", ROOT_PATH,
+                    [
+                        "name" => "oat-sa/extension-tao-taoItemBank",
+                        "version" => "v1.0"
+                    ]
+                ],
+                [
+                    "oat-sa/extension-tao-taoDocuments", ROOT_PATH,
+                    [
+                        "name" => "oat-sa/extension-tao-taoDocuments",
+                        "version" => "v1.0"
+                    ]
+                ]
+            ]
+        ));
+
+        return $composerInfo;
     }
 
     public function testManifestLoading()
@@ -49,11 +88,14 @@ class ManifestTest extends TestCase
             common_ext_ExtensionsManager::SERVICE_ID => $extensionsManager
         ]);
         $currentPath = dirname(__FILE__);
-        define('ROOT_PATH', $currentPath . self::SAMPLES_PATH);
+        if (!defined('ROOT_PATH')) {
+            define('ROOT_PATH', $currentPath . self::SAMPLES_PATH);
+        }
+        $composerInfo = $this->getComposerInfoMock();
         // try to load a manifest that does not exists.
         try {
             $manifestPath = $currentPath . self::SAMPLES_PATH . self::MANIFEST_PATH_DOES_NOT_EXIST;
-            $manifest = new Manifest($manifestPath);
+            $manifest = new Manifest($manifestPath, $composerInfo);
             $this->assertTrue(false, "Trying to load a manifest that does not exist should raise an exception");
         } catch (Exception $e) {
             $this->assertInstanceOf(oat\oatbox\extension\exception\ManifestNotFoundException::class, $e);
@@ -61,44 +103,33 @@ class ManifestTest extends TestCase
 
         // Load a simple lightweight manifest that exists and is well formed.
         $manifestPath = $currentPath . self::SAMPLES_PATH . self::MANIFEST_PATH_LIGHTWEIGHT;
-        try {
-            $manifest = new Manifest($manifestPath);
-            $manifest->setServiceLocator($serviceLocator);
-            $this->assertInstanceOf(Manifest::class, $manifest);
-            $this->assertEquals('lightweight', $manifest->getName());
-            $this->assertEquals('lightweight testing manifest', $manifest->getDescription());
-            $this->assertEquals('v1.0', $manifest->getVersion());
-            $this->assertEquals('TAO Team', $manifest->getAuthor());
-        } catch (ManifestException $e) {
-            $this->assertTrue(false, "Trying to load a manifest that exists and well formed should not raise an exception.");
-        }
+        $manifest = new Manifest($manifestPath, $composerInfo);
+        $manifest->setServiceLocator($serviceLocator);
+        $this->assertInstanceOf(Manifest::class, $manifest);
+        $this->assertEquals('lightweight', $manifest->getName());
+        $this->assertEquals('lightweight testing manifest', $manifest->getDescription());
+        $this->assertEquals('v1.0', $manifest->getVersion());
+        $this->assertEquals('TAO Team', $manifest->getAuthor());
 
         // Load a more complex manifest that exists and is well formed.
         $manifestPath = $currentPath . self::SAMPLES_PATH . self::MANIFEST_PATH_COMPLEX;
-        try {
-            $manifest = new Manifest($manifestPath);
-            $manifest->setServiceLocator($serviceLocator);
-            $this->assertInstanceOf(Manifest::class, $manifest);
-            $this->assertEquals('complex', $manifest->getName());
-            $this->assertEquals('complex testing manifest', $manifest->getDescription());
-            $this->assertEquals('v1.0', $manifest->getVersion());
-            $this->assertEquals('TAO Team', $manifest->getAuthor());
-            $this->assertEquals(['taoItemBank', 'taoDocuments'], array_keys($manifest->getDependencies()));
-            $this->assertEquals(
-                [
-                '/extension/path/models/ontology/taofuncacl.rdf',
-                '/extension/path/models/ontology/taoitembank.rdf'
-                ],
-                $manifest->getInstallModelFiles()
-            );
-            $this->assertEquals(['WS_ENDPOINT_TWITTER' => 'http://twitter.com/statuses/', 'WS_ENDPOINT_FACEBOOK' => 'http://api.facebook.com/restserver.php'], $manifest->getConstants());
-            $this->assertEquals(['http://www.linkeddata.org/ontologies/data.rdf#myClass1','http://www.linkeddata.org/ontologies/data.rdf#myClass2'], $manifest->getOptimizableClasses());
-            $this->assertEquals(['http://www.linkeddata.org/ontologies/props.rdf#myProp1','http://www.linkeddata.org/ontologies/props.rdf#myProp2'], $manifest->getOptimizableProperties());
-        } catch (ManifestException $e) {
-            $this->assertTrue(false, $e->getMessage());
-        }
-
-        // Load a malformed manifest.
-        // @TODO try to load a malformed manifest.
+        $manifest = new Manifest($manifestPath, $composerInfo);
+        $manifest->setServiceLocator($serviceLocator);
+        $this->assertInstanceOf(Manifest::class, $manifest);
+        $this->assertEquals('complex', $manifest->getName());
+        $this->assertEquals('complex testing manifest', $manifest->getDescription());
+        $this->assertEquals('v1.0', $manifest->getVersion());
+        $this->assertEquals('TAO Team', $manifest->getAuthor());
+        $this->assertEquals(['taoItemBank', 'taoDocuments'], array_keys($manifest->getDependencies()));
+        $this->assertEquals(
+            [
+            '/extension/path/models/ontology/taofuncacl.rdf',
+            '/extension/path/models/ontology/taoitembank.rdf'
+            ],
+            $manifest->getInstallModelFiles()
+        );
+        $this->assertEquals(['WS_ENDPOINT_TWITTER' => 'http://twitter.com/statuses/', 'WS_ENDPOINT_FACEBOOK' => 'http://api.facebook.com/restserver.php'], $manifest->getConstants());
+        $this->assertEquals(['http://www.linkeddata.org/ontologies/data.rdf#myClass1','http://www.linkeddata.org/ontologies/data.rdf#myClass2'], $manifest->getOptimizableClasses());
+        $this->assertEquals(['http://www.linkeddata.org/ontologies/props.rdf#myProp1','http://www.linkeddata.org/ontologies/props.rdf#myProp2'], $manifest->getOptimizableProperties());
     }
 }

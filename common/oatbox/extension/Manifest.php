@@ -60,15 +60,22 @@ class Manifest implements ServiceLocatorAwareInterface
     private $manifest = [];
 
     /**
+     * @var ComposerInfo
+     */
+    private $composerInfo = null;
+
+    /**
      * Creates a new instance of Manifest.
      *
      * @access public
      * @param string $filePath The path to the manifest.php file to parse.
+     * @param ComposerInfo $composerInfo
      * @throws ManifestNotFoundException
      * @throws exception\MalformedManifestException
      */
-    public function __construct($filePath)
+    public function __construct($filePath, ComposerInfo $composerInfo = null)
     {
+        $this->composerInfo = $composerInfo;
         // the file exists, we can refer to the $filePath.
         if (!is_readable($filePath)) {
             throw new ManifestNotFoundException("The Extension Manifest file located at '${filePath}' could not be read.");
@@ -114,7 +121,7 @@ class Manifest implements ServiceLocatorAwareInterface
      */
     public function getName(): string
     {
-        return (string) isset($this->manifest['name']) ? $this->manifest['name'] : '';
+        return isset($this->manifest['name']) ? $this->manifest['name'] : '';
     }
 
     /**
@@ -123,7 +130,7 @@ class Manifest implements ServiceLocatorAwareInterface
      */
     public function getLicense(): string
     {
-        return (string) isset($this->manifest['license']) ? $this->manifest['license'] : 'unknown';
+        return isset($this->manifest['license']) ? $this->manifest['license'] : 'unknown';
     }
 
     /**
@@ -132,7 +139,7 @@ class Manifest implements ServiceLocatorAwareInterface
      */
     public function getDescription(): string
     {
-        return (string) isset($this->manifest['description']) ? $this->manifest['description'] : '';
+        return isset($this->manifest['description']) ? $this->manifest['description'] : '';
     }
 
     /**
@@ -141,7 +148,7 @@ class Manifest implements ServiceLocatorAwareInterface
      */
     public function getAuthor(): string
     {
-        return (string) isset($this->manifest['author']) ? $this->manifest['author'] : '';
+        return isset($this->manifest['author']) ? $this->manifest['author'] : '';
     }
 
     /**
@@ -150,7 +157,7 @@ class Manifest implements ServiceLocatorAwareInterface
      */
     public function getLabel(): string
     {
-        return (string) isset($this->manifest['label']) ? $this->manifest['label'] : '';
+        return isset($this->manifest['label']) ? $this->manifest['label'] : '';
     }
 
     /**
@@ -159,7 +166,7 @@ class Manifest implements ServiceLocatorAwareInterface
      */
     public function getAclTable(): array
     {
-        return (array) isset($this->manifest['acl']) ? $this->manifest['acl'] : [];
+        return isset($this->manifest['acl']) ? $this->manifest['acl'] : [];
     }
 
     /**
@@ -170,6 +177,7 @@ class Manifest implements ServiceLocatorAwareInterface
     public function getVersion():string
     {
         if ($this->version === null) {
+            var_dump($this->getPackageId());
             $packageInfo = $this->getComposerInfo()->getPackageInfo($this->getPackageId());
             $this->version = $packageInfo['version'];
         }
@@ -207,7 +215,7 @@ class Manifest implements ServiceLocatorAwareInterface
      */
     public function getModels(): array
     {
-        return (array) isset($this->manifest['models']) ? $this->manifest['models'] : [];
+        return isset($this->manifest['models']) ? $this->manifest['models'] : [];
     }
 
     /**
@@ -294,7 +302,8 @@ class Manifest implements ServiceLocatorAwareInterface
      */
     public function getConstants(): array
     {
-        return (array) isset($this->manifest['constants']) ? $this->manifest['constants'] : [];
+        return isset($this->manifest['constants']) && is_array($this->manifest['constants'])
+            ? $this->manifest['constants'] : [];
     }
 
     /**
@@ -303,7 +312,7 @@ class Manifest implements ServiceLocatorAwareInterface
      */
     public function getExtra()
     {
-        return (array) isset($this->manifest['extra']) ? $this->manifest['extra'] : [];
+        return isset($this->manifest['extra']) ? $this->manifest['extra'] : [];
     }
 
     /**
@@ -381,7 +390,7 @@ class Manifest implements ServiceLocatorAwareInterface
      */
     public function getManagementRoleUri()
     {
-        return (string) isset($this->manifest['managementRole']) ? $this->manifest['managementRole'] : '';
+        return isset($this->manifest['managementRole']) ? $this->manifest['managementRole'] : '';
     }
 
     /**
@@ -425,7 +434,10 @@ class Manifest implements ServiceLocatorAwareInterface
      */
     private function getComposerInfo()
     {
-        return new ComposerInfo();
+        if ($this->composerInfo === null) {
+            $this->composerInfo = new ComposerInfo();
+        }
+        return $this->composerInfo;
     }
 
     /**
