@@ -47,11 +47,7 @@ class ComposerInfo
     {
         if (!isset(self::$jsons[$folder])) {
             $file = realpath($folder).DIRECTORY_SEPARATOR.self::COMPOSER_JSON;
-            if (!file_exists($file)) {
-                throw new ManifestException($file.' file not found');
-            }
-            $content = file_get_contents($file);
-            self::$jsons[$folder] = json_decode($content, true);
+            self::$jsons[$folder] = $this->getEncodedFileContent($file);
         }
         return self::$jsons[$folder];
     }
@@ -65,11 +61,7 @@ class ComposerInfo
     {
         if (!isset(self::$locks[$folder])) {
             $file = realpath($folder).DIRECTORY_SEPARATOR.self::COMPOSER_LOCK;
-            if (!file_exists($file)) {
-                throw new ManifestException($file . ' file not found');
-            }
-            $content = file_get_contents($file);
-            self::$locks[$folder] = json_decode($content, true);
+            self::$locks[$folder] = $this->getEncodedFileContent($file);
         }
         return self::$locks[$folder];
     }
@@ -93,5 +85,19 @@ class ComposerInfo
             $packageId,
             $folder.DIRECTORY_SEPARATOR.self::COMPOSER_LOCK
         ));
+    }
+
+    /**
+     * @param $path
+     * @return mixed
+     * @throws ManifestException
+     */
+    private function getEncodedFileContent($path)
+    {
+        if (!file_exists($path)) {
+            throw new ManifestException($path . ' file not found');
+        }
+        $content = file_get_contents($path);
+        return json_decode($content, true);
     }
 }

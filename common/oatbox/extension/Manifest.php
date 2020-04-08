@@ -83,14 +83,6 @@ class Manifest implements ServiceLocatorAwareInterface
         $this->setFilePath($filePath);
         $this->manifest = require($this->getFilePath());
 
-        // legacy support
-        if (isset($array['additional']) && is_array($this->manifest['additional'])) {
-            foreach ($this->manifest['additional'] as $key => $val) {
-                $this->manifest[$key] = $val;
-            }
-            unset($this->manifest['additional']);
-        }
-
         // mandatory
         if (empty($this->manifest['name'])) {
             throw new exception\MalformedManifestException("The 'name' component is mandatory in manifest located at '{$this->getFilePath()}'.");
