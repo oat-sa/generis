@@ -302,30 +302,41 @@ class common_ext_ExtensionsManager extends ConfigurableService
     /**
      * Call a service to retrieve a map array of all available extensions
      * with extension package id as a key and extension id as a value
-     * @return array
+     * @return common_Serializable
      * @throws ManifestException
+     * @throws \oat\oatbox\service\exception\InvalidServiceManagerException
+     * @throws common_cache_NotFoundException
      */
     public function getAvailablePackages()
     {
-        /** @var \common_cache_Cache $cache */
-        $cache = $this->getServiceManager()->get(\common_cache_Cache::SERVICE_ID);
+        /** @var common_cache_Cache $cache */
+        $cache = $this->getServiceManager()->get(common_cache_Cache::SERVICE_ID);
         $key = static::class.'_getAvailablePackages';
         if (!$cache->has($key)) {
-            $returnValue = [];
-            $dir = new DirectoryIterator(ROOT_PATH);
-            $composer = new ComposerInfo();
-            foreach ($dir as $fileInfo) {
-                if ($fileInfo->isDir() && !$fileInfo->isDot()) {
-                    if (!file_exists($fileInfo->getRealPath().DIRECTORY_SEPARATOR.\common_ext_Extension::MANIFEST_NAME)) {
-                        continue;
-                    }
-                    $composerJson = $composer->getComposerJson($fileInfo->getRealPath());
-                    $returnValue[$composerJson['name']] = $composerJson['extra']['tao-extension-name'];
-                }
-            }
-            $cache->put($returnValue, $key);
+            $cache->put(self::getAvailablePackagesStatic(), $key);
         }
 
         return $cache->get($key);
+    }
+
+    /**
+     * @return array
+     * @throws ManifestException
+     */
+    public static function getAvailablePackagesStatic()
+    {
+        $returnValue = [];
+        $dir = new DirectoryIterator(ROOT_PATH);
+        $composer = new ComposerInfo();
+        foreach ($dir as $fileInfo) {
+            if ($fileInfo->isDir() && !$fileInfo->isDot()) {
+                if (!file_exists($fileInfo->getRealPath().DIRECTORY_SEPARATOR.\common_ext_Extension::MANIFEST_NAME)) {
+                    continue;
+                }
+                $composerJson = $composer->getComposerJson($fileInfo->getRealPath());
+                $returnValue[$composerJson['name']] = $composerJson['extra']['tao-extension-name'];
+            }
+        }
+        return $returnValue;
     }
 }

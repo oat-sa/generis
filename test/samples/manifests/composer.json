@@ -1,0 +1,18 @@
+{
+
+    "name": "oat-sa/extension-tao-lightweight",
+    "description" : "",
+    "type" : "tao-extension",
+    "license" : [
+        "GPL-2.0-only"
+    ],
+    "extra" : {
+        "tao-extension-name" : "taoLightweight"
+    },
+    "minimum-stability" : "dev",
+    "require": {
+        "oat-sa/oatbox-extension-installer": "~1.1||dev-master",
+        "oat-sa/extension-tao-taoItemBank": "*",
+        "oat-sa/extension-tao-taoDocuments": "*"
+    }
+}

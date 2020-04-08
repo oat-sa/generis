@@ -29,9 +29,7 @@
 return [
     'name' => 'complex',
     'description' => 'complex testing manifest',
-    'version' => '1.0',
     'author' => 'TAO Team',
-    'dependencies' => ['taoItemBank', 'taoDocuments'],
     'models' => [
         'http://www.tao.lu/Ontologies/taoFuncACL.rdf',
         'http://www.tao.lu/Ontologies/taoItemBank.rdf'

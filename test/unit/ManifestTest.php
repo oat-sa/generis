@@ -39,12 +39,21 @@ class ManifestTest extends TestCase
 
     public function testManifestLoading()
     {
+        $extensionsManager = $this->getMockBuilder(\common_ext_ExtensionsManager::class)->getMock();
+        $extensionsManager->method('getAvailablePackages')->willReturn([
+            'oat-sa/extension-tao-taoItemBank' => 'taoItemBank',
+            'oat-sa/extension-tao-taoDocuments' => 'taoDocuments'
+        ]);
+        $serviceLocator = $this->getServiceLocatorMock([
+            common_cache_Cache::SERVICE_ID => new \common_cache_NoCache(),
+            common_ext_ExtensionsManager::SERVICE_ID => $extensionsManager
+        ]);
         $currentPath = dirname(__FILE__);
-
+        define('ROOT_PATH', $currentPath . self::SAMPLES_PATH);
         // try to load a manifest that does not exists.
         try {
             $manifestPath = $currentPath . self::SAMPLES_PATH . self::MANIFEST_PATH_DOES_NOT_EXIST;
-            $manifest = new common_ext_Manifest($manifestPath);
+            $manifest = new Manifest($manifestPath);
             $this->assertTrue(false, "Trying to load a manifest that does not exist should raise an exception");
         } catch (Exception $e) {
             $this->assertInstanceOf(oat\oatbox\extension\exception\ManifestNotFoundException::class, $e);
@@ -54,10 +63,11 @@ class ManifestTest extends TestCase
         $manifestPath = $currentPath . self::SAMPLES_PATH . self::MANIFEST_PATH_LIGHTWEIGHT;
         try {
             $manifest = new Manifest($manifestPath);
+            $manifest->setServiceLocator($serviceLocator);
             $this->assertInstanceOf(Manifest::class, $manifest);
             $this->assertEquals('lightweight', $manifest->getName());
             $this->assertEquals('lightweight testing manifest', $manifest->getDescription());
-            $this->assertEquals('1.0', $manifest->getVersion());
+            $this->assertEquals('v1.0', $manifest->getVersion());
             $this->assertEquals('TAO Team', $manifest->getAuthor());
         } catch (ManifestException $e) {
             $this->assertTrue(false, "Trying to load a manifest that exists and well formed should not raise an exception.");
@@ -67,10 +77,11 @@ class ManifestTest extends TestCase
         $manifestPath = $currentPath . self::SAMPLES_PATH . self::MANIFEST_PATH_COMPLEX;
         try {
             $manifest = new Manifest($manifestPath);
+            $manifest->setServiceLocator($serviceLocator);
             $this->assertInstanceOf(Manifest::class, $manifest);
             $this->assertEquals('complex', $manifest->getName());
             $this->assertEquals('complex testing manifest', $manifest->getDescription());
-            $this->assertEquals('1.0', $manifest->getVersion());
+            $this->assertEquals('v1.0', $manifest->getVersion());
             $this->assertEquals('TAO Team', $manifest->getAuthor());
             $this->assertEquals(['taoItemBank', 'taoDocuments'], array_keys($manifest->getDependencies()));
             $this->assertEquals(
