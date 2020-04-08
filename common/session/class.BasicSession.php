@@ -36,6 +36,7 @@ use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use oat\oatbox\user\UserLanguageServiceInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
+use oat\oatbox\session\SessionContext;
 
 class common_session_BasicSession implements common_session_Session, ServiceLocatorAwareInterface
 {
@@ -47,6 +48,8 @@ class common_session_BasicSession implements common_session_Session, ServiceLoca
      * @var common_user_User
      */
     private $user;
+
+    private $contexts = [];
 
     public function __construct(User $user)
     {
@@ -165,4 +168,20 @@ class common_session_BasicSession implements common_session_Session, ServiceLoca
         }
         return $this->setOriginalServiceLocator($serviceLocator);
     }
+
+    public function withContext(SessionContext $context): array
+    {
+        $this->contexts[] = $context;
+        return $this;
+    }
+
+    public function getContexts($class = null): array
+    {
+        $contexts = $this->contexts;
+        if ($class != null) {
+            $contexts = array_filter($contexts, function($element) use ($class) {return $element instanceof $class;});
+        }
+        return $contexts;
+    }
+
 }
