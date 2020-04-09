@@ -169,7 +169,6 @@ class Manifest implements ServiceLocatorAwareInterface
     public function getVersion():string
     {
         if ($this->version === null) {
-            var_dump($this->getPackageId());
             $packageInfo = $this->getComposerInfo()->getPackageInfo($this->getPackageId());
             $this->version = $packageInfo['version'];
         }
@@ -191,10 +190,9 @@ class Manifest implements ServiceLocatorAwareInterface
             $extensionsManager = $this->getServiceLocator()->get(\common_ext_ExtensionsManager::SERVICE_ID);
             $availablePackages = $extensionsManager->getAvailablePackages();
             $composerJson = $this->getComposerInfo()->getComposerJson(dirname($this->getFilePath()));
-            foreach ($composerJson['require'] as $packageId => $packageVersion) {
-                if (isset($availablePackages[$packageId])) {
-                    $this->dependencies[$availablePackages[$packageId]] = $packageVersion;
-                }
+            $requiredTaoPackages = array_intersect_key($composerJson['require'], $availablePackages);
+            foreach ($requiredTaoPackages as $packageId => $packageVersion) {
+                $this->dependencies[$availablePackages[$packageId]] = $packageVersion;
             }
         }
         return $this->dependencies;

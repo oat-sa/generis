@@ -302,7 +302,7 @@ class common_ext_ExtensionsManager extends ConfigurableService
     /**
      * Call a service to retrieve a map array of all available extensions
      * with extension package id as a key and extension id as a value
-     * @return common_Serializable
+     * @return array
      * @throws ManifestException
      * @throws \oat\oatbox\service\exception\InvalidServiceManagerException
      * @throws common_cache_NotFoundException
@@ -316,7 +316,7 @@ class common_ext_ExtensionsManager extends ConfigurableService
             $cache->put(self::getAvailablePackagesStatic(), $key);
         }
 
-        return $cache->get($key);
+        return (array) $cache->get($key);
     }
 
     /**
@@ -326,13 +326,11 @@ class common_ext_ExtensionsManager extends ConfigurableService
     public static function getAvailablePackagesStatic()
     {
         $returnValue = [];
-        $dir = new \FilesystemIterator(ROOT_PATH);
         $composer = new ComposerInfo();
-        foreach ($dir as $fileInfo) {
-            $composerJson = $composer->getComposerJson($fileInfo->getRealPath());
-            $manifestFilePath = $fileInfo->getRealPath().DIRECTORY_SEPARATOR.\common_ext_Extension::MANIFEST_NAME;
-            if (!file_exists($manifestFilePath)) continue;
-            $returnValue[$composerJson['name']] = $composerJson['extra']['tao-extension-name'];
+        $composerLock = $composer->getComposerLock(ROOT_PATH);
+        foreach ($composerLock[ComposerInfo::COMPOSER_LOCK_PACKAGES] as $package) {
+            if (!isset($package['extra']['tao-extension-name'])) continue;
+            $returnValue[$package['name']] = $package['extra']['tao-extension-name'];
         }
         return $returnValue;
     }
