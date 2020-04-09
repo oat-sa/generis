@@ -36,8 +36,8 @@ return [
     ],
     'install' => [
         'rdf' => [
-                ['ns' => 'http://www.tao.lu/Ontologies/taoFuncACL.rdf', 'file' => '/extension/path/models/ontology/taofuncacl.rdf'],
-                ['ns' => 'http://www.tao.lu/Ontologies/taoItemBank.rdf', 'file' => '/extension/path/models/ontology/taoitembank.rdf']
+            '/extension/path/models/ontology/taofuncacl.rdf',
+            '/extension/path/models/ontology/taoitembank.rdf'
         ],
         'checks' => [
             ['type' => 'CheckPHPRuntime', 'value' => ['id' => 'php_runtime', 'min' => '5.3', 'max' => '5.3.18']],

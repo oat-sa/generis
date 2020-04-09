@@ -85,7 +85,7 @@ class ManifestTest extends TestCase
         ]);
         $serviceLocator = $this->getServiceLocatorMock([
             common_cache_Cache::SERVICE_ID => new \common_cache_NoCache(),
-            common_ext_ExtensionsManager::SERVICE_ID => $extensionsManager
+            common_ext_ExtensionsManager::class => $extensionsManager
         ]);
         $currentPath = dirname(__FILE__);
         if (!defined('ROOT_PATH')) {
