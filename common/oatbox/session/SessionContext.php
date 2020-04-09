@@ -24,7 +24,7 @@ declare(strict_types=1);
 namespace oat\oatbox\session;
 
 /**
- * Represents an additional context that can be attached to a sesson
+ * Represents an additional context that can be attached to a session
  */
 interface SessionContext
 {
