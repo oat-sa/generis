@@ -36,11 +36,10 @@ class BasicSessionTest extends TestCase
         $context1 = $this->prophesize(SessionContext::class)->reveal();
         $context2 = $this->prophesize(SessionContext::class)->reveal();
 
-        $session = new \common_session_BasicSession($user);
-        $session->withContext($context1);
+        $session = new \common_session_BasicSession($user, [$context1]);
         $this->assertEquals([$context1], $session->getContexts());
 
-        $session->withContext($context2);
+        $session = new \common_session_BasicSession($user, [$context1, $context2]);
         $this->assertEquals([$context1, $context2], $session->getContexts());
     }
 

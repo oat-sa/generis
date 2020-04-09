@@ -49,11 +49,18 @@ class common_session_BasicSession implements common_session_Session, ServiceLoca
      */
     private $user;
 
-    private $contexts = [];
+    /**
+     * @var SessionContext[]
+     */
+    private $contexts;
 
-    public function __construct(User $user)
+    /**
+     * @param SessionContext[] $context
+     */
+    public function __construct(User $user, array $contexts = [])
     {
         $this->user = $user;
+        $this->contexts = $contexts;
     }
     
     public function getUser()
@@ -167,12 +174,6 @@ class common_session_BasicSession implements common_session_Session, ServiceLoca
             $this->user->setServiceLocator($serviceLocator);
         }
         return $this->setOriginalServiceLocator($serviceLocator);
-    }
-
-    public function withContext(SessionContext $context): self
-    {
-        $this->contexts[] = $context;
-        return $this;
     }
 
     public function getContexts(string $class = null): array
