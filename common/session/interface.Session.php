@@ -113,5 +113,5 @@ interface common_session_Session
      * @param string $class Class to filter the contexts by, or all if none provided
      * @return SessionContext[]
      */
-    public function getContexts($class = null): array;
+    public function getContexts(string $class = null): array;
 }

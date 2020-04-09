@@ -121,7 +121,7 @@ class common_session_AnonymousSession implements common_session_StatelessSession
         // nothing to do here
     }
 
-    public function getContexts($class = null): array
+    public function getContexts(string $class = null): array
     {
         return [];
     }

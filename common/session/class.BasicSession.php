@@ -175,7 +175,7 @@ class common_session_BasicSession implements common_session_Session, ServiceLoca
         return $this;
     }
 
-    public function getContexts($class = null): array
+    public function getContexts(string $class = null): array
     {
         $contexts = $this->contexts;
         if ($class != null) {
