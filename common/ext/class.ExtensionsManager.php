@@ -196,7 +196,7 @@ class common_ext_ExtensionsManager extends ConfigurableService
             throw new common_ext_ExtensionException('No id specified for getExtensionById()');
         }
         if (! isset($this->extensions[$id])) {
-            $extension = new common_ext_Extension($id, false);
+            $extension = new common_ext_Extension($id);
             $this->propagate($extension);
 
             // loads the extension if it hasn't been loaded yet

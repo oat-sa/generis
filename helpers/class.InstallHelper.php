@@ -63,13 +63,12 @@ class helpers_InstallHelper
         $installed = [];
         foreach ($extensionIDs as $id) {
             $ext = common_ext_ExtensionsManager::singleton()->getExtensionById($id);
-            
             if (!common_ext_ExtensionsManager::singleton()->isInstalled($ext->getId())) {
                 static::log('d', 'Extension ' . $id . ' needs to be installed');
                 $toInstall[$id] = $ext;
             }
         }
-        
+
         while (!empty($toInstall)) {
             $modified = false;
             foreach ($toInstall as $key => $extension) {
@@ -149,4 +148,5 @@ class helpers_InstallHelper
             call_user_func('common_Logger::' . $logLevel, $message, $tags);
         }
     }
+
 }

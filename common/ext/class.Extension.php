@@ -449,16 +449,6 @@ class common_ext_Extension implements ServiceManagerAwareInterface
     public function load()
     {
         if (!$this->isLoaded()) {
-            $dependencies = $this->getManifest()->getDependencies();
-            foreach ($dependencies as $extId => $extVersion) {
-                // triggers loading of extensions
-                try {
-                    $this->getExtensionManager()->getExtensionById($extId);
-                } catch (ManifestNotFoundException $e) {
-                    throw new common_ext_MissingExtensionException($e->getExtensionId() . ' not found but required for ' . $this->getId(), $e->getExtensionId());
-                }
-            }
-            
             $loader = new common_ext_ExtensionLoader($this);
             $loader->load();
             //load all dependent extensions
