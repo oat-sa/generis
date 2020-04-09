@@ -169,7 +169,7 @@ class common_session_BasicSession implements common_session_Session, ServiceLoca
         return $this->setOriginalServiceLocator($serviceLocator);
     }
 
-    public function withContext(SessionContext $context): array
+    public function withContext(SessionContext $context): self
     {
         $this->contexts[] = $context;
         return $this;
