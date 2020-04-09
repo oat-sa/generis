@@ -309,6 +309,10 @@ class common_ext_ExtensionsManager extends ConfigurableService
      */
     public function getAvailablePackages()
     {
+        //During installation list of packages is needed but cache service is not installed yet.
+        if (!$this->getServiceManager()->has(common_cache_Cache::SERVICE_ID)) {
+            return self::getAvailablePackagesStatic();
+        }
         /** @var common_cache_Cache $cache */
         $cache = $this->getServiceManager()->get(common_cache_Cache::SERVICE_ID);
         $key = static::class.'_'.__METHOD__;

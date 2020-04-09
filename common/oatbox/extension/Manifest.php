@@ -75,35 +75,16 @@ class Manifest implements ServiceLocatorAwareInterface
      */
     public function __construct($filePath, ComposerInfo $composerInfo = null)
     {
-        $this->composerInfo = $composerInfo;
         // the file exists, we can refer to the $filePath.
         if (!is_readable($filePath)) {
             throw new ManifestNotFoundException("The Extension Manifest file located at '${filePath}' could not be read.");
         }
-        $this->setFilePath($filePath);
-        $this->manifest = require($this->getFilePath());
-
+        $this->manifest = require($filePath);
         // mandatory
         if (empty($this->manifest['name'])) {
-            throw new exception\MalformedManifestException("The 'name' component is mandatory in manifest located at '{$this->getFilePath()}'.");
+            throw new exception\MalformedManifestException("The 'name' component is mandatory in manifest located at '{$this->filePath}'.");
         }
-    }
-
-    /**
-     * Get the path to the manifest file.
-     * @return string
-     */
-    public function getFilePath(): string
-    {
-        return (string) $this->filePath;
-    }
-
-    /**
-     * Set the path to the manifest file.
-     * @param  string $filePath An absolute path.
-     */
-    private function setFilePath(string $filePath)
-    {
+        $this->composerInfo = $composerInfo;
         $this->filePath = $filePath;
     }
 
@@ -187,9 +168,9 @@ class Manifest implements ServiceLocatorAwareInterface
     {
         if (empty($this->dependencies)) {
             /** @var \common_ext_ExtensionsManager $extensionsManager */
-            $extensionsManager = $this->getServiceLocator()->get(\common_ext_ExtensionsManager::SERVICE_ID);
+            $extensionsManager = $this->getServiceLocator()->get(\common_ext_ExtensionsManager::class);
             $availablePackages = $extensionsManager->getAvailablePackages();
-            $composerJson = $this->getComposerInfo()->getComposerJson(dirname($this->getFilePath()));
+            $composerJson = $this->getComposerInfo()->getComposerJson(dirname($this->filePath));
             $requiredTaoPackages = array_intersect_key($composerJson['require'], $availablePackages);
             foreach ($requiredTaoPackages as $packageId => $packageVersion) {
                 $this->dependencies[$availablePackages[$packageId]] = $packageVersion;
@@ -212,7 +193,6 @@ class Manifest implements ServiceLocatorAwareInterface
      * returns an array of RDF files to import during install.
      * The returned array contains paths to the files to be imported.
      * @return array
-     * @throws \common_ext_InstallationException
      */
     public function getInstallModelFiles(): array
     {
@@ -222,17 +202,8 @@ class Manifest implements ServiceLocatorAwareInterface
         $files = is_array($this->manifest['install']['rdf']) ?
             $this->manifest['install']['rdf'] :
             [$this->manifest['install']['rdf']];
-        $installModelFiles = [];
-        foreach ($files as $row) {
-            if (is_string($row)) {
-                $installModelFiles[] = $row;
-            } elseif (is_array($row) && isset($row['file'])) {
-                $installModelFiles[] = $row['file'];
-            } else {
-                throw new \common_ext_InstallationException('Error in definition of model to add into the ontology for ' . $this->getName(), 'INSTALL');
-            }
-        }
-        return (array) $installModelFiles;
+        $files = array_filter($files);
+        return (array) $files;
     }
 
     /**
@@ -336,8 +307,7 @@ class Manifest implements ServiceLocatorAwareInterface
             throw new ManifestNotFoundException("Extension Manifest file could not be found in '${file}'.");
         }
 
-        $manifestPath = $file;
-        $content = file_get_contents($manifestPath);
+        $content = file_get_contents($file);
         $matches = [];
         preg_match_all("/(?:\"|')\s*checks\s*(?:\"|')\s*=>(\s*array\s*\((\s*array\((?:.*)\s*\)\)\s*,{0,1})*\s*\))/", $content, $matches);
 
@@ -436,6 +406,6 @@ class Manifest implements ServiceLocatorAwareInterface
      */
     private function getPackageId()
     {
-        return $this->getComposerInfo()->getComposerJson(dirname($this->getFilePath()))['name'];
+        return $this->getComposerInfo()->getComposerJson(dirname($this->filePath))['name'];
     }
 }
