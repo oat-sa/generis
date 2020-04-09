@@ -25,7 +25,7 @@ namespace oat\oatbox\service;
 
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-interface ServiceFactory
+interface ServiceFactoryInterface
 {
     public function __invoke(ServiceLocatorInterface $serviceLocator);
 }

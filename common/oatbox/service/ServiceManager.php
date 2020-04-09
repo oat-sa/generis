@@ -109,7 +109,7 @@ class ServiceManager implements ServiceLocatorInterface, ContainerInterface
             $service = $this->tryAutowiring($serviceId, $serviceKey);
         }
 
-        if ($service instanceof ServiceFactory) {
+        if ($service instanceof ServiceFactoryInterface) {
             $service = $service($this);
         }
 
