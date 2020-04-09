@@ -33,26 +33,12 @@ use oat\oatbox\user\UserLanguageServiceInterface;
  * @package generis
 
  */
-class common_session_AnonymousSession implements common_session_StatelessSession, ServiceLocatorAwareInterface
+class common_session_AnonymousSession extends common_session_BasicSession implements common_session_StatelessSession
 {
-    use ServiceLocatorAwareTrait;
-
-    /**
-     * (non-PHPdoc)
-     * @see common_session_Session::getUser()
-     */
-    public function getUser()
-    {
-        return new AnonymousUser();
-    }
     
-    /**
-     * (non-PHPdoc)
-     * @see common_session_Session::getUserUri()
-     */
-    public function getUserUri()
+    public function __construct()
     {
-        return null;
+        parent::__construct(new AnonymousUser());
     }
 
     /**
@@ -120,10 +106,4 @@ class common_session_AnonymousSession implements common_session_StatelessSession
     {
         // nothing to do here
     }
-
-    public function getContexts(string $class = null): array
-    {
-        return [];
-    }
-
 }
