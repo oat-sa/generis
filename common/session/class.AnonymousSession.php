@@ -21,9 +21,8 @@
 
 use oat\generis\model\GenerisRdf;
 use oat\oatbox\user\AnonymousUser;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use oat\oatbox\user\UserLanguageServiceInterface;
+use oat\oatbox\session\SessionContext;
 
 /**
  * Represents a userless Session.
@@ -33,26 +32,14 @@ use oat\oatbox\user\UserLanguageServiceInterface;
  * @package generis
 
  */
-class common_session_AnonymousSession implements common_session_StatelessSession, ServiceLocatorAwareInterface
+class common_session_AnonymousSession extends common_session_BasicSession implements common_session_StatelessSession
 {
-    use ServiceLocatorAwareTrait;
-
     /**
-     * (non-PHPdoc)
-     * @see common_session_Session::getUser()
+     * @param SessionContext[] $contexts
      */
-    public function getUser()
+    public function __construct($contexts = [])
     {
-        return new AnonymousUser();
-    }
-    
-    /**
-     * (non-PHPdoc)
-     * @see common_session_Session::getUserUri()
-     */
-    public function getUserUri()
-    {
-        return null;
+        parent::__construct(new AnonymousUser(), $contexts);
     }
 
     /**

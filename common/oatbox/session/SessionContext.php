@@ -15,28 +15,17 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2018 (original work) Open Assessment Technologies SA;
+ * Copyright (c) 2020 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  *
  */
 
-namespace oat\generis\scripts\install;
+declare(strict_types=1);
 
-use oat\generis\model\user\UserFactoryService;
-use oat\oatbox\extension\InstallAction;
+namespace oat\oatbox\session;
 
-class SetupUserFactoryService extends InstallAction
+/**
+ * Represents an additional context that can be attached to a session
+ */
+interface SessionContext
 {
-    /**
-     * @param $params
-     * @throws \common_Exception
-     * @throws \oat\oatbox\service\exception\InvalidServiceManagerException
-     */
-    public function __invoke($params)
-    {
-        $userFactory = new UserFactoryService([]);
-
-        $this->getServiceManager()->register(UserFactoryService::SERVICE_ID, $userFactory);
-
-        return new \common_report_Report(\common_report_Report::TYPE_SUCCESS, 'UserFactoryService registered.');
-    }
 }
