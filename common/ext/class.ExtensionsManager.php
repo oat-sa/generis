@@ -331,7 +331,14 @@ class common_ext_ExtensionsManager extends ConfigurableService
     {
         $returnValue = [];
         $composer = new ComposerInfo();
-        $composerLock = $composer->getComposerLock(ROOT_PATH);
+
+        if (defined('ROOT_PATH')) {
+            $rootPath = ROOT_PATH;
+        } else {
+            $rootPath = realpath(__DIR__ . '/../../../') ;
+        }
+
+        $composerLock = $composer->getComposerLock($rootPath);
         foreach ($composerLock[ComposerInfo::COMPOSER_LOCK_PACKAGES] as $package) {
             if (!isset($package[ComposerInfo::COMPOSER_LOCK_EXTRA][ComposerInfo::COMPOSER_LOCK_EXTENSION_NAME])) continue;
             $composerPackageName = $package[ComposerInfo::COMPOSER_LOCK_PACKAGE_NAME];
