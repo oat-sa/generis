@@ -333,8 +333,10 @@ class common_ext_ExtensionsManager extends ConfigurableService
         $composer = new ComposerInfo();
         $composerLock = $composer->getComposerLock(ROOT_PATH);
         foreach ($composerLock[ComposerInfo::COMPOSER_LOCK_PACKAGES] as $package) {
-            if (!isset($package['extra']['tao-extension-name'])) continue;
-            $returnValue[$package['name']] = $package['extra']['tao-extension-name'];
+            if (!isset($package[ComposerInfo::COMPOSER_LOCK_EXTRA][ComposerInfo::COMPOSER_LOCK_EXTENSION_NAME])) continue;
+            $composerPackageName = $package[ComposerInfo::COMPOSER_LOCK_PACKAGE_NAME];
+            $extId = $package[ComposerInfo::COMPOSER_LOCK_EXTRA][ComposerInfo::COMPOSER_LOCK_EXTENSION_NAME];
+            $returnValue[$composerPackageName] = $extId;
         }
         return $returnValue;
     }

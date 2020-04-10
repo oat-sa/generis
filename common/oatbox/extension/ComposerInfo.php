@@ -37,6 +37,9 @@ class ComposerInfo
     const COMPOSER_JSON = 'composer.json';
     const COMPOSER_LOCK = 'composer.lock';
     const COMPOSER_LOCK_PACKAGES = 'packages';
+    const COMPOSER_LOCK_EXTRA = 'extra';
+    const COMPOSER_LOCK_EXTENSION_NAME = 'tao-extension-name';
+    const COMPOSER_LOCK_PACKAGE_NAME = 'name';
 
     /**
      * @param $folder
