@@ -1,4 +1,6 @@
 <?php
+use oat\oatbox\session\SessionContext;
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -105,4 +107,11 @@ interface common_session_Session
      * refreshes the information stored in the current session
      */
     public function refresh();
+
+    /**
+     * Returns additional contexts of the current session
+     * @param string $class Class to filter the contexts by, or all if none provided
+     * @return SessionContext[]
+     */
+    public function getContexts(string $class = null): array;
 }
