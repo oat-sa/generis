@@ -22,6 +22,7 @@
 namespace oat\oatbox\event;
 
 use oat\oatbox\service\ConfigurableService;
+use oat\oatbox\service\ServiceNotFoundException;
 
 /**
  * The simple placeholder ServiceManager
@@ -50,11 +51,13 @@ class EventManager extends ConfigurableService
         foreach ($this->getListeners($eventObject) as $callback) {
             if (is_array($callback) && count($callback) == 2) {
                 list($key, $function) = $callback;
-                if (
-                    (is_string($key) && $this->getServiceManager()->has($key))
-                    || (class_exists($key) && is_subclass_of($key, ConfigurableService::class))) {
-                    $service = $this->getServiceManager()->get($key);
-                    $callback = [$service, $function];
+                if (is_string($key)) {
+                    try {
+                        $service = $this->getServiceManager()->get($key);
+                        $callback = [$service, $function];
+                    } catch (ServiceNotFoundException $e) {
+                        //do nothing
+                    }
                 }
             }
             call_user_func($callback, $eventObject);
