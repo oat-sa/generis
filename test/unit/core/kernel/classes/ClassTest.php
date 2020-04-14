@@ -150,9 +150,9 @@ class ClassTest extends GenerisTestCase
         $eventManager->expects($this->exactly($triggeredEvents))->method('trigger');
 
         /** @var ServiceLocatorInterface|MockObject $serviceLocatorInterface */
-        $serviceLocatorInterface = $this->createMock(ServiceLocatorInterface::class);
-        $serviceLocatorInterface->method('get')->with(EventManager::SERVICE_ID)->willReturn($eventManager);
-
+        $serviceLocatorInterface = $this->getServiceLocatorMock(
+            [EventManager::SERVICE_ID => $eventManager]
+        );
         /** @var SmoothModel|MockObject $model */
         $model = $this->createConfiguredMock(
             SmoothModel::class,
@@ -183,7 +183,10 @@ class ClassTest extends GenerisTestCase
     {
         // Passing an associative array allows to specify the number of events triggered.
         if (isset($subClassesLabels[0])) {
-            $subClassesLabels = array_combine($subClassesLabels, array_fill(0, count($subClassesLabels), 0));
+            $subClassesLabels = array_combine(
+                $subClassesLabels, 
+                array_fill(0, count($subClassesLabels), 0)
+            );
         }
 
         $subClasses = [];
