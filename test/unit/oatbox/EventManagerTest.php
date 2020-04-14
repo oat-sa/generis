@@ -22,6 +22,8 @@
 namespace oat\generis\test\unit\oatbox;
 
 use oat\oatbox\event\EventManager;
+use oat\oatbox\service\ConfigurableService;
+use oat\oatbox\service\ServiceManager;
 use Prophecy\Argument;
 use Prophecy\Prediction\CallTimesPrediction;
 use oat\oatbox\event\GenericEvent;
@@ -40,11 +42,25 @@ class EmptyClass
     }
 }
 
+class EmptyClassService extends ConfigurableService
+{
+    public static $called = false;
+
+    public function testfunction($event)
+    {
+        self::$called = true;
+    }
+}
+
 class EventManagerTest extends TestCase
 {
     public function testInit()
     {
         $eventManager = new EventManager();
+
+        $config = new \common_persistence_KeyValuePersistence([], new \common_persistence_InMemoryKvDriver());
+        $eventManager->setServiceLocator(new ServiceManager($config));
+
         $this->assertInstanceOf(EventManager::class, $eventManager);
         
         return $eventManager;
@@ -83,19 +99,25 @@ class EventManagerTest extends TestCase
     public function testTriggerEventObj($eventManager)
     {
         $genericEvent = new GenericEvent('objEvent', ['param1' => '1']);
-        
+
         $callable = $this->prophesize(EmptyClass::class);
         $callable->testfunction($genericEvent)->should(new CallTimesPrediction(1));
-        
-    
+
+
         $eventManager->attach($genericEvent->getName(), [$callable->reveal(), 'testfunction']);
         $eventManager->trigger($genericEvent);
+
+        $genericEvent2 = new GenericEvent('objEvent2', ['param1' => '2']);
+        $eventManager->attach($genericEvent2->getName(), [EmptyClassService::class, 'testfunction']);
+        $eventManager->trigger($genericEvent2);
+        $this->assertTrue(EmptyClassService::$called);
     }
-    
+
+
     /**
      * @depends testInit
      */
-    public function testDetatch($eventManager)
+    public function testDetach($eventManager)
     {
         $callable = $this->prophesize(EmptyClass::class);
 
