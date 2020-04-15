@@ -21,6 +21,7 @@
  */
 
 use oat\generis\model\data\ModelManager;
+use oat\oatbox\service\ServiceFactoryInterface;
 use oat\oatbox\service\ServiceManager;
 use oat\oatbox\event\EventManager;
 use oat\oatbox\service\ConfigurableService;
@@ -67,7 +68,7 @@ class common_ext_ExtensionInstaller extends common_ext_ExtensionHandler
     public function install()
     {
         $this->log('i', 'Installing extension ' . $this->extension->getId());
-        
+
         if ($this->extension->getId() == 'generis') {
             throw new common_ext_ForbiddenActionException(
                 'Tried to install generis using the ExtensionInstaller',
@@ -80,31 +81,31 @@ class common_ext_ExtensionInstaller extends common_ext_ExtensionHandler
                 $this->extension->getId()
             );
         }
-        
+
         // we purge the whole cache.
         $this->log('d', 'Purging cache...');
         $cache = common_cache_FileCache::singleton();
         $cache->purge();
-    
+
 
         // check required extensions, throws exception if failed
         helpers_ExtensionHelper::checkRequiredExtensions($this->getExtension());
-            
+
         $this->installLoadDefaultConfig();
         $this->installOntology();
         $this->installRegisterExt();
-            
+
         $this->log('d', 'Installing custom script for extension ' . $this->extension->getId());
         $this->installCustomScript();
         $this->log('d', 'Done installing custom script for extension ' . $this->extension->getId());
-        
+
         if ($this->getLocalData() == true) {
             $this->log('d', 'Installing local data for extension ' . $this->extension->getId());
             $this->installLocalData();
             $this->log('d', 'Done installing local data for extension ' . $this->extension->getId());
         }
         $this->log('d', 'Extended install for extension ' . $this->extension->getId());
-            
+
         // Method to be overridden by subclasses
         // to extend the installation mechanism.
         $this->extendedInstall();
@@ -130,6 +131,9 @@ class common_ext_ExtensionInstaller extends common_ext_ExtensionHandler
                     $confKey = substr($fileinfo->getFilename(), 0, -strlen('.conf.php'));
                     if (! $this->extension->hasConfig($confKey)) {
                         $config = include $fileinfo->getPathname();
+                        if ($config instanceof ServiceFactoryInterface) {
+                            $config = $config($this->getServiceManager());
+                        }
                         if ($config instanceof ConfigurableService) {
                             $this->getServiceManager()->register($this->extension->getId() . '/' . $confKey, $config);
                         } else {
@@ -167,7 +171,7 @@ class common_ext_ExtensionInstaller extends common_ext_ExtensionHandler
      */
     protected function installRegisterExt()
     {
-        
+
         $this->log('d', 'Registering extension ' . $this->extension->getId());
         common_ext_ExtensionsManager::singleton()->registerExtension($this->extension);
         common_ext_ExtensionsManager::singleton()->setEnabled($this->extension->getId());
@@ -225,7 +229,7 @@ class common_ext_ExtensionInstaller extends common_ext_ExtensionHandler
      */
     public function __construct(common_ext_Extension $extension, $localData = true)
     {
-        
+
         parent::__construct($extension);
         $this->setLocalData($localData);
     }
@@ -254,7 +258,7 @@ class common_ext_ExtensionInstaller extends common_ext_ExtensionHandler
     {
         return $this->localData;
     }
-    
+
     /**
      * Returns the ontology model of the extension
      *
