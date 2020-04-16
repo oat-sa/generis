@@ -22,11 +22,11 @@ namespace oat\generis\test\unit\core\kernel\classes;
 
 use core_kernel_classes_Class as RdfClass;
 use core_kernel_persistence_ClassInterface as ClassImplementation;
+use core_kernel_persistence_smoothsql_SmoothModel as SmoothModel;
 use oat\generis\model\data\RdfsInterface;
 use oat\generis\test\GenerisTestCase;
 use oat\generis\test\MockObject;
 use oat\oatbox\event\EventManager;
-use oat\taoWorkspace\model\generis\WrapperModel;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
@@ -37,13 +37,7 @@ class ClassTest extends GenerisTestCase
     /** @var RdfClass */
     private $subject;
 
-    private $eventManager;
-
-    private $label1 = 'a label';
-
-    private $label2 = 'another label';
-
-    public function setUp()
+    public function setUp(): void
     {
         $this->subject = new RdfClass('http://example.com/uri');
     }
@@ -136,10 +130,7 @@ class ClassTest extends GenerisTestCase
     private function createModel(array $subClassLabels, $triggeredEvents = 0)
     {
         /** @var ClassImplementation|MockObject $classImplementation */
-        $classImplementation = $this->getMockBuilder(ClassImplementation::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getSubClasses', 'createSubClass'])
-            ->getMockForAbstractClass();
+        $classImplementation = $this->createMock(ClassImplementation::class);
         $subClasses = $this->createSubclasses($subClassLabels);
         $classImplementation->method('getSubClasses')->willReturn($subClasses);
         $classImplementation->method('createSubClass')->willReturnCallback(
@@ -149,33 +140,27 @@ class ClassTest extends GenerisTestCase
         );
 
         /** @var RdfsInterface|MockObject $rdfsInterface */
-        $rdfsInterface = $this->getMockBuilder(RdfsInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getClassImplementation'])
-            ->getMockForAbstractClass();
-        $rdfsInterface->method('getClassImplementation')->willReturn($classImplementation);
+        $rdfsInterface = $this->createConfiguredMock(
+            RdfsInterface::class,
+            ['getClassImplementation' => $classImplementation]
+        );
 
         /** @var EventManager|MockObject $eventManager */
-        $eventManager = $this->getMockBuilder(EventManager::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['trigger'])
-            ->getMock();
+        $eventManager = $this->createMock(EventManager::class);
         $eventManager->expects($this->exactly($triggeredEvents))->method('trigger');
 
         /** @var ServiceLocatorInterface|MockObject $serviceLocatorInterface */
-        $serviceLocatorInterface = $this->getMockBuilder(ServiceLocatorInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['get'])
-            ->getMockForAbstractClass();
-        $serviceLocatorInterface->method('get')->with(EventManager::SERVICE_ID)->willReturn($eventManager);
-
-        /** @var WrapperModel|MockObject $model */
-        $model = $this->getMockBuilder(WrapperModel::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getRdfsInterface', 'getServiceLocator'])
-            ->getMockForAbstractClass();
-        $model->method('getRdfsInterface')->willReturn($rdfsInterface);
-        $model->method('getServiceLocator')->willReturn($serviceLocatorInterface);
+        $serviceLocatorInterface = $this->getServiceLocatorMock(
+            [EventManager::SERVICE_ID => $eventManager]
+        );
+        /** @var SmoothModel|MockObject $model */
+        $model = $this->createConfiguredMock(
+            SmoothModel::class,
+            [
+                'getRdfsInterface' => $rdfsInterface,
+                'getServiceLocator' => $serviceLocatorInterface,
+            ]
+        );
 
         return $model;
     }
@@ -198,7 +183,10 @@ class ClassTest extends GenerisTestCase
     {
         // Passing an associative array allows to specify the number of events triggered.
         if (isset($subClassesLabels[0])) {
-            $subClassesLabels = array_combine($subClassesLabels, array_fill(0, count($subClassesLabels), 0));
+            $subClassesLabels = array_combine(
+                $subClassesLabels, 
+                array_fill(0, count($subClassesLabels), 0)
+            );
         }
 
         $subClasses = [];
