@@ -101,6 +101,7 @@ class common_ext_UpdateExtensions implements Action, ServiceLocatorAwareInterfac
             } else {
                 $updater = new $updaterClass($ext);
                 $returnedVersion = $updater->update($installed);
+                $updater->setVersion($ext->getVersion());
                 $currentVersion = common_ext_ExtensionsManager::singleton()->getInstalledVersion($ext->getId());
                 
                 if (!is_null($returnedVersion) && $returnedVersion != $currentVersion) {

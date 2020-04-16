@@ -495,6 +495,6 @@ class Updater extends common_ext_ExtensionUpdater
 
         $this->skip('12.12.0', '12.17.0');
 
-        $this->setVersion($this->getExtension()->getVersion());
+        //Updater script is deprecated. Use migration scripts.
     }
 }
