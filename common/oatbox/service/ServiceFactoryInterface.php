@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -15,14 +17,15 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2019 (original work) Open Assessment Technologies SA;
+ * Copyright (c) 2020 (original work) Open Assessment Technologies SA;
  *
  */
 
-namespace oat\generis\test;
+namespace oat\oatbox\service;
 
-use PHPUnit\Framework\MockObject\MockObject as MockObjectInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
-interface MockObject extends MockObjectInterface
+interface ServiceFactoryInterface
 {
+    public function __invoke(ServiceLocatorInterface $serviceLocator);
 }
