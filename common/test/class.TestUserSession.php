@@ -167,4 +167,13 @@ class common_test_TestUserSession implements common_session_StatelessSession
     {
         // nothign to do
     }
+
+    /**
+     * (non-PHPdoc)
+     * @see common_session_Session::getContexts()
+     */
+    public function getContexts(string $class = null): array
+    {
+        // nothign to do
+    }
 }
