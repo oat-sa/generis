@@ -41,7 +41,9 @@ interface PermissionInterface
      *
      * @var string
      */
-    const RIGHT_UNSUPPORTED = 'unsupported';
+    public const RIGHT_UNSUPPORTED = 'unsupported';
+    public const RIGHT_READ = 'READ';
+    public const RIGHT_WRITE = 'WRITE';
     
     /**
      * Return the permissions a specified user has on the resources
