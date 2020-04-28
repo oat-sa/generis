@@ -40,7 +40,7 @@ class PermissionHelper extends ConfigurableService
         }
         $permissions = $provider->getPermissions($this->getCurrentUser(),$resourceIds);
 
-        return array_filter($resourceIds, function($id) use ($right, $permissions){ return in_array($right, $permissions[$id]); });
+        return array_filter($resourceIds, function($id) use ($right, $permissions){ return isset($permissions[$id]) && in_array($right, $permissions[$id]); });
     }
 
     private function getCurrentUser(): User
