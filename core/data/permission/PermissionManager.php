@@ -40,6 +40,7 @@ class PermissionManager
     
     /**
      * @return PermissionInterface
+     * @deprecated
      */
     public static function getPermissionModel()
     {
@@ -50,13 +51,13 @@ class PermissionManager
             return new NoAccess();
         }
     }
-    
+
     /**
-     * @param core_kernel_persistence_RdfsDriver $model
+     * @deprecated
      */
     public static function setPermissionModel(PermissionInterface $model)
     {
-        common_ext_ExtensionsManager::singleton()->getExtensionById('generis')->setConfig(self::CONFIG_KEY, $model);
+        return ServiceManager::getServiceManager()->register(PermissionInterface::SERVICE_ID, $model);
     }
     
     public static function catchEvent(Event $event)
