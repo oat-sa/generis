@@ -284,11 +284,9 @@ class core_kernel_impl_ApiModelOO extends core_kernel_impl_Api implements core_k
     {
         $returnValue = $this->createClassCollection(__METHOD__);
 
-        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
-
-        $query =  "SELECT DISTINCT subject FROM statements WHERE (predicate = ? AND object = ?) 
-        			AND subject NOT IN (SELECT subject FROM statements WHERE predicate = ?)";
-        $result = $dbWrapper->query($query, [
+        $query =  'SELECT DISTINCT subject FROM statements WHERE (predicate = ? AND object = ?) 
+        			AND subject NOT IN (SELECT subject FROM statements WHERE predicate = ?)';
+        $result = core_kernel_classes_DbWrapper::singleton()->query($query, [
             OntologyRdf::RDF_TYPE,
             OntologyRdfs::RDFS_CLASS,
             OntologyRdfs::RDFS_SUBCLASSOF
@@ -358,10 +356,8 @@ class core_kernel_impl_ApiModelOO extends core_kernel_impl_Api implements core_k
     {
         $returnValue = $this->createClassCollection(__METHOD__);
 
-        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
-
-        $query =  "SELECT DISTINCT subject FROM statements WHERE (predicate = ? AND object = ?) OR predicate = ?";
-        $result = $dbWrapper->query($query, [
+        $query =  'SELECT DISTINCT subject FROM statements WHERE (predicate = ? AND object = ?) OR predicate = ?';
+        $result = core_kernel_classes_DbWrapper::singleton()->query($query, [
             OntologyRdf::RDF_TYPE,
             OntologyRdfs::RDFS_CLASS,
             OntologyRdfs::RDFS_SUBCLASSOF
