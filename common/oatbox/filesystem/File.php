@@ -64,7 +64,11 @@ class File extends FileSystemHandler
      */
     public function getSize()
     {
-        return $this->getFileSystem()->getSize($this->getPrefix());
+        try {
+            return $this->getFileSystem()->getSize($this->getPrefix());
+        } catch (FileNotFoundException $e) {
+        }
+        return 0;
     }
 
     /**
