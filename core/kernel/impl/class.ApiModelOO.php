@@ -262,7 +262,7 @@ class core_kernel_impl_ApiModelOO extends core_kernel_impl_Api implements core_k
      */
     public function getMetaClasses()
     {
-        $returnValue = new core_kernel_classes_ContainerCollection(new core_kernel_classes_Container(__METHOD__), __METHOD__);
+        $returnValue = $this->createClassCollection(__METHOD__);
 
         $classClass = new core_kernel_classes_Class(OntologyRdfs::RDFS_CLASS);
         foreach ($classClass->getSubClasses(true) as $uri => $subClass) {
@@ -282,7 +282,7 @@ class core_kernel_impl_ApiModelOO extends core_kernel_impl_Api implements core_k
      */
     public function getRootClasses()
     {
-        $returnValue = new core_kernel_classes_ContainerCollection(new core_kernel_classes_Container(__METHOD__), __METHOD__);
+        $returnValue = $this->createClassCollection(__METHOD__);
 
         $dbWrapper = core_kernel_classes_DbWrapper::singleton();
 
@@ -356,7 +356,7 @@ class core_kernel_impl_ApiModelOO extends core_kernel_impl_Api implements core_k
      */
     public function getAllClasses()
     {
-        $returnValue = new core_kernel_classes_ContainerCollection(new core_kernel_classes_Container(__METHOD__), __METHOD__);
+        $returnValue = $this->createClassCollection(__METHOD__);
 
         $dbWrapper = core_kernel_classes_DbWrapper::singleton();
 
@@ -397,7 +397,7 @@ class core_kernel_impl_ApiModelOO extends core_kernel_impl_Api implements core_k
             $predicate,
             $object
         ]);
-        $returnValue = new core_kernel_classes_ContainerCollection(new common_Object(__METHOD__));
+        $returnValue = new core_kernel_classes_ContainerCollection(new common_Object());
         while ($row = $sqlResult->fetch()) {
             $container = new core_kernel_classes_Resource($row['subject'], __METHOD__);
             $container->debug = __METHOD__ ;
@@ -457,7 +457,7 @@ class core_kernel_impl_ApiModelOO extends core_kernel_impl_Api implements core_k
             $subject,
             $predicate
         ]);
-        $returnValue = new core_kernel_classes_ContainerCollection(new common_Object(__METHOD__));
+        $returnValue = new core_kernel_classes_ContainerCollection(new common_Object());
         while ($row = $sqlResult->fetch()) {
             $value = $row['object'];
             if (!common_Utils::isUri($value)) {
@@ -512,5 +512,10 @@ class core_kernel_impl_ApiModelOO extends core_kernel_impl_Api implements core_k
     public function getServiceLocator()
     {
         return ServiceManager::getServiceManager();
+    }
+
+    private function createClassCollection(string $debug = ''): core_kernel_classes_ContainerCollection
+    {
+        return new core_kernel_classes_ContainerCollection(new core_kernel_classes_Container(), $debug);
     }
 }
