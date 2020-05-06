@@ -318,6 +318,25 @@ class ResourceTest extends GenerisPhpUnitTestRunner
         $instance->delete(true);
     }
 
+    public function testSetPropertiesValuesWithNull()
+    {
+
+        $class = new core_kernel_classes_Class(GenerisRdf::GENERIS_BOOLEAN);
+        $instance = $class->createInstance('a label', 'a comment');
+        $this->assertIsA($instance, 'core_kernel_classes_Resource');
+
+        $instance->setPropertiesValues([
+            OntologyRdfs::RDFS_COMMENT        => [null]
+        ]);
+
+        $seeAlso = $instance->getOnePropertyValue(new core_kernel_classes_Property(OntologyRdfs::RDFS_COMMENT));
+        $this->assertNotNull($seeAlso);
+        $this->assertIsA($seeAlso, 'core_kernel_classes_Literal');
+        $this->assertEquals($seeAlso->literal, "a comment");
+
+        $instance->delete(true);
+    }
+
     public function testGetUsedLanguages()
     {
         $class = new core_kernel_classes_Class(GenerisRdf::GENERIS_BOOLEAN, __METHOD__);
