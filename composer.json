@@ -63,7 +63,7 @@
     "oat-sa/oatbox-extension-installer": "~1.1||dev-master",
     "php": "^7.1",
     "psr/log": "~1.0",
-    "oat-sa/lib-generis-search": "2.1.2",
+    "oat-sa/lib-generis-search": "dev-develop",
     "monolog/monolog": "^1.23.0",
     "fluent/logger": "^1.0.1",
     "symfony/lock": "^3.4",
