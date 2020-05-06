@@ -44,24 +44,14 @@ class common_ext_UpdateExtensions implements Action, ServiceLocatorAwareInterfac
      */
     public function __invoke($params)
     {
-        
-        $merged = array_merge(
-            common_ext_ExtensionsManager::singleton()->getInstalledExtensions(),
-            $this->getMissingExtensions()
-        );
-        
-        $sorted = \helpers_ExtensionHelper::sortByDependencies($merged);
-        
         $report = new common_report_Report(common_report_Report::TYPE_INFO, 'Running extension update');
+        $extManager = $this->getExtensionManager();
+        $this->installMissingExtensions($report);
+        $sorted = \helpers_ExtensionHelper::sortByDependencies($extManager->getInstalledExtensions());
+
         foreach ($sorted as $ext) {
             try {
-                if (!common_ext_ExtensionsManager::singleton()->isInstalled($ext->getId())) {
-                    $installer = new \tao_install_ExtensionInstaller($ext);
-                    $installer->install();
-                    $report->add(new common_report_Report(common_report_Report::TYPE_SUCCESS, 'Installed ' . $ext->getName()));
-                } else {
-                    $report->add($this->updateExtension($ext));
-                }
+                $report->add($this->updateExtension($ext));
             } catch (common_ext_MissingExtensionException $ex) {
                 $report->add(new common_report_Report(common_report_Report::TYPE_ERROR, $ex->getMessage()));
                 break;
@@ -79,17 +69,21 @@ class common_ext_UpdateExtensions implements Action, ServiceLocatorAwareInterfac
         $this->logInfo(helpers_Report::renderToCommandline($report, false));
         return $report;
     }
-    
+
     /**
      * Update a specific extension
      *
      * @param common_ext_Extension $ext
      * @return common_report_Report
+     * @throws common_exception_Error
+     * @throws common_ext_ManifestNotFoundException
+     * @throws common_ext_MissingExtensionException
+     * @throws common_ext_OutdatedVersionException
      */
     protected function updateExtension(common_ext_Extension $ext)
     {
         helpers_ExtensionHelper::checkRequiredExtensions($ext);
-        $installed = common_ext_ExtensionsManager::singleton()->getInstalledVersion($ext->getId());
+        $installed = $this->getExtensionManager()->getInstalledVersion($ext->getId());
         $codeVersion = $ext->getVersion();
         if ($installed !== $codeVersion) {
             $report = new common_report_Report(common_report_Report::TYPE_INFO, $ext->getName() . ' requires update from ' . $installed . ' to ' . $codeVersion);
@@ -101,10 +95,10 @@ class common_ext_UpdateExtensions implements Action, ServiceLocatorAwareInterfac
             } else {
                 $updater = new $updaterClass($ext);
                 $returnedVersion = $updater->update($installed);
-                $currentVersion = common_ext_ExtensionsManager::singleton()->getInstalledVersion($ext->getId());
+                $currentVersion = $this->getExtensionManager()->getInstalledVersion($ext->getId());
                 
                 if (!is_null($returnedVersion) && $returnedVersion != $currentVersion) {
-                    common_ext_ExtensionsManager::singleton()->updateVersion($ext, $returnedVersion);
+                    $this->getExtensionManager()->updateVersion($ext, $returnedVersion);
                     $report->add(new common_report_Report(common_report_Report::TYPE_WARNING, 'Manually saved extension version'));
                     $currentVersion = $returnedVersion;
                 }
@@ -131,13 +125,41 @@ class common_ext_UpdateExtensions implements Action, ServiceLocatorAwareInterfac
     
     protected function getMissingExtensions()
     {
-        $missingId = \helpers_ExtensionHelper::getMissingExtensionIds(common_ext_ExtensionsManager::singleton()->getInstalledExtensions());
+        $missingId = \helpers_ExtensionHelper::getMissingExtensionIds($this->getExtensionManager()->getInstalledExtensions());
         
         $missingExt = [];
         foreach ($missingId as $extId) {
-            $ext = \common_ext_ExtensionsManager::singleton()->getExtensionById($extId);
+            $ext = $this->getExtensionManager()->getExtensionById($extId);
             $missingExt[$extId] = $ext;
         }
         return $missingExt;
     }
+
+    /**
+     * @param common_report_Report $report
+     * @throws common_exception_Error
+     * @throws common_ext_AlreadyInstalledException
+     * @throws common_ext_ForbiddenActionException
+     */
+    private function installMissingExtensions(common_report_Report $report)
+    {
+        $merged = array_merge($this->getMissingExtensions(), $this->getExtensionManager()->getInstalledExtensions());
+        $sorted = \helpers_ExtensionHelper::sortByDependencies($merged);
+        foreach ($sorted as $ext) {
+            if (!$this->getExtensionManager()->isInstalled($ext->getId())) {
+                $installer = new \tao_install_ExtensionInstaller($ext);
+                $installer->install();
+                $report->add(new common_report_Report(common_report_Report::TYPE_SUCCESS, 'Installed ' . $ext->getName()));
+            }
+        }
+    }
+
+    /**
+     * @return common_ext_ExtensionsManager
+     */
+    private function getExtensionManager()
+    {
+        return $this->getServiceLocator()->get(common_ext_ExtensionsManager::SERVICE_ID);
+    }
+
 }
