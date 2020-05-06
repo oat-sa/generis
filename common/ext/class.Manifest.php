@@ -143,7 +143,13 @@ class common_ext_Manifest
      * @var string
      */
     private $updateHandler = null;
-    
+
+    /**
+     * The post update handler class
+     * @var string
+     */
+    private $postUpdateHandler = null;
+
     /**
      * The routes to the controllers described by the manifest.
      *
@@ -300,7 +306,11 @@ class common_ext_Manifest
             if (isset($array['update'])) {
                 $this->updateHandler = $array['update'];
             }
-            
+
+            if (isset($array['postUpdate'])) {
+                $this->postUpdateHandler = $array['postUpdate'];
+            }
+
             if (!empty($array['local'])) {
                 $this->localData = $array['local'];
             }
@@ -791,7 +801,17 @@ class common_ext_Manifest
     {
         return $this->updateHandler;
     }
-    
+
+    /**
+     * Return the className of the post update handler
+     *
+     * @return string
+     */
+    public function getPostUpdateHandler()
+    {
+        return $this->postUpdateHandler;
+    }
+
     /**
       * PHP scripts to execute in order to add some sample data to an install
       *

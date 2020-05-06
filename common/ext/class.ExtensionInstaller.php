@@ -20,9 +20,7 @@
  *
  */
 
-use oat\generis\model\data\ModelManager;
 use oat\oatbox\service\ServiceFactoryInterface;
-use oat\oatbox\service\ServiceManager;
 use oat\oatbox\event\EventManager;
 use oat\oatbox\service\ConfigurableService;
 use oat\generis\model\data\import\RdfImporter;
@@ -110,7 +108,7 @@ class common_ext_ExtensionInstaller extends common_ext_ExtensionHandler
         // to extend the installation mechanism.
         $this->extendedInstall();
         $this->log('d', 'Done extended install for extension ' . $this->extension->getId());
-        $eventManager = ServiceManager::getServiceManager()->get(EventManager::CONFIG_ID);
+        $eventManager = $this->getServiceManager()->get(EventManager::CONFIG_ID);
         $eventManager->trigger(new common_ext_event_ExtensionInstalled($this->extension));
     }
 
@@ -270,14 +268,20 @@ class common_ext_ExtensionInstaller extends common_ext_ExtensionHandler
     }
 
     /**
-     * Short description of method extendedInstall
-     *
-     * @access public
-     * @author Jerome Bogaerts, <jerome@taotesting.com>
-     * @return void
+     * @return mixed
+     * @throws common_exception_Error
      */
     public function extendedInstall()
     {
-        return;
+        $extensions = $this->getServiceManager()->get(common_ext_ExtensionsManager::SERVICE_ID)->getInstalledExtensions();
+        $sorted = \helpers_ExtensionHelper::sortByDependencies($extensions);
+        foreach ($sorted as $extension) {
+            $postUpdaterClass = $extension->getManifest()->getPostUpdateHandler();
+            if ($postUpdaterClass !== null && class_exists($postUpdaterClass)) {
+                $postUpdater = new $postUpdaterClass($extension);
+                $postUpdater->setServiceLocator($this->getServiceManager());
+                return $postUpdater([]);
+            }
+        }
     }
 }

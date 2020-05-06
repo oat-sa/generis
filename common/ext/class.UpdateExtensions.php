@@ -76,6 +76,12 @@ class common_ext_UpdateExtensions implements Action, ServiceLocatorAwareInterfac
                 break;
             }
         }
+        foreach ($sorted as $ext) {
+            $postUpdateReport = $this->postUpdateExtension($ext);
+            if ($postUpdateReport) {
+                $report->add($postUpdateReport);
+            }
+        }
         $this->logInfo(helpers_Report::renderToCommandline($report, false));
         return $report;
     }
@@ -128,7 +134,22 @@ class common_ext_UpdateExtensions implements Action, ServiceLocatorAwareInterfac
         }
         return $report;
     }
-    
+
+    /**
+     * @param common_ext_Extension $ext
+     * @return mixed
+     * @throws common_ext_ManifestNotFoundException
+     */
+    protected function postUpdateExtension(common_ext_Extension $ext)
+    {
+        $postUpdaterClass = $ext->getManifest()->getPostUpdateHandler();
+        if ($postUpdaterClass !== null && class_exists($postUpdaterClass)) {
+            $postUpdater = new $postUpdaterClass($ext);
+            $postUpdater->setServiceLocator($this->getServiceLocator());
+            return $postUpdater([]);
+        }
+    }
+
     protected function getMissingExtensions()
     {
         $missingId = \helpers_ExtensionHelper::getMissingExtensionIds(common_ext_ExtensionsManager::singleton()->getInstalledExtensions());
