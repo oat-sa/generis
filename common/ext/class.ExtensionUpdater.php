@@ -22,6 +22,9 @@ use oat\oatbox\service\ServiceManager;
  *
  */
 
+use oat\oatbox\service\ServiceManagerAwareTrait;
+use oat\oatbox\service\ServiceManagerAwareInterface;
+
 /**
  * Short description of class common_ext_ExtensionInstaller
  *
@@ -31,8 +34,10 @@ use oat\oatbox\service\ServiceManager;
  * @see @license  GNU General Public (GPL) Version 2 http://www.opensource.org/licenses/gpl-2.0.php
 
  */
-abstract class common_ext_ExtensionUpdater extends common_ext_ExtensionHandler
+abstract class common_ext_ExtensionUpdater extends common_ext_ExtensionHandler implements ServiceManagerAwareInterface
 {
+
+    use ServiceManagerAwareTrait;
 
     /** @var common_report_Report[] */
     private $reports = [];
@@ -43,18 +48,16 @@ abstract class common_ext_ExtensionUpdater extends common_ext_ExtensionHandler
      * @return string $versionUpdatedTo
      */
     abstract public function update($initialVersion);
-    
+
     /**
-     * Temporary helper untill the service manager
-     * gets properly injected into the update scripts
-     *
-     * @return \oat\oatbox\service\ServiceManager
+     * The function will be called after all extensions updated.
+     * @param $initialVersion
      */
-    public function getServiceManager()
+    public function postUpdate()
     {
-        return ServiceManager::getServiceManager();
+        //to be replaced in child class if needed
     }
-    
+
     /**
      * Update the current version of the extension to the provided version
      * Ensures that a successfull update doesn't get executed twice

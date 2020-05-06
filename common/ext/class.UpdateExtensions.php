@@ -66,6 +66,9 @@ class common_ext_UpdateExtensions implements Action, ServiceLocatorAwareInterfac
                 break;
             }
         }
+        foreach ($sorted as $ext) {
+            $this->getUpdater($ext)->postUpdate();
+        }
         $this->logInfo(helpers_Report::renderToCommandline($report, false));
         return $report;
     }
@@ -87,16 +90,11 @@ class common_ext_UpdateExtensions implements Action, ServiceLocatorAwareInterfac
         $codeVersion = $ext->getVersion();
         if ($installed !== $codeVersion) {
             $report = new common_report_Report(common_report_Report::TYPE_INFO, $ext->getName() . ' requires update from ' . $installed . ' to ' . $codeVersion);
-            $updaterClass = $ext->getManifest()->getUpdateHandler();
-            if (is_null($updaterClass)) {
-                $report = new common_report_Report(common_report_Report::TYPE_WARNING, 'No Updater found for  ' . $ext->getName());
-            } elseif (!class_exists($updaterClass)) {
-                $report = new common_report_Report(common_report_Report::TYPE_ERROR, 'Updater ' . $updaterClass . ' not found');
-            } else {
-                $updater = new $updaterClass($ext);
+            try {
+                $updater = $this->getUpdater($ext);
                 $returnedVersion = $updater->update($installed);
                 $currentVersion = $this->getExtensionManager()->getInstalledVersion($ext->getId());
-                
+
                 if (!is_null($returnedVersion) && $returnedVersion != $currentVersion) {
                     $this->getExtensionManager()->updateVersion($ext, $returnedVersion);
                     $report->add(new common_report_Report(common_report_Report::TYPE_WARNING, 'Manually saved extension version'));
@@ -116,13 +114,35 @@ class common_ext_UpdateExtensions implements Action, ServiceLocatorAwareInterfac
                 $report->add($versionReport);
 
                 common_cache_FileCache::singleton()->purge();
+            } catch (common_ext_ManifestException $e) {
+                $report = new common_report_Report(common_report_Report::TYPE_WARNING, $e->getMessage());
             }
         } else {
             $report = new common_report_Report(common_report_Report::TYPE_INFO, $ext->getName() . ' already up to date');
         }
         return $report;
     }
-    
+
+    /**
+     * @param common_ext_Extension $ext
+     * @return common_ext_ExtensionUpdater
+     * @throws common_ext_ManifestException
+     * @throws common_ext_ManifestNotFoundException
+     */
+    protected function getUpdater(common_ext_Extension $ext)
+    {
+        $updaterClass = $ext->getManifest()->getUpdateHandler();
+        if ($updaterClass === null) {
+            throw new \common_ext_ManifestException('No Updater found for  ' . $ext->getName());
+        } elseif (!class_exists($updaterClass)) {
+            throw new \common_ext_ManifestException('Updater ' . $updaterClass . ' not found');
+        }
+        /** @var common_ext_ExtensionUpdater $updater */
+        $updater = new $updaterClass($ext);
+        $updater->setServiceLocator($this->getServiceLocator());
+        return $updater;
+    }
+
     protected function getMissingExtensions()
     {
         $missingId = \helpers_ExtensionHelper::getMissingExtensionIds($this->getExtensionManager()->getInstalledExtensions());
