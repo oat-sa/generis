@@ -19,6 +19,7 @@
  *
  */
 
+use Doctrine\DBAL\ParameterType;
 use oat\generis\model\data\event\ResourceCreated;
 use oat\generis\model\data\Ontology;
 use oat\generis\model\data\RdfInterface;
@@ -78,7 +79,8 @@ class core_kernel_persistence_smoothsql_SmoothRdf implements RdfInterface
                 is_null($triple->lg) ? '' : $triple->lg,
                 $this->getPersistence()->getPlatForm()->getNowExpression(),
                 is_null($triple->author) ? '' : $triple->author
-            ]
+            ],
+            $this->getTripleParameterTypes()
         );
         return $success;
     }
@@ -113,7 +115,11 @@ class core_kernel_persistence_smoothsql_SmoothRdf implements RdfInterface
 
     protected function insertValues(array $valuesToInsert)
     {
-        return $this->getPersistence()->insertMultiple('statements', $valuesToInsert);
+        $types = [];
+        foreach ($valuesToInsert as $value) {
+            array_push($types, ...$this->getTripleParameterTypes());
+        }
+        return $this->getPersistence()->insertMultiple('statements', $valuesToInsert, $types);
     }
     
     /**
@@ -163,6 +169,26 @@ class core_kernel_persistence_smoothsql_SmoothRdf implements RdfInterface
             'l_language' => is_null($triple->lg) ? '' : $triple->lg,
             'author' => is_null($triple->author) ? '' : $triple->author,
             'epoch' => $this->getPersistence()->getPlatForm()->getNowExpression()
+        ];
+    }
+
+    protected function getTripleParameterTypes()
+    {
+        return [
+            // modelid
+            ParameterType::STRING,
+            // subject
+            ParameterType::STRING,
+            // predicate
+            ParameterType::STRING,
+            // object
+            ParameterType::STRING,
+            // l_language
+            ParameterType::STRING,
+            // epoch
+            ParameterType::STRING,
+            // author
+            ParameterType::STRING,
         ];
     }
 }
