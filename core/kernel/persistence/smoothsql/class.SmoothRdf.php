@@ -33,7 +33,25 @@ use oat\generis\model\data\RdfInterface;
  */
 class core_kernel_persistence_smoothsql_SmoothRdf implements RdfInterface
 {
-    const BATCH_SIZE = 100;
+    public const BATCH_SIZE = 100;
+
+    public const TRIPLE_PARAMETER_TYPE = [
+        // modelid
+        ParameterType::INTEGER,
+        // subject
+        ParameterType::STRING,
+        // predicate
+        ParameterType::STRING,
+        // object
+        ParameterType::STRING,
+        // l_language
+        ParameterType::STRING,
+        // epoch
+        ParameterType::STRING,
+        // author
+        ParameterType::STRING,
+    ];
+
     /**
      * @var core_kernel_persistence_smoothsql_SmoothModel
      */
@@ -153,7 +171,6 @@ class core_kernel_persistence_smoothsql_SmoothRdf implements RdfInterface
 
     /**
      * @param core_kernel_classes_Triple $triple
-     * @param array $valuesToInsert
      * @return array
      */
     protected function tripleToValue(core_kernel_classes_Triple $triple)
@@ -171,21 +188,6 @@ class core_kernel_persistence_smoothsql_SmoothRdf implements RdfInterface
 
     protected function getTripleParameterTypes()
     {
-        return [
-            // modelid
-            ParameterType::INTEGER,
-            // subject
-            ParameterType::STRING,
-            // predicate
-            ParameterType::STRING,
-            // object
-            ParameterType::STRING,
-            // l_language
-            ParameterType::STRING,
-            // epoch
-            ParameterType::STRING,
-            // author
-            ParameterType::STRING,
-        ];
+        return self::TRIPLE_PARAMETER_TYPE;
     }
 }

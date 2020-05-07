@@ -82,27 +82,17 @@ class NewSqlRdf extends core_kernel_persistence_smoothsql_SmoothRdf
     }
 
     /**
+     * Get default ontology parameter type and add string id
+     *
      * @return array
      */
     protected function getTripleParameterTypes()
     {
-        return [
-            // id
-            ParameterType::STRING,
-            // modelid
-            ParameterType::INTEGER,
-            // subject
-            ParameterType::STRING,
-            // predicate
-            ParameterType::STRING,
-            // object
-            ParameterType::STRING,
-            // l_language
-            ParameterType::STRING,
-            // author
-            ParameterType::STRING,
-            // epoch
-            ParameterType::STRING,
-        ];
+        return array_merge(
+            [
+                ParameterType::STRING,
+            ],
+            parent::getTripleParameterTypes()
+        );
     }
 }
