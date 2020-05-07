@@ -76,7 +76,7 @@ class NewSqlRdf extends core_kernel_persistence_smoothsql_SmoothRdf
      * @return array
      * @throws Exception
      */
-    protected function tripleToValue(core_kernel_classes_Triple $triple)
+    protected function tripleToValue(core_kernel_classes_Triple $triple) : array
     {
         return ['id' => $this->getUniquePrimaryKey()] + parent::tripleToValue($triple);
     }
@@ -86,7 +86,7 @@ class NewSqlRdf extends core_kernel_persistence_smoothsql_SmoothRdf
      *
      * @return array
      */
-    protected function getTripleParameterTypes()
+    protected function getTripleParameterTypes() : array
     {
         return array_merge(
             [

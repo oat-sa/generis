@@ -173,7 +173,7 @@ class core_kernel_persistence_smoothsql_SmoothRdf implements RdfInterface
      * @param core_kernel_classes_Triple $triple
      * @return array
      */
-    protected function tripleToValue(core_kernel_classes_Triple $triple)
+    protected function tripleToValue(core_kernel_classes_Triple $triple) : array
     {
         return [
             'modelid' => $triple->modelid,
@@ -186,7 +186,7 @@ class core_kernel_persistence_smoothsql_SmoothRdf implements RdfInterface
         ];
     }
 
-    protected function getTripleParameterTypes()
+    protected function getTripleParameterTypes() : array
     {
         return self::TRIPLE_PARAMETER_TYPE;
     }
