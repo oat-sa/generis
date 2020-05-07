@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,12 +22,8 @@
  */
 
 use Doctrine\DBAL\ParameterType;
-use oat\generis\model\data\event\ResourceCreated;
 use oat\generis\model\data\Ontology;
 use oat\generis\model\data\RdfInterface;
-use oat\generis\model\OntologyRdf;
-use oat\generis\model\OntologyRdfs;
-use oat\oatbox\event\EventManager;
 
 /**
  * Implementation of the RDF interface for the smooth sql driver
@@ -69,7 +67,7 @@ class core_kernel_persistence_smoothsql_SmoothRdf implements RdfInterface
         $query = "INSERT INTO statements ( modelId, subject, predicate, object, l_language, epoch, author) "
             . "VALUES ( ? , ? , ? , ? , ? , ?, ?);";
 
-        $success = $this->getPersistence()->exec(
+        return $this->getPersistence()->exec(
             $query,
             [
                 $triple->modelid,
@@ -82,7 +80,6 @@ class core_kernel_persistence_smoothsql_SmoothRdf implements RdfInterface
             ],
             $this->getTripleParameterTypes()
         );
-        return $success;
     }
 
     /**
@@ -109,8 +106,7 @@ class core_kernel_persistence_smoothsql_SmoothRdf implements RdfInterface
     protected function insertTriples(array $triples)
     {
         $values = array_map([$this,"tripleToValue"], $triples);
-        $isInsertionSuccessful = $this->insertValues($values);
-        return $isInsertionSuccessful;
+        return $this->insertValues($values);
     }
 
     protected function insertValues(array $valuesToInsert)
@@ -119,6 +115,7 @@ class core_kernel_persistence_smoothsql_SmoothRdf implements RdfInterface
         foreach ($valuesToInsert as $value) {
             array_push($types, ...$this->getTripleParameterTypes());
         }
+
         return $this->getPersistence()->insertMultiple('statements', $valuesToInsert, $types);
     }
     
@@ -176,7 +173,7 @@ class core_kernel_persistence_smoothsql_SmoothRdf implements RdfInterface
     {
         return [
             // modelid
-            ParameterType::STRING,
+            ParameterType::INTEGER,
             // subject
             ParameterType::STRING,
             // predicate
