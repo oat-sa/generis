@@ -1,7 +1,4 @@
 <?php
-
-use oat\oatbox\service\ServiceManager;
-
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,8 +19,11 @@ use oat\oatbox\service\ServiceManager;
  *
  */
 
+declare(strict_types = 1);
+
 use oat\oatbox\service\ServiceManagerAwareTrait;
 use oat\oatbox\service\ServiceManagerAwareInterface;
+use common_report_Report as Report;
 
 /**
  * Short description of class common_ext_ExtensionInstaller
@@ -39,7 +39,7 @@ abstract class common_ext_ExtensionUpdater extends common_ext_ExtensionHandler i
 
     use ServiceManagerAwareTrait;
 
-    /** @var common_report_Report[] */
+    /** @var Report[] */
     private $reports = [];
 
     /**
@@ -50,17 +50,17 @@ abstract class common_ext_ExtensionUpdater extends common_ext_ExtensionHandler i
     abstract public function update($initialVersion);
 
     /**
-     * The function will be called after all extensions updated.
-     * @param $initialVersion
+     * @return Report|null
      */
-    public function postUpdate()
+    public function postUpdate(): ?Report
     {
         //to be replaced in child class if needed
+        return null;
     }
 
     /**
      * Update the current version of the extension to the provided version
-     * Ensures that a successfull update doesn't get executed twice
+     * Ensures that a successful update doesn't get executed twice
      *
      * @param string $version
      */
@@ -108,7 +108,7 @@ abstract class common_ext_ExtensionUpdater extends common_ext_ExtensionHandler i
     }
 
     /**
-     * @return \common_report_Report[]
+     * @return Report[]
      */
     public function getReports()
     {
@@ -116,9 +116,9 @@ abstract class common_ext_ExtensionUpdater extends common_ext_ExtensionHandler i
     }
 
     /**
-     * @param common_report_Report $report
+     * @param Report $report
      */
-    public function addReport(\common_report_Report $report)
+    public function addReport(Report $report)
     {
         $this->reports[] = $report;
     }

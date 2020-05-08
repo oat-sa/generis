@@ -19,12 +19,14 @@
  *
  */
 
-use oat\oatbox\service\ServiceManager;
+declare(strict_types = 1);
+
 use oat\oatbox\action\Action;
+use oat\oatbox\log\LoggerAwareTrait;
+use common_report_Report as Report;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Psr\Log\LoggerAwareInterface;
-use oat\oatbox\log\LoggerAwareTrait;
 
 /**
  * Run the extension updater
@@ -44,7 +46,7 @@ class common_ext_UpdateExtensions implements Action, ServiceLocatorAwareInterfac
      */
     public function __invoke($params)
     {
-        $report = new common_report_Report(common_report_Report::TYPE_INFO, 'Running extension update');
+        $report = new Report(Report::TYPE_INFO, 'Running extension update');
         $extManager = $this->getExtensionManager();
         $this->installMissingExtensions($report);
         $sorted = \helpers_ExtensionHelper::sortByDependencies($extManager->getInstalledExtensions());
@@ -53,21 +55,28 @@ class common_ext_UpdateExtensions implements Action, ServiceLocatorAwareInterfac
             try {
                 $report->add($this->updateExtension($ext));
             } catch (common_ext_MissingExtensionException $ex) {
-                $report->add(new common_report_Report(common_report_Report::TYPE_ERROR, $ex->getMessage()));
+                $report->add(new Report(Report::TYPE_ERROR, $ex->getMessage()));
                 break;
             } catch (common_ext_OutdatedVersionException $ex) {
-                $report->add(new common_report_Report(common_report_Report::TYPE_ERROR, $ex->getMessage()));
+                $report->add(new Report(Report::TYPE_ERROR, $ex->getMessage()));
                 break;
             } catch (Exception $e) {
                 $this->logError('Exception during update of ' . $ext->getId() . ': ' . get_class($e) . ' "' . $e->getMessage() . '"');
-                $report->setType(common_report_Report::TYPE_ERROR);
+                $report->setType(Report::TYPE_ERROR);
                 $report->setTitle('Update failed');
-                $report->add(new common_report_Report(common_report_Report::TYPE_ERROR, 'Exception during update of ' . $ext->getId() . '.'));
+                $report->add(new Report(Report::TYPE_ERROR, 'Exception during update of ' . $ext->getId() . '.'));
                 break;
             }
         }
+        $postUpdateReport = new Report(Report::TYPE_INFO, 'Post update actions:');
         foreach ($sorted as $ext) {
-            $this->getUpdater($ext)->postUpdate();
+            $postUpdateExtensionReport = $this->getUpdater($ext)->postUpdate();
+            if ($postUpdateExtensionReport) {
+                $postUpdateReport->add($postUpdateExtensionReport);
+            }
+        }
+        if ($postUpdateReport->hasChildren()) {
+            $report->add($postUpdateReport);
         }
         $this->logInfo(helpers_Report::renderToCommandline($report, false));
         return $report;
@@ -77,7 +86,7 @@ class common_ext_UpdateExtensions implements Action, ServiceLocatorAwareInterfac
      * Update a specific extension
      *
      * @param common_ext_Extension $ext
-     * @return common_report_Report
+     * @return Report
      * @throws common_exception_Error
      * @throws common_ext_ManifestNotFoundException
      * @throws common_ext_MissingExtensionException
@@ -89,7 +98,7 @@ class common_ext_UpdateExtensions implements Action, ServiceLocatorAwareInterfac
         $installed = $this->getExtensionManager()->getInstalledVersion($ext->getId());
         $codeVersion = $ext->getVersion();
         if ($installed !== $codeVersion) {
-            $report = new common_report_Report(common_report_Report::TYPE_INFO, $ext->getName() . ' requires update from ' . $installed . ' to ' . $codeVersion);
+            $report = new Report(Report::TYPE_INFO, $ext->getName() . ' requires update from ' . $installed . ' to ' . $codeVersion);
             try {
                 $updater = $this->getUpdater($ext);
                 $returnedVersion = $updater->update($installed);
@@ -97,14 +106,14 @@ class common_ext_UpdateExtensions implements Action, ServiceLocatorAwareInterfac
 
                 if (!is_null($returnedVersion) && $returnedVersion != $currentVersion) {
                     $this->getExtensionManager()->updateVersion($ext, $returnedVersion);
-                    $report->add(new common_report_Report(common_report_Report::TYPE_WARNING, 'Manually saved extension version'));
+                    $report->add(new Report(Report::TYPE_WARNING, 'Manually saved extension version'));
                     $currentVersion = $returnedVersion;
                 }
 
                 if ($currentVersion == $codeVersion) {
-                    $versionReport = new common_report_Report(common_report_Report::TYPE_SUCCESS, 'Successfully updated ' . $ext->getName() . ' to ' . $currentVersion);
+                    $versionReport = new Report(Report::TYPE_SUCCESS, 'Successfully updated ' . $ext->getName() . ' to ' . $currentVersion);
                 } else {
-                    $versionReport = new common_report_Report(common_report_Report::TYPE_WARNING, 'Update of ' . $ext->getName() . ' exited with version ' . $currentVersion);
+                    $versionReport = new Report(Report::TYPE_WARNING, 'Update of ' . $ext->getName() . ' exited with version ' . $currentVersion);
                 }
 
                 foreach ($updater->getReports() as $updaterReport) {
@@ -115,10 +124,10 @@ class common_ext_UpdateExtensions implements Action, ServiceLocatorAwareInterfac
 
                 common_cache_FileCache::singleton()->purge();
             } catch (common_ext_ManifestException $e) {
-                $report = new common_report_Report(common_report_Report::TYPE_WARNING, $e->getMessage());
+                $report = new Report(Report::TYPE_WARNING, $e->getMessage());
             }
         } else {
-            $report = new common_report_Report(common_report_Report::TYPE_INFO, $ext->getName() . ' already up to date');
+            $report = new Report(Report::TYPE_INFO, $ext->getName() . ' already up to date');
         }
         return $report;
     }
@@ -156,12 +165,12 @@ class common_ext_UpdateExtensions implements Action, ServiceLocatorAwareInterfac
     }
 
     /**
-     * @param common_report_Report $report
+     * @param Report $report
      * @throws common_exception_Error
      * @throws common_ext_AlreadyInstalledException
      * @throws common_ext_ForbiddenActionException
      */
-    private function installMissingExtensions(common_report_Report $report)
+    private function installMissingExtensions(Report $report)
     {
         $merged = array_merge($this->getMissingExtensions(), $this->getExtensionManager()->getInstalledExtensions());
         $sorted = \helpers_ExtensionHelper::sortByDependencies($merged);
@@ -169,7 +178,7 @@ class common_ext_UpdateExtensions implements Action, ServiceLocatorAwareInterfac
             if (!$this->getExtensionManager()->isInstalled($ext->getId())) {
                 $installer = new \tao_install_ExtensionInstaller($ext);
                 $installer->install();
-                $report->add(new common_report_Report(common_report_Report::TYPE_SUCCESS, 'Installed ' . $ext->getName()));
+                $report->add(new Report(Report::TYPE_SUCCESS, 'Installed ' . $ext->getName()));
             }
         }
     }
