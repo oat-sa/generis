@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -17,7 +19,6 @@
  *
  * Copyright (c) 2020 (original work) Open Assessment Technologies SA;
  *
- *
  */
 
 use oat\generis\scripts\install\SetupDefaultKvPersistence;
@@ -33,7 +34,7 @@ return [
     'label' => 'Generis Core',
     'description' => 'Core extension, provide the low level framework and an API to manage ontologies',
     'license' => 'GPL-2.0',
-    'version' => '12.21.0',
+    'version' => '12.21.1',
     'author' => 'Open Assessment Technologies, CRP Henri Tudor',
     'requires' => [],
     'install' => [
