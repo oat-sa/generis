@@ -493,6 +493,20 @@ class Updater extends common_ext_ExtensionUpdater
             $this->setVersion('12.12.0');
         }
 
-        $this->skip('12.12.0', '12.20.1');
+        $this->skip('12.12.0', '12.20.2');
+
+        if ($this->isVersion('12.20.2')) {
+            $file = __DIR__ . DIRECTORY_SEPARATOR .
+                '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR .
+                'core' . DIRECTORY_SEPARATOR .
+                'ontology' . DIRECTORY_SEPARATOR .
+                'generis.rdf';
+            $api = core_kernel_impl_ApiModelOO::singleton();
+            $api->importXmlRdf('http://www.tao.lu/Ontologies/generis.rdf', $file);
+
+            $this->setVersion('12.21.0');
+        }
+        
+        $this->skip('12.21.0', '12.21.1');
     }
 }
