@@ -54,6 +54,7 @@
     "tao-extension-name": "generis"
   },
   "require": {
+    "php": "^7.1",
     "clearfw/clearfw": "~1.2.0",
     "easyrdf/easyrdf": "^0.9.0",
     "doctrine/dbal": "2.10.1",
@@ -61,13 +62,13 @@
     "zendframework/zend-servicemanager": "~2.5.0",
     "league/flysystem": "~1.0",
     "oat-sa/oatbox-extension-installer": "~1.1||dev-master",
-    "php": "^7.1",
-    "psr/log": "~1.0",
     "oat-sa/lib-generis-search": "2.1.2",
     "monolog/monolog": "^1.23.0",
     "fluent/logger": "^1.0.1",
     "symfony/lock": "^3.4",
+    "psr/log": "~1.0",
     "psr/container": "^1.0.0",
+    "psr/simple-cache" : "^1.0.1",
     "ramsey/uuid": "^3.8"
   },
   "require-dev": {
