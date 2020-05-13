@@ -25,6 +25,7 @@ use oat\oatbox\cache\SimpleCache;
 
 /**
  * Wrap the PSR simple cache implementation into the legacy interface
+ * @deprecated Please use oat\oatbox\cache\SimpleCache
  */
 class common_cache_PsrWrapperCache extends ConfigurableService implements common_cache_Cache
 {
