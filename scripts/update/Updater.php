@@ -361,8 +361,7 @@ class Updater extends common_ext_ExtensionUpdater
             $ontologyModel = new $className($modelConfig['config']);
             if ($ontologyModel instanceof core_kernel_persistence_smoothsql_SmoothModel) {
                 $ontologyModel->setOption(
-                    \core_kernel_persistence_smoothsql_SmoothModel::OPTION_CACHE_SERVICE,
-                    \common_cache_Cache::SERVICE_ID
+                    \core_kernel_persistence_smoothsql_SmoothModel::OPTION_CACHE_SERVICE
                 );
             }
             $this->getServiceManager()->register(Ontology::SERVICE_ID, $ontologyModel);
