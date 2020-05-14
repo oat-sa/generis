@@ -513,12 +513,7 @@ class Updater extends common_ext_ExtensionUpdater
 
         // register PSR 16 cache
         if ($this->isVersion('12.21.1')) {
-            $oldCache = $this->getServiceManager()->get(\common_cache_Cache::SERVICE_ID);
-            $persistenceId = ($oldCache instanceof \common_cache_KeyValueCache)
-                ? $oldCache->getOption(\common_cache_KeyValueCache::OPTION_PERSISTENCE)
-                : 'cache'
-            ;
-            $psrCache = new KeyValueCache([KeyValueCache::OPTION_PERSISTENCE => $persistenceId]);
+            $psrCache = new KeyValueCache([KeyValueCache::OPTION_PERSISTENCE => 'cache']);
             $this->getServiceManager()->register(SimpleCache::SERVICE_ID, $psrCache);
             $this->setVersion('12.22.0');
         }
