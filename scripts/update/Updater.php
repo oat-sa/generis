@@ -56,6 +56,8 @@ use oat\oatbox\mutex\NoLockStorage;
 use League\Flysystem\Adapter\Local;
 use oat\generis\model\kernel\uri\UriProvider;
 use oat\oatbox\config\ConfigurationService;
+use oat\oatbox\cache\KeyValueCache;
+use oat\oatbox\cache\SimpleCache;
 
 /**
  * @author Joel Bout <joel@taotesting.com>
@@ -508,5 +510,12 @@ class Updater extends common_ext_ExtensionUpdater
         }
         
         $this->skip('12.21.0', '12.21.1');
+
+        // register PSR 16 cache
+        if ($this->isVersion('12.21.1')) {
+            $psrCache = new KeyValueCache([KeyValueCache::OPTION_PERSISTENCE => 'cache']);
+            $this->getServiceManager()->register(SimpleCache::SERVICE_ID, $psrCache);
+            $this->setVersion('12.22.0');
+        }
     }
 }

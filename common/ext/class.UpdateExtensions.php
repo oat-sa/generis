@@ -25,6 +25,7 @@ use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Psr\Log\LoggerAwareInterface;
 use oat\oatbox\log\LoggerAwareTrait;
+use oat\oatbox\cache\SimpleCache;
 
 /**
  * Run the extension updater
@@ -121,7 +122,7 @@ class common_ext_UpdateExtensions implements Action, ServiceLocatorAwareInterfac
 
                 $report->add($versionReport);
 
-                common_cache_FileCache::singleton()->purge();
+                $this->getServiceLocator()->get(SimpleCache::SERVICE_ID)->clear();
             }
         } else {
             $report = new common_report_Report(common_report_Report::TYPE_INFO, $ext->getName() . ' already up to date');
