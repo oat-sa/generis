@@ -78,6 +78,9 @@ class Updater extends common_ext_ExtensionUpdater
                 'Updates from versions prior to Tao 3.1 are not longer supported, please update to Tao 3.1 first'
             );
         }
+        // in order to prevent update scripts to fail we run some early fixes
+        $this->runPreChecks();
+
         $this->skip('2.12.0', '2.18.0');
 
         if ($this->isVersion('2.18.0')) {
@@ -509,13 +512,18 @@ class Updater extends common_ext_ExtensionUpdater
             $this->setVersion('12.21.0');
         }
         
-        $this->skip('12.21.0', '12.21.1');
+        $this->skip('12.21.0', '12.22.1');
+    }
 
-        // register PSR 16 cache
-        if ($this->isVersion('12.21.1')) {
+    /**
+     * Runs required fixes that allow the rest of the updates to run
+     */
+    protected function runPreChecks(): void
+    {
+        // 12.22.0 introduced PSR-16 cache required for update process
+        if (!$this->getServiceManager()->has(SimpleCache::SERVICE_ID)) {
             $psrCache = new KeyValueCache([KeyValueCache::OPTION_PERSISTENCE => 'cache']);
             $this->getServiceManager()->register(SimpleCache::SERVICE_ID, $psrCache);
-            $this->setVersion('12.22.0');
         }
     }
 }
