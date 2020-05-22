@@ -35,6 +35,8 @@ use oat\generis\model\data\Ontology;
 use core_kernel_persistence_smoothsql_SmoothModel;
 use oat\generis\model\kernel\persistence\newsql\NewSqlOntology;
 use oat\generis\persistence\sql\SchemaProviderInterface;
+use oat\oatbox\cache\SimpleCache;
+use oat\oatbox\cache\NoCache;
 
 trait OntologyMockTrait
 {
@@ -48,7 +50,6 @@ trait OntologyMockTrait
             NewSqlOntology::OPTION_READABLE_MODELS => [2,3],
             NewSqlOntology::OPTION_WRITEABLE_MODELS => [2],
             NewSqlOntology::OPTION_NEW_TRIPLE_MODEL => 2,
-            'cache' => 'smoothcache'
         ]);
         return $this->setupOntology($model);
     }
@@ -63,7 +64,6 @@ trait OntologyMockTrait
             core_kernel_persistence_smoothsql_SmoothModel::OPTION_READABLE_MODELS => [2,3],
             core_kernel_persistence_smoothsql_SmoothModel::OPTION_WRITEABLE_MODELS => [2],
             core_kernel_persistence_smoothsql_SmoothModel::OPTION_NEW_TRIPLE_MODEL => 2,
-            'cache' => 'smoothcache'
         ]);
         return $this->setupOntology($model);
     }
@@ -83,7 +83,7 @@ trait OntologyMockTrait
             EventManager::SERVICE_ID => new EventManager(),
             LoggerService::SERVICE_ID => $this->prophesize(LoggerInterface::class)->reveal(),
             UriProvider::SERVICE_ID => new Bin2HexUriProvider([Bin2HexUriProvider::OPTION_NAMESPACE => 'http://ontology.mock/bin2hex#']),
-            'smoothcache' => new \common_cache_NoCache()
+            SimpleCache::SERVICE_ID => new NoCache()
         ]);
         $session->setServiceLocator($sl);
         $onto->setServiceLocator($sl);

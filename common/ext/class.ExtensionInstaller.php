@@ -26,6 +26,7 @@ use oat\oatbox\service\ServiceManager;
 use oat\oatbox\event\EventManager;
 use oat\oatbox\service\ConfigurableService;
 use oat\generis\model\data\import\RdfImporter;
+use oat\oatbox\cache\SimpleCache;
 
 /**
  * Generis installer of extensions
@@ -84,8 +85,8 @@ class common_ext_ExtensionInstaller extends common_ext_ExtensionHandler
 
         // we purge the whole cache.
         $this->log('d', 'Purging cache...');
-        $cache = common_cache_FileCache::singleton();
-        $cache->purge();
+        $cache = $this->getServiceManager()->get(SimpleCache::SERVICE_ID);
+        $cache->clear();
 
 
         // check required extensions, throws exception if failed

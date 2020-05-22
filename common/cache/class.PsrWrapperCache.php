@@ -15,39 +15,20 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
- *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
- *               2010-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
+ * Copyright (c) 2020 (original work) Open Assessment Technologies SA
  *
  */
 
 use oat\oatbox\service\ConfigurableService;
+use Psr\SimpleCache\CacheInterface;
+use oat\oatbox\cache\SimpleCache;
 
 /**
- * Caches data in a key-value store
- *
- * @access public
- * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
- * @package generis
+ * Wrap the PSR simple cache implementation into the legacy interface
  * @deprecated Please use oat\oatbox\cache\SimpleCache
  */
-class common_cache_KeyValueCache extends ConfigurableService implements common_cache_Cache
+class common_cache_PsrWrapperCache extends ConfigurableService implements common_cache_Cache
 {
-    const OPTION_PERSISTENCE = 'persistence';
-    
-    
-    /**
-     * @var common_persistence_KeyValuePersistence
-     */
-    private $persistence;
-    
-    protected function getPersistence()
-    {
-        if (is_null($this->persistence)) {
-            $this->persistence = $this->getServiceLocator()->get('generis/persistences')->getPersistenceById($this->getOption(self::OPTION_PERSISTENCE));
-        }
-        return $this->persistence;
-    }
 
     /**
      * puts "something" into the cache,
@@ -71,7 +52,7 @@ class common_cache_KeyValueCache extends ConfigurableService implements common_c
             $serial = $mixed->getSerial();
         }
 
-        return $this->getPersistence()->set($serial, $mixed, $ttl);
+        return $this->getPsrSimpleCache()->set($serial, $mixed, $ttl);
     }
 
     /**
@@ -85,8 +66,8 @@ class common_cache_KeyValueCache extends ConfigurableService implements common_c
      */
     public function get($serial)
     {
-        $returnValue = $this->getPersistence()->get($serial);
-        if ($returnValue === false && !$this->has($serial)) {
+        $returnValue = $this->getPsrSimpleCache()->get($serial, false);
+        if ($returnValue === false && !$this->getPsrSimpleCache()->has($serial)) {
             $msg = "No cache entry found for '" . $serial . "'.";
             throw new common_cache_NotFoundException($msg);
         }
@@ -103,7 +84,7 @@ class common_cache_KeyValueCache extends ConfigurableService implements common_c
      */
     public function has($serial)
     {
-        return $this->getPersistence()->exists($serial);
+        return $this->getPsrSimpleCache()->has($serial);
     }
 
     /**
@@ -116,7 +97,7 @@ class common_cache_KeyValueCache extends ConfigurableService implements common_c
      */
     public function remove($serial)
     {
-        return $this->getPersistence()->del($serial);
+        return $this->getPsrSimpleCache()->delete($serial);
     }
 
     /**
@@ -128,6 +109,11 @@ class common_cache_KeyValueCache extends ConfigurableService implements common_c
      */
     public function purge()
     {
-        return $this->getPersistence()->purge();
+        return $this->getPsrSimpleCache()->clear();
+    }
+
+    protected function getPsrSimpleCache() : CacheInterface
+    {
+        return $this->getServiceLocator()->get(SimpleCache::SERVICE_ID);
     }
 }
