@@ -46,13 +46,18 @@ class common_ext_UpdateExtensions implements Action, ServiceLocatorAwareInterfac
      */
     public function __invoke($params)
     {
-        $report = new Report(Report::TYPE_INFO, 'Running extension update');
         $extManager = $this->getExtensionManager();
-        $sorted = \helpers_ExtensionHelper::sortByDependencies($extManager->getInstalledExtensions());
+        $merged = array_merge(
+            $extManager->getInstalledExtensions(),
+            $this->getMissingExtensions()
+        );
+
+        $sorted = \helpers_ExtensionHelper::sortByDependencies($merged);
+        $report = new Report(Report::TYPE_INFO, 'Running extension update');
 
         foreach ($sorted as $ext) {
             try {
-                if (!$this->getExtensionManager()->isInstalled($ext->getId())) {
+                if (!$extManager->isInstalled($ext->getId())) {
                     $installer = new \tao_install_ExtensionInstaller($ext);
                     $installer->install();
                     $report->add(new Report(Report::TYPE_SUCCESS, 'Installed ' . $ext->getName()));
@@ -127,7 +132,6 @@ class common_ext_UpdateExtensions implements Action, ServiceLocatorAwareInterfac
 
                 $report->add($versionReport);
 
-                $this->getServiceLocator()->get(SimpleCache::SERVICE_ID)->clear();
             } catch (common_ext_ManifestException $e) {
                 $report = new Report(Report::TYPE_WARNING, $e->getMessage());
                 $this->getServiceLocator()->get(SimpleCache::SERVICE_ID)->clear();
