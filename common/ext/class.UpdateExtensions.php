@@ -48,12 +48,17 @@ class common_ext_UpdateExtensions implements Action, ServiceLocatorAwareInterfac
     {
         $report = new Report(Report::TYPE_INFO, 'Running extension update');
         $extManager = $this->getExtensionManager();
-        $this->installMissingExtensions($report);
         $sorted = \helpers_ExtensionHelper::sortByDependencies($extManager->getInstalledExtensions());
 
         foreach ($sorted as $ext) {
             try {
-                $report->add($this->updateExtension($ext));
+                if (!$this->getExtensionManager()->isInstalled($ext->getId())) {
+                    $installer = new \tao_install_ExtensionInstaller($ext);
+                    $installer->install();
+                    $report->add(new Report(Report::TYPE_SUCCESS, 'Installed ' . $ext->getName()));
+                } else {
+                    $report->add($this->updateExtension($ext));
+                }
             } catch (common_ext_MissingExtensionException $ex) {
                 $report->add(new Report(Report::TYPE_ERROR, $ex->getMessage()));
                 break;
@@ -163,25 +168,6 @@ class common_ext_UpdateExtensions implements Action, ServiceLocatorAwareInterfac
             $missingExt[$extId] = $ext;
         }
         return $missingExt;
-    }
-
-    /**
-     * @param Report $report
-     * @throws common_exception_Error
-     * @throws common_ext_AlreadyInstalledException
-     * @throws common_ext_ForbiddenActionException
-     */
-    private function installMissingExtensions(Report $report)
-    {
-        $merged = array_merge($this->getMissingExtensions(), $this->getExtensionManager()->getInstalledExtensions());
-        $sorted = \helpers_ExtensionHelper::sortByDependencies($merged);
-        foreach ($sorted as $ext) {
-            if (!$this->getExtensionManager()->isInstalled($ext->getId())) {
-                $installer = new \tao_install_ExtensionInstaller($ext);
-                $installer->install();
-                $report->add(new Report(Report::TYPE_SUCCESS, 'Installed ' . $ext->getName()));
-            }
-        }
     }
 
     /**
