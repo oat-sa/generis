@@ -26,6 +26,7 @@ use oat\generis\model\data\Ontology;
 use oat\generis\persistence\sql\SchemaProviderInterface;
 use oat\generis\persistence\sql\SchemaCollection;
 use oat\generis\model\kernel\persistence\smoothsql\install\SmoothRdsModel;
+use oat\oatbox\cache\SimpleCache;
 
 /**
  * transitory model for the smooth sql implementation
@@ -45,19 +46,11 @@ class core_kernel_persistence_smoothsql_SmoothModel extends ConfigurableService 
     const DEFAULT_READ_ONLY_MODEL = 2;
 
     /**
-     * Cache service to use
-     * @var string
-     */
-    const OPTION_CACHE_SERVICE = 'cache';
-
-    /**
      * Persistence to use for the smoothmodel
      *
      * @var common_persistence_SqlPersistence
      */
     private $persistence;
-    
-    private $cache;
     
     function getResource($uri)
     {
@@ -93,15 +86,9 @@ class core_kernel_persistence_smoothsql_SmoothModel extends ConfigurableService 
         return $this->persistence;
     }
 
-    /**
-     * @return common_cache_Cache
-     */
-    public function getCache()
+    public function getCache(): SimpleCache
     {
-        if (is_null($this->cache)) {
-            $this->cache = $this->getServiceLocator()->get($this->getOption(self::OPTION_CACHE_SERVICE));
-        }
-        return $this->cache;
+        return $this->getServiceLocator()->get(SimpleCache::SERVICE_ID);
     }
 
     /**

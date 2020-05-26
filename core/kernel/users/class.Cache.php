@@ -22,6 +22,7 @@
  */
 
 use oat\oatbox\service\ServiceManager;
+use oat\oatbox\cache\SimpleCache;
 
 /**
  * A facade aiming at helping client code to put User data in the Cache memory.
@@ -63,20 +64,18 @@ class core_kernel_users_Cache
     public static function retrieveIncludedRoles(core_kernel_classes_Resource $role)
     {
         $returnValue = [];
-        try {
-            $serial = self::buildIncludedRolesSerial($role);
-            $fromCache = ServiceManager::getServiceManager()->get('generis/cache')->get($serial);
-            // array of URIs.
-
-            foreach ($fromCache as $uri) {
-                $returnValue[$uri] = new core_kernel_classes_Resource($uri);
-            }
-        } catch (common_cache_Exception $e) {
+        $serial = self::buildIncludedRolesSerial($role);
+        $fromCache = ServiceManager::getServiceManager()->get(SimpleCache::SERVICE_ID)->get($serial);
+        // array of URIs.
+        if (is_null($fromCache)) {
             $roleUri = $role->getUri();
             $msg = "Includes roles related to Role with URI '${roleUri}' is not in the Cache memory.";
             throw new core_kernel_users_CacheException($msg);
         }
-        
+
+        foreach ($fromCache as $uri) {
+            $returnValue[$uri] = new core_kernel_classes_Resource($uri);
+        }
 
         return (array) $returnValue;
     }
