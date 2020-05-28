@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,6 +19,8 @@ declare(strict_types=1);
  *
  * @license GPLv2
  */
+
+declare(strict_types=1);
 
 namespace oat\generis\model\kernel\persistence\newsql;
 
@@ -67,6 +67,14 @@ class NewSqlRdf extends core_kernel_persistence_smoothsql_SmoothRdf
         }
 
         return $success;
+    }
+
+    public function getIterator()
+    {
+        /**
+         * @FIXME @TODO WIP Only for review purposes
+         */
+        return new NewSqlIterator($this->getPersistence());
     }
 
     /**
