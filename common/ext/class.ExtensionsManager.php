@@ -55,14 +55,6 @@ class common_ext_ExtensionsManager extends ConfigurableService
     private $extensions = [];
 
     /**
-     * Singleton instance of common_ext_ExtensionsManager
-     *
-     * @access private
-     * @var common_ext_ExtensionsManager
-     */
-    private static $instance = null;
-
-    /**
      * @deprecated Use ServiceManager::get(\common_ext_ExtensionsManager::SERVICE_ID) instead
      *
      * Obtain a reference on a unique common_ext_ExtensionsManager
@@ -74,15 +66,7 @@ class common_ext_ExtensionsManager extends ConfigurableService
      */
     public static function singleton()
     {
-        if (! isset(self::$instance)) {
-            if (ServiceManager::getServiceManager()->has(self::SERVICE_ID)) {
-                self::$instance = ServiceManager::getServiceManager()->get(self::SERVICE_ID);
-            } else {
-                self::$instance = new common_ext_ExtensionsManager();
-                ServiceManager::getServiceManager()->propagate(self::$instance);
-            }
-        }
-        return self::$instance;
+        return ServiceManager::getServiceManager()->get(self::class);
     }
 
     /**
