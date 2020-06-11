@@ -27,15 +27,12 @@ class GenerisTestCase extends TestCase
 {
     use OntologyMockTrait;
 
-    /**
-     * @return FileSystemService
-     */
-    protected function getFileSystemMock($dirs = [])
+    protected function getFileSystemMock($dirs = []): FileSystemService
     {
         $adapterparam = [
             'testfs' => class_exists('League\Flysystem\Memory\MemoryAdapter')
                 ? [
-                    'class' => \League\Flysystem\Memory\MemoryAdapter::class
+                    'class' => 'League\Flysystem\Memory\MemoryAdapter'
                 ]
                 : [
                     'class' => FileSystemService::FLYSYSTEM_LOCAL_ADAPTER,

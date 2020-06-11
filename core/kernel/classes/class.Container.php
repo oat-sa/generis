@@ -26,21 +26,7 @@
  * @access public
  * @author patrick.plichart@tudor.lu
  * @package generis
-
  */
 class core_kernel_classes_Container extends common_Object
 {
-
-
-    /**
-     * Short description of method __serialize
-     *
-     * @access public
-     * @author firstname and lastname of author, <author@example.org>
-     * @return string
-     */
-    public function __serialize()
-    {
-        return 'container';
-    }
 }
