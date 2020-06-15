@@ -76,6 +76,8 @@ class PlatformTest extends TestCase
         $fromSchema = $this->createMock(Schema::class);
         $fromSchema->method('getMigrateToSql')
                    ->willReturn(["SELECT 'fake-statement1';", "SELECT 'fake-statement2'"]);
+        $fromSchema->expects($this->exactly(1))
+                   ->method('getMigrateToSql');
 
         $queryCount = $platform->migrateSchema(
             $fromSchema,
