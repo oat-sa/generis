@@ -495,11 +495,10 @@ class common_ext_Extension implements ServiceManagerAwareInterface
     }
 
     /**
-     * @return common_ext_ExtensionUpdater
      * @throws common_ext_ManifestException
      * @throws common_ext_ManifestNotFoundException
      */
-    public function getUpdater()
+    public function getUpdater(): common_ext_ExtensionUpdater
     {
         $updaterClass = $this->getManifest()->getUpdateHandler();
         if ($updaterClass === null) {
