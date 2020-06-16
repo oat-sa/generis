@@ -493,4 +493,23 @@ class common_ext_Extension implements ServiceManagerAwareInterface
         }
         return null;
     }
+
+    /**
+     * @return common_ext_ExtensionUpdater
+     * @throws common_ext_ManifestException
+     * @throws common_ext_ManifestNotFoundException
+     */
+    public function getUpdater()
+    {
+        $updaterClass = $this->getManifest()->getUpdateHandler();
+        if ($updaterClass === null) {
+            throw new \common_ext_ManifestException('No Updater found for  ' . $this->getName());
+        } elseif (!class_exists($updaterClass)) {
+            throw new \common_ext_ManifestException('Updater ' . $updaterClass . ' not found');
+        }
+        /** @var common_ext_ExtensionUpdater $updater */
+        $updater = new $updaterClass($this);
+        $updater->setServiceLocator($this->getServiceLocator());
+        return $updater;
+    }
 }

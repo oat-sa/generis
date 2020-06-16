@@ -80,7 +80,7 @@ class common_ext_UpdateExtensions implements Action, ServiceLocatorAwareInterfac
         }
         $postUpdateReport = new Report(Report::TYPE_INFO, 'Post update actions:');
         foreach ($sorted as $ext) {
-            $postUpdateExtensionReport = $this->getUpdater($ext)->postUpdate();
+            $postUpdateExtensionReport = $ext->getUpdater()->postUpdate();
             if ($postUpdateExtensionReport) {
                 $postUpdateReport->add($postUpdateExtensionReport);
             }
@@ -110,7 +110,7 @@ class common_ext_UpdateExtensions implements Action, ServiceLocatorAwareInterfac
         if ($installed !== $codeVersion) {
             $report = new Report(Report::TYPE_INFO, $ext->getName() . ' requires update from ' . $installed . ' to ' . $codeVersion);
             try {
-                $updater = $this->getUpdater($ext);
+                $updater = $ext->getUpdater();
                 $returnedVersion = $updater->update($installed);
                 $currentVersion = $this->getExtensionManager()->getInstalledVersion($ext->getId());
 
@@ -140,26 +140,6 @@ class common_ext_UpdateExtensions implements Action, ServiceLocatorAwareInterfac
             $report = new Report(Report::TYPE_INFO, $ext->getName() . ' already up to date');
         }
         return $report;
-    }
-
-    /**
-     * @param common_ext_Extension $ext
-     * @return common_ext_ExtensionUpdater
-     * @throws common_ext_ManifestException
-     * @throws common_ext_ManifestNotFoundException
-     */
-    protected function getUpdater(common_ext_Extension $ext)
-    {
-        $updaterClass = $ext->getManifest()->getUpdateHandler();
-        if ($updaterClass === null) {
-            throw new \common_ext_ManifestException('No Updater found for  ' . $ext->getName());
-        } elseif (!class_exists($updaterClass)) {
-            throw new \common_ext_ManifestException('Updater ' . $updaterClass . ' not found');
-        }
-        /** @var common_ext_ExtensionUpdater $updater */
-        $updater = new $updaterClass($ext);
-        $updater->setServiceLocator($this->getServiceLocator());
-        return $updater;
     }
 
     protected function getMissingExtensions()
