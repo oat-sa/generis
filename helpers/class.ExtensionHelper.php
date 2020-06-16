@@ -53,7 +53,7 @@ class helpers_ExtensionHelper
      *
      * @param array $extensions
      * @throws common_exception_Error
-     * @return array
+     * @return common_ext_Extension[]
      */
     public static function sortByDependencies($extensions)
     {
