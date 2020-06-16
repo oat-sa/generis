@@ -29,8 +29,9 @@ use oat\oatbox\service\ServiceManager;
 use oat\oatbox\filesystem\FileSystemService;
 use oat\oatbox\service\ServiceNotFoundException;
 use common_report_Report as Report;
+use League\Flysystem\Memory\MemoryAdapter;
 
- /**
+/**
  * A service to install oatbox functionality
  *
  * Sets up:
@@ -103,6 +104,9 @@ class Installer extends ConfigurableService
                         'options' => [
                             'root' => $this->getOption('file_path')
                         ]
+                    ],
+                    'memory' => [
+                        'class' => MemoryAdapter::class
                     ]
                 ]
             ]);

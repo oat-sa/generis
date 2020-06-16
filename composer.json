@@ -61,6 +61,7 @@
     "doctrine/annotations": "~1.6.0",
     "zendframework/zend-servicemanager": "~2.5.0",
     "league/flysystem": "~1.0",
+    "league/flysystem-memory": "~1.0",
     "oat-sa/oatbox-extension-installer": "~1.1||dev-master",
     "oat-sa/lib-generis-search": "2.1.2",
     "monolog/monolog": "^1.23.0",
