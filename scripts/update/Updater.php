@@ -39,6 +39,7 @@ use oat\generis\model\kernel\persistence\smoothsql\search\ComplexSearchService;
 use oat\generis\model\kernel\uri\UriProvider;
 use oat\generis\model\user\AuthAdapter;
 use oat\generis\model\user\UserFactoryService;
+use oat\generis\model\WidgetRdf;
 use oat\generis\persistence\PersistenceManager;
 use oat\oatbox\action\ActionService;
 use oat\oatbox\cache\KeyValueCache;
@@ -528,9 +529,10 @@ class Updater extends common_ext_ExtensionUpdater
         $this->skip('12.23.0', '12.26.1');
 
         if ($this->isVersion('12.26.1')) {
-            $widgetDefinitionsFilePath =  __DIR__ . '/../../core/ontology/widgetdefinitions.rdf';
-            $api = core_kernel_impl_ApiModelOO::singleton();
-            $api->importXmlRdf('http://www.tao.lu/datatypes/WidgetDefinitions.rdf', $widgetDefinitionsFilePath);
+            core_kernel_impl_ApiModelOO::singleton()->importXmlRdf(
+                WidgetRdf::NAMESPACE,
+                __DIR__ . '/../../core/ontology/widgetdefinitions.rdf'
+            );
 
             $this->setVersion('12.27.0');
         }
