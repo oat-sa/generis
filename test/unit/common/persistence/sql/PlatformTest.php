@@ -22,6 +22,7 @@ namespace oat\generis\test\unit\common\persistence\sql\dbal;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
+use Doctrine\DBAL\Schema\Schema;
 use oat\generis\test\TestCase;
 use oat\generis\test\MockObject;
 
@@ -67,6 +68,23 @@ class PlatformTest extends TestCase
         $platform = new \common_persistence_sql_Platform($dbalConnection);
         $datetime = (new \DateTime('now', new \DateTimeZone('UTC')))->format($format);
         $this->assertEquals($datetime, $platform->getNowExpression());
+    }
+
+    public function testMigrateSchemaNoChanges()
+    {
+        $platform = $this->createInstance();
+        $fromSchema = $this->createMock(Schema::class);
+        $fromSchema->method('getMigrateToSql')
+                   ->willReturn(["SELECT 'fake-statement1';", "SELECT 'fake-statement2'"]);
+        $fromSchema->expects($this->exactly(1))
+                   ->method('getMigrateToSql');
+
+        $queryCount = $platform->migrateSchema(
+            $fromSchema,
+            $this->createMock(Schema::class)
+        );
+
+        $this->assertEquals(2, $queryCount);
     }
 
     /**
