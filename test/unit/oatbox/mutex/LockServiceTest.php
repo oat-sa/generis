@@ -39,7 +39,8 @@ class LockServiceTest extends TestCase
 
     public function testLock()
     {
-        $dir = \tao_helpers_File::createTempDir();
+        $dir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . "generis_unittest_" . mt_rand() . DIRECTORY_SEPARATOR;
+        mkdir($dir);
         $actionId1 = 'action_1';
         $actionId2 = 'action_2';
         $sleep = 3;
