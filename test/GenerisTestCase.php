@@ -22,6 +22,7 @@
 namespace oat\generis\test;
 
 use oat\oatbox\filesystem\FileSystemService;
+use League\Flysystem\Memory\MemoryAdapter;
 
 class GenerisTestCase extends TestCase
 {
@@ -30,14 +31,9 @@ class GenerisTestCase extends TestCase
     protected function getFileSystemMock($dirs = []): FileSystemService
     {
         $adapterparam = [
-            'testfs' => class_exists('League\Flysystem\Memory\MemoryAdapter')
-                ? [
-                    'class' => 'League\Flysystem\Memory\MemoryAdapter'
-                ]
-                : [
-                    'class' => FileSystemService::FLYSYSTEM_LOCAL_ADAPTER,
-                    'options' => ['root' => \tao_helpers_File::createTempDir()]
-                ]
+            'testfs' => [
+                'class' => MemoryAdapter::class
+            ]
         ];
         $dirparam = [];
         foreach ($dirs as $dir) {
