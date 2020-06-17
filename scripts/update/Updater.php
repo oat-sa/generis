@@ -512,7 +512,6 @@ class Updater extends common_ext_ExtensionUpdater
 
             $this->setVersion('12.21.0');
         }
-
         $this->skip('12.21.0', '12.22.1');
 
         if ($this->isVersion('12.22.1')) {
@@ -526,7 +525,7 @@ class Updater extends common_ext_ExtensionUpdater
             $this->setVersion('12.23.0');
         }
 
-        $this->skip('12.23.0', '12.24.0');
+        $this->skip('12.23.0', '12.26.0');
     }
 
     /**
