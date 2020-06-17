@@ -766,10 +766,4 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
         $eventManager = $this->getServiceManager()->get(EventManager::SERVICE_ID);
         $eventManager->trigger(new ResourceUpdated($this));
     }
-
-    public function __serialize()
-    {
-        common_Logger::w('Resource '.$this->getUri().' should not be serialized');
-        return ['uriResource' => $this->getUri()];
-    }
 }

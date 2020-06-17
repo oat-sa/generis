@@ -29,4 +29,13 @@
  */
 class core_kernel_classes_Container extends common_Object
 {
+    /**
+     * Please serialize the value or the URI but not the resource or literal itself
+     * @deprecated
+     * @throws common_exception_NotImplemented
+     */
+    public function __serialize()
+    {
+        throw new common_exception_NotImplemented('Do not serialize resources or literals');
+    }
 }

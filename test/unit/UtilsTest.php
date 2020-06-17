@@ -24,6 +24,7 @@ error_reporting(E_ALL);
 
 use oat\generis\test\TestCase;
 use Prophecy\Prophet;
+use oat\generis\model\user\AuthAdapter;
 
 /**
  *
@@ -70,7 +71,7 @@ class generis_test_UtilsTest extends TestCase
     {
         $toSerialize = [
             'a' => "te\0st \\ ",
-            'b' => new core_kernel_classes_Resource('doesnotexist'),
+            'b' => new AuthAdapter(),
             'c' => [
                 '1', '2', [common_user_auth_Service::singleton()]
             ],
