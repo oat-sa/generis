@@ -99,8 +99,14 @@ class PersistenceManagerTest extends TestCase
 
     public function testAddSchema()
     {
+        $serviceClass = new class implements SchemaProviderInterface {
+            public function provideSchema(SchemaCollection $schemaCollection)
+            {
+                $schemaCollection->getSchema('sql1')->createTable('serviceTable');
+            }
+        };
         $this->assertFalse($this->pm->getSqlSchemas()->getSchema('sql1')->hasTable('serviceTable'));
-        $this->pm->addSchema(new UnitTestService());
+        $this->pm->addSchema(new $serviceClass());
         $this->assertTrue($this->pm->getSqlSchemas()->getSchema('sql1')->hasTable('serviceTable'));
     }
 
@@ -115,13 +121,5 @@ class PersistenceManagerTest extends TestCase
                 'url' => 'sqlite:///:memory:'
             ]
         ];
-    }
-}
-
-class UnitTestService implements SchemaProviderInterface
-{
-    public function provideSchema(SchemaCollection $schemaCollection)
-    {
-        $schemaCollection->getSchema('sql1')->createTable('serviceTable');
     }
 }
