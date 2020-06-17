@@ -25,6 +25,7 @@ use oat\generis\persistence\PersistenceManager;
 use oat\generis\persistence\sql\SchemaCollection;
 use Doctrine\DBAL\Schema\Schema;
 use oat\oatbox\log\LoggerService;
+use oat\generis\persistence\sql\SchemaProviderInterface;
 
 class PersistenceManagerTest extends TestCase
 {
@@ -96,6 +97,13 @@ class PersistenceManagerTest extends TestCase
         $this->assertFalse($this->pm->getSqlSchemas()->getSchema('sql2')->hasTable('sample_table'));
     }
 
+    public function testAddSchema()
+    {
+        $this->assertFalse($this->pm->getSqlSchemas()->getSchema('sql1')->hasTable('serviceTable'));
+        $this->pm->addSchema(new UnitTestService());
+        $this->assertTrue($this->pm->getSqlSchemas()->getSchema('sql1')->hasTable('serviceTable'));
+    }
+
     protected function getSqlConfig()
     {
         if (!extension_loaded('pdo_sqlite')) {
@@ -107,5 +115,13 @@ class PersistenceManagerTest extends TestCase
                 'url' => 'sqlite:///:memory:'
             ]
         ];
+    }
+}
+
+class UnitTestService implements SchemaProviderInterface
+{
+    public function provideSchema(SchemaCollection $schemaCollection)
+    {
+        $schemaCollection->getSchema('sql1')->createTable('serviceTable');
     }
 }

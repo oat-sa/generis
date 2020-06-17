@@ -23,6 +23,7 @@ namespace oat\generis\persistence;
 use oat\oatbox\service\ConfigurableService;
 use oat\generis\persistence\sql\SchemaCollection;
 use common_persistence_SqlPersistence;
+use oat\generis\persistence\sql\SchemaProviderInterface;
 
 /**
  * The PersistenceManager is responsible for initializing all persistences
@@ -162,6 +163,21 @@ class PersistenceManager extends ConfigurableService
             foreach ($queries as $query) {
                 $persistence->exec($query);
             }
+        }
+    }
+
+    /**
+     * Add the schema of a single service, if needed
+     */
+    public function addSchema($service): void
+    {
+        if ($service instanceof SchemaProviderInterface) {
+            $schemaCollection = $this->getSqlSchemas();
+            $service->provideSchema($schemaCollection);
+            $this->applySchemas($schemaCollection);
+            $this->logInfo('Applied schema for '.get_class($service));
+        } else {
+            $this->logDebug('No schema found for '.get_class($service));
         }
     }
 }
