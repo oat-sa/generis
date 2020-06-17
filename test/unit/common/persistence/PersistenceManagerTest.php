@@ -55,7 +55,10 @@ class PersistenceManagerTest extends TestCase
 
     public function tearDown(): void
     {
-        \helpers_File::remove($this->path);
+        // path is only created if persistence was used
+        if (file_exists($this->path)) {
+            \helpers_File::remove($this->path);
+        }
     }
 
     public function testGetSchema()
