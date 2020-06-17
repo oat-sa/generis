@@ -36,7 +36,7 @@ cat > build/composer.json <<- composerjson
       }
     ],
 composerjson
-tail -n +2 build/dependencies.json >> build/composer.json                        '''
+tail -n +2 build/dependencies.json >> build/composer.json
                         '''
                     )
                 }
