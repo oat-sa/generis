@@ -23,7 +23,6 @@ namespace oat\generis\test;
 
 use League\Flysystem\Memory\MemoryAdapter;
 use oat\oatbox\filesystem\FileSystemService;
-use oat\oatbox\service\ServiceManager;
 
 trait FileSystemMockTrait
 {
