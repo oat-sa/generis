@@ -21,27 +21,8 @@
 
 namespace oat\generis\test;
 
-use oat\oatbox\filesystem\FileSystemService;
-use League\Flysystem\Memory\MemoryAdapter;
-
 class GenerisTestCase extends TestCase
 {
     use OntologyMockTrait;
-
-    protected function getFileSystemMock($dirs = []): FileSystemService
-    {
-        $adapterparam = [
-            'testfs' => [
-                'class' => MemoryAdapter::class
-            ]
-        ];
-        $dirparam = [];
-        foreach ($dirs as $dir) {
-            $dirparam[$dir] = 'testfs';
-        }
-        return new FileSystemService([
-            FileSystemService::OPTION_ADAPTERS => $adapterparam,
-            FileSystemService::OPTION_DIRECTORIES => $dirparam
-        ]);
-    }
+    use FileSystemMockTrait;
 }
