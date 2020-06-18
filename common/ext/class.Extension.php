@@ -502,7 +502,7 @@ class common_ext_Extension implements ServiceManagerAwareInterface
     {
         $updaterClass = $this->getManifest()->getUpdateHandler();
         if ($updaterClass === null) {
-            throw new \common_ext_ManifestException('No Updater found for  ' . $this->getName());
+            throw new \common_ext_ManifestException('No Updater found for ' . $this->getName());
         } elseif (!class_exists($updaterClass)) {
             throw new \common_ext_ManifestException('Updater ' . $updaterClass . ' not found');
         }

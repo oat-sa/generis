@@ -136,9 +136,9 @@ class common_ext_UpdateExtensions implements Action, ServiceLocatorAwareInterfac
 
                 $report->add($versionReport);
 
+                $this->getServiceLocator()->get(SimpleCache::SERVICE_ID)->clear();
             } catch (common_ext_ManifestException $e) {
                 $report = new Report(Report::TYPE_WARNING, $e->getMessage());
-                $this->getServiceLocator()->get(SimpleCache::SERVICE_ID)->clear();
             }
         } else {
             $report = new Report(Report::TYPE_INFO, $ext->getName() . ' already up to date');
