@@ -25,6 +25,11 @@ use common_ext_Extension as Extension;
 class AdvKeyValuePersistenceTest extends TestCase
 {
 
+    /**
+     * @runInSeparateProcess
+     * @throws \common_ext_ManifestException
+     * @throws \common_ext_ManifestNotFoundException
+     */
     public function testGetUpdater()
     {
         define('EXTENSION_PATH', __DIR__.DIRECTORY_SEPARATOR.'samples'.DIRECTORY_SEPARATOR);
