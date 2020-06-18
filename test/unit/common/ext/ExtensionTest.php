@@ -22,7 +22,7 @@ namespace oat\generis\test\unit\common\ext;
 use oat\generis\test\TestCase;
 use common_ext_Extension as Extension;
 
-class AdvKeyValuePersistenceTest extends TestCase
+class ExtensionTest extends TestCase
 {
 
     /**
@@ -32,8 +32,18 @@ class AdvKeyValuePersistenceTest extends TestCase
      */
     public function testGetUpdater()
     {
-        define('EXTENSION_PATH', __DIR__.DIRECTORY_SEPARATOR.'samples'.DIRECTORY_SEPARATOR);
-        $ext = new Extension('foo');
+        $dir = __DIR__.DIRECTORY_SEPARATOR.'samples'.DIRECTORY_SEPARATOR;
+        $ext = new class ('foo', $dir) extends Extension {
+            private $dir;
+            public function __construct($id, $dir) {
+                parent::__construct($id);
+                $this->dir = $dir;
+            }
+            public function getDir()
+            {
+                return $this->dir.$this->getId().DIRECTORY_SEPARATOR;
+            }
+        };
         $ext->setServiceLocator($this->getServiceLocatorMock([]));
         $this->assertInstanceOf(\common_ext_ExtensionUpdater::class, $ext->getUpdater());
     }
