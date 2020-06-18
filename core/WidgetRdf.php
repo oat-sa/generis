@@ -23,19 +23,20 @@ namespace oat\generis\model;
 
 interface WidgetRdf
 {
-    const CLASS_URI_WIDGET = 'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#WidgetClass';
-    const PROPERTY_WIDGET = 'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#widget';
-    const PROPERTY_WIDGET_RADIO = 'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#RadioBox';
-    const PROPERTY_WIDGET_COMBO = 'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#ComboBox';
-    const PROPERTY_WIDGET_CHECK = 'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#CheckBox';
-    const PROPERTY_WIDGET_FTE = 'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#TextBox';
-    const PROPERTY_WIDGET_TIMER = 'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#Timer';
-    const PROPERTY_WIDGET_TREEVIEW = 'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#TreeView';
-    const PROPERTY_WIDGET_LABEL = 'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#Label';
-    const PROPERTY_WIDGET_CONSTRAINT_TYPE = 'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#rangeConstraintTypes';
-    const PROPERTY_WIDGET_ID = 'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#identifier';
-    const CLASS_URI_WIDGET_RENDERER = 'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#WidgetRenderer';
-    const PROPERTY_WIDGET_RENDERER_WIDGET = 'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#renderedWidget';
-    const PROPERTY_WIDGET_RENDERER_MODE = 'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#renderMode';
-    const PROPERTY_WIDGET_RENDERER_IMPLEMENTATION = 'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#implementation';
+    public const CLASS_URI_WIDGET                        = 'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#WidgetClass';
+    public const PROPERTY_WIDGET                         = 'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#widget';
+    public const PROPERTY_WIDGET_RADIO                   = 'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#RadioBox';
+    public const PROPERTY_WIDGET_COMBO                   = 'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#ComboBox';
+    public const PROPERTY_WIDGET_CHECK                   = 'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#CheckBox';
+    public const PROPERTY_WIDGET_FTE                     = 'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#TextBox';
+    public const PROPERTY_WIDGET_SEARCH_BOX              = 'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#SearchTextBox';
+    public const PROPERTY_WIDGET_TIMER                   = 'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#Timer';
+    public const PROPERTY_WIDGET_TREEVIEW                = 'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#TreeView';
+    public const PROPERTY_WIDGET_LABEL                   = 'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#Label';
+    public const PROPERTY_WIDGET_CONSTRAINT_TYPE         = 'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#rangeConstraintTypes';
+    public const PROPERTY_WIDGET_ID                      = 'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#identifier';
+    public const CLASS_URI_WIDGET_RENDERER               = 'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#WidgetRenderer';
+    public const PROPERTY_WIDGET_RENDERER_WIDGET         = 'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#renderedWidget';
+    public const PROPERTY_WIDGET_RENDERER_MODE           = 'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#renderMode';
+    public const PROPERTY_WIDGET_RENDERER_IMPLEMENTATION = 'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#implementation';
 }

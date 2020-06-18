@@ -526,6 +526,18 @@ class Updater extends common_ext_ExtensionUpdater
         }
 
         $this->skip('12.23.0', '12.26.1');
+
+        if ($this->isVersion('12.26.1')) {
+            $file = __DIR__ . DIRECTORY_SEPARATOR .
+                '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR .
+                'core' . DIRECTORY_SEPARATOR .
+                'ontology' . DIRECTORY_SEPARATOR .
+                'widgetdefinitions.rdf';
+            $api = core_kernel_impl_ApiModelOO::singleton();
+            $api->importXmlRdf('http://www.tao.lu/datatypes/WidgetDefinitions.rdf', $file);
+
+            $this->setVersion('12.27.0');
+        }
     }
 
     /**
