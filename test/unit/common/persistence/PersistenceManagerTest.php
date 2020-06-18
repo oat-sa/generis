@@ -34,21 +34,32 @@ class PersistenceManagerTest extends TestCase
      */
     private $pm;
 
+    private $path;
+
     public function setUp(): void
     {
+        $this->path = sys_get_temp_dir() . DIRECTORY_SEPARATOR . "generis_unittest_" . mt_rand() . DIRECTORY_SEPARATOR;
         $this->pm = new PersistenceManager([
             PersistenceManager::OPTION_PERSISTENCES => [
                 'sql1' => $this->getSqlConfig(),
                 'sql2' => $this->getSqlConfig(),
                 'notsql' => [
                     'driver' => 'phpfile',
-                    'dir' => \tao_helpers_File::createTempDir()
+                    'dir' => $this->path
                 ]
             ]
         ]);
         $this->pm->setServiceLocator($this->getServiceLocatorMock([
             LoggerService::SERVICE_ID => $this->createMock(LoggerService::class)
         ]));
+    }
+
+    public function tearDown(): void
+    {
+        // path is only created if persistence was used
+        if (file_exists($this->path)) {
+            \helpers_File::remove($this->path);
+        }
     }
 
     public function testGetSchema()
