@@ -538,6 +538,22 @@ class Updater extends common_ext_ExtensionUpdater
         }
 
         $this->skip('12.27.0', '12.28.0');
+
+        if ($this->isVersion('12.28.0')) {
+            $this->removeDuplicates();
+            $this->setVersion('12.28.1');
+        }
+    }
+    
+    protected function removeDuplicates(): void
+    {
+        $model = new \common_ext_ExtensionModel($this->getExtension());
+        $ontology = $this->getServiceLocator()->get(Ontology::SERVICE_ID);
+        foreach ($model as $triple) {
+            $ontology->getRdfInterface()->remove($triple);
+            $ontology->getRdfInterface()->add($triple);
+        }
+        
     }
 
     /**
