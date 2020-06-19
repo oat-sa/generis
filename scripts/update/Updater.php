@@ -60,6 +60,7 @@ use oat\oatbox\task\TaskRunner;
 use oat\oatbox\user\UserLanguageService;
 use oat\taoWorkspace\model\generis\WrapperModel;
 use Psr\Log\LoggerInterface;
+use oat\generis\model\kernel\persistence\file\FileIterator;
 
 /**
  * @author Joel Bout <joel@taotesting.com>
@@ -540,20 +541,18 @@ class Updater extends common_ext_ExtensionUpdater
         $this->skip('12.27.0', '12.28.0');
 
         if ($this->isVersion('12.28.0')) {
-            $this->removeDuplicates();
+            $this->removeDuplicates(new FileIterator(__DIR__ . '/../../core/ontology/widgetdefinitions.rdf'));
             $this->setVersion('12.28.1');
         }
     }
     
-    protected function removeDuplicates(): void
+    protected function removeDuplicates(\Traversable $triples): void
     {
-        $model = new \common_ext_ExtensionModel($this->getExtension());
-        $ontology = $this->getServiceLocator()->get(Ontology::SERVICE_ID);
-        foreach ($model as $triple) {
-            $ontology->getRdfInterface()->remove($triple);
-            $ontology->getRdfInterface()->add($triple);
+        $rdfModel = $this->getServiceLocator()->get(Ontology::SERVICE_ID)->getRdfInterface();
+        foreach ($triples as $triple) {
+            $rdfModel->remove($triple);
         }
-        
+        $rdfModel->addTripleCollection($triples);
     }
 
     /**
