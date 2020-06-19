@@ -60,6 +60,8 @@ use oat\oatbox\task\TaskRunner;
 use oat\oatbox\user\UserLanguageService;
 use oat\taoWorkspace\model\generis\WrapperModel;
 use Psr\Log\LoggerInterface;
+use oat\generis\model\kernel\persistence\file\FileIterator;
+use Traversable;
 
 /**
  * @author Joel Bout <joel@taotesting.com>
@@ -538,6 +540,27 @@ class Updater extends common_ext_ExtensionUpdater
         }
 
         $this->skip('12.27.0', '12.28.0');
+
+        if ($this->isVersion('12.28.0')) {
+            $this->removeDuplicates(new FileIterator(__DIR__ . '/../../core/ontology/widgetdefinitions.rdf'));
+            $this->setVersion('12.28.1');
+        }
+    }
+
+    /**
+     * Helper for the unfortunate scenario where we generated duplicate
+     * entries in the statement table.
+     *
+     * Fixes the duplicates by removing all matching triples and then
+     * readding them only once
+     */
+    protected function removeDuplicates(Traversable $triples): void
+    {
+        $rdfModel = $this->getServiceLocator()->get(Ontology::SERVICE_ID)->getRdfInterface();
+        foreach ($triples as $triple) {
+            $rdfModel->remove($triple);
+        }
+        $rdfModel->addTripleCollection($triples);
     }
 
     /**
