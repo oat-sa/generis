@@ -65,6 +65,7 @@ use Traversable;
 
 /**
  * @author Joel Bout <joel@taotesting.com>
+ * @deprecated use migrations instead. See https://github.com/oat-sa/generis/wiki/Tao-Update-Process
  */
 class Updater extends common_ext_ExtensionUpdater
 {
@@ -545,6 +546,11 @@ class Updater extends common_ext_ExtensionUpdater
             $this->removeDuplicates(new FileIterator(__DIR__ . '/../../core/ontology/widgetdefinitions.rdf'));
             $this->setVersion('12.28.1');
         }
+        
+        //Updater files are deprecated. Please use migrations.
+        //See: https://github.com/oat-sa/generis/wiki/Tao-Update-Process
+
+        $this->setVersion($this->getExtension()->getManifest()->getVersion());
     }
 
     /**
