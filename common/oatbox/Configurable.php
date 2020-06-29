@@ -83,18 +83,19 @@ abstract class Configurable implements PhpSerializable, TaoLoggerAwareInterface
     {
         return isset($this->options[$name]);
     }
-    
+
     /**
      * Get an option value by name
      *
-     * If the option is empty or not set a NULL value will be returned.
+     * If the option is not set a default value will be returned.
      *
-     * @param  string $name
+     * @param string        $name
+     * @param mixed|null    $default Default value to return if option is not set.
      * @return mixed
-    */
-    public function getOption($name)
+     */
+    public function getOption($name, $default = null)
     {
-        return isset($this->options[$name]) ? $this->options[$name] : null;
+        return $this->options[$name] ?? $default;
     }
     
     /**
