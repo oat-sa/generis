@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,12 +20,13 @@
  *               2017      (update and modification) Open Assessment Technologies SA;
  *
  */
+
 use oat\generis\test\TestCase;
 
 class FileHelperTest extends TestCase
 {
 
-    protected function setUp()
+    protected function setUp(): void
     {
     }
 
@@ -69,7 +71,7 @@ class FileHelperTest extends TestCase
      */
     public function testScandir($toScan, $expectedResult, $recursive = false, $absolute = false)
     {
-        $result = helpers_File::scanDir($toScan, array('recursive' => $recursive, 'absolute' => $absolute, 'only' => helpers_File::SCAN_FILE));
+        $result = helpers_File::scanDir($toScan, ['recursive' => $recursive, 'absolute' => $absolute, 'only' => helpers_File::SCAN_FILE]);
         $this->assertEquals(count($expectedResult), count($result));
         // The order might vary depending on the file system implementation...
         foreach ($expectedResult as $expected) {
@@ -81,9 +83,9 @@ class FileHelperTest extends TestCase
     {
         $ds = DIRECTORY_SEPARATOR;
 
-        return array(
-            array(dirname(__FILE__) . $ds . '..' . $ds . 'samples' . $ds . 'scandir', array('1', '2')),
-        );
+        return [
+            [dirname(__FILE__) . $ds . '..' . $ds . 'samples' . $ds . 'scandir', ['1', '2']],
+        ];
     }
 
     /**
@@ -101,39 +103,38 @@ class FileHelperTest extends TestCase
 
     public function containsFileTypeProvider()
     {
-        return array(
-            array(dirname(__FILE__), 'php', true, true),
-            array(dirname(__FILE__), 'php', false, true),
-            array(dirname(__FILE__), 'js', true, false),
-            array(dirname(__FILE__), 'js', false, false),
-            array(dirname(__FILE__) . '/..', 'rdf', false, false),
-            array(dirname(__FILE__) . '/..', 'rdf', true, true),
+        return [
+            [dirname(__FILE__), 'php', true, true],
+            [dirname(__FILE__), 'php', false, true],
+            [dirname(__FILE__), 'js', true, false],
+            [dirname(__FILE__), 'js', false, false],
+            [dirname(__FILE__) . '/..', 'rdf', false, false],
+            [dirname(__FILE__) . '/..', 'rdf', true, true],
 
             // edge cases.
             // - unexisting directory.
-            array(dirname(__FILE__) . '/foo', 'php', false, false),
-            array(dirname(__FILE__) . '/foo', 'php', true, false),
+            [dirname(__FILE__) . '/foo', 'php', false, false],
+            [dirname(__FILE__) . '/foo', 'php', true, false],
             // - scan a file.
-            array(dirname(__FILE__) . '/../index.php', 'php', false, false),
-            array(dirname(__FILE__) . '/../index.php', 'php', true, false),
-        );
+            [dirname(__FILE__) . '/../index.php', 'php', false, false],
+            [dirname(__FILE__) . '/../index.php', 'php', true, false],
+        ];
     }
 
     public function testUrlToPath()
     {
         $path = DIRECTORY_SEPARATOR . 'style' . DIRECTORY_SEPARATOR . 'custom' . DIRECTORY_SEPARATOR . 'tao-user-styles.css';
 
-        $urls = array(
+        $urls = [
             '/style/custom/tao-user-styles.css',
             'http://ex.com/style/custom/tao-user-styles.css',
             'https://ex.com/style/custom/tao-user-styles.css',
             'file://c/style/custom/tao-user-styles.css',
             'file://D:/style/custom/tao-user-styles.css',
-        );
+        ];
 
         foreach ($urls as $url) {
             $this->assertEquals(helpers_File::urlToPath($url), $path);
         }
     }
 }
-	

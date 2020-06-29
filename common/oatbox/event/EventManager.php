@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,6 +22,8 @@
 namespace oat\oatbox\event;
 
 use oat\oatbox\service\ConfigurableService;
+use oat\oatbox\service\ServiceNotFoundException;
+
 /**
  * The simple placeholder ServiceManager
  * @author Joel Bout <joel@taotesting.com>
@@ -38,18 +41,23 @@ class EventManager extends ConfigurableService
     
     /**
      * Dispatch an event and trigger its listeners
-     * 
+     *
      * @param mixed $event either an Event object or a string
      * @param array $params
      */
-    public function trigger($event, $params = array()) {
+    public function trigger($event, $params = [])
+    {
         $eventObject = is_object($event) ? $event : new GenericEvent($event, $params);
         foreach ($this->getListeners($eventObject) as $callback) {
             if (is_array($callback) && count($callback) == 2) {
                 list($key, $function) = $callback;
-                if (is_string($key) && !class_exists($key) && $this->getServiceManager()->has($key)) {
-                    $service = $this->getServiceManager()->get($key);
-                    $callback = [$service, $function];
+                if (is_string($key)) {
+                    try {
+                        $service = $this->getServiceManager()->get($key);
+                        $callback = [$service, $function];
+                    } catch (ServiceNotFoundException $e) {
+                        //do nothing
+                    }
                 }
             }
             call_user_func($callback, $eventObject);
@@ -58,17 +66,18 @@ class EventManager extends ConfigurableService
     
     /**
      * Attach a Listener to one or multiple events
-     * 
+     *
      * @param mixed $event either an Event object or a string
-     * @param Callable $callback
+     * @param callable $callback
      */
-    public function attach($event, $callback) {
-        $events = is_array($event) ? $event : array($event);
+    public function attach($event, $callback)
+    {
+        $events = is_array($event) ? $event : [$event];
         $listeners = $this->getOption(self::OPTION_LISTENERS);
         foreach ($events as $event) {
             $eventObject = is_object($event) ? $event : new GenericEvent($event);
             if (!isset($listeners[$eventObject->getName()])) {
-                $listeners[$eventObject->getName()] = array();
+                $listeners[$eventObject->getName()] = [];
             }
 
             if (!in_array($callback, $listeners[$eventObject->getName()], true)) {
@@ -85,11 +94,12 @@ class EventManager extends ConfigurableService
      * @param callable $callback
      * @return array
      */
-    protected function removeListener(array $listeners , $eventObject , $callback) {
+    protected function removeListener(array $listeners, $eventObject, $callback)
+    {
         if (isset($listeners[$eventObject->getName()])) {
             if (($index = array_search($callback, $listeners[$eventObject->getName()])) !== false) {
                 unset($listeners[$eventObject->getName()][$index]);
-                if(empty($listeners[$eventObject->getName()])) {
+                if (empty($listeners[$eventObject->getName()])) {
                     unset($listeners[$eventObject->getName()]);
                 } else {
                     $listeners[$eventObject->getName()] = array_values($listeners[$eventObject->getName()]);
@@ -106,8 +116,9 @@ class EventManager extends ConfigurableService
      * @param mixed $event either an Event object or a string
      * @param Callable $callback
      */
-    public function detach($event, $callback){
-        $events = is_array($event) ? $event : array($event);
+    public function detach($event, $callback)
+    {
+        $events = is_array($event) ? $event : [$event];
         $listeners = $this->getOption(self::OPTION_LISTENERS);
         foreach ($events as $event) {
             $eventObject = is_object($event) ? $event : new GenericEvent($event);
@@ -118,14 +129,15 @@ class EventManager extends ConfigurableService
     
     /**
      * Get all Listeners listening to this kind of event
-     * 
+     *
      * @param Event $eventObject
      * @return Callable[] listeners associated with this event
      */
-    protected function getListeners(Event $eventObject) {
+    protected function getListeners(Event $eventObject)
+    {
         $listeners = $this->getOption(self::OPTION_LISTENERS);
         return isset($listeners[$eventObject->getName()])
             ? $listeners[$eventObject->getName()]
-            : array();
+            : [];
     }
 }

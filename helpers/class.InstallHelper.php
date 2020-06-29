@@ -50,67 +50,70 @@ class helpers_InstallHelper
     }
 
     /**
-     * 
+     *
      * @param array $extensionIDs
      * @param array $installData
      * @throws common_exception_Error
      * @throws common_ext_ExtensionException
      * @return array installed extensions ids
      */
-    public static function installRecursively($extensionIDs, $installData=array())
+    public static function installRecursively($extensionIDs, $installData = [])
     {
-		$toInstall = array();
-		$installed = array();
-		foreach ($extensionIDs as $id) {
-			$ext = common_ext_ExtensionsManager::singleton()->getExtensionById($id);
-			
-			if (!common_ext_ExtensionsManager::singleton()->isInstalled($ext->getId())) {
-			    static::log('d', 'Extension ' . $id . ' needs to be installed');
-				$toInstall[$id] = $ext;
-			}
-		}
+        $toInstall = [];
+        $installed = [];
+        foreach ($extensionIDs as $id) {
+            $ext = common_ext_ExtensionsManager::singleton()->getExtensionById($id);
+            
+            if (!common_ext_ExtensionsManager::singleton()->isInstalled($ext->getId())) {
+                static::log('d', 'Extension ' . $id . ' needs to be installed');
+                $toInstall[$id] = $ext;
+            }
+        }
         
         while (!empty($toInstall)) {
-        	$modified = false;
-        	foreach ($toInstall as $key => $extension) {
-        		// if all dependencies are installed
-        	    static::log('d', 'Considering extension ' . $key);
-        		$allInstalled	= array_keys(common_ext_ExtensionsManager::singleton()->getinstalledextensions());
-        		$missing	= array_diff(array_keys($extension->getDependencies()), $allInstalled);
-        		if (count($missing) == 0) {
-    			    static::install($extension, $installData);
-					$installed[] = $extension->getId();
-                    static::log('i', 'Extension '.$extension->getId().' installed');
-        			unset($toInstall[$key]);
-        			$modified = true;
-        			break;
-        		} else {
-        			$missing = array_diff($missing, array_keys($toInstall));
-        			foreach ($missing as $extID) {
-        			    static::log('d', 'Extension ' . $extID . ' is required but missing, added to install list');
-        			    $toInstall = [$extID => common_ext_ExtensionsManager::singleton()->getExtensionById($extID)] + $toInstall;
-        				$modified = true;
-        			}
-        		}
-        	}
-        	// no extension could be installed, and no new requirements was added
-        	if (!$modified) {
-        		throw new \common_exception_Error('Unfulfilable/Cyclic reference found in extensions');
-        	}
+            $modified = false;
+            foreach ($toInstall as $key => $extension) {
+                // if all dependencies are installed
+                static::log('d', 'Considering extension ' . $key);
+                $allInstalled   = array_keys(common_ext_ExtensionsManager::singleton()->getinstalledextensions());
+                $missing    = array_diff(array_keys($extension->getDependencies()), $allInstalled);
+                if (count($missing) == 0) {
+                    static::install($extension, $installData);
+                    $installed[] = $extension->getId();
+                    static::log('i', 'Extension ' . $extension->getId() . ' installed');
+                    unset($toInstall[$key]);
+                    $modified = true;
+                    break;
+                } else {
+                    $missing = array_diff($missing, array_keys($toInstall));
+                    foreach ($missing as $extID) {
+                        static::log('d', 'Extension ' . $extID . ' is required but missing, added to install list');
+                        $toInstall = [$extID => common_ext_ExtensionsManager::singleton()->getExtensionById($extID)] + $toInstall;
+                        $modified = true;
+                    }
+                }
+            }
+            // no extension could be installed, and no new requirements was added
+            if (!$modified) {
+                throw new \common_exception_Error('Unfulfilable/Cyclic reference found in extensions');
+            }
         }
         return $installed;
     }
     
-    protected static function install($extension, $installData) {
+    protected static function install($extension, $installData)
+    {
         $importLocalData = (isset($installData['import_local']) && $installData['import_local'] == true);
         $extinstaller = static::getInstaller($extension, $importLocalData);
 
         helpers_TimeOutHelper::setTimeOutLimit(helpers_TimeOutHelper::LONG);
         $extinstaller->install();
-        helpers_TimeOutHelper::reset();;
+        helpers_TimeOutHelper::reset();
+        ;
     }
     
-    protected static function getInstaller($extension, $importLocalData) {
+    protected static function getInstaller($extension, $importLocalData)
+    {
         $instance = new \common_ext_ExtensionInstaller($extension, $importLocalData);
         $instance->initContainer(static::$container);
 
@@ -134,7 +137,7 @@ class helpers_InstallHelper
      * @param string $message
      * @param array $tags
      */
-    public static function log($logLevel, $message, $tags = array())
+    public static function log($logLevel, $message, $tags = [])
     {
         if (static::$logger instanceof \Psr\Log\LoggerInterface) {
             static::$logger->log(
@@ -146,5 +149,4 @@ class helpers_InstallHelper
             call_user_func('common_Logger::' . $logLevel, $message, $tags);
         }
     }
-
 }

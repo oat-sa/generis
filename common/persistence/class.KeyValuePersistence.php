@@ -160,7 +160,7 @@ class common_persistence_KeyValuePersistence extends common_persistence_Persiste
      * @param int $level
      * @return bool
      */
-    protected function deleteMappedKey($key, $value = null, $level=0)
+    protected function deleteMappedKey($key, $value = null, $level = 0)
     {
         if (is_null($value)) {
             $value = $this->getDriver()->get($key);
@@ -173,7 +173,6 @@ class common_persistence_KeyValuePersistence extends common_persistence_Persiste
         $success = true;
 
         if ($this->isSplit($value)) {
-
             $valueParts = [];
             foreach ($this->unSerializeMap($value) as $mappedKey) {
                 $mappedKey = $this->transformReferenceToMappedKey($mappedKey);
@@ -186,7 +185,6 @@ class common_persistence_KeyValuePersistence extends common_persistence_Persiste
             if ($this->isSplit($value)) {
                 $success = $success && $this->deleteMappedKey($key, $value, $level + 1);
             }
-
         }
         return $success;
     }
@@ -363,7 +361,7 @@ class common_persistence_KeyValuePersistence extends common_persistence_Persiste
     protected function getMappedKeyIndex($mappedKey, $key)
     {
         $startSize = strlen($this->getStartMapDelimiter()) - 1;
-        $key = substr($key, $startSize, strrpos($key, $this->getEndMapDelimiter())-$startSize);
+        $key = substr($key, $startSize, strrpos($key, $this->getEndMapDelimiter()) - $startSize);
         return substr($mappedKey, strlen($key . self::MAPPED_KEY_SEPARATOR));
     }
 
@@ -494,7 +492,7 @@ class common_persistence_KeyValuePersistence extends common_persistence_Persiste
             case self::FEATURE_NX:
                 return ($this->getDriver() instanceof common_persistence_KeyValue_Nx);
             default:
-                throw new common_exception_Error('Unknown feature '.$feature);
+                throw new common_exception_Error('Unknown feature ' . $feature);
         }
         return false;
     }

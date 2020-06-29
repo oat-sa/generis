@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,7 +30,7 @@ class KeyValuePersistenceTest extends TestCase
     /** @var \common_persistence_Driver */
     protected $driver;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->driver = new \common_persistence_InMemoryKvDriver();
 
@@ -56,15 +57,14 @@ class KeyValuePersistenceTest extends TestCase
          * In memory persistence
          */
             $this->largeValuePersistence = new \common_persistence_KeyValuePersistence(
-            array(
+                [
                 \common_persistence_KeyValuePersistence::MAX_VALUE_SIZE => 100
-            ),
-            $this->driver
-        );
-        
+                ],
+                $this->driver
+            );
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         unset($this->largeValuePersistence);
     }
@@ -114,23 +114,23 @@ class KeyValuePersistenceTest extends TestCase
     public function testMapMapControl()
     {
         $this->largeValuePersistence = new \common_persistence_KeyValuePersistence(
-            array(
+            [
                 \common_persistence_KeyValuePersistence::MAX_VALUE_SIZE => 100,
                 \common_persistence_KeyValuePersistence::MAP_IDENTIFIER => 'iamamap',
                 \common_persistence_KeyValuePersistence::START_MAP_DELIMITER => 'mapbegin',
                 \common_persistence_KeyValuePersistence::END_MAP_DELIMITER => 'mapend',
 
-            ),
+            ],
             $this->driver
         );
 
         $this->testDelExistsLarge();
     }
-    
+
     public function testSetValueLengthEqualsMax()
     {
         $str = str_repeat('a', 100);
-        
+
         $this->largeValuePersistence->set('equalsMax', $str);
         $this->assertEquals($str, $this->largeValuePersistence->get('equalsMax'));
         $this->assertTrue($this->largeValuePersistence->del('equalsMax'));

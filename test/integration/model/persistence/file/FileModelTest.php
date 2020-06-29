@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -17,6 +18,7 @@
  * Copyright (c) (original work) 2015 Open Assessment Technologies SA
  *
  */
+
 namespace oat\generis\test\integration\model\kernel\persistence\file;
 
 use oat\generis\model\kernel\persistence\file\FileModel;
@@ -30,7 +32,7 @@ class FileModelTest extends GenerisPhpUnitTestRunner
      *
      * @see PHPUnit_Framework_TestCase::setUp()
      */
-    public function setUp()
+    public function setUp(): void
     {
     }
 
@@ -43,13 +45,13 @@ class FileModelTest extends GenerisPhpUnitTestRunner
     {
         // $this->markTestSkipped('test it');
         try {
-            $model = new FileModel(array());
+            $model = new FileModel([]);
         } catch (\common_Exception $e) {
             $this->assertInstanceOf('common_exception_MissingParameter', $e);
         }
-        $conf = array(
+        $conf = [
             'file' => 'default'
-        );
+        ];
         $model = new FileModel($conf);
         return $model;
     }
@@ -61,16 +63,16 @@ class FileModelTest extends GenerisPhpUnitTestRunner
      */
     public function testGetConfig($model)
     {
-        $this->assertEquals(array(
+        $this->assertEquals([
             'file' => 'default'
-        ), $model->getOptions());
+        ], $model->getOptions());
     }
 
     /**
      * @depends testConstruct
      *
      * @author Lionel Lecaque, lionel@taotesting.com
-     * @param array $model            
+     * @param array $model
      */
     public function testGetRdfInterface($model)
     {
@@ -79,13 +81,13 @@ class FileModelTest extends GenerisPhpUnitTestRunner
 
     /**
      * @depends testConstruct
-     * @expectedException common_exception_NoImplementation
-     * 
+     *
      * @author Lionel Lecaque, lionel@taotesting.com
-     * @param array $model            
+     * @param array $model
      */
     public function testGetRdfsInterface($model)
     {
+        $this->expectException(\common_exception_NoImplementation::class);
         $model->getRdfsInterface();
     }
 
@@ -97,25 +99,25 @@ class FileModelTest extends GenerisPhpUnitTestRunner
     public function modelProvider()
     {
         $dir = $this->getSampleDir();
-        return array(
-            array(
+        return [
+            [
                 6,
                 $dir . '/rdf/generis.rdf'
-            ),
-            array(
+            ],
+            [
                 4,
                 $dir . '/rdf/widget.rdf'
-            ),
-            array(
+            ],
+            [
                 100,
                 $dir . '/rdf/nobase.rdf'
-            )
-        );
+            ]
+        ];
     }
 
     /**
      * @dataProvider modelProvider
-     * 
+     *
      * @author Lionel Lecaque, lionel@taotesting.com
      */
     public function testGetModelIdFromXml($id, $file)
@@ -133,5 +135,3 @@ class FileModelTest extends GenerisPhpUnitTestRunner
         }
     }
 }
-
-?>

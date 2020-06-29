@@ -21,10 +21,34 @@
  * @access public
  * @author Gyula Szucs, <gyula@taotesting.com>
  * @package generis
- 
+
  */
 class common_exception_MethodNotAllowed extends common_exception_BadRequest
 {
+    /**
+     * @var string[]|null
+     */
+    protected $allowedMethods;
+
+    /**
+     * @param string|null $message
+     * @param int $code
+     * @param string[]|null $allowedMethods
+     */
+    public function __construct($message = null, $code = 0, array $allowedMethods = null)
+    {
+        parent::__construct($message, $code);
+        $this->allowedMethods = $allowedMethods;
+    }
+
+    /**
+     * @return string[]|null
+     */
+    public function getAllowedMethods()
+    {
+        return $this->allowedMethods;
+    }
+
     public function getUserMessage()
     {
         return __("Request method is not allowed.");

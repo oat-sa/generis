@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,23 +22,25 @@
 namespace oat\oatbox\service;
 
 use Zend\ServiceManager\Exception\ServiceNotFoundException as ZendException;
+use Psr\Container\NotFoundExceptionInterface;
+
 /**
- * 
- * @author bout
- *
+ * Exception thrown whenever a service is not defined and cannot be autowired
+ * Compatible with the Zend Servicemanager as well as the PSR-11 container
+ * @author Joel Bout <joel@taotesting.com>
  */
-class ServiceNotFoundException extends ZendException
+class ServiceNotFoundException extends ZendException implements NotFoundExceptionInterface
 {
     private $serviceKey;
-    
-    public function __construct($serviceKey, $message = '') {
-        parent::__construct('Service "'.$serviceKey.'" not found'. (empty($message) ? '' : ': '.$message));
+
+    public function __construct($serviceKey, $message = '')
+    {
+        parent::__construct('Service "' . $serviceKey . '" not found' . (empty($message) ? '' : ': ' . $message));
         $this->serviceKey = $serviceKey;
-        \common_Logger::singleton()->handleException($this);
     }
-    
-    public function getServiceKey() {
+
+    public function getServiceKey()
+    {
         return $this->serviceKey;
     }
-    
 }

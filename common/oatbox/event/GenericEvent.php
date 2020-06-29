@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -17,38 +18,40 @@
  * Copyright (c) 2015 (original work) Open Assessment Technologies SA;
  *
  */
+
 namespace oat\oatbox\event;
 
 use common_ext_ExtensionsManager;
+
 /**
  * A generic event used for events that are defined by name alone
- * 
+ *
  * @author Joel Bout <joel@taotesting.com>
  */
 class GenericEvent implements Event
 {
     /**
      * Event name
-     * 
+     *
      * @var string
      */
     private $eventName;
-    
     /**
-     * Parameters of the event
-     * 
-     * @var array()
-     */
+         * Parameters of the event
+         *
+         * @var array()
+         */
     private $params;
     
     /**
      * Create a new generic event based on an event name
      * with optional parameters
-     * 
+     *
      * @param string $eventName
      * @param array $params
      */
-    public function __construct($eventName, $params = array()) {
+    public function __construct($eventName, $params = [])
+    {
         $this->eventName = (string)$eventName;
         $this->params = $params;
     }
@@ -57,7 +60,8 @@ class GenericEvent implements Event
      * (non-PHPdoc)
      * @see \oat\oatbox\event\Event::getName()
      */
-    public function getName() {
+    public function getName()
+    {
         return $this->eventName;
     }
 
@@ -65,7 +69,8 @@ class GenericEvent implements Event
      * Get parameters
      * @return array
      */
-    public function getParams() {
+    public function getParams()
+    {
         return $this->params;
     }
 }

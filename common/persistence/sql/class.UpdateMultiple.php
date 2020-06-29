@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -118,7 +119,7 @@ class common_persistence_sql_UpdateMultiple
                     $conditionColumn = $condition['conditionColumn'];
                     $conditionValue = $condition['conditionValue'];
 
-                    $key = ':' .$index . '_' .$column. '_'  . $indexCondition . '_' . $conditionColumn . '_conditionvalue';
+                    $key = ':' . $index . '_' . $column . '_'  . $indexCondition . '_' . $conditionColumn . '_conditionvalue';
                     $conditionsString[] = " $conditionColumn = $key ";
                     $allColumns[$conditionColumn][] = $conditionValue;
                     $params[$key] = $conditionValue;

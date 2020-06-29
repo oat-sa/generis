@@ -1,22 +1,24 @@
 <?php
-/**  
+
+/**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
  * of the License (non-upgradable).
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- * 
+ *
  * Copyright (c) (original work) 2015 Open Assessment Technologies SA
- * 
+ *
  */
+
 namespace oat\generis\test\integration\model\persistence\smoothsql;
 
 use \core_kernel_persistence_smoothsql_SmoothModel;
@@ -26,10 +28,10 @@ class SmoothModelTest extends GenerisPhpUnitTestRunner
 {
 
     /**
-     * 
+     *
      * @see PHPUnit_Framework_TestCase::setUp()
      */
-    public function setUp()
+    public function setUp(): void
     {
         GenerisPhpUnitTestRunner::initTest();
     }
@@ -43,13 +45,13 @@ class SmoothModelTest extends GenerisPhpUnitTestRunner
     {
         // $this->markTestSkipped('test it');
         try {
-            $model = new core_kernel_persistence_smoothsql_SmoothModel(array());
+            $model = new core_kernel_persistence_smoothsql_SmoothModel([]);
         } catch (\common_Exception $e) {
             $this->assertInstanceOf('common_exception_MissingParameter', $e);
         }
-        $conf = array(
+        $conf = [
             'persistence' => 'default'
-        );
+        ];
         $model = new core_kernel_persistence_smoothsql_SmoothModel($conf);
         return $model;
     }
@@ -61,16 +63,16 @@ class SmoothModelTest extends GenerisPhpUnitTestRunner
      */
     public function testGetConfig($model)
     {
-        $this->assertEquals(array(
+        $this->assertEquals([
             'persistence' => 'default'
-        ), $model->getOptions());
+        ], $model->getOptions());
     }
 
     /**
      * @depends testConstuct
      *
      * @author Lionel Lecaque, lionel@taotesting.com
-     * @param array $model            
+     * @param array $model
      */
     public function testGetRdfInterface($model)
     {
@@ -81,7 +83,7 @@ class SmoothModelTest extends GenerisPhpUnitTestRunner
      * @depends testConstuct
      *
      * @author Lionel Lecaque, lionel@taotesting.com
-     * @param array $model            
+     * @param array $model
      */
     public function testGetRdfsInterface($model)
     {
@@ -89,26 +91,26 @@ class SmoothModelTest extends GenerisPhpUnitTestRunner
     }
 
     /**
-     * 
+     *
      * @author Lionel Lecaque, lionel@taotesting.com
      */
     public function testGetUpdatableModelIds()
     {
         $models = core_kernel_persistence_smoothsql_SmoothModel::getUpdatableModelIds();
-        $this->assertArraySubset(array(
+        $this->assertArraySubset([
             1
-        ), $models);
+        ], $models);
     }
 
     /**
-     * 
+     *
      * @author Lionel Lecaque, lionel@taotesting.com
      */
     public function testGetReadableModelIds()
     {
         $models = core_kernel_persistence_smoothsql_SmoothModel::getReadableModelIds();
-        $this->assertArraySubset(array(
+        $this->assertArraySubset([
             1
-        ), $models);
+        ], $models);
     }
 }

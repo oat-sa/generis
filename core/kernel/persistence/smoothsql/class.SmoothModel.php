@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,15 +23,18 @@ use oat\generis\model\data\ModelManager;
 use oat\oatbox\service\ConfigurableService;
 use oat\generis\model\kernel\persistence\smoothsql\search\ComplexSearchService;
 use oat\generis\model\data\Ontology;
+use oat\generis\persistence\sql\SchemaProviderInterface;
+use oat\generis\persistence\sql\SchemaCollection;
+use oat\generis\model\kernel\persistence\smoothsql\install\SmoothRdsModel;
+use oat\oatbox\cache\SimpleCache;
 
 /**
  * transitory model for the smooth sql implementation
- * 
+ *
  * @author joel bout <joel@taotesting.com>
  * @package generis
  */
-class core_kernel_persistence_smoothsql_SmoothModel extends ConfigurableService
-    implements Ontology
+class core_kernel_persistence_smoothsql_SmoothModel extends ConfigurableService implements Ontology, SchemaProviderInterface
 {
     const OPTION_PERSISTENCE = 'persistence';
     const OPTION_READABLE_MODELS = 'readable';
@@ -38,38 +42,32 @@ class core_kernel_persistence_smoothsql_SmoothModel extends ConfigurableService
     const OPTION_NEW_TRIPLE_MODEL = 'addTo';
     const OPTION_SEARCH_SERVICE = 'search';
 
-    /**
-     * Cache service to use
-     * @var string
-     */
-    const OPTION_CACHE_SERVICE = 'cache';
+    const DEFAULT_WRITABLE_MODEL = 1;
+    const DEFAULT_READ_ONLY_MODEL = 2;
 
     /**
      * Persistence to use for the smoothmodel
-     * 
+     *
      * @var common_persistence_SqlPersistence
      */
     private $persistence;
     
-    private $cache;
-
-    private static $readableSubModels = null;
-    
-    private static $updatableSubModels = null;
-    
-    function getResource($uri) {
+    function getResource($uri)
+    {
         $resource = new \core_kernel_classes_Resource($uri);
         $resource->setModel($this);
         return $resource;
     }
 
-    function getClass($uri) {
+    function getClass($uri)
+    {
         $class = new \core_kernel_classes_Class($uri);
         $class->setModel($this);
         return $class;
     }
 
-    function getProperty($uri) {
+    function getProperty($uri)
+    {
         $property = new \core_kernel_classes_Property($uri);
         $property->setModel($this);
         return $property;
@@ -78,28 +76,27 @@ class core_kernel_persistence_smoothsql_SmoothModel extends ConfigurableService
     /**
      * @return common_persistence_SqlPersistence
      */
-    public function getPersistence() {
+    public function getPersistence()
+    {
         if (is_null($this->persistence)) {
-            $this->persistence = $this->getServiceLocator()->get(common_persistence_Manager::SERVICE_ID)->getPersistenceById($this->getOption(self::OPTION_PERSISTENCE));
+            $this->persistence = $this->getServiceLocator()
+                ->get(common_persistence_Manager::SERVICE_ID)
+                ->getPersistenceById($this->getOption(self::OPTION_PERSISTENCE));
         }
         return $this->persistence;
     }
 
-    /**
-     * @return common_cache_Cache
-     */
-    public function getCache() {
-        if (is_null($this->cache)) {
-            $this->cache = $this->getServiceLocator()->get($this->getOption(self::OPTION_CACHE_SERVICE));
-        }
-        return $this->cache;
+    public function getCache(): SimpleCache
+    {
+        return $this->getServiceLocator()->get(SimpleCache::SERVICE_ID);
     }
 
     /**
      * (non-PHPdoc)
      * @see \oat\generis\model\data\Model::getRdfInterface()
      */
-    public function getRdfInterface() {
+    public function getRdfInterface()
+    {
         return new core_kernel_persistence_smoothsql_SmoothRdf($this);
     }
     
@@ -107,15 +104,17 @@ class core_kernel_persistence_smoothsql_SmoothModel extends ConfigurableService
      * (non-PHPdoc)
      * @see \oat\generis\model\data\Model::getRdfsInterface()
      */
-    public function getRdfsInterface() {
+    public function getRdfsInterface()
+    {
         return new core_kernel_persistence_smoothsql_SmoothRdfs($this);
     }
     
     /**
      * @return ComplexSearchService
      */
-    public function getSearchInterface() {
-        $search = $this->getServiceManager()->get($this->getOption(self::OPTION_SEARCH_SERVICE));
+    public function getSearchInterface()
+    {
+        $search = $this->getServiceLocator()->get($this->getOption(self::OPTION_SEARCH_SERVICE));
         $search->setModel($this);
         return $search;
     }
@@ -124,66 +123,79 @@ class core_kernel_persistence_smoothsql_SmoothModel extends ConfigurableService
     
     /**
      * Returns the id of the model to add to
-     * 
+     *
      * @return string
      */
-    public function getNewTripleModelId() {
+    public function getNewTripleModelId()
+    {
         return $this->getOption(self::OPTION_NEW_TRIPLE_MODEL);
     }
     
-    public function getReadableModels() {
+    public function getReadableModels()
+    {
         return $this->getOption(self::OPTION_READABLE_MODELS);
     }
 
-    public function getWritableModels() {
+    public function getWritableModels()
+    {
         return $this->getOption(self::OPTION_WRITEABLE_MODELS);
     }
     
+    //
+    // Deprecated functions
+    //
+
     /**
      * Defines a model as readable
      *
      * @param string $id
      */
-    public function addReadableModel($id) {
-    
-        common_Logger::i('ADDING MODEL '.$id);
-    
+    public function addReadableModel($id)
+    {
+
+        common_Logger::i('ADDING MODEL ' . $id);
+
         $readables = $this->getOption(self::OPTION_READABLE_MODELS);
-        $this->setOption(self::OPTION_READABLE_MODELS, array_unique(array_merge($readables, array($id))));
-    
+        $this->setOption(self::OPTION_READABLE_MODELS, array_unique(array_merge($readables, [$id])));
+
         // update in persistence
         ModelManager::setModel($this);
     }
-    
-    //
-    // Deprecated functions
-    // 
-    
+
     /**
      * Returns the submodel ids that are readable
-     * 
+     *
      * @deprecated
      * @return array()
      */
-    public static function getReadableModelIds() {
+    public static function getReadableModelIds()
+    {
         $model = ModelManager::getModel();
         if (!$model instanceof self) {
-            throw new common_exception_Error(__FUNCTION__.' called on '.get_class($model).' model implementation');
+            throw new common_exception_Error(__FUNCTION__ . ' called on ' . get_class($model) . ' model implementation');
         }
         return $model->getReadableModels();
     }
     
     /**
      * Returns the submodel ids that are updatable
-     * 
+     *
      * @deprecated
      * @return array()
      */
-    public static function getUpdatableModelIds() {
+    public static function getUpdatableModelIds()
+    {
         $model = ModelManager::getModel();
         if (!$model instanceof self) {
-            throw new common_exception_Error(__FUNCTION__.' called on '.get_class($model).' model implementation');
+            throw new common_exception_Error(__FUNCTION__ . ' called on ' . get_class($model) . ' model implementation');
         }
         return $model->getWritableModels();
     }
+
+    public function provideSchema(SchemaCollection $schemaCollection)
+    {
+        $schema = $schemaCollection->getSchema($this->getOption(self::OPTION_PERSISTENCE));
+        SmoothRdsModel::addSmoothTables($schema);
+    }
+
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,7 +28,8 @@ use oat\generis\test\TestCase;
  *
  * @author Bertrand Chevrier <bertrand@taotesting.com>
  */
-class RequestTest extends TestCase {
+class RequestTest extends TestCase
+{
 
     /**
      * Test the method getHeaderValue
@@ -56,5 +58,4 @@ class RequestTest extends TestCase {
             [ ['Accept' => 'application/json' ], 'ACCEPT', 'application/json' ],
         ];
     }
-
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -17,8 +18,8 @@
  * Copyright (c) 2015 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  *
  */
-namespace oat\oatbox\action;
 
+namespace oat\oatbox\action;
 
 use oat\oatbox\service\ServiceNotFoundException;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
@@ -28,11 +29,12 @@ class Help implements Action, ServiceLocatorAwareInterface
 {
     use ServiceLocatorAwareTrait;
     
-    public function __invoke($params) {
+    public function __invoke($params)
+    {
         $actionResolver = $this->getServiceLocator()->get(ActionService::SERVICE_ID);
         $report = new \common_report_Report(\common_report_Report::TYPE_INFO, __('Available Actions:'));
         foreach ($actionResolver->getAvailableActions() as $actionClass) {
-            $report->add(new \common_report_Report(\common_report_Report::TYPE_INFO, '  '.$actionClass));
+            $report->add(new \common_report_Report(\common_report_Report::TYPE_INFO, '  ' . $actionClass));
         }
         return $report;
     }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,6 +20,7 @@
 
 namespace oat\generis\test\unit\model;
 
+use common_exception_NoContent;
 use \core_kernel_classes_ResourceFormatter;
 use oat\generis\model\GenerisRdf;
 use oat\generis\test\TestCase;
@@ -77,51 +79,50 @@ class ResourceFormatterTest extends TestCase
 
         $typeProphecy = $this->createClassProphecy('#typeUri');
         $typeProphecy->getProperties(true)->willReturn(
-            array(
+            [
                 $propertyProphecy->reveal(),
                 $propertyProphecy2->reveal()
-            )
+            ]
         );
 
         $typeProphecy2 = $typeProphecy = $this->createClassProphecy('#typeUri2');
-        $typeProphecy->getProperties(true)->willReturn(array());
+        $typeProphecy->getProperties(true)->willReturn([]);
 
         $prop1 = $propertyProphecy->reveal();
         $prop2 = $propertyProphecy2->reveal();
 
         $typeProphecy2->getProperties(true)->willReturn(
-            array(
+            [
                 $prop1,
                 $prop2
-            )
+            ]
         );
         $resourceDescProphecy->getTypes()->willReturn(
-            array(
+            [
                 $typeProphecy->reveal(),
                 $typeProphecy2->reveal()
-            )
+            ]
         );
         if ($withNoValue) {
             $resourceDescProphecy->getPropertiesValues(
-                array(
+                [
                     "#propertyUri" => $prop1,
                     "#propertyUri2" => $prop2
-                )
-            )->willReturn(array());
-
+                ]
+            )->willReturn([]);
         } else {
-            $resourceDescProphecy->getPropertiesValues(array(
+            $resourceDescProphecy->getPropertiesValues([
                 "#propertyUri" => $prop1,
                 "#propertyUri2" => $prop2
-            ))->willReturn(array(
-                '#propertyUri' => array(
+            ])->willReturn([
+                '#propertyUri' => [
                     new \core_kernel_classes_Literal('value1'),
                     new \core_kernel_classes_Literal('value2')
-                ),
-                '#propertyUri2' => array(
+                ],
+                '#propertyUri2' => [
                     new \core_kernel_classes_Resource(GenerisRdf::GENERIS_BOOLEAN)
-                )
-            ));
+                ]
+            ]);
         }
         return $resourceDescProphecy->reveal();
     }
@@ -151,42 +152,41 @@ class ResourceFormatterTest extends TestCase
         $result = $formatter->getResourceDescription($this->createResourceDescription(false));
 
         $this->assertInstanceOf('stdClass', $result);
-        $this->assertAttributeEquals('#fakeUri', 'uri', $result);
-        $this->assertAttributeInternalType('array', 'properties', $result);
-        $this->assertAttributeCount(2, 'properties', $result);
+        $this->assertSame('#fakeUri', $result->uri);
+        $this->assertIsArray($result->properties);
+        $this->assertCount(2, $result->properties);
 
         $this->assertInstanceOf('stdClass', $result->properties[0]);
-        $this->assertAttributeEquals('#propertyUri', 'predicateUri', $result->properties[0]);
-        $this->assertAttributeInternalType('array', 'values', $result->properties[0]);
-        $this->assertAttributeCount(2, 'values', $result->properties[0]);
+        $this->assertSame('#propertyUri', $result->properties[0]->predicateUri);
+        $this->assertIsArray($result->properties[0]->values);
+        $this->assertCount(2, $result->properties[0]->values);
 
         $this->assertInstanceOf('stdClass', $result->properties[0]->values[0]);
-        $this->assertAttributeEquals('literal', 'valueType', $result->properties[0]->values[0]);
-        $this->assertAttributeEquals('value1', 'value', $result->properties[0]->values[0]);
+        $this->assertSame('literal', $result->properties[0]->values[0]->valueType);
+        $this->assertSame('value1', $result->properties[0]->values[0]->value);
 
         $this->assertInstanceOf('stdClass', $result->properties[0]->values[1]);
-        $this->assertAttributeEquals('literal', 'valueType', $result->properties[0]->values[1]);
-        $this->assertAttributeEquals('value2', 'value', $result->properties[0]->values[1]);
+        $this->assertSame('literal', $result->properties[0]->values[1]->valueType);
+        $this->assertSame('value2', $result->properties[0]->values[1]->value);
 
         $this->assertInstanceOf('stdClass', $result->properties[1]);
-        $this->assertAttributeEquals('#propertyUri2', 'predicateUri', $result->properties[1]);
-        $this->assertAttributeInternalType('array', 'values', $result->properties[1]);
-        $this->assertAttributeCount(1, 'values', $result->properties[1]);
+        $this->assertSame('#propertyUri2', $result->properties[1]->predicateUri);
+        $this->assertIsArray($result->properties[1]->values);
+        $this->assertCount(1, $result->properties[1]->values);
 
         $this->assertInstanceOf('stdClass', $result->properties[1]->values[0]);
-        $this->assertAttributeEquals('resource', 'valueType', $result->properties[1]->values[0]);
-        $this->assertAttributeEquals(GenerisRdf::GENERIS_BOOLEAN, 'value', $result->properties[1]->values[0]);
-
+        $this->assertSame('resource', $result->properties[1]->values[0]->valueType);
+        $this->assertSame(GenerisRdf::GENERIS_BOOLEAN, $result->properties[1]->values[0]->value);
     }
 
     /**
-     * @expectedException common_exception_NoContent
      * @author Lionel Lecaque, lionel@taotesting.com
      */
     public function testGetResourceDesciptionNoContentTripple()
     {
+        $this->expectException(common_exception_NoContent::class);
         $resourceDescProphecy = $this->createResourceProphecy('#fakeUri');
-        $resourceDescProphecy->getRdfTriples()->willReturn(array());
+        $resourceDescProphecy->getRdfTriples()->willReturn([]);
         $formatter = new core_kernel_classes_ResourceFormatter();
 
         $result = $formatter->getResourceDescription($resourceDescProphecy->reveal(), false);
@@ -199,7 +199,7 @@ class ResourceFormatterTest extends TestCase
      */
     private function generateTriple()
     {
-        $returnValue = array();
+        $returnValue = [];
         for ($i = 0; $i < 3; $i++) {
             $triple = new \core_kernel_classes_Triple();
             $triple->subject = '#subject' . $i;
@@ -223,30 +223,28 @@ class ResourceFormatterTest extends TestCase
         $result = $formatter->getResourceDescription($resourceDescProphecy->reveal(), false);
 
         $this->assertInstanceOf('stdClass', $result);
-        $this->assertAttributeEquals('#fakeUri', 'uri', $result);
-        $this->assertAttributeInternalType('array', 'properties', $result);
-        $this->assertAttributeCount(3, 'properties', $result);
+        $this->assertSame('#fakeUri', $result->uri);
+        $this->assertIsArray($result->properties);
+        $this->assertCount(3, $result->properties);
 
         $this->assertInstanceOf('stdClass', $result->properties[0]);
-        $this->assertAttributeEquals('#predicate0', 'predicateUri', $result->properties[0]);
-        $this->assertAttributeInternalType('array', 'values', $result->properties[0]);
-        $this->assertAttributeCount(1, 'values', $result->properties[0]);
+        $this->assertSame('#predicate0', $result->properties[0]->predicateUri);
+        $this->assertIsArray($result->properties[0]->values);
+        $this->assertCount(1,$result->properties[0]->values);
 
         $this->assertInstanceOf('stdClass', $result->properties[0]->values[0]);
-        $this->assertAttributeEquals('resource', 'valueType', $result->properties[0]->values[0]);
-        $this->assertAttributeEquals(GenerisRdf::GENERIS_BOOLEAN, 'value', $result->properties[0]->values[0]);
+        $this->assertSame('resource', $result->properties[0]->values[0]->valueType);
+        $this->assertSame(GenerisRdf::GENERIS_BOOLEAN, $result->properties[0]->values[0]->value);
 
         for ($i = 1; $i < 3; $i++) {
             $this->assertInstanceOf('stdClass', $result->properties[$i]);
-            $this->assertAttributeEquals('#predicate' . $i, 'predicateUri', $result->properties[$i]);
-            $this->assertAttributeInternalType('array', 'values', $result->properties[$i]);
-            $this->assertAttributeCount(1, 'values', $result->properties[$i]);
+            $this->assertSame('#predicate' . $i, $result->properties[$i]->predicateUri);
+            $this->assertIsArray($result->properties[$i]->values);
+            $this->assertCount(1,$result->properties[$i]->values);
 
             $this->assertInstanceOf('stdClass', $result->properties[$i]->values[0]);
-            $this->assertAttributeEquals('literal', 'valueType', $result->properties[$i]->values[0]);
-            $this->assertAttributeEquals('object' . $i, 'value', $result->properties[$i]->values[0]);
+            $this->assertSame('literal', $result->properties[$i]->values[0]->valueType);
+            $this->assertSame('object' . $i, $result->properties[$i]->values[0]->value);
         }
     }
 }
-
-?>

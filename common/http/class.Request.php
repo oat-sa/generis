@@ -1,21 +1,21 @@
 <?php
-/**  
+/**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
  * of the License (non-upgradable).
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- * 
+ *
  * Copyright (c) 2013-2016 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- * 
+ *
  */
 
 /**
@@ -24,7 +24,7 @@
  * @access public
  * @author Joel Bout, <joel@taotesting.com>
  * @package generis
- 
+
  */
 class common_http_Request
 {
@@ -35,12 +35,12 @@ class common_http_Request
 
     /**
      * Creates an request from the current call
-     * 
+     *
      * The scheme in used (http|https) will be derived from
-     * 
+     *
      * * $_SERVER['HTTPS'] in case of a standard deployment
      * * $_SERVER['HTTP_X_FORWARDED_PROTO'] or $_SERVER['HTTP_X_FORWARDED_SSL'] in case of being deployed behing a load balancer/proxy.
-     * 
+     *
      * If no clues about whether HTTPS is in use are found, HTTP will be the scheme of the current request.
      *
      * @return common_http_Request A request corresponding to the current HTTP(S) context.
@@ -60,15 +60,15 @@ class common_http_Request
         
         $method = $_SERVER['REQUEST_METHOD'];
         
-        if($_SERVER['REQUEST_METHOD'] == self::METHOD_GET){
+        if ($_SERVER['REQUEST_METHOD'] == self::METHOD_GET) {
             $params = $_GET;
-        } else { 
+        } else {
             $params = $_POST;
         }
         if (function_exists('apache_request_headers')) {
             $headers = apache_request_headers();
         } else {
-            $headers = array();
+            $headers = [];
             if (isset($_SERVER['CONTENT_TYPE'])) {
                 $headers['Content-Type'] = $_SERVER['CONTENT_TYPE'];
             }
@@ -98,7 +98,7 @@ class common_http_Request
 
     private $body;
 
-    public function __construct($url, $method = self::METHOD_POST, $params = array(), $headers = array(), $body = "")
+    public function __construct($url, $method = self::METHOD_POST, $params = [], $headers = [], $body = "")
     {
         $this->url = $url;
         $this->method = $method;
@@ -122,7 +122,8 @@ class common_http_Request
         } elseif (
             // $_SERVER['HTTPS'] is set behind a proxy / load balancer
             !empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https' ||
-            !empty($_SERVER['HTTP_X_FORWARDED_SSL']) && $_SERVER['HTTP_X_FORWARDED_SSL'] == 'on') {
+            !empty($_SERVER['HTTP_X_FORWARDED_SSL']) && $_SERVER['HTTP_X_FORWARDED_SSL'] == 'on'
+        ) {
             $https = true;
         }
         return $https;
@@ -178,54 +179,59 @@ class common_http_Request
     /**
      * set request body to send
      */
-    public function setBody($requestBodyData) {
+    public function setBody($requestBodyData)
+    {
         $this->body = $requestBodyData;
     }
-    public function getBody() {
+    public function getBody()
+    {
         return $this->body;
     }
     /**
      * @return common_http_Response
      */
-    public function send(){
+    public function send()
+    {
 
         $curlHandler = curl_init($this->getUrl());
 
           //set the headers
-        if ((is_array($this->headers)) and (count($this->headers)>0)) {
-             curl_setopt($curlHandler,CURLOPT_HTTPHEADER, self::headerEncode($this->headers));
+        if ((is_array($this->headers)) and (count($this->headers) > 0)) {
+             curl_setopt($curlHandler, CURLOPT_HTTPHEADER, self::headerEncode($this->headers));
         }
         switch ($this->getMethod()) {
             case "HEAD":{
-                    curl_setopt($curlHandler,CURLOPT_NOBODY, true);
-                    curl_setopt($curlHandler,CURLOPT_HEADER, true);
+                    curl_setopt($curlHandler, CURLOPT_NOBODY, true);
+                    curl_setopt($curlHandler, CURLOPT_HEADER, true);
                 break;
             }
-             case "POST":{
-                    curl_setopt($curlHandler,CURLOPT_POST, 1);
+            case "POST":{
+                   curl_setopt($curlHandler, CURLOPT_POST, 1);
                     
-                    if (is_array($this->params) and (count($this->params)>0)) {
-                        $params =  $this->postEncode($this->params);
-                         //application/x-www-form-urlencoded
-                         curl_setopt($curlHandler,CURLOPT_POSTFIELDS, $params);
-                    } else {
-                        //common_Logger::i(serialize($this->getBody()));
-                        if (!is_null(($this->getBody()))) {
-                      
+                if (is_array($this->params) and (count($this->params) > 0)) {
+                    $params =  $this->postEncode($this->params);
+                    //application/x-www-form-urlencoded
+                    curl_setopt($curlHandler, CURLOPT_POSTFIELDS, $params);
+                } else {
+                    //common_Logger::i(serialize($this->getBody()));
+                    if (!is_null(($this->getBody()))) {
                         curl_setopt($curlHandler, CURLOPT_POSTFIELDS, ($this->getBody()));
-                        }
                     }
+                }
 
                    
-            		//analyse if there is a body or structured postfields
+                   //analyse if there is a body or structured postfields
                    
-                 break;}
+                break;
+            }
             case "PUT":{
 
-                break;}
+                break;
+            }
             case "GET":{
                 //curl_setopt($curlHandler,CURLOPT_HTTPGET, true);
-                break;}
+                break;
+            }
         }
       
         curl_setopt($curlHandler, CURLOPT_RETURNTRANSFER, 1);
@@ -249,27 +255,28 @@ class common_http_Request
      * @return string
      */
 
-    public static function postEncode($parameters){
+    public static function postEncode($parameters)
+    {
         
         //todo
         //$content_type = isset($this->headers['Content-Type']) ? $this->headers['Content-Type'] : 'text/plain';
         //should detect suitable encoding
-		$format = 'text/plain';
-		switch($format)
-		{
-			default:
-					return http_build_query($parameters, null, '&');
-				break;
-		}
+        $format = 'text/plain';
+        switch ($format) {
+            default:
+                return http_build_query($parameters, null, '&');
+                break;
+        }
     }
 
-    public static function headerEncode($headers){
-        $encodedHeaders = array();
+    public static function headerEncode($headers)
+    {
+        $encodedHeaders = [];
         //todo using aray_walk
         foreach ($headers as $key => $value) {
-            $encodedHeaders[]=$key.": ".$value."";
+            $encodedHeaders[] = $key . ": " . $value . "";
         }
-       //print_r($encodedHeaders);
+        //print_r($encodedHeaders);
         return $encodedHeaders;
     }
 }

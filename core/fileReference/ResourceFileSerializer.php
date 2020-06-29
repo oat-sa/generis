@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,6 +28,11 @@ use oat\oatbox\filesystem\File;
 use oat\oatbox\filesystem\FileSystemService;
 use oat\oatbox\service\ConfigurableService;
 
+/**
+ * Class ResourceFileSerializer
+ *
+ * @see UrlFileSerializer
+ */
 class ResourceFileSerializer extends ConfigurableService implements FileReferenceSerializer
 {
     use OntologyAwareTrait;
@@ -50,7 +56,7 @@ class ResourceFileSerializer extends ConfigurableService implements FileReferenc
             $filePath = $abstraction->getPrefix();
         } else {
             throw new FileSerializerException(
-                __CLASS__.'::'.__FUNCTION__.' expects parameter to be an instance of Directory or File'
+                __CLASS__ . '::' . __FUNCTION__ . ' expects parameter to be an instance of Directory or File'
             );
         }
 
@@ -76,7 +82,7 @@ class ResourceFileSerializer extends ConfigurableService implements FileReferenc
         $dir = $this->getRootDirectory($properties[self::RESOURCE_FILE_FILESYSTEM_URI]);
 
         return (isset($properties[self::RESOURCE_FILE_NAME]) && !empty($properties[self::RESOURCE_FILE_NAME]))
-            ? $dir->getFile($properties[self::RESOURCE_FILE_PATH].'/'.$properties[self::RESOURCE_FILE_NAME])
+            ? $dir->getFile($properties[self::RESOURCE_FILE_PATH] . '/' . $properties[self::RESOURCE_FILE_NAME])
             : $dir->getDirectory($properties[self::RESOURCE_FILE_PATH]);
     }
 
@@ -90,7 +96,7 @@ class ResourceFileSerializer extends ConfigurableService implements FileReferenc
         $properties = $this->getResourceFilePropertiesValues($serial);
 
         return $this->getRootDirectory($properties[self::RESOURCE_FILE_FILESYSTEM_URI])
-            ->getFile($properties[self::RESOURCE_FILE_PATH].'/'.$properties[self::RESOURCE_FILE_NAME]);
+            ->getFile($properties[self::RESOURCE_FILE_PATH] . '/' . $properties[self::RESOURCE_FILE_NAME]);
     }
 
     /**
@@ -145,7 +151,11 @@ class ResourceFileSerializer extends ConfigurableService implements FileReferenc
         $file = $this->getResource($serial);
 
         if (!$file->exists()) {
-            throw new \common_exception_NotFound('File reference serial "'. $serial .'" not exist as resource');
+            throw new \common_exception_NotFound('File reference serial "' . $serial . '" not exist as resource');
+        }
+
+        if (!$file->hasType($this->getClass(GenerisRdf::CLASS_GENERIS_FILE))) {
+            throw new \common_exception_NotFound('Resource ' . $serial . ' is not a file');
         }
 
         $properties = [];

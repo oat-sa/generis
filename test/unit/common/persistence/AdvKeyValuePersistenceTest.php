@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,17 +29,17 @@ class AdvKeyValuePersistenceTest extends TestCase
      */
     protected $largeValuePersistence;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->largeValuePersistence = new \common_persistence_AdvKeyValuePersistence(
-            array(
+            [
                 \common_persistence_AdvKeyValuePersistence::MAX_VALUE_SIZE => 100
-            ),
+            ],
             new \common_persistence_InMemoryAdvKvDriver()
         );
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         unset($this->largeValuePersistence);
     }
@@ -54,23 +55,31 @@ class AdvKeyValuePersistenceTest extends TestCase
     {
         $this->expectException(\common_Exception::class);
         $this->largeValuePersistence = new \common_persistence_AdvKeyValuePersistence(
-            array(
+            [
                 \common_persistence_AdvKeyValuePersistence::MAX_VALUE_SIZE => 'toto'
-            ),
+            ],
             new \common_persistence_InMemoryAdvKvDriver()
         );
         $this->largeValuePersistence->hSet('test', 'fixture', 'value');
     }
 
+    public function testHset()
+    {
+        $this->assertTrue($this->largeValuePersistence->hSet('test', 'hset1', 'value'));
+        $this->assertTrue($this->largeValuePersistence->hSet('test', 'hset2', 'value'));
+        $this->assertFalse($this->largeValuePersistence->hSet('test', 'hset1', 'value2'));
+        $this->assertEquals('value2', $this->largeValuePersistence->hGet('test', 'hset1'));
+    }
+
     public function testLargeHmsetHget()
     {
         $bigValue = $this->get100000bytesValue();
-        $this->largeValuePersistence->hmSet('test', array(
+        $this->largeValuePersistence->hmSet('test', [
             'fixture' => $bigValue,
             'fixture1' => 'value1',
             'fixture2' => $bigValue,
             'fixture3' => 'value3',
-        ));
+        ]);
 
         $this->assertEquals($bigValue, $this->largeValuePersistence->hGet('test', 'fixture'));
         $this->assertEquals('value1', $this->largeValuePersistence->hGet('test', 'fixture1'));
@@ -92,12 +101,12 @@ class AdvKeyValuePersistenceTest extends TestCase
 
     public function testHmsetHget()
     {
-        $this->largeValuePersistence->hmSet('test', array(
+        $this->largeValuePersistence->hmSet('test', [
             'fixture' => 'value',
             'fixture1' => 'value1',
             'fixture2' => 'value2',
             'fixture3' => 'value3',
-        ));
+        ]);
         $this->assertEquals('value', $this->largeValuePersistence->hGet('test', 'fixture'));
         $this->assertEquals('value1', $this->largeValuePersistence->hGet('test', 'fixture1'));
         $this->assertEquals('value2', $this->largeValuePersistence->hGet('test', 'fixture2'));
@@ -108,12 +117,12 @@ class AdvKeyValuePersistenceTest extends TestCase
 
     public function testHgetAllHexists()
     {
-        $attributes = array(
+        $attributes = [
             'fixture' => 'value',
             'fixture1' => 'value1',
             'fixture2' => 'value2',
             'fixture3' => 'value3',
-        );
+        ];
 
         $this->largeValuePersistence->hmSet('test', $attributes);
 
@@ -129,13 +138,13 @@ class AdvKeyValuePersistenceTest extends TestCase
         $this->assertTrue($this->largeValuePersistence->hExists('test', 'none'));
 
         $this->assertEquals(
-            array(
+            [
                 'fixture' => 'value',
                 'fixture1' => 'value1',
                 'fixture2' => 'value2',
                 'fixture3' => 'value3',
                 'none' => 'noneValue',
-            ),
+            ],
             $this->largeValuePersistence->hGetAll('test')
         );
 
@@ -145,18 +154,18 @@ class AdvKeyValuePersistenceTest extends TestCase
     public function testKeys()
     {
         $bigValue = $this->get100000bytesValue();
-        $attributes = array(
+        $attributes = [
             'fixture' => $bigValue,
             'fixture1' => 'value1',
             'fixture2' => $bigValue,
             'fixture3' => 'value3',
-        );
+        ];
 
         $this->largeValuePersistence->hmSet('test', $attributes);
         $this->largeValuePersistence->hmSet('test1', $attributes);
         $this->largeValuePersistence->hmSet('test2', $attributes);
 
-        $this->assertEquals(['test','test1','test2'] , array_values($this->largeValuePersistence->keys('*')));
+        $this->assertEquals(['test','test1','test2'], array_values($this->largeValuePersistence->keys('*')));
 
         $this->assertTrue($this->largeValuePersistence->del('test'));
         $this->assertTrue($this->largeValuePersistence->del('test1'));
@@ -212,13 +221,13 @@ class AdvKeyValuePersistenceTest extends TestCase
     public function testMapMapControl()
     {
         $this->largeValuePersistence = new \common_persistence_AdvKeyValuePersistence(
-            array(
+            [
                 \common_persistence_KeyValuePersistence::MAX_VALUE_SIZE => 100,
                 \common_persistence_KeyValuePersistence::MAP_IDENTIFIER => 'iamamap',
                 \common_persistence_KeyValuePersistence::START_MAP_DELIMITER => 'mapbegin',
                 \common_persistence_KeyValuePersistence::END_MAP_DELIMITER => 'mapend',
 
-            ),
+            ],
             new \common_persistence_InMemoryAdvKvDriver()
         );
 

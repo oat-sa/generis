@@ -1,93 +1,103 @@
 {
-	"name" : "oat-sa/generis",
-	"description" : "TAO generis library",
-    "type" : "tao-extension",
-	"authors" : [
-		{
-			"name" : "Open Assessment Technologies S.A.",
-			"homepage" : "http://www.taotesting.com"
-		},
-		{
-			"name": "Jérôme Bogaerts",
-			"role": "Developer"
-		},
-		{
-			"name": "Joel Bout",
-			"role": "Developer"
-		},
-		{
-			"name": "Bertrand Chevrier",
-			"role": "Developer"
-		},
-		{
-			"name": "Lionel Lecaque",
-			"role": "Developer"
-		},
-		{
-			"name": "Patrick Plichart",
-			"role": "Developer"
-		},
-		{
-			"name": "Dieter Raber",
-			"role": "Developer"
-		},
-		{
-			"name": "Somsack Sipasseuth",
-			"role": "Developer"
-		}
-	],
-	"support": {
-		"forum": "http://forum.taotesting.com",
-		"issues": "http://forge.taotesting.com"
-	},
-	"keywords" : [
-		"tao",
-		"oat",
-		"doctrine-dbal",
-		"computer-based-assessment"
-	],
-	"homepage" : "http://www.taotesting.com",
-	"license" : [
-		"GPL-2.0-only"
-	],
-	"extra" : {
-		"tao-extension-name" : "generis"
-	},
-	"require" : {
-		"clearFw/clearFw" : "~1.2.0",
-		"easyrdf/easyrdf" : "^0.9.0",
-		"doctrine/dbal" : "~2.5.0",
-		"zendframework/zend-servicemanager" : "~2.5.0",
-		"league/flysystem": "~1.0",
-		"oat-sa/oatbox-extension-installer": "~1.1||dev-master",
-		"php" : ">=5.6.6",
-		"psr/log": "~1.0",
-		"oat-sa/lib-generis-search": "^2.0.1",
-		"monolog/monolog": "^1.23.0",
-		"fluent/logger": "^1.0.1"
-	},
-        "require-dev" : {
-		"mikey179/vfsStream" : "1.4.0",
-		"phpunit/phpunit": "^4.8",
-		"symfony/cache": "~4.1"
-        },
-    "autoload" : {
-        "psr-4" : {
-            "oat\\generis\\model\\" : "core/",
-            "oat\\generis\\Helper\\" : "helpers/",
-            "oat\\oatbox\\" : "common/oatbox/",
-            "oat\\generis\\test\\": "test/",
-            "oat\\generis\\scripts\\": "scripts/"
-        },
-        "files": [
-        	"common/legacy/class.LegacyAutoLoader.php",
-        	"common/constants.php"
-    	]
+  "name": "oat-sa/generis",
+  "description": "TAO generis library",
+  "type": "tao-extension",
+  "authors": [
+    {
+      "name": "Open Assessment Technologies S.A.",
+      "homepage": "http://www.taotesting.com"
     },
-
-    "autoload-dev": {
-        "psr-4": {
-            "oat\\generis\\test\\": "generis/test/"
-        }
+    {
+      "name": "Jérôme Bogaerts",
+      "role": "Developer"
+    },
+    {
+      "name": "Joel Bout",
+      "role": "Developer"
+    },
+    {
+      "name": "Bertrand Chevrier",
+      "role": "Developer"
+    },
+    {
+      "name": "Lionel Lecaque",
+      "role": "Developer"
+    },
+    {
+      "name": "Patrick Plichart",
+      "role": "Developer"
+    },
+    {
+      "name": "Dieter Raber",
+      "role": "Developer"
+    },
+    {
+      "name": "Somsack Sipasseuth",
+      "role": "Developer"
     }
+  ],
+  "support": {
+    "forum": "http://forum.taotesting.com",
+    "issues": "http://forge.taotesting.com"
+  },
+  "keywords": [
+    "tao",
+    "oat",
+    "doctrine-dbal",
+    "computer-based-assessment"
+  ],
+  "homepage": "http://www.taotesting.com",
+  "license": [
+    "GPL-2.0-only"
+  ],
+  "extra": {
+    "tao-extension-name": "generis"
+  },
+  "require": {
+    "php": "^7.1",
+    "clearfw/clearfw": "~1.2.0",
+    "easyrdf/easyrdf": "^0.9.0",
+    "doctrine/dbal": "2.10.1",
+    "doctrine/annotations": "~1.6.0",
+    "zendframework/zend-servicemanager": "~2.5.0",
+    "league/flysystem": "~1.0",
+    "league/flysystem-memory": "~1.0",
+    "oat-sa/oatbox-extension-installer": "~1.1||dev-master",
+    "oat-sa/lib-generis-search": "2.1.2",
+    "monolog/monolog": "^1.23.0",
+    "fluent/logger": "^1.0.1",
+    "symfony/lock": "^3.4",
+    "psr/log": "~1.0",
+    "psr/container": "^1.0.0",
+    "psr/simple-cache" : "^1.0.1",
+    "ramsey/uuid": "^3.8"
+  },
+  "require-dev": {
+    "mikey179/vfsstream": "1.4.0",
+    "phpunit/phpunit": "^8.5",
+    "php-mock/php-mock": "^2.0",
+    "symfony/cache": "~4.1"
+  },
+  "suggest": {
+    "superbalist/flysystem-google-storage": "Supports google flystore"
+  },
+  "autoload": {
+    "psr-4": {
+      "oat\\generis\\persistence\\": "common/persistence/",
+      "oat\\generis\\model\\": "core/",
+      "oat\\generis\\Helper\\": "helpers/",
+      "oat\\oatbox\\": "common/oatbox/",
+      "oat\\generis\\test\\": "test/",
+      "oat\\generis\\scripts\\": "scripts/"
+    },
+    "files": [
+      "common/legacy/class.LegacyAutoLoader.php",
+      "common/constants.php"
+    ]
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "oat\\generis\\test\\": "generis/test/"
+    }
+  }
 }

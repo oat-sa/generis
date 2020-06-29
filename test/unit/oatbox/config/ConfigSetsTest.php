@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,6 +21,7 @@
 
 namespace oat\generis\test\unit\config;
 
+use common_exception_InconsistentData;
 use oat\oatbox\service\ConfigurableService;
 use oat\oatbox\config\ConfigSets;
 use oat\generis\test\TestCase;
@@ -40,7 +42,7 @@ class ConfigSetsTest extends TestCase
     /**
      * Configure registry instance
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configurable = new ConfigurableTestSample([
             'handlers' => [
@@ -73,11 +75,9 @@ class ConfigSetsTest extends TestCase
         $this->assertEquals('baz', $this->configurable->hashGet('foo', 'bar'));
     }
 
-    /**
-     * @expectedException \common_exception_InconsistentData
-     */
     public function testHashSetException()
     {
+        $this->expectException(common_exception_InconsistentData::class);
         $this->configurable->hashSet('key', 'bar', 'baz');
     }
 
@@ -87,7 +87,6 @@ class ConfigSetsTest extends TestCase
         $this->assertEquals(null, $this->configurable->hashGet('handlers', 'handler_1_name'));
         $this->assertFalse($this->configurable->hashRemove('handlers', 'handler_1_name'));
     }
-
 }
 
 /**
@@ -98,4 +97,3 @@ class ConfigurableTestSample extends ConfigurableService
 {
     use ConfigSets;
 }
-

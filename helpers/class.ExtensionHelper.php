@@ -21,24 +21,26 @@
  * @package generis
  *
  */
-class helpers_ExtensionHelper{
+class helpers_ExtensionHelper
+{
 
     /**
-     * Based on a list of extensions we generate an array of missing extensions 
-     * 
+     * Based on a list of extensions we generate an array of missing extensions
+     *
      * @param array $extensions
      * @return array array of missing extensions ids
      */
-    public static function getMissingExtensionIds($extensions) {
-        $inList = array();
+    public static function getMissingExtensionIds($extensions)
+    {
+        $inList = [];
         foreach ($extensions as $ext) {
             $inList[] = $ext->getId();
         }
-        $missing = array();
+        $missing = [];
         foreach ($extensions as $ext) {
             foreach ($ext->getDependencies() as $extId => $version) {
                 if (!in_array($extId, $inList) && !in_array($extId, $missing)) {
-                    $missing[] = $extId; 
+                    $missing[] = $extId;
                 }
             }
         }
@@ -47,15 +49,16 @@ class helpers_ExtensionHelper{
     
     /**
      * Sorts a list of extensions by dependencies,
-     * starting with independent extensions  
-     * 
+     * starting with independent extensions
+     *
      * @param array $extensions
      * @throws common_exception_Error
-     * @return array
+     * @return common_ext_Extension[]
      */
-    public static function sortByDependencies($extensions) {
-        $sorted = array();
-        $unsorted = array();
+    public static function sortByDependencies($extensions)
+    {
+        $sorted = [];
+        $unsorted = [];
         foreach ($extensions as $ext) {
             $unsorted[$ext->getId()] = array_keys($ext->getDependencies());
         }
@@ -71,14 +74,14 @@ class helpers_ExtensionHelper{
             if (count($unsorted) == $before) {
                 $notfound = array_diff($missing, array_keys($unsorted));
                 if (!empty($notfound)) {
-                    throw new common_exception_Error('Missing extensions '.implode(',', $notfound).' for: '.implode(',', array_keys($unsorted)));
+                    throw new common_exception_Error('Missing extensions ' . implode(',', $notfound) . ' for: ' . implode(',', array_keys($unsorted)));
                 } else {
-                    throw new common_exception_Error('Cyclic extension dependencies for: '.implode(',', array_keys($unsorted)));
+                    throw new common_exception_Error('Cyclic extension dependencies for: ' . implode(',', array_keys($unsorted)));
                 }
             }
         }
         
-        $returnValue = array();
+        $returnValue = [];
         foreach ($sorted as $id) {
             foreach ($extensions as $ext) {
                 if ($ext->getId() == $id) {
@@ -89,20 +92,22 @@ class helpers_ExtensionHelper{
         return $returnValue;
     }
     
-    public static function sortById($extensions) {
-        usort($extensions, function($a, $b) {
-            return strcasecmp($a->getId(),$b->getId());
+    public static function sortById($extensions)
+    {
+        usort($extensions, function ($a, $b) {
+            return strcasecmp($a->getId(), $b->getId());
         });
         return $extensions;
     }
     
     /**
      * Whenever or not the extension is required by other installed extensions
-     * 
+     *
      * @param common_ext_Extension $extension
      * @return boolean
      */
-    public static function isRequired(common_ext_Extension $extension) {
+    public static function isRequired(common_ext_Extension $extension)
+    {
         foreach (common_ext_ExtensionsManager::singleton()->getInstalledExtensions() as $ext) {
             foreach ($ext->getDependencies() as $extId => $version) {
                 if ($extId == $extension->getId()) {
@@ -116,11 +121,12 @@ class helpers_ExtensionHelper{
     /**
      * Whenever or not the extension is required to be enabled
      * by other enabled extensions
-     * 
+     *
      * @param common_ext_Extension $extension
      * @return boolean
      */
-    public static function mustBeEnabled(common_ext_Extension $extension) {
+    public static function mustBeEnabled(common_ext_Extension $extension)
+    {
         foreach (common_ext_ExtensionsManager::singleton()->getEnabledExtensions() as $ext) {
             foreach ($ext->getDependencies() as $extId => $version) {
                 if ($extId == $extension->getId()) {
@@ -148,23 +154,25 @@ class helpers_ExtensionHelper{
         foreach ($extension->getManifest()->getDependencies() as $requiredExt => $requiredVersion) {
             $installedVersion = $extensionManager->getInstalledVersion($requiredExt);
             if (is_null($installedVersion)) {
-                throw new common_ext_MissingExtensionException('Extension '. $requiredExt . ' is needed by the extension to be installed but is missing.',
-                    'GENERIS');
+                throw new common_ext_MissingExtensionException(
+                    'Extension ' . $requiredExt . ' is needed by the extension to be installed but is missing.',
+                    'GENERIS'
+                );
             }
             if ($requiredVersion != '*') {
                 $conditions = is_array($requiredVersion) ? $requiredVersion : [$requiredVersion];
                 foreach ($conditions as $condition) {
-                    $matches = array();
+                    $matches = [];
                     preg_match('/[0-9\.]+/', $condition, $matches, PREG_OFFSET_CAPTURE);
                     if (count($matches) == 1) {
                         $match = current($matches);
                         $nr = $match[0];
                         $operator = $match[1] > 0 ? substr($condition, 0, $match[1]) : '=';
                         if (!version_compare($installedVersion, $nr, $operator)) {
-                            throw new common_ext_OutdatedVersionException('Installed version of '.$requiredExt.' '.$installedVersion.' does not satisfy required '.$condition.' for '.$extension->getId());
+                            throw new common_ext_OutdatedVersionException('Installed version of ' . $requiredExt . ' ' . $installedVersion . ' does not satisfy required ' . $condition . ' for ' . $extension->getId());
                         }
                     } else {
-                        throw new common_exception_Error('Unsupported version requirement: "'.$condition.'"');
+                        throw new common_exception_Error('Unsupported version requirement: "' . $condition . '"');
                     }
                 }
             }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,7 +29,7 @@ class ColoredVerboseLogger extends VerboseLogger
     /**
      * @var array List of colors associated to a level
      */
-    protected $colors = array(
+    protected $colors = [
         LogLevel::EMERGENCY => '1;31', // red
         LogLevel::ALERT     => '1;31', // red
         LogLevel::CRITICAL  => '1;31', // red
@@ -37,7 +38,7 @@ class ColoredVerboseLogger extends VerboseLogger
         LogLevel::NOTICE    => '1;34', // light blue
         LogLevel::INFO      => '0;32', // green
         LogLevel::DEBUG     => '0;37', // light grey
-    );
+    ];
 
     /**
      * Log message following minimum level of verbosity
@@ -48,7 +49,7 @@ class ColoredVerboseLogger extends VerboseLogger
      * @param string $message
      * @param array $context
      */
-    public function log($level, $message, array $context = array())
+    public function log($level, $message, array $context = [])
     {
         $this->logMessage(
             $level,
@@ -85,5 +86,4 @@ class ColoredVerboseLogger extends VerboseLogger
     {
         return "\033[0m"; // Dark grey
     }
-
 }

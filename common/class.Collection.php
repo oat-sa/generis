@@ -4,20 +4,20 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
  * of the License (non-upgradable).
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- * 
+ *
  * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
  *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- * 
+ *
  */
 
 
@@ -28,7 +28,7 @@
  *
  * This file is part of Generis Object Oriented API.
  *
- * Automatically generated on 24.03.2010, 14:38:36 with ArgoUML PHP module 
+ * Automatically generated on 24.03.2010, 14:38:36 with ArgoUML PHP module
  * (last revised $Date: 2008-04-19 08:22:08 +0200 (Sat, 19 Apr 2008) $)
  *
  * @author Lionel Lecaque <lionel.lecaque@tudor.lu>
@@ -36,8 +36,7 @@
  * @see @license  GNU General Public (GPL) Version 2 http://www.opensource.org/licenses/gpl-2.0.php
  */
 
-class common_Collection
-    extends common_Object implements IteratorAggregate
+class common_Collection extends common_Object implements IteratorAggregate, Countable
 {
     // --- ASSOCIATIONS ---
 
@@ -50,7 +49,7 @@ class common_Collection
      * @access public
      * @var array
      */
-    public $sequence = array();
+    public $sequence = [];
 
     /**
      * Short description of attribute container
@@ -71,12 +70,11 @@ class common_Collection
      * @param  string debug
      * @return void
      */
-    public function __construct( common_Object $container, $debug = '')
+    public function __construct(common_Object $container, $debug = '')
     {
         
-        $this->sequence = array();
-		$this->container = $container;	
-        
+        $this->sequence = [];
+        $this->container = $container;
     }
 
     /**
@@ -105,17 +103,17 @@ class common_Collection
      * @param  Object object
      * @return int
      */
-    public function indexOf( common_Object $object)
+    public function indexOf(common_Object $object)
     {
         $returnValue = (int) 0;
 
         
-    	$returnValue = -1;
-        foreach($this->sequence as $index => $_object){
-			if($object === $_object){
-				return $index;
-			}
-		}
+        $returnValue = -1;
+        foreach ($this->sequence as $index => $_object) {
+            if ($object === $_object) {
+                return $index;
+            }
+        }
         
 
         return (int) $returnValue;
@@ -134,11 +132,11 @@ class common_Collection
         $returnValue = null;
 
         
-			
-		$returnValue = isset($this->sequence[$index]) ? $this->sequence[$index] : null;
-		if($returnValue == null) {
-			throw new common_Exception('index is out of range');
-		}
+            
+        $returnValue = isset($this->sequence[$index]) ? $this->sequence[$index] : null;
+        if ($returnValue == null) {
+            throw new common_Exception('index is out of range');
+        }
         
 
         return $returnValue;
@@ -171,11 +169,10 @@ class common_Collection
      * @param  Object value
      * @return void
      */
-    public function offsetSet( common_Object $key,  common_Object $value)
+    public function offsetSet(common_Object $key, common_Object $value)
     {
         
         $this->sequence[$key] = $value;
-        
     }
 
     /**
@@ -186,7 +183,7 @@ class common_Collection
      * @param  Object key
      * @return common_Object
      */
-    public function offsetGet( common_Object $key)
+    public function offsetGet(common_Object $key)
     {
         $returnValue = null;
 
@@ -205,11 +202,10 @@ class common_Collection
      * @param  Object key
      * @return void
      */
-    public function offsetUnset( common_Object $key)
+    public function offsetUnset(common_Object $key)
     {
         
         unset($this->sequence[$key]);
-        
     }
 
     /**
@@ -220,7 +216,7 @@ class common_Collection
      * @param  Object key
      * @return boolean
      */
-    public function offsetExists( common_Object $key)
+    public function offsetExists(common_Object $key)
     {
         $returnValue = (bool) false;
 
@@ -242,7 +238,6 @@ class common_Collection
     {
         
          return new ArrayIterator($this->sequence);
-        
     }
 
     /**
@@ -253,12 +248,11 @@ class common_Collection
      * @param  Object node
      * @return mixed
      */
-    public function add( common_Object $node)
+    public function add(common_Object $node)
     {
         
-		$this->sequence[] = $node;
-		$returnValue = $node;
-        
+        $this->sequence[] = $node;
+        $returnValue = $node;
     }
 
     /**
@@ -269,19 +263,19 @@ class common_Collection
      * @param  Object object
      * @return boolean
      */
-    public function remove( common_Object $object)
+    public function remove(common_Object $object)
     {
         $returnValue = (bool) false;
 
         
-        foreach($this->sequence as $index => $_node){
-			if($_node === $object){
-				unset($this->sequence[$index]);
-				$this->sequence = array_values($this->sequence);
-				return true;
-			}		
-		}
-		return false;
+        foreach ($this->sequence as $index => $_node) {
+            if ($_node === $object) {
+                unset($this->sequence[$index]);
+                $this->sequence = array_values($this->sequence);
+                return true;
+            }
+        }
+        return false;
         
 
         return (bool) $returnValue;
@@ -295,13 +289,13 @@ class common_Collection
      * @param  Collection collection
      * @return common_Collection
      */
-    public function union( common_Collection $collection)
+    public function union(common_Collection $collection)
     {
         $returnValue = null;
 
         
-        $returnValue = new common_Collection($this);     
-        $returnValue->sequence = array_merge($this->sequence, $collection->sequence );      
+        $returnValue = new common_Collection($this);
+        $returnValue->sequence = array_merge($this->sequence, $collection->sequence);
         
 
         return $returnValue;
@@ -315,7 +309,7 @@ class common_Collection
      * @param  Collection collection
      * @return common_Collection
      */
-    public function intersect( common_Collection $collection)
+    public function intersect(common_Collection $collection)
     {
         $returnValue = null;
 
@@ -336,15 +330,14 @@ class common_Collection
      */
     public function toArray()
     {
-        $returnValue = array();
+        $returnValue = [];
 
         
-        foreach ($this->getIterator() as $it){
-        	$returnValue[] = $it;
+        foreach ($this->getIterator() as $it) {
+            $returnValue[] = $it;
         }
         
 
         return (array) $returnValue;
     }
-
 }

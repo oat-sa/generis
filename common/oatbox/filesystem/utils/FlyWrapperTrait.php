@@ -1,16 +1,18 @@
 <?php
+
 namespace oat\oatbox\filesystem\utils;
 
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\Config;
+
 /**
  * A trait to facilitate creation of adapter wrappers
- * 
+ *
  * @author Joel Bout
  */
 trait FlyWrapperTrait
 {
-
+    
     /**
      * (non-PHPdoc)
      * @see \League\Flysystem\AdapterInterface::write()
@@ -19,7 +21,7 @@ trait FlyWrapperTrait
     {
         return $this->getAdapter()->write($path, $contents, $config);
     }
-
+    
     /**
      * (non-PHPdoc)
      * @see \League\Flysystem\AdapterInterface::writeStream()
@@ -28,7 +30,7 @@ trait FlyWrapperTrait
     {
         return $this->getAdapter()->writeStream($path, $resource, $config);
     }
-
+    
     /**
      * (non-PHPdoc)
      * @see \League\Flysystem\AdapterInterface::update()
@@ -37,7 +39,7 @@ trait FlyWrapperTrait
     {
         return $this->getAdapter()->update($path, $contents, $config);
     }
-
+    
     /**
      * (non-PHPdoc)
      * @see \League\Flysystem\AdapterInterface::updateStream()
@@ -46,7 +48,7 @@ trait FlyWrapperTrait
     {
         return $this->getAdapter()->updateStream($path, $resource, $config);
     }
-
+    
     /**
      * (non-PHPdoc)
      * @see \League\Flysystem\AdapterInterface::rename()
@@ -55,7 +57,7 @@ trait FlyWrapperTrait
     {
         return $this->getAdapter()->rename($path, $newpath);
     }
-
+    
     /**
      * (non-PHPdoc)
      * @see \League\Flysystem\AdapterInterface::copy()
@@ -64,7 +66,7 @@ trait FlyWrapperTrait
     {
         $this->getAdapter()->copy($path, $newpath);
     }
-
+    
     /**
      * (non-PHPdoc)
      * @see \League\Flysystem\AdapterInterface::delete()
@@ -73,7 +75,7 @@ trait FlyWrapperTrait
     {
         return $this->getAdapter()->delete($path);
     }
-
+    
     /**
      * (non-PHPdoc)
      * @see \League\Flysystem\AdapterInterface::deleteDir()
@@ -82,7 +84,7 @@ trait FlyWrapperTrait
     {
         return $this->getAdapter()->deleteDir($dirname);
     }
-
+    
     /**
      * (non-PHPdoc)
      * @see \League\Flysystem\AdapterInterface::createDir()
@@ -91,7 +93,7 @@ trait FlyWrapperTrait
     {
         return $this->getAdapter()->createDir($dirname, $config);
     }
-
+    
     /**
      * (non-PHPdoc)
      * @see \League\Flysystem\AdapterInterface::setVisibility()
@@ -100,7 +102,7 @@ trait FlyWrapperTrait
     {
         return $this->getAdapter()->setVisibility($path, $visibility);
     }
-
+    
     /**
      * (non-PHPdoc)
      * @see \League\Flysystem\ReadInterface::has()
@@ -109,7 +111,7 @@ trait FlyWrapperTrait
     {
         return $this->getAdapter()->has($path);
     }
-
+    
     /**
      * (non-PHPdoc)
      * @see \League\Flysystem\ReadInterface::read()
@@ -118,7 +120,7 @@ trait FlyWrapperTrait
     {
         return $this->getAdapter()->read($path);
     }
-
+    
     /**
      * (non-PHPdoc)
      * @see \League\Flysystem\ReadInterface::readStream()
@@ -127,7 +129,7 @@ trait FlyWrapperTrait
     {
         return $this->getAdapter()->readStream($path);
     }
-
+    
     /**
      * (non-PHPdoc)
      * @see \League\Flysystem\ReadInterface::listContents()
@@ -136,7 +138,7 @@ trait FlyWrapperTrait
     {
         return $this->getAdapter()->listContents($directory, $recursive);
     }
-
+    
     /**
      * (non-PHPdoc)
      * @see \League\Flysystem\ReadInterface::getMetadata()
@@ -145,7 +147,7 @@ trait FlyWrapperTrait
     {
         return $this->getAdapter()->getMetadata($path);
     }
-
+    
     /**
      * (non-PHPdoc)
      * @see \League\Flysystem\ReadInterface::getSize()
@@ -154,7 +156,7 @@ trait FlyWrapperTrait
     {
         return $this->getAdapter()->getSize($path);
     }
-
+    
     /**
      * (non-PHPdoc)
      * @see \League\Flysystem\ReadInterface::getMimetype()
@@ -163,7 +165,7 @@ trait FlyWrapperTrait
     {
         return $this->getAdapter()->getMimetype($path);
     }
-
+    
     /**
      * (non-PHPdoc)
      * @see \League\Flysystem\ReadInterface::getTimestamp()
@@ -172,7 +174,7 @@ trait FlyWrapperTrait
     {
         return $this->getAdapter()->getTimestamp($path);
     }
-
+    
     /**
      * (non-PHPdoc)
      * @see \League\Flysystem\ReadInterface::getVisibility()
@@ -181,10 +183,10 @@ trait FlyWrapperTrait
     {
         return $this->getAdapter()->getVisibility($path);
     }
-
+    
     /**
      * Return the adapter implementation
-     * 
+     *
      * @return AdapterInterface
      */
     abstract public function getAdapter();

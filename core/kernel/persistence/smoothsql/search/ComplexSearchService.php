@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,17 +22,20 @@
  * @package generis
  *
  */
+
 namespace   oat\generis\model\kernel\persistence\smoothsql\search;
 
 use core_kernel_persistence_smoothsql_SmoothModel;
 use oat\generis\model\kernel\persistence\smoothsql\search\filter\FilterFactory;
 use oat\oatbox\service\ConfigurableService;
 use oat\search\base\QueryBuilderInterface;
+use oat\search\base\QueryInterface;
 use oat\search\base\SearchGateWayInterface;
 use Zend\ServiceManager\Config;
 use Zend\ServiceManager\ServiceManager;
 use oat\generis\model\data\ModelManager;
 use oat\generis\model\data\Model;
+
 /**
  * Complexe search service
  *
@@ -46,7 +50,7 @@ class ComplexSearchService extends ConfigurableService
 
     /**
      * internal service locator
-     * @var \Zend\ServiceManager\ServiceLocatorInterface 
+     * @var \Zend\ServiceManager\ServiceLocatorInterface
      */
     protected $services;
     /**
@@ -80,12 +84,13 @@ class ComplexSearchService extends ConfigurableService
      * @param boolean $like
      * @return string
      */
-    protected function getOperator($like ) {
+    protected function getOperator($like)
+    {
         $operator = 'equals';
         
-        if($like) {
+        if ($like) {
             $operator = 'contains';
-        } 
+        }
         
         return $operator;
     }
@@ -103,7 +108,8 @@ class ComplexSearchService extends ConfigurableService
      * return search gateway
      * @return SearchGateWayInterface
      */
-    public function getGateway() {
+    public function getGateway()
+    {
         if (is_null($this->gateway)) {
             $this->gateway = $this->getZendServiceManager()->get(self::SERVICE_SEARCH_ID)
                 ->setServiceLocator($this->getZendServiceManager())
@@ -115,24 +121,27 @@ class ComplexSearchService extends ConfigurableService
      * return a new query builder
      * @return \oat\search\QueryBuilder
      */
-    public function query() {
+    public function query()
+    {
         return $this->getGateway()->query();
     }
 
-        /**
+    /**
      * return a preset query builder with types
      * @param QueryBuilderInterface $query
      * @param string $class_uri
      * @param boolean $recursive
-     * @return QueryBuilderInterface
+     * @return QueryInterface
+     * @throws \common_exception_Error
      */
-    public function searchType(QueryBuilderInterface $query , $class_uri , $recursive = false) {
+    public function searchType(QueryBuilderInterface $query, $class_uri, $recursive = false)
+    {
 
         $Class    = new \core_kernel_classes_Class($class_uri);
         $rdftypes = [];
 
         if ($recursive === true) {
-            foreach($Class->getSubClasses(true) as $subClass) {
+            foreach ($Class->getSubClasses(true) as $subClass) {
                 $rdftypes[] = $subClass->getUri();
             }
         }
@@ -153,9 +162,13 @@ class ComplexSearchService extends ConfigurableService
      * @param string $defaultLanguage
      * @return $this
      */
-    public function setLanguage(QueryBuilderInterface $query , $userLanguage = '' , $defaultLanguage = \DEFAULT_LANG) {
+    public function setLanguage(QueryBuilderInterface $query, $userLanguage = '', $defaultLanguage = null)
+    {
+        if (is_null($defaultLanguage)) {
+            $defaultLanguage = DEFAULT_LANG;
+        }
         $options = $this->getGateway()->getOptions();
-        if(!empty($userLanguage)) {
+        if (!empty($userLanguage)) {
             $options['language'] = $userLanguage;
         }
         $options['defaultLanguage'] = $defaultLanguage;
@@ -165,13 +178,14 @@ class ComplexSearchService extends ConfigurableService
         return $query->newQuery();
     }
     
-    protected function parseValue($rawValue) {
+    protected function parseValue($rawValue)
+    {
         $result = [];
         if (!is_array($rawValue)) {
             $rawValue = [$rawValue];
         }
         foreach ($rawValue as $value) {
-            if($value instanceof \core_kernel_classes_Resource ){
+            if ($value instanceof \core_kernel_classes_Resource) {
                 $result[] = $value->getUri();
             } else {
                 $result[] = preg_replace('/^\*$/', '', $value);
@@ -186,14 +200,13 @@ class ComplexSearchService extends ConfigurableService
      * @return boolean
      * @throws exception\InvalidValueException
      */
-    protected function validValue($value) {
-        if(is_array($value)) {
-                
-                if(empty($value)) {
-                    throw new exception\InvalidValueException('query filter value cann\'t be empty ');
-                }
-
-            } 
+    protected function validValue($value)
+    {
+        if (is_array($value)) {
+            if (empty($value)) {
+                throw new exception\InvalidValueException('query filter value cann\'t be empty ');
+            }
+        }
     }
 
     /**
@@ -213,13 +226,13 @@ class ComplexSearchService extends ConfigurableService
      */
     public function getQuery(core_kernel_persistence_smoothsql_SmoothModel $model, $classUri, array $propertyFilters, $and = true, $isLikeOperator = true, $lang = '', $offset = 0, $limit = 0, $order = '', $orderDir = 'ASC')
     {
-        $query = $this->getGateway()->query()->setLimit( $limit )->setOffset($offset );
+        $query = $this->getGateway()->query()->setLimit($limit)->setOffset($offset);
         
-        if(!empty($order)) {
+        if (!empty($order)) {
             $query->sort([$order => strtolower($orderDir)]);
         }
         
-        $this->setLanguage($query , $lang);
+        $this->setLanguage($query, $lang);
 
         $criteria = $query->newQuery()
                 ->add('http://www.w3.org/1999/02/22-rdf-syntax-ns#type')
@@ -227,31 +240,30 @@ class ComplexSearchService extends ConfigurableService
         
         $query->setCriteria($criteria);
         $count     = 0;
-		$propertyFilters = FilterFactory::buildFilters($propertyFilters, $isLikeOperator);
-		$maxLength = count($propertyFilters);
+        $propertyFilters = FilterFactory::buildFilters($propertyFilters, $isLikeOperator);
+        $maxLength = count($propertyFilters);
         foreach ($propertyFilters as $filter) {
-        	$this->validValue($filter->getValue());
+            $this->validValue($filter->getValue());
 
-			$criteria->addCriterion($filter->getKey(), $filter->getOperator(), $this->parseValue($filter->getValue()));
+            $criteria->addCriterion($filter->getKey(), $filter->getOperator(), $this->parseValue($filter->getValue()));
 
-			$orValues = $filter->getOrConditionValues();
+            $orValues = $filter->getOrConditionValues();
 
-			foreach ($orValues as $val) {
-				$criteria->addOr($this->parseValue($val));
-			}
+            foreach ($orValues as $val) {
+                $criteria->addOr($this->parseValue($val));
+            }
 
-			$count++;
-			if($and === false && $maxLength > $count) {
-				$criteria = $query->newQuery()
-					->add('http://www.w3.org/1999/02/22-rdf-syntax-ns#type')
-					->in($classUri);
-				$query->setOr($criteria);
-			}
-		}
+            $count++;
+            if ($and === false && $maxLength > $count) {
+                $criteria = $query->newQuery()
+                    ->add('http://www.w3.org/1999/02/22-rdf-syntax-ns#type')
+                    ->in($classUri);
+                $query->setOr($criteria);
+            }
+        }
 
         $queryString = $this->getGateway()->serialyse($query)->getQuery();
 
         return $queryString;
     }
-    
 }

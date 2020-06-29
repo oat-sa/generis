@@ -1,4 +1,7 @@
 <?php
+
+use Doctrine\DBAL\Schema\AbstractSchemaManager;
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,24 +24,28 @@
  * @package generis
  *
  */
- class common_persistence_sql_dbal_SchemaManager extends common_persistence_sql_SchemaManager{
+class common_persistence_sql_dbal_SchemaManager extends common_persistence_sql_SchemaManager
+{
     
     private $dbalSchemaManager;
     
     
     /**
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
-     * @param d $dbalSchemaManager
+     * @param AbstractSchemaManager $dbalSchemaManager
      */
-    public function __construct($dbalSchemaManager){
+    public function __construct($dbalSchemaManager)
+    {
         $this->dbalSchemaManager = $dbalSchemaManager;
     }
     
     
     /**
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
+     * @return AbstractSchemaManager
      */
-    protected function getSchemaManager() {
+    protected function getSchemaManager()
+    {
         return $this->dbalSchemaManager;
     }
     
@@ -66,16 +73,4 @@
     {
         return '42703';
     }
-       
-
-
-
-    
-
-
-
-    
-
-    
-    
 }

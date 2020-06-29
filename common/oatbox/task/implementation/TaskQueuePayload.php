@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: christophe
@@ -7,7 +8,6 @@
  */
 
 namespace oat\oatbox\task\implementation;
-
 
 use oat\oatbox\task\Task;
 use oat\oatbox\task\TaskInterface\TaskPayLoad;
@@ -21,7 +21,6 @@ use Zend\ServiceManager\ServiceLocatorAwareTrait;
  */
 class TaskQueuePayload implements TaskPayLoad
 {
-
     use ServiceLocatorAwareTrait;
 
     /**
@@ -41,7 +40,7 @@ class TaskQueuePayload implements TaskPayLoad
 
         $params = $this->request->getFilters();
 
-        if(!empty($this->currentUserId)) {
+        if (!empty($this->currentUserId)) {
             $params['owner'] = $this->currentUserId;
         }
 
@@ -51,7 +50,7 @@ class TaskQueuePayload implements TaskPayLoad
         $sortBy    = $this->request->getSortBy();
         $sortOrder = $this->request->getSortOrder();
 
-        $iterator = $this->persistence->search($params ,  $rows , $page , $sortBy , $sortOrder );
+        $iterator = $this->persistence->search($params, $rows, $page, $sortBy, $sortOrder);
 
         $taskList = [];
 
@@ -74,18 +73,18 @@ class TaskQueuePayload implements TaskPayLoad
             'rows'    => $rows,
             'page'    => $page,
             'amount'  => count($taskList),
-            'total'   => ceil($countTotal/$rows),
+            'total'   => ceil($countTotal / $rows),
             'data'    => $taskList,
         ];
 
         return $data;
-
     }
 
-    public function count() {
+    public function count()
+    {
         $params = $this->request->getFilters();
 
-        if(!empty($this->currentUserId)) {
+        if (!empty($this->currentUserId)) {
             $params['owner'] = $this->currentUserId;
         }
 
@@ -108,6 +107,4 @@ class TaskQueuePayload implements TaskPayLoad
     {
         return $this->getPayload();
     }
-
-
 }

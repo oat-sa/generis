@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,86 +22,96 @@
  * @package generis
  *
  */
+
+use \oat\generis\Helper\UuidPrimaryKeyTrait;
+
 abstract class common_persistence_Persistence
 {
+    use UuidPrimaryKeyTrait;
+
     /**
      * Driver of the persistence
-     * 
+     *
      * @var common_persistence_Driver
      */
     private $driver;
-    
+
     /**
      * Persistence parameters
-     * 
+     *
      * @var array
      */
-    private $params = array();
-    
-    public static function getPersistence($driverId) {
+    private $params = [];
+
+    public static function getPersistence($driverId)
+    {
         $returnValue = common_persistence_Manager::getPersistence($driverId);
         $class = get_called_class();
         if (!$returnValue instanceof $class) {
-            common_Logger::w('Got a ',get_class($returnValue).' instead of '.$class);
+            common_Logger::w('Got a ', get_class($returnValue) . ' instead of ' . $class);
         }
         return $returnValue;
     }
 
     /**
      * Constructor
-     * 
+     *
      * @access public
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
      * @param array $params
      * @param common_persistence_driver $driver
      */
-    public function __construct($params = array(), common_persistence_driver $driver){
+    public function __construct($params = [], common_persistence_driver $driver)
+    {
         $this->setParams($params);
         $this->setDriver($driver);
     }
 
     /**
      * Retrieve persistence's driver
-     * 
+     *
      * @access public
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
      * @return common_persistence_driver
      */
-    public function getDriver(){
+    public function getDriver()
+    {
         return $this->driver;
     }
 
     /**
      * Set the persistence
-     * 
+     *
      * @access protected
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
      * @param common_persistence_Driver $driver
      */
-    protected  function setDriver(common_persistence_Driver $driver){
-        $this->driver=$driver;
+    protected function setDriver(common_persistence_Driver $driver)
+    {
+        $this->driver = $driver;
     }
 
     /**
      * Retrieve persistence's parameters
-     * 
+     *
      * @access protected
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
-     * @return multitype:
+     * @return array:
      */
-    protected function getParams(){
+    protected function getParams()
+    {
         return $this->params;
     }
 
     /**
      * set persistence's parameters
-     * 
+     *
      * @access protected
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
-     * @param unknown $params
+     * @param array $params
      */
-    protected function setParams($params){
+    protected function setParams($params)
+    {
         $this->params = $params;
     }
 }
-

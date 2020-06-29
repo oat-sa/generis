@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,54 +21,53 @@
 
 namespace oat\generis\test\integration;
 
-
+use oat\generis\test\TestCase;
 use oat\oatbox\BasicRegistry;
 
-class RegistryTest extends \PHPUnit_Framework_TestCase
+class RegistryTest extends TestCase
 {
     /**
      *
      * @author Lionel Lecaque, lionel@taotesting.com
      */
-    public function setUp()
+    public function setUp(): void
     {
     }
-    
+
     /**
-     * 
+     *
      * @author Lionel Lecaque, lionel@taotesting.com
      */
-    public function testSet(){
-        BasicRegistry::getRegistry()->set('key','value');
+    public function testSet()
+    {
+        BasicRegistry::getRegistry()->set('key', 'value');
         $data = BasicRegistry::getRegistry()->getMap();
         $this->assertEquals('value', $data['key']);
     }
-    
-    /**
-     * @depends testSet
-     * 
-     * @author Lionel Lecaque, lionel@taotesting.com
-     */
-    public function testGet(){
-        $value = BasicRegistry::getRegistry()->get('key');
-        $this->assertEquals('value', $value);
-    }
-    
+
     /**
      * @depends testSet
      *
      * @author Lionel Lecaque, lionel@taotesting.com
      */
-    public function testRemove(){
-        
+    public function testGet()
+    {
+        $value = BasicRegistry::getRegistry()->get('key');
+        $this->assertEquals('value', $value);
+    }
+
+    /**
+     * @depends testSet
+     *
+     * @author Lionel Lecaque, lionel@taotesting.com
+     */
+    public function testRemove()
+    {
+
         $data = BasicRegistry::getRegistry()->getMap();
         $this->assertTrue(isset($data['key']));
         BasicRegistry::getRegistry()->remove('key');
         $data = BasicRegistry::getRegistry()->getMap();
         $this->assertFalse(isset($data['key']));
-        
     }
-    
 }
-
-?>

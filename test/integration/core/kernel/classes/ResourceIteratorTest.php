@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,7 +34,7 @@ class ResourceIteratorTest extends TaoPhpUnitTestRunner
 
     protected static $sampleClass = 'http://www.tao.lu/Ontologies/TAO.rdf#ResourceIteratorTest';
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->removeResources();
     }

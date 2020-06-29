@@ -23,8 +23,8 @@
  */
 
 /**
- * Interface of drivers that provide hash possibilities 
- * 
+ * Interface of drivers that provide hash possibilities
+ *
  * @author Patrick Plichart <patrick@taotesting.com>
  * @author Joel Bout <joel@taotesting.com>
  */
@@ -32,7 +32,7 @@ interface common_persistence_HashTableDriver extends common_persistence_Driver
 {
     /**
      * Sets multiple fields in a single operation
-     * 
+     *
      * @param string $key
      * @param array $fields
      * @return boolean
@@ -41,7 +41,7 @@ interface common_persistence_HashTableDriver extends common_persistence_Driver
     
     /**
      * Checks whenever a given field exists for a given key
-     * 
+     *
      * @param string $key
      * @param string $field
      * @return boolean
@@ -50,7 +50,7 @@ interface common_persistence_HashTableDriver extends common_persistence_Driver
     
     /**
      * Sets the value of a field
-     * 
+     *
      * @param string $key
      * @param string $field
      * @param string $value
@@ -61,7 +61,7 @@ interface common_persistence_HashTableDriver extends common_persistence_Driver
     /**
      * gets the value of a field
      * return false if not found
-     * 
+     *
      * @param string $key
      * @param string $field
      * @return string
@@ -71,7 +71,7 @@ interface common_persistence_HashTableDriver extends common_persistence_Driver
     /**
      * Get all fields of the Hashtable
      * return false if not found
-     * 
+     *
      * @param string $key
      * @return array
      */

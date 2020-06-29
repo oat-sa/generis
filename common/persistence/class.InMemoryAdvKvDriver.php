@@ -22,6 +22,15 @@ class common_persistence_InMemoryAdvKvDriver extends common_persistence_InMemory
 {
     const HPREFIX = 'hPrfx_';
 
+    /**
+     *
+     * @see common_persistence_Driver::connect()
+     */
+    function connect($id, array $params)
+    {
+        return new \common_persistence_AdvKeyValuePersistence($params, $this);
+    }
+
     public function hmSet($key, $fields)
     {
         if (!is_array($fields)) {
@@ -40,16 +49,15 @@ class common_persistence_InMemoryAdvKvDriver extends common_persistence_InMemory
 
     public function hSet($key, $field, $value)
     {
-        if (! isset($this->persistence[$key])) {
-            return false;
-        }
+        $result = !isset($this->persistence[$key][self::HPREFIX . $field]);
         $this->persistence[$key][self::HPREFIX . $field] = $value;
-        return true;
+        return $result;
     }
 
     public function hGet($key, $field)
     {
-        if (! isset($this->persistence[$key])
+        if (
+            ! isset($this->persistence[$key])
             || ! isset($this->persistence[$key][self::HPREFIX . $field])
         ) {
             return false;

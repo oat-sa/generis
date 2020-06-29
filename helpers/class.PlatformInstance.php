@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,10 +21,9 @@
 
 use oat\generis\Helper\SystemHelper;
 
-
 /**
  * A utility class focusing on the current instance.
- * 
+ *
  * @author Joel Bout <joel@taotesting.com>
  * @deprecated
  */
@@ -35,7 +35,8 @@ class helpers_PlatformInstance
      * @deprecated use ApplicationHelper::isDemo
      * @return boolean
      */
-    static public function isDemo() {
+    public static function isDemo()
+    {
         common_Logger::w('Deprecated fucntion helpers_PlatformInstance::isDemo called, please use oat\tao\helpers\ApplicationHelper');
         return false;
     }
@@ -45,7 +46,8 @@ class helpers_PlatformInstance
      * @deprecated use SystemHelper::isWindows
      * @return boolean
      */
-    static public function isWindows() {
+    public static function isWindows()
+    {
         return SystemHelper::isWindows();
     }
 }

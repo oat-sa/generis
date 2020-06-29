@@ -1,23 +1,23 @@
 <?php
-/** 
+/**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
  * of the License (non-upgradable).
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- * 
+ *
  * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
  *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- * 
+ *
  */
 
 /**
@@ -26,7 +26,7 @@
  * @access public
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
  * @package generis
- 
+
  */
 class common_configuration_ComponentFactory
 {
@@ -145,14 +145,29 @@ class common_configuration_ComponentFactory
      * @param  string location
      * @param  string expectedRights
      * @param  boolean optional
+     * @param  boolean recursive
+     * @param  boolean mustCheckIfEmpty
+     * @throws common_configuration_MalformedRightsException
      * @return common_configuration_FileSystemComponent
      */
-    public static function buildFileSystemComponent($location, $expectedRights, $optional = false, $recursive = false)
-    {
-        $returnValue = new common_configuration_FileSystemComponent($location, $expectedRights, $optional = false, $recursive);
+    public static function buildFileSystemComponent(
+        $location,
+        $expectedRights,
+        $optional = false,
+        $recursive = false,
+        $mustCheckIfEmpty = false
+    ) {
+        $returnValue = new common_configuration_FileSystemComponent(
+            $location,
+            $expectedRights,
+            $optional,
+            $recursive,
+            $mustCheckIfEmpty
+        );
+
         self::incrementFileSystemCount();
+
         $returnValue->setName('FileSystemComponentCheck_' . self::getFileSystemCount());
-        
 
         return $returnValue;
     }
@@ -172,28 +187,26 @@ class common_configuration_ComponentFactory
         $returnValue = null;
 
         
-    	// Camelize the name to find it in the checks folder.
+        // Camelize the name to find it in the checks folder.
         $name = explode('_', $name);
-        for ($i = 0; $i < count($name); $i++){
+        for ($i = 0; $i < count($name); $i++) {
             $name[$i] = ucfirst($name[$i]);
         }
         $name = implode('', $name);
         $checkClassName = "${extension}_install_checks_${name}";
         
         // Instanciate the Component.
-        try{
+        try {
             $checkClass = new ReflectionClass($checkClassName);
-            $returnValue = $checkClass->newInstanceArgs(array("custom_${extension}_${name}", $optional));
-        }
-        catch (LogicException $e){
-	        $msg = "Cannot instantiate custom check '${name}' for extension '${extension}': ";
-	        $msg .= $e->getMessage();
-	        throw new common_configuration_ComponentFactoryException($msg);
-        }
-        catch (ReflectionException $e){
-        	$msg = "Cannot instantiate custom check '${name}' for extension '${extension}': ";
-	        $msg .= $e->getMessage();
-	        throw new common_configuration_ComponentFactoryException($msg);
+            $returnValue = $checkClass->newInstanceArgs(["custom_${extension}_${name}", $optional]);
+        } catch (LogicException $e) {
+            $msg = "Cannot instantiate custom check '${name}' for extension '${extension}': ";
+            $msg .= $e->getMessage();
+            throw new common_configuration_ComponentFactoryException($msg);
+        } catch (ReflectionException $e) {
+            $msg = "Cannot instantiate custom check '${name}' for extension '${extension}': ";
+            $msg .= $e->getMessage();
+            throw new common_configuration_ComponentFactoryException($msg);
         }
         
 
@@ -235,134 +248,129 @@ class common_configuration_ComponentFactory
         $returnValue = null;
 
         
-        if (!empty($array)){
-        	if (!empty($array['type'])){
-        		$acceptedTypes = array('PHPRuntime', 'PHPINIValue', 'PHPExtension', 'PHPDatabaseDriver', 'FileSystemComponent', 'Custom', 'Mock');
-        		$cleanType = preg_replace('/^Check/i', '', $array['type']);
-        		if (in_array($cleanType, $acceptedTypes)){
-        			
-        			if (!empty($array['value'])){
-        				$values = $array['value'];
-        				
-        				// Optional parameter is always used.
-        				$optional = false;
-        				if (!empty($values['optional'])){
-        					$optional = $values['optional'];
-        				}
-        				
-	        			switch ($cleanType){
-	        				case 'PHPRuntime':
-	        					$max = null;
-	        					if (!empty($values['max'])){
-	        						$max = $values['max'];
-	        					}
-	        					
-	        					if (empty($values['min'])){
-	        						$msg = "Mandatory attribute 'min' is missing.";
-	        						throw new common_configuration_ComponentFactoryException($msg);	
-	        					}
-	        					
-	        					$returnValue = self::buildPHPRuntime($values['min'], $max, $optional);
-	        				break;
-	        				
-	        				case 'PHPINIValue':
-	        					if (empty($values['name'])){
-	        						$msg = "Mandatory attribute 'name' is missing.";
-	        						throw new common_configuration_ComponentFactoryException($msg);	
-	        					}
-	        					
-	        					if (empty($values['value']) && $values['value'] !== '0'){
-	        						$msg = "Mandatory attribute 'value' is missing.";
-	        						throw new common_configuration_ComponentFactoryException($msg);	
-	        					}
-	        					
-	        					$returnValue = self::buildPHPINIValue($values['name'], $values['value'], $optional);
-	        				break;
-	        				
-	        				case 'PHPExtension':
-	        					if (empty($values['name'])){
-	        						$msg = "Mandatory attribute 'name' is missing.";
-	        						throw new common_configuration_ComponentFactoryException($msg);	
-	        					}
-	        					
-	        					$min = null;
-	        					if (!empty($values['min'])){
-	        						$min = $values['min'];	
-	        					}
-	        					
-	        					$max = null;
-	        					if (!empty($values['max'])){
-	        						$max = $values['max'];	
-	        					}
-	        					
-	        					$returnValue = self::buildPHPExtension($values['name'], $min, $max, $optional);
-	        				break;
-	        				
-	        				case 'PHPDatabaseDriver':
-	        					if (empty($values['name'])){
-	        						$msg = "Mandatory attribute 'name' is missing.";
-	        						throw new common_configuration_ComponentFactoryException($msg);	
-	        					}
-	        					
-	        					$returnValue = self::buildPHPDatabaseDriver($values['name'], $optional);
-	        				break;
-	        				
-	        				case 'FileSystemComponent':
-	        					if (empty($values['location'])){
-	        						$msg = "Mandatory attribute 'location' is missing.";
-	        						throw new common_configuration_ComponentFactoryException($msg);	
-	        					}
-	        					
-	        					if (empty($values['rights'])){
-	        						$msg = "Mandatory attribute 'rights' is missing.";
-	        						throw new common_configuration_ComponentFactoryException($msg);	
-	        					}
-	        					
-	        					$returnValue = self::buildFileSystemComponent($values['location'], $values['rights'], $optional);
-	        				break;
-	        				
-	        				case 'Custom':
-	        					if (empty($values['name'])){
-	        						$msg = "Mandatory attribute 'name' is missing.";
-	        						throw new common_configuration_ComponentFactoryException($msg);	
-	        					}
+        if (!empty($array)) {
+            if (!empty($array['type'])) {
+                $acceptedTypes = ['PHPRuntime', 'PHPINIValue', 'PHPExtension', 'PHPDatabaseDriver', 'FileSystemComponent', 'Custom', 'Mock'];
+                $cleanType = preg_replace('/^Check/i', '', $array['type']);
+                if (in_array($cleanType, $acceptedTypes)) {
+                    if (!empty($array['value'])) {
+                        $values = $array['value'];
+                        
+                        // Optional parameter is always used.
+                        $optional = false;
+                        if (!empty($values['optional'])) {
+                            $optional = $values['optional'];
+                        }
+                        
+                        switch ($cleanType) {
+                            case 'PHPRuntime':
+                                $max = null;
+                                if (!empty($values['max'])) {
+                                    $max = $values['max'];
+                                }
+                                
+                                if (empty($values['min'])) {
+                                    $msg = "Mandatory attribute 'min' is missing.";
+                                    throw new common_configuration_ComponentFactoryException($msg);
+                                }
+                                
+                                $returnValue = self::buildPHPRuntime($values['min'], $max, $optional);
+                                break;
+                            
+                            case 'PHPINIValue':
+                                if (empty($values['name'])) {
+                                    $msg = "Mandatory attribute 'name' is missing.";
+                                    throw new common_configuration_ComponentFactoryException($msg);
+                                }
+                                
+                                if (empty($values['value']) && $values['value'] !== '0') {
+                                    $msg = "Mandatory attribute 'value' is missing.";
+                                    throw new common_configuration_ComponentFactoryException($msg);
+                                }
+                                
+                                $returnValue = self::buildPHPINIValue($values['name'], $values['value'], $optional);
+                                break;
+                            
+                            case 'PHPExtension':
+                                if (empty($values['name'])) {
+                                    $msg = "Mandatory attribute 'name' is missing.";
+                                    throw new common_configuration_ComponentFactoryException($msg);
+                                }
+                                
+                                $min = null;
+                                if (!empty($values['min'])) {
+                                    $min = $values['min'];
+                                }
+                                
+                                $max = null;
+                                if (!empty($values['max'])) {
+                                    $max = $values['max'];
+                                }
+                                
+                                $returnValue = self::buildPHPExtension($values['name'], $min, $max, $optional);
+                                break;
+                            
+                            case 'PHPDatabaseDriver':
+                                if (empty($values['name'])) {
+                                    $msg = "Mandatory attribute 'name' is missing.";
+                                    throw new common_configuration_ComponentFactoryException($msg);
+                                }
+                                
+                                $returnValue = self::buildPHPDatabaseDriver($values['name'], $optional);
+                                break;
+                            
+                            case 'FileSystemComponent':
+                                if (empty($values['location'])) {
+                                    $msg = "Mandatory attribute 'location' is missing.";
+                                    throw new common_configuration_ComponentFactoryException($msg);
+                                }
+                                
+                                if (empty($values['rights'])) {
+                                    $msg = "Mandatory attribute 'rights' is missing.";
+                                    throw new common_configuration_ComponentFactoryException($msg);
+                                }
+                                
+                                $returnValue = self::buildFileSystemComponent($values['location'], $values['rights'], $optional);
+                                break;
+                            
+                            case 'Custom':
+                                if (empty($values['name'])) {
+                                    $msg = "Mandatory attribute 'name' is missing.";
+                                    throw new common_configuration_ComponentFactoryException($msg);
+                                }
 
-	        					$extension = 'generis';
-	        					if (!empty($values['extension'])){
-	        						$extension = $values['extension'];
-	        					}
-	        					
-	        					$returnValue = self::buildCustom($values['name'], $extension, $optional);
-	        				break;
-	        				
-	        				case 'Mock':
-	        					$status = common_configuration_Report::VALID; 
-	        					if (!empty($values['status'])){
-	        						$status = $values['status'];
-	        					}
-	        					
-	        					$returnValue = self::buildMock($status, $optional);
-	        				break;
-	        			}	
-        			}
-        			else{
-        				$msg = "No 'value' array provided.";
-        				throw new common_configuration_ComponentFactoryException($msg);
-        			}
-        		}
-        		else{
-        			$msg = "Unknown 'type' = '${cleanType}'.";
-        			throw new common_configuration_ComponentFactoryException($msg);
-        		}
-        	}
-        	else{
-        		$msg = "Cannot build a Configuration Component without 'type'.";
-        		throw new common_configuration_ComponentFactoryException($msg);
-        	}
-        }
-        else{
-        	$msg = 'Cannot build a Configuration Component with an empty array.';
-        	throw new common_configuration_ComponentFactoryException($msg);
+                                $extension = 'generis';
+                                if (!empty($values['extension'])) {
+                                    $extension = $values['extension'];
+                                }
+                                
+                                $returnValue = self::buildCustom($values['name'], $extension, $optional);
+                                break;
+                            
+                            case 'Mock':
+                                $status = common_configuration_Report::VALID;
+                                if (!empty($values['status'])) {
+                                    $status = $values['status'];
+                                }
+                                
+                                $returnValue = self::buildMock($status, $optional);
+                                break;
+                        }
+                    } else {
+                        $msg = "No 'value' array provided.";
+                        throw new common_configuration_ComponentFactoryException($msg);
+                    }
+                } else {
+                    $msg = "Unknown 'type' = '${cleanType}'.";
+                    throw new common_configuration_ComponentFactoryException($msg);
+                }
+            } else {
+                $msg = "Cannot build a Configuration Component without 'type'.";
+                throw new common_configuration_ComponentFactoryException($msg);
+            }
+        } else {
+            $msg = 'Cannot build a Configuration Component with an empty array.';
+            throw new common_configuration_ComponentFactoryException($msg);
         }
         
 
@@ -378,11 +386,7 @@ class common_configuration_ComponentFactory
      */
     private static function getFileSystemCount()
     {
-        $returnValue = (int) 0;
-
-        
         $returnValue = self::$fileSystemCount;
-        
 
         return (int) $returnValue;
     }
@@ -399,7 +403,6 @@ class common_configuration_ComponentFactory
     {
         
         self::$fileSystemCount = $fileSystemCount;
-        
     }
 
     /**
@@ -415,7 +418,6 @@ class common_configuration_ComponentFactory
         $count = self::getFileSystemCount();
         $count++;
         self::setFileSystemCount($count);
-        
     }
 
     /**
@@ -427,11 +429,7 @@ class common_configuration_ComponentFactory
      */
     private static function getMockCount()
     {
-        $returnValue = (int) 0;
-
-        
         $returnValue = self::$mockCount;
-        
 
         return (int) $returnValue;
     }
@@ -448,7 +446,6 @@ class common_configuration_ComponentFactory
     {
         
         self::$mockCount = $mockCount;
-        
     }
 
     /**
@@ -464,7 +461,5 @@ class common_configuration_ComponentFactory
         $count = self::getMockCount();
         $count++;
         self::setMockCount($count);
-        
     }
-
-} 
+}

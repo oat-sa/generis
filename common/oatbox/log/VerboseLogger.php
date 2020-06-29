@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,7 +34,7 @@ class VerboseLogger extends AbstractLogger
     /**
      * @var array Level priority list.
      */
-    protected $levels = array(
+    protected $levels = [
         LogLevel::EMERGENCY,
         LogLevel::ALERT,
         LogLevel::CRITICAL,
@@ -42,7 +43,7 @@ class VerboseLogger extends AbstractLogger
         LogLevel::NOTICE,
         LogLevel::INFO,
         LogLevel::DEBUG,
-    );
+    ];
 
     /**
      * VerboseLogger constructor.
@@ -67,7 +68,7 @@ class VerboseLogger extends AbstractLogger
      * @param string $message
      * @param array $context
      */
-    public function log($level, $message, array $context = array())
+    public function log($level, $message, array $context = [])
     {
         $this->logMessage(
             $level,

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,27 +19,30 @@
  * @author "Lionel Lecaque, <lionel@taotesting.com>"
  * @license GPLv2
  * @package generis
- 
+
  *
  */
-abstract class common_persistence_sql_SchemaManager {
+abstract class common_persistence_sql_SchemaManager
+{
     
     /**
      * HACK to set "PDO::MYSQL_ATTR_MAX_BUFFER_SIZE" for fileupload
-     *  
+     *
      * @author Lionel Lecaque, lionel@taotesting.com
      * @param unknown $name
      * @param unknown $value
      * @throws core_kernel_persistence_Exception
      */
-    public function setAttribute($name,$value){
+    public function setAttribute($name, $value)
+    {
         throw new core_kernel_persistence_Exception('setattribute only availlable for mysql pdo implementation');
-    } 
+    }
     
     /**
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
+     * @return Doctrine\DBAL\Schema\AbstractSchemaManager;
      */
-    protected abstract function getSchemaManager();
+    abstract protected function getSchemaManager();
     
     /**
      * Returns the column names of a given table
@@ -50,7 +52,8 @@ abstract class common_persistence_sql_SchemaManager {
      * @param  string table
      * @return array
      */
-    public function getColumnNames($table){
+    public function getColumnNames($table)
+    {
         return $this->getSchemaManager()->listTableColumns($table);
     }
     
@@ -59,9 +62,10 @@ abstract class common_persistence_sql_SchemaManager {
     /**
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
      */
-    public function createSchema(){
+    public function createSchema()
+    {
         $tables = $this->getSchemaManager()->listTables();
-        return new \Doctrine\DBAL\Schema\Schema($tables,array(),$this->getSchemaManager()->createSchemaConfig());
+        return new \Doctrine\DBAL\Schema\Schema($tables, [], $this->getSchemaManager()->createSchemaConfig());
     }
      
     
@@ -72,10 +76,11 @@ abstract class common_persistence_sql_SchemaManager {
      * @param unknown $column
      * @return unknown
      */
-    public function addColumnToTable($schema,$tblname,$column){
+    public function addColumnToTable($schema, $tblname, $column)
+    {
         $newSchema = clone $schema;
         $table = $newSchema->getTable($tblname);
-        $table->addColumn($column, "text",array("notnull" => false));
+        $table->addColumn($column, "text", ["notnull" => false]);
         return $newSchema;
     }
     
@@ -88,7 +93,8 @@ abstract class common_persistence_sql_SchemaManager {
      * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @return array
      */
-    public  function getTables(){
+    public function getTables()
+    {
         return $this->getSchemaManager()->listTableNames();
     }
     
@@ -96,7 +102,8 @@ abstract class common_persistence_sql_SchemaManager {
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
      * @param string $tableName
      */
-    public function getTableIndexes($tableName){
+    public function getTableIndexes($tableName)
+    {
         return $this->getSchemaManager()->listTableIndexes($tableName);
     }
     
@@ -112,10 +119,19 @@ abstract class common_persistence_sql_SchemaManager {
      * @param  array columns
      * @return void
      */
-    public function createIndex($indexName, $tableName, $columns){
-        $index = new \Doctrine\DBAL\Schema\Index($indexName,array_keys($columns));
+    public function createIndex($indexName, $tableName, $columns)
+    {
+        $index = new \Doctrine\DBAL\Schema\Index($indexName, array_keys($columns));
         $table = new \Doctrine\DBAL\Schema\Table($tableName);
-        $this->getSchemaManager()->createIndex($index,$table);
+        $this->getSchemaManager()->createIndex($index, $table);
+    }
+
+    /**
+     * @return Doctrine\DBAL\Schema\AbstractSchemaManager;
+     */
+    public function getDbalSchemaManager()
+    {
+        return $this->getSchemaManager();
     }
 
     /**
@@ -125,13 +141,11 @@ abstract class common_persistence_sql_SchemaManager {
      * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @return string
      */
-    public abstract function getIndexAlreadyExistsErrorCode();
+    abstract public function getIndexAlreadyExistsErrorCode();
     
     /**
-     * 
+     *
      * @author Lionel Lecaque, lionel@taotesting.com
      */
-    public abstract function getColumnNotFoundErrorCode();
-
-    
+    abstract public function getColumnNotFoundErrorCode();
 }

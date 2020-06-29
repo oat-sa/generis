@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -14,56 +15,135 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2013 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
+ * Copyright (c) 2013-2020 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
+ *
+ * @author Lionel Lecaque  <lionel@taotesting.com>
+ * @author Jerome Bogaerts, <jerome@taotesting.com>
+ *
  */
 
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Driver\ResultStatement;
+use Doctrine\DBAL\Driver\Statement;
+
 /**
- * Dbal Driver 
- * 
- * @author Lionel Lecaque  <lionel@taotesting.com>
- * @license GPLv2
- * @package generis
- *
+ * Dbal Driver
  */
 class common_persistence_sql_dbal_Driver implements common_persistence_sql_Driver
 {
     use common_persistence_sql_MultipleOperations;
 
     /**
-     * @var \Doctrine\DBAL\Connection
+     * @var Connection
      */
     protected $connection;
 
     /**
+     * @var string
+     */
+    private $driverManagerClass;
+
+    /**
      * Connect to Dbal
-     * 
+     *
      * @param string $id
      * @param array $params
-     * @return \Doctrine\DBAL\Connection;
+     * @return common_persistence_Persistence|common_persistence_SqlPersistence
+     * @throws DBALException
      */
-    function connect($id, array $params)
+    public function connect($id, array $params)
     {
+        $isMysqlDbal = false;
         if (isset($params['connection'])) {
             $connectionParams = $params['connection'];
+            $isMysqlDbal = isset($connectionParams['driver']) && $connectionParams['driver'] === 'pdo_mysql';
         } else {
             $connectionParams = $params;
             $connectionParams['driver'] = str_replace('dbal_', '', $connectionParams['driver']);
         }
-        $config = new \Doctrine\DBAL\Configuration();
-//          $logger = new Doctrine\DBAL\Logging\EchoSQLLogger();
-//          $config->setSQLLogger($logger);
-        $this->connection = \Doctrine\DBAL\DriverManager::getConnection($connectionParams, $config);
+
+        $this->persistentConnect($connectionParams);
+
+        if ($isMysqlDbal) {
+            $this->exec('SET SESSION SQL_MODE=\'ANSI_QUOTES\';');
+        }
+
         return new common_persistence_SqlPersistence($params, $this);
     }
-    
-    
-   
+
+    /**
+     * Endless connection
+     *
+     * @param $connectionParams
+     * @throws DBALException
+     */
+    protected function persistentConnect($connectionParams)
+    {
+        $config = new \Doctrine\DBAL\Configuration();
+        //          $logger = new Doctrine\DBAL\Logging\EchoSQLLogger();
+        //          $config->setSQLLogger($logger);
+
+        $connLimit = 3; // Max connection attempts.
+        $counter = 0; // Connection attempts counter.
+
+        while (true) {
+            try {
+                /** @var Connection connection */
+                $this->connection = $this->getConnection($connectionParams, $config);
+                // to generate DBALException if no connection
+                $this->connection->ping();
+                break;
+            } catch (DBALException $e) {
+                $this->connection = null;
+                $counter++;
+
+                if ($counter === $connLimit) {
+                    // Connection attempts exceeded.
+                    throw $e;
+                }
+            }
+        }
+    }
+
+    /**
+     * @param $params
+     * @param $config
+     * @return Connection
+     *
+     * @throws DBALException
+     *
+     */
+    private function getConnection($params, $config)
+    {
+        return call_user_func($this->getDriverManagerClass() . '::getConnection', $params, $config);
+    }
+
+    /**
+     * @return string
+     */
+    private function getDriverManagerClass()
+    {
+        if (!$this->driverManagerClass || !class_exists($this->driverManagerClass)) {
+            $this->driverManagerClass = \Doctrine\DBAL\DriverManager::class;
+        }
+        return $this->driverManagerClass;
+    }
+
+    /**
+     * @param string $driverManagerClass
+     */
+    protected function setDriverManagerClass($driverManagerClass)
+    {
+        $this->driverManagerClass = $driverManagerClass;
+    }
 
     /**
      * (non-PHPdoc)
      * @see common_persistence_sql_Driver::getPlatForm()
      */
-    public function getPlatForm(){
+    public function getPlatForm()
+    {
         return new common_persistence_sql_Platform($this->getDbalConnection());
     }
     
@@ -75,77 +155,109 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
     {
         return new common_persistence_sql_dbal_SchemaManager($this->connection->getSchemaManager());
     }
-    
-   
+
     /**
      * Execute the statement with provided params
      *
-     * @author "Lionel Lecaque, <lionel@taotesting.com>"
      * @param mixed $statement
      * @param array $params
+     * @param array $types
      * @return integer number of affected row
+     * @throws DBALException
      */
-    public function exec($statement,$params = array())
+    public function exec($statement, $params = [], array $types = [])
     {
-        return $this->connection->executeUpdate($statement,$params);
+        return $this->connection->executeUpdate($statement, $params, $types);
     }
-    
-    
+
+
     /**
      * Query  the statement with provided params
-     * 
-     * @author "Lionel Lecaque, <lionel@taotesting.com>"
-     * @param mixed $statement
-     * @return \Doctrine\DBAL\Driver\Statement
+     *
+     * @param Statement $statement
+     * @param array $params
+     * @param array $types
+     * @return ResultStatement
+     * @throws DBALException
      */
-    public function query($statement,$params = array())
+    public function query($statement, $params = [], array $types = [])
     {
-        return $this->connection->executeQuery($statement,$params);
+        return $this->connection->executeQuery($statement, $params, $types);
     }
     
     /**
      * Convenience access to PDO::quote.
      *
-     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @param string $parameter The parameter to quote.
      * @param int $parameter_type A PDO PARAM_XX constant.
      * @return string The quoted string.
      */
-    public function quote($parameter, $parameter_type = PDO::PARAM_STR){
+    public function quote($parameter, $parameter_type = PDO::PARAM_STR)
+    {
         return $this->connection->quote($parameter, $parameter_type);
     }
-    
-    
 
     /**
-     * (non-PHPdoc)
-     * @see common_persistence_sql_Driver::insert()
+     * Insert a single row into the database.
+     *
+     * column names and values will be encoded
+     *
+     * @param string $tableName name of the table
+     * @param array $data An associative array containing column-value pairs.
+     * @param array $types
+     * @return integer The number of affected rows.
+     *
+     * @throws DBALException
      */
-    public function insert($tableName, array $data){
-        $cleanColumns = array();
+    public function insert($tableName, array $data, array $types = [])
+    {
+        $cleanColumns = [];
         foreach ($data as $columnName => $value) {
             $cleanColumns[$this->getPlatForm()->quoteIdentifier($columnName)] = $value;
         }
-        return $this->connection->insert($tableName, $cleanColumns);
+        return $this->connection->insert($tableName, $cleanColumns, $types);
     }
     
     /**
      * Convenience access to PDO::lastInsertId.
      *
-     * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @param string $name
      * @return string The quoted string.
      */
-    public function lastInsertId($name = null){
+    public function lastInsertId($name = null)
+    {
         return $this->connection->lastInsertId($name);
     }
 
     /**
-     * @return \Doctrine\DBAL\Connection
+     * @return Connection
      */
-    protected function getDbalConnection()
+    public function getDbalConnection()
     {
         return $this->connection;
     }
     
+    /**
+     * Returns the name of the connections database
+     * @return string
+     */
+    public function getDataBase()
+    {
+        return $this->connection->getDatabase();
+    }
+
+    /**
+     * Execute a function within a transaction.
+     *
+     * @param Closure $func The function to execute in a transactional way.
+     *
+     * @return mixed The value returned by $func
+     *
+     * @throws Exception
+     * @throws Throwable
+     */
+    public function transactional(Closure $func)
+    {
+        return $this->connection->transactional($func);
+    }
 }

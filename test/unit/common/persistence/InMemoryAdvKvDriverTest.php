@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,7 +29,7 @@ class InMemoryAdvKvDriverTest extends TestCase
      */
     private $driver;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->driver = new \common_persistence_InMemoryAdvKvDriver();
     }

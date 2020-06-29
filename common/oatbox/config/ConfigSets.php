@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,11 +21,9 @@
 
 namespace oat\oatbox\config;
 
-
-
 /**
  * Configurable base class
- * 
+ *
  * inspired by Solarium\Core\Configurable by Bas de Nooijer
  * https://github.com/basdenooijer/solarium/blob/master/library/Solarium/Core/Configurable.php
  *
@@ -34,14 +33,15 @@ trait ConfigSets
 {
     /**
      * Sets a specific field of an option
-     * 
+     *
      * @param string $key
      * @param string $field
      * @param mixed $value
      * @throws \common_exception_InconsistentData
      * @return boolean success
      */
-    public function hashSet($key, $field, $value) {
+    public function hashSet($key, $field, $value)
+    {
         $option = $this->getHashOption($key);
         $option[$field] = $value;
         return $this->setOption($key, $option);
@@ -49,13 +49,14 @@ trait ConfigSets
     
     /**
      * Removes a specific field of an option
-     * 
+     *
      * @param string $key
      * @param string $field
      * @throws \common_exception_InconsistentData
      * @return boolean
      */
-    public function hashRemove($key, $field) {
+    public function hashRemove($key, $field)
+    {
         $option = $this->getHashOption($key);
         if (!isset($option[$field])) {
             return false;
@@ -67,13 +68,14 @@ trait ConfigSets
     
     /**
      * Returns a specific field of an option
-     * 
+     *
      * @param string $key
      * @throws \common_exception_InconsistentData
      * @param string $field
      * @return mixed
      */
-    public function hashGet($key, $field) {
+    public function hashGet($key, $field)
+    {
         $option = $this->getHashOption($key);
         return isset($option[$field]) ? $option[$field] : null;
     }
@@ -86,30 +88,29 @@ trait ConfigSets
     abstract public function getOption($name, $default = null);
 
     /**
-     * @param string $name
-     * @return boolean
-     */
+         * @param string $name
+         * @return boolean
+         */
     abstract public function hasOption($name);
-
     /**
-     * @param string $name
-     * @param mixed $value
-     */
+         * @param string $name
+         * @param mixed $value
+         */
     abstract public function setOption($name, $value);
 
     /**
      * Retroieve an option and ensure it is an array
-     * 
+     *
      * @param string $key
      * @throws \common_exception_InconsistentData
      * @return array
      */
-    private function getHashOption($key) {
+    private function getHashOption($key)
+    {
         $option = $this->hasOption($key) ? $this->getOption($key) : [];
         if (!is_array($option)) {
-            throw new \common_exception_InconsistentData($key.' is not an array');
+            throw new \common_exception_InconsistentData($key . ' is not an array');
         }
         return $option;
     }
-
 }

@@ -20,13 +20,12 @@
 /**
  * An Exception to be thrown to describe that a feature, or a software component
  * is not implemented yet.
- * 
+ *
  * @author Patrick Plichart <patrick@taotesting.com>
  * @package generis
- 
+
  */
-class common_exception_NotImplemented
-    extends common_Exception
+class common_exception_NotImplemented extends common_Exception
 {
   
    

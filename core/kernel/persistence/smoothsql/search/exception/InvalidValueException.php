@@ -13,8 +13,8 @@ namespace oat\generis\model\kernel\persistence\smoothsql\search\exception;
  *
  * @author Christophe GARCIA <christopheg@taotesting.com>
  */
-class InvalidValueException extends \InvalidArgumentException 
-    implements \common_exception_UserReadableException {
+class InvalidValueException extends \InvalidArgumentException implements \common_exception_UserReadableException
+{
     
     /**
      * Get the human-readable message for the end-user. It is supposed
@@ -27,5 +27,4 @@ class InvalidValueException extends \InvalidArgumentException
     {
         return __("Wrong Value, try again please or contact your system administrator");
     }
-    
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,57 +40,62 @@ class TaoLog extends ConfigurableService implements LoggerInterface
     const OPTION_APPENDERS = 'appenders';
 
     /** @var \common_log_Dispatcher */
-    private $dispatcher = null;
-    
+    private $dispatcher;
+
 
     /**
      * @param mixed $level
      * @param string $message
      * @param array $context
-     * @throws \common_configuration_ComponentFactoryException
+     * @throws \Exception
      */
-    public function log($level, $message, array $context = array())
+    public function log($level, $message, array $context = [])
     {
-        $stack = defined('DEBUG_BACKTRACE_IGNORE_ARGS')
+        if (isset($context['trace'])) {
+            $stack = $context['trace'];
+            unset($context['trace']);
+        } else {
+            $stack = defined('DEBUG_BACKTRACE_IGNORE_ARGS')
                 ? debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS)
                 : debug_backtrace(false);
-		array_shift($stack);
-		// retrieving the user can be a complex procedure, leading to missing log informations
-		$user = null;
-		$keys = array_keys($stack);
-		$current = isset($keys[2]) ? $stack[$keys[2]] : $stack[end($keys)];
+            array_shift($stack);
+        }
+
+        $current = isset($stack[2]) ? $stack[2] : end($stack);
         $current = array_merge($current, $context);
-        if (isset($current['file']) && isset($current['line'])) {
+
+        if (isset($current['file'], $current['line'])) {
             $errorFile = $current['file'];
             $errorLine = $current['line'];
-        } elseif (isset($current['class']) && isset($current['function'])) {
-            $errorFile = $current['class'];
-            $errorLine = $current['function'];
+        } elseif (isset($current['class'], $context['function'])) {
+            $errorFile = $context['class'];
+            $errorLine = $context['function'];
         } else {
             $errorFile = $errorLine = 'undefined';
         }
-		if(PHP_SAPI != 'cli'){
-			$requestURI = $_SERVER['REQUEST_URI'];
-		} else {
-			$requestURI = implode(' ', $_SERVER['argv']);
-		}
-		
-		//reformat input
-		if(is_object($message)){
-			$message = 'Message is object of type ' . gettype($message);
+
+        if (PHP_SAPI !== 'cli') {
+            $requestURI = $_SERVER['REQUEST_URI'];
+        } else {
+            $requestURI = implode(' ', $_SERVER['argv']);
+        }
+        
+        //reformat input
+        if (is_object($message)) {
+            $message = 'Message is object of type ' . gettype($message);
 
             //show content of logged object only from debug level
-            if($level <= \common_Logger::DEBUG_LEVEL){
+            if ($level <= \common_Logger::DEBUG_LEVEL) {
                 $message .= ' : ' . PHP_EOL . var_export($message, true);
             }
-        //same for arrays
-	    } else if (is_array($message) && $level <= \common_Logger::DEBUG_LEVEL){
-			$message = 'Message is an array : ' . PHP_EOL . var_export($message, true);
-		} else{
-			$message = (string) $message;
-		}
-		$level = \common_log_Logger2Psr::getCommonFromPsrLevel($level);
-		$this->getDispatcher()->log(new \common_log_Item($message, $level, time(), $stack, $context, $requestURI, $errorFile, $errorLine));
+            //same for arrays
+        } elseif (is_array($message) && $level <= \common_Logger::DEBUG_LEVEL) {
+            $message = 'Message is an array : ' . PHP_EOL . var_export($message, true);
+        } else {
+            $message = (string) $message;
+        }
+        $level = \common_log_Logger2Psr::getCommonFromPsrLevel($level);
+        $this->getDispatcher()->log(new \common_log_Item($message, $level, time(), $stack, $context, $requestURI, $errorFile, $errorLine));
     }
     
     /**
@@ -97,12 +103,11 @@ class TaoLog extends ConfigurableService implements LoggerInterface
      *
      * @return Appender
      */
-    private function getDispatcher() {
+    private function getDispatcher()
+    {
         if (is_null($this->dispatcher)) {
             $this->dispatcher = new \common_log_Dispatcher($this->getOption(self::OPTION_APPENDERS));
         }
         return $this->dispatcher;
     }
-
-
 }

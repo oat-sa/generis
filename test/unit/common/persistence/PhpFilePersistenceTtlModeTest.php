@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,7 +41,7 @@ class PhpFilePersistenceTtlModeTest extends TestCase
 
     private $root;
 
-    public function setUp()
+    public function setUp(): void
     {
         if (!class_exists('org\bovigo\vfs\vfsStream')) {
             $this->markTestSkipped(
@@ -52,11 +53,11 @@ class PhpFilePersistenceTtlModeTest extends TestCase
 
     public function testConnect()
     {
-        $params = array(
+        $params = [
             'dir' => vfsStream::url('data'),
             'humanReadable' => true,
             common_persistence_PhpFileDriver::OPTION_TTL => true,
-        );
+        ];
         $driver = new common_persistence_PhpFileDriver();
         $persistence = $driver->connect('test', $params);
         $this->assertInstanceOf('common_persistence_KeyValuePersistence', $persistence);
@@ -124,11 +125,11 @@ class PhpFilePersistenceTtlModeTest extends TestCase
             ->willReturn($fakeTimeStamp)
         ;
 
-        $params = array(
+        $params = [
             'dir' => vfsStream::url('data'),
             'humanReadable' => true,
             common_persistence_PhpFileDriver::OPTION_TTL => true,
-        );
+        ];
 
         return $driverMock->connect('testWithTtl', $params);
     }
@@ -277,15 +278,14 @@ class PhpFilePersistenceTtlModeTest extends TestCase
     public function testNotHumanReadable()
     {
         $vfStream = vfsStream::setup('cache');
-        $params = array(
+        $params = [
             'dir' => vfsStream::url('cache'),
-        );
+        ];
         $driver = new common_persistence_PhpFileDriver();
         $persistence = $driver->connect('test', $params);
 
         $persistence->set('fakeKeyName', 'value');
         $this->assertEquals('value', $persistence->get('fakeKeyName'));
-
     }
 
     /**

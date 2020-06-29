@@ -19,25 +19,26 @@
  * @author "Lionel Lecaque, <lionel@taotesting.com>"
  * @license GPLv2
  * @package generis
- 
  *
  */
-interface common_persistence_sql_Driver extends common_persistence_Driver{
+interface common_persistence_sql_Driver extends common_persistence_Driver
+{
     
-    public function query($statement,$params);
+    public function query($statement, $params, array $types = []);
     
-    public function exec($statement,$params);
-    
+    public function exec($statement, $params, array $types = []);
+
     /**
      * Insert a single row into the database.
-     * 
+     *
      * column names and values will be encoded
-     * 
+     *
      * @param string $tableName name of the table
      * @param array $data An associative array containing column-value pairs.
-     * @return integer The number of affected rows. 
+     * @param array $types
+     * @return integer The number of affected rows.
      */
-    public function insert($tableName, array $data);
+    public function insert($tableName, array $data, array $types = []);
     
     public function insertMultiple($tableName, array $data);
 
@@ -50,11 +51,18 @@ interface common_persistence_sql_Driver extends common_persistence_Driver{
     public function updateMultiple($tableName, array $data);
 
     public function getSchemaManager();
-    
+
+    /**
+     * @return common_persistence_sql_Platform
+     */
     public function getPlatForm();
     
     public function lastInsertId($name = null);
     
     public function quote($parameter, $parameter_type = PDO::PARAM_STR);
-    
+
+    /**
+     * @return \Doctrine\DBAL\Connection
+     */
+    public function getDbalConnection();
 }

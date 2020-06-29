@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -72,7 +73,7 @@ class Directory extends FileSystemHandler implements \IteratorAggregate
      * @param null $flags
      * @return \ArrayIterator
      */
-    public function getFlyIterator($flags=null)
+    public function getFlyIterator($flags = null)
     {
         if (is_null($flags)) {
             $flags = self::ITERATOR_DIRECTORY | self::ITERATOR_FILE;
@@ -82,16 +83,19 @@ class Directory extends FileSystemHandler implements \IteratorAggregate
         $withDirectories = ($flags & self::ITERATOR_DIRECTORY);
         $withFiles = ($flags & self::ITERATOR_FILE);
 
-        $iterator = array();
+        $iterator = [];
         $contents = $this->getFileSystem()->listContents($this->getPrefix(), $recursive);
 
-        foreach ($contents as $content) {
-            if ($withDirectories && $content['type'] == 'dir') {
-                $iterator[] = $this->getDirectory(str_replace($this->getPrefix(), '', $content['path']));
-            }
+        if (!empty($contents)) {
+            $dirPath = $this->getFileSystem()->get($this->getPrefix())->getPath();
+            foreach ($contents as $content) {
+                if ($withDirectories && $content['type'] == 'dir') {
+                    $iterator[] = $this->getDirectory(str_replace($dirPath, '', $content['path']));
+                }
 
-            if ($withFiles && $content['type'] == 'file') {
-                $iterator[] = $this->getFile(str_replace($this->getPrefix(), '', $content['path']));
+                if ($withFiles && $content['type'] == 'file') {
+                    $iterator[] = $this->getFile(str_replace($dirPath, '', $content['path']));
+                }
             }
         }
 
@@ -161,14 +165,20 @@ class Directory extends FileSystemHandler implements \IteratorAggregate
         // This implementation supersedes the Flysystem's one. Indeed, while using connectors
         // such as the Amazon S3 (v3) connector, rename on directories does not work. A custom
         // implementation is then needed.
-        $contents = $this->getFileSystem()->listContents($this->getPrefix(), true);
 
+        $contents = $this->getFileSystem()->listContents($this->getPrefix(), true);
+        $fileSystemId = $this->getFileSystemId().'/';
         // Filter files only.
         $filePaths = [];
         foreach ($contents as $content) {
             if ($content['type'] === 'file') {
-                $filePaths[]= [
-                    'source' => $content['path'],
+                $contentPath = $content['path'];
+                if(strpos($contentPath, $fileSystemId) === 0) {
+                    $contentPath = substr($contentPath, strlen($fileSystemId));
+                }
+
+                $filePaths[] = [
+                    'source' => $contentPath,
                     'destination' => str_replace($this->getPrefix(), $path, $content['path'])];
             }
         }
@@ -176,10 +186,10 @@ class Directory extends FileSystemHandler implements \IteratorAggregate
         foreach ($filePaths as $renaming) {
             try {
                 if ($this->getFileSystem()->rename($renaming['source'], $renaming['destination']) === false) {
-                    throw new \common_exception_FileSystemError("Unable to rename '" . $this->getPrefix() . "' into '${path}'.");
+                    throw new \common_exception_FileSystemError("Unable to rename '" . $renaming['source'] . "' into '".$renaming['destination']."'.");
                 }
             } catch (FileExistsException $e) {
-                throw new \common_exception_FileSystemError("Unable to rename '" . $this->getPrefix() . "' into '${path}'. File already exists.");
+                throw new \common_exception_FileSystemError("Unable to rename '" . $renaming['source'] . "' into '".$renaming['destination']."'. File already exists.");
             }
         }
 

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,6 +20,7 @@
 
 namespace oat\generis\test\unit\oatbox\log;
 
+use common_exception_InconsistentData;
 use Psr\Log\LogLevel;
 use oat\generis\test\TestCase;
 
@@ -27,7 +29,8 @@ use oat\generis\test\TestCase;
  */
 class TestLoggerTest extends TestCase
 {
-    public function testArbitraryLogger() {
+    public function testArbitraryLogger()
+    {
         $logger = new TestLogger();
 
         $logger->log(LogLevel::EMERGENCY, 'testEmergency1', ["context1" => "value1", "context2" => "value2"]);
@@ -55,25 +58,24 @@ class TestLoggerTest extends TestCase
         $this->assertFalse($logger->has(LogLevel::EMERGENCY, 'I haven\'t been logged'));
     }
 
-    public function testLogBadLevel() {
+    public function testLogBadLevel()
+    {
         $logger = new TestLogger();
         $logger->log('BAD_LEVEL', 'testMessage');
 
         $this->assertEquals(1, count($logger->get(LogLevel::ERROR)));
     }
 
-    /**
-     * @expectedException common_exception_InconsistentData
-     */
-    public function testGetBadLevel() {
+    public function testGetBadLevel()
+    {
+        $this->expectException(common_exception_InconsistentData::class);
         $logger = new TestLogger();
         $logger->get('BAD_LEVEL');
     }
 
-    /**
-     * @expectedException common_exception_InconsistentData
-     */
-    public function testHasBadLevel() {
+    public function testHasBadLevel()
+    {
+        $this->expectException(common_exception_InconsistentData::class);
         $logger = new TestLogger();
         $logger->has('BAD_LEVEL', 'testMessage');
     }

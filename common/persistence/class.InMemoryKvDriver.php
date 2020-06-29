@@ -35,7 +35,8 @@ class common_persistence_InMemoryKvDriver implements common_persistence_KvDriver
      *
      * @see common_persistence_Driver::connect()
      */
-    function connect($id, array $params){
+    function connect($id, array $params)
+    {
         return new common_persistence_KeyValuePersistence($params, $this);
     }
 
@@ -64,24 +65,27 @@ class common_persistence_InMemoryKvDriver implements common_persistence_KvDriver
     public function purge()
     {
         $this->persistence = [];
+        return true;
     }
 
-    public function incr($id) {
+    public function incr($id)
+    {
         if (!isset($this->persistence[$id])) {
             $this->persistence[$id] = 0;
         }
         if (!is_int($this->persistence[$id])) {
-            throw new common_exception_InconsistentData('Cannot increment non intvalue for '.$id);
+            throw new common_exception_InconsistentData('Cannot increment non intvalue for ' . $id);
         }
         return ++$this->persistence[$id];
     }
 
-    public function decr($id) {
+    public function decr($id)
+    {
         if (!isset($this->persistence[$id])) {
             $this->persistence[$id] = 0;
         }
         if (!is_int($this->persistence[$id])) {
-            throw new common_exception_InconsistentData('Cannot decrement non intvalue for '.$id);
+            throw new common_exception_InconsistentData('Cannot decrement non intvalue for ' . $id);
         }
         return --$this->persistence[$id];
     }

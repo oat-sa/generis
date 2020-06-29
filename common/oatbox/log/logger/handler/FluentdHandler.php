@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,7 +42,7 @@ class FluentdHandler extends AbstractProcessingHandler
      * @param int          $level
      * @param bool         $bubble
      */
-    public function __construct(FluentLogger $logger = null, $level  = Logger::DEBUG, $bubble = true)
+    public function __construct(FluentLogger $logger = null, $level = Logger::DEBUG, $bubble = true)
     {
         parent::__construct($level, $bubble);
 
@@ -62,7 +63,6 @@ class FluentdHandler extends AbstractProcessingHandler
             $logRecord['level'] = Logger::getLevelName($record['level']);
             $logRecord['message'] = $record['message'];
         }
-
         $this->logger->post($record['channel'], $logRecord);
     }
 }

@@ -1,28 +1,30 @@
 <?php
-/*  
+
+/**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
  * of the License (non-upgradable).
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- * 
+ *
  * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- * 
+ *
  */
 
 error_reporting(E_ALL);
 
 use oat\generis\test\TestCase;
 use Prophecy\Prophet;
+use oat\generis\model\user\AuthAdapter;
 
 /**
  *
@@ -59,26 +61,27 @@ class generis_test_UtilsTest extends TestCase
         }
         $value = eval("return " . common_Utils::toPHPVariableString($all) . ";");
         $this->assertEquals($all, $value);
-
-        $prophet = new Prophet();
-        $e = $prophet->prophesize('generis_test_UtilsTest');
-
-        $serialized = serialize($e->reveal());
+        
+        $serialized = serialize(new stdClass());
         $value = eval("return " . common_Utils::toPHPVariableString($serialized) . ";");
         $this->assertEquals($serialized, $value);
     }
 
     public function testSerialisation()
     {
-        $toSerialize = array(
+        $toSerialize = [
             'a' => "te\0st \\ ",
-            'b' => new core_kernel_classes_Resource('doesnotexist'),
-            'c' => array(
-                '1', '2', array(common_user_auth_Service::singleton())
-            )
-        );
+            'b' => new AuthAdapter(),
+            'c' => [
+                '1', '2', [common_user_auth_Service::singleton()]
+            ],
+            'd' => 'aaaaa' . PHP_EOL . 'bbbbb' . PHP_EOL . 'ccccc'
+        ];
         $value = eval("return " . common_Utils::toPHPVariableString($toSerialize) . ";");
         $this->assertEquals($toSerialize, $value);
+
+        $valueNice = eval("return " . common_Utils::toHumanReadablePhpString($toSerialize) . ";");
+        $this->assertEquals($toSerialize, $valueNice);
     }
 
     private function buildBinString()
@@ -98,6 +101,6 @@ class generis_test_UtilsTest extends TestCase
         $score = "\x01" . pack('S', 8) . "\x00" . "\x01" . pack('d', 1.0);
         $response = "\x00" . pack('S', 0) . "\x00" . "\x01" . pack('S', 7) . 'ChoiceA';
 
-        return implode('', array($position, $state, $navigationMode, $submissionMode, $attempting, $hasItemSessionControl, $numAttempts, $duration, $completionStatus, $timeReference, $varCount, $score, $response));
+        return implode('', [$position, $state, $navigationMode, $submissionMode, $attempting, $hasItemSessionControl, $numAttempts, $duration, $completionStatus, $timeReference, $varCount, $score, $response]);
     }
 }

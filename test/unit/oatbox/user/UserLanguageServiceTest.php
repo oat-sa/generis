@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,7 +33,7 @@ use oat\generis\test\TestCase;
 class UserLanguageServiceTest extends TestCase
 {
 
-    public function setUp()
+    public function setUp(): void
     {
         if (!defined('DEFAULT_LANG')) {
             define('DEFAULT_LANG', 'en-US');
@@ -90,7 +91,7 @@ class UserLanguageServiceTest extends TestCase
      */
     private function getUser($uiLg = null, $dataLg = null)
     {
-        $user= $this->prophesize(User::class);
+        $user = $this->prophesize(User::class);
         $user->getPropertyValues(GenerisRdf::PROPERTY_USER_DEFLG)
             ->willReturn($dataLg === null ? [] : [$dataLg]);
         $user->getPropertyValues(GenerisRdf::PROPERTY_USER_UILG)

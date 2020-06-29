@@ -1,22 +1,23 @@
 <?php
-/*  
+
+/*
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
  * of the License (non-upgradable).
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- * 
+ *
  * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- * 
+ *
  */
 
 namespace oat\generis\test\unit;
@@ -98,7 +99,7 @@ class ConfigurationTest extends TestCase
         $this->assertTrue($php->isOptional());
 
         // max & min test.
-        $php = new \common_configuration_PHPRuntime('5.3', '7.2.x');
+        $php = new \common_configuration_PHPRuntime('5.3', '7.4.x');
         $report = $php->check();
 
         $this->assertEquals($report->getStatus(), \common_configuration_Report::VALID);
@@ -160,7 +161,7 @@ class ConfigurationTest extends TestCase
         // We consider that if there is no version information but the extension
         // is loaded, the report is always valid even if min and/or max version(s)
         // are specified.
-        $ext = new \common_configuration_PHPExtension(null, null, 'hash');
+        $ext = new \common_configuration_PHPExtension(null, null, 'json');
         $report = $ext->check();
         $this->assertEquals($report->getStatus(), \common_configuration_Report::VALID);
 
@@ -168,7 +169,7 @@ class ConfigurationTest extends TestCase
         $report = $ext->check();
         $this->assertEquals($report->getStatus(), \common_configuration_Report::VALID);
 
-        $ext->setMax('2.0');
+        $ext->setMax('7.5');
         $report = $ext->check();
         $this->assertEquals($report->getStatus(), \common_configuration_Report::VALID);
 
@@ -260,8 +261,8 @@ class ConfigurationTest extends TestCase
             $reports = $collection->check();
             $this->assertTrue(true); // Acyclic graph, no CyclicDependencyException thrown.
             $this->assertEquals(count($reports), 1);
-            $this->assertEquals($collection->getCheckedComponents(), array($componentA));
-            $this->assertEquals($collection->getUncheckedComponents(), array($componentB, $componentC));
+            $this->assertEquals($collection->getCheckedComponents(), [$componentA]);
+            $this->assertEquals($collection->getUncheckedComponents(), [$componentB, $componentC]);
 
             // Add an additional independant component.
             $componentD = new \common_configuration_Mock(\common_configuration_Report::VALID, 'componentD');
@@ -269,16 +270,16 @@ class ConfigurationTest extends TestCase
             $reports = $collection->check();
             $this->assertTrue(true); // Acyclic graph, no CyclicDependencyException thrown.
             $this->assertEquals(count($reports), 2);
-            $this->assertEquals($collection->getCheckedComponents(), array($componentA, $componentD));
-            $this->assertEquals($collection->getUncheckedComponents(), array($componentB, $componentC));
+            $this->assertEquals($collection->getCheckedComponents(), [$componentA, $componentD]);
+            $this->assertEquals($collection->getUncheckedComponents(), [$componentB, $componentC]);
 
             // Make the whole components valid again.
             $componentA->setExpectedStatus(\common_configuration_Report::VALID);
             $reports = $collection->check();
             $this->assertTrue(true); // Acyclic graph, no CyclicDependencyException thrown.
             $this->assertEquals(count($reports), 4);
-            $this->assertEquals($collection->getCheckedComponents(), array($componentA, $componentB, $componentC, $componentD));
-            $this->assertEquals($collection->getUncheckedComponents(), array());
+            $this->assertEquals($collection->getCheckedComponents(), [$componentA, $componentB, $componentC, $componentD]);
+            $this->assertEquals($collection->getUncheckedComponents(), []);
 
             try {
                 // Make the graph cyclic.
@@ -287,20 +288,20 @@ class ConfigurationTest extends TestCase
                 $this->assertTrue(false, 'The graph should be cyclic.');
             } catch (\common_configuration_CyclicDependencyException $e) {
                 $this->assertTrue(true);
-                $this->assertEquals($collection->getReports(), array());
-                $this->assertEquals($collection->getCheckedComponents(), array());
-                $this->assertEquals($collection->getUncheckedComponents(), array($componentA, $componentB, $componentC, $componentD));
+                $this->assertEquals($collection->getReports(), []);
+                $this->assertEquals($collection->getCheckedComponents(), []);
+                $this->assertEquals($collection->getUncheckedComponents(), [$componentA, $componentB, $componentC, $componentD]);
 
                 // Finally, we test a ComponentCollection reset.
                 $collection->reset();
-                $this->assertEquals($collection->getReports(), array());
-                $this->assertEquals($collection->getCheckedComponents(), array());
-                $this->assertEquals($collection->getUncheckedComponents(), array());
+                $this->assertEquals($collection->getReports(), []);
+                $this->assertEquals($collection->getCheckedComponents(), []);
+                $this->assertEquals($collection->getUncheckedComponents(), []);
                 $reports = $collection->check();
-                $this->assertEquals($reports, array());
-                $this->assertEquals($collection->getReports(), array());
-                $this->assertEquals($collection->getCheckedComponents(), array());
-                $this->assertEquals($collection->getUncheckedComponents(), array());
+                $this->assertEquals($reports, []);
+                $this->assertEquals($collection->getReports(), []);
+                $this->assertEquals($collection->getCheckedComponents(), []);
+                $this->assertEquals($collection->getUncheckedComponents(), []);
             }
         } catch (\common_configuration_CyclicDependencyException $e) {
             $this->assertTrue(false, 'The graph dependency formed by the ComponentCollection must be acyclic.');
@@ -309,7 +310,7 @@ class ConfigurationTest extends TestCase
 
     public function testComponentFactory()
     {
-        $component = \common_configuration_ComponentFactory::buildPHPRuntime('5.0', '7.2.x', true);
+        $component = \common_configuration_ComponentFactory::buildPHPRuntime('5.0', '7.4.x', true);
         $this->assertInstanceOf(\common_configuration_PHPRuntime::class, $component);
         $this->assertEquals($component->getMin(), '5.0');
         // 5.5.x will be replaced internally
@@ -352,7 +353,7 @@ class ConfigurationTest extends TestCase
         $this->assertInstanceOf(\common_configuration_Report::class, $report);
         $this->assertEquals($report->getStatus(), \common_configuration_Report::VALID);
 
-        $array = array('type' => 'PHPRuntime', 'value' => array('min' => '5.0', 'max' => '7.2.x', 'optional' => true));
+        $array = ['type' => 'PHPRuntime', 'value' => ['min' => '5.0', 'max' => '7.4.x', 'optional' => true]];
         $component = \common_configuration_ComponentFactory::buildFromArray($array);
         $this->assertInstanceOf(\common_configuration_PHPRuntime::class, $component);
         $this->assertEquals($component->getMin(), '5.0');
@@ -363,7 +364,7 @@ class ConfigurationTest extends TestCase
         $this->assertInstanceOf(\common_configuration_Report::class, $report);
         $this->assertEquals($report->getStatus(), \common_configuration_Report::VALID);
 
-        $array = array('type' => 'PHPExtension', 'value' => array('name' => 'spl'));
+        $array = ['type' => 'PHPExtension', 'value' => ['name' => 'spl']];
         $component = \common_configuration_ComponentFactory::buildFromArray($array);
         $this->assertInstanceOf(\common_configuration_PHPExtension::class, $component);
         $this->assertEquals($component->getName(), 'spl');
@@ -373,13 +374,13 @@ class ConfigurationTest extends TestCase
         $this->assertEquals($report->getStatus(), \common_configuration_Report::VALID);
 
         // 'Check' before the Component type is accepted.
-        $array = array('type' => 'CheckPHPINIValue', 'value' => array('name' => 'magic_quotes_gpc', 'value' => '0'));
+        $array = ['type' => 'CheckPHPINIValue', 'value' => ['name' => 'magic_quotes_gpc', 'value' => '0']];
         $component = \common_configuration_ComponentFactory::buildFromArray($array);
         $this->assertInstanceOf(\common_configuration_PHPINIValue::class, $component);
         $this->assertEquals($component->getName(), 'magic_quotes_gpc');
         $this->assertFalse($component->isOptional());
 
-        $array = array('type' => 'FileSystemComponent', 'value' => array('location' => $location, 'rights' => 'r'));
+        $array = ['type' => 'FileSystemComponent', 'value' => ['location' => $location, 'rights' => 'r']];
         $component = \common_configuration_ComponentFactory::buildFromArray($array);
         $this->assertInstanceOf(\common_configuration_FileSystemComponent::class, $component);
         $this->assertFalse($component->isOptional());
@@ -390,7 +391,7 @@ class ConfigurationTest extends TestCase
         $this->assertEquals($report->getStatus(), \common_configuration_Report::VALID);
 
         try {
-            $array = array('type' => 'PHPINIValue', 'value' => array());
+            $array = ['type' => 'PHPINIValue', 'value' => []];
             $component = \common_configuration_ComponentFactory::buildFromArray($array);
             $this->assertTrue(false, 'An exception should be raised because of missing attributes.');
         } catch (\common_configuration_ComponentFactoryException $e) {

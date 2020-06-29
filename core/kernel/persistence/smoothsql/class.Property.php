@@ -1,19 +1,20 @@
 <?php
-/**  
+
+/**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
  * of the License (non-upgradable).
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- * 
+ *
  * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
  *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
@@ -29,11 +30,9 @@ use oat\generis\model\OntologyRdfs;
  * @access public
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
  * @package generis
- 
+
  */
-class core_kernel_persistence_smoothsql_Property
-    extends core_kernel_persistence_smoothsql_Resource
-        implements core_kernel_persistence_PropertyInterface
+class core_kernel_persistence_smoothsql_Property extends core_kernel_persistence_smoothsql_Resource implements core_kernel_persistence_PropertyInterface
 {
     // --- ASSOCIATIONS ---
 
@@ -47,7 +46,6 @@ class core_kernel_persistence_smoothsql_Property
      * @var Resource
      */
     public static $instance = null;
-
     // --- OPERATIONS ---
 
 
@@ -59,17 +57,16 @@ class core_kernel_persistence_smoothsql_Property
      * @param  Resource resource
      * @return boolean
      */
-    public function isLgDependent( core_kernel_classes_Resource $resource)
+    public function isLgDependent(core_kernel_classes_Resource $resource)
     {
-        if ($this->getModel()->getCache()->has($resource->getUri())) {
-            $lgDependent = $this->getModel()->getCache()->get($resource->getUri());
-        } else {
-            $lgDependentProperty = new \core_kernel_classes_Property(GenerisRdf::PROPERTY_IS_LG_DEPENDENT);
+        $lgDependent = $this->getModel()->getCache()->get($resource->getUri());
+        if (is_null($lgDependent)) {
+            $lgDependentProperty = $this->getModel()->getProperty(GenerisRdf::PROPERTY_IS_LG_DEPENDENT);
             $lgDependentResource = $resource->getOnePropertyValue($lgDependentProperty);
             $lgDependent = !is_null($lgDependentResource)
                 && $lgDependentResource instanceof \core_kernel_classes_Resource
                 && $lgDependentResource->getUri() == GenerisRdf::GENERIS_TRUE;
-            $this->getModel()->getCache()->put($lgDependent, $resource->getUri());
+            $this->getModel()->getCache()->set($resource->getUri(), $lgDependent);
         }
         return (bool) $lgDependent;
     }
@@ -82,16 +79,10 @@ class core_kernel_persistence_smoothsql_Property
      * @param  Resource resource
      * @return boolean
      */
-    public function isMultiple( core_kernel_classes_Resource $resource)
+    public function isMultiple(core_kernel_classes_Resource $resource)
     {
         $returnValue = (bool) false;
-
-        
-        
-        throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
-        
-        
-
+        throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (" . __METHOD__ . ") is not available in this persistence implementation (" . __CLASS__ . ")");
         return (bool) $returnValue;
     }
 
@@ -103,14 +94,10 @@ class core_kernel_persistence_smoothsql_Property
      * @param  Resource resource
      * @return core_kernel_classes_Class
      */
-    public function getRange( core_kernel_classes_Resource $resource)
+    public function getRange(core_kernel_classes_Resource $resource)
     {
         $returnValue = null;
-
-        
-        throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (".__METHOD__.") is not available in this persistence implementation (".__CLASS__.")");
-        
-
+        throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (" . __METHOD__ . ") is not available in this persistence implementation (" . __CLASS__ . ")");
         return $returnValue;
     }
 
@@ -123,19 +110,15 @@ class core_kernel_persistence_smoothsql_Property
      * @param  boolean deleteReference
      * @return boolean
      */
-    public function delete( core_kernel_classes_Resource $resource, $deleteReference = false)
+    public function delete(core_kernel_classes_Resource $resource, $deleteReference = false)
     {
         $returnValue = (bool) false;
-
-        
-        
         //delete all values of the property to delete
-        if ($deleteReference){
-			$query = 'DELETE FROM "statements" WHERE "predicate" = ? AND '.$this->getModelWriteSqlCondition();
-	        $returnValue = $this->getPersistence()->exec($query, array($resource->getUri()));
+        if ($deleteReference) {
+            $query = 'DELETE FROM "statements" WHERE "predicate" = ? AND ' . $this->getModelWriteSqlCondition();
+            $returnValue = $this->getPersistence()->exec($query, [$resource->getUri()]);
         }
         $returnValue = parent::delete($resource, $deleteReference);
-
         return (bool) $returnValue;
     }
 
@@ -148,15 +131,11 @@ class core_kernel_persistence_smoothsql_Property
      * @param  Class class
      * @return core_kernel_classes_Class
      */
-    public function setRange( core_kernel_classes_Resource $resource,  core_kernel_classes_Class $class)
+    public function setRange(core_kernel_classes_Resource $resource, core_kernel_classes_Class $class)
     {
         $returnValue = null;
-
-        
         $rangeProp = new core_kernel_classes_Property(OntologyRdfs::RDFS_RANGE, __METHOD__);
         $returnValue = $this->setPropertyValue($resource, $rangeProp, $class->getUri());
-        
-
         return $returnValue;
     }
 
@@ -169,14 +148,13 @@ class core_kernel_persistence_smoothsql_Property
      * @param  boolean isMultiple
      * @return void
      */
-    public function setMultiple( core_kernel_classes_Resource $resource, $isMultiple)
+    public function setMultiple(core_kernel_classes_Resource $resource, $isMultiple)
     {
         
-    	$multipleProperty = new core_kernel_classes_Property(GenerisRdf::PROPERTY_MULTIPLE);
+        $multipleProperty = new core_kernel_classes_Property(GenerisRdf::PROPERTY_MULTIPLE);
         $value = ((bool)$isMultiple) ?  GenerisRdf::GENERIS_TRUE : GenerisRdf::GENERIS_FALSE ;
         $this->removePropertyValues($resource, $multipleProperty);
         $this->setPropertyValue($resource, $multipleProperty, $value);
-        
     }
 
     /**
@@ -188,14 +166,13 @@ class core_kernel_persistence_smoothsql_Property
      * @param  boolean isLgDependent
      * @return void
      */
-    public function setLgDependent( core_kernel_classes_Resource $resource, $isLgDependent)
+    public function setLgDependent(core_kernel_classes_Resource $resource, $isLgDependent)
     {
         
-    	$lgDependentProperty = new core_kernel_classes_Property(GenerisRdf::PROPERTY_IS_LG_DEPENDENT,__METHOD__);
+        $lgDependentProperty = new core_kernel_classes_Property(GenerisRdf::PROPERTY_IS_LG_DEPENDENT, __METHOD__);
         $value = ((bool)$isLgDependent) ?  GenerisRdf::GENERIS_TRUE : GenerisRdf::GENERIS_FALSE ;
         $this->removePropertyValues($resource, $lgDependentProperty);
         $this->setPropertyValue($resource, $lgDependentProperty, $value);
-        
     }
 
     /**
@@ -208,17 +185,10 @@ class core_kernel_persistence_smoothsql_Property
     public static function singleton()
     {
         $returnValue = null;
-
-        
-
-		if (core_kernel_persistence_smoothsql_Property::$instance == null){
-			core_kernel_persistence_smoothsql_Property::$instance = new core_kernel_persistence_smoothsql_Property();
-		}
-		$returnValue = core_kernel_persistence_smoothsql_Property::$instance;
-
-        
-
+        if (core_kernel_persistence_smoothsql_Property::$instance == null) {
+            core_kernel_persistence_smoothsql_Property::$instance = new core_kernel_persistence_smoothsql_Property();
+        }
+        $returnValue = core_kernel_persistence_smoothsql_Property::$instance;
         return $returnValue;
     }
-
 }

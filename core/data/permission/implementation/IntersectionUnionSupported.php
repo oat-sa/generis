@@ -1,21 +1,22 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
  * of the License (non-upgradable).
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- * 
+ *
  * Copyright (c) 2017 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- * 
+ *
  */
 
 namespace oat\generis\model\data\permission\implementation;
@@ -30,8 +31,7 @@ use oat\oatbox\user\User;
  * @access public
  * @author Antoine Robin, <antoine@taotesting.com>
  */
-class IntersectionUnionSupported extends ConfigurableService
-    implements PermissionInterface
+class IntersectionUnionSupported extends ConfigurableService implements PermissionInterface
 {
 
 
@@ -43,26 +43,26 @@ class IntersectionUnionSupported extends ConfigurableService
     {
         $registered = false;
         $options = $this->getOption('inner');
-        foreach ($options as $impl){
-            if($impl == $service){
+        foreach ($options as $impl) {
+            if ($impl == $service) {
                 $registered = true;
                 break;
             }
         }
 
-        if(!$registered){
+        if (!$registered) {
             $options[] = $service;
             $this->setOption('inner', $options);
         }
 
         return $this;
-
     }
 
     /**
      * @return PermissionInterface[]
      */
-    protected function getInner() {
+    protected function getInner()
+    {
         $results = [];
         foreach ($this->getOption('inner') as $impl) {
             $impl->setServiceLocator($this->getServiceLocator());
@@ -74,11 +74,12 @@ class IntersectionUnionSupported extends ConfigurableService
     
     /**
      * (non-PHPdoc)
-     * @see \oat\generis\model\data\PermissionInterface::getPermissions()
+     * @see PermissionInterface::getPermissions()
      */
-    public function getPermissions(User $user, array $resourceIds) {
+    public function getPermissions(User $user, array $resourceIds)
+    {
 
-        $results = array();
+        $results = [];
         $allRights = $this->getSupportedRights();
 
         foreach ($this->getInner() as $impl) {
@@ -86,13 +87,13 @@ class IntersectionUnionSupported extends ConfigurableService
             $notSupported = array_diff($allRights, $impl->getSupportedRights());
             $resourceRights = $impl->getPermissions($user, $resourceIds);
             $resourcesRights = [];
-            foreach ($resourceRights as $uri => $resourceRight){
+            foreach ($resourceRights as $uri => $resourceRight) {
                 $resourcesRights[$uri] = array_merge($notSupported, $resourceRight);
             }
             $results[] = $resourcesRights;
         }
 
-        $rights = array();
+        $rights = [];
         foreach ($resourceIds as $id) {
             $intersect = null;
             foreach ($results as $modelResult) {
@@ -108,9 +109,10 @@ class IntersectionUnionSupported extends ConfigurableService
     
     /**
      * (non-PHPdoc)
-     * @see \oat\generis\model\data\PermissionInterface::onResourceCreated()
+     * @see PermissionInterface::onResourceCreated()
      */
-    public function onResourceCreated(\core_kernel_classes_Resource $resource) {
+    public function onResourceCreated(\core_kernel_classes_Resource $resource)
+    {
         foreach ($this->getInner() as $impl) {
             $impl->onResourceCreated($resource);
         }
@@ -118,9 +120,10 @@ class IntersectionUnionSupported extends ConfigurableService
     
     /**
      * (non-PHPdoc)
-     * @see \oat\generis\model\data\PermissionInterface::getSupportedPermissions()
+     * @see PermissionInterface::getSupportedPermissions()
      */
-    public function getSupportedRights() {
+    public function getSupportedRights()
+    {
         $models = $this->getInner();
         $first = array_pop($models);
         $supported = $first->getSupportedRights();

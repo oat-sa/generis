@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -15,48 +16,56 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2016 (original work) Open Assessment Technologies SA
- * 
+ *
  */
 
 namespace oat\generis\model;
 
 use oat\generis\model\data\ModelManager;
-use oat\generis\model\data\Model;
+use oat\generis\model\data\Ontology;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+
 /**
  * Trait for classes that want to access the ontology
- * 
+ *
  * @author Joel Bout <joel@taotesting.com>
  */
 trait OntologyAwareTrait
 {
-    private $model;
+    /**
+     * @var Ontology
+     */
+    private $ontology;
     
     /**
      * Return the used model
-     * @return Model
+     * @return Ontology
      */
     function getModel()
     {
-        if (is_null($this->model)) {
-            return ModelManager::getModel();
+        if (is_null($this->ontology)) {
+            return ($this instanceof ServiceLocatorAwareInterface && !is_null($this->getServiceLocator()))
+                ? $this->getServiceLocator()->get(Ontology::SERVICE_ID)
+                : ModelManager::getModel();
         }
-        return $this->model;
+        return $this->ontology;
     }
-    
+
     /**
      * Sets the model to use
-     * @param Model $model
+     * @param Ontology $model
      */
-    function setModel(Model $model)
+    function setModel(Ontology $model)
     {
-        $this->model = $model;
+        $this->ontology = $model;
     }
     
     /**
      * @param string $uri
      * @return \core_kernel_classes_Resource
      */
-    function getResource($uri) {
+    function getResource($uri)
+    {
         return $this->getModel()->getResource($uri);
     }
     
@@ -64,7 +73,8 @@ trait OntologyAwareTrait
      * @param string $uri
      * @return \core_kernel_classes_Class
      */
-     function getClass($uri) {
+    function getClass($uri)
+    {
         return $this->getModel()->getClass($uri);
     }
     
@@ -72,7 +82,8 @@ trait OntologyAwareTrait
      * @param string $uri
      * @return \core_kernel_classes_Property
      */
-    function getProperty($uri) {
+    function getProperty($uri)
+    {
         return $this->getModel()->getProperty($uri);
-    }	
+    }
 }

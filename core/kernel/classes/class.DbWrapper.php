@@ -1,23 +1,23 @@
 <?php
-/*  
+/*
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
  * of the License (non-upgradable).
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- * 
+ *
  * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
  *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- * 
+ *
  */
 
 error_reporting(E_ALL);
@@ -33,7 +33,7 @@ error_reporting(E_ALL);
  * @access public
  * @author Jerome Bogaerts, <jerome@taotesting.com>
  * @package generis
- 
+
  */
 class core_kernel_classes_DbWrapper
 {
@@ -97,18 +97,18 @@ class core_kernel_classes_DbWrapper
     public $debug = false;
     
     /**
-     * 
+     *
      * @var common_persistence_SqlPersistence
      */
     private $persistence = null;
 
     /**
-     * 
+     *
      * @var common_persistence_sql_Platform
      */
     private $platform = null;
     /**
-     * 
+     *
      * @var common_persistence_sql_SchemaManager
      */
     private $schemaManager = null;
@@ -126,10 +126,10 @@ class core_kernel_classes_DbWrapper
         $returnValue = null;
 
         if (!isset(self::$instance)) {
-			$c = __CLASS__;
-			self::$instance = new $c();
-		}
-		$returnValue = self::$instance;
+            $c = __CLASS__;
+            self::$instance = new $c();
+        }
+        $returnValue = self::$instance;
 
 
 
@@ -159,7 +159,7 @@ class core_kernel_classes_DbWrapper
     public function __clone()
     {
         $returnValue = null;
-		trigger_error('You cannot clone a singleton', E_USER_ERROR);
+        trigger_error('You cannot clone a singleton', E_USER_ERROR);
         return $returnValue;
     }
 
@@ -185,26 +185,20 @@ class core_kernel_classes_DbWrapper
      * @param  array params
      * @return PDOStatement
      */
-    public function query($statement, $params = array())
+    public function query($statement, $params = [])
     {
         $returnValue = null;
 
         
-        $this->debug($statement);
-        common_Profiler::queryStart();
-//         $trace=debug_backtrace();
-//         $caller=array_shift($trace);
-//         $caller=array_shift($trace);
-//         common_Logger::d('trace : '. $caller['function'] .$caller['class'] );
-//         common_Logger::d($statement . implode('|', $params));
-       	$sth = $this->persistence->query($statement,$params);
-//        	$string = '$this->persistence->executeQuery('.common_Utils::toPHPVariableString($statement).','
-//        			.common_Utils::toPHPVariableString($params).');$this->count++;'.PHP_EOL;
-//        	file_put_contents(ROOT_PATH.'sql.php', $string,FILE_APPEND);
-        common_Profiler::queryStop($statement, $params);
-		
-        if (!empty($sth)){
-        	$returnValue = $sth;
+        //         $trace=debug_backtrace();
+        //         $caller=array_shift($trace);
+        //         $caller=array_shift($trace);
+        //         common_Logger::d('trace : '. $caller['function'] .$caller['class'] );
+        //         common_Logger::d($statement . implode('|', $params));
+        $sth = $this->persistence->query($statement, $params);
+        
+        if (!empty($sth)) {
+            $returnValue = $sth;
         }
 
         $this->incrementNrOfQueries();
@@ -221,16 +215,12 @@ class core_kernel_classes_DbWrapper
      * @param  array params
      * @return int
      */
-    public function exec($statement, $params = array())
+    public function exec($statement, $params = [])
     {
         $this->debug($statement);
-		
-		common_Profiler::queryStart();
+        
+        $returnValue = $this->persistence->exec($statement, $params);
 
-        $returnValue = $this->persistence->exec($statement,$params);
-
-        common_Profiler::queryStop($statement, $params);
-		
         $this->incrementNrOfQueries();
         return (int) $returnValue;
     }
@@ -240,10 +230,10 @@ class core_kernel_classes_DbWrapper
      * @param string $tableName
      * @param array $data
      */
-    public function insert($tableName, array $data){
-    	$this->incrementNrOfQueries();
-        return $this->persistence->insert($tableName,$data);
-
+    public function insert($tableName, array $data)
+    {
+        $this->incrementNrOfQueries();
+        return $this->persistence->insert($tableName, $data);
     }
 
     /**
@@ -255,7 +245,8 @@ class core_kernel_classes_DbWrapper
      * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @return array
      */
-    public function getTables() {
+    public function getTables()
+    {
         return $this->getSchemaManager()->getTables();
     }
 
@@ -271,7 +262,8 @@ class core_kernel_classes_DbWrapper
      * @param  string table
      * @return array
      */
-    public function getColumnNames($table){
+    public function getColumnNames($table)
+    {
         return $this->getSchemaManager()->getColumnNames($table);
     }
 
@@ -345,8 +337,8 @@ class core_kernel_classes_DbWrapper
      */
     protected function debug($statement)
     {
-        if ($this->debug){
-        	common_Logger::w($statement);
+        if ($this->debug) {
+            common_Logger::w($statement);
         }
     }
 
@@ -363,7 +355,8 @@ class core_kernel_classes_DbWrapper
      * @param  int offset Limit upper bound.
      * @return string
      */
-    public function limitStatement($statement, $limit, $offset = 0){
+    public function limitStatement($statement, $limit, $offset = 0)
+    {
         return $this->getPlatform()->limitStatement($statement, $limit, $offset);
     }
 
@@ -373,8 +366,9 @@ class core_kernel_classes_DbWrapper
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
      * return common_persistence_sql_Platform
      */
-    public function getPlatForm(){
-        if($this->platform == null){
+    public function getPlatForm()
+    {
+        if ($this->platform == null) {
             $this->platform =  $this->persistence->getPlatForm();
         }
         return $this->platform;
@@ -384,8 +378,9 @@ class core_kernel_classes_DbWrapper
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
      * return common_persistence_sql_SchemaManager
      */
-    public function getSchemaManager(){
-        if($this->schemaManager == null){
+    public function getSchemaManager()
+    {
+        if ($this->schemaManager == null) {
             $this->schemaManager = $this->persistence->getSchemaManager();
         }
         return $this->schemaManager;
@@ -400,17 +395,19 @@ class core_kernel_classes_DbWrapper
      * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @return string
      */
-    public function getIndexAlreadyExistsErrorCode(){
+    public function getIndexAlreadyExistsErrorCode()
+    {
         return $this->getSchemaManager()->getIndexAlreadyExistsErrorCode();
     }
 
     /**
-     * 
+     *
      * @author Lionel Lecaque, lionel@taotesting.com
      */
-     public function getColumnNotFoundErrorCode(){
-         return $this->getSchemaManager()->getColumnNotFoundErrorCode();
-     }
+    public function getColumnNotFoundErrorCode()
+    {
+        return $this->getSchemaManager()->getColumnNotFoundErrorCode();
+    }
 
     /**
      * Create an index on a given table and selected columns. This method throws
@@ -424,21 +421,23 @@ class core_kernel_classes_DbWrapper
      * @param  array columns An associative array that represents the columns on which the index applies. The keys of the array are the name of the columns, the values are the length of the data to index in the column. If there is no length limitation, set the value of the array cell to null.
      * @return void
      */
-    public function createIndex($indexName, $tableName, $columns){
+    public function createIndex($indexName, $tableName, $columns)
+    {
         return $this->getSchemaManager()->createIndex($indexName, $tableName, $columns);
     }
 
     /**
-     * Rebuild the indexes of a given table. This method throws PDOExceptions in
-     * of error.
+     * Rebuild the indexes of a given table. This method throws DBALException in case of error.
      *
      * @abstract
      * @access public
      * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @param  string tableName
      * @return void
+     * @throws \Doctrine\DBAL\DBALException
      */
-    public function rebuildIndexes($tableName){
+    public function rebuildIndexes($tableName)
+    {
         return $this->getSchemaManager()->rebuildIndexes($tableName);
     }
 
@@ -452,9 +451,9 @@ class core_kernel_classes_DbWrapper
      * @param  string tableName
      * @return void
      */
-    public function flush($tableName){
+    public function flush($tableName)
+    {
         return $this->getSchemaManager()->flush($tableName);
-        
     }
 
     /**
@@ -483,24 +482,26 @@ class core_kernel_classes_DbWrapper
      * @param string $name
      * @return string The quoted string.
      */
-    public function lastInsertId($name = null){
+    public function lastInsertId($name = null)
+    {
         return $this->persistence->lastInsertId($name);
     }
     
     /**
      * Convenience access to platForm quote.
-     * 
+     *
      * @author Jerome Bogaerts, <jerome@taotesting.com>
      * @param string $parameter The parameter to quote.
      * @param int $parameter_type A PDO PARAM_XX constant.
      * @return string The quoted string.
      */
-    public function quote($parameter){
-    	return $this->persistence->quote($parameter);
+    public function quote($parameter)
+    {
+        return $this->persistence->quote($parameter);
     }
     
-    public function quoteIdentifier($parameter){
+    public function quoteIdentifier($parameter)
+    {
         return $this->persistence->getPlatForm()->quoteIdentifier($parameter);
     }
-
 }
