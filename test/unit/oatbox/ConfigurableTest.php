@@ -19,9 +19,10 @@
 
 namespace oat\generis\test\unit\oatbox;
 
+use oat\generis\test\TestCase;
 use oat\oatbox\Configurable;
 
-class ConfigurableTest extends \PHPUnit_Framework_TestCase
+class ConfigurableTest extends TestCase
 {
     /**
      * @param array $options
