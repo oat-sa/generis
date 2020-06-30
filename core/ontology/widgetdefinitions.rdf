@@ -112,6 +112,12 @@
     <widget:textLength><![CDATA[3]]></widget:textLength>
     <widget:textLength><![CDATA[255]]></widget:textLength>
   </rdf:Description>
+  <rdf:Description rdf:about="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#SearchTextBox">
+    <rdf:type rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#WidgetClass"/>
+    <rdfs:label xml:lang="en-US"><![CDATA[Search Input]]></rdfs:label>
+    <rdfs:comment xml:lang="en-US"><![CDATA[One may select 0 to N values from a defined list]]></rdfs:comment>
+    <widget:rangeConstraint rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#rangeConstraint-Resource"/>
+  </rdf:Description>
   <rdf:Description rdf:about="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#Label">
     <rdf:type rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#WidgetClass"/>
     <rdfs:label xml:lang="en-US"><![CDATA[Text Label]]></rdfs:label>

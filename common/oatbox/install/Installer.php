@@ -49,6 +49,7 @@ class Installer extends ConfigurableService
         $this->validateOptions();
 
         $this->setupServiceManager($this->getConfigPath());
+        $this->setupExtensionManager();
         $this->installFilesystem();
 
         return new Report(Report::TYPE_SUCCESS, 'Oatbox installed successfully');
@@ -75,8 +76,7 @@ class Installer extends ConfigurableService
                 'dir' => $configPath,
                 'humanReadable' => true
             ]);
-
-            $this->setServiceManager(new ServiceManager($configService));
+            $this->setServiceLocator(new ServiceManager($configService));
         }
 
         return $this->getServiceManager();
@@ -112,6 +112,11 @@ class Installer extends ConfigurableService
             ]);
             $this->getServiceManager()->register(FileSystemService::SERVICE_ID, $fileSystemService);
         }
+    }
+
+    public function setupExtensionManager(): void
+    {
+        $this->getServiceManager()->register(\common_ext_ExtensionsManager::SERVICE_ID, new \common_ext_ExtensionsManager());
     }
 
     /**

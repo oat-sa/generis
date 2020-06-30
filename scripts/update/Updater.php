@@ -39,6 +39,7 @@ use oat\generis\model\kernel\persistence\smoothsql\search\ComplexSearchService;
 use oat\generis\model\kernel\uri\UriProvider;
 use oat\generis\model\user\AuthAdapter;
 use oat\generis\model\user\UserFactoryService;
+use oat\generis\model\WidgetRdf;
 use oat\generis\persistence\PersistenceManager;
 use oat\oatbox\action\ActionService;
 use oat\oatbox\cache\KeyValueCache;
@@ -59,9 +60,12 @@ use oat\oatbox\task\TaskRunner;
 use oat\oatbox\user\UserLanguageService;
 use oat\taoWorkspace\model\generis\WrapperModel;
 use Psr\Log\LoggerInterface;
+use oat\generis\model\kernel\persistence\file\FileIterator;
+use Traversable;
 
 /**
  * @author Joel Bout <joel@taotesting.com>
+ * @deprecated use migrations instead. See https://github.com/oat-sa/generis/wiki/Tao-Update-Process
  */
 class Updater extends common_ext_ExtensionUpdater
 {
@@ -525,7 +529,44 @@ class Updater extends common_ext_ExtensionUpdater
             $this->setVersion('12.23.0');
         }
 
-        $this->skip('12.23.0', '12.26.0');
+        $this->skip('12.23.0', '12.26.1');
+
+        if ($this->isVersion('12.26.1')) {
+            core_kernel_impl_ApiModelOO::singleton()->importXmlRdf(
+                WidgetRdf::NAMESPACE,
+                __DIR__ . '/../../core/ontology/widgetdefinitions.rdf'
+            );
+
+            $this->setVersion('12.27.0');
+        }
+
+        $this->skip('12.27.0', '12.28.0');
+
+        if ($this->isVersion('12.28.0')) {
+            $this->removeDuplicates(new FileIterator(__DIR__ . '/../../core/ontology/widgetdefinitions.rdf'));
+            $this->setVersion('12.28.1');
+        }
+
+        //Updater files are deprecated. Please use migrations.
+        //See: https://github.com/oat-sa/generis/wiki/Tao-Update-Process
+
+        $this->setVersion($this->getExtension()->getManifest()->getVersion());
+    }
+
+    /**
+     * Helper for the unfortunate scenario where we generated duplicate
+     * entries in the statement table.
+     *
+     * Fixes the duplicates by removing all matching triples and then
+     * readding them only once
+     */
+    protected function removeDuplicates(Traversable $triples): void
+    {
+        $rdfModel = $this->getServiceLocator()->get(Ontology::SERVICE_ID)->getRdfInterface();
+        foreach ($triples as $triple) {
+            $rdfModel->remove($triple);
+        }
+        $rdfModel->addTripleCollection($triples);
     }
 
     /**
