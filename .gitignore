@@ -3,3 +3,5 @@
 /.buildpath
 /data/*
 composer.lock
+vendor/
+.idea/
