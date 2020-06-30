@@ -169,7 +169,7 @@ class PersistenceManager extends ConfigurableService
     /**
      * Add the schema of a single service, if needed
      */
-    public function addSchema($service): void
+    public function applySchemaProvider($service): void
     {
         if ($service instanceof SchemaProviderInterface) {
             $schemaCollection = $this->getSqlSchemas();

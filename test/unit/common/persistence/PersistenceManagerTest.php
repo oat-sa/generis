@@ -108,16 +108,17 @@ class PersistenceManagerTest extends TestCase
         $this->assertFalse($this->pm->getSqlSchemas()->getSchema('sql2')->hasTable('sample_table'));
     }
 
-    public function testAddSchema()
+    public function testApplySchemaProvider()
     {
         $serviceClass = new class implements SchemaProviderInterface {
             public function provideSchema(SchemaCollection $schemaCollection)
             {
-                $schemaCollection->getSchema('sql1')->createTable('serviceTable');
+                $table = $schemaCollection->getSchema('sql1')->createTable('serviceTable');
+                $table->addColumn('sample', "text");
             }
         };
         $this->assertFalse($this->pm->getSqlSchemas()->getSchema('sql1')->hasTable('serviceTable'));
-        $this->pm->addSchema(new $serviceClass());
+        $this->pm->applySchemaProvider(new $serviceClass());
         $this->assertTrue($this->pm->getSqlSchemas()->getSchema('sql1')->hasTable('serviceTable'));
     }
 
