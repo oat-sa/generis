@@ -31,7 +31,7 @@ use common_ext_Extension;
  *
  * @author Lionel Lecaque <lionel@taotesting.com>
  */
-abstract class AbstractRegistry extends ConfigurableService
+abstract class AbstractRegistry`` extends ConfigurableService
 {
     /**
      *
