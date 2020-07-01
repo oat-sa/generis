@@ -78,20 +78,6 @@ class common_ext_UpdateExtensions implements Action, ServiceLocatorAwareInterfac
                 break;
             }
         }
-        $postUpdateReport = new Report(Report::TYPE_INFO, 'Post update actions:');
-        foreach ($sorted as $ext) {
-            try {
-                $postUpdateExtensionReport = $ext->getUpdater()->postUpdate();
-                if ($postUpdateExtensionReport) {
-                    $postUpdateReport->add($postUpdateExtensionReport);
-                }
-            } catch (common_ext_ManifestException $e) {
-                $postUpdateReport->add(new Report(Report::TYPE_WARNING, $e->getMessage()));
-            }
-        }
-        if ($postUpdateReport->hasChildren()) {
-            $report->add($postUpdateReport);
-        }
         $this->logInfo(helpers_Report::renderToCommandline($report, false));
         return $report;
     }
