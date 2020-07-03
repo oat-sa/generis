@@ -81,10 +81,12 @@ trait ConfigSets
     }
 
     /**
-     * @param string $name
+     * @param string        $name
+     * @param mixed|null    $default
      * @return mixed
      */
-    abstract public function getOption($name);
+    abstract public function getOption($name, $default = null);
+
     /**
          * @param string $name
          * @return boolean
