@@ -21,29 +21,30 @@ use oat\oatbox\service\ConfigurableService;
 
 /**
  * Session implementation as a Key Value storage and using the persistence
- * 
+ *
  * @author Joel Bout <joel@taotesting.com>
  * @package generis
  */
 class common_session_php_KeyValueSessionHandler extends ConfigurableService
     implements common_session_php_SessionHandler
 {
-    const OPTION_PERSISTENCE = 'persistence'; 
-    
-    const KEY_NAMESPACE = "generis:session:";
-    
-    /**
-     * @var common_persistence_KeyValuePersistence
-     */
-    private $sessionPersistence = null;
-    
-    protected function getPersistence() {
+    public const OPTION_PERSISTENCE = 'persistence';
+    public const OPTION_SESSION_TTL = 'session_ttl';
+
+    public const KEY_NAMESPACE = 'generis:session:';
+
+    /** @var common_persistence_KeyValuePersistence */
+    private $sessionPersistence;
+
+    protected function getPersistence()
+    {
         if (is_null($this->sessionPersistence)) {
             $this->sessionPersistence = common_persistence_KeyValuePersistence::getPersistence($this->getOption(self::OPTION_PERSISTENCE));
         }
+
         return $this->sessionPersistence;
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see common_session_storage_SessionStorage::open()
@@ -67,7 +68,7 @@ class common_session_php_KeyValueSessionHandler extends ConfigurableService
      */
     public function read($id)
     {
-        $session = $this->getPersistence()->get(self::KEY_NAMESPACE.$id); 
+        $session = $this->getPersistence()->get(self::KEY_NAMESPACE.$id);
         return is_string($session) ? $session : '';
     }
 
@@ -76,8 +77,8 @@ class common_session_php_KeyValueSessionHandler extends ConfigurableService
      * @see common_session_storage_SessionStorage::write()
      */
     public function write($id, $data)
-    {  
-        return $this->getPersistence()->set(self::KEY_NAMESPACE.$id, $data, (int) ini_get('session.gc_maxlifetime'));
+    {
+        return $this->getPersistence()->set(self::KEY_NAMESPACE . $id, $data, $this->getSessionTtl());
     }
 
     /**
@@ -94,12 +95,17 @@ class common_session_php_KeyValueSessionHandler extends ConfigurableService
      * @see common_session_storage_SessionStorage::gc()
      */
     public function gc($maxlifetime)
-    { 
+    {
         //
-        //problem here either 
-        // solution 1 : do two explicit handlers for each specific persistence (Redis, SQL) 
-        // solution 2 : Check if the eprsistence is capable of autonomous garbage  
+        //problem here either
+        // solution 1 : do two explicit handlers for each specific persistence (Redis, SQL)
+        // solution 2 : Check if the eprsistence is capable of autonomous garbage
         //
         return true;
+    }
+
+    private function getSessionTtl(): int
+    {
+        return $this->getOption(self::OPTION_SESSION_TTL) ?? (int)ini_get('session.gc_maxlifetime');
     }
 }
