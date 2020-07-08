@@ -76,6 +76,28 @@ class DirectoryFilesystemTest extends GenerisTestCase
         $directory->rename('testDirectory.exist');
     }
 
+    public function testGetFullPathFile()
+    {
+        $file = $this->getTempDirectory()->getFile('fixture');
+        $fileSystemId = $file->getFileSystemId();
+
+        $fileSystemService = new FileSystemService([
+            FileSystemService::OPTION_FILE_PATH => '/tmp/testing',
+            FileSystemService::OPTION_ADAPTERS => [
+                $fileSystemId => [
+                    'class' => FileSystemService::FLYSYSTEM_LOCAL_ADAPTER,
+                    'options' => ['root' => $file->getFileSystemId()]
+                ]
+            ],
+        ]);
+
+        $file = $this->getTempDirectory()->getFile('fixture');
+
+        $result = $fileSystemService->getFullPathFile($file);
+
+        $this->assertEquals($result, $file->getFileSystemId() . '/');
+    }
+
 
     /**
      * @return bool
