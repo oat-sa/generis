@@ -31,9 +31,13 @@ class common_persistence_sql_QueryIterator implements Iterator
      * @var common_persistence_SqlPersistence
      */
     private $persistence;
-
+    /**
+     * @var string
+     */
     private $query;
-
+    /**
+     * @var array
+     */
     private $params;
 
     /**
@@ -49,13 +53,19 @@ class common_persistence_sql_QueryIterator implements Iterator
      * @var array
      */
     private $cache;
+    /**
+     * @var array
+     */
     private $types;
+    /**
+     * @var int
+     */
     private $limit;
 
     public function __construct(
         common_persistence_SqlPersistence $persistence,
-        $query,
-        $params = [],
+        string $query,
+        array $params = [],
         array $types = [],
         int $limit = self::CACHE_SIZE
     ) {
