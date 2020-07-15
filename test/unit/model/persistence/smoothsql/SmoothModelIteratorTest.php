@@ -21,9 +21,9 @@
 
 namespace oat\generis\test\unit\model\persistence\smoothsql;
 
-use Prophecy\Promise\ReturnPromise;
-use Prophecy\Argument;
 use oat\generis\test\TestCase;
+use Prophecy\Argument;
+use Prophecy\Promise\ReturnPromise;
 
 class SmoothModelIteratorTest extends TestCase
 {
@@ -76,7 +76,7 @@ class SmoothModelIteratorTest extends TestCase
 
         $persistenceProphecy->getPlatForm()->willReturn($platform);
         $persistenceProphecy
-            ->query($finalQuery, Argument::type('array'))
+            ->query($finalQuery, Argument::type('array'), Argument::type('array'))
             ->willReturn($plop);
 
         $iterator = new \core_kernel_persistence_smoothsql_SmoothIterator($persistenceProphecy->reveal());
