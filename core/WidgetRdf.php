@@ -27,14 +27,6 @@ interface WidgetRdf
 
     public const CLASS_URI_WIDGET                        = self::NAMESPACE . '#WidgetClass';
     public const PROPERTY_WIDGET                         = self::NAMESPACE . '#widget';
-    public const PROPERTY_WIDGET_RADIO                   = self::NAMESPACE . '#RadioBox';
-    public const PROPERTY_WIDGET_COMBO                   = self::NAMESPACE . '#ComboBox';
-    public const PROPERTY_WIDGET_CHECK                   = self::NAMESPACE . '#CheckBox';
-    public const PROPERTY_WIDGET_FTE                     = self::NAMESPACE . '#TextBox';
-    public const PROPERTY_WIDGET_HIDDEN_BOX              = self::NAMESPACE . '#HiddenBox';
-    public const PROPERTY_WIDGET_TEXT_AREA               = self::NAMESPACE . '#TextArea';
-    public const PROPERTY_WIDGET_HTML_AREA               = self::NAMESPACE . '#HTMLArea';
-    public const PROPERTY_WIDGET_TREEVIEW                = self::NAMESPACE . '#TreeView';
     public const PROPERTY_WIDGET_CONSTRAINT_TYPE         = self::NAMESPACE . '#rangeConstraintTypes';
     public const PROPERTY_WIDGET_ID                      = self::NAMESPACE . '#identifier';
     public const CLASS_URI_WIDGET_RENDERER               = self::NAMESPACE . '#WidgetRenderer';

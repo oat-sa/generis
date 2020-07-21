@@ -109,23 +109,6 @@ define('PROPERTY_MASK_SUBJECT', GENERIS_NS . '#MaskSubject');
 define('PROPERTY_MASK_PREDICATE', GENERIS_NS . '#MaskPredicate');
 define('PROPERTY_MASK_OBJECT', GENERIS_NS . '#MaskObject');
 
-
-#widget
-define('CLASS_WIDGET', 'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#WidgetClass');
-define('PROPERTY_WIDGET', 'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#widget');
-define('WIDGET_RADIO', 'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#RadioBox');
-define('WIDGET_COMBO', 'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#ComboBox');
-define('WIDGET_CHECK', 'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#CheckBox');
-define('WIDGET_FTE', 'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#TextBox');
-define('WIDGET_TIMER', 'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#Timer');
-define('WIDGET_TREEVIEW', 'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#TreeView');
-define('WIDGET_CONSTRAINT_TYPE', 'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#rangeConstraintTypes');
-define('PROPERTY_WIDGET_ID', 'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#identifier');
-define('CLASS_WIDGETRENDERER', 'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#WidgetRenderer');
-define('PROPERTY_WIDGETRENDERER_WIDGET', 'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#renderedWidget');
-define('PROPERTY_WIDGETRENDERER_MODE', 'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#renderMode');
-define('PROPERTY_WIDGETRENDERER_IMPLEMENTATION', 'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#implementation');
-
 #Rules
 define('RULES_NS', 'http://www.tao.lu/middleware/Rules.rdf');
 
