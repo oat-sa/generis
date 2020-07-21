@@ -186,6 +186,22 @@ class FileSystemService extends ConfigurableService
     }
 
     /**
+     * Get the full path to the file
+     *
+     * @param File $file
+     * @return string
+     * @throws \common_exception_NotFound
+     * @throws common_exception_Error
+     */
+    public function getFullPathFile($file)
+    {
+        $config = $this->getAdapterConfig($file->getFileSystemId());
+        $adapter = $this->getFlysystemAdapter($config['adapter']);
+
+        return $adapter->getPathPrefix() . $file->getMetadata()['path'];
+    }
+
+    /**
      * Returns the configuration for an adapter
      * @param string $id
      * @return string[]
