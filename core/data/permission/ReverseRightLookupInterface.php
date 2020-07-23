@@ -32,7 +32,21 @@ use core_kernel_classes_Resource;
 interface ReverseRightLookupInterface
 {
     /**
-     * Returns a list roles related to a resource
+     * Returns a list roles and permissions related to a resource
+     *
+     *
+     * Sample data to be returned:
+     * [
+     *    'http://www.tao.lu/Ontologies/TAO.rdf#BackOfficeRole' => [
+     *        'GRANT',
+     *        'READ',
+     *        'WRITE'
+     *    ],
+     *    'http://www.tao.lu/Ontologies/TAO.rdf#ItemAuthor' => [
+     *        'GRANT',
+     *        'READ'
+     *    ],
+     * ]
      *
      * @param core_kernel_classes_Resource $resource
      * @return array
