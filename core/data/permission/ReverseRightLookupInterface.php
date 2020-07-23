@@ -22,8 +22,6 @@ declare(strict_types=1);
 
 namespace oat\generis\model\data\permission;
 
-use core_kernel_classes_Resource;
-
 /**
  * ReverseRightLookupInterface
  *
@@ -48,8 +46,8 @@ interface ReverseRightLookupInterface
      *    ],
      * ]
      *
-     * @param core_kernel_classes_Resource $resource
+     * @param string $resourceId
      * @return array
      */
-    public function getResourceAccessData(core_kernel_classes_Resource $resource): array;
+    public function getResourceAccessData(string $resourceId): array;
 }
