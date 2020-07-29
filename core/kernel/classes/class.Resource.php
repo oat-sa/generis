@@ -62,17 +62,6 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
     public $uriResource = '';
 
     /**
-     * The resource label
-     * direct access to the label is deprecated,
-     * please use getLabel()
-     *
-     * @access public
-     * @var string
-     * @deprecated
-     */
-    public $label = null;
-
-    /**
      * The resource comment
      * direct access to the comment is deprecated,
      * please use getComment()
@@ -187,40 +176,32 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
      * method preventing to call the get getPropertyValues() method for a such common
      * operation.
      *
-     * @author Patrick Plichart <patrick@taotesting.com>
      * @return string A Uniform Resource Identifier (URI).
+     * @throws core_kernel_persistence_Exception
+     * @author Patrick Plichart <patrick@taotesting.com>
      */
-    public function getLabel()
+    public function getLabel(): ?string
     {
-        if (is_null($this->label)) {
-            $label =  $this->getOnePropertyValue($this->getProperty(OntologyRdfs::RDFS_LABEL));
-            $this->label = is_null($label)
-                ? ''
-                : ($label instanceof core_kernel_classes_Resource
-                    ? $label->getUri()
-                    : (string)$label
-                   )
-            ;
+        $label =  $this->getOnePropertyValue($this->getProperty(OntologyRdfs::RDFS_LABEL));
+
+        if ($label === null) {
+            return '';
         }
-        
-        return $this->label;
+
+        return $label instanceof self ? $label->getUri() : __((string)$label);
     }
 
     /**
-     * alias to setPropertyValue using rdfs:label property
+     * Alias to editPropertyValues using rdfs:label property
      *
      * @access public
      * @author patrick.plichart@tudor:lu
-     * @param  string label
+     * @param  string $label
      * @return boolean
      */
-    public function setLabel($label)
+    public function setLabel(string $label): bool
     {
-        $returnValue = (bool) false;
-        $this->removePropertyValues($this->getProperty(OntologyRdfs::RDFS_LABEL));
-        $this->setPropertyValue($this->getProperty(OntologyRdfs::RDFS_LABEL), $label);
-        $this->label = $label;
-        return (bool) $returnValue;
+        return $this->editPropertyValues($this->getProperty(OntologyRdfs::RDFS_LABEL), $label);
     }
 
     /**
