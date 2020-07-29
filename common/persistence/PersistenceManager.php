@@ -34,16 +34,16 @@ use oat\generis\persistence\sql\SchemaProviderInterface;
 class PersistenceManager extends ConfigurableService
 {
 
-    const SERVICE_ID = 'generis/persistences';
+    public const SERVICE_ID = 'generis/persistences';
 
-    const OPTION_PERSISTENCES = 'persistences';
+    public const OPTION_PERSISTENCES = 'persistences';
 
     /**
      * Mapping of drivers to implementations.
      * All SQL drivers except 'dbal' are deprecated
      * @var array
      */
-    const DRIVER_MAP = [
+    private const DRIVER_MAP = [
         'dbal' => 'common_persistence_sql_dbal_Driver',
         'dbal_pdo_mysql' => 'common_persistence_sql_dbal_Driver',
         'dbal_pdo_sqlite' => 'common_persistence_sql_dbal_Driver',
@@ -90,7 +90,10 @@ class PersistenceManager extends ConfigurableService
             ];
         }
 
-        if (isset($persistenceConf['connection']['driver']) && $persistenceConf['connection']['driver'] === 'pdo_mysql') {
+        if (
+            isset($persistenceConf['connection']['driver'])
+            && $persistenceConf['connection']['driver'] === 'pdo_mysql'
+        ) {
             $persistenceConf['connection']['charset'] = 'utf8';
         }
 
@@ -129,7 +132,9 @@ class PersistenceManager extends ConfigurableService
         $driverClassName = isset(self::DRIVER_MAP[$driverString]) ? self::DRIVER_MAP[$driverString] : $driverString;
 
         if (! class_exists($driverClassName)) {
-            throw new \common_exception_Error('Driver ' . $driverString . ' not found, check your database configuration');
+            throw new \common_exception_Error(
+                'Driver ' . $driverString . ' not found, check your database configuration'
+            );
         }
         $driver = $this->propagate(new $driverClassName());
         return $driver->connect($persistenceId, $config);
@@ -175,9 +180,9 @@ class PersistenceManager extends ConfigurableService
             $schemaCollection = $this->getSqlSchemas();
             $service->provideSchema($schemaCollection);
             $this->applySchemas($schemaCollection);
-            $this->logInfo('Applied schema for '.get_class($service));
+            $this->logInfo('Applied schema for ' . get_class($service));
         } else {
-            $this->logDebug('No schema found for '.get_class($service));
+            $this->logDebug('No schema found for ' . get_class($service));
         }
     }
 }
