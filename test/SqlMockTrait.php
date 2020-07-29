@@ -29,11 +29,8 @@ trait SqlMockTrait
 {
     /**
      * Returns a persistence Manager with a mocked sql persistence
-     *
-     * @param string $key identifier of the persistence
-     * @return PersistenceManager
      */
-    public function getSqlMock($key)
+    public function getSqlMock(string $key): PersistenceManager
     {
         if (!extension_loaded('pdo_sqlite')) {
             $this->markTestSkipped('sqlite not found, tests skipped.');
