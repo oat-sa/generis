@@ -30,9 +30,8 @@ trait KeyValueMockTrait
      * Returns a keyvalue persistence on top of a SQL memory mock
      *
      * @param string $key identifier of the persistence
-     * @return PersistenceManager
      */
-    public function getKeyValueMock($key)
+    public function getKeyValueMock(string $key): PersistenceManager
     {
         $driver = new \common_persistence_InMemoryKvDriver();
         $persistence = new \common_persistence_KeyValuePersistence([],$driver);

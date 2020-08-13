@@ -15,16 +15,26 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2018 (original work) Open Assessment Technologies SA;
+ * Copyright (c) 2020 (original work) Open Assessment Technologies SA;
  *
  */
 
 namespace oat\generis\test;
 
-use PHPUnit\Framework\TestCase as UnitTestCase;
+use Prophecy\Argument;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
-abstract class TestCase extends UnitTestCase
+trait MockServiceLocatorTrait
 {
-    use MockServiceLocatorTrait;
-    use SqlMockTrait;
+    public function getServiceLocatorMock(array $services = []): ServiceLocatorInterface
+    {
+        $serviceLocatorProphecy = $this->prophesize(ServiceLocatorInterface::class);
+        foreach ($services as $key => $service) {
+            $serviceLocatorProphecy->get($key)->willReturn($service);
+            $serviceLocatorProphecy->has($key)->willReturn(true);
+        }
+        $serviceLocatorProphecy->has(Argument::any())->willReturn(false);
+        
+        return $serviceLocatorProphecy->reveal();
+    }
 }
