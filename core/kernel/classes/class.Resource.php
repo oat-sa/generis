@@ -30,6 +30,7 @@ use oat\oatbox\event\EventManager;
 use oat\generis\model\data\event\ResourceUpdated;
 use oat\generis\model\data\event\ResourceDeleted;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Resource implements rdf:resource container identified by an uri (a string).
@@ -707,9 +708,7 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
      */
     public function equals(core_kernel_classes_Resource $resource)
     {
-        $returnValue = (bool) false;
-        $returnValue = $this->getUri() == $resource->getUri();
-        return (bool) $returnValue;
+        return $this->getUri() == $resource->getUri();
     }
 
     /**
@@ -721,7 +720,7 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
      * @param  Class class
      * @return boolean
      */
-    public function isInstanceOf(core_kernel_classes_Class $class)
+    public function isInstanceOf(core_kernel_classes_Class $class): bool
     {
         $returnValue = (bool) false;
         foreach ($this->getTypes() as $type) {
@@ -733,7 +732,7 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
         return (bool) $returnValue;
     }
 
-    public function getServiceManager()
+    public function getServiceManager(): ServiceManager
     {
         return ($this->getModel() instanceof ServiceLocatorAwareInterface)
             ? $this->getModel()->getServiceLocator()
@@ -743,7 +742,7 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
     /**
      * Moved from common_Utils to not break dependency ingestion chain
      * @param string $value
-     * @return core_kernel_classes_Literal|core_kernel_classes_Resource
+     * @return core_kernel_classes_Literal|core_kernel_classes_Resource|core_kernel_classes_Resource[]
      */
     protected function toResource($value)
     {
@@ -762,7 +761,7 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
         }
     }
 
-    private function onUpdate()
+    private function onUpdate(): void
     {
         /** @var EventAggregator $eventAggregator */
         $eventAggregator = $this->getServiceManager()->get(EventAggregator::class);
