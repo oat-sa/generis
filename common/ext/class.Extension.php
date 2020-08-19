@@ -26,6 +26,7 @@ use oat\oatbox\service\ServiceManagerAwareTrait;
 use oat\oatbox\service\ServiceNotFoundException;
 use oat\oatbox\service\ConfigurableService;
 use oat\oatbox\config\ConfigurationService;
+use oat\oatbox\service\ServiceFactoryInterface;
 
 /**
  * Short description of class common_ext_Extension
@@ -477,6 +478,52 @@ class common_ext_Extension implements ServiceManagerAwareInterface
             $this->getServiceLocator()->propagate($service);
         }
         return $service;
+    }
+    
+    public function getDefaultServices(): array
+    {
+        $services = [];
+        foreach ($this->getDefaultFiles() as $key => $filePath) {
+            $service = $this->buildService($key, $filePath);
+            if (!is_null($service)) {
+                $services[$this->extension->getId() . '/' . $key] = $service;
+            }
+        }
+        return $services;
+    }
+    
+    private function getDefaultFiles(): array
+    {
+        $filePaths = [];
+        $defaultsPath = $this->getDir() . 'config/default';
+        if (is_dir($defaultsPath)) {
+            $defaultIterator = new DirectoryIterator($defaultsPath);
+            foreach ($defaultIterator as $fileinfo) {
+                if (!$fileinfo->isDot() && strpos($fileinfo->getFilename(), '.conf.php') > 0) {
+                    $key = substr($fileinfo->getFilename(), 0, -strlen('.conf.php'));
+                    $filePaths[$key] = $fileinfo->getPathname();
+                }
+            }
+        }
+        return $filePaths;
+    }
+    
+    private function buildService($confKey, $filepath): ?ConfigurableService
+    {
+        $confKey = substr($fileinfo->getFilename(), 0, -strlen('.conf.php'));
+        $config = include $filepath;
+        if ($config instanceof ServiceFactoryInterface) {
+            $config = $config($this->getServiceManager());
+        }
+        if (!$config instanceof ConfigurableService) {
+            return null;
+        }
+        $header = $this->getConfigHeader($confKey);
+        if (!is_null($header)) {
+            $config->setHeader($header);
+        }
+        return $config;
+        
     }
     
     /**

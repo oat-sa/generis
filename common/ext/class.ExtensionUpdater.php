@@ -24,6 +24,7 @@ declare(strict_types = 1);
 use oat\oatbox\service\ServiceManagerAwareTrait;
 use oat\oatbox\service\ServiceManagerAwareInterface;
 use common_report_Report as Report;
+use oat\taoDevTools\actions\ExtensionsManager;
 
 /**
  * Short description of class common_ext_ExtensionInstaller
@@ -41,13 +42,42 @@ abstract class common_ext_ExtensionUpdater extends common_ext_ExtensionHandler i
 
     /** @var Report[] */
     private $reports = [];
+    
+    public function runUpdate(): Report
+    {
+        $this->registerDefaultServices();
+        $this->update();
+
+        $codeVersion = $this->getExtension()->getVersion();
+        $postUpdateVersion = $this->getServiceLocator()->get(ExtensionsManager::class)->getInstalledVersion($this->getExtension()->getId());
+
+        $versionReport =  ($postUpdateVersion == $codeVersion)
+            ? new Report(Report::TYPE_SUCCESS, 'Successfully updated ' . $this->getExtension()->getName() . ' to ' . $postUpdateVersion)
+            : new Report(Report::TYPE_WARNING, 'Update of ' . $this->getExtension()->getName() . ' exited with version ' . $postUpdateVersion)
+        ;
+
+        foreach ($this->getReports() as $updaterReport) {
+            $versionReport->add($updaterReport);
+        }
+
+        return $versionReport;
+    }
 
     /**
      *
      * @param string $currentVersion
      * @return string $versionUpdatedTo
      */
-    abstract public function update($initialVersion);
+    abstract public function update($initialVersion = null);
+    
+    public function registerDefaultServices(): ?Report
+    {
+        foreach ($this->getExtension()->getDefaultServices() as $key => $service) {
+            if (!$this->getServiceLocator()->has($key)) {
+                $this->getServiceManager()->register($key, $service);
+            }
+        }
+    }
 
     /**
      * @return Report|null

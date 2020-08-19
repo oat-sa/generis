@@ -101,26 +101,7 @@ class common_ext_UpdateExtensions implements Action, ServiceLocatorAwareInterfac
             $report = new Report(Report::TYPE_INFO, $ext->getName() . ' requires update from ' . $installed . ' to ' . $codeVersion);
             try {
                 $updater = $ext->getUpdater();
-                $returnedVersion = $updater->update($installed);
-                $currentVersion = $this->getExtensionManager()->getInstalledVersion($ext->getId());
-
-                if (!is_null($returnedVersion) && $returnedVersion != $currentVersion) {
-                    $this->getExtensionManager()->updateVersion($ext, $returnedVersion);
-                    $report->add(new Report(Report::TYPE_WARNING, 'Manually saved extension version'));
-                    $currentVersion = $returnedVersion;
-                }
-
-                if ($currentVersion == $codeVersion) {
-                    $versionReport = new Report(Report::TYPE_SUCCESS, 'Successfully updated ' . $ext->getName() . ' to ' . $currentVersion);
-                } else {
-                    $versionReport = new Report(Report::TYPE_WARNING, 'Update of ' . $ext->getName() . ' exited with version ' . $currentVersion);
-                }
-
-                foreach ($updater->getReports() as $updaterReport) {
-                    $versionReport->add($updaterReport);
-                }
-
-                $report->add($versionReport);
+                $report->add($updater->runUpdate());
 
                 $this->getServiceLocator()->get(SimpleCache::SERVICE_ID)->clear();
             } catch (common_ext_ManifestException $e) {
