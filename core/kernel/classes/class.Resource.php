@@ -23,6 +23,7 @@
 
 use oat\generis\model\OntologyRdf;
 use oat\generis\model\OntologyRdfs;
+use oat\oatbox\event\EventAggregator;
 use oat\oatbox\service\ServiceManager;
 use oat\generis\model\OntologyAwareTrait;
 use oat\oatbox\event\EventManager;
@@ -92,7 +93,7 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
     {
         return $this->getModel()->getRdfsInterface()->getResourceImplementation();
     }
-    
+
 
     /**
      * create the object
@@ -202,7 +203,7 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
                    )
             ;
         }
-        
+
         return $this->label;
     }
 
@@ -338,14 +339,14 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
         if ($last) {
             throw new core_kernel_persistence_Exception('parameter \'last\' for getOnePropertyValue no longer supported');
         };
-        
+
         $options = [
             'forceDefaultLg' => true,
             'one' => true
         ];
 
         $value = $this->getPropertyValues($property, $options);
-        
+
         if (count($value)) {
             $returnValue = $this->toResource(current($value));
         }
@@ -465,7 +466,7 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
         $returnValue &= $this->setPropertyValueByLg($prop, $value, $lg);
         return (bool) $returnValue;
     }
-    
+
     /**
      * remove a single triple with this subject and predicate
      *
@@ -731,7 +732,7 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
         }
         return (bool) $returnValue;
     }
-    
+
     public function getServiceManager()
     {
         return ($this->getModel() instanceof ServiceLocatorAwareInterface)
@@ -763,7 +764,8 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
 
     private function onUpdate()
     {
-        $eventManager = $this->getServiceManager()->get(EventManager::SERVICE_ID);
-        $eventManager->trigger(new ResourceUpdated($this));
+        /** @var EventAggregator $eventAggregator */
+        $eventAggregator = $this->getServiceManager()->get(EventAggregator::class);
+        $eventAggregator->put($this->getUri(), new ResourceUpdated($this));
     }
 }
