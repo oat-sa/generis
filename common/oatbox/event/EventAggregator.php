@@ -37,7 +37,7 @@ class EventAggregator extends ConfigurableService implements LoggerAwareInterfac
     /** @var array */
     private $events = [];
 
-    public function __construct($options = [])
+    public function __construct(array $options = [])
     {
         parent::__construct($options);
 
