@@ -706,7 +706,7 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
      * @param  Resource resource
      * @return boolean
      */
-    public function equals(core_kernel_classes_Resource $resource)
+    public function equals(core_kernel_classes_Resource $resource): bool
     {
         return $this->getUri() == $resource->getUri();
     }
