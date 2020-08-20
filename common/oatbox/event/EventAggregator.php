@@ -67,6 +67,6 @@ class EventAggregator extends ConfigurableService implements LoggerAwareInterfac
 
     public function getEventManager(): EventManager
     {
-        return $this->getServiceManager()->get(EventManager::SERVICE_ID);
+        return $this->getServiceLocator()->get(EventManager::SERVICE_ID);
     }
 }
