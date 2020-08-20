@@ -23,7 +23,6 @@
  *
  */
 
-
 use oat\oatbox\event\EventAggregator;
 
 return new EventAggregator(
