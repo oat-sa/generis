@@ -25,6 +25,7 @@ use oat\generis\persistence\PersistenceManager;
 use oat\generis\persistence\sql\SchemaCollection;
 use Doctrine\DBAL\Schema\Schema;
 use oat\oatbox\log\LoggerService;
+use oat\generis\persistence\sql\SchemaProviderInterface;
 
 class PersistenceManagerTest extends TestCase
 {
@@ -105,6 +106,20 @@ class PersistenceManagerTest extends TestCase
         $this->pm->applySchemas($sc);
         $this->assertTrue($this->pm->getSqlSchemas()->getSchema('sql1')->hasTable('sample_table'));
         $this->assertFalse($this->pm->getSqlSchemas()->getSchema('sql2')->hasTable('sample_table'));
+    }
+
+    public function testApplySchemaProvider()
+    {
+        $serviceClass = new class implements SchemaProviderInterface {
+            public function provideSchema(SchemaCollection $schemaCollection)
+            {
+                $table = $schemaCollection->getSchema('sql1')->createTable('serviceTable');
+                $table->addColumn('sample', "text");
+            }
+        };
+        $this->assertFalse($this->pm->getSqlSchemas()->getSchema('sql1')->hasTable('serviceTable'));
+        $this->pm->applySchemaProvider(new $serviceClass());
+        $this->assertTrue($this->pm->getSqlSchemas()->getSchema('sql1')->hasTable('serviceTable'));
     }
 
     protected function getSqlConfig()
