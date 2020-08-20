@@ -80,6 +80,18 @@ class EventAggregatorTest extends TestCase
         $eventAggregator->put('event1', new GenericEvent('wwwww'));
     }
 
+    public function testDoNotLogWhenThereIsNoEvents(): void
+    {
+        $this->eventManager->expects($this->never())
+            ->method('trigger');
+
+        $this->logger->expects($this->never())->method('info');
+
+        $eventAggregator = new EventAggregator(['numberOfAggregatedEvents'=>4]);
+        $eventAggregator->setServiceLocator($this->serviceLocator);
+        $eventAggregator->triggerAggregatedEvents();
+    }
+
     public function testTriggerAggregatedEvents(): void
     {
         $this->eventManager->expects($this->once())

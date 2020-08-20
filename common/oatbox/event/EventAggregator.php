@@ -55,7 +55,13 @@ class EventAggregator extends ConfigurableService implements LoggerAwareInterfac
 
     public function triggerAggregatedEvents(): void
     {
-        $this->logInfo(sprintf('Triggering %d aggregated events', count($this->events)));
+        $countEvents = count($this->events);
+
+        if ($countEvents < 1) {
+            return;
+        }
+
+        $this->logInfo(sprintf('Triggering %d aggregated events', $countEvents));
 
         $eventManager = $this->getEventManager();
         foreach ($this->events as $event) {
