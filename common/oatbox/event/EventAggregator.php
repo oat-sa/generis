@@ -28,9 +28,9 @@ use Psr\Log\LoggerAwareInterface;
 
 class EventAggregator extends ConfigurableService implements LoggerAwareInterface
 {
-    const SERVICE_ID = 'generis/eventAggregator';
-
     use LoggerAwareTrait;
+
+    public const SERVICE_ID = 'generis/eventAggregator';
 
     /** @var int */
     private $numberOfAggregatedEvents;
