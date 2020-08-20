@@ -732,7 +732,7 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
         return (bool) $returnValue;
     }
 
-    public function getServiceManager(): ServiceManager
+    public function getServiceManager(): ServiceLocatorInterface
     {
         return ($this->getModel() instanceof ServiceLocatorAwareInterface)
             ? $this->getModel()->getServiceLocator()
