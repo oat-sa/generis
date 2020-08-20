@@ -764,7 +764,7 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
     private function onUpdate(): void
     {
         /** @var EventAggregator $eventAggregator */
-        $eventAggregator = $this->getServiceManager()->get(EventAggregator::class);
+        $eventAggregator = $this->getServiceManager()->get(EventAggregator::SERVICE_ID);
         $eventAggregator->put($this->getUri(), new ResourceUpdated($this));
     }
 }
