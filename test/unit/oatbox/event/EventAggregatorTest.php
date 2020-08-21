@@ -55,7 +55,7 @@ class EventAggregatorTest extends TestCase
         );
     }
 
-    public function testTriggerEventsWhenNumberOfAggregatedEventsRichesTheMaximum(): void
+    public function testTriggerEventsWhenNumberOfAggregatedEventsReachesTheMaximum(): void
     {
         $this->eventManager->expects($this->atLeast(2))
             ->method('trigger');

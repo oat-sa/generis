@@ -708,7 +708,7 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
      */
     public function equals(core_kernel_classes_Resource $resource): bool
     {
-        return $this->getUri() == $resource->getUri();
+        return $this->getUri() === $resource->getUri();
     }
 
     /**
