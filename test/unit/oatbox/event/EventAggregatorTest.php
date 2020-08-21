@@ -67,6 +67,19 @@ class EventAggregatorTest extends TestCase
         $eventAggregator->put('event1', new GenericEvent('wwwww'));
         $eventAggregator->put('event2', new GenericEvent('wwwww'));
     }
+    public function testTriggerOneEventWhenEventsAreDuplicated(): void
+    {
+        $this->eventManager->expects($this->once())
+            ->method('trigger');
+        $this->mockDebugLogger('Triggering 1 aggregated events');
+
+        $eventAggregator = new EventAggregator(['numberOfAggregatedEvents'=>2]);
+        $eventAggregator->setServiceLocator($this->serviceLocator);
+
+        $eventAggregator->put('event1', new GenericEvent('wwwww'));
+        $eventAggregator->put('event1', new GenericEvent('wwwww'));
+        $eventAggregator->triggerAggregatedEvents();
+    }
 
     public function testDoNotTriggerEventsWhenNumberOfAggregatedEventsIsLessThanTheMaximum(): void
     {
