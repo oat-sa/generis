@@ -23,12 +23,14 @@
 
 use oat\generis\model\OntologyRdf;
 use oat\generis\model\OntologyRdfs;
+use oat\oatbox\event\EventAggregator;
 use oat\oatbox\service\ServiceManager;
 use oat\generis\model\OntologyAwareTrait;
 use oat\oatbox\event\EventManager;
 use oat\generis\model\data\event\ResourceUpdated;
 use oat\generis\model\data\event\ResourceDeleted;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Resource implements rdf:resource container identified by an uri (a string).
@@ -92,7 +94,7 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
     {
         return $this->getModel()->getRdfsInterface()->getResourceImplementation();
     }
-    
+
 
     /**
      * create the object
@@ -202,7 +204,7 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
                    )
             ;
         }
-        
+
         return $this->label;
     }
 
@@ -338,14 +340,14 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
         if ($last) {
             throw new core_kernel_persistence_Exception('parameter \'last\' for getOnePropertyValue no longer supported');
         };
-        
+
         $options = [
             'forceDefaultLg' => true,
             'one' => true
         ];
 
         $value = $this->getPropertyValues($property, $options);
-        
+
         if (count($value)) {
             $returnValue = $this->toResource(current($value));
         }
@@ -465,7 +467,7 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
         $returnValue &= $this->setPropertyValueByLg($prop, $value, $lg);
         return (bool) $returnValue;
     }
-    
+
     /**
      * remove a single triple with this subject and predicate
      *
@@ -704,11 +706,9 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
      * @param  Resource resource
      * @return boolean
      */
-    public function equals(core_kernel_classes_Resource $resource)
+    public function equals(core_kernel_classes_Resource $resource): bool
     {
-        $returnValue = (bool) false;
-        $returnValue = $this->getUri() == $resource->getUri();
-        return (bool) $returnValue;
+        return $this->getUri() === $resource->getUri();
     }
 
     /**
@@ -720,7 +720,7 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
      * @param  Class class
      * @return boolean
      */
-    public function isInstanceOf(core_kernel_classes_Class $class)
+    public function isInstanceOf(core_kernel_classes_Class $class): bool
     {
         $returnValue = (bool) false;
         foreach ($this->getTypes() as $type) {
@@ -731,8 +731,8 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
         }
         return (bool) $returnValue;
     }
-    
-    public function getServiceManager()
+
+    public function getServiceManager(): ServiceLocatorInterface
     {
         return ($this->getModel() instanceof ServiceLocatorAwareInterface)
             ? $this->getModel()->getServiceLocator()
@@ -742,7 +742,7 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
     /**
      * Moved from common_Utils to not break dependency ingestion chain
      * @param string $value
-     * @return core_kernel_classes_Literal|core_kernel_classes_Resource
+     * @return core_kernel_classes_Literal|core_kernel_classes_Resource|core_kernel_classes_Resource[]
      */
     protected function toResource($value)
     {
@@ -761,9 +761,10 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
         }
     }
 
-    private function onUpdate()
+    private function onUpdate(): void
     {
-        $eventManager = $this->getServiceManager()->get(EventManager::SERVICE_ID);
-        $eventManager->trigger(new ResourceUpdated($this));
+        /** @var EventAggregator $eventAggregator */
+        $eventAggregator = $this->getServiceManager()->get(EventAggregator::SERVICE_ID);
+        $eventAggregator->put($this->getUri(), new ResourceUpdated($this));
     }
 }

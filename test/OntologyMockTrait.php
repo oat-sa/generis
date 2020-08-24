@@ -21,6 +21,7 @@
 
 namespace oat\generis\test;
 
+use oat\oatbox\event\EventAggregator;
 use oat\oatbox\user\UserLanguageServiceInterface;
 use oat\oatbox\session\SessionService;
 use Prophecy\Argument;
@@ -73,28 +74,32 @@ trait OntologyMockTrait
      */
     private function setupOntology(Ontology $onto)
     {
-        $pm = $this->getPersistenceManagerWithSqlMock('mockSql');
+        $eventAggregator = new EventAggregator(['numberOfAggregatedEvents'=>10]);
+
+        $persistenceManagerWithSqlMock = $this->getPersistenceManagerWithSqlMock('mockSql');
         $session = new \common_session_AnonymousSession();
-        $sl = $this->getServiceLocatorMock([
+        $serviceLocatorMock = $this->getServiceLocatorMock([
             Ontology::SERVICE_ID => $onto,
-            PersistenceManager::SERVICE_ID => $pm,
+            PersistenceManager::SERVICE_ID => $persistenceManagerWithSqlMock,
             UserLanguageServiceInterface::SERVICE_ID => $this->getUserLanguageServiceMock('xx_XX'),
             SessionService::SERVICE_ID => $this->getSessionServiceMock($session),
             EventManager::SERVICE_ID => new EventManager(),
             LoggerService::SERVICE_ID => $this->prophesize(LoggerInterface::class)->reveal(),
             UriProvider::SERVICE_ID => new Bin2HexUriProvider([Bin2HexUriProvider::OPTION_NAMESPACE => 'http://ontology.mock/bin2hex#']),
-            SimpleCache::SERVICE_ID => new NoCache()
+            SimpleCache::SERVICE_ID => new NoCache(),
+            EventAggregator::SERVICE_ID => $eventAggregator
         ]);
-        $session->setServiceLocator($sl);
-        $onto->setServiceLocator($sl);
-        $pm->setServiceLocator($sl);
+        $eventAggregator->setServiceLocator($serviceLocatorMock);
+        $session->setServiceLocator($serviceLocatorMock);
+        $onto->setServiceLocator($serviceLocatorMock);
+        $persistenceManagerWithSqlMock->setServiceLocator($serviceLocatorMock);
 
         // setup schema
-        $schemas = $pm->getSqlSchemas();
+        $schemas = $persistenceManagerWithSqlMock->getSqlSchemas();
         if ($onto instanceof SchemaProviderInterface) {
             $onto->provideSchema($schemas);
         }
-        $pm->applySchemas($schemas);
+        $persistenceManagerWithSqlMock->applySchemas($schemas);
 
         return $onto;
     }
