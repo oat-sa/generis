@@ -146,8 +146,30 @@ class common_persistence_AdvKeyValuePersistence extends common_persistence_KeyVa
     }
 
     /**
+     * Deletes $field value.
+     *
+     * @param string $key
+     * @param string $field
+     * @return bool
+     */
+    public function hDel($key, $field): bool
+    {
+        if ($this->hasMaxSize()) {
+            if ($this->isMappedKey($key) || $this->isMappedKey($field)) {
+                return false;
+            }
+        }
+
+        return $this->getDriver()->hDel($key, $field);
+    }
+
+    /**
      * Get a list of existing $keys
      * Mapped will be ignored
+     *
+     * IMPORTANT:   Never use this method for production purposes.
+     *              Time complexity: O(N) with N being the number of keys in the database,
+     *              under the assumption that the key names in the database and the given pattern have limited length.
      *
      * @param $pattern
      * @return array
