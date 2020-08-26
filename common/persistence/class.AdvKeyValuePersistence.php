@@ -154,13 +154,22 @@ class common_persistence_AdvKeyValuePersistence extends common_persistence_KeyVa
      */
     public function hDel($key, $field): bool
     {
-        if ($this->hasMaxSize()) {
-            if ($this->isMappedKey($key) || $this->isMappedKey($field)) {
-                return false;
-            }
+
+        if (!$this->hasMaxSize()) {
+            return $this->getDriver()->hDel($key, $field);
         }
 
-        return $this->getDriver()->hDel($key, $field);
+        if ($this->isMappedKey($key)) {
+            return false;
+        }
+
+        $success = true;
+        $value = $this->getDriver()->hGet($key, $field);
+        if ($this->isSplit($value)) {
+            $success = $success && $this->deleteMappedKey($key, $value);
+        }
+
+        return $success && $this->getDriver()->hDel($key, $field);
     }
 
     /**
