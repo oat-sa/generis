@@ -416,7 +416,7 @@ class common_persistence_KeyValuePersistence extends common_persistence_Persiste
                 if (!is_int($size)) {
                     throw new common_Exception('Persistence max value size has to be an integer');
                 }
-                $this->size = $size;
+                $this->size = $size - strlen($this->getMapIdentifier());
             }
         }
         return $this->size;
