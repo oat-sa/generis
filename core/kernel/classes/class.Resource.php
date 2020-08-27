@@ -593,7 +593,7 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
      * @author Joel Bout, <joel.bout@tudor.lu>
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->getUri() . "\n" . $this->getLabel() ;
     }
@@ -606,9 +606,8 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
      * @param  array properties
      * @return array
      */
-    public function getPropertiesValues($properties)
+    public function getPropertiesValues($properties): array
     {
-        $returnValue = [];
         if (!is_array($properties)) {
             throw new common_exception_InvalidArgumentType(__CLASS__, __FUNCTION__, 0, 'array', $properties);
         }
@@ -624,10 +623,12 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
      * @param  Class type
      * @return boolean
      */
-    public function setType(core_kernel_classes_Class $type)
+    public function setType(core_kernel_classes_Class $type): bool
     {
-        $returnValue = (bool) false;
         $returnValue = $this->getImplementation()->setType($this, $type);
+
+        $this->onUpdate();
+
         return (bool) $returnValue;
     }
 
@@ -639,10 +640,12 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
      * @param  Class type
      * @return boolean
      */
-    public function removeType(core_kernel_classes_Class $type)
+    public function removeType(core_kernel_classes_Class $type): bool
     {
-        $returnValue = (bool) false;
         $returnValue = $this->getImplementation()->removeType($this, $type);
+
+        $this->onUpdate();
+
         return (bool) $returnValue;
     }
 
@@ -654,7 +657,7 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
      * @param  Class class
      * @return boolean
      */
-    public function hasType(core_kernel_classes_Class $class)
+    public function hasType(core_kernel_classes_Class $class): bool
     {
         $returnValue = (bool) false;
         foreach ($this->getTypes() as $type) {
@@ -691,11 +694,9 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
      * @author Joel Bout, <joel.bout@tudor.lu>
      * @return string
      */
-    public function getUri()
+    public function getUri(): string
     {
-        $returnValue = (string) '';
-        $returnValue = $this->uriResource;
-        return (string) $returnValue;
+        return (string) $this->uriResource;
     }
 
     /**
