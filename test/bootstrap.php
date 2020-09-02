@@ -21,8 +21,9 @@
  * @subpackage
  */
 
-$root_dir = __DIR__ . '/../';
+$extensionRoot = __DIR__ . '/../';
 
-require_once $root_dir . 'vendor/autoload.php';
+// Use TAO dependency resolver first.
+require_once $extensionRoot . './../vendor/autoload.php';
 
-common_Config::load($root_dir . 'config/sample/generis.conf.php');
+common_Config::load($extensionRoot . 'config/sample/generis.conf.php');
