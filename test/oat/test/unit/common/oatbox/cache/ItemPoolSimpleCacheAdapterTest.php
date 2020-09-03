@@ -24,14 +24,14 @@ namespace oat\test\unit\common\oatbox\cache;
 
 use oat\generis\test\MockObject;
 use oat\generis\test\TestCase;
+use oat\oatbox\cache\ItemPoolSimpleCacheAdapter;
 use oat\oatbox\cache\SimpleCache;
-use oat\oatbox\cache\SimpleCacheItemPool;
 use Psr\Cache\CacheItemInterface;
 use Psr\SimpleCache\CacheInterface;
 
-class SimpleCacheItemPoolTest extends TestCase
+class ItemPoolSimpleCacheAdapterTest extends TestCase
 {
-    /** @var SimpleCacheItemPool */
+    /** @var ItemPoolSimpleCacheAdapter */
     private $subject;
 
     /** @var CacheInterface|MockObject */
@@ -45,7 +45,7 @@ class SimpleCacheItemPoolTest extends TestCase
         $this->cacheMock = $this->createMock(CacheInterface::class);
         $this->cacheItemMock = $this->createMock(CacheItemInterface::class);
 
-        $this->subject = new SimpleCacheItemPool();
+        $this->subject = new ItemPoolSimpleCacheAdapter();
         $this->subject->setServiceLocator(
             $this->getServiceLocatorMock(
                 [

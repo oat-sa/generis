@@ -27,7 +27,7 @@ use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\SimpleCache\CacheInterface;
 
-class SimpleCacheItemPool extends ConfigurableService implements CacheItemPoolInterface
+class ItemPoolSimpleCacheAdapter extends ConfigurableService implements CacheItemPoolInterface
 {
     /** @var CacheItemInterface[] */
     private $deferred;
