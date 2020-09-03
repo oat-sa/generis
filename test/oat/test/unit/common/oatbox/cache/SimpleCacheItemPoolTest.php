@@ -1,0 +1,173 @@
+<?php
+
+/**
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; under version 2
+ * of the License (non-upgradable).
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ *
+ * Copyright (c) 2020 (original work) Open Assessment Technologies SA;
+ */
+
+declare(strict_types=1);
+
+namespace oat\test\unit\common\oatbox\cache;
+
+use oat\generis\test\MockObject;
+use oat\generis\test\TestCase;
+use oat\oatbox\cache\SimpleCache;
+use oat\oatbox\cache\SimpleCacheItemPool;
+use Psr\Cache\CacheItemInterface;
+use Psr\SimpleCache\CacheInterface;
+
+class SimpleCacheItemPoolTest extends TestCase
+{
+    /** @var SimpleCacheItemPool */
+    private $subject;
+
+    /** @var CacheInterface|MockObject */
+    private $cacheMock;
+
+    /** @var CacheItemInterface|MockObject */
+    private $cacheItemMock;
+
+    public function setUp(): void
+    {
+        $this->cacheMock = $this->createMock(CacheInterface::class);
+        $this->cacheItemMock = $this->createMock(CacheItemInterface::class);
+
+        $this->subject = new SimpleCacheItemPool();
+        $this->subject->setServiceLocator(
+            $this->getServiceLocatorMock(
+                [
+                    SimpleCache::SERVICE_ID => $this->cacheMock,
+                ]
+            )
+        );
+    }
+
+    public function testGetItem(): void
+    {
+        $this->cacheMock
+            ->expects($this->once())
+            ->method('get')
+            ->with('key');
+
+        $this->subject->getItem('key');
+    }
+
+    public function testGetItems(): void
+    {
+        $this->cacheMock
+            ->expects($this->once())
+            ->method('setMultiple')
+            ->with(['key1', 'key2']);
+
+        $this->subject->getItems(['key1', 'key2']);
+    }
+
+    public function testHasItem(): void
+    {
+        $this->cacheMock
+            ->expects($this->once())
+            ->method('has')
+            ->with('key');
+
+        $this->subject->hasItem('key');
+    }
+
+    public function testClear(): void
+    {
+        $this->cacheMock
+            ->expects($this->once())
+            ->method('clear');
+
+        $this->subject->clear();
+    }
+
+    public function testDeleteItem(): void
+    {
+        $this->cacheMock
+            ->expects($this->once())
+            ->method('delete')
+            ->with('key');
+
+        $this->subject->deleteItem('key');
+    }
+
+    public function testDeleteItems(): void
+    {
+        $this->cacheMock
+            ->expects($this->once())
+            ->method('deleteMultiple')
+            ->with(['key1', 'key2']);
+
+        $this->subject->deleteItems(['key1', 'key2']);
+    }
+
+    public function testSave(): void
+    {
+        $this->cacheItemMock
+            ->expects($this->once())
+            ->method('getKey')
+            ->willReturn('key');
+
+        $this->cacheItemMock
+            ->expects($this->once())
+            ->method('get')
+            ->willReturn('value');
+
+        $this->cacheMock
+            ->expects($this->once())
+            ->method('set')
+            ->with('key', 'value')
+            ->willReturn(true);
+
+        $this->subject->save($this->cacheItemMock);
+    }
+
+    public function testSaveDeferredAndCommit(): void
+    {
+        $this->cacheItemMock
+            ->expects($this->exactly(4))
+            ->method('getKey')
+            ->willReturnOnConsecutiveCalls(
+                'key1',
+                'key2',
+                'key1',
+                'key2'
+            );
+
+        $this->cacheItemMock
+            ->expects($this->exactly(2))
+            ->method('get')
+            ->willReturnOnConsecutiveCalls(
+                'value1',
+                'value2'
+            );
+
+        $this->cacheMock
+            ->expects($this->exactly(2))
+            ->method('set')
+            ->withConsecutive(
+                ['key1', 'value1'],
+                ['key2', 'value2']
+            )->willReturnOnConsecutiveCalls(
+                true,
+                true
+            );
+
+        $this->subject->saveDeferred($this->cacheItemMock);
+        $this->subject->saveDeferred($this->cacheItemMock);
+        $this->subject->commit();
+    }
+}

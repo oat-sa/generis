@@ -20,15 +20,12 @@
 
 declare(strict_types=1);
 
-namespace oat\taoLti\models\classes\Cache;
+namespace oat\oatbox\cache;
 
-use oat\oatbox\cache\SimpleCache;
 use oat\oatbox\service\ConfigurableService;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
-use Psr\SimpleCache\CacheException;
 use Psr\SimpleCache\CacheInterface;
-use Symfony\Component\Cache\CacheItem;
 
 class SimpleCacheItemPool extends ConfigurableService implements CacheItemPoolInterface
 {
@@ -102,9 +99,7 @@ class SimpleCacheItemPool extends ConfigurableService implements CacheItemPoolIn
      */
     public function save(CacheItemInterface $item)
     {
-        $this->deferred[$item->getKey()] = $item;
-
-        return $this->commit();
+        return $this->store($item);
     }
 
     /**
@@ -114,9 +109,6 @@ class SimpleCacheItemPool extends ConfigurableService implements CacheItemPoolIn
      */
     public function saveDeferred(CacheItemInterface $item)
     {
-        if (!$item instanceof CacheItem) {
-            return false;
-        }
         $this->deferred[$item->getKey()] = $item;
 
         return true;
@@ -130,20 +122,25 @@ class SimpleCacheItemPool extends ConfigurableService implements CacheItemPoolIn
     public function commit()
     {
         foreach ($this->deferred as $item) {
-            try {
-                $this->getCache()->set($item->getKey(), $item->get());
-            } catch (CacheException $exception) {
-                $this->getLogger()->error(sprintf(
-                    'Cache value for %s key has not been saved. %s',
-                    $item->getKey(),
-                    $exception->getMessage()
-                ));
-            }
+            $this->store($item);
         }
     }
 
     public function getCache(): CacheInterface
     {
         return $this->getServiceLocator()->get(SimpleCache::SERVICE_ID);
+    }
+
+    private function store(CacheItemInterface $item): bool
+    {
+        try {
+            return $this->getCache()->set($item->getKey(), $item->get());
+        } catch (\Throwable $exception) {
+            $this->getLogger()->error(sprintf(
+                'Cache value for %s key has not been saved. %s',
+                $item->getKey(),
+                $exception->getMessage()
+            ));
+        }
     }
 }
