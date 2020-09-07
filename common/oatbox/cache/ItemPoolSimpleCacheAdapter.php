@@ -34,9 +34,7 @@ class ItemPoolSimpleCacheAdapter extends ConfigurableService implements CacheIte
     private $deferred;
 
     /**
-     * {@inheritdoc}
-     *
-     * @return CacheItemInterface
+     * @inheritdoc
      */
     public function getItem($key)
     {
@@ -44,7 +42,7 @@ class ItemPoolSimpleCacheAdapter extends ConfigurableService implements CacheIte
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @return CacheItemInterface[]
      */
@@ -54,9 +52,7 @@ class ItemPoolSimpleCacheAdapter extends ConfigurableService implements CacheIte
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @return bool
+     * @inheritdoc
      */
     public function hasItem($key)
     {
@@ -64,9 +60,7 @@ class ItemPoolSimpleCacheAdapter extends ConfigurableService implements CacheIte
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @return bool
+     * @inheritdoc
      */
     public function clear()
     {
@@ -74,9 +68,7 @@ class ItemPoolSimpleCacheAdapter extends ConfigurableService implements CacheIte
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @return bool
+     * @inheritdoc
      */
     public function deleteItem($key)
     {
@@ -84,9 +76,7 @@ class ItemPoolSimpleCacheAdapter extends ConfigurableService implements CacheIte
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @return bool
+     * @inheritdoc
      */
     public function deleteItems(array $keys)
     {
@@ -94,9 +84,7 @@ class ItemPoolSimpleCacheAdapter extends ConfigurableService implements CacheIte
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @return bool
+     * @inheritdoc
      */
     public function save(CacheItemInterface $item)
     {
@@ -104,9 +92,7 @@ class ItemPoolSimpleCacheAdapter extends ConfigurableService implements CacheIte
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @return bool
+     * @inheritdoc
      */
     public function saveDeferred(CacheItemInterface $item)
     {
@@ -116,9 +102,7 @@ class ItemPoolSimpleCacheAdapter extends ConfigurableService implements CacheIte
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @return bool
+     * @inheritdoc
      */
     public function commit()
     {
