@@ -26,6 +26,8 @@ use DateInterval;
 use DateTime;
 use oat\generis\test\TestCase;
 use oat\oatbox\cache\CacheItem;
+use ReflectionClass;
+use ReflectionProperty;
 
 class CacheItemTest extends TestCase
 {
@@ -60,19 +62,31 @@ class CacheItemTest extends TestCase
     {
         $expiry = new DateTime('tomorrow');
         $this->subject->expiresAt($expiry);
-        $this->assertFalse($this->subject->isExpired());
-    }
 
-    public function testExpiresAtOnExpired(): void
-    {
-        $expiry = new \DateTime('yesterday');
-        $this->subject->expiresAt($expiry);
-        $this->assertTrue($this->subject->isExpired());
+        $this->assertSame(
+            $expiry->getTimestamp(),
+            $this->getPrivateProperty(CacheItem::class, 'expiry')->getValue($this->subject)
+        );
     }
 
     public function testExpiresAfter3MonthAhead(): void
     {
+        $dt = new DateTime('now');
+        $dt->add(new DateInterval('P3M'));
+        $expected = $dt->format('Y:m:d');
         $this->subject->expiresAfter(new DateInterval('P3M'));
-        $this->assertFalse($this->subject->isExpired());
+        $expiry = $this->getPrivateProperty(CacheItem::class, 'expiry')->getValue($this->subject);
+        $resultDt = new DateTime();
+        $resultDt->setTimestamp($expiry);
+        $this->assertSame($expected, $resultDt->format('Y:m:d'));
+    }
+
+    public function getPrivateProperty(string $className, string $propertyName): ReflectionProperty
+    {
+        $reflector = new ReflectionClass($className);
+        $property = $reflector->getProperty($propertyName);
+        $property->setAccessible(true);
+
+        return $property;
     }
 }

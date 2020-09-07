@@ -26,6 +26,7 @@ use oat\oatbox\service\ConfigurableService;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\SimpleCache\CacheInterface;
+use Throwable;
 
 class ItemPoolSimpleCacheAdapter extends ConfigurableService implements CacheItemPoolInterface
 {
@@ -124,9 +125,11 @@ class ItemPoolSimpleCacheAdapter extends ConfigurableService implements CacheIte
         foreach ($this->deferred as $item) {
             $this->store($item);
         }
+
+        return true;
     }
 
-    public function getCache(): CacheInterface
+    private function getCache(): CacheInterface
     {
         return $this->getServiceLocator()->get(SimpleCache::SERVICE_ID);
     }
@@ -135,12 +138,14 @@ class ItemPoolSimpleCacheAdapter extends ConfigurableService implements CacheIte
     {
         try {
             return $this->getCache()->set($item->getKey(), $item->get());
-        } catch (\Throwable $exception) {
-            $this->getLogger()->error(sprintf(
-                'Cache value for %s key has not been saved. %s',
-                $item->getKey(),
-                $exception->getMessage()
-            ));
+        } catch (Throwable $exception) {
+            $this->getLogger()->error(
+                sprintf(
+                    'Cache value for %s key has not been saved. %s',
+                    $item->getKey(),
+                    $exception->getMessage()
+                )
+            );
         }
     }
 }

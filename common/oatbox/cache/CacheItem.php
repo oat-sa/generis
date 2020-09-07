@@ -42,7 +42,6 @@ class CacheItem implements CacheItemInterface
     /** @var bool */
     private $isHit;
 
-
     public function __construct(string $key, $hit = false)
     {
         $this->key = $key;
@@ -85,15 +84,13 @@ class CacheItem implements CacheItemInterface
 
     /**
      * @inheritDoc
-     *
-     * @param DateTimeInterface|null $expiration
      */
     public function expiresAt($expiration): self
     {
         if (null === $expiration) {
             $this->expiry = null;
-        } elseif ($expiration instanceof DateTime) {
-            $this->expiry = $expiration;
+        } elseif ($expiration instanceof DateTimeInterface) {
+            $this->expiry = $expiration->getTimestamp();
         } else {
             throw new InvalidArgumentException(sprintf(
                     'Expiration date must implement DateTimeInterface or be null, "%s" given.',
@@ -115,7 +112,7 @@ class CacheItem implements CacheItemInterface
             $this->expiry = null;
         } elseif ($time instanceof DateInterval) {
             $now = new DateTime('now');
-            $this->expiry = $now->add($time);
+            $this->expiry = $now->add($time)->getTimestamp();
         } else {
             throw new InvalidArgumentException(sprintf(
                     'Expiration date must be a DateInterval or null, "%s" given.',
@@ -124,10 +121,5 @@ class CacheItem implements CacheItemInterface
         }
 
         return $this;
-    }
-
-    public function isExpired()
-    {
-        return $this->expiry < new DateTime('now');
     }
 }
