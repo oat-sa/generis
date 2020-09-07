@@ -24,6 +24,7 @@ namespace oat\oatbox\cache;
 
 use DateInterval;
 use DateTime;
+use DateTimeInterface;
 use InvalidArgumentException;
 use Psr\Cache\CacheItemInterface;
 
@@ -86,16 +87,24 @@ class CacheItem implements CacheItemInterface
      */
     public function expiresAt($expiration): self
     {
-        if (null !== $expiration && !$expiration instanceof DateTime) {
-            throw new InvalidArgumentException(sprintf(
-                    'Expiration date must implement DateTimeInterface or be null, "%s" given.',
-                    get_debug_type($expiration))
-            );
+        if (null === $expiration) {
+            $this->expiry = null;
+
+            return $this;
         }
 
-        $this->expiry = $expiration->getTimestamp();
+        if ($expiration instanceof DateTimeInterface) {
+            $this->expiry = $expiration->getTimestamp();
 
-        return $this;
+            return $this;
+        }
+
+        throw new InvalidArgumentException(
+            sprintf(
+                'Expiration date must implement DateTimeInterface or be null, "%s" given.',
+                get_debug_type($expiration)
+            )
+        );
     }
 
     /**
@@ -107,16 +116,20 @@ class CacheItem implements CacheItemInterface
     {
         if (null === $time) {
             $this->expiry = null;
-        } elseif ($time instanceof DateInterval) {
-            $now = new DateTime('now');
-            $this->expiry = $now->add($time)->getTimestamp();
-        } else {
-            throw new InvalidArgumentException(sprintf(
-                    'Expiration date must be a DateInterval or null, "%s" given.',
-                    get_debug_type($time))
-            );
+
+            return $this;
         }
 
-        return $this;
+        if ($time instanceof DateInterval) {
+            $now = new DateTime('now');
+            $this->expiry = $now->add($time)->getTimestamp();
+
+            return $this;
+        }
+
+        throw new InvalidArgumentException(sprintf(
+                'Expiration date must implement DateTimeInterface or be null, "%s" given.',
+                get_debug_type($expiration))
+        );
     }
 }
