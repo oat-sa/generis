@@ -24,7 +24,6 @@ namespace oat\oatbox\cache;
 
 use DateInterval;
 use DateTime;
-use DateTimeInterface;
 use InvalidArgumentException;
 use Psr\Cache\CacheItemInterface;
 
@@ -87,16 +86,14 @@ class CacheItem implements CacheItemInterface
      */
     public function expiresAt($expiration): self
     {
-        if (null === $expiration) {
-            $this->expiry = null;
-        } elseif ($expiration instanceof DateTimeInterface) {
-            $this->expiry = $expiration->getTimestamp();
-        } else {
+        if (null !== $expiration && !$expiration instanceof DateTime) {
             throw new InvalidArgumentException(sprintf(
                     'Expiration date must implement DateTimeInterface or be null, "%s" given.',
                     get_debug_type($expiration))
             );
         }
+
+        $this->expiry = $expiration->getTimestamp();
 
         return $this;
     }
