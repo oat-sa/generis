@@ -24,6 +24,7 @@ namespace oat\test\unit\common\oatbox\cache;
 
 use oat\generis\test\MockObject;
 use oat\generis\test\TestCase;
+use oat\oatbox\cache\CacheItem;
 use oat\oatbox\cache\ItemPoolSimpleCacheAdapter;
 use oat\oatbox\cache\SimpleCache;
 use Psr\Cache\CacheItemInterface;
@@ -55,14 +56,32 @@ class ItemPoolSimpleCacheAdapterTest extends TestCase
         );
     }
 
-    public function testGetItem(): void
+    public function testGetItemThatExistInCache(): void
     {
         $this->cacheMock
             ->expects($this->once())
             ->method('get')
-            ->with('key');
+            ->with('key')
+            ->willReturn('value');
 
-        $this->subject->getItem('key');
+        $result = $this->subject->getItem('key');
+        $this->assertInstanceOf(CacheItem::class, $result);
+        $this->assertSame('value', $result->get());
+        $this->assertSame('key', $result->getKey());
+    }
+
+    public function testGetItemThatNotExistInCache(): void
+    {
+        $this->cacheMock
+            ->expects($this->once())
+            ->method('get')
+            ->with('key')
+            ->willReturn(null);
+
+        $result = $this->subject->getItem('key');
+        $this->assertInstanceOf(CacheItem::class, $result);
+        $this->assertSame('key', $result->getKey());
+        $this->assertNull($result->get());
     }
 
     public function testGetItems(): void
