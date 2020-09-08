@@ -32,10 +32,9 @@ interface UserTimezoneServiceInterface
     public const OPTION_USER_TIMEZONE_ENABLED = 'userTimezoneEnabled';
 
     /**
-     * @return string language code (e.g. 'Europe/')
+     * @return string language code (e.g. 'Europe/Minsk')
      */
     public function getDefaultTimezone(): string;
 
     public function isUserTimezoneEnabled();
-
 }
