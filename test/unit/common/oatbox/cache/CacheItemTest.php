@@ -20,7 +20,7 @@
 
 declare(strict_types=1);
 
-namespace oat\test\unit\common\oatbox\cache;
+namespace oat\generis\test\unit\common\oatbox\cache;
 
 use DateInterval;
 use DateTime;
@@ -33,6 +33,7 @@ class CacheItemTest extends TestCase
 {
     private const KEY = 'key';
     private const EXAMPLE_VALUE = 'example value';
+
     /** @var CacheItem */
     private $subject;
 
@@ -73,11 +74,16 @@ class CacheItemTest extends TestCase
     {
         $dt = new DateTime('now');
         $dt->add(new DateInterval('P3M'));
+
         $expected = $dt->format('Y:m:d');
+
         $this->subject->expiresAfter(new DateInterval('P3M'));
+
         $expiry = $this->getPrivateProperty(CacheItem::class, 'expiry')->getValue($this->subject);
+
         $resultDt = new DateTime();
         $resultDt->setTimestamp($expiry);
+
         $this->assertSame($expected, $resultDt->format('Y:m:d'));
     }
 
