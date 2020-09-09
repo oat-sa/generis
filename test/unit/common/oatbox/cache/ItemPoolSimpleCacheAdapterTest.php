@@ -151,7 +151,7 @@ class ItemPoolSimpleCacheAdapterTest extends TestCase
             ->with('key', 'value')
             ->willReturn(true);
 
-        $this->subject->save($this->cacheItemMock);
+        $this->assertTrue($this->subject->save($this->cacheItemMock));
     }
 
     public function testSaveDeferredAndCommit(): void
@@ -187,6 +187,7 @@ class ItemPoolSimpleCacheAdapterTest extends TestCase
 
         $this->subject->saveDeferred($this->cacheItemMock);
         $this->subject->saveDeferred($this->cacheItemMock);
-        $this->subject->commit();
+
+        $this->assertTrue($this->subject->commit());
     }
 }
