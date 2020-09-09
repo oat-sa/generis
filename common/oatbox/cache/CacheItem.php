@@ -44,7 +44,7 @@ class CacheItem implements CacheItemInterface
     /** @var bool */
     private $isHit;
 
-    public function __construct(string $key, $hit = false)
+    public function __construct(string $key, bool $hit = false)
     {
         $this->key = $key;
         $this->isHit = $hit;
