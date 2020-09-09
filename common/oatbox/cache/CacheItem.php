@@ -1,4 +1,6 @@
-<?php /** @noinspection ALL */
+<?php
+
+/** @noinspection MissingReturnTypeInspection */
 
 /**
  * This program is free software; you can redistribute it and/or
@@ -99,12 +101,7 @@ class CacheItem implements CacheItemInterface
             return $this;
         }
 
-        throw new InvalidArgumentException(
-            sprintf(
-                'Expiration date must implement DateTimeInterface or be null, "%s" given.',
-                get_debug_type($expiration)
-            )
-        );
+        throw new InvalidArgumentException('Expiration date must implement DateTimeInterface or be null');
     }
 
     /**
