@@ -20,7 +20,7 @@
 
 declare(strict_types=1);
 
-namespace oat\test\unit\common\oatbox\cache;
+namespace oat\generis\test\unit\common\oatbox\cache;
 
 use oat\generis\test\MockObject;
 use oat\generis\test\TestCase;
