@@ -23,7 +23,7 @@
 
 
 /**
- * Generis Configuration
+ * Generis Configuration used only for php unit tests.
  *
  * @author CRP Henri Tudor - TAO Team - {@link http://www.tao.lu}
  * @package generis
@@ -39,11 +39,11 @@ define('GENERIS_INSTANCE_NAME', '');
 define('GENERIS_SESSION_NAME', '');
 
 # paths
-define('ROOT_PATH', 'en-US');
+define('ROOT_PATH', '');
 define('ROOT_URL', '');
 
 # language
-define('DEFAULT_LANG', '');
+define('DEFAULT_LANG', 'en-US');
 define('DEFAULT_ANONYMOUS_INTERFACE_LANG', '');
 
 #mode
