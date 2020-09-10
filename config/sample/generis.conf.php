@@ -43,7 +43,7 @@ define('ROOT_PATH', '');
 define('ROOT_URL', '');
 
 # language
-define('DEFAULT_LANG', 'en-US');
+define('DEFAULT_LANG', '');
 define('DEFAULT_ANONYMOUS_INTERFACE_LANG', '');
 
 #mode
