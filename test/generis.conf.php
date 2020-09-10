@@ -36,11 +36,12 @@ define('LOCAL_NAMESPACE', '');
 
 # platform identification
 define('GENERIS_INSTANCE_NAME', '');
-define('GENERIS_SESSION_NAME', '');
+define('GENERIS_SESSION_NAME', 'test');
 
 # paths
 define('ROOT_PATH', '');
-define('ROOT_URL', '');
+// trailing slash is important!
+define('ROOT_URL', 'https://test.com/');
 
 # language
 define('DEFAULT_LANG', 'en-US');
