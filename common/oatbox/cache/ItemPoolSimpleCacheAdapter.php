@@ -1,4 +1,6 @@
-<?php /** @noinspection ALL */
+<?php
+
+/** @noinspection MissingReturnTypeInspection */
 
 /**
  * This program is free software; you can redistribute it and/or

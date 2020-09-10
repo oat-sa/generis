@@ -124,9 +124,11 @@ class CacheItem implements CacheItemInterface
             return $this;
         }
 
-        throw new InvalidArgumentException(sprintf(
+        throw new InvalidArgumentException(
+            sprintf(
                 'Expiration date must implement DateTimeInterface or be null, "%s" given.',
-                get_debug_type($expiration))
+                get_debug_type($expiration)
+            )
         );
     }
 }
