@@ -26,4 +26,4 @@ $extensionRoot = __DIR__ . '/../';
 // Use TAO dependency resolver first.
 require_once $extensionRoot . './../vendor/autoload.php';
 
-common_Config::load($extensionRoot . 'test/generis.conf.php');
+common_Config::load($extensionRoot . 'test/config/generis.conf.php');
