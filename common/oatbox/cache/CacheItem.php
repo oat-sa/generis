@@ -53,7 +53,7 @@ class CacheItem implements CacheItemInterface
     /**
      * @inheritDoc
      */
-    public function getKey()
+    public function getKey(): string
     {
         return $this->key;
     }
@@ -69,7 +69,7 @@ class CacheItem implements CacheItemInterface
     /**
      * @inheritDoc
      */
-    public function isHit()
+    public function isHit(): bool
     {
         return $this->isHit;
     }
@@ -127,7 +127,7 @@ class CacheItem implements CacheItemInterface
         throw new InvalidArgumentException(
             sprintf(
                 'Expiration date must implement DateTimeInterface or be null, "%s" given.',
-                get_debug_type($expiration)
+                gettype($time)
             )
         );
     }
