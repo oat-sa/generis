@@ -22,6 +22,8 @@ declare(strict_types=1);
 
 namespace oat\generis\test\unit\common\oatbox\cache;
 
+use Exception;
+use Monolog\Logger;
 use oat\generis\test\MockObject;
 use oat\generis\test\TestCase;
 use oat\oatbox\cache\CacheItem;
@@ -41,12 +43,18 @@ class ItemPoolSimpleCacheAdapterTest extends TestCase
     /** @var CacheItemInterface|MockObject */
     private $cacheItemMock;
 
+    /** @var Logger */
+    private $loggerMock;
+
     public function setUp(): void
     {
         $this->cacheMock = $this->createMock(CacheInterface::class);
         $this->cacheItemMock = $this->createMock(CacheItemInterface::class);
+        $this->loggerMock = $this->createMock(Logger::class);
 
         $this->subject = new ItemPoolSimpleCacheAdapter();
+
+        $this->subject->setLogger($this->loggerMock);
         $this->subject->setServiceLocator(
             $this->getServiceLocatorMock(
                 [
@@ -168,6 +176,19 @@ class ItemPoolSimpleCacheAdapterTest extends TestCase
         $this->assertTrue($this->subject->save($this->cacheItemMock));
     }
 
+    public function testSaveCatchError(): void
+    {
+        $this->cacheMock
+            ->method('set')
+            ->willThrowException(new Exception());
+
+        $this->loggerMock
+            ->expects($this->once())
+            ->method('error');
+
+        $this->assertFalse($this->subject->save($this->cacheItemMock));
+    }
+
     public function testSaveDeferredAndCommit(): void
     {
         $this->cacheItemMock
@@ -203,5 +224,20 @@ class ItemPoolSimpleCacheAdapterTest extends TestCase
         $this->subject->saveDeferred($this->cacheItemMock);
 
         $this->assertTrue($this->subject->commit());
+    }
+
+    public function testCommitCatchError(): void
+    {
+        $this->cacheMock
+            ->method('set')
+            ->willThrowException(new Exception());
+
+        $this->loggerMock
+            ->expects($this->once())
+            ->method('error');
+
+        $this->subject->saveDeferred($this->cacheItemMock);
+
+        $this->assertFalse($this->subject->commit());
     }
 }

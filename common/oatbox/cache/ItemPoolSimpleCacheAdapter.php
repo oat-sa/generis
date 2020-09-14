@@ -124,7 +124,9 @@ class ItemPoolSimpleCacheAdapter extends ConfigurableService implements CacheIte
     public function commit()
     {
         foreach ($this->deferred as $item) {
-            $this->store($item);
+            if (!$this->store($item)) {
+                return false;
+            }
         }
 
         return true;
@@ -147,6 +149,8 @@ class ItemPoolSimpleCacheAdapter extends ConfigurableService implements CacheIte
                     $exception->getMessage()
                 )
             );
+
+            return false;
         }
     }
 }
