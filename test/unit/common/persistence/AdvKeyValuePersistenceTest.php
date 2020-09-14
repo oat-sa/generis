@@ -21,19 +21,20 @@
 namespace oat\generis\test\unit\common\persistence;
 
 use oat\generis\test\TestCase;
+use common_persistence_AdvKeyValuePersistence as AdvKeyValuePersistence;
 
 class AdvKeyValuePersistenceTest extends TestCase
 {
     /**
-     * @var \common_persistence_AdvKeyValuePersistence
+     * @var AdvKeyValuePersistence
      */
     protected $largeValuePersistence;
 
     public function setUp(): void
     {
-        $this->largeValuePersistence = new \common_persistence_AdvKeyValuePersistence(
+        $this->largeValuePersistence = new AdvKeyValuePersistence(
             [
-                \common_persistence_AdvKeyValuePersistence::MAX_VALUE_SIZE => 100
+                AdvKeyValuePersistence::MAX_VALUE_SIZE => 100
             ],
             new \common_persistence_InMemoryAdvKvDriver()
         );
@@ -54,9 +55,9 @@ class AdvKeyValuePersistenceTest extends TestCase
     public function testLargeHmsetSetWithWrongSize()
     {
         $this->expectException(\common_Exception::class);
-        $this->largeValuePersistence = new \common_persistence_AdvKeyValuePersistence(
+        $this->largeValuePersistence = new AdvKeyValuePersistence(
             [
-                \common_persistence_AdvKeyValuePersistence::MAX_VALUE_SIZE => 'toto'
+                AdvKeyValuePersistence::MAX_VALUE_SIZE => 'toto'
             ],
             new \common_persistence_InMemoryAdvKvDriver()
         );
@@ -220,7 +221,7 @@ class AdvKeyValuePersistenceTest extends TestCase
 
     public function testMapMapControl()
     {
-        $this->largeValuePersistence = new \common_persistence_AdvKeyValuePersistence(
+        $this->largeValuePersistence = new AdvKeyValuePersistence(
             [
                 \common_persistence_KeyValuePersistence::MAX_VALUE_SIZE => 100,
                 \common_persistence_KeyValuePersistence::MAP_IDENTIFIER => 'iamamap',
@@ -232,5 +233,52 @@ class AdvKeyValuePersistenceTest extends TestCase
         );
 
         $this->testHgetAllHexists();
+    }
+
+    public function testHDelSmallValue(): void
+    {
+        $key = 'TEST_KEY';
+        $field = 'TEST_FIELD';
+        $value = 'TEST_VALUE';
+
+        $this->largeValuePersistence->hSet($key, $field, $value);
+        $storedValue = $this->largeValuePersistence->hGet($key, $field);
+
+        self::assertSame($value, $storedValue, 'The same value must be returned from persistence.');
+        self::assertTrue($this->largeValuePersistence->hDel($key, $field), 'Method must return FALSE when value was deleted.');
+        self::assertFalse($this->largeValuePersistence->hGet($key, $field), 'Value must be deleted from persistence.');
+        self::assertFalse($this->largeValuePersistence->hDel($key, $field), 'Method must return FALSE when key/field does not exist.');
+    }
+
+    public function testHDelLargeValue(): void
+    {
+        $key = 'TEST_KEY';
+        $field = 'TEST_FIELD';
+        $value = str_repeat('a', 600);
+        $startMapDelimiter = '<<<>>>';
+        $endMapDelimiter = '<<</>>>';
+        $this->largeValuePersistence = new AdvKeyValuePersistence(
+            [
+                'max_value_size' => 300,
+                'map_identifier' => $startMapDelimiter,
+                'start_map_delimiter' => $startMapDelimiter,
+                'end_map_delimiter' => $endMapDelimiter,
+            ],
+            new \common_persistence_InMemoryAdvKvDriver()
+        );
+
+        $this->largeValuePersistence->hSet($key, $field, $value);
+        // Get keys map and test that one map value cannot be deleted
+        $keyMap = array_values($this->largeValuePersistence->get($key))[0];
+        $keyMap = json_decode(substr_replace($keyMap, '', 0, strlen($startMapDelimiter)), true);
+        $mappedKye = $startMapDelimiter . $keyMap[0] . $endMapDelimiter;
+        self::assertFalse($this->largeValuePersistence->hDel($key, $mappedKye), 'It should not be allowed to delete one part of large value.');
+
+
+        $storedValue = $this->largeValuePersistence->hGet($key, $field);
+        self::assertSame($value, $storedValue, 'The same value must be returned from persistence.');
+        self::assertTrue($this->largeValuePersistence->hDel($key, $field), 'Method must return FALSE when value was deleted.');
+        self::assertFalse($this->largeValuePersistence->hGet($key, $field), 'Value must be deleted from persistence.');
+        self::assertFalse($this->largeValuePersistence->hDel($key, $field), 'Method must return FALSE when key/field does not exist.');
     }
 }
