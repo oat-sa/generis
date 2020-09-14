@@ -87,11 +87,20 @@ class ItemPoolSimpleCacheAdapterTest extends TestCase
     public function testGetItems(): void
     {
         $this->cacheMock
-            ->expects($this->once())
-            ->method('setMultiple')
-            ->with(['key1', 'key2']);
+            ->method('get')
+            ->withConsecutive(
+                ['key1'],
+                ['key2'],
+            )
+            ->willReturnOnConsecutiveCalls('value1', 'value2');
 
-        $this->subject->getItems(['key1', 'key2']);
+        $result = $this->subject->getItems(['key1', 'key2']);
+
+        $this->assertIsArray($result);
+        $this->assertInstanceOf(CacheItem::class, $result[0]);
+        $this->assertInstanceOf(CacheItem::class, $result[1]);
+        $this->assertSame('value1', $result[0]->get());
+        $this->assertSame('value2', $result[1]->get());
     }
 
     public function testHasItem(): void

@@ -59,7 +59,13 @@ class ItemPoolSimpleCacheAdapter extends ConfigurableService implements CacheIte
      */
     public function getItems(array $keys = [])
     {
-        $this->getCache()->setMultiple($keys);
+        $items = [];
+
+        foreach ($keys as $key) {
+            $items[] = $this->getItem($key);
+        }
+
+        return $items;
     }
 
     /**
