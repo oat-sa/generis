@@ -90,7 +90,7 @@ class ItemPoolSimpleCacheAdapterTest extends TestCase
             ->method('get')
             ->withConsecutive(
                 ['key1'],
-                ['key2'],
+                ['key2']
             )
             ->willReturnOnConsecutiveCalls('value1', 'value2');
 
