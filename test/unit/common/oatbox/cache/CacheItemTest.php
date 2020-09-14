@@ -113,7 +113,7 @@ class CacheItemTest extends TestCase
         );
     }
 
-    public function testExpiresAfterWithInvalidArgument()
+    public function testExpiresAfterWithInvalidArgument(): void
     {
         $this->expectException(InvalidArgumentException::class);
 
