@@ -66,6 +66,16 @@ class common_persistence_InMemoryAdvKvDriver extends common_persistence_InMemory
         return $this->persistence[$key][self::HPREFIX . $field];
     }
 
+    public function hDel($key, $field): bool
+    {
+        if (!isset($this->persistence[$key]) || !isset($this->persistence[$key][self::HPREFIX . $field])) {
+            return false;
+        }
+        unset($this->persistence[$key][self::HPREFIX . $field]);
+
+        return true;
+    }
+
     public function hGetAll($key)
     {
         if (! isset($this->persistence[$key])) {
