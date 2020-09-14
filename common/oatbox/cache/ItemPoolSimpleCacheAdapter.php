@@ -81,7 +81,7 @@ class ItemPoolSimpleCacheAdapter extends ConfigurableService implements CacheIte
      */
     public function clear()
     {
-        $this->getCache()->clear();
+        return $this->getCache()->clear();
     }
 
     /**
@@ -89,7 +89,7 @@ class ItemPoolSimpleCacheAdapter extends ConfigurableService implements CacheIte
      */
     public function deleteItem($key)
     {
-        $this->getCache()->delete($key);
+        return $this->getCache()->delete($key);
     }
 
     /**
@@ -97,7 +97,7 @@ class ItemPoolSimpleCacheAdapter extends ConfigurableService implements CacheIte
      */
     public function deleteItems(array $keys)
     {
-        $this->getCache()->deleteMultiple($keys);
+        return $this->getCache()->deleteMultiple($keys);
     }
 
     /**

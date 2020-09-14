@@ -119,9 +119,10 @@ class ItemPoolSimpleCacheAdapterTest extends TestCase
     {
         $this->cacheMock
             ->expects($this->once())
-            ->method('clear');
+            ->method('clear')
+            ->willReturn(true);
 
-        $this->subject->clear();
+        $this->assertTrue($this->subject->clear());
     }
 
     public function testDeleteItem(): void
@@ -129,9 +130,10 @@ class ItemPoolSimpleCacheAdapterTest extends TestCase
         $this->cacheMock
             ->expects($this->once())
             ->method('delete')
-            ->with('key');
+            ->with('key')
+            ->willReturn(true);
 
-        $this->subject->deleteItem('key');
+        $this->assertTrue($this->subject->deleteItem('key'));
     }
 
     public function testDeleteItems(): void
@@ -139,9 +141,10 @@ class ItemPoolSimpleCacheAdapterTest extends TestCase
         $this->cacheMock
             ->expects($this->once())
             ->method('deleteMultiple')
-            ->with(['key1', 'key2']);
+            ->with(['key1', 'key2'])
+            ->willReturn(true);
 
-        $this->subject->deleteItems(['key1', 'key2']);
+        $this->assertTrue($this->subject->deleteItems(['key1', 'key2']));
     }
 
     public function testSave(): void
