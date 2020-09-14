@@ -73,7 +73,7 @@ class ItemPoolSimpleCacheAdapter extends ConfigurableService implements CacheIte
      */
     public function hasItem($key)
     {
-        $this->getCache()->has($key);
+        return $this->getCache()->has($key);
     }
 
     /**

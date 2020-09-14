@@ -108,9 +108,11 @@ class ItemPoolSimpleCacheAdapterTest extends TestCase
         $this->cacheMock
             ->expects($this->once())
             ->method('has')
-            ->with('key');
+            ->with('key')
+            ->willReturn(true);
 
-        $this->subject->hasItem('key');
+        $result = $this->subject->hasItem('key');
+        $this->assertTrue($result);
     }
 
     public function testClear(): void
