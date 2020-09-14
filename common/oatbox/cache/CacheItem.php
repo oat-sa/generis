@@ -26,6 +26,7 @@ namespace oat\oatbox\cache;
 
 use DateInterval;
 use DateTime;
+use DateTimeImmutable;
 use DateTimeInterface;
 use InvalidArgumentException;
 use Psr\Cache\CacheItemInterface;
@@ -44,10 +45,14 @@ class CacheItem implements CacheItemInterface
     /** @var bool */
     private $isHit;
 
-    public function __construct(string $key, bool $hit = false)
+    /** @var DateTime */
+    private $currentDateTime;
+
+    public function __construct(string $key, bool $hit = false, DateTimeInterface $currentDateTime = null)
     {
         $this->key = $key;
         $this->isHit = $hit;
+        $this->currentDateTime = $currentDateTime ?? new DateTimeImmutable();
     }
 
     /**
@@ -118,8 +123,7 @@ class CacheItem implements CacheItemInterface
         }
 
         if ($time instanceof DateInterval) {
-            $now = new DateTime('now');
-            $this->expiry = $now->add($time)->getTimestamp();
+            $this->expiry = $this->currentDateTime->add($time)->getTimestamp();
 
             return $this;
         }
