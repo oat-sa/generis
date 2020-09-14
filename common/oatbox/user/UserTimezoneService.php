@@ -14,16 +14,25 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2020 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
- * @license    GPLv2
- * @package    package_name
- * @subpackage
+ * Copyright (c) 2020  (original work) Open Assessment Technologies SA;
  */
 
-$extensionRoot = __DIR__ . '/../';
+declare(strict_types=1);
 
-// Use TAO dependency resolver first.
-require_once $extensionRoot . './../vendor/autoload.php';
+namespace oat\oatbox\user;
 
-common_Config::load($extensionRoot . 'test/config/generis.conf.php');
+
+use oat\oatbox\service\ConfigurableService;
+
+class UserTimezoneService extends ConfigurableService implements UserTimezoneServiceInterface
+{
+    public function getDefaultTimezone(): string
+    {
+        return TIME_ZONE;
+    }
+
+    public function isUserTimezoneEnabled()
+    {
+        return $this->getOption(self::OPTION_USER_TIMEZONE_ENABLED);
+    }
+}
