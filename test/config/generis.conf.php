@@ -41,7 +41,7 @@ define('GENERIS_SESSION_NAME', 'test');
 # paths
 define('ROOT_PATH', '');
 // trailing slash is important!
-define('ROOT_URL', 'https://test.com/');
+define('ROOT_URL', 'http://demo.taotesting.com/');
 
 # language
 define('DEFAULT_LANG', 'en-US');
