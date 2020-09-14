@@ -24,6 +24,7 @@ namespace oat\generis\test\unit\common\oatbox\cache;
 
 use DateInterval;
 use DateTime;
+use InvalidArgumentException;
 use oat\generis\test\TestCase;
 use oat\oatbox\cache\CacheItem;
 use ReflectionClass;
@@ -59,6 +60,22 @@ class CacheItemTest extends TestCase
         $this->assertTrue($subject->isHit());
     }
 
+    public function testExpiresAtInvalidArgument(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        $this->subject->expiresAt('string');
+    }
+
+    public function testExpireWithNull(): void
+    {
+        $this->subject->expiresAt(null);
+
+        $this->assertNull(
+            $this->getPrivateProperty(CacheItem::class, 'expiry')->getValue($this->subject)
+        );
+    }
+
     public function testExpiresAt(): void
     {
         $expiry = new DateTime('tomorrow');
@@ -86,6 +103,23 @@ class CacheItemTest extends TestCase
 
         $this->assertSame($expected, $resultDt->format('Y:m:d'));
     }
+
+    public function testExpiresAfterWithNull(): void
+    {
+        $this->subject->expiresAfter(null);
+
+        $this->assertNull(
+            $this->getPrivateProperty(CacheItem::class, 'expiry')->getValue($this->subject)
+        );
+    }
+
+    public function testExpiresAfterWithInvalidArgument()
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        $this->subject->expiresAfter('string');
+    }
+    
 
     public function getPrivateProperty(string $className, string $propertyName): ReflectionProperty
     {
