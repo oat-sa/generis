@@ -62,7 +62,7 @@
     "zendframework/zend-servicemanager": "~2.5.0",
     "league/flysystem": "~1.0",
     "league/flysystem-memory": "~1.0",
-    "oat-sa/oatbox-extension-installer": "~1.1||dev-master",
+    "oat-sa/oatbox-extension-installer": "~1.1||dev-back-to-vendor",
     "oat-sa/lib-generis-search": "2.1.2",
     "monolog/monolog": "^1.23.0",
     "fluent/logger": "^1.0.1",
