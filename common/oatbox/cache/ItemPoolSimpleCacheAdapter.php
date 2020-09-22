@@ -41,7 +41,7 @@ class ItemPoolSimpleCacheAdapter extends ConfigurableService implements CacheIte
         $item = $this->getCache()->get($key);
 
         if ($item) {
-            $cacheItem = new CacheItem($key);
+            $cacheItem = new CacheItem($key, true);
             $cacheItem->set($item);
 
             return $cacheItem;

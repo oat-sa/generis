@@ -120,6 +120,10 @@ class CacheItem implements CacheItemInterface
             return $this;
         }
 
+        if (is_int($time)) {
+            $time = new DateInterval(sprintf('PT%dS', $time));
+        }
+
         if ($time instanceof DateInterval) {
             $this->expiry = $this->currentDateTime->add($time)->getTimestamp();
 
