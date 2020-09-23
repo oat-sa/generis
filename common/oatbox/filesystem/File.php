@@ -26,6 +26,7 @@ use GuzzleHttp\Psr7\StreamWrapper;
 use League\Flysystem\FileNotFoundException;
 use Psr\Http\Message\StreamInterface;
 use League\Flysystem\FileExistsException;
+use tao_helpers_File;
 
 class File extends FileSystemHandler
 {
@@ -54,7 +55,7 @@ class File extends FileSystemHandler
             }
 
             if (in_array($suffix, ['.svg', 'svgz'])) {
-                $mimeType = 'image/svg+xml';
+                $mimeType = tao_helpers_File::MIME_SVG;
             }
 
             return $mimeType;
