@@ -180,7 +180,7 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
      * @throws core_kernel_persistence_Exception
      * @author Patrick Plichart <patrick@taotesting.com>
      */
-    public function getLabel(): ?string
+    public function getLabel(): string
     {
         $label =  $this->getOnePropertyValue($this->getProperty(OntologyRdfs::RDFS_LABEL));
 
