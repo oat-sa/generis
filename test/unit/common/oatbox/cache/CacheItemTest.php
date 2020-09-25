@@ -104,6 +104,22 @@ class CacheItemTest extends TestCase
         $this->assertSame($expected, $resultDt->format('Y:m:d'));
     }
 
+    public function testExpiresAfterNumberOfSeconds(): void
+    {
+        $ttl = 300;
+
+        $dt = new DateTime('now');
+        $dt->add(new DateInterval('PT300S'));
+
+        $expected = $dt->getTimestamp();
+
+        $this->subject->expiresAfter($ttl);
+
+        $expiry = $this->getPrivateProperty(CacheItem::class, 'expiry')->getValue($this->subject);
+
+        $this->assertSame($expected, $expiry);
+    }
+
     public function testExpiresAfterWithNull(): void
     {
         $this->subject->expiresAfter(null);

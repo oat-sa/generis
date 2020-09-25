@@ -76,6 +76,7 @@ class ItemPoolSimpleCacheAdapterTest extends TestCase
         $this->assertInstanceOf(CacheItem::class, $result);
         $this->assertSame('value', $result->get());
         $this->assertSame('key', $result->getKey());
+        $this->assertTrue($result->isHit());
     }
 
     public function testGetItemThatNotExistInCache(): void
@@ -90,6 +91,7 @@ class ItemPoolSimpleCacheAdapterTest extends TestCase
         $this->assertInstanceOf(CacheItem::class, $result);
         $this->assertSame('key', $result->getKey());
         $this->assertNull($result->get());
+        $this->assertFalse($result->isHit());
     }
 
     public function testGetItems(): void
