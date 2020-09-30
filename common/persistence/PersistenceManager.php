@@ -136,7 +136,13 @@ class PersistenceManager extends ConfigurableService
                 'Driver ' . $driverString . ' not found, check your database configuration'
             );
         }
+
         $driver = $this->propagate(new $driverClassName());
+
+        /** @var DriverConfigFeeder $feeder */
+        $feeder = $this->getServiceLocator()->get(DriverConfigFeeder::class);
+        $config = $feeder->feed($config);
+
         return $driver->connect($persistenceId, $config);
     }
 
