@@ -15,43 +15,61 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2017 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
+ * Copyright (c) 2017-2020 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
+
+declare(strict_types=1);
 
 namespace oat\generis\test\unit\common\persistence;
 
+use oat\generis\persistence\DriverConfigurationFeeder;
 use oat\generis\test\TestCase;
 use oat\generis\persistence\PersistenceManager;
 use oat\generis\persistence\sql\SchemaCollection;
 use Doctrine\DBAL\Schema\Schema;
 use oat\oatbox\log\LoggerService;
 use oat\generis\persistence\sql\SchemaProviderInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class PersistenceManagerTest extends TestCase
 {
-    /**
-     * @var PersistenceManager
-     */
+    /** @var PersistenceManager */
     private $pm;
 
+    /** @var DriverConfigurationFeeder|MockObject */
+    private $driverConfigurationFeeder;
+
+    /** @var string */
     private $path;
 
     public function setUp(): void
     {
         $this->path = sys_get_temp_dir() . DIRECTORY_SEPARATOR . "generis_unittest_" . mt_rand() . DIRECTORY_SEPARATOR;
-        $this->pm = new PersistenceManager([
-            PersistenceManager::OPTION_PERSISTENCES => [
-                'sql1' => $this->getSqlConfig(),
-                'sql2' => $this->getSqlConfig(),
-                'notsql' => [
-                    'driver' => 'phpfile',
-                    'dir' => $this->path
+        $this->driverConfigurationFeeder = $this->createMock(DriverConfigurationFeeder::class);
+        $this->pm = new PersistenceManager(
+            [
+                PersistenceManager::OPTION_PERSISTENCES => [
+                    'sql1' => $this->getSqlConfig(),
+                    'sql2' => $this->getSqlConfig(),
+                    'notsql' => [
+                        'driver' => 'phpfile',
+                        'dir' => $this->path
+                    ]
                 ]
             ]
-        ]);
-        $this->pm->setServiceLocator($this->getServiceLocatorMock([
-            LoggerService::SERVICE_ID => $this->createMock(LoggerService::class)
-        ]));
+        );
+        $this->pm->setServiceLocator(
+            $this->getServiceLocatorMock(
+                [
+                    LoggerService::SERVICE_ID => $this->createMock(LoggerService::class),
+                    DriverConfigurationFeeder::class => $this->driverConfigurationFeeder,
+                ]
+            )
+        );
+
+        $this->driverConfigurationFeeder
+            ->method('feed')
+            ->willReturnArgument(0);
     }
 
     public function tearDown(): void
