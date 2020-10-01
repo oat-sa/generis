@@ -205,7 +205,9 @@ class GcpTokenCacheItemPool extends ConfigurableService implements CacheItemPool
 
     private function getCache(): CacheItemPoolInterface
     {
-        $this->cache = $this->createCache();
+        if ($this->cache === null) {
+            $this->cache = $this->createCache();
+        }
 
         return $this->cache;
     }
