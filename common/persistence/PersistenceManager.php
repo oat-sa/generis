@@ -108,7 +108,7 @@ class PersistenceManager extends ConfigurableService
      */
     public function getPersistenceById($persistenceId)
     {
-        if (! isset($this->persistences[$persistenceId])) {
+        if (!isset($this->persistences[$persistenceId])) {
             $this->persistences[$persistenceId] = $this->createPersistence($persistenceId);
         }
         return $this->persistences[$persistenceId];
@@ -117,13 +117,13 @@ class PersistenceManager extends ConfigurableService
     /**
      *
      * @param string $persistenceId
-     * @throws \common_Exception
      * @return \common_persistence_Persistence
+     * @throws \common_Exception
      */
     private function createPersistence($persistenceId)
     {
         $configs = $this->getOption(self::OPTION_PERSISTENCES);
-        if (! isset($configs[$persistenceId])) {
+        if (!isset($configs[$persistenceId])) {
             throw new \common_Exception('Persistence Configuration for persistence ' . $persistenceId . ' not found');
         }
         $config = $configs[$persistenceId];
@@ -131,7 +131,7 @@ class PersistenceManager extends ConfigurableService
 
         $driverClassName = isset(self::DRIVER_MAP[$driverString]) ? self::DRIVER_MAP[$driverString] : $driverString;
 
-        if (! class_exists($driverClassName)) {
+        if (!class_exists($driverClassName)) {
             throw new \common_exception_Error(
                 'Driver ' . $driverString . ' not found, check your database configuration'
             );
@@ -139,9 +139,7 @@ class PersistenceManager extends ConfigurableService
 
         $driver = $this->propagate(new $driverClassName());
 
-        /** @var DriverConfigFeeder $feeder */
-        $feeder = $this->getServiceLocator()->get(DriverConfigFeeder::class);
-        $config = $feeder->feed($config);
+        $config = $this->getDriverConfigFeeder()->feed($config);
 
         return $driver->connect($persistenceId, $config);
     }
@@ -190,5 +188,10 @@ class PersistenceManager extends ConfigurableService
         } else {
             $this->logDebug('No schema found for ' . get_class($service));
         }
+    }
+
+    private function getDriverConfigFeeder(): DriverConfigurationFeeder
+    {
+        return $this->getServiceLocator()->get(DriverConfigurationFeeder::class);
     }
 }

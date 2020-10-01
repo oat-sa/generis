@@ -25,12 +25,7 @@ namespace oat\generis\persistence;
 use OAT\Library\DBALSpanner\SpannerDriver;
 use oat\oatbox\service\ConfigurableService;
 
-/**
- * @FIXME This will be refactored before merge
- *
- * @TODO The configuration mapping will be added by .conf.php file, so we do not need to use specific driver decisions here
- */
-class DriverConfigFeeder extends ConfigurableService
+class DriverConfigurationFeeder extends ConfigurableService
 {
     private const SPANNER_DRIVER = 'OAT\Library\DBALSpanner\SpannerDriver';
 

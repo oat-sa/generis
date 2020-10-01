@@ -22,6 +22,7 @@ declare(strict_types=1);
 
 namespace oat\oatbox\cache;
 
+use oat\oatbox\cache\factory\CacheItemPoolFactory;
 use oat\oatbox\service\ConfigurableService;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
@@ -32,7 +33,6 @@ class GcpTokenCacheItemPool extends ConfigurableService implements CacheItemPool
 
     public const OPTION_PERSISTENCE = 'persistence';
     public const OPTION_ENABLE_DEBUG = 'enableDebug';
-    public const OPTION_CACHE_SERVICE = 'cacheService';
     public const OPTION_DISABLE_WRITE = 'disableWrite';
     public const OPTION_TOKEN_CACHE_KEY = 'tokenCacheKey';
 
@@ -188,7 +188,7 @@ class GcpTokenCacheItemPool extends ConfigurableService implements CacheItemPool
     private function isDebug(): bool
     {
         if ($this->isDebug === null) {
-            $this->isDebug = (bool)$this->getOption(self::OPTION_ENABLE_DEBUG, true); //FIXME @TODO default is false
+            $this->isDebug = (bool)$this->getOption(self::OPTION_ENABLE_DEBUG, false);
         }
 
         return $this->isDebug;
@@ -205,47 +205,18 @@ class GcpTokenCacheItemPool extends ConfigurableService implements CacheItemPool
 
     private function getCache(): CacheItemPoolInterface
     {
-        if ($this->cache !== null) {
-            return $this->cache;
-        }
-
-        if ($this->hasOption(self::OPTION_CACHE_SERVICE)) {
-            $this->cache = $this->getOption(self::OPTION_CACHE_SERVICE);
-
-            return $this->cache;
-        }
-
         $this->cache = $this->createCache();
 
         return $this->cache;
     }
 
-    /**
-     * @TODO Needs to check how to customize it in a better way...
-     */
     private function createCache(): CacheItemPoolInterface
     {
-        $persistence = $this->getOption(self::OPTION_PERSISTENCE);
-
-        if (empty($persistence)) {
-
-        }
-
-        $cacheValue = new KeyValueCache(
+        return $this->getCacheFactory()->create(
             [
-                KeyValueCache::OPTION_PERSISTENCE => $persistence
+                CacheItemPoolFactory::CONFIG_PERSISTENCE => $this->getOption(self::OPTION_PERSISTENCE, 'redis'),
             ]
         );
-        $cacheValue->setServiceLocator($this->getServiceLocator());
-
-        $cache = new ItemPoolSimpleCacheAdapter(
-            [
-                ItemPoolSimpleCacheAdapter::OPTION_CACHE_SERVICE => $cacheValue
-            ]
-        );
-        $cache->setServiceLocator($this->getServiceLocator());
-
-        return $cache;
     }
 
     private function unSerializeIfNecessary(CacheItemInterface $item): void
@@ -270,17 +241,11 @@ class GcpTokenCacheItemPool extends ConfigurableService implements CacheItemPool
 
     private function getCacheKey(): string
     {
-        $cacheKey = (string)$this->getOption(self::OPTION_TOKEN_CACHE_KEY);
+        return (string)$this->getOption(self::OPTION_TOKEN_CACHE_KEY, 'GCP-TOKEN-SANCTUARY:GOOGLE_AUTH_PHP_GCE');
+    }
 
-        if (empty($cacheKey)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    'Missing GCP token key config %s',
-                    self::OPTION_TOKEN_CACHE_KEY
-                )
-            );
-        }
-
-        return $cacheKey;
+    private function getCacheFactory(): CacheItemPoolFactory
+    {
+        return $this->getServiceLocator()->get(CacheItemPoolFactory::class);
     }
 }
