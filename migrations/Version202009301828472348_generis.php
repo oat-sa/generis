@@ -39,7 +39,6 @@ final class Version202009301828472348_generis extends AbstractMigration
             new GcpTokenCacheItemPool(
                 [
                     GcpTokenCacheItemPool::OPTION_PERSISTENCE => 'gcpTokenKeyValue',
-                    GcpTokenCacheItemPool::OPTION_ENABLE_DEBUG => false,
                     GcpTokenCacheItemPool::OPTION_DISABLE_WRITE => true,
                     GcpTokenCacheItemPool::OPTION_TOKEN_CACHE_KEY => 'GCP-TOKEN-SANCTUARY:GOOGLE_AUTH_PHP_GCE',
                 ]

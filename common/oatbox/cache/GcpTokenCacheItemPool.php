@@ -32,15 +32,11 @@ class GcpTokenCacheItemPool extends ConfigurableService implements CacheItemPool
     public const SERVICE_ID = 'generis/GcpTokenCacheItemPool';
 
     public const OPTION_PERSISTENCE = 'persistence';
-    public const OPTION_ENABLE_DEBUG = 'enableDebug';
     public const OPTION_DISABLE_WRITE = 'disableWrite';
     public const OPTION_TOKEN_CACHE_KEY = 'tokenCacheKey';
 
     /** @var CacheItemPoolInterface */
     private $cache;
-
-    /** @var bool */
-    private $isDebug;
 
     /** @var bool */
     private $isWritingDisabled;
@@ -173,25 +169,14 @@ class GcpTokenCacheItemPool extends ConfigurableService implements CacheItemPool
 
     private function log(string $method, array $keys = []): void
     {
-        if ($this->isDebug()) {
-            $this->getLogger()->debug(
-                sprintf(
-                    '[%s] Called method %s with key(s) %s',
-                    __CLASS__,
-                    $method,
-                    implode(',', $keys)
-                )
-            );
-        }
-    }
-
-    private function isDebug(): bool
-    {
-        if ($this->isDebug === null) {
-            $this->isDebug = (bool)$this->getOption(self::OPTION_ENABLE_DEBUG, false);
-        }
-
-        return $this->isDebug;
+        $this->getLogger()->debug(
+            sprintf(
+                '[%s] Called method %s with key(s) %s',
+                __CLASS__,
+                $method,
+                implode(',', $keys)
+            )
+        );
     }
 
     private function isWritingDisabled(): bool

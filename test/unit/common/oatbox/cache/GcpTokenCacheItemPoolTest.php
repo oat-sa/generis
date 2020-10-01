@@ -57,7 +57,6 @@ class GcpTokenCacheItemPoolTest extends TestCase
             [
                 GcpTokenCacheItemPool::OPTION_TOKEN_CACHE_KEY => self::TOKEN_CACHE_KEY,
                 GcpTokenCacheItemPool::OPTION_DISABLE_WRITE => false,
-                GcpTokenCacheItemPool::OPTION_ENABLE_DEBUG => true,
                 GcpTokenCacheItemPool::OPTION_PERSISTENCE => 'redis',
             ]
         );
