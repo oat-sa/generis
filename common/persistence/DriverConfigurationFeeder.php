@@ -22,20 +22,33 @@ declare(strict_types=1);
 
 namespace oat\generis\persistence;
 
-use OAT\Library\DBALSpanner\SpannerDriver;
 use oat\oatbox\service\ConfigurableService;
 
 class DriverConfigurationFeeder extends ConfigurableService
 {
-    private const SPANNER_DRIVER = 'OAT\Library\DBALSpanner\SpannerDriver';
+    private const DRIVER_OPTIONS_REPLACE = [
+        'OAT\Library\DBALSpanner\SpannerDriver' => [
+            'driverOptions' => [
+                'driver-option-auth-pool',
+                'driver-option-session-pool'
+            ]
+        ]
+    ];
 
     public function feed(array $config): array
     {
-        $driverClass = $config['connection']['driverClass'] ?? null;
+        if (empty($config['connection']['driverClass'])) {
+            return $config;
+        }
 
-        if ($driverClass === self::SPANNER_DRIVER && !empty($config['connection']['driverOptions'])) {
-            $config = $this->feedConfigWithService($config, SpannerDriver::DRIVER_OPTION_AUTH_POOL);
-            $config = $this->feedConfigWithService($config, SpannerDriver::DRIVER_OPTION_SESSION_POOL);
+        $driverClass = $config['connection']['driverClass'];
+
+        if (empty(self::DRIVER_OPTIONS_REPLACE[$driverClass]) || empty($config['connection']['driverOptions'])) {
+            return $config;
+        }
+
+        foreach (self::DRIVER_OPTIONS_REPLACE[$driverClass]['driverOptions'] as $option) {
+            $config = $this->feedConfigWithService($config, $option);
         }
 
         return $config;
