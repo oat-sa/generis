@@ -458,10 +458,10 @@ class common_Logger
      */
     public function handlePHPShutdown()
     {
-        
         $error = error_get_last();
-        if (($error['type'] & (E_COMPILE_ERROR | E_ERROR | E_PARSE | E_CORE_ERROR)) != 0) {
-            $msg = (isset($error['file']) && isset($error['line']))
+
+        if ($error !== null && ($error['type'] & (E_COMPILE_ERROR | E_ERROR | E_PARSE | E_CORE_ERROR)) !== 0) {
+            $msg = (isset($error['file'], $error['line']))
                ? 'php error(' . $error['type'] . ') in ' . $error['file'] . '@' . $error['line'] . ': ' . $error['message']
                : 'php error(' . $error['type'] . '): ' . $error['message'];
             self::singleton()->log(self::FATAL_LEVEL, $msg, ['PHPERROR']);
