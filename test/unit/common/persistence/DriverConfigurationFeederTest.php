@@ -34,7 +34,18 @@ class DriverConfigurationFeederTest extends TestCase
 
     public function setUp(): void
     {
-        $this->subject = new DriverConfigurationFeeder();
+        $this->subject = new DriverConfigurationFeeder(
+            [
+                DriverConfigurationFeeder::OPTION_DRIVER_OPTIONS => [
+                    'OAT\Library\DBALSpanner\SpannerDriver' => [
+                        'driverOptions' => [
+                            'driver-option-auth-pool',
+                            'driver-option-session-pool'
+                        ]
+                    ]
+                ]
+            ]
+        );
         $this->subject->setServiceLocator(
             $this->getServiceLocatorMock(
                 [

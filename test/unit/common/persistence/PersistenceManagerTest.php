@@ -62,7 +62,7 @@ class PersistenceManagerTest extends TestCase
             $this->getServiceLocatorMock(
                 [
                     LoggerService::SERVICE_ID => $this->createMock(LoggerService::class),
-                    DriverConfigurationFeeder::class => $this->driverConfigurationFeeder,
+                    DriverConfigurationFeeder::SERVICE_ID => $this->driverConfigurationFeeder,
                 ]
             )
         );

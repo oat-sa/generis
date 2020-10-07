@@ -22,25 +22,23 @@ declare(strict_types=1);
 namespace oat\generis\migrations;
 
 use Doctrine\DBAL\Schema\Schema;
-use oat\oatbox\cache\GcpTokenCacheItemPool;
+use oat\generis\persistence\DriverConfigurationFeeder;
 use oat\tao\scripts\tools\migrations\AbstractMigration;
 
 final class Version202009301828472348_generis extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return 'Register GCP Token handler cache';
+        return 'Register DriverConfigurationFeeder';
     }
 
     public function up(Schema $schema): void
     {
         $this->getServiceLocator()->register(
-            GcpTokenCacheItemPool::SERVICE_ID,
-            new GcpTokenCacheItemPool(
+            DriverConfigurationFeeder::SERVICE_ID,
+            new DriverConfigurationFeeder(
                 [
-                    GcpTokenCacheItemPool::OPTION_PERSISTENCE => 'gcpTokenKeyValue',
-                    GcpTokenCacheItemPool::OPTION_DISABLE_WRITE => true,
-                    GcpTokenCacheItemPool::OPTION_TOKEN_CACHE_KEY => 'GCP-TOKEN-SANCTUARY:GOOGLE_AUTH_PHP_GCE',
+                    DriverConfigurationFeeder::OPTION_DRIVER_OPTIONS => [],
                 ]
             )
         );
@@ -48,6 +46,6 @@ final class Version202009301828472348_generis extends AbstractMigration
 
     public function down(Schema $schema): void
     {
-        $this->getServiceLocator()->unregister(GcpTokenCacheItemPool::SERVICE_ID);
+        $this->getServiceLocator()->unregister(DriverConfigurationFeeder::SERVICE_ID);
     }
 }

@@ -18,12 +18,17 @@
  * Copyright (c) 2020 (original work) Open Assessment Technologies SA
  */
 
-use oat\oatbox\cache\GcpTokenCacheItemPool;
+use oat\generis\persistence\DriverConfigurationFeeder;
 
-return new GcpTokenCacheItemPool(
+return new DriverConfigurationFeeder(
     [
-        GcpTokenCacheItemPool::OPTION_PERSISTENCE => 'gcpTokenKeyValue',
-        GcpTokenCacheItemPool::OPTION_DISABLE_WRITE => true,
-        GcpTokenCacheItemPool::OPTION_TOKEN_CACHE_KEY => 'GCP-TOKEN-SANCTUARY:GOOGLE_AUTH_PHP_GCE',
+        DriverConfigurationFeeder::OPTION_DRIVER_OPTIONS => [
+            'OAT\Library\DBALSpanner\SpannerDriver' => [
+                'driverOptions' => [
+                    'driver-option-auth-pool',
+                    'driver-option-session-pool'
+                ]
+            ]
+        ]
     ]
 );

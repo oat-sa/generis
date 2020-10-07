@@ -194,6 +194,6 @@ class PersistenceManager extends ConfigurableService
 
     private function getDriverConfigFeeder(): DriverConfigurationFeeder
     {
-        return $this->getServiceLocator()->get(DriverConfigurationFeeder::class);
+        return $this->getServiceLocator()->get(DriverConfigurationFeeder::SERVICE_ID);
     }
 }

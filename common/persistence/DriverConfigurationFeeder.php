@@ -26,14 +26,8 @@ use oat\oatbox\service\ConfigurableService;
 
 class DriverConfigurationFeeder extends ConfigurableService
 {
-    private const DRIVER_OPTIONS_REPLACE = [
-        'OAT\Library\DBALSpanner\SpannerDriver' => [
-            'driverOptions' => [
-                'driver-option-auth-pool',
-                'driver-option-session-pool'
-            ]
-        ]
-    ];
+    public const SERVICE_ID = 'generis/DriverConfigurationFeeder';
+    public const OPTION_DRIVER_OPTIONS = 'driverOptions';
 
     public function feed(array $config): array
     {
@@ -43,11 +37,13 @@ class DriverConfigurationFeeder extends ConfigurableService
 
         $driverClass = $config['connection']['driverClass'];
 
-        if (empty(self::DRIVER_OPTIONS_REPLACE[$driverClass]) || empty($config['connection']['driverOptions'])) {
+        $options = $this->getOption(self::OPTION_DRIVER_OPTIONS, []);
+
+        if (empty($options[$driverClass]) || empty($config['connection']['driverOptions'])) {
             return $config;
         }
 
-        foreach (self::DRIVER_OPTIONS_REPLACE[$driverClass]['driverOptions'] as $option) {
+        foreach ($options[$driverClass]['driverOptions'] as $option) {
             $config = $this->feedConfigWithService($config, $option);
         }
 
