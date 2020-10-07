@@ -37,7 +37,7 @@ class DriverConfigurationFeederTest extends TestCase
         $this->subject = new DriverConfigurationFeeder(
             [
                 DriverConfigurationFeeder::OPTION_DRIVER_OPTIONS => [
-                    'OAT\Library\DBALSpanner\SpannerDriver' => [
+                    'OAT\\Library\\DBALSpanner\\SpannerDriver' => [
                         'driverOptions' => [
                             'driver-option-auth-pool',
                             'driver-option-session-pool'
@@ -72,6 +72,23 @@ class DriverConfigurationFeederTest extends TestCase
 
         $this->assertInstanceOf(Logger::class, $result['connection']['driverOptions']['driver-option-auth-pool']);
         $this->assertInstanceOf(stdClass::class, $result['connection']['driverOptions']['driver-option-session-pool']);
+    }
+
+    public function testFeedWithCustomServiceWithEmptyValue(): void
+    {
+        $result = $this->subject->feed(
+            [
+                'connection' =>
+                    [
+                        'driverClass' => 'OAT\Library\DBALSpanner\SpannerDriver',
+                        'driverOptions' => [
+                            'driver-option-auth-pool' => null,
+                        ]
+                    ]
+            ]
+        );
+
+        $this->assertNull($result['connection']['driverOptions']['driver-option-auth-pool']);
     }
 
     public function testFeedWithNoDriverOptions(): void
