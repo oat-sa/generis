@@ -22,13 +22,6 @@ use oat\generis\persistence\DriverConfigurationFeeder;
 
 return new DriverConfigurationFeeder(
     [
-        DriverConfigurationFeeder::OPTION_DRIVER_OPTIONS => [
-            'OAT\Library\DBALSpanner\SpannerDriver' => [
-                'driverOptions' => [
-                    'driver-option-auth-pool',
-                    'driver-option-session-pool'
-                ]
-            ]
-        ]
+        DriverConfigurationFeeder::OPTION_DRIVER_OPTIONS => []
     ]
 );
