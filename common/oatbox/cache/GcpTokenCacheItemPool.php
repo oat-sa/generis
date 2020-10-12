@@ -201,7 +201,7 @@ class GcpTokenCacheItemPool extends ConfigurableService implements CacheItemPool
     {
         return $this->getCacheFactory()->create(
             [
-                CacheItemPoolFactory::CONFIG_PERSISTENCE => $this->getOption(self::OPTION_PERSISTENCE, 'redis'),
+                CacheItemPoolFactory::CONFIG_PERSISTENCE => $this->getOption(self::OPTION_PERSISTENCE, 'default_kv'),
             ]
         );
     }
