@@ -26,6 +26,8 @@ use oat\oatbox\service\ConfigurableService;
 use oat\generis\persistence\sql\SchemaCollection;
 use common_persistence_SqlPersistence;
 use oat\generis\persistence\sql\SchemaProviderInterface;
+use oat\oatbox\service\ServiceNotFoundException;
+use Throwable;
 
 /**
  * The PersistenceManager is responsible for initializing all persistences
@@ -141,7 +143,11 @@ class PersistenceManager extends ConfigurableService
 
         $driver = $this->propagate(new $driverClassName());
 
-        $config = $this->getDriverConfigFeeder()->feed($config);
+        $driverOptionsFeeder = $this->getDriverConfigFeeder();
+
+        if ($driverOptionsFeeder !== null) {
+            $config = $driverOptionsFeeder->feed($config);
+        }
 
         return $driver->connect($persistenceId, $config);
     }
@@ -192,8 +198,16 @@ class PersistenceManager extends ConfigurableService
         }
     }
 
-    private function getDriverConfigFeeder(): DriverConfigurationFeeder
+    private function getDriverConfigFeeder(): ?DriverConfigurationFeeder
     {
-        return $this->getServiceLocator()->get(DriverConfigurationFeeder::SERVICE_ID);
+        try {
+            return $this->getServiceLocator()->get(DriverConfigurationFeeder::SERVICE_ID);
+        } catch (ServiceNotFoundException $exception) {
+            /**
+             * This is because PersistenceManager is registered in tao-core and while doing the generis update
+             * before the update of tao (which had this class in the migrations).
+             */
+            return null;
+        }
     }
 }
