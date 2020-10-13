@@ -27,7 +27,6 @@ use oat\generis\persistence\sql\SchemaCollection;
 use common_persistence_SqlPersistence;
 use oat\generis\persistence\sql\SchemaProviderInterface;
 use oat\oatbox\service\ServiceNotFoundException;
-use Throwable;
 
 /**
  * The PersistenceManager is responsible for initializing all persistences
