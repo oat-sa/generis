@@ -21,6 +21,8 @@
  *
  */
 
+use common_ext_ManifestException as ManifestException;
+use common_ext_UpdaterNotFoundException as UpdaterNotFoundException;
 use oat\oatbox\service\ServiceManagerAwareInterface;
 use oat\oatbox\service\ServiceManagerAwareTrait;
 use oat\oatbox\service\ServiceNotFoundException;
@@ -503,9 +505,9 @@ class common_ext_Extension implements ServiceManagerAwareInterface
     {
         $updaterClass = $this->getManifest()->getUpdateHandler();
         if ($updaterClass === null) {
-            throw new \common_ext_UpdaterNotFoundException('No Updater found for ' . $this->getName());
+            throw new UpdaterNotFoundException('No Updater found for ' . $this->getName());
         } elseif (!class_exists($updaterClass)) {
-            throw new \common_ext_ManifestException('Updater ' . $updaterClass . ' not found');
+            throw new ManifestException('Updater ' . $updaterClass . ' not found');
         }
         /** @var common_ext_ExtensionUpdater $updater */
         $updater = new $updaterClass($this);

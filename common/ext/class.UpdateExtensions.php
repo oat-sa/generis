@@ -113,12 +113,12 @@ class common_ext_UpdateExtensions implements Action, ServiceLocatorAwareInterfac
                 if ($currentVersion === $codeVersion) {
                     $versionReport = new Report(
                         Report::TYPE_SUCCESS,
-                        'Successfully updated ' . $ext->getName() . ' to ' . $currentVersion
+                        sprintf('Successfully updated %s to %s', $ext->getName(), $currentVersion)
                     );
                 } else {
                     $versionReport = new Report(
                         Report::TYPE_WARNING,
-                        'Update of ' . $ext->getName() . ' exited with version ' . $currentVersion
+                        sprintf('Update of %s exited with version %s', $ext->getName(), $currentVersion)
                     );
                 }
 
