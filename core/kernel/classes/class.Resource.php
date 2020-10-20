@@ -23,7 +23,6 @@
 
 use oat\generis\model\OntologyRdf;
 use oat\generis\model\OntologyRdfs;
-use oat\oatbox\event\EventAggregator;
 use oat\oatbox\service\ServiceManager;
 use oat\generis\model\OntologyAwareTrait;
 use oat\oatbox\event\EventManager;
@@ -46,11 +45,6 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 class core_kernel_classes_Resource extends core_kernel_classes_Container
 {
     use OntologyAwareTrait;
-
-    // --- ASSOCIATIONS ---
-
-
-    // --- ATTRIBUTES ---
 
     /**
      * long uri as string (including namespace)
@@ -764,8 +758,7 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
 
     private function onUpdate(): void
     {
-        /** @var EventAggregator $eventAggregator */
-        $eventAggregator = $this->getServiceManager()->get(EventAggregator::SERVICE_ID);
-        $eventAggregator->put($this->getUri(), new ResourceUpdated($this));
+        $eventManager = $this->getServiceManager()->get(EventManager::SERVICE_ID);
+        $eventManager->trigger(new ResourceUpdated($this));
     }
 }
