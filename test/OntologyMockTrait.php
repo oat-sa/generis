@@ -21,7 +21,6 @@
 
 namespace oat\generis\test;
 
-use oat\oatbox\event\EventAggregator;
 use oat\oatbox\user\UserLanguageServiceInterface;
 use oat\oatbox\session\SessionService;
 use Prophecy\Argument;
@@ -74,8 +73,6 @@ trait OntologyMockTrait
      */
     private function setupOntology(Ontology $onto)
     {
-        $eventAggregator = new EventAggregator(['numberOfAggregatedEvents'=>10]);
-
         $persistenceManagerWithSqlMock = $this->getPersistenceManagerWithSqlMock('mockSql');
         $session = new \common_session_AnonymousSession();
         $serviceLocatorMock = $this->getServiceLocatorMock([
@@ -87,7 +84,6 @@ trait OntologyMockTrait
             LoggerService::SERVICE_ID => $this->prophesize(LoggerInterface::class)->reveal(),
             UriProvider::SERVICE_ID => new Bin2HexUriProvider([Bin2HexUriProvider::OPTION_NAMESPACE => 'http://ontology.mock/bin2hex#']),
             SimpleCache::SERVICE_ID => new NoCache(),
-            EventAggregator::SERVICE_ID => $eventAggregator
         ]);
         $eventAggregator->setServiceLocator($serviceLocatorMock);
         $session->setServiceLocator($serviceLocatorMock);
