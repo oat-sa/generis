@@ -484,11 +484,13 @@ class Updater extends common_ext_ExtensionUpdater
             /** @var \common_persistence_sql_SchemaManager $schemaManager */
             $schemaManager = $defaultPersistence->getDriver()->getSchemaManager();
             $schema = $schemaManager->createSchema();
-            $fromSchema = clone $schema;
-            $schema->dropTable('models');
-            $queries = $defaultPersistence->getPlatform()->getMigrateSchemaSql($fromSchema, $schema);
-            foreach ($queries as $query) {
-                $defaultPersistence->exec($query);
+            if ($schema->hasTable('models')) {
+                $fromSchema = clone $schema;
+                $schema->dropTable('models');
+                $queries = $defaultPersistence->getPlatform()->getMigrateSchemaSql($fromSchema, $schema);
+                foreach ($queries as $query) {
+                    $defaultPersistence->exec($query);
+                }
             }
             $this->setVersion('12.12.0');
         }
