@@ -33,6 +33,8 @@ class ItemPoolSimpleCacheAdapter extends ConfigurableService implements CacheIte
     /** @var CacheItemInterface[] */
     private $deferred;
 
+    public const OPTION_CACHE_SERVICE = 'cacheService';
+
     /**
      * @inheritdoc
      */
@@ -132,6 +134,10 @@ class ItemPoolSimpleCacheAdapter extends ConfigurableService implements CacheIte
 
     private function getCache(): CacheInterface
     {
+        if ($this->hasOption(self::OPTION_CACHE_SERVICE)) {
+            return $this->getOption(self::OPTION_CACHE_SERVICE);
+        }
+
         return $this->getServiceLocator()->get(SimpleCache::SERVICE_ID);
     }
 
