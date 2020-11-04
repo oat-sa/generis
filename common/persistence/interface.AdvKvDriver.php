@@ -35,6 +35,7 @@ interface common_persistence_AdvKvDriver extends common_persistence_KvDriver
     public function hExists($key, $field);
     public function hSet($key, $field, $value);
     public function hGet($key, $field);
+    public function hDel($key, $field): bool;
     public function hGetAll($key);
     public function keys($pattern);
 

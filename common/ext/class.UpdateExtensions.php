@@ -39,7 +39,7 @@ class common_ext_UpdateExtensions implements Action, ServiceLocatorAwareInterfac
 {
     use ServiceLocatorAwareTrait;
     use LoggerAwareTrait;
-    
+
     /**
      * (non-PHPdoc)
      * @see \oat\oatbox\action\Action::__invoke()
@@ -110,10 +110,16 @@ class common_ext_UpdateExtensions implements Action, ServiceLocatorAwareInterfac
                     $currentVersion = $returnedVersion;
                 }
 
-                if ($currentVersion == $codeVersion) {
-                    $versionReport = new Report(Report::TYPE_SUCCESS, 'Successfully updated ' . $ext->getName() . ' to ' . $currentVersion);
+                if ($currentVersion === $codeVersion) {
+                    $versionReport = new Report(
+                        Report::TYPE_SUCCESS,
+                        sprintf('Successfully updated %s to %s', $ext->getName(), $currentVersion)
+                    );
                 } else {
-                    $versionReport = new Report(Report::TYPE_WARNING, 'Update of ' . $ext->getName() . ' exited with version ' . $currentVersion);
+                    $versionReport = new Report(
+                        Report::TYPE_WARNING,
+                        sprintf('Update of %s exited with version %s', $ext->getName(), $currentVersion)
+                    );
                 }
 
                 foreach ($updater->getReports() as $updaterReport) {
@@ -123,6 +129,12 @@ class common_ext_UpdateExtensions implements Action, ServiceLocatorAwareInterfac
                 $report->add($versionReport);
 
                 $this->getServiceLocator()->get(SimpleCache::SERVICE_ID)->clear();
+            } catch (common_ext_UpdaterNotFoundException $e) {
+                $this->getExtensionManager()->updateVersion($ext, $codeVersion);
+                $versionReport = Report::createSuccess(
+                    sprintf('Successfully updated %s to %s', $ext->getName(), $codeVersion)
+                );
+                $report->add($versionReport);
             } catch (common_ext_ManifestException $e) {
                 $report = new Report(Report::TYPE_WARNING, $e->getMessage());
             }
@@ -135,7 +147,7 @@ class common_ext_UpdateExtensions implements Action, ServiceLocatorAwareInterfac
     protected function getMissingExtensions()
     {
         $missingId = \helpers_ExtensionHelper::getMissingExtensionIds($this->getExtensionManager()->getInstalledExtensions());
-        
+
         $missingExt = [];
         foreach ($missingId as $extId) {
             $ext = $this->getExtensionManager()->getExtensionById($extId);

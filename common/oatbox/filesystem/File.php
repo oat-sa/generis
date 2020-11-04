@@ -15,7 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2016 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
+ * Copyright (c) 2016-2020 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  *
  */
 
@@ -26,6 +26,7 @@ use GuzzleHttp\Psr7\StreamWrapper;
 use League\Flysystem\FileNotFoundException;
 use Psr\Http\Message\StreamInterface;
 use League\Flysystem\FileExistsException;
+use tao_helpers_File;
 
 class File extends FileSystemHandler
 {
@@ -48,9 +49,15 @@ class File extends FileSystemHandler
     {
         try {
             $mimeType = $this->getFileSystem()->getMimetype($this->getPrefix());
-            if ($mimeType == 'text/plain' && substr($this->getPrefix(), -4) == '.css') {
+            $suffix =  substr($this->getPrefix(), -4);
+            if ($mimeType === 'text/plain' &&  $suffix === '.css') {
                 $mimeType = 'text/css';
             }
+
+            if (in_array($suffix, ['.svg', 'svgz'])) {
+                $mimeType = tao_helpers_File::MIME_SVG;
+            }
+
             return $mimeType;
         } catch (FileNotFoundException $e) {
         }

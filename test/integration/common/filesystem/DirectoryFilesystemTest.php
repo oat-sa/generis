@@ -93,9 +93,9 @@ class DirectoryFilesystemTest extends GenerisTestCase
 
         $file = $this->getTempDirectory()->getFile('fixture');
 
-        $result = $fileSystemService->getFullPathFile($file);
+        $result = $fileSystemService->getFileAdapterByFile($file);
 
-        $this->assertEquals($result, $file->getFileSystemId() . '/');
+        $this->assertEquals($result->getPathPrefix(), 'unit-test/');
     }
 
 

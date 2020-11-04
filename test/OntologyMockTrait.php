@@ -22,6 +22,7 @@
 namespace oat\generis\test;
 
 use oat\oatbox\event\EventAggregator;
+use oat\generis\persistence\DriverConfigurationFeeder;
 use oat\oatbox\user\UserLanguageServiceInterface;
 use oat\oatbox\session\SessionService;
 use Prophecy\Argument;
@@ -87,6 +88,7 @@ trait OntologyMockTrait
             LoggerService::SERVICE_ID => $this->prophesize(LoggerInterface::class)->reveal(),
             UriProvider::SERVICE_ID => new Bin2HexUriProvider([Bin2HexUriProvider::OPTION_NAMESPACE => 'http://ontology.mock/bin2hex#']),
             SimpleCache::SERVICE_ID => new NoCache(),
+            DriverConfigurationFeeder::SERVICE_ID => new DriverConfigurationFeeder(),
             EventAggregator::SERVICE_ID => $eventAggregator
         ]);
         $eventAggregator->setServiceLocator($serviceLocatorMock);

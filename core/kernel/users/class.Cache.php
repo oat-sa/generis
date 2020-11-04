@@ -103,9 +103,10 @@ class core_kernel_users_Cache
         }
         
         $serial = self::buildIncludedRolesSerial($role);
-        $cache = ServiceManager::getServiceManager()->get('generis/cache');
+        /** @var SimpleCache $cache */
+        $cache = ServiceManager::getServiceManager()->get(SimpleCache::SERVICE_ID);
         try {
-            $cache->put($toCache, $serial);
+            $cache->set($serial, $toCache);
             $returnValue = true;
         } catch (common_Exception $e) {
             $roleUri = $role->getUri();
