@@ -37,15 +37,15 @@ use RecursiveIteratorIterator;
  * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
  * @author Ivan Klimchuk, <ivan.klimchuk@1pt.com>
  *
- * @method static self createInfo(string $message, $data = null, array $children = [])
- * @method static self createSuccess(string $message, $data = null, array $children = [])
- * @method static self createWarning(string $message, $data = null, array $children = [])
- * @method static self createError(string $message, $data = null, array $children = [])
+ * @method static self createInfo(string $message, $data = null, array $children = []): self
+ * @method static self createSuccess(string $message, $data = null, array $children = []): self
+ * @method static self createWarning(string $message, $data = null, array $children = []): self
+ * @method static self createError(string $message, $data = null, array $children = []): self
  *
- * @method $this getInfos()
- * @method $this getSuccesses()
- * @method $this getWarnings()
- * @method $this getErrors()
+ * @method $this getInfos(bool $asFlat = false): array
+ * @method $this getSuccesses(bool $asFlat = false): array
+ * @method $this getWarnings(bool $asFlat = false): array
+ * @method $this getErrors(bool $asFlat = false): array
  *
  * @method $this containsInfo() Whenever or not the report contains info messages
  * @method $this containsSuccess() Whenever or not the report contains successes
@@ -146,8 +146,9 @@ class Report implements IteratorAggregate, JsonSerializable
         /**
          * Covers methods by template: get<Type>[e]s
          */
-        if (strpos($name, 'create') === 0) {
-            $type = strtolower(rtrim(str_replace('get', '', $name), 'es'));
+        if (strpos($name, 'get') === 0) {
+            $type = strtolower(str_replace('get', '', $name));
+            $type = rtrim(substr($type, 0, -1), 'e');
             return $this->filterChildrenByTypes([$type], ...$arguments);
         }
 
@@ -204,8 +205,6 @@ class Report implements IteratorAggregate, JsonSerializable
      */
     public function setType(string $type): self
     {
-        // validate?
-
         $this->type = $type;
 
         return $this;
@@ -331,7 +330,7 @@ class Report implements IteratorAggregate, JsonSerializable
      */
     public function getIterator(): ArrayIterator
     {
-        return new ArrayIterator($this->children);
+        return new ArrayIterator($this->getChildren());
     }
 
     /**
@@ -341,7 +340,7 @@ class Report implements IteratorAggregate, JsonSerializable
      */
     public function __toString()
     {
-        return $this->message;
+        return $this->getMessage();
     }
 
     /**
@@ -424,7 +423,7 @@ class Report implements IteratorAggregate, JsonSerializable
     private function getRecursiveIterator(): RecursiveIteratorIterator
     {
         return new RecursiveIteratorIterator(
-            new RecursiveIteratorIterator($this->getIterator()),
+            new RecursiveReportIterator($this->getIterator()),
             RecursiveIteratorIterator::SELF_FIRST
         );
     }
