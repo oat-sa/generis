@@ -355,7 +355,7 @@ class Report implements IteratorAggregate, JsonSerializable
     public static function jsonUnserialize($data): ?self
     {
         if (!is_array($data)) {
-            $data = (array) json_decode($data, true);
+            $data = (array) json_decode((string) $data, true);
         }
 
         if (count(array_intersect(['type', 'message', 'data'], array_keys($data))) === 3) {
