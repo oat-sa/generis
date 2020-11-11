@@ -81,7 +81,7 @@ class Report implements IteratorAggregate, JsonSerializable
      *
      * @var array
      */
-    private $children;
+    private $children = [];
 
     /**
      * Attached to the report data
@@ -126,7 +126,7 @@ class Report implements IteratorAggregate, JsonSerializable
      */
     public static function __callStatic(string $name, array $arguments)
     {
-        if (strpos($name, 'create')) {
+        if (strpos($name, 'create') === 0) {
             return new static(strtolower(str_replace('create', '', $name)), ...$arguments);
         }
 
@@ -146,7 +146,7 @@ class Report implements IteratorAggregate, JsonSerializable
         /**
          * Covers methods by template: get<Type>[e]s
          */
-        if (strpos($name, 'get')) {
+        if (strpos($name, 'create') === 0) {
             $type = strtolower(rtrim(str_replace('get', '', $name), 'es'));
             return $this->filterChildrenByTypes([$type], ...$arguments);
         }
@@ -154,7 +154,7 @@ class Report implements IteratorAggregate, JsonSerializable
         /**
          * Covers methods by template: contains<Type>
          */
-        if (strpos($name, 'contains')) {
+        if (strpos($name, 'contains') === 0) {
             return $this->contains(strtolower(str_replace('contains', '', $name)));
         }
 
