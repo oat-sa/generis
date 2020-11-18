@@ -19,13 +19,15 @@
  *
  */
 
-use oat\oatbox\service\ServiceManager;
+declare(strict_types = 1);
+
 use oat\oatbox\action\Action;
+use oat\oatbox\log\LoggerAwareTrait;
+use common_report_Report as Report;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Psr\Log\LoggerAwareInterface;
-use oat\oatbox\log\LoggerAwareTrait;
-
+use oat\oatbox\cache\SimpleCache;
 /**
  * Run the extension updater
  *
@@ -37,83 +39,87 @@ class common_ext_UpdateExtensions implements Action, ServiceLocatorAwareInterfac
 {
     use ServiceLocatorAwareTrait;
     use LoggerAwareTrait;
-    
+
     /**
      * (non-PHPdoc)
      * @see \oat\oatbox\action\Action::__invoke()
      */
     public function __invoke($params)
     {
-        
+        $extManager = $this->getExtensionManager();
         $merged = array_merge(
-            common_ext_ExtensionsManager::singleton()->getInstalledExtensions(),
+            $extManager->getInstalledExtensions(),
             $this->getMissingExtensions()
         );
-        
+
         $sorted = \helpers_ExtensionHelper::sortByDependencies($merged);
-        
-        $report = new common_report_Report(common_report_Report::TYPE_INFO, 'Running extension update');
+        $report = new Report(Report::TYPE_INFO, 'Running extension update');
+
         foreach ($sorted as $ext) {
             try {
-                if (!common_ext_ExtensionsManager::singleton()->isInstalled($ext->getId())) {
+                if (!$extManager->isInstalled($ext->getId())) {
                     $installer = new \tao_install_ExtensionInstaller($ext);
                     $installer->install();
-                    $report->add(new common_report_Report(common_report_Report::TYPE_SUCCESS, 'Installed ' . $ext->getName()));
+                    $report->add(new Report(Report::TYPE_SUCCESS, 'Installed ' . $ext->getName()));
                 } else {
                     $report->add($this->updateExtension($ext));
                 }
             } catch (common_ext_MissingExtensionException $ex) {
-                $report->add(new common_report_Report(common_report_Report::TYPE_ERROR, $ex->getMessage()));
+                $report->add(new Report(Report::TYPE_ERROR, $ex->getMessage()));
                 break;
             } catch (common_ext_OutdatedVersionException $ex) {
-                $report->add(new common_report_Report(common_report_Report::TYPE_ERROR, $ex->getMessage()));
+                $report->add(new Report(Report::TYPE_ERROR, $ex->getMessage()));
                 break;
             } catch (Exception $e) {
                 $this->logError('Exception during update of ' . $ext->getId() . ': ' . get_class($e) . ' "' . $e->getMessage() . '"');
-                $report->setType(common_report_Report::TYPE_ERROR);
+                $report->setType(Report::TYPE_ERROR);
                 $report->setTitle('Update failed');
-                $report->add(new common_report_Report(common_report_Report::TYPE_ERROR, 'Exception during update of ' . $ext->getId() . '.'));
+                $report->add(new Report(Report::TYPE_ERROR, 'Exception during update of ' . $ext->getId() . '.'));
                 break;
             }
         }
         $this->logInfo(helpers_Report::renderToCommandline($report, false));
         return $report;
     }
-    
+
     /**
      * Update a specific extension
      *
      * @param common_ext_Extension $ext
-     * @return common_report_Report
+     * @return Report
+     * @throws common_exception_Error
+     * @throws common_ext_ManifestNotFoundException
+     * @throws common_ext_MissingExtensionException
+     * @throws common_ext_OutdatedVersionException
      */
     protected function updateExtension(common_ext_Extension $ext)
     {
         helpers_ExtensionHelper::checkRequiredExtensions($ext);
-        $installed = common_ext_ExtensionsManager::singleton()->getInstalledVersion($ext->getId());
+        $installed = $this->getExtensionManager()->getInstalledVersion($ext->getId());
         $codeVersion = $ext->getVersion();
         if ($installed !== $codeVersion) {
-            $report = new common_report_Report(common_report_Report::TYPE_INFO, $ext->getName() . ' requires update from ' . $installed . ' to ' . $codeVersion);
-            $updaterClass = $ext->getManifest()->getUpdateHandler();
-            if (is_null($updaterClass)) {
-                $report = new common_report_Report(common_report_Report::TYPE_WARNING, 'No Updater found for  ' . $ext->getName());
-            } elseif (!class_exists($updaterClass)) {
-                $report = new common_report_Report(common_report_Report::TYPE_ERROR, 'Updater ' . $updaterClass . ' not found');
-            } else {
-                $updater = new $updaterClass($ext);
+            $report = new Report(Report::TYPE_INFO, $ext->getName() . ' requires update from ' . $installed . ' to ' . $codeVersion);
+            try {
+                $updater = $ext->getUpdater();
                 $returnedVersion = $updater->update($installed);
-                $updater->setVersion($ext->getVersion());
-                $currentVersion = common_ext_ExtensionsManager::singleton()->getInstalledVersion($ext->getId());
-                
+                $currentVersion = $this->getExtensionManager()->getInstalledVersion($ext->getId());
+
                 if (!is_null($returnedVersion) && $returnedVersion != $currentVersion) {
-                    common_ext_ExtensionsManager::singleton()->updateVersion($ext, $returnedVersion);
-                    $report->add(new common_report_Report(common_report_Report::TYPE_WARNING, 'Manually saved extension version'));
+                    $this->getExtensionManager()->updateVersion($ext, $returnedVersion);
+                    $report->add(new Report(Report::TYPE_WARNING, 'Manually saved extension version'));
                     $currentVersion = $returnedVersion;
                 }
 
-                if ($currentVersion == $codeVersion) {
-                    $versionReport = new common_report_Report(common_report_Report::TYPE_SUCCESS, 'Successfully updated ' . $ext->getName() . ' to ' . $currentVersion);
+                if ($currentVersion === $codeVersion) {
+                    $versionReport = new Report(
+                        Report::TYPE_SUCCESS,
+                        sprintf('Successfully updated %s to %s', $ext->getName(), $currentVersion)
+                    );
                 } else {
-                    $versionReport = new common_report_Report(common_report_Report::TYPE_WARNING, 'Update of ' . $ext->getName() . ' exited with version ' . $currentVersion);
+                    $versionReport = new Report(
+                        Report::TYPE_WARNING,
+                        sprintf('Update of %s exited with version %s', $ext->getName(), $currentVersion)
+                    );
                 }
 
                 foreach ($updater->getReports() as $updaterReport) {
@@ -122,23 +128,40 @@ class common_ext_UpdateExtensions implements Action, ServiceLocatorAwareInterfac
 
                 $report->add($versionReport);
 
-                common_cache_FileCache::singleton()->purge();
+                $this->getServiceLocator()->get(SimpleCache::SERVICE_ID)->clear();
+            } catch (common_ext_UpdaterNotFoundException $e) {
+                $this->getExtensionManager()->updateVersion($ext, $codeVersion);
+                $versionReport = Report::createSuccess(
+                    sprintf('Successfully updated %s to %s', $ext->getName(), $codeVersion)
+                );
+                $report->add($versionReport);
+            } catch (common_ext_ManifestException $e) {
+                $report = new Report(Report::TYPE_WARNING, $e->getMessage());
             }
         } else {
-            $report = new common_report_Report(common_report_Report::TYPE_INFO, $ext->getName() . ' already up to date');
+            $report = new Report(Report::TYPE_INFO, $ext->getName() . ' already up to date');
         }
         return $report;
     }
-    
+
     protected function getMissingExtensions()
     {
-        $missingId = \helpers_ExtensionHelper::getMissingExtensionIds(common_ext_ExtensionsManager::singleton()->getInstalledExtensions());
-        
+        $missingId = \helpers_ExtensionHelper::getMissingExtensionIds($this->getExtensionManager()->getInstalledExtensions());
+
         $missingExt = [];
         foreach ($missingId as $extId) {
-            $ext = \common_ext_ExtensionsManager::singleton()->getExtensionById($extId);
+            $ext = $this->getExtensionManager()->getExtensionById($extId);
             $missingExt[$extId] = $ext;
         }
         return $missingExt;
     }
+
+    /**
+     * @return common_ext_ExtensionsManager
+     */
+    private function getExtensionManager()
+    {
+        return $this->getServiceLocator()->get(common_ext_ExtensionsManager::SERVICE_ID);
+    }
+
 }

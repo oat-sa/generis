@@ -25,6 +25,7 @@ use oat\generis\persistence\PersistenceManager;
 use oat\generis\model\data\Ontology;
 use oat\generis\persistence\sql\SchemaProviderInterface;
 use oat\oatbox\extension\exception\ManifestNotFoundException;
+use oat\oatbox\cache\SimpleCache;
 
 /**
  * Custom extension installer for generis
@@ -55,7 +56,7 @@ class common_ext_GenerisInstaller extends common_ext_ExtensionInstaller
         $this->installOntology();
         $this->installRegisterExt();
 
-        $this->getServiceManager()->get(common_cache_Cache::SERVICE_ID)->purge();
+        $this->getServiceManager()->get(SimpleCache::SERVICE_ID)->clear();
         
         $this->log('d', 'Installing custom script for extension ' . $this->extension->getId());
         $this->installCustomScript();

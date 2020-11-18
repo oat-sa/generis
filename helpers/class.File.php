@@ -346,7 +346,7 @@ class helpers_File
         // http://sourceforge.net/p/magmi/git/ci/master/tree/magmi-0.8/inc/magmi_utils.php
 
         // whether $path is unix or not
-        $unipath = strlen($path) == 0 || $path{0} != '/';
+        $unipath = strlen($path) == 0 || $path[0] != '/';
         // attempts to detect if path is relative in which case, add cwd
         if (strpos($path, ':') === false && $unipath) {
             $path = getcwd() . DIRECTORY_SEPARATOR . $path;

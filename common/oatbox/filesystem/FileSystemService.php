@@ -186,6 +186,20 @@ class FileSystemService extends ConfigurableService
     }
 
     /**
+     * Get file adapter by file
+     *
+     * @param File $file
+     * @return AdapterInterface
+     * @throws \common_exception_NotFound
+     * @throws common_exception_Error
+     */
+    public function getFileAdapterByFile(File $file)
+    {
+        $config = $this->getAdapterConfig($file->getFileSystemId());
+        return $this->getFlysystemAdapter($config['adapter']);
+    }
+
+    /**
      * Returns the configuration for an adapter
      * @param string $id
      * @return string[]

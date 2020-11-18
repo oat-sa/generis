@@ -40,10 +40,7 @@ class SetupDb implements LoggerAwareInterface
      */
     public function setupDatabase(\common_persistence_SqlPersistence $p)
     {
-        $dbalDriver = $p->getDriver();
-        if (!$dbalDriver instanceof \common_persistence_sql_dbal_Driver) {
-            throw new \common_exception_InconsistentData('Non DBAL driver no longer supported');
-        }
+        $dbalDriver = $p->getDriver()->getDbalConnection();
         $dbName = $dbalDriver->getDataBase();
         $this->verifyDatabase($p, $dbName);
         $this->cleanDb($p);

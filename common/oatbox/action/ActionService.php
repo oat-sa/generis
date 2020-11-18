@@ -22,8 +22,8 @@
 namespace oat\oatbox\action;
 
 use oat\oatbox\service\ConfigurableService;
-use oat\oatbox\service\ServiceNotFoundException;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use oat\oatbox\cache\SimpleCache;
+use common_ext_ExtensionsManager;
 
 class ActionService extends ConfigurableService
 {
@@ -43,9 +43,7 @@ class ActionService extends ConfigurableService
             $action = $this->getServiceManager()->get($actionIdentifier);
         } elseif (class_exists($actionIdentifier) && is_subclass_of($actionIdentifier, Action::class)) {
             $action = new $actionIdentifier();
-            if ($action instanceof ServiceLocatorAwareInterface) {
-                $action->setServiceLocator($this->getServiceLocator());
-            }
+            $this->propagate($action);
         } else {
             throw new ResolutionException('Unknown action ' . $actionIdentifier);
         }
@@ -54,25 +52,21 @@ class ActionService extends ConfigurableService
     
     public function getAvailableActions()
     {
-        if ($this->getCache()->has(__FUNCTION__)) {
-            $actions = $this->getCache()->get(__FUNCTION__);
-        } else {
+        $actions = $this->getCache()->get(__FUNCTION__);
+        if (is_null($actions)) {
             $actions = [];
-            foreach (\common_ext_ExtensionsManager::singleton()->getInstalledExtensions() as $ext) {
+            foreach ($this->getServiceLocator()->get(common_ext_ExtensionsManager::SERVICE_ID)->getInstalledExtensions() as $ext) {
                 $actions = array_merge($actions, $this->getActionsInDirectory($ext->getDir()));
             }
             $actions = array_merge($actions, $this->getActionsInDirectory(VENDOR_PATH . 'oat-sa'));
-            $this->getCache()->put($actions, __FUNCTION__);
+            $this->getCache()->set(__FUNCTION__, $actions);
         }
         return $actions;
     }
     
-    /**
-     * @return \common_cache_Cache
-     */
-    protected function getCache()
+    protected function getCache(): SimpleCache
     {
-        return $this->getServiceManager()->get('generis/cache');
+        return $this->getServiceLocator()->get(SimpleCache::SERVICE_ID);
     }
     
     protected function getActionsInDirectory($dir)

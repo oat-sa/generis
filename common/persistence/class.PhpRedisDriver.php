@@ -172,6 +172,12 @@ class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDrive
     {
         return $this->callWithRetry('hGet', [$key, $field]);
     }
+
+    public function hDel($key, $field): bool
+    {
+        return (bool) $this->callWithRetry('hDel', [$key, $field]);
+    }
+
     //Time complexity: O(N) where N is the size of the hash.
     public function hGetAll($key)
     {

@@ -29,23 +29,23 @@ use oat\oatbox\service\ConfigurableService;
  */
 class common_session_php_KeyValueSessionHandler extends ConfigurableService implements common_session_php_SessionHandler
 {
-    const OPTION_PERSISTENCE = 'persistence';
-    
-    const KEY_NAMESPACE = "generis:session:";
-    
-    /**
-     * @var common_persistence_KeyValuePersistence
-     */
-    private $sessionPersistence = null;
-    
+    public const OPTION_PERSISTENCE = 'persistence';
+    public const OPTION_SESSION_TTL = 'session_ttl';
+
+    public const KEY_NAMESPACE = 'generis:session:';
+
+    /** @var common_persistence_KeyValuePersistence */
+    private $sessionPersistence;
+
     protected function getPersistence()
     {
         if (is_null($this->sessionPersistence)) {
             $this->sessionPersistence = common_persistence_KeyValuePersistence::getPersistence($this->getOption(self::OPTION_PERSISTENCE));
         }
+
         return $this->sessionPersistence;
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see common_session_storage_SessionStorage::open()
@@ -80,7 +80,7 @@ class common_session_php_KeyValueSessionHandler extends ConfigurableService impl
      */
     public function write($id, $data)
     {
-        return $this->getPersistence()->set(self::KEY_NAMESPACE . $id, $data, (int) ini_get('session.gc_maxlifetime'));
+        return $this->getPersistence()->set(self::KEY_NAMESPACE . $id, $data, $this->getSessionTtl());
     }
 
     /**
@@ -105,5 +105,10 @@ class common_session_php_KeyValueSessionHandler extends ConfigurableService impl
         // solution 2 : Check if the eprsistence is capable of autonomous garbage
         //
         return true;
+    }
+
+    private function getSessionTtl(): int
+    {
+        return $this->getOption(self::OPTION_SESSION_TTL) ?? (int)ini_get('session.gc_maxlifetime');
     }
 }

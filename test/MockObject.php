@@ -21,8 +21,8 @@
 
 namespace oat\generis\test;
 
-use PHPUnit_Framework_MockObject_MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObjectInterface;
 
-interface MockObject extends PHPUnit_Framework_MockObject_MockObject
+interface MockObject extends MockObjectInterface
 {
 }

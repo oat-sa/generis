@@ -20,8 +20,8 @@
  *
  */
 
-use oat\oatbox\service\ServiceManager;
 use oat\oatbox\service\ConfigurableService;
+use oat\oatbox\service\ServiceManager;
 use oat\oatbox\extension\exception\ManifestException;
 use oat\oatbox\extension\ComposerInfo;
 
@@ -56,14 +56,6 @@ class common_ext_ExtensionsManager extends ConfigurableService
     private $extensions = [];
 
     /**
-     * Singleton instance of common_ext_ExtensionsManager
-     *
-     * @access private
-     * @var common_ext_ExtensionsManager
-     */
-    private static $instance = null;
-
-    /**
      * @deprecated Use ServiceManager::get(\common_ext_ExtensionsManager::SERVICE_ID) instead
      *
      * Obtain a reference on a unique common_ext_ExtensionsManager
@@ -75,15 +67,7 @@ class common_ext_ExtensionsManager extends ConfigurableService
      */
     public static function singleton()
     {
-        if (! isset(self::$instance)) {
-            if (ServiceManager::getServiceManager()->has(self::SERVICE_ID)) {
-                self::$instance = ServiceManager::getServiceManager()->get(self::SERVICE_ID);
-            } else {
-                self::$instance = new common_ext_ExtensionsManager();
-                ServiceManager::getServiceManager()->propagate(self::$instance);
-            }
-        }
-        return self::$instance;
+        return ServiceManager::getServiceManager()->get(self::class);
     }
 
     /**
@@ -152,12 +136,12 @@ class common_ext_ExtensionsManager extends ConfigurableService
                         $ext = $this->getExtensionById($extId);
                         $returnValue[] = $ext;
                     } catch (common_ext_ExtensionException $exception) {
-                        common_Logger::d($extId . ' is not an extension');
+                        common_Logger::d(sprintf('%s  is not an extension (%s)', $extId, $exception->getMessage()));
                     }
                 }
             }
         }
-        
+
         return $returnValue;
     }
 
@@ -204,22 +188,22 @@ class common_ext_ExtensionsManager extends ConfigurableService
             // if successfully loaded add to list
             $this->extensions[$id] = $extension;
         }
-        
+
         return $this->extensions[$id];
     }
-    
+
     public function isEnabled($extensionId)
     {
         $exts = $this->getExtensionById('generis')->getConfig(self::EXTENSIONS_CONFIG_KEY);
         return isset($exts[$extensionId]['enabled']) ? $exts[$extensionId]['enabled'] : false;
     }
-    
+
     public function isInstalled($extensionId)
     {
         $exts = $this->getExtensionById('generis')->getConfig(self::EXTENSIONS_CONFIG_KEY);
         return isset($exts[$extensionId]);
     }
-    
+
     public function getInstalledVersion($extensionId)
     {
         $exts = $this->getExtensionById('generis')->getConfig(self::EXTENSIONS_CONFIG_KEY);
@@ -276,7 +260,7 @@ class common_ext_ExtensionsManager extends ConfigurableService
         $extensions[$extension->getId()] = $entry;
         return $this->getExtensionById('generis')->setConfig(self::EXTENSIONS_CONFIG_KEY, $extensions);
     }
-    
+
     /**
      * Add the end of an uninstallation unregister the extension
      *
@@ -291,7 +275,7 @@ class common_ext_ExtensionsManager extends ConfigurableService
         unset($extensions[$extension->getId()]);
         $this->getExtensionById('generis')->setConfig(self::EXTENSIONS_CONFIG_KEY, $extensions);
     }
-    
+
     public function updateVersion(common_ext_Extension $extension, $version)
     {
         $extensions = $this->getExtensionById('generis')->getConfig(self::EXTENSIONS_CONFIG_KEY);

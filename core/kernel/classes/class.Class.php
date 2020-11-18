@@ -229,6 +229,52 @@ class core_kernel_classes_Class extends core_kernel_classes_Resource
     }
 
     /**
+     * Retrieves a direct subclass by label.
+     *
+     * @param  string label
+     * @return core_kernel_classes_Class|null
+     */
+    public function retrieveSubClassByLabel($label)
+    {
+        $subClasses = $this->getSubClasses();
+        foreach ($subClasses as $subclass) {
+            if ($subclass->getLabel() === $label) {
+                return $subclass;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Retrieves a direct subclass by label or creates it if not existent.
+     *
+     * @param  string label
+     * @return core_kernel_classes_Class
+     */
+    public function retrieveOrCreateSubClassByLabel($label)
+    {
+        return $this->retrieveSubClassByLabel($label) ?: $this->createSubClass($label);
+    }
+
+    /**
+     * Creates a path of subclasses from an array of labels, URIs and comments.
+     *
+     * @param  array $labels indexed array of labels ordered from root to leaf class
+     * @return core_kernel_classes_Class The last class created
+     */
+    public function createSubClassPathByLabel(array $labels)
+    {
+        $currentClass = $this;
+
+        foreach($labels as $label) {
+            $currentClass = $currentClass->retrieveOrCreateSubClassByLabel($label);
+        }
+
+        return $currentClass;
+    }
+
+    /**
      * Short description of method createProperty
      *
      * @access public

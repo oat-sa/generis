@@ -22,20 +22,7 @@
 
 /**
  * basic interface a cache implementation has to implement
- *
- * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
- * @package generis
-
- */
-
-
-/**
- * basic interface a cache implementation has to implement
- *
- * @access public
- * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
- * @package generis
-
+ * @deprecated please use oat\oatbox\cache\SimpleCache
  */
 interface common_cache_Cache
 {

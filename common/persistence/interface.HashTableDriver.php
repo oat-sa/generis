@@ -67,6 +67,15 @@ interface common_persistence_HashTableDriver extends common_persistence_Driver
      * @return string
      */
     public function hGet($key, $field);
+
+    /**
+     * Delete the value for provided field.
+     *
+     * @param string $key
+     * @param string $field
+     * @return string
+     */
+    public function hDel($key, $field);
     
     /**
      * Get all fields of the Hashtable

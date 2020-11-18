@@ -21,6 +21,8 @@
  *
  */
 
+use common_ext_ManifestException as ManifestException;
+use common_ext_UpdaterNotFoundException as UpdaterNotFoundException;
 use oat\oatbox\service\ServiceManagerAwareInterface;
 use oat\oatbox\service\ServiceManagerAwareTrait;
 use oat\oatbox\service\ServiceNotFoundException;
@@ -126,7 +128,7 @@ class common_ext_Extension implements ServiceManagerAwareInterface
     {
         return $this->getServiceLocator()->has($this->getId() . '/' . $key);
     }
-    
+
     /**
      * sets a configuration value
      *
@@ -243,7 +245,7 @@ class common_ext_Extension implements ServiceManagerAwareInterface
         $constants = $this->getConstants();
         return isset($constants[$key]);
     }
-    
+
     /**
      * Retrieves a constant from the manifest.php file of the extension.
      *
@@ -311,7 +313,7 @@ class common_ext_Extension implements ServiceManagerAwareInterface
                 }
             }
         }
-        
+
         // validate the classes
         foreach (array_keys($returnValue) as $key) {
             $class = $returnValue[$key];
@@ -323,7 +325,7 @@ class common_ext_Extension implements ServiceManagerAwareInterface
                 unset($returnValue[$key]);
             }
         }
-        
+
         return (array) $returnValue;
     }
 
@@ -403,7 +405,7 @@ class common_ext_Extension implements ServiceManagerAwareInterface
     {
         return $this->getManifest()->getManagementRole();
     }
-    
+
     /**
      * Get an array of Class URIs (as strings) that are considered optimizable by the Extension.
      *
@@ -415,7 +417,7 @@ class common_ext_Extension implements ServiceManagerAwareInterface
     {
         return $this->getManifest()->getOptimizableClasses();
     }
-    
+
     public function getPhpNamespace()
     {
         return $this->getManifest()->getPhpNamespace();
@@ -449,6 +451,16 @@ class common_ext_Extension implements ServiceManagerAwareInterface
     public function load()
     {
         if (!$this->isLoaded()) {
+            $dependencies = $this->getManifest()->getDependencies();
+            foreach ($dependencies as $extId => $extVersion) {
+                // triggers loading of extensions
+                try {
+                    $this->getExtensionManager()->getExtensionById($extId);
+                } catch (common_ext_ManifestNotFoundException $e) {
+                    throw new common_ext_MissingExtensionException($e->getExtensionId() . ' not found but required for ' . $this->getId(), $e->getExtensionId());
+                }
+            }
+
             $loader = new common_ext_ExtensionLoader($this);
             $loader->load();
             //load all dependent extensions
@@ -471,7 +483,7 @@ class common_ext_Extension implements ServiceManagerAwareInterface
         }
         return $service;
     }
-    
+
     /**
      * Get the documentation header for extension config located at key path
      *
@@ -485,5 +497,24 @@ class common_ext_Extension implements ServiceManagerAwareInterface
             return file_get_contents($path);
         }
         return null;
+    }
+
+    /**
+     * @throws common_ext_ManifestException
+     * @throws common_ext_ManifestNotFoundException
+     * @throws common_ext_UpdaterNotFoundException
+     */
+    public function getUpdater(): common_ext_ExtensionUpdater
+    {
+        $updaterClass = $this->getManifest()->getUpdateHandler();
+        if ($updaterClass === null) {
+            throw new UpdaterNotFoundException('No Updater found for ' . $this->getName());
+        } elseif (!class_exists($updaterClass)) {
+            throw new ManifestException('Updater ' . $updaterClass . ' not found');
+        }
+        /** @var common_ext_ExtensionUpdater $updater */
+        $updater = new $updaterClass($this);
+        $updater->setServiceLocator($this->getServiceLocator());
+        return $updater;
     }
 }

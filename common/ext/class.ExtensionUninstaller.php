@@ -1,4 +1,6 @@
 <?php
+use oat\oatbox\cache\SimpleCache;
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -68,8 +70,8 @@ class common_ext_ExtensionUninstaller extends common_ext_ExtensionHandler
         $this->unregister();
         
         // we purge the whole cache.
-        $cache = common_cache_FileCache::singleton();
-        $cache->purge();
+        $cache = $this->getServiceManager()->get(SimpleCache::SERVICE_ID);
+        $cache->clear();
         
         common_Logger::i('Uninstalled ' . $this->extension->getId());
         return true;

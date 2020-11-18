@@ -31,6 +31,7 @@ use oat\oatbox\filesystem\Directory;
 use oat\oatbox\filesystem\File;
 use oat\oatbox\filesystem\FileSystemService;
 use oat\oatbox\filesystem\FileSystemHandler;
+use oat\generis\test\FileSystemMockTrait;
 
 /**
  * Test cases for the File serializer migration script helper
@@ -38,6 +39,7 @@ use oat\oatbox\filesystem\FileSystemHandler;
  */
 class FileSerializerMigrationHelperTest extends GenerisTestCase
 {
+    use FileSystemMockTrait;
 
     const PARENT_RESOURCE_URI = 'http://www.tao.lu/Ontologies/generis.rdf#UnitTest';
     const PROPERTY_URI = 'http://www.tao.lu/Ontologies/generis.rdf#TestFile';
@@ -173,28 +175,7 @@ class FileSerializerMigrationHelperTest extends GenerisTestCase
     private function getTempDirectory()
     {
         if (!$this->tempDirectory) {
-            $fileSystemService = $this->getMockFileSystem();
-            $this->tempFileSystemId = uniqid('unit-test-', true);
-
-            $adapters = $fileSystemService->getOption(FileSystemService::OPTION_ADAPTERS);
-            if (class_exists('League\Flysystem\Memory\MemoryAdapter')) {
-                $adapters[$this->tempFileSystemId] = [
-                    'class' => \League\Flysystem\Memory\MemoryAdapter::class
-                ];
-            } else {
-                $adapters[$this->tempFileSystemId] = [
-                    'class' => FileSystemService::FLYSYSTEM_LOCAL_ADAPTER,
-                    'options' => ['root' => '/tmp/testing']
-                ];
-            }
-            $fileSystemService->setOption(FileSystemService::OPTION_ADAPTERS, $adapters);
-            $fileSystemService->setOption(FileSystemService::OPTION_FILE_PATH, '/tmp/unit-test');
-
-            $fileSystemService->setServiceLocator($this->getServiceLocatorMock([
-                FileSystemService::SERVICE_ID => $fileSystemService
-            ]));
-
-            $this->tempDirectory = $fileSystemService->getDirectory($this->tempFileSystemId);
+            $this->tempDirectory = $this->getFileSystemMock(['unit-test'])->getDirectory('unit-test');
         }
         return $this->tempDirectory;
     }

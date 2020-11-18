@@ -29,6 +29,7 @@ use oat\oatbox\service\ConfigurableService;
  * @access public
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
  * @package generis
+ * @deprecated Please use oat\oatbox\cache\SimpleCache
  */
 class common_cache_KeyValueCache extends ConfigurableService implements common_cache_Cache
 {

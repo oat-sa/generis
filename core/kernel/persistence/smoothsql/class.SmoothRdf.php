@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,12 +21,9 @@
  *
  */
 
-use oat\generis\model\data\event\ResourceCreated;
+use Doctrine\DBAL\ParameterType;
 use oat\generis\model\data\Ontology;
 use oat\generis\model\data\RdfInterface;
-use oat\generis\model\OntologyRdf;
-use oat\generis\model\OntologyRdfs;
-use oat\oatbox\event\EventManager;
 
 /**
  * Implementation of the RDF interface for the smooth sql driver
@@ -34,7 +33,25 @@ use oat\oatbox\event\EventManager;
  */
 class core_kernel_persistence_smoothsql_SmoothRdf implements RdfInterface
 {
-    const BATCH_SIZE = 100;
+    public const BATCH_SIZE = 100;
+
+    public const TRIPLE_PARAMETER_TYPE = [
+        // modelid
+        ParameterType::INTEGER,
+        // subject
+        ParameterType::STRING,
+        // predicate
+        ParameterType::STRING,
+        // object
+        ParameterType::STRING,
+        // l_language
+        ParameterType::STRING,
+        // epoch
+        ParameterType::STRING,
+        // author
+        ParameterType::STRING,
+    ];
+
     /**
      * @var core_kernel_persistence_smoothsql_SmoothModel
      */
@@ -68,7 +85,7 @@ class core_kernel_persistence_smoothsql_SmoothRdf implements RdfInterface
         $query = "INSERT INTO statements ( modelId, subject, predicate, object, l_language, epoch, author) "
             . "VALUES ( ? , ? , ? , ? , ? , ?, ?);";
 
-        $success = $this->getPersistence()->exec(
+        return $this->getPersistence()->exec(
             $query,
             [
                 $triple->modelid,
@@ -78,9 +95,9 @@ class core_kernel_persistence_smoothsql_SmoothRdf implements RdfInterface
                 is_null($triple->lg) ? '' : $triple->lg,
                 $this->getPersistence()->getPlatForm()->getNowExpression(),
                 is_null($triple->author) ? '' : $triple->author
-            ]
+            ],
+            $this->getTripleParameterTypes()
         );
-        return $success;
     }
 
     /**
@@ -107,13 +124,17 @@ class core_kernel_persistence_smoothsql_SmoothRdf implements RdfInterface
     protected function insertTriples(array $triples)
     {
         $values = array_map([$this,"tripleToValue"], $triples);
-        $isInsertionSuccessful = $this->insertValues($values);
-        return $isInsertionSuccessful;
+        return $this->insertValues($values);
     }
 
     protected function insertValues(array $valuesToInsert)
     {
-        return $this->getPersistence()->insertMultiple('statements', $valuesToInsert);
+        $types = [];
+        foreach ($valuesToInsert as $value) {
+            array_push($types, ...$this->getTripleParameterTypes());
+        }
+
+        return $this->getPersistence()->insertMultiple('statements', $valuesToInsert, $types);
     }
     
     /**
@@ -150,10 +171,9 @@ class core_kernel_persistence_smoothsql_SmoothRdf implements RdfInterface
 
     /**
      * @param core_kernel_classes_Triple $triple
-     * @param array $valuesToInsert
      * @return array
      */
-    protected function tripleToValue(core_kernel_classes_Triple $triple)
+    protected function tripleToValue(core_kernel_classes_Triple $triple) : array
     {
         return [
             'modelid' => $triple->modelid,
@@ -164,5 +184,10 @@ class core_kernel_persistence_smoothsql_SmoothRdf implements RdfInterface
             'author' => is_null($triple->author) ? '' : $triple->author,
             'epoch' => $this->getPersistence()->getPlatForm()->getNowExpression()
         ];
+    }
+
+    protected function getTripleParameterTypes() : array
+    {
+        return self::TRIPLE_PARAMETER_TYPE;
     }
 }

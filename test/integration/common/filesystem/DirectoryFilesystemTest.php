@@ -25,9 +25,12 @@ use oat\generis\test\GenerisTestCase;
 use oat\oatbox\filesystem\Directory;
 use oat\oatbox\filesystem\File;
 use oat\oatbox\filesystem\FileSystemService;
+use oat\generis\test\FileSystemMockTrait;
 
 class DirectoryFilesystemTest extends GenerisTestCase
 {
+    use FileSystemMockTrait;
+
     /**
      * @var MigrationHelper
      */
@@ -73,6 +76,28 @@ class DirectoryFilesystemTest extends GenerisTestCase
         $directory->rename('testDirectory.exist');
     }
 
+    public function testGetFullPathFile()
+    {
+        $file = $this->getTempDirectory()->getFile('fixture');
+        $fileSystemId = $file->getFileSystemId();
+
+        $fileSystemService = new FileSystemService([
+            FileSystemService::OPTION_FILE_PATH => '/tmp/testing',
+            FileSystemService::OPTION_ADAPTERS => [
+                $fileSystemId => [
+                    'class' => FileSystemService::FLYSYSTEM_LOCAL_ADAPTER,
+                    'options' => ['root' => $file->getFileSystemId()]
+                ]
+            ],
+        ]);
+
+        $file = $this->getTempDirectory()->getFile('fixture');
+
+        $result = $fileSystemService->getFileAdapterByFile($file);
+
+        $this->assertEquals($result->getPathPrefix(), 'unit-test/');
+    }
+
 
     /**
      * @return bool
@@ -93,29 +118,7 @@ class DirectoryFilesystemTest extends GenerisTestCase
     private function getTempDirectory()
     {
         if (!$this->tempDirectory) {
-            $fileSystemService = $this->getMockFileSystem();
-            $this->tempFileSystemId = uniqid('rename-test-', true);
-
-            $adapters = $fileSystemService->getOption(FileSystemService::OPTION_ADAPTERS);
-            if (class_exists('League\Flysystem\Memory\MemoryAdapter')) {
-                $adapters[$this->tempFileSystemId] = [
-                    'class' => \League\Flysystem\Memory\MemoryAdapter::class
-                ];
-            } else {
-                $adapters[$this->tempFileSystemId] = [
-                    'class' => FileSystemService::FLYSYSTEM_LOCAL_ADAPTER,
-                    'options' => ['root' => '/tmp/testing']
-                ];
-            }
-            $fileSystemService->setOption(FileSystemService::OPTION_ADAPTERS, $adapters);
-            $fileSystemService->setOption(FileSystemService::OPTION_DIRECTORIES, [$this->tempFileSystemId => $this->tempFileSystemId]);
-            $fileSystemService->setOption(FileSystemService::OPTION_FILE_PATH, '/tmp/unit-test');
-
-            $fileSystemService->setServiceLocator($this->getServiceLocatorMock([
-                FileSystemService::SERVICE_ID => $fileSystemService
-            ]));
-
-            $this->tempDirectory = $fileSystemService->getDirectory($this->tempFileSystemId);
+            $this->tempDirectory = $this->getFileSystemMock(['unit-test'])->getDirectory('unit-test');
         }
         return $this->tempDirectory;
     }

@@ -15,14 +15,18 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2019 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
+ * Copyright (c) 2019-2020 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
+
+declare(strict_types=1);
 
 namespace oat\generis\persistence;
 
 use oat\oatbox\service\ConfigurableService;
 use oat\generis\persistence\sql\SchemaCollection;
 use common_persistence_SqlPersistence;
+use oat\generis\persistence\sql\SchemaProviderInterface;
+use oat\oatbox\service\ServiceNotFoundException;
 
 /**
  * The PersistenceManager is responsible for initializing all persistences
@@ -33,16 +37,16 @@ use common_persistence_SqlPersistence;
 class PersistenceManager extends ConfigurableService
 {
 
-    const SERVICE_ID = 'generis/persistences';
+    public const SERVICE_ID = 'generis/persistences';
 
-    const OPTION_PERSISTENCES = 'persistences';
+    public const OPTION_PERSISTENCES = 'persistences';
 
     /**
      * Mapping of drivers to implementations.
      * All SQL drivers except 'dbal' are deprecated
      * @var array
      */
-    const DRIVER_MAP = [
+    private const DRIVER_MAP = [
         'dbal' => 'common_persistence_sql_dbal_Driver',
         'dbal_pdo_mysql' => 'common_persistence_sql_dbal_Driver',
         'dbal_pdo_sqlite' => 'common_persistence_sql_dbal_Driver',
@@ -89,7 +93,10 @@ class PersistenceManager extends ConfigurableService
             ];
         }
 
-        if (isset($persistenceConf['connection']['driver']) && $persistenceConf['connection']['driver'] === 'pdo_mysql') {
+        if (
+            isset($persistenceConf['connection']['driver'])
+            && $persistenceConf['connection']['driver'] === 'pdo_mysql'
+        ) {
             $persistenceConf['connection']['charset'] = 'utf8';
         }
 
@@ -104,7 +111,7 @@ class PersistenceManager extends ConfigurableService
      */
     public function getPersistenceById($persistenceId)
     {
-        if (! isset($this->persistences[$persistenceId])) {
+        if (!isset($this->persistences[$persistenceId])) {
             $this->persistences[$persistenceId] = $this->createPersistence($persistenceId);
         }
         return $this->persistences[$persistenceId];
@@ -113,13 +120,13 @@ class PersistenceManager extends ConfigurableService
     /**
      *
      * @param string $persistenceId
-     * @throws \common_Exception
      * @return \common_persistence_Persistence
+     * @throws \common_Exception
      */
     private function createPersistence($persistenceId)
     {
         $configs = $this->getOption(self::OPTION_PERSISTENCES);
-        if (! isset($configs[$persistenceId])) {
+        if (!isset($configs[$persistenceId])) {
             throw new \common_Exception('Persistence Configuration for persistence ' . $persistenceId . ' not found');
         }
         $config = $configs[$persistenceId];
@@ -127,10 +134,20 @@ class PersistenceManager extends ConfigurableService
 
         $driverClassName = isset(self::DRIVER_MAP[$driverString]) ? self::DRIVER_MAP[$driverString] : $driverString;
 
-        if (! class_exists($driverClassName)) {
-            throw new \common_exception_Error('Driver ' . $driverString . ' not found, check your database configuration');
+        if (!class_exists($driverClassName)) {
+            throw new \common_exception_Error(
+                'Driver ' . $driverString . ' not found, check your database configuration'
+            );
         }
+
         $driver = $this->propagate(new $driverClassName());
+
+        $driverOptionsFeeder = $this->getDriverConfigFeeder();
+
+        if ($driverOptionsFeeder !== null) {
+            $config = $driverOptionsFeeder->feed($config);
+        }
+
         return $driver->connect($persistenceId, $config);
     }
 
@@ -162,6 +179,34 @@ class PersistenceManager extends ConfigurableService
             foreach ($queries as $query) {
                 $persistence->exec($query);
             }
+        }
+    }
+
+    /**
+     * Add the schema of a single service, if needed
+     */
+    public function applySchemaProvider($service): void
+    {
+        if ($service instanceof SchemaProviderInterface) {
+            $schemaCollection = $this->getSqlSchemas();
+            $service->provideSchema($schemaCollection);
+            $this->applySchemas($schemaCollection);
+            $this->logInfo('Applied schema for ' . get_class($service));
+        } else {
+            $this->logDebug('No schema found for ' . get_class($service));
+        }
+    }
+
+    private function getDriverConfigFeeder(): ?DriverConfigurationFeeder
+    {
+        try {
+            return $this->getServiceLocator()->get(DriverConfigurationFeeder::SERVICE_ID);
+        } catch (ServiceNotFoundException $exception) {
+            /**
+             * This is because PersistenceManager is registered in tao-core and while doing the generis update
+             * before the update of tao (which had this class in the migrations).
+             */
+            return null;
         }
     }
 }

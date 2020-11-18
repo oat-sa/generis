@@ -65,6 +65,7 @@ class common_persistence_InMemoryKvDriver implements common_persistence_KvDriver
     public function purge()
     {
         $this->persistence = [];
+        return true;
     }
 
     public function incr($id)

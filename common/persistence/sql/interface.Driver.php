@@ -51,7 +51,10 @@ interface common_persistence_sql_Driver extends common_persistence_Driver
     public function updateMultiple($tableName, array $data);
 
     public function getSchemaManager();
-    
+
+    /**
+     * @return common_persistence_sql_Platform
+     */
     public function getPlatForm();
     
     public function lastInsertId($name = null);

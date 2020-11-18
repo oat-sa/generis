@@ -159,19 +159,19 @@ class ClassTest extends GenerisPhpUnitTestRunner
         foreach ($instances as $k => $instance) {
             $this->assertTrue($instance instanceof core_kernel_classes_Resource);
 
-            if ($instance->getUri() === WidgetRdf::PROPERTY_WIDGET_COMBO) {
+            if ($instance->getUri() === 'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#ComboBox') {
                 $this->assertEquals($instance->getLabel(), 'Drop down menu');
                 $this->assertEquals($instance->getComment(), 'In drop down menu, one may select 1 to N options');
             }
-            if ($instance->getUri() === WidgetRdf::PROPERTY_WIDGET_RADIO) {
+            if ($instance->getUri() === 'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#RadioBox') {
                 $this->assertEquals($instance->getLabel(), 'Radio button');
                 $this->assertEquals($instance->getComment(), 'In radio boxes, one may select exactly one option');
             }
-            if ($instance->getUri() === WidgetRdf::PROPERTY_WIDGET_CHECK) {
+            if ($instance->getUri() === 'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#CheckBox') {
                 $this->assertEquals($instance->getLabel(), 'Check box');
                 $this->assertEquals($instance->getComment(), 'In check boxes, one may select 0 to N options');
             }
-            if ($instance->getUri() === WidgetRdf::PROPERTY_WIDGET_FTE) {
+            if ($instance->getUri() === 'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#TextBox') {
                 $this->assertEquals($instance->getLabel(), 'A Text Box');
                 $this->assertEquals($instance->getComment(), 'A particular text box');
             }
@@ -185,19 +185,19 @@ class ClassTest extends GenerisPhpUnitTestRunner
         $this->assertTrue(count($instances2)  > 0);
         foreach ($instances2 as $k => $instance) {
             $this->assertTrue($instance instanceof core_kernel_classes_Resource);
-            if ($instance->getUri() === WidgetRdf::PROPERTY_WIDGET_COMBO) {
+            if ($instance->getUri() === 'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#ComboBox') {
                 $this->assertEquals($instance->getLabel(), 'Drop down menu');
                 $this->assertEquals($instance->getComment(), 'In drop down menu, one may select 1 to N options');
             }
-            if ($instance->getUri() === WidgetRdf::PROPERTY_WIDGET_RADIO) {
+            if ($instance->getUri() === 'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#RadioBox') {
                 $this->assertEquals($instance->getLabel(), 'Radio button');
                 $this->assertEquals($instance->getComment(), 'In radio boxes, one may select exactly one option');
             }
-            if ($instance->getUri() === WidgetRdf::PROPERTY_WIDGET_CHECK) {
+            if ($instance->getUri() === 'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#CheckBox') {
                 $this->assertEquals($instance->getLabel(), 'Check box');
                 $this->assertEquals($instance->getComment(), 'In check boxes, one may select 0 to N options');
             }
-            if ($instance->getUri() === WidgetRdf::PROPERTY_WIDGET_FTE) {
+            if ($instance->getUri() === 'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#TextBox') {
                 $this->assertEquals($instance->getLabel(), 'A Text Box');
                 $this->assertEquals($instance->getComment(), 'A particular text box');
             }

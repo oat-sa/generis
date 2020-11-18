@@ -29,8 +29,9 @@ use oat\oatbox\service\ServiceManager;
 use oat\oatbox\filesystem\FileSystemService;
 use oat\oatbox\service\ServiceNotFoundException;
 use common_report_Report as Report;
+use League\Flysystem\Memory\MemoryAdapter;
 
- /**
+/**
  * A service to install oatbox functionality
  *
  * Sets up:
@@ -48,6 +49,7 @@ class Installer extends ConfigurableService
         $this->validateOptions();
 
         $this->setupServiceManager($this->getConfigPath());
+        $this->setupExtensionManager();
         $this->installFilesystem();
 
         return new Report(Report::TYPE_SUCCESS, 'Oatbox installed successfully');
@@ -74,8 +76,7 @@ class Installer extends ConfigurableService
                 'dir' => $configPath,
                 'humanReadable' => true
             ]);
-
-            $this->setServiceManager(new ServiceManager($configService));
+            $this->setServiceLocator(new ServiceManager($configService));
         }
 
         return $this->getServiceManager();
@@ -103,11 +104,19 @@ class Installer extends ConfigurableService
                         'options' => [
                             'root' => $this->getOption('file_path')
                         ]
+                    ],
+                    'memory' => [
+                        'class' => MemoryAdapter::class
                     ]
                 ]
             ]);
             $this->getServiceManager()->register(FileSystemService::SERVICE_ID, $fileSystemService);
         }
+    }
+
+    public function setupExtensionManager(): void
+    {
+        $this->getServiceManager()->register(\common_ext_ExtensionsManager::SERVICE_ID, new \common_ext_ExtensionsManager());
     }
 
     /**

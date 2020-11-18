@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,6 +26,7 @@ namespace oat\generis\model\kernel\persistence\newsql;
 
 use core_kernel_classes_Triple;
 use core_kernel_persistence_smoothsql_SmoothRdf;
+use Doctrine\DBAL\ParameterType;
 use Exception;
 use oat\generis\Helper\UuidPrimaryKeyTrait;
 use oat\generis\model\OntologyRdfs;
@@ -54,8 +57,10 @@ class NewSqlRdf extends core_kernel_persistence_smoothsql_SmoothRdf
                 is_null($triple->lg) ? '' : $triple->lg,
                 $this->getPersistence()->getPlatForm()->getNowExpression(),
                 is_null($triple->author) ? '' : $triple->author
-            ]
+            ],
+            $this->getTripleParameterTypes()
         );
+
         if ($triple->predicate == OntologyRdfs::RDFS_SUBCLASSOF || $triple->predicate == OntologyRdf::RDF_TYPE) {
             $eventManager = $this->getModel()->getServiceLocator()->get(EventManager::SERVICE_ID);
             $eventManager->trigger(new ResourceCreated($this->getModel()->getResource($triple->subject)));
@@ -65,14 +70,29 @@ class NewSqlRdf extends core_kernel_persistence_smoothsql_SmoothRdf
     }
 
     /**
+     * Add id to set of triple values. Put id in first position to match parameter types
+     *
      * @param core_kernel_classes_Triple $triple
      * @return array
      * @throws Exception
      */
-    protected function tripleToValue(core_kernel_classes_Triple $triple)
+    protected function tripleToValue(core_kernel_classes_Triple $triple) : array
     {
-        $values = parent::tripleToValue($triple);
-        $values['id'] = $this->getUniquePrimaryKey();
-        return $values;
+        return ['id' => $this->getUniquePrimaryKey()] + parent::tripleToValue($triple);
+    }
+
+    /**
+     * Get default ontology parameter type and add string id
+     *
+     * @return array
+     */
+    protected function getTripleParameterTypes() : array
+    {
+        return array_merge(
+            [
+                ParameterType::STRING,
+            ],
+            parent::getTripleParameterTypes()
+        );
     }
 }

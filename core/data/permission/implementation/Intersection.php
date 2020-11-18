@@ -58,7 +58,7 @@ class Intersection extends ConfigurableService implements PermissionInterface
     
     /**
      * (non-PHPdoc)
-     * @see \oat\generis\model\data\PermissionInterface::getPermissions()
+     * @see PermissionInterface::getPermissions()
      */
     public function getPermissions(User $user, array $resourceIds)
     {
@@ -84,7 +84,7 @@ class Intersection extends ConfigurableService implements PermissionInterface
     
     /**
      * (non-PHPdoc)
-     * @see \oat\generis\model\data\PermissionInterface::onResourceCreated()
+     * @see PermissionInterface::onResourceCreated()
      */
     public function onResourceCreated(\core_kernel_classes_Resource $resource)
     {
@@ -95,7 +95,7 @@ class Intersection extends ConfigurableService implements PermissionInterface
     
     /**
      * (non-PHPdoc)
-     * @see \oat\generis\model\data\PermissionInterface::getSupportedPermissions()
+     * @see PermissionInterface::getSupportedPermissions()
      */
     public function getSupportedRights()
     {

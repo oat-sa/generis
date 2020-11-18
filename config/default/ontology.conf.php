@@ -1,7 +1,6 @@
 <?php
 
 use core_kernel_persistence_smoothsql_SmoothModel as SmoothModel;
-use common_cache_Cache as CommonCache;
 use oat\generis\model\kernel\persistence\smoothsql\search\ComplexSearchService;
 
 return new \core_kernel_persistence_smoothsql_SmoothModel([
@@ -12,6 +11,5 @@ return new \core_kernel_persistence_smoothsql_SmoothModel([
         [SmoothModel::DEFAULT_WRITABLE_MODEL],
     SmoothModel::OPTION_NEW_TRIPLE_MODEL =>
         SmoothModel::DEFAULT_WRITABLE_MODEL,
-    SmoothModel::OPTION_SEARCH_SERVICE => ComplexSearchService::SERVICE_ID,
-    SmoothModel::OPTION_CACHE_SERVICE => CommonCache::SERVICE_ID
+    SmoothModel::OPTION_SEARCH_SERVICE => ComplexSearchService::SERVICE_ID
 ]);

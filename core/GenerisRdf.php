@@ -23,60 +23,61 @@ namespace oat\generis\model;
 
 interface GenerisRdf
 {
-    const GENERIS_NS = 'http://www.tao.lu/Ontologies/generis.rdf';
-    const GENERIS_BOOLEAN = 'http://www.tao.lu/Ontologies/generis.rdf#Boolean';
-    const GENERIS_TRUE = 'http://www.tao.lu/Ontologies/generis.rdf#True';
-    const GENERIS_FALSE = 'http://www.tao.lu/Ontologies/generis.rdf#False';
-    const PROPERTY_IS_LG_DEPENDENT = 'http://www.tao.lu/Ontologies/generis.rdf#is_language_dependent';
-    const CLASS_GENERIS_RESOURCE = 'http://www.tao.lu/Ontologies/generis.rdf#generis_Ressource';
-    const PROPERTY_MULTIPLE = 'http://www.tao.lu/Ontologies/generis.rdf#Multiple';
-    const CLASS_GENERIS_FILE = 'http://www.tao.lu/Ontologies/generis.rdf#File';
-    const PROPERTY_FILE_FILENAME = 'http://www.tao.lu/Ontologies/generis.rdf#FileName';
-    const PROPERTY_FILE_FILEPATH = 'http://www.tao.lu/Ontologies/generis.rdf#FilePath';
-    const PROPERTY_FILE_FILESYSTEM = 'http://www.tao.lu/Ontologies/generis.rdf#FileRepository';
-    const PROPERTY_VERSIONEDFILE_VERSION = 'http://www.tao.lu/Ontologies/generis.rdf#FileVersion';
-    const CLASS_GENERIS_VERSIONEDREPOSITORY = 'http://www.tao.lu/Ontologies/generis.rdf#VersionedRepository';
-    const PROPERTY_GENERIS_VERSIONEDREPOSITORY_URL = 'http://www.tao.lu/Ontologies/generis.rdf#VersionedRepositoryUrl';
-    const PROPERTY_GENERIS_VERSIONEDREPOSITORY_PATH = 'http://www.tao.lu/Ontologies/generis.rdf#VersionedRepositoryPath';
-    const PROPERTY_GENERIS_VERSIONEDREPOSITORY_TYPE = 'http://www.tao.lu/Ontologies/generis.rdf#VersionedRepositoryType';
-    const PROPERTY_GENERIS_VERSIONEDREPOSITORY_LOGIN = 'http://www.tao.lu/Ontologies/generis.rdf#VersionedRepositoryLogin';
-    const PROPERTY_GENERIS_VERSIONEDREPOSITORY_PASSWORD = 'http://www.tao.lu/Ontologies/generis.rdf#VersionedRepositoryPassword';
-    const PROPERTY_GENERIS_VERSIONEDREPOSITORY_ENABLED = 'http://www.tao.lu/Ontologies/generis.rdf#VersionedRepositoryEnabled';
-    const PROPERTY_GENERIS_VERSIONEDREPOSITORY_ROOTFILE = 'http://www.tao.lu/Ontologies/generis.rdf#RepositoryRootFile';
-    const PROPERTY_GENERIS_VCS_TYPE_SUBVERSION = 'http://www.tao.lu/Ontologies/generis.rdf#VCSTypeSubversion';
-    const PROPERTY_GENERIS_VCS_TYPE_SUBVERSION_WIN = 'http://www.tao.lu/Ontologies/generis.rdf#VCSTypeSubversionWindows';
-    const PROPERTY_GENERIS_VCS_TYPE_CVS = 'http://www.tao.lu/Ontologies/generis.rdf#VCSTypeCvs';
-    const INSTANCE_GENERIS_VCS_TYPE_LOCAL = 'http://www.tao.lu/Ontologies/generis.rdf#VCSLocalDirectory';
-    const CLASS_ROLE = 'http://www.tao.lu/Ontologies/generis.rdf#ClassRole';
-    const PROPERTY_ROLE_ISSYSTEM = 'http://www.tao.lu/Ontologies/generis.rdf#isSystem';
-    const PROPERTY_ROLE_INCLUDESROLE = 'http://www.tao.lu/Ontologies/generis.rdf#includesRole';
-    const INSTANCE_ROLE_GENERIS = 'http://www.tao.lu/Ontologies/generis.rdf#GenerisRole';
-    const INSTANCE_ROLE_ANONYMOUS = 'http://www.tao.lu/Ontologies/generis.rdf#AnonymousRole';
-    const CLASS_SUBCRIPTION = 'http://www.tao.lu/Ontologies/generis.rdf#Subscription';
-    const PROPERTY_SUBCRIPTION_URL = 'http://www.tao.lu/Ontologies/generis.rdf#SubscriptionUrl';
-    const PROPERTY_SUBCRIPTION_MASK = 'http://www.tao.lu/Ontologies/generis.rdf#SubscriptionMask';
-    const CLASS_MASK = 'http://www.tao.lu/Ontologies/generis.rdf#Mask';
-    const PROPERTY_MASK_SUBJECT = 'http://www.tao.lu/Ontologies/generis.rdf#MaskSubject';
-    const PROPERTY_MASK_PREDICATE = 'http://www.tao.lu/Ontologies/generis.rdf#MaskPredicate';
-    const PROPERTY_MASK_OBJECT = 'http://www.tao.lu/Ontologies/generis.rdf#MaskObject';
+    public const GENERIS_NS = 'http://www.tao.lu/Ontologies/generis.rdf';
+    public const GENERIS_BOOLEAN = 'http://www.tao.lu/Ontologies/generis.rdf#Boolean';
+    public const GENERIS_TRUE = 'http://www.tao.lu/Ontologies/generis.rdf#True';
+    public const GENERIS_FALSE = 'http://www.tao.lu/Ontologies/generis.rdf#False';
+    public const PROPERTY_ALIAS = 'http://www.tao.lu/Ontologies/generis.rdf#alias';
+    public const PROPERTY_IS_LG_DEPENDENT = 'http://www.tao.lu/Ontologies/generis.rdf#is_language_dependent';
+    public const CLASS_GENERIS_RESOURCE = 'http://www.tao.lu/Ontologies/generis.rdf#generis_Ressource';
+    public const PROPERTY_MULTIPLE = 'http://www.tao.lu/Ontologies/generis.rdf#Multiple';
+    public const CLASS_GENERIS_FILE = 'http://www.tao.lu/Ontologies/generis.rdf#File';
+    public const PROPERTY_FILE_FILENAME = 'http://www.tao.lu/Ontologies/generis.rdf#FileName';
+    public const PROPERTY_FILE_FILEPATH = 'http://www.tao.lu/Ontologies/generis.rdf#FilePath';
+    public const PROPERTY_FILE_FILESYSTEM = 'http://www.tao.lu/Ontologies/generis.rdf#FileRepository';
+    public const PROPERTY_VERSIONEDFILE_VERSION = 'http://www.tao.lu/Ontologies/generis.rdf#FileVersion';
+    public const CLASS_GENERIS_VERSIONEDREPOSITORY = 'http://www.tao.lu/Ontologies/generis.rdf#VersionedRepository';
+    public const PROPERTY_GENERIS_VERSIONEDREPOSITORY_URL = 'http://www.tao.lu/Ontologies/generis.rdf#VersionedRepositoryUrl';
+    public const PROPERTY_GENERIS_VERSIONEDREPOSITORY_PATH = 'http://www.tao.lu/Ontologies/generis.rdf#VersionedRepositoryPath';
+    public const PROPERTY_GENERIS_VERSIONEDREPOSITORY_TYPE = 'http://www.tao.lu/Ontologies/generis.rdf#VersionedRepositoryType';
+    public const PROPERTY_GENERIS_VERSIONEDREPOSITORY_LOGIN = 'http://www.tao.lu/Ontologies/generis.rdf#VersionedRepositoryLogin';
+    public const PROPERTY_GENERIS_VERSIONEDREPOSITORY_PASSWORD = 'http://www.tao.lu/Ontologies/generis.rdf#VersionedRepositoryPassword';
+    public const PROPERTY_GENERIS_VERSIONEDREPOSITORY_ENABLED = 'http://www.tao.lu/Ontologies/generis.rdf#VersionedRepositoryEnabled';
+    public const PROPERTY_GENERIS_VERSIONEDREPOSITORY_ROOTFILE = 'http://www.tao.lu/Ontologies/generis.rdf#RepositoryRootFile';
+    public const PROPERTY_GENERIS_VCS_TYPE_SUBVERSION = 'http://www.tao.lu/Ontologies/generis.rdf#VCSTypeSubversion';
+    public const PROPERTY_GENERIS_VCS_TYPE_SUBVERSION_WIN = 'http://www.tao.lu/Ontologies/generis.rdf#VCSTypeSubversionWindows';
+    public const PROPERTY_GENERIS_VCS_TYPE_CVS = 'http://www.tao.lu/Ontologies/generis.rdf#VCSTypeCvs';
+    public const INSTANCE_GENERIS_VCS_TYPE_LOCAL = 'http://www.tao.lu/Ontologies/generis.rdf#VCSLocalDirectory';
+    public const CLASS_ROLE = 'http://www.tao.lu/Ontologies/generis.rdf#ClassRole';
+    public const PROPERTY_ROLE_ISSYSTEM = 'http://www.tao.lu/Ontologies/generis.rdf#isSystem';
+    public const PROPERTY_ROLE_INCLUDESROLE = 'http://www.tao.lu/Ontologies/generis.rdf#includesRole';
+    public const INSTANCE_ROLE_GENERIS = 'http://www.tao.lu/Ontologies/generis.rdf#GenerisRole';
+    public const INSTANCE_ROLE_ANONYMOUS = 'http://www.tao.lu/Ontologies/generis.rdf#AnonymousRole';
+    public const CLASS_SUBCRIPTION = 'http://www.tao.lu/Ontologies/generis.rdf#Subscription';
+    public const PROPERTY_SUBCRIPTION_URL = 'http://www.tao.lu/Ontologies/generis.rdf#SubscriptionUrl';
+    public const PROPERTY_SUBCRIPTION_MASK = 'http://www.tao.lu/Ontologies/generis.rdf#SubscriptionMask';
+    public const CLASS_MASK = 'http://www.tao.lu/Ontologies/generis.rdf#Mask';
+    public const PROPERTY_MASK_SUBJECT = 'http://www.tao.lu/Ontologies/generis.rdf#MaskSubject';
+    public const PROPERTY_MASK_PREDICATE = 'http://www.tao.lu/Ontologies/generis.rdf#MaskPredicate';
+    public const PROPERTY_MASK_OBJECT = 'http://www.tao.lu/Ontologies/generis.rdf#MaskObject';
     //@deprecated use UserRdf::CLASS_URI
-    const CLASS_GENERIS_USER = 'http://www.tao.lu/Ontologies/generis.rdf#User';
+    public const CLASS_GENERIS_USER = 'http://www.tao.lu/Ontologies/generis.rdf#User';
     //@deprecated use UserRdf::PROPERTY_LOGIN
-    const PROPERTY_USER_LOGIN = 'http://www.tao.lu/Ontologies/generis.rdf#login';
+    public const PROPERTY_USER_LOGIN = 'http://www.tao.lu/Ontologies/generis.rdf#login';
     //@deprecated use UserRdf::PROPERTY_PASSWORD
-    const PROPERTY_USER_PASSWORD = 'http://www.tao.lu/Ontologies/generis.rdf#password';
+    public const PROPERTY_USER_PASSWORD = 'http://www.tao.lu/Ontologies/generis.rdf#password';
     //@deprecated use UserRdf::PROPERTY_UILG
-    const PROPERTY_USER_UILG = 'http://www.tao.lu/Ontologies/generis.rdf#userUILg';
+    public const PROPERTY_USER_UILG = 'http://www.tao.lu/Ontologies/generis.rdf#userUILg';
     //@deprecated use UserRdf::PROPERTY_DEFLG
-    const PROPERTY_USER_DEFLG = 'http://www.tao.lu/Ontologies/generis.rdf#userDefLg';
+    public const PROPERTY_USER_DEFLG = 'http://www.tao.lu/Ontologies/generis.rdf#userDefLg';
     //@deprecated use UserRdf::PROPERTY_MAIL
-    const PROPERTY_USER_MAIL = 'http://www.tao.lu/Ontologies/generis.rdf#userMail';
+    public const PROPERTY_USER_MAIL = 'http://www.tao.lu/Ontologies/generis.rdf#userMail';
     //@deprecated use UserRdf::PROPERTY_FIRSTNAME
-    const PROPERTY_USER_FIRSTNAME = 'http://www.tao.lu/Ontologies/generis.rdf#userFirstName';
+    public const PROPERTY_USER_FIRSTNAME = 'http://www.tao.lu/Ontologies/generis.rdf#userFirstName';
     //@deprecated use UserRdf::PROPERTY_USER_LASTNAME
-    const PROPERTY_USER_LASTNAME = 'http://www.tao.lu/Ontologies/generis.rdf#userLastName';
+    public const PROPERTY_USER_LASTNAME = 'http://www.tao.lu/Ontologies/generis.rdf#userLastName';
     //@deprecated use UserRdf::PROPERTY_ROLES
-    const PROPERTY_USER_ROLES = 'http://www.tao.lu/Ontologies/generis.rdf#userRoles';
+    public const PROPERTY_USER_ROLES = 'http://www.tao.lu/Ontologies/generis.rdf#userRoles';
     //@deprecated use UserRdf::PROPERTY_TIMEZONE
-    const PROPERTY_USER_TIMEZONE = 'http://www.tao.lu/Ontologies/generis.rdf#userTimezone';
+    public const PROPERTY_USER_TIMEZONE = 'http://www.tao.lu/Ontologies/generis.rdf#userTimezone';
 }

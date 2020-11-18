@@ -21,21 +21,18 @@
 
 namespace oat\oatbox;
 
+use oat\oatbox\service\ConfigurableService;
+use oat\oatbox\service\ServiceManager;
+use common_ext_Extension;
+
 /**
  *
  * Registry allows any extension to store specific arrays of data into extension config file
  *
  * @author Lionel Lecaque <lionel@taotesting.com>
  */
-abstract class AbstractRegistry
+abstract class AbstractRegistry extends ConfigurableService
 {
-
-    /**
-     *
-     * @var array
-     */
-    private static $registries = [];
-    
     /**
      *
      * @author Lionel Lecaque, lionel@taotesting.com
@@ -43,21 +40,7 @@ abstract class AbstractRegistry
      */
     public static function getRegistry()
     {
-        $class = get_called_class();
-        if (! isset(self::$registries[$class])) {
-            self::$registries[$class] = new $class();
-        }
-        
-        return self::$registries[$class];
-    }
-
-    /**
-     *
-     * @author Lionel Lecaque, lionel@taotesting.com
-     */
-    protected function __construct()
-    {
-        // empty
+        return ServiceManager::getServiceManager()->get(get_called_class());
     }
 
     /**

@@ -107,8 +107,8 @@ class PropertyTest extends GenerisPhpUnitTestRunner
     public function testGetWidget()
     {
         $widget = $this->object->getWidget();
-        $this->assertTrue($widget instanceof core_kernel_classes_Resource);
-        $this->assertEquals($widget->getUri(), WidgetRdf::PROPERTY_WIDGET_COMBO);
+        $this->assertInstanceOf(core_kernel_classes_Resource::class, $widget);
+        $this->assertEquals($widget->getUri(), 'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#ComboBox');
         $this->assertEquals($widget->getLabel(), 'Drop down menu');
         $this->assertEquals($widget->getComment(), 'In drop down menu, one may select 1 to N options');
     }

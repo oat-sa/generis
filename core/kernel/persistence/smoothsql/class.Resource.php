@@ -659,9 +659,11 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
             $normalizedValues[] = $value->getUri();
         } elseif (is_array($value)) {
             foreach ($value as $val) {
-                $normalizedValues[] = $val instanceof core_kernel_classes_Resource
-                    ? $val->getUri()
-                    : $val;
+                if ($val !== null) {
+                    $normalizedValues[] = $val instanceof core_kernel_classes_Resource
+                        ? $val->getUri()
+                        : $val;
+                }
             }
         } else {
             $normalizedValues[] = ($value == null) ? '' : $value;

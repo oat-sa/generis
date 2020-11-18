@@ -25,6 +25,7 @@
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Schema\Schema;
 
 class common_persistence_sql_Platform
 {
@@ -130,7 +131,7 @@ class common_persistence_sql_Platform
 
     /**
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
-     * @param \Doctrine\DBAL\Schema\Schema $schema
+     * @param Schema $schema
      * @return array
      */
     public function schemaToSql($schema)
@@ -140,7 +141,7 @@ class common_persistence_sql_Platform
 
     /**
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
-     * @param \Doctrine\DBAL\Schema\Schema $schema
+     * @param Schema $schema
      * @return array
      */
     public function toDropSql($schema)
@@ -150,13 +151,37 @@ class common_persistence_sql_Platform
 
     /**
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
-     * @param \Doctrine\DBAL\Schema\Schema $fromSchema
-     * @param \Doctrine\DBAL\Schema\Schema $toSchema
+     * @param Schema $fromSchema
+     * @param Schema $toSchema
      * @return array
      */
     public function getMigrateSchemaSql($fromSchema, $toSchema)
     {
         return $fromSchema->getMigrateToSql($toSchema, $this->dbalPlatform);
+    }
+
+    /**
+     * Migrate Schema
+     *
+     * Migrate from $fromSchema to $toSchema. SQL queries to go from $fromSchema
+     * to $toSchema will be automatically executed.
+     *
+     * @param Schema $fromSchema
+     * @param Schema $toSchema
+     * @return int
+     * @throws DBALException
+     */
+    public function migrateSchema(Schema $fromSchema, Schema $toSchema): int
+    {
+        $queryCount = 0;
+
+        $queries = $this->getMigrateSchemaSql($fromSchema, $toSchema);
+        foreach ($queries as $query) {
+            $this->dbalConnection->exec($query);
+            $queryCount++;
+        }
+
+        return $queryCount;
     }
     
     /**

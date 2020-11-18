@@ -45,7 +45,7 @@ class NoAccess extends ConfigurableService implements PermissionInterface
     
     /**
      * (non-PHPdoc)
-     * @see \oat\generis\model\data\PermissionInterface::getPermissions()
+     * @see PermissionInterface::getPermissions()
      */
     public function getPermissions(User $user, array $resourceIds)
     {
@@ -54,7 +54,7 @@ class NoAccess extends ConfigurableService implements PermissionInterface
     
     /**
      * (non-PHPdoc)
-     * @see \oat\generis\model\data\PermissionInterface::onResourceCreated()
+     * @see PermissionInterface::onResourceCreated()
      */
     public function onResourceCreated(\core_kernel_classes_Resource $resource)
     {
@@ -63,7 +63,7 @@ class NoAccess extends ConfigurableService implements PermissionInterface
     
     /**
      * (non-PHPdoc)
-     * @see \oat\generis\model\data\permission\PermissionInterface::getSupportedRights()
+     * @see PermissionInterface::getSupportedRights()
      */
     public function getSupportedRights()
     {
