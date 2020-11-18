@@ -158,8 +158,7 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
     private function writeFile($id, $value, $preWriteValueProcessor = null)
     {
         $filePath = $this->getPath($id);
-        $dirname = dirname($filePath);
-        $this->makedir($dirname, self::DEFAULT_MASK);
+        $this->makeDirectory(dirname($filePath), self::DEFAULT_MASK);
 
         // we first open with 'c' in case the flock fails
         // 'w' would empty the file that someone else might be working on
@@ -194,22 +193,22 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
 
     /**
      * Create directory and suppress warning message
-     * @param $dirpath
+     * @param $path
      * @param int $mode
      * @return bool
      */
-    private function makedir(string $dirpath, int $mode)
+    private function makeDirectory(string $path, int $mode)
     {
-        if (is_dir($dirpath) || @mkdir($dirpath, $mode, true)) {
+        if (is_dir($path) || @mkdir($path, $mode, true)) {
             return true;
         }
 
-        if (is_dir($dirpath)) {
-            \common_Logger::w('Directory already exists. Path: \''.$dirpath.'\'');
-        } elseif (is_file($dirpath)) {
-            \common_Logger::w('Directory was not created. File with the same name already exists. Path: \''.$dirpath.'\'');
+        if (is_dir($path)) {
+            \common_Logger::w(sprintf('Directory already exists. Path: \'%s\'', $path));
+        } elseif (is_file($path)) {
+            \common_Logger::w(sprintf('Directory was not created. File with the same name already exists. Path: \'%s\'', $path));
         } else {
-            \common_Logger::w('Directory was not created. Path: \''.$dirpath.'\'');
+            \common_Logger::w(sprintf('Directory was not created. Path: \'%s\'', $path));
         }
 
         return false;
