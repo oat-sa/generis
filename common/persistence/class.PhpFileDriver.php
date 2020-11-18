@@ -198,7 +198,8 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
      * @param int $mode
      * @return bool
      */
-    private function makedir(string $dirpath, int $mode) {
+    private function makedir(string $dirpath, int $mode)
+    {
         $result = is_dir($dirpath) || @mkdir($dirpath, $mode, true);
         if ($result === false) {
             if (is_dir($dirpath)) {
