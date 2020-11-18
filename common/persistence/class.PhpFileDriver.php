@@ -159,9 +159,7 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
     {
         $filePath = $this->getPath($id);
         $dirname = dirname($filePath);
-        if (!file_exists($dirname)) {
-            mkdir($dirname, self::DEFAULT_MASK, true);
-        }
+        $this->makedir($dirname, self::DEFAULT_MASK);
 
         // we first open with 'c' in case the flock fails
         // 'w' would empty the file that someone else might be working on
@@ -192,6 +190,26 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
 
             return false;
         }
+    }
+
+    /**
+     * Create directory and suppress warning message
+     * @param $dirpath
+     * @param int $mode
+     * @return bool
+     */
+    private function makedir(string $dirpath, int $mode) {
+        $result = is_dir($dirpath) || @mkdir($dirpath, $mode, true);
+        if ($result === false) {
+            if (is_dir($dirpath)) {
+                \common_Logger::w('Directory already exists. Path: \''.$dirpath.'\'');
+            } elseif (is_file($dirpath)) {
+                \common_Logger::w('Directory was not created. File with the same name already exists. Path: \''.$dirpath.'\'');
+            } else {
+                \common_Logger::w('Directory was not created. Path: \''.$dirpath.'\'');
+            }
+        }
+        return $result;
     }
 
     /**
