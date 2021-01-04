@@ -22,12 +22,12 @@ declare(strict_types = 1);
 namespace oat\oatbox\reporting;
 
 use ArrayIterator;
+use BadMethodCallException;
 use common_exception_Error;
 use common_exception_UserReadableException as UserReadableException;
-use common_report_RecursiveReportIterator;
-use InvalidArgumentException;
 use IteratorAggregate;
 use JsonSerializable;
+use OutOfBoundsException;
 use RecursiveIteratorIterator;
 
 /**
@@ -61,6 +61,13 @@ class Report implements IteratorAggregate, JsonSerializable
     public const TYPE_WARNING = 'warning';
 
     public const TYPE_ERROR = 'error';
+
+    protected const ALLOWED_TYPES = [
+        self::TYPE_INFO,
+        self::TYPE_SUCCESS,
+        self::TYPE_WARNING,
+        self::TYPE_ERROR,
+    ];
 
     /**
      * Type of the report
@@ -102,8 +109,8 @@ class Report implements IteratorAggregate, JsonSerializable
      */
     public function __construct(string $type, string $message = '', $data = null, array $children = [])
     {
-        if (!$this->isValidType($type)) {
-            throw new InvalidArgumentException('Such report type is unsupported');
+        if (!self::isValidType($type)) {
+            throw new OutOfBoundsException(sprintf('Type of the report `%s` is unsupported for creation', $type));
         }
 
         $this->type = $type;
@@ -121,16 +128,22 @@ class Report implements IteratorAggregate, JsonSerializable
      * @param string $name
      * @param array  $arguments
      *
-     * @return null|Report
+     * @return Report
      * @throws common_exception_Error
      */
-    public static function __callStatic(string $name, array $arguments)
+    public static function __callStatic(string $name, array $arguments): self
     {
-        if (strpos($name, 'create') === 0) {
-            return new static(strtolower(str_replace('create', '', $name)), ...$arguments);
+        if (strpos($name, 'create') !== 0) {
+            throw new BadMethodCallException(sprintf('Requested method `%s` is not found or is not allowed in class %s', $name, __CLASS__));
         }
 
-        return null;
+        $type = strtolower(str_replace('create', '', $name));
+
+        if (!self::isValidType($type)) {
+            throw new OutOfBoundsException(sprintf('Type of the report `%s` is unsupported for creation', $type));
+        }
+
+        return new static($type, ...$arguments);
     }
 
     /**
@@ -139,27 +152,21 @@ class Report implements IteratorAggregate, JsonSerializable
      * @param string $name
      * @param array  $arguments
      *
-     * @return bool|array|null
+     * @return bool|array
      */
     public function __call(string $name, array $arguments)
     {
-        /**
-         * Covers methods by template: get<Type>[e]s
-         */
-        if (strpos($name, 'get') === 0) {
-            $type = strtolower(str_replace('get', '', $name));
-            $type = rtrim(substr($type, 0, -1), 'e');
-            return $this->filterChildrenByTypes([$type], ...$arguments);
+        /** Covers methods by template: get<Type>[e]s */
+        if (str_starts_with($name, 'get')) {
+            return $this->handleGetCalls($name, $arguments);
         }
 
-        /**
-         * Covers methods by template: contains<Type>
-         */
-        if (strpos($name, 'contains') === 0) {
-            return $this->contains(strtolower(str_replace('contains', '', $name)));
+        /** Covers methods by template: contains<Type> */
+        if (str_starts_with($name, 'contains')) {
+            return $this->handleContainsCalls($name, $arguments);
         }
 
-        return null;
+        throw new BadMethodCallException(sprintf('Requested method `%s` is not found or is not allowed in class %s', $name, __CLASS__));
     }
 
     /**
@@ -302,7 +309,7 @@ class Report implements IteratorAggregate, JsonSerializable
      * Returns all children based on type
      *
      * @param array $types
-     * @param false $asFlat
+     * @param bool  $asFlat
      *
      * @return array
      */
@@ -325,8 +332,6 @@ class Report implements IteratorAggregate, JsonSerializable
 
     /**
      * Returns an iterator over the children
-     *
-     * @return ArrayIterator
      */
     public function getIterator(): ArrayIterator
     {
@@ -335,10 +340,8 @@ class Report implements IteratorAggregate, JsonSerializable
 
     /**
      * User feedback message
-     *
-     * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->getMessage();
     }
@@ -374,8 +377,6 @@ class Report implements IteratorAggregate, JsonSerializable
 
     /**
      * Prepares object data for valid converting to json
-     *
-     * @return array
      */
     public function jsonSerialize(): array
     {
@@ -388,9 +389,7 @@ class Report implements IteratorAggregate, JsonSerializable
     }
 
     /**
-     * Return array representation of the report, recursively
-     *
-     * @return array
+     * Returns array representation of the report, recursively
      */
     public function toArray(): array
     {
@@ -417,9 +416,29 @@ class Report implements IteratorAggregate, JsonSerializable
         return new static(self::TYPE_ERROR, $message, $data, $errors);
     }
 
-    /**
-     * @return RecursiveIteratorIterator
-     */
+    private function handleGetCalls(string $name, array $arguments): array
+    {
+        $type = strtolower(str_replace('get', '', $name));
+        $type = rtrim(substr($type, 0, -1), 'e');
+
+        if (!self::isValidType($type)) {
+            throw new OutOfBoundsException(sprintf('Type of report `%s` is unsupported', $type));
+        }
+
+        return $this->filterChildrenByTypes([$type], ...$arguments);
+    }
+
+    private function handleContainsCalls(string $name, array $arguments): bool
+    {
+        $type = strtolower(str_replace('contains', '', $name));
+
+        if (!self::isValidType($type)) {
+            throw new OutOfBoundsException(sprintf('Type of report `%s` is unsupported', $type));
+        }
+
+        return $this->contains($type);
+    }
+
     private function getRecursiveIterator(): RecursiveIteratorIterator
     {
         return new RecursiveIteratorIterator(
@@ -428,14 +447,8 @@ class Report implements IteratorAggregate, JsonSerializable
         );
     }
 
-    private function isValidType(string $type): bool
+    private static function isValidType(string $type): bool
     {
-        return in_array($type, [
-            self::TYPE_INFO,
-            self::TYPE_SUCCESS,
-            self::TYPE_WARNING,
-            self::TYPE_ERROR
-        ]);
+        return in_array($type, static::ALLOWED_TYPES);
     }
-
 }
