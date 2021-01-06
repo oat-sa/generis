@@ -361,18 +361,18 @@ class Report implements IteratorAggregate, JsonSerializable
             $data = (array) json_decode((string) $data, true);
         }
 
-        if (count(array_intersect(['type', 'message', 'data'], array_keys($data))) === 3) {
-            $report = new static($data['type'], $data['message'], $data['data']);
-            if (isset($data['children']) && is_array($data['children'])) {
-                foreach ($data['children'] as $child) {
-                    $report->add(static::jsonUnserialize($child));
-                }
-            }
-
-            return $report;
+        if (count(array_intersect(['type', 'message', 'data'], array_keys($data))) !== 3) {
+            return null;
         }
 
-        return null;
+        $report = new static($data['type'], $data['message'], $data['data']);
+
+        $data['children'] = (!isset($data['children']) || !is_array($data['children'])) ? [] : $data['children'];
+        foreach ($data['children'] as $child) {
+            $report->add(static::jsonUnserialize($child));
+        }
+
+        return $report;
     }
 
     /**
