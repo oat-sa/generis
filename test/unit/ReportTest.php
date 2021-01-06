@@ -24,6 +24,68 @@ use oat\oatbox\reporting\Report;
 
 class ReportTest extends TestCase
 {
+    public function testConstructThrowsException(): void
+    {
+        $this->expectException(OutOfBoundsException::class);
+        new Report('foo', 'bar');
+    }
+
+    public function testStaticCallThrowsException(): void
+    {
+        $this->expectException(BadMethodCallException::class);
+        Report::foo();
+    }
+
+    public function testStaticInstantiationThrowsException(): void
+    {
+        $this->expectException(OutOfBoundsException::class);
+        Report::createFoo();
+    }
+
+    public function testNonexistentMethodCallThrowsException(): void
+    {
+        $this->expectException(BadMethodCallException::class);
+        $report = new Report(Report::TYPE_SUCCESS, 'message');
+        $report->foo();
+    }
+
+    public function testFilterWrongTypesThrowsException(): void
+    {
+        $this->expectException(OutOfBoundsException::class);
+        $this->expectExceptionMessage('Type of report `foo` is unsupported');
+        $report = new Report(Report::TYPE_SUCCESS, 'message');
+        $report->getFoos();
+    }
+
+    public function testContainsWrongTypesThrowsException(): void
+    {
+        $this->expectException(OutOfBoundsException::class);
+        $this->expectExceptionMessage('Type of report `foo` is unsupported');
+        $report = new Report(Report::TYPE_SUCCESS, 'message');
+        $report->containsFoo();
+    }
+
+    public function testToArray()
+    {
+        $report = Report::createInfo('foo', ['baz'=>'bar']);
+        $report->add(Report::createWarning('foo', ['baz'=>'bar']));
+        $expectedArray = [
+            'type' => 'info',
+            'message' => 'foo',
+            'data' => ['baz' => 'bar'],
+            'children' => [
+                [
+                    'type' => 'warning',
+                    'message' => 'foo',
+                    'data' => ['baz' => 'bar'],
+                    'children' => [],
+                ],
+            ],
+        ];
+        $this->assertEquals($expectedArray, $report->toArray());
+
+    }
+
     public function testBasicReport(): void
     {
         $report = new Report(Report::TYPE_SUCCESS, 'test message');
