@@ -157,12 +157,12 @@ class Report implements IteratorAggregate, JsonSerializable
     public function __call(string $name, array $arguments)
     {
         /** Covers methods by template: get<Type>[e]s */
-        if (str_starts_with($name, 'get')) {
+        if (0 === strpos($name, 'get')) {
             return $this->handleGetCalls($name, $arguments);
         }
 
         /** Covers methods by template: contains<Type> */
-        if (str_starts_with($name, 'contains')) {
+        if (0 === strpos($name, 'contains')) {
             return $this->handleContainsCalls($name, $arguments);
         }
 
