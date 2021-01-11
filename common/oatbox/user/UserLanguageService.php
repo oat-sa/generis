@@ -15,7 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2018 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
+ * Copyright (c) 2018-2021 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  *
  */
 
@@ -24,14 +24,10 @@ namespace oat\oatbox\user;
 use oat\oatbox\service\ConfigurableService;
 use oat\generis\model\GenerisRdf;
 
-/**
- * class UserLanguageService
- * @package oat\oatbox\user
- */
 class UserLanguageService extends ConfigurableService implements UserLanguageServiceInterface
 {
-
-    const OPTION_LOCK_DATA_LANGUAGE = 'lock_data_language';
+    public const OPTION_LOCK_DATA_LANGUAGE = 'lock_data_language';
+    public const OPTION_QTI_LANGUAGE = 'qti_language';
 
     /**
      * {@inheritDoc}
@@ -70,5 +66,10 @@ class UserLanguageService extends ConfigurableService implements UserLanguageSer
     public function isDataLanguageEnabled()
     {
         return !$this->hasOption(self::OPTION_LOCK_DATA_LANGUAGE) || $this->getOption(self::OPTION_LOCK_DATA_LANGUAGE) === false;
+    }
+
+    public function getQtiLanguage(): string
+    {
+        return $this->getOption(self::OPTION_QTI_LANGUAGE, $this->getDefaultLanguage());
     }
 }
