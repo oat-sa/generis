@@ -315,7 +315,7 @@ class Manifest implements ServiceLocatorAwareInterface
             throw new ManifestNotFoundException(sprintf('The Extension Manifest file located at %s could not be read.', $file));
         }
         //ROOT_URL constant may be used in the manifest file.
-        if (!defined(ROOT_URL)) {
+        if (!defined('ROOT_URL')) {
             define(ROOT_URL, '');
         }
         $manifest = require($file);

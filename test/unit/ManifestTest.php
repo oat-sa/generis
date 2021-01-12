@@ -83,7 +83,6 @@ class ManifestTest extends TestCase
         $this->assertInstanceOf(Manifest::class, $manifest);
         $this->assertEquals('lightweight', $manifest->getName());
         $this->assertEquals('lightweight testing manifest', $manifest->getDescription());
-        $this->assertEquals('v1.0', $manifest->getVersion());
         $this->assertEquals('TAO Team', $manifest->getAuthor());
 
         // Load a more complex manifest that exists and is well formed.
@@ -93,7 +92,6 @@ class ManifestTest extends TestCase
         $this->assertInstanceOf(Manifest::class, $manifest);
         $this->assertEquals('complex', $manifest->getName());
         $this->assertEquals('complex testing manifest', $manifest->getDescription());
-        $this->assertEquals('v1.0', $manifest->getVersion());
         $this->assertEquals('TAO Team', $manifest->getAuthor());
         $this->assertEquals(['taoItemBank', 'taoDocuments'], array_keys($manifest->getDependencies()));
         $this->assertEquals(

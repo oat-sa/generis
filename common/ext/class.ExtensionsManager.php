@@ -313,21 +313,19 @@ class common_ext_ExtensionsManager extends ConfigurableService
      */
     public static function getAvailablePackagesStatic()
     {
+        $rootPath = defined('ROOT_PATH') ? ROOT_PATH : realpath(__DIR__ . '/../../../');
+
         $returnValue = [];
         $composer = new ComposerInfo();
 
-        if (defined('ROOT_PATH')) {
-            $rootPath = ROOT_PATH;
-        } else {
-            $rootPath = realpath(__DIR__ . '/../../../') ;
-        }
-
         $composerLock = $composer->getComposerLock($rootPath);
-        foreach ($composerLock[ComposerInfo::COMPOSER_LOCK_PACKAGES] as $package) {
-            if (!isset($package[ComposerInfo::COMPOSER_LOCK_EXTRA][ComposerInfo::COMPOSER_LOCK_EXTENSION_NAME])) continue;
-            $composerPackageName = $package[ComposerInfo::COMPOSER_LOCK_PACKAGE_NAME];
+
+        $extensionPackages = array_filter($composerLock[ComposerInfo::COMPOSER_LOCK_PACKAGES], function ($package) {
+            return isset($package[ComposerInfo::COMPOSER_LOCK_EXTRA][ComposerInfo::COMPOSER_LOCK_EXTENSION_NAME]);
+        });
+        foreach ($extensionPackages as $package) {
             $extId = $package[ComposerInfo::COMPOSER_LOCK_EXTRA][ComposerInfo::COMPOSER_LOCK_EXTENSION_NAME];
-            $returnValue[$composerPackageName] = $extId;
+            $returnValue[$package[ComposerInfo::COMPOSER_LOCK_PACKAGE_NAME]] = $extId;
         }
 
         return $returnValue;
