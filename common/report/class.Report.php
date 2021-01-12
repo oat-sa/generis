@@ -20,6 +20,7 @@
 
 use oat\oatbox\reporting\RecursiveReportIterator;
 use oat\oatbox\reporting\Report;
+use oat\oatbox\reporting\ReportInterface;
 
 /**
  * The Report allows to return a more detailed return value
@@ -28,23 +29,8 @@ use oat\oatbox\reporting\Report;
  * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
  * @deprecated Please, use oat\oatbox\reporting\Report::class.
  */
-class common_report_Report implements IteratorAggregate, JsonSerializable
+class common_report_Report implements ReportInterface
 {
-    public const TYPE_INFO = 'info';
-
-    public const TYPE_SUCCESS = 'success';
-
-    public const TYPE_WARNING = 'warning';
-
-    public const TYPE_ERROR = 'error';
-
-    protected const ALLOWED_TYPES = [
-        self::TYPE_INFO,
-        self::TYPE_SUCCESS,
-        self::TYPE_WARNING,
-        self::TYPE_ERROR,
-    ];
-
     /**
      * Type of the report
      *
