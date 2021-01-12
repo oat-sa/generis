@@ -310,23 +310,20 @@ class Manifest implements ServiceLocatorAwareInterface
      */
     public static function extractChecks($file)
     {
+        // the file exists, we can refer to the $filePath.
         if (!is_readable($file)) {
-            throw new ManifestNotFoundException("Extension Manifest file could not be found in '${file}'.");
+            throw new ManifestNotFoundException(sprintf('The Extension Manifest file located at %s could not be read.', $file));
         }
-
-        $content = file_get_contents($file);
-        $matches = [];
-        preg_match_all("/(?:\"|')\s*checks\s*(?:\"|')\s*=>(\s*array\s*\((\s*array\((?:.*)\s*\)\)\s*,{0,1})*\s*\))/", $content, $matches);
-
-        $returnValue = [];
-        if (!empty($matches[1][0])) {
-            $returnValue = eval('return ' . $matches[1][0] . ';');
-
-            foreach ($returnValue as &$component) {
-                if (strpos($component['type'], 'FileSystemComponent') !== false) {
-                    $root = realpath(dirname(__FILE__) . '/../../../');
-                    $component['value']['location'] = $root . '/' . $component['value']['location'];
-                }
+        //ROOT_URL constant may be used in the manifest file.
+        if (!defined(ROOT_URL)) {
+            define(ROOT_URL, '');
+        }
+        $manifest = require($file);
+        $returnValue = $manifest['install']['checks'] ?? [];
+        foreach ($returnValue as &$component) {
+            if (strpos($component['type'], 'FileSystemComponent') !== false) {
+                $root = realpath(dirname(__FILE__) . '/../../../../');
+                $component['value']['location'] = $root . '/' . $component['value']['location'];
             }
         }
 
