@@ -151,7 +151,7 @@ class Manifest implements ServiceLocatorAwareInterface
     public function getVersion():string
     {
         if ($this->version === null) {
-            InstalledVersions::getPrettyVersion($this->getPackageId());
+            $this->version = InstalledVersions::getVersion($this->getPackageId());
         }
         return (string) $this->version;
     }

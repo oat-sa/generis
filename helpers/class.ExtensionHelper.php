@@ -154,8 +154,7 @@ class helpers_ExtensionHelper
         $extensionManager = common_ext_ExtensionsManager::singleton();
         // read direct dependencies from manifest, do not check recursively
         foreach ($extension->getManifest()->getDependencies() as $requiredExt => $requiredVersion) {
-            $installedVersion = $extensionManager->getInstalledVersion($requiredExt);
-            if (is_null($installedVersion)) {
+            if (!$extensionManager->isInstalled($requiredExt)) {
                 throw new common_ext_MissingExtensionException(
                     'Extension ' . $requiredExt . ' is needed by the extension to be installed but is missing.',
                     'GENERIS'
