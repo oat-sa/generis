@@ -27,7 +27,7 @@ use oat\generis\model\GenerisRdf;
 class UserLanguageService extends ConfigurableService implements UserLanguageServiceInterface
 {
     public const OPTION_LOCK_DATA_LANGUAGE = 'lock_data_language';
-    public const OPTION_QTI_LANGUAGE = 'qti_language';
+    public const OPTION_AUTHORING_LANGUAGE = 'authoring_language';
 
     /**
      * {@inheritDoc}
@@ -68,8 +68,8 @@ class UserLanguageService extends ConfigurableService implements UserLanguageSer
         return !$this->hasOption(self::OPTION_LOCK_DATA_LANGUAGE) || $this->getOption(self::OPTION_LOCK_DATA_LANGUAGE) === false;
     }
 
-    public function getQtiLanguage(): string
+    public function getAuthoringLanguage(): string
     {
-        return $this->getOption(self::OPTION_QTI_LANGUAGE, $this->getDefaultLanguage());
+        return $this->getOption(self::OPTION_AUTHORING_LANGUAGE, $this->getDefaultLanguage());
     }
 }
