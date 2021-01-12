@@ -24,6 +24,7 @@ use oat\oatbox\service\ConfigurableService;
 use oat\oatbox\service\ServiceManager;
 use oat\oatbox\extension\exception\ManifestException;
 use oat\oatbox\extension\ComposerInfo;
+use oat\oatbox\cache\SimpleCache;
 
 /**
  * The ExtensionsManager class is dedicated to Extensions Management. It provides
@@ -289,19 +290,18 @@ class common_ext_ExtensionsManager extends ConfigurableService
      * @return array
      * @throws ManifestException
      * @throws \oat\oatbox\service\exception\InvalidServiceManagerException
-     * @throws common_cache_NotFoundException
      */
     public function getAvailablePackages()
     {
         //During installation list of packages is needed but cache service is not installed yet.
-        if (!$this->getServiceManager()->has(common_cache_Cache::SERVICE_ID)) {
+        if (!$this->getServiceManager()->has(SimpleCache::SERVICE_ID)) {
             return self::getAvailablePackagesStatic();
         }
-        /** @var common_cache_Cache $cache */
-        $cache = $this->getServiceManager()->get(common_cache_Cache::SERVICE_ID);
+        /** @var SimpleCache $cache */
+        $cache = $this->getServiceManager()->get(SimpleCache::SERVICE_ID);
         $key = static::class.'_'.__METHOD__;
         if (!$cache->has($key)) {
-            $cache->put(self::getAvailablePackagesStatic(), $key);
+            $cache->set($key, self::getAvailablePackagesStatic());
         }
 
         return (array) $cache->get($key);
@@ -329,6 +329,7 @@ class common_ext_ExtensionsManager extends ConfigurableService
             $extId = $package[ComposerInfo::COMPOSER_LOCK_EXTRA][ComposerInfo::COMPOSER_LOCK_EXTENSION_NAME];
             $returnValue[$composerPackageName] = $extId;
         }
+
         return $returnValue;
     }
 }

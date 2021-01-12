@@ -26,6 +26,7 @@ use oat\oatbox\extension\exception\ManifestException;
 use oat\oatbox\extension\exception\ManifestNotFoundException;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Composer\InstalledVersions;
 
 /**
  * Class Manifest
@@ -69,7 +70,7 @@ class Manifest implements ServiceLocatorAwareInterface
      *
      * @access public
      * @param string $filePath The path to the manifest.php file to parse.
-     * @param ComposerInfo $composerInfo
+     * @param ComposerInfo|null $composerInfo
      * @throws ManifestNotFoundException
      * @throws exception\MalformedManifestException
      */
@@ -150,8 +151,7 @@ class Manifest implements ServiceLocatorAwareInterface
     public function getVersion():string
     {
         if ($this->version === null) {
-            $packageInfo = $this->getComposerInfo()->getPackageInfo($this->getPackageId());
-            $this->version = $packageInfo['version'];
+            InstalledVersions::getPrettyVersion($this->getPackageId());
         }
         return (string) $this->version;
     }
@@ -174,6 +174,12 @@ class Manifest implements ServiceLocatorAwareInterface
             $requiredTaoPackages = array_intersect_key($composerJson['require'], $availablePackages);
             foreach ($requiredTaoPackages as $packageId => $packageVersion) {
                 $this->dependencies[$availablePackages[$packageId]] = $packageVersion;
+            }
+
+            //backward compatibility with old requirements declaration
+            //todo: remove after dependencies of all Tao extensions be moved from manifest to composer.json
+            if (isset($this->manifest['requires'])) {
+                $this->dependencies = array_merge($this->dependencies, $this->manifest['requires']);
             }
         }
         return $this->dependencies;
@@ -282,14 +288,15 @@ class Manifest implements ServiceLocatorAwareInterface
      * @return array
      * @throws ManifestException
      */
-    public static function extractDependencies($file)
+    public static function extractDependencies(string $file)
     {
+        $file = realpath($file);
         $result = [];
         $availablePackages = \common_ext_ExtensionsManager::getAvailablePackagesStatic();
         $composerJson = (new ComposerInfo())->getComposerJson(dirname($file));
         foreach ($composerJson['require'] as $packageId => $packageVersion) {
             if (isset($availablePackages[$packageId])) {
-                $result[$availablePackages[$packageId]] = $packageVersion;
+                $result[] = $availablePackages[$packageId];
             }
         }
         return $result;

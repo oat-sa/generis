@@ -52,9 +52,9 @@ class ComposerInfoTest extends TestCase
     public function testGetPackageInfo()
     {
         $instance = new ComposerInfo();
-        $packageInfo = $instance->getPackageInfo('oat-sa/extension-tao-taoItemBank', $this->getSamplesDir());
+        $packageInfo = $instance->getPackageInfo('oat-sa/extension-tao-foobar', $this->getSamplesDir());
         $this->assertArrayHasKey('version', $packageInfo);
-        $this->assertEquals('oat-sa/extension-tao-taoItemBank', $packageInfo['name']);
+        $this->assertEquals('oat-sa/extension-tao-foobar', $packageInfo['name']);
     }
 
     public function testGetComposerJsonException()

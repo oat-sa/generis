@@ -21,7 +21,7 @@
  *
  */
 
-use common_ext_ManifestException as ManifestException;
+use oat\oatbox\extension\exception\ManifestException;
 use common_ext_UpdaterNotFoundException as UpdaterNotFoundException;
 use oat\oatbox\service\ServiceManagerAwareInterface;
 use oat\oatbox\service\ServiceManagerAwareTrait;
@@ -451,14 +451,13 @@ class common_ext_Extension implements ServiceManagerAwareInterface
     public function load()
     {
         if (!$this->isLoaded()) {
-            $dependencies = $this->getManifest()->getDependencies();
-            foreach ($dependencies as $extId => $extVersion) {
-                // triggers loading of extensions
-                try {
+            try {
+                $dependencies = $this->getManifest()->getDependencies();
+                foreach ($dependencies as $extId => $extVersion) {
                     $this->getExtensionManager()->getExtensionById($extId);
-                } catch (common_ext_ManifestNotFoundException $e) {
-                    throw new common_ext_MissingExtensionException($e->getExtensionId() . ' not found but required for ' . $this->getId(), $e->getExtensionId());
                 }
+            } catch (ManifestNotFoundException $e) {
+                throw new common_ext_MissingExtensionException($e->getExtensionId() . ' not found but required for ' . $this->getId(), $e->getExtensionId());
             }
 
             $loader = new common_ext_ExtensionLoader($this);
@@ -500,8 +499,8 @@ class common_ext_Extension implements ServiceManagerAwareInterface
     }
 
     /**
-     * @throws common_ext_ManifestException
-     * @throws common_ext_ManifestNotFoundException
+     * @throws ManifestException
+     * @throws ManifestNotFoundException
      * @throws common_ext_UpdaterNotFoundException
      */
     public function getUpdater(): common_ext_ExtensionUpdater
