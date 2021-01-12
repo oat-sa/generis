@@ -70,27 +70,6 @@ class ComposerInfo
     }
 
     /**
-     * @param $packageId
-     * @param string $folder
-     * @return array
-     * @throws ManifestException
-     */
-    public function getPackageInfo($packageId, $folder = ROOT_PATH): array
-    {
-        $composerLock = $this->getComposerLock($folder);
-        foreach ($composerLock[self::COMPOSER_LOCK_PACKAGES] as $package) {
-            if ($package['name'] === $packageId) {
-                return $package;
-            }
-        }
-        throw new ManifestException(sprintf(
-            'Package "%s" not found in %s',
-            $packageId,
-            $folder.DIRECTORY_SEPARATOR.self::COMPOSER_LOCK
-        ));
-    }
-
-    /**
      * @param $path
      * @return mixed
      * @throws ManifestException

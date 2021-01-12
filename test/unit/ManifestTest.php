@@ -47,31 +47,6 @@ class ManifestTest extends TestCase
                 'oat-sa/extension-tao-taoDocuments'=> '*'
             ]
         ]);
-        $composerInfo->method('getPackageInfo')->will($this->returnValueMap(
-            [
-                [
-                    "oat-sa/extension-tao-lightweight", ROOT_PATH,
-                    [
-                        "name" => "oat-sa/extension-tao-lightweight",
-                        "version" => "v1.0"
-                    ]
-                ],
-                [
-                    "oat-sa/extension-tao-taoItemBank", ROOT_PATH,
-                    [
-                        "name" => "oat-sa/extension-tao-taoItemBank",
-                        "version" => "v1.0"
-                    ]
-                ],
-                [
-                    "oat-sa/extension-tao-taoDocuments", ROOT_PATH,
-                    [
-                        "name" => "oat-sa/extension-tao-taoDocuments",
-                        "version" => "v1.0"
-                    ]
-                ]
-            ]
-        ));
 
         return $composerInfo;
     }

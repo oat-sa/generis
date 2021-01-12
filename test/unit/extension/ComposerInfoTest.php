@@ -49,14 +49,6 @@ class ComposerInfoTest extends TestCase
         $this->assertArrayHasKey('packages', $composerLock);
     }
 
-    public function testGetPackageInfo()
-    {
-        $instance = new ComposerInfo();
-        $packageInfo = $instance->getPackageInfo('oat-sa/extension-tao-foobar', $this->getSamplesDir());
-        $this->assertArrayHasKey('version', $packageInfo);
-        $this->assertEquals('oat-sa/extension-tao-foobar', $packageInfo['name']);
-    }
-
     public function testGetComposerJsonException()
     {
         $instance = new ComposerInfo();
@@ -69,13 +61,6 @@ class ComposerInfoTest extends TestCase
         $instance = new ComposerInfo();
         $this->expectException(ManifestException::class);
         $instance->getComposerLock('foo');
-    }
-
-    public function testGetPackageInfoException()
-    {
-        $instance = new ComposerInfo();
-        $this->expectException(ManifestException::class);
-        $instance->getPackageInfo('foo', $this->getSamplesDir());
     }
 
     private function getSamplesDir()
