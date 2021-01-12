@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,82 +15,179 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2013 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
  */
 
+declare(strict_types = 1);
+
 use oat\generis\test\TestCase;
-use common_report_Report as Report;
+use oat\oatbox\reporting\Report;
 
 class ReportTest extends TestCase
 {
-    
-    public function testBasicReport()
+    public function testConstructThrowsException(): void
     {
-        $report = new common_report_Report(common_report_Report::TYPE_SUCCESS, 'test message');
-        $this->assertFalse($report->hasChildren());
-        $this->assertEquals('test message', (string)$report);
-        $this->assertEquals('test message', $report->getMessage());
-        $this->assertEquals(common_report_Report::TYPE_SUCCESS, $report->getType());
+        $this->expectException(OutOfBoundsException::class);
+        new Report('foo', 'bar');
+    }
+
+    public function testStaticCallThrowsException(): void
+    {
+        $this->expectException(BadMethodCallException::class);
+        Report::foo();
+    }
+
+    public function testStaticInstantiationThrowsException(): void
+    {
+        $this->expectException(OutOfBoundsException::class);
+        Report::createFoo();
+    }
+
+    public function testNonexistentMethodCallThrowsException(): void
+    {
+        $this->expectException(BadMethodCallException::class);
+        $report = new Report(Report::TYPE_SUCCESS, 'message');
+        $report->foo();
+    }
+
+    public function testFilterWrongTypesThrowsException(): void
+    {
+        $this->expectException(OutOfBoundsException::class);
+        $this->expectExceptionMessage('Type of report `foo` is unsupported');
+        $report = new Report(Report::TYPE_SUCCESS, 'message');
+        $report->getFoos();
+    }
+
+    public function testContainsWrongTypesThrowsException(): void
+    {
+        $this->expectException(OutOfBoundsException::class);
+        $this->expectExceptionMessage('Type of report `foo` is unsupported');
+        $report = new Report(Report::TYPE_SUCCESS, 'message');
+        $report->containsFoo();
+    }
+
+    public function testToArray()
+    {
+        $report = Report::createInfo('foo', ['baz'=>'bar']);
+        $report->add(Report::createWarning('foo', ['baz'=>'bar']));
+        $expectedArray = [
+            'type' => 'info',
+            'message' => 'foo',
+            'data' => ['baz' => 'bar'],
+            'children' => [
+                [
+                    'type' => 'warning',
+                    'message' => 'foo',
+                    'data' => ['baz' => 'bar'],
+                    'children' => [],
+                ],
+            ],
+        ];
+        $this->assertEquals($expectedArray, $report->toArray());
+
+    }
+
+    public function testBasicReport(): void
+    {
+        $report = new Report(Report::TYPE_SUCCESS, 'test message');
+
+        self::assertFalse($report->hasChildren());
+        self::assertEquals('test message', (string)$report);
+        self::assertEquals('test message', $report->getMessage());
+        self::assertEquals(Report::TYPE_SUCCESS, $report->getType());
+
         foreach ($report as $child) {
-            $this->fail('Should not contain children');
+            self::fail('Should not contain children');
         }
     }
+
+    public function testBasicReportWithChildren(): void
+    {
+        $sub1 = Report::createInfo('info31');
+        $sub2 = Report::createError('error31');
+        $sub3 = Report::createWarning('warning31');
+
+        $report = new Report(Report::TYPE_SUCCESS, 'test message', null, [$sub1, $sub2, $sub3]);
+
+        self::assertTrue($report->hasChildren());
+        self::assertCount(3, $report->getChildren());
+    }
     
-    public function testDataInReport()
+    public function testDataInReport(): void
     {
         $exception = new Exception('testing');
-        $report = new common_report_Report(common_report_Report::TYPE_INFO, 'test message2', $exception);
-        $this->assertFalse($report->hasChildren());
-        $this->assertEquals('test message2', (string)$report);
-        $this->assertEquals(common_report_Report::TYPE_INFO, $report->getType());
+        $report = new Report(Report::TYPE_INFO, 'test message2', $exception);
+
+        self::assertFalse($report->hasChildren());
+        self::assertEquals('test message2', (string)$report);
+        self::assertEquals(Report::TYPE_INFO, $report->getType());
+
         foreach ($report as $child) {
-            $this->fail('Should not contain children');
+            self::fail('Should not contain children');
         }
-        $this->assertSame($exception, $report->getData());
+
+        self::assertSame($exception, $report->getData());
     }
    
-    public function testNestedReport()
+    public function testNestedReport(): void
     {
-        $report = new common_report_Report(common_report_Report::TYPE_WARNING, 'test message3');
-        $sub1 = new common_report_Report(common_report_Report::TYPE_INFO, 'info31');
-        $sub2 = new common_report_Report(common_report_Report::TYPE_ERROR, 'error31');
-        $report->add([$sub1, $sub2]);
+        $report = new Report(Report::TYPE_WARNING, 'test message3');
+        $sub1 = new Report(Report::TYPE_INFO, 'info31');
+        $sub2 = new Report(Report::TYPE_ERROR, 'error31');
+        $sub3 = new Report(Report::TYPE_WARNING, 'warning31');
+        $report->add([$sub1, $sub2, $sub3]);
         
-        $this->assertTrue($report->hasChildren());
-        $this->assertEquals('test message3', (string)$report);
-        $this->assertEquals(common_report_Report::TYPE_WARNING, $report->getType());
+        self::assertTrue($report->hasChildren());
+        self::assertEquals('test message3', (string)$report);
+        self::assertEquals(Report::TYPE_WARNING, $report->getType());
+
         $array = [];
         foreach ($report as $child) {
             $array[] = $child;
         }
-        $this->assertEquals(2, count($array));
-        list($first, $second) = $array;
+        self::assertCount(3, $array);
+
+        [$first, $second, $third] = $array;
         
-        $this->assertFalse($first->hasChildren());
-        $this->assertEquals('info31', (string)$first);
-        $this->assertEquals(common_report_Report::TYPE_INFO, $first->getType());
+        self::assertFalse($first->hasChildren());
+        self::assertEquals('info31', (string)$first);
+        self::assertEquals(Report::TYPE_INFO, $first->getType());
         foreach ($first as $child) {
-            $this->fail('Should not contain children');
+            self::fail('Should not contain children');
         }
         
-        $this->assertFalse($second->hasChildren());
-        $this->assertEquals('error31', (string)$second);
-        $this->assertEquals(common_report_Report::TYPE_ERROR, $second->getType());
+        self::assertFalse($second->hasChildren());
+        self::assertEquals('error31', (string)$second);
+        self::assertEquals(Report::TYPE_ERROR, $second->getType());
         foreach ($second as $child) {
-            $this->fail('Should not contain children');
+            self::fail('Should not contain children');
         }
 
-        $this->assertFalse($report->contains(common_report_Report::TYPE_SUCCESS));
-        $this->assertTrue($report->contains(common_report_Report::TYPE_INFO));
-        $this->assertTrue($report->contains(common_report_Report::TYPE_ERROR));
+        self::assertFalse($third->hasChildren());
+        self::assertEquals('warning31', (string)$third);
+        self::assertEquals(Report::TYPE_WARNING, $third->getType());
+        foreach ($third as $child) {
+            self::fail('Should not contain children');
+        }
+
+        self::assertFalse($report->contains(Report::TYPE_SUCCESS));
+        self::assertFalse($report->containsSuccess());
+
+        self::assertTrue($report->contains(Report::TYPE_INFO));
+        self::assertTrue($report->containsInfo());
+
+        self::assertTrue($report->contains(Report::TYPE_ERROR));
+        self::assertTrue($report->containsError());
+
+        self::assertTrue($report->contains(Report::TYPE_WARNING));
+        self::assertTrue($report->containsWarning());
     }
 
-    public function testJsonUnserialize()
+    public function testJsonUnserialize(): void
     {
-        $root = new common_report_Report(common_report_Report::TYPE_WARNING, 'test message3');
-        $sub1 = new common_report_Report(common_report_Report::TYPE_INFO, 'info31');
-        $sub2 = new common_report_Report(common_report_Report::TYPE_ERROR, 'error31');
-        $subsub = new common_report_Report(common_report_Report::TYPE_SUCCESS, 'success31');
+        $root = new Report(Report::TYPE_WARNING, 'test message3');
+        $sub1 = new Report(Report::TYPE_INFO, 'info31');
+        $sub2 = new Report(Report::TYPE_ERROR, 'error31');
+        $subsub = new Report(Report::TYPE_SUCCESS, 'success31');
 
         // make report tree
         $sub1->add([$subsub]);
@@ -99,59 +195,60 @@ class ReportTest extends TestCase
 
         $json = json_encode($root, JSON_PRETTY_PRINT);
 
-        $report = common_report_Report::jsonUnserialize($json);
+        $report = Report::jsonUnserialize($json);
 
-        $this->assertTrue($report->hasChildren());
-        $this->assertEquals('test message3', (string)$report);
-        $this->assertEquals(common_report_Report::TYPE_WARNING, $report->getType());
+        self::assertTrue($report->hasChildren());
+        self::assertEquals('test message3', (string)$report);
+        self::assertEquals(Report::TYPE_WARNING, $report->getType());
 
         $array = [];
         foreach ($report as $child) {
             $array[] = $child;
         }
-        $this->assertEquals(2, count($array));
-        list($first, $second) = $array;
+        self::assertCount(2, $array);
+        [$first, $second] = $array;
 
-        $this->assertTrue($first->hasChildren());
-        $this->assertEquals('info31', (string)$first);
-        $this->assertEquals(common_report_Report::TYPE_INFO, $first->getType());
+        self::assertTrue($first->hasChildren());
+        self::assertEquals('info31', (string)$first);
+        self::assertEquals(Report::TYPE_INFO, $first->getType());
         foreach ($first as $child) {
-            $this->assertEquals('success31', (string)$child);
-            $this->assertEquals(common_report_Report::TYPE_SUCCESS, $child->getType());
+            self::assertEquals('success31', (string)$child);
+            self::assertEquals(Report::TYPE_SUCCESS, $child->getType());
         }
 
-        $this->assertFalse($second->hasChildren());
-        $this->assertEquals('error31', (string)$second);
-        $this->assertEquals(common_report_Report::TYPE_ERROR, $second->getType());
+        self::assertFalse($second->hasChildren());
+        self::assertEquals('error31', (string)$second);
+        self::assertEquals(Report::TYPE_ERROR, $second->getType());
         foreach ($second as $child) {
-            $this->fail('Should not contain children');
+            self::fail('Should not contain children');
         }
 
-        $this->assertTrue($report->contains(common_report_Report::TYPE_SUCCESS));
-        $this->assertTrue($report->contains(common_report_Report::TYPE_INFO));
-        $this->assertTrue($report->contains(common_report_Report::TYPE_ERROR));
+        self::assertTrue($report->contains(Report::TYPE_SUCCESS));
+        self::assertTrue($report->contains(Report::TYPE_INFO));
+        self::assertTrue($report->contains(Report::TYPE_ERROR));
     }
 
-    public function testGetSuccessesAsFlat()
+    public function testGetSuccessesAsFlat(): void
     {
         $report = new Report(Report::TYPE_INFO);
-        $succes_1 = new Report(Report::TYPE_SUCCESS, 'success_1');
-        $succes_1_1 = new Report(Report::TYPE_SUCCESS, 'success_1_1');
-        $succes_1->add($succes_1_1);
-        $succes_2 = new Report(Report::TYPE_SUCCESS, 'success_2');
 
-        $report->add($succes_1);
-        $report->add($succes_2);
+        $success_1 = new Report(Report::TYPE_SUCCESS, 'success_1');
+        $success_1_1 = new Report(Report::TYPE_SUCCESS, 'success_1_1');
+        $success_1->add($success_1_1);
+        $success_2 = new Report(Report::TYPE_SUCCESS, 'success_2');
 
-        $successes = $report->getSuccesses(true);
+        $report->add($success_1);
+        $report->add($success_2);
 
-        $this->assertCount(3, $successes, '3 successes should be returned');
-        $this->assertEquals('success_1', (string) array_shift($successes));
-        $this->assertEquals('success_1_1', (string) array_shift($successes));
-        $this->assertEquals('success_2', (string) array_shift($successes));
+        $successes = (array) $report->getSuccesses(true);
+
+        self::assertCount(3, $successes, '3 successes should be returned');
+        self::assertEquals('success_1', (string) array_shift($successes));
+        self::assertEquals('success_1_1', (string) array_shift($successes));
+        self::assertEquals('success_2', (string) array_shift($successes));
     }
 
-    public function testGetInfosAsFlat()
+    public function testGetInfosAsFlat(): void
     {
         $report = new Report(Report::TYPE_SUCCESS);
         $info_1 = new Report(Report::TYPE_INFO, 'info_1');
@@ -162,15 +259,34 @@ class ReportTest extends TestCase
         $report->add($info_1);
         $report->add($info_2);
 
-        $infos = $report->getInfos(true);
+        $infos = (array) $report->getInfos(true);
 
-        $this->assertCount(3, $infos, '3 infos should be returned');
-        $this->assertEquals('info_1', (string) array_shift($infos));
-        $this->assertEquals('info_1_1', (string) array_shift($infos));
-        $this->assertEquals('info_2', (string) array_shift($infos));
+        self::assertCount(3, $infos, '3 infos should be returned');
+        self::assertEquals('info_1', (string) array_shift($infos));
+        self::assertEquals('info_1_1', (string) array_shift($infos));
+        self::assertEquals('info_2', (string) array_shift($infos));
     }
 
-    public function testGetErrosAsFlat()
+    public function testGetWarningsAsFlat(): void
+    {
+        $report = new Report(Report::TYPE_WARNING);
+        $warning_1 = new Report(Report::TYPE_WARNING, 'warning_1');
+        $warning_1_1 = new Report(Report::TYPE_WARNING, 'warning_1_1');
+        $warning_1->add($warning_1_1);
+        $warning_2 = new Report(Report::TYPE_WARNING, 'warning_2');
+
+        $report->add($warning_1);
+        $report->add($warning_2);
+
+        $warnings = (array) $report->getWarnings(true);
+
+        self::assertCount(3, $warnings, '3 warnings should be returned');
+        self::assertEquals('warning_1', (string) array_shift($warnings));
+        self::assertEquals('warning_1_1', (string) array_shift($warnings));
+        self::assertEquals('warning_2', (string) array_shift($warnings));
+    }
+
+    public function testGetErrorsAsFlat(): void
     {
         $report = new Report(Report::TYPE_SUCCESS);
         $error_1 = new Report(Report::TYPE_ERROR, 'error_1');
@@ -181,11 +297,59 @@ class ReportTest extends TestCase
         $report->add($error_1);
         $report->add($error_2);
 
-        $errors = $report->getErrors(true);
+        $errors = (array) $report->getErrors(true);
 
-        $this->assertCount(3, $errors, '3 errors should be returned');
-        $this->assertEquals('error_1', (string) array_shift($errors));
-        $this->assertEquals('error_1_1', (string) array_shift($errors));
-        $this->assertEquals('error_2', (string) array_shift($errors));
+        self::assertCount(3, $errors, '3 errors should be returned');
+        self::assertEquals('error_1', (string) array_shift($errors));
+        self::assertEquals('error_1_1', (string) array_shift($errors));
+        self::assertEquals('error_2', (string) array_shift($errors));
+    }
+
+    public function testStaticReportCreation(): void
+    {
+        $info = Report::createInfo('info31');
+        $success = Report::createSuccess('success31');
+        $warning = Report::createWarning('warning31');
+        $error = Report::createError('error31');
+
+        self::assertEquals(Report::TYPE_INFO, $info->getType());
+        self::assertEquals('info31', $info->getMessage());
+
+        self::assertEquals(Report::TYPE_SUCCESS, $success->getType());
+        self::assertEquals('success31', $success->getMessage());
+
+        self::assertEquals(Report::TYPE_WARNING, $warning->getType());
+        self::assertEquals('warning31', $warning->getMessage());
+
+        self::assertEquals(Report::TYPE_ERROR, $error->getType());
+        self::assertEquals('error31', $error->getMessage());
+    }
+
+    public function testFilterChildrenByTypes(): void
+    {
+        $report = new Report(Report::TYPE_INFO);
+
+        $success = Report::createSuccess('success');
+        $warning = Report::createWarning('warning');
+        $error = Report::createError('error');
+
+        $report->add($success)->add($success);
+        $report->add($warning)->add($warning);
+        $report->add($error)->add($error);
+
+        $filtered = $report->filterChildrenByTypes([
+            Report::TYPE_WARNING,
+            Report::TYPE_ERROR
+        ]);
+
+        self::assertCount(4, $filtered);
+
+        $output = [];
+        foreach ($filtered as $r) {
+            $output[$r->getType()][] = $r->getMessage();
+        }
+
+        self::assertCount(2, $output[Report::TYPE_ERROR]);
+        self::assertCount(2, $output[Report::TYPE_WARNING]);
     }
 }
