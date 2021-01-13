@@ -24,6 +24,7 @@ namespace oat\oatbox\extension;
 
 use oat\oatbox\extension\exception\ManifestException;
 use oat\oatbox\extension\exception\ManifestNotFoundException;
+use oat\oatbox\service\exception\InvalidServiceManagerException;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Composer\InstalledVersions;
@@ -99,15 +100,6 @@ class Manifest implements ServiceLocatorAwareInterface
     }
 
     /**
-     * Get the license of the Extension the manifest describes.
-     * @return string
-     */
-    public function getLicense(): string
-    {
-        return isset($this->manifest['license']) ? $this->manifest['license'] : 'unknown';
-    }
-
-    /**
      * Get the description of the Extension the manifest describes.
      * @return string
      */
@@ -151,7 +143,8 @@ class Manifest implements ServiceLocatorAwareInterface
     public function getVersion():string
     {
         if ($this->version === null) {
-            $this->version = InstalledVersions::getVersion($this->getPackageId());
+            $packageId = $this->getComposerInfo()->getComposerJson(dirname($this->filePath))['name'];
+            $this->version = InstalledVersions::getVersion($packageId);
         }
         return (string) $this->version;
     }
@@ -161,8 +154,7 @@ class Manifest implements ServiceLocatorAwareInterface
      * The content of the array are extensionIDs, represented as strings.
      * @return array
      * @throws ManifestException
-     * @throws \common_cache_NotFoundException
-     * @throws \oat\oatbox\service\exception\InvalidServiceManagerException
+     * @throws InvalidServiceManagerException
      */
     public function getDependencies(): array
     {
@@ -183,16 +175,6 @@ class Manifest implements ServiceLocatorAwareInterface
             }
         }
         return $this->dependencies;
-    }
-
-    /**
-     * Get the models related to the Extension the manifest describes.
-     * The returned value is an array containing model URIs as strings.
-     * @return array
-     */
-    public function getModels(): array
-    {
-        return isset($this->manifest['models']) ? $this->manifest['models'] : [];
     }
 
     /**
@@ -331,66 +313,12 @@ class Manifest implements ServiceLocatorAwareInterface
     }
 
     /**
-     * Removing all generis references from framework
-     * @return \core_kernel_classes_Resource
-     * @throws \common_exception_Error
-     * @deprecated
-     * @see Manifest::getManagementRoleUri()
-     */
-    public function getManagementRole()
-    {
-        $result = null;
-        if (isset($this->manifest['managementRole'])) {
-            $result = $this->manifest['managementRole'] === null ?
-                null : new \core_kernel_classes_Resource($this->manifest['managementRole']);
-        }
-
-        return $result;
-    }
-
-    /**
      * Get the Role dedicated to manage this extension. Returns null if there is
      * @return string
      */
     public function getManagementRoleUri()
     {
         return isset($this->manifest['managementRole']) ? $this->manifest['managementRole'] : '';
-    }
-
-    /**
-     * Get an array of Class URIs (as strings) that are considered optimizable for the
-     * described Extension.
-     * @return array
-     * @throws exception\MalformedManifestException
-     */
-    public function getOptimizableClasses()
-    {
-        $result = [];
-        if (isset($this->manifest['optimizableClasses'])) {
-            if (!is_array($this->manifest['optimizableClasses'])) {
-                throw new exception\MalformedManifestException("The 'optimizableClasses' component must be an array.");
-            }
-            $result = $this->manifest['optimizableClasses'];
-        }
-        return $result;
-    }
-    
-    /**
-     * Get an array of Property URIs (as strings) that are considered optimizable for the
-     * described Extension.
-     * @return array
-     * @throws exception\MalformedManifestException
-     */
-    public function getOptimizableProperties()
-    {
-        $result = [];
-        if (isset($this->manifest['optimizableProperties'])) {
-            if (!is_array($this->manifest['optimizableProperties'])) {
-                throw new exception\MalformedManifestException("The 'optimizableProperties' component must be an array.");
-            }
-            $result = $this->manifest['optimizableProperties'];
-        }
-        return $result;
     }
 
     /**
@@ -402,14 +330,5 @@ class Manifest implements ServiceLocatorAwareInterface
             $this->composerInfo = new ComposerInfo();
         }
         return $this->composerInfo;
-    }
-
-    /**
-     * @return string
-     * @throws ManifestException
-     */
-    private function getPackageId()
-    {
-        return $this->getComposerInfo()->getComposerJson(dirname($this->filePath))['name'];
     }
 }

@@ -102,7 +102,5 @@ class ManifestTest extends TestCase
             $manifest->getInstallModelFiles()
         );
         $this->assertEquals(['WS_ENDPOINT_TWITTER' => 'http://twitter.com/statuses/', 'WS_ENDPOINT_FACEBOOK' => 'http://api.facebook.com/restserver.php'], $manifest->getConstants());
-        $this->assertEquals(['http://www.linkeddata.org/ontologies/data.rdf#myClass1','http://www.linkeddata.org/ontologies/data.rdf#myClass2'], $manifest->getOptimizableClasses());
-        $this->assertEquals(['http://www.linkeddata.org/ontologies/props.rdf#myProp1','http://www.linkeddata.org/ontologies/props.rdf#myProp2'], $manifest->getOptimizableProperties());
     }
 }

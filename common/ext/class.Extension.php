@@ -389,50 +389,9 @@ class common_ext_Extension implements ServiceManagerAwareInterface
         return $this->manifest;
     }
 
-    /**
-     * Get the Management Role of the Extension. Returns null in case of no
-     * Role for the Extension.
-     *
-     * Removing all generis references from framework, please use the Manifest::getManagementRoleUri()
-     *
-     * @access public
-     * @author firstname and lastname of author, <author@example.org>
-     * @return core_kernel_classes_Resource
-     * @deprecated
-     * @see Manifest::getManagementRoleUri()
-     */
-    public function getManagementRole()
-    {
-        return $this->getManifest()->getManagementRole();
-    }
-
-    /**
-     * Get an array of Class URIs (as strings) that are considered optimizable by the Extension.
-     *
-     * @access public
-     * @author Jerome Bogaerts <jerome@taotesting.com>
-     * @return array
-     */
-    public function getOptimizableClasses()
-    {
-        return $this->getManifest()->getOptimizableClasses();
-    }
-
     public function getPhpNamespace()
     {
         return $this->getManifest()->getPhpNamespace();
-    }
-
-    /**
-     * Get an array of Property URIs (as strings) that are considered optimizable by the Extension.
-     *
-     * @access public
-     * @author Jerome Bogaerts <jerome@taotesting.com>
-     * @return array
-     */
-    public function getOptimizableProperties()
-    {
-        return $this->getManifest()->getOptimizableProperties();
     }
 
     /**
