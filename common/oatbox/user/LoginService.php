@@ -76,7 +76,7 @@ class LoginService
                 $user = $adapter->authenticate();
             } catch (common_user_auth_AuthFailedException $exception) {
                 // try next adapter or login failed
-                common_Logger::e($exception->getMessage());
+                common_Logger::w($exception->getMessage());
                 $exceptions[] = $exception;
             }
         }
