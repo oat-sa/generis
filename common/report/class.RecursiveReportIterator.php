@@ -18,34 +18,15 @@
  *
  */
 
+use oat\oatbox\reporting\RecursiveReportIterator;
+
 /**
  * Custom RecursiveIterator for reports.
  *
  * @author Gyula Szucs, <gyula@taotesting.com>
+ * @deprecated Please, use oat\oatbox\reporting\RecursiveReportIterator::class.
  */
-class common_report_RecursiveReportIterator extends ArrayIterator implements RecursiveIterator
+class common_report_RecursiveReportIterator extends RecursiveReportIterator
 {
-    /**
-     * @inheritdoc
-     * @return bool
-     */
-    public function hasChildren()
-    {
-        /** @var common_report_Report $report */
-        $report = $this->current();
 
-        return $report->hasChildren();
-    }
-
-    /**
-     * @inheritdoc
-     * @return common_report_RecursiveReportIterator|RecursiveIterator
-     */
-    public function getChildren()
-    {
-        /** @var common_report_Report $report */
-        $report = $this->current();
-
-        return new self($report->getChildren());
-    }
 }

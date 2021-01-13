@@ -14,22 +14,36 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2013 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
+ * Copyright (c) 2020 (original work) Open Assessment Technologies SA;
  */
 
+declare(strict_types = 1);
+
+namespace oat\oatbox\reporting;
+
+use RecursiveIterator;
+use ArrayIterator;
+
 /**
- * An element of a report representing a successful operation
+ * Custom RecursiveIterator for reports.
  *
- * @access public
- * @author Joel Bout, <joel@taotesting.com>
- * @package generis
- * @deprecated
+ * @author Gyula Szucs, <gyula@taotesting.com>
  */
-class common_report_SuccessElement extends common_report_Report
+class RecursiveReportIterator extends ArrayIterator implements RecursiveIterator
 {
-    public function __construct($message, $data = null)
+    /**
+     * @return bool
+     */
+    public function hasChildren(): bool
     {
-        parent::__construct(self::TYPE_SUCCESS, $message, $data);
+        return $this->current()->hasChildren();
+    }
+
+    /**
+     * @return self|RecursiveIterator
+     */
+    public function getChildren()
+    {
+        return new static($this->current()->getChildren());
     }
 }

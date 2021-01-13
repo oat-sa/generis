@@ -14,22 +14,30 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2013 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
+ * Copyright (c) 2021 (original work) Open Assessment Technologies SA;
  */
 
-/**
- * An element of a report representing an error that occured
- *
- * @access public
- * @author Joel Bout, <joel@taotesting.com>
- * @package generis
- * @deprecated
- */
-class common_report_ErrorElement extends common_report_Report
+declare(strict_types = 1);
+
+namespace oat\oatbox\reporting;
+
+use IteratorAggregate;
+use JsonSerializable;
+
+interface ReportInterface extends IteratorAggregate, JsonSerializable
 {
-    public function __construct($message)
-    {
-        parent::__construct(self::TYPE_ERROR, $message);
-    }
+    public const TYPE_INFO = 'info';
+
+    public const TYPE_SUCCESS = 'success';
+
+    public const TYPE_WARNING = 'warning';
+
+    public const TYPE_ERROR = 'error';
+
+    public const ALLOWED_TYPES = [
+        self::TYPE_INFO,
+        self::TYPE_SUCCESS,
+        self::TYPE_WARNING,
+        self::TYPE_ERROR,
+    ];
 }
