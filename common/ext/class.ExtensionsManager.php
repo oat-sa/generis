@@ -309,25 +309,10 @@ class common_ext_ExtensionsManager extends ConfigurableService
 
     /**
      * @return array
-     * @throws ManifestException
      */
-    public static function getAvailablePackagesStatic()
+    public static function getAvailablePackagesStatic(): array
     {
-        $rootPath = defined('ROOT_PATH') ? ROOT_PATH : realpath(__DIR__ . '/../../../');
-
-        $returnValue = [];
         $composer = new ComposerInfo();
-
-        $composerLock = $composer->getComposerLock($rootPath);
-
-        $extensionPackages = array_filter($composerLock[ComposerInfo::COMPOSER_LOCK_PACKAGES], function ($package) {
-            return isset($package[ComposerInfo::COMPOSER_LOCK_EXTRA][ComposerInfo::COMPOSER_LOCK_EXTENSION_NAME]);
-        });
-        foreach ($extensionPackages as $package) {
-            $extId = $package[ComposerInfo::COMPOSER_LOCK_EXTRA][ComposerInfo::COMPOSER_LOCK_EXTENSION_NAME];
-            $returnValue[$package[ComposerInfo::COMPOSER_LOCK_PACKAGE_NAME]] = $extId;
-        }
-
-        return $returnValue;
+        return $composer->getAvailableTaoExtensions();
     }
 }

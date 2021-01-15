@@ -143,7 +143,7 @@ class Manifest implements ServiceLocatorAwareInterface
     public function getVersion():string
     {
         if ($this->version === null) {
-            $packageId = $this->getComposerInfo()->getComposerJson(dirname($this->filePath))['name'];
+            $packageId = $this->getComposerInfo()->getPackageId();
             $this->version = InstalledVersions::getVersion($packageId);
         }
         return (string) $this->version;
@@ -159,15 +159,7 @@ class Manifest implements ServiceLocatorAwareInterface
     public function getDependencies(): array
     {
         if (empty($this->dependencies)) {
-            /** @var \common_ext_ExtensionsManager $extensionsManager */
-            $extensionsManager = $this->getServiceLocator()->get(\common_ext_ExtensionsManager::class);
-            $availablePackages = $extensionsManager->getAvailablePackages();
-            $composerJson = $this->getComposerInfo()->getComposerJson(dirname($this->filePath));
-            $requiredTaoPackages = array_intersect_key($composerJson['require'], $availablePackages);
-            foreach ($requiredTaoPackages as $packageId => $packageVersion) {
-                $this->dependencies[$availablePackages[$packageId]] = $packageVersion;
-            }
-
+            $this->dependencies = $this->getComposerInfo()->extractExtensionDependencies();
             //backward compatibility with old requirements declaration
             //todo: remove after dependencies of all Tao extensions be moved from manifest to composer.json
             if (isset($this->manifest['requires'])) {
@@ -265,23 +257,16 @@ class Manifest implements ServiceLocatorAwareInterface
     }
 
     /**
-     * Extract checks from a given manifest file.
-     * @param string $file The path to a manifest.php file.
+     * Extract dependencies for extensions
+     * @param string $file
      * @return array
-     * @throws ManifestException
+     * @throws \common_ext_ExtensionException
      */
     public static function extractDependencies(string $file)
     {
         $file = realpath($file);
-        $result = [];
-        $availablePackages = \common_ext_ExtensionsManager::getAvailablePackagesStatic();
-        $composerJson = (new ComposerInfo())->getComposerJson(dirname($file));
-        foreach ($composerJson['require'] as $packageId => $packageVersion) {
-            if (isset($availablePackages[$packageId])) {
-                $result[] = $availablePackages[$packageId];
-            }
-        }
-        return $result;
+        $composer = new ComposerInfo(dirname($file));
+        return array_keys($composer->extractExtensionDependencies());
     }
 
     /**
@@ -290,7 +275,7 @@ class Manifest implements ServiceLocatorAwareInterface
      * @return \common_configuration_ComponentCollection
      * @throws ManifestNotFoundException
      */
-    public static function extractChecks($file)
+    public static function extractChecks(string $file)
     {
         // the file exists, we can refer to the $filePath.
         if (!is_readable($file)) {
@@ -323,11 +308,12 @@ class Manifest implements ServiceLocatorAwareInterface
 
     /**
      * @return ComposerInfo
+     * @throws \common_ext_ExtensionException
      */
     private function getComposerInfo()
     {
         if ($this->composerInfo === null) {
-            $this->composerInfo = new ComposerInfo();
+            $this->composerInfo = new ComposerInfo(dirname($this->filePath));
         }
         return $this->composerInfo;
     }

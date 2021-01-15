@@ -23,7 +23,7 @@ declare(strict_types=1);
 
 namespace oat\oatbox\extension;
 
-use oat\oatbox\extension\exception\ManifestException;
+use common_ext_ExtensionException;
 
 /**
  * Class ComposerInfo
@@ -33,52 +33,124 @@ class ComposerInfo
 {
     private static $jsons = [];
     private static $locks = [];
+    private static $availablePackages;
 
-    const COMPOSER_JSON = 'composer.json';
-    const COMPOSER_LOCK = 'composer.lock';
-    const COMPOSER_LOCK_PACKAGES = 'packages';
-    const COMPOSER_LOCK_EXTRA = 'extra';
-    const COMPOSER_LOCK_EXTENSION_NAME = 'tao-extension-name';
-    const COMPOSER_LOCK_PACKAGE_NAME = 'name';
+    /** @var null|string  */
+    private $rootDir;
+
+    private const COMPOSER_JSON = 'composer.json';
+    private const COMPOSER_LOCK = 'composer.lock';
+    private const COMPOSER_LOCK_PACKAGES = 'packages';
+    private const COMPOSER_LOCK_EXTRA = 'extra';
+    private const COMPOSER_LOCK_EXTENSION_NAME = 'tao-extension-name';
+    private const COMPOSER_LOCK_PACKAGE_NAME = 'name';
 
     /**
-     * @param $folder
-     * @return array
-     * @throws ManifestException
+     * ComposerInfo constructor.
+     * @param string|null $rootDir directory where composer file located
+     * @throws common_ext_ExtensionException
      */
-    public function getComposerJson($folder): array
+    public function __construct(string $rootDir = null)
     {
-        if (!isset(self::$jsons[$folder])) {
-            $file = realpath($folder).DIRECTORY_SEPARATOR.self::COMPOSER_JSON;
-            self::$jsons[$folder] = $this->getEncodedFileContent($file);
+        if ($rootDir === null) {
+            $this->rootDir = defined('ROOT_PATH') ? ROOT_PATH : realpath(__DIR__ . '/../../../../');
+        } else {
+            $this->rootDir = $rootDir;
         }
-        return self::$jsons[$folder];
+        $composerJsonPath = realpath($this->rootDir).DIRECTORY_SEPARATOR.self::COMPOSER_JSON;
+
+        if (!file_exists($composerJsonPath)) {
+            throw new common_ext_ExtensionException(sprintf('Composer file missed at %s', $this->rootDir));
+        }
     }
 
     /**
-     * @param $folder
      * @return array
-     * @throws ManifestException
      */
-    public function getComposerLock($folder): array
+    private function getComposerJson(): array
     {
-        if (!isset(self::$locks[$folder])) {
-            $file = realpath($folder).DIRECTORY_SEPARATOR.self::COMPOSER_LOCK;
-            self::$locks[$folder] = $this->getEncodedFileContent($file);
+        if (!isset(self::$jsons[$this->rootDir])) {
+            $file = realpath($this->rootDir).DIRECTORY_SEPARATOR.self::COMPOSER_JSON;
+            self::$jsons[$this->rootDir] = $this->getEncodedFileContent($file);
         }
-        return self::$locks[$folder];
+        return self::$jsons[$this->rootDir];
+    }
+
+
+    /**
+     * @return array
+     * @throws common_ext_ExtensionException
+     */
+    private function getComposerLock(): array
+    {
+        if (!isset(self::$locks[$this->rootDir])) {
+            $composerLockPath = realpath($this->rootDir).DIRECTORY_SEPARATOR.self::COMPOSER_LOCK;
+            if (!file_exists($composerLockPath)) {
+                throw new common_ext_ExtensionException(sprintf('Composer lock file missed at %s', $composerLockPath));
+            }
+            self::$locks[$this->rootDir] = $this->getEncodedFileContent($composerLockPath);
+        }
+
+        return self::$locks[$this->rootDir];
+    }
+
+    /**
+     * @return array
+     * @throws common_ext_ExtensionException
+     */
+    public function getAvailableTaoExtensions(): array
+    {
+        if (self::$availablePackages !== null) {
+            return self::$availablePackages;
+        }
+
+        self::$availablePackages = [];
+        $rootComposerInfo = new self();
+        $composerLock = $rootComposerInfo->getComposerLock();
+
+        $extensionPackages = array_filter($composerLock[self::COMPOSER_LOCK_PACKAGES], function ($package) {
+            return isset($package[self::COMPOSER_LOCK_EXTRA][self::COMPOSER_LOCK_EXTENSION_NAME]);
+        });
+        foreach ($extensionPackages as $package) {
+            $extId = $package[self::COMPOSER_LOCK_EXTRA][self::COMPOSER_LOCK_EXTENSION_NAME];
+            self::$availablePackages[$package[self::COMPOSER_LOCK_PACKAGE_NAME]] = $extId;
+        }
+
+        return self::$availablePackages;
+    }
+
+    /**
+     * Get dependant tao extensions
+     * @return array
+     * @throws common_ext_ExtensionException
+     */
+    public function extractExtensionDependencies()
+    {
+        $result = [];
+        $availableTaoExtensions = $this->getAvailableTaoExtensions();
+        $composerJson = $this->getComposerJson();
+        foreach ($composerJson['require'] as $packageId => $packageVersion) {
+            if (isset($availableTaoExtensions[$packageId])) {
+                $result[$availableTaoExtensions[$packageId]] = $packageVersion;
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPackageId():string
+    {
+        return $this->getComposerJson()['name'];
     }
 
     /**
      * @param $path
      * @return mixed
-     * @throws ManifestException
      */
     private function getEncodedFileContent($path)
     {
-        if (!file_exists($path)) {
-            throw new ManifestException($path . ' file not found');
-        }
         $content = file_get_contents($path);
         return json_decode($content, true);
     }
