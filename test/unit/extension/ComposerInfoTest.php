@@ -33,34 +33,26 @@ use oat\oatbox\extension\exception\ManifestException;
  */
 class ComposerInfoTest extends TestCase
 {
-    public function testGetComposerJson()
+
+    public function testGetAvailableTaoExtensions()
     {
-        $instance = new ComposerInfo();
-        $composerJson = $instance->getComposerJson($this->getSamplesDir());
-        $this->assertArrayHasKey('require', $composerJson);
-        $this->assertEquals('oat-sa/extension-tao-lightweight', $composerJson['name']);
-        $this->assertEquals('tao-extension', $composerJson['type']);
+        $instance = new ComposerInfo($this->getSamplesDir());
+        $this->assertEquals([
+            'oat-sa/extension-tao-foobar' => 'taoFooBar',
+            'oat-sa/extension-tao-taoItemBank' => 'taoItemBank'
+        ], $instance->getAvailableTaoExtensions());
     }
 
-    public function testGetComposerLock()
+    public function testExtractExtensionDependencies()
     {
-        $instance = new ComposerInfo();
-        $composerLock = $instance->getComposerLock($this->getSamplesDir());
-        $this->assertArrayHasKey('packages', $composerLock);
+        $instance = new ComposerInfo($this->getSamplesDir());
+        $this->assertEquals(['taoItemBank' => '*'], $instance->extractExtensionDependencies());
     }
 
-    public function testGetComposerJsonException()
+    public function testGetPackageId()
     {
-        $instance = new ComposerInfo();
-        $this->expectException(ManifestException::class);
-        $instance->getComposerJson('foo');
-    }
-
-    public function testGetComposerLockException()
-    {
-        $instance = new ComposerInfo();
-        $this->expectException(ManifestException::class);
-        $instance->getComposerLock('foo');
+        $instance = new ComposerInfo($this->getSamplesDir());
+        $this->assertEquals('oat-sa/extension-tao-lightweight', $instance->getPackageId());
     }
 
     private function getSamplesDir()

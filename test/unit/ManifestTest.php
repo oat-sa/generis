@@ -36,16 +36,10 @@ class ManifestTest extends TestCase
     private function getComposerInfoMock()
     {
         $composerInfo = $this->getMockBuilder(ComposerInfo::class)->getMock();
-        $composerInfo->method('getComposerJson')->willReturn([
-            'name'=> 'oat-sa/extension-tao-lightweight',
-            'extra' => [
-                'tao-extension-name' => 'taoLightweight'
-            ],
-            'require'=> [
-                'oat-sa/oatbox-extension-installer'=> '~1.1||dev-master',
-                'oat-sa/extension-tao-taoItemBank'=> '*',
-                'oat-sa/extension-tao-taoDocuments'=> '*'
-            ]
+
+        $composerInfo->method('extractExtensionDependencies')->willReturn([
+              'taoItemBank' => '*',
+              'taoDocuments' => '*'
         ]);
 
         return $composerInfo;
