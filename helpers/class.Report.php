@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,6 +19,7 @@
  */
 
 use oat\generis\Helper\SystemHelper;
+use oat\oatbox\reporting\ReportInterface;
 
 /**
  * This helper aims at providing utility methods to render
@@ -35,30 +35,30 @@ class helpers_Report
     /**
      * Contains the logic to render a report and its children to the command line
      *
-     * @param common_report_Report $report A report to be rendered.
+     * @param ReportInterface $report A report to be rendered.
      * @param boolean $useColor
      * @param integer $intend the intend of the message.
      * @return string The shell output of $report.
      */
-    public static function renderToCommandLine(common_report_Report $report, $useColor = self::AUTOSENSE, $intend = 0)
+    public static function renderToCommandLine(ReportInterface $report, $useColor = self::AUTOSENSE, $intend = 0): string
     {
         switch ($report->getType()) {
-            case common_report_Report::TYPE_SUCCESS:
+            case ReportInterface::TYPE_SUCCESS:
                 $color = '0;32'; // green
                 break;
             
-            case common_report_Report::TYPE_WARNING:
+            case ReportInterface::TYPE_WARNING:
                 $color = '1;33'; // yellow
                 break;
             
-            case common_report_Report::TYPE_ERROR:
+            case ReportInterface::TYPE_ERROR:
                 $color = '1;31'; // red
                 break;
             
             default:
                 $color = '0;37'; // light grey
         }
-        if ($useColor == self::AUTOSENSE) {
+        if ($useColor === self::AUTOSENSE) {
             $useColor = getenv('TAO_CONSOLE') !== 'nocolor' && !SystemHelper::isWindows();
         }
             
@@ -69,6 +69,7 @@ class helpers_Report
         foreach ($report as $child) {
             $output .= self::renderToCommandline($child, $useColor, $intend + 2);
         }
+
         return $output;
     }
 }
