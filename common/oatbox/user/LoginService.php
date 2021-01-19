@@ -27,6 +27,7 @@ use common_user_auth_AuthFailedException;
 use common_user_User;
 use common_session_DefaultSession;
 use common_session_SessionManager;
+use common_Logger;
 
 /**
  * Login service
@@ -75,6 +76,7 @@ class LoginService
                 $user = $adapter->authenticate();
             } catch (common_user_auth_AuthFailedException $exception) {
                 // try next adapter or login failed
+                common_Logger::w($exception->getMessage());
                 $exceptions[] = $exception;
             }
         }
