@@ -149,7 +149,8 @@ class ComposerInfo
 
         $composerLockPath = realpath($this->rootDir).DIRECTORY_SEPARATOR.self::COMPOSER_LOCK;
         if (!file_exists($composerLockPath)) {
-            $composerLockPath = $this->getTaoRoot().DIRECTORY_SEPARATOR.self::COMPOSER_LOCK;
+            $composerLockPath = rtrim($this->getTaoRoot(), DIRECTORY_SEPARATOR) .
+                DIRECTORY_SEPARATOR . self::COMPOSER_LOCK;
         }
 
         if (!file_exists($composerLockPath)) {

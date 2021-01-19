@@ -288,31 +288,21 @@ class common_ext_ExtensionsManager extends ConfigurableService
      * Call a service to retrieve a map array of all available extensions
      * with extension package id as a key and extension id as a value
      * @return array
-     * @throws ManifestException
-     * @throws \oat\oatbox\service\exception\InvalidServiceManagerException
      */
     public function getAvailablePackages()
     {
+        $composer = new ComposerInfo();
         //During installation list of packages is needed but cache service is not installed yet.
         if (!$this->getServiceManager()->has(SimpleCache::SERVICE_ID)) {
-            return self::getAvailablePackagesStatic();
+            return $composer->getAvailableTaoExtensions();
         }
         /** @var SimpleCache $cache */
         $cache = $this->getServiceManager()->get(SimpleCache::SERVICE_ID);
         $key = static::class.'_'.__METHOD__;
         if (!$cache->has($key)) {
-            $cache->set($key, self::getAvailablePackagesStatic());
+            $cache->set($key, $composer->getAvailableTaoExtensions());
         }
 
         return (array) $cache->get($key);
-    }
-
-    /**
-     * @return array
-     */
-    public static function getAvailablePackagesStatic(): array
-    {
-        $composer = new ComposerInfo();
-        return $composer->getAvailableTaoExtensions();
     }
 }
