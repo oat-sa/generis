@@ -1,0 +1,156 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "ea527e79576536e15b935c77c43ea815",
+    "packages": [
+        {
+            "name": "oat-sa/extension-tao-foobar",
+            "version": "dev-develop",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/oat-sa/extension-tao-foobar.git",
+                "reference": "57dd32fdf23489ed391b3c57d2e0828e758a1ba9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/oat-sa/extension-tao-foobar/zipball/57dd32fdf23489ed391b3c57d2e0828e758a1ba9",
+                "reference": "57dd32fdf23489ed391b3c57d2e0828e758a1ba9",
+                "shasum": ""
+            },
+            "require": {
+                "oat-sa/oatbox-extension-installer": "~1.1||dev-master"
+            },
+            "type": "tao-extension",
+            "extra": {
+                "tao-extension-name": "taoFooBar"
+            },
+            "autoload": {
+                "psr-4": {
+                    "oat\\taoFooBar\\": ""
+                }
+            },
+            "license": [
+                "GPL-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Open Assessment Technologies S.A.",
+                    "homepage": "http://www.taotesting.com"
+                }
+            ],
+            "description": "dummy extension for testing",
+            "homepage": "http://www.taotesting.com",
+            "keywords": [
+                "computer-based-assessment",
+                "oat",
+                "tao"
+            ],
+            "support": {
+                "source": "https://github.com/oat-sa/extension-tao-foobar/tree/v5.3.1",
+                "issues": "https://github.com/oat-sa/extension-tao-foobar/issues"
+            },
+            "time": "2021-01-06T14:20:04+00:00"
+        },
+        {
+            "name": "oat-sa/extension-tao-taoItemBank",
+            "version": "dev-develop",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/oat-sa/oat-sa/extension-tao-taoItemBank.git",
+                "reference": "57dd32fdf23489ed391b3c57d2e0828e758a1ba9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/oat-sa/oat-sa/extension-tao-taoItemBank/zipball/57dd32fdf23489ed391b3c57d2e0828e758a1ba9",
+                "reference": "57dd32fdf23489ed391b3c57d2e0828e758a1ba9",
+                "shasum": ""
+            },
+            "require": {
+                "oat-sa/oatbox-extension-installer": "~1.1||dev-master"
+            },
+            "type": "tao-extension",
+            "extra": {
+                "tao-extension-name": "taoItemBank"
+            },
+            "autoload": {
+                "psr-4": {
+                    "oat\\taoFooBar\\": ""
+                }
+            },
+            "license": [
+                "GPL-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Open Assessment Technologies S.A.",
+                    "homepage": "http://www.taotesting.com"
+                }
+            ],
+            "description": "tao taoItemBank",
+            "homepage": "http://www.taotesting.com",
+            "keywords": [
+                "computer-based-assessment",
+                "oat",
+                "tao"
+            ],
+            "support": {
+                "source": "https://github.com/oat-sa/extension-tao-taoItemBank/tree/v5.3.1",
+                "issues": "https://github.com/oat-sa/extension-tao-taoItemBank/issues"
+            },
+            "time": "2021-01-06T14:20:04+00:00"
+        },
+        {
+            "name": "clearfw/clearfw",
+            "version": "v1.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/oat-sa/clearfw.git",
+                "reference": "e50dae8eed52d5d43d0759a9c1928ba509f2fd09"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/oat-sa/clearfw/zipball/e50dae8eed52d5d43d0759a9c1928ba509f2fd09",
+                "reference": "e50dae8eed52d5d43d0759a9c1928ba509f2fd09",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "core/",
+                    "core/helpers/",
+                    "core/util"
+                ],
+                "files": [
+                    "clearbricks/init.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0"
+            ],
+            "authors": [
+            ],
+            "description": "ClearFw",
+            "support": {
+                "issues": "https://github.com/oat-sa/clearfw/issues",
+                "source": "https://github.com/oat-sa/clearfw/tree/master"
+            },
+            "time": "2019-02-15T10:59:35+00:00"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "dev",
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": [],
+    "platform-overrides": {
+        "php": "7.2.29"
+    },
+    "plugin-api-version": "1.1.0"
+}
