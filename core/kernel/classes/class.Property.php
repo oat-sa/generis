@@ -21,12 +21,9 @@
  *
  */
 
-use oat\generis\model\data\ModelManager;
 use oat\generis\model\GenerisRdf;
 use oat\generis\model\OntologyRdfs;
 use oat\generis\model\WidgetRdf;
-use oat\oatbox\event\EventManager;
-use oat\tao\model\event\ClassPropertyDeletedEvent;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 
 /**
@@ -328,12 +325,6 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
     {
         $returnValue = (bool) false;
         $returnValue = $this->getImplementation()->delete($this, $deleteReference);
-        $this->getEventManager()->trigger(new ClassPropertyDeletedEvent($this->getUri()));
         return (bool) $returnValue;
-    }
-
-    private function getEventManager(): EventManager
-    {
-        return $this->getServiceManager()->get(EventManager::SERVICE_ID);
     }
 }

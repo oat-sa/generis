@@ -326,16 +326,6 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
             throw new common_Exception('problem creating property');
         }
 
-        $this->getEventManager()->trigger(
-            new ClassPropertyCreatedEvent(
-                $resource,
-                [
-                    'propertyUri' => $propertyInstance->getUri(),
-                    'label' => $label
-                ]
-            )
-        );
-
         return $returnValue;
     }
 
@@ -536,10 +526,5 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
         }
 
         return $query;
-    }
-
-    private function getEventManager(): EventManager
-    {
-        return $this->getServiceLocator()->get(EventManager::SERVICE_ID);
     }
 }
