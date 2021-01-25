@@ -28,7 +28,7 @@ use Google\Cloud\Storage\StorageClient;
 use Superbalist\Flysystem\GoogleStorage\GoogleStorageAdapter;
 
 /**
- *
+ * @deprecated Please install `oat-sa/lib-generis-gcp` and use \oat\Gcp\Gcs\GcsFlyWrapper
  * @author Joel Bout
  */
 class GoogleStorageWrapper extends ConfigurableService implements AdapterInterface
