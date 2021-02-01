@@ -32,7 +32,7 @@ class ClassPropertyDeletedEventTest extends TestCase
     {
         $classMock = $this->createMock(core_kernel_classes_Class::class);
         $subject = new ClassPropertyDeletedEvent($classMock, ['propertyUri' => 'uri']);
-        $this->assertEquals($subject->getClass(), $classMock);
+        $this->assertEquals($classMock, $subject->getClass());
         $this->assertArrayHasKey('propertyUri', $subject->getProperties());
         $this->assertEquals(ClassPropertyDeletedEvent::class, $subject->getName());
     }
