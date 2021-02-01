@@ -39,8 +39,6 @@ abstract class AbstractClassPropertyEvent implements Event
         $this->properties = $properties;
     }
 
-    abstract public function getName();
-
     public function getProperties(): array
     {
         return $this->properties;
