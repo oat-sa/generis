@@ -22,9 +22,7 @@ declare(strict_types=1);
 
 namespace oat\generis\model\data\event;
 
-use oat\oatbox\event\Event;
-
-class ClassPropertyCreatedEvent extends AbstractClassPropertyEvent implements Event
+class ClassPropertyCreatedEvent extends AbstractClassPropertyEvent
 {
     public function getName()
     {
