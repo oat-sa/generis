@@ -21,10 +21,11 @@
  *               2012-2017 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
 
+use oat\generis\model\data\event\ClassPropertyCreatedEvent;
 use oat\generis\model\GenerisRdf;
 use oat\generis\model\OntologyRdf;
 use oat\generis\model\OntologyRdfs;
-use oat\oatbox\service\ServiceManager;
+use oat\oatbox\event\EventManagerAwareTrait;
 use oat\generis\model\kernel\persistence\smoothsql\search\ComplexSearchService;
 use Doctrine\DBAL\DBALException;
 use oat\generis\model\kernel\uri\UriProvider;
@@ -35,6 +36,7 @@ use oat\generis\model\kernel\uri\UriProvider;
  */
 class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_smoothsql_Resource implements core_kernel_persistence_ClassInterface
 {
+    use EventManagerAwareTrait;
 
     /**
      * (non-PHPdoc)
@@ -324,7 +326,17 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
         if (!$returnValue->setDomain($resource)) {
             throw new common_Exception('problem creating property');
         }
-        
+
+        $this->getEventManager()->trigger(
+            new ClassPropertyCreatedEvent(
+                $resource,
+                [
+                    'propertyUri' => $propertyInstance->getUri(),
+                    'propertyLabel' => $propertyInstance->getLabel()
+                ]
+            )
+        );
+
         return $returnValue;
     }
 
