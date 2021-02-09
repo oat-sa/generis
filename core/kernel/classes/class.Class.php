@@ -435,7 +435,9 @@ class core_kernel_classes_Class extends core_kernel_classes_Resource
     public function delete($deleteReference = false)
     {
         $delete = (bool) $this->getImplementation()->delete($this, $deleteReference);
-        $this->getEventManager()->trigger(new ClassDeletedEvent($this));
+        if ($delete) {
+            $this->getEventManager()->trigger(new ClassDeletedEvent($this));
+        }
         return $delete;
     }
 
