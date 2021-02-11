@@ -283,7 +283,7 @@ class Manifest implements ServiceLocatorAwareInterface
         }
         //ROOT_URL constant may be used in the manifest file.
         if (!defined('ROOT_URL')) {
-            define(ROOT_URL, '');
+            define('ROOT_URL', '');
         }
         $manifest = require($file);
         $returnValue = $manifest['install']['checks'] ?? [];
