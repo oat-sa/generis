@@ -22,6 +22,9 @@
 
 use oat\oatbox\service\ConfigurableService;
 use oat\oatbox\service\ServiceManager;
+use oat\oatbox\extension\exception\ManifestException;
+use oat\oatbox\extension\ComposerInfo;
+use oat\oatbox\cache\SimpleCache;
 
 /**
  * The ExtensionsManager class is dedicated to Extensions Management. It provides
@@ -33,7 +36,6 @@ use oat\oatbox\service\ServiceManager;
  * @authorlionel@taotesting.com
  * @package generis
  * @see @license  GNU General Public (GPL) Version 2 http://www.opensource.org/licenses/gpl-2.0.php
-
  */
 class common_ext_ExtensionsManager extends ConfigurableService
 {
@@ -179,7 +181,7 @@ class common_ext_ExtensionsManager extends ConfigurableService
             throw new common_ext_ExtensionException('No id specified for getExtensionById()');
         }
         if (! isset($this->extensions[$id])) {
-            $extension = new common_ext_Extension($id, false);
+            $extension = new common_ext_Extension($id);
             $this->propagate($extension);
 
             // loads the extension if it hasn't been loaded yet
@@ -218,7 +220,7 @@ class common_ext_ExtensionsManager extends ConfigurableService
         $exts[$extensionId]['enabled'] = (bool) $enabled;
         return $this->getExtensionById('generis')->setConfig(self::EXTENSIONS_CONFIG_KEY, $exts);
     }
-
+    
     /**
      * Get the set of currently enabled extensions. This method
      * returns an array of common_ext_Extension.
@@ -237,10 +239,10 @@ class common_ext_ExtensionsManager extends ConfigurableService
                 $returnValue[$ext->getId()] = $ext;
             }
         }
-
+    
         return (array) $returnValue;
     }
-
+    
     /**
      * Add the end of an installation register the new extension
      *
@@ -280,5 +282,27 @@ class common_ext_ExtensionsManager extends ConfigurableService
         $extensions = $this->getExtensionById('generis')->getConfig(self::EXTENSIONS_CONFIG_KEY);
         $extensions[$extension->getId()]['installed'] = $version;
         $this->getExtensionById('generis')->setConfig(self::EXTENSIONS_CONFIG_KEY, $extensions);
+    }
+
+    /**
+     * Call a service to retrieve a map array of all available extensions
+     * with extension package id as a key and extension id as a value
+     * @return array
+     */
+    public function getAvailablePackages()
+    {
+        $composer = new ComposerInfo();
+        //During installation list of packages is needed but cache service is not installed yet.
+        if (!$this->getServiceManager()->has(SimpleCache::SERVICE_ID)) {
+            return $composer->getAvailableTaoExtensions();
+        }
+        /** @var SimpleCache $cache */
+        $cache = $this->getServiceManager()->get(SimpleCache::SERVICE_ID);
+        $key = static::class.'_'.__METHOD__;
+        if (!$cache->has($key)) {
+            $cache->set($key, $composer->getAvailableTaoExtensions());
+        }
+
+        return (array) $cache->get($key);
     }
 }

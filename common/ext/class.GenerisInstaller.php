@@ -24,6 +24,7 @@
 use oat\generis\persistence\PersistenceManager;
 use oat\generis\model\data\Ontology;
 use oat\generis\persistence\sql\SchemaProviderInterface;
+use oat\oatbox\extension\exception\ManifestNotFoundException;
 use oat\oatbox\cache\SimpleCache;
 
 /**
@@ -42,7 +43,7 @@ class common_ext_GenerisInstaller extends common_ext_ExtensionInstaller
      * @throws common_Exception
      * @throws common_ext_ExtensionException
      * @throws common_ext_InstallationException
-     * @throws common_ext_ManifestNotFoundException
+     * @throws ManifestNotFoundException
      */
     public function install()
     {
