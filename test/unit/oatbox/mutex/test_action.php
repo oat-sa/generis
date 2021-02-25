@@ -1,6 +1,11 @@
 <?php
 
-require(__DIR__ . '/../../../../../vendor/autoload.php');
+$extRoot = __DIR__ . '/../../../../';
+if (is_dir($extRoot.'vendor')) {
+    require($extRoot.'vendor/autoload.php');
+} elseif (is_dir($extRoot.'../vendor')) {
+    require($extRoot.'../vendor/autoload.php');
+}
 
 use oat\oatbox\mutex\LockService;
 use oat\oatbox\service\ServiceManager;

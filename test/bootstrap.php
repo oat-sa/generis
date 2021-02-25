@@ -29,7 +29,7 @@ if (is_dir($extensionRoot . '../vendor')) {
 } elseif (is_dir($extensionRoot . 'vendor')){
     require_once $extensionRoot . 'vendor/autoload.php';
 } else {
-    throw \Exception('Vendor directory not found');
+    throw new \Exception('Vendor directory not found');
 }
 
-common_Config::load($extensionRoot . 'test/config/generis.conf.php');
+\common_Config::load($extensionRoot . 'test/config/generis.conf.php');
