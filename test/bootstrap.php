@@ -32,7 +32,11 @@ if (is_dir($extensionRoot . '../vendor')) {
     throw new \Exception('Vendor directory not found');
 }
 
+<<<<<<< HEAD
 var_dump(class_exists('\\common_Config'));
 var_dump(class_exists('\\oat\\generis\\test\\TestCase'));
 
 \common_Config::load($extensionRoot . 'test/config/generis.conf.php');
+=======
+common_Config::load($extensionRoot . 'test/config/generis.conf.php');
+>>>>>>> e7657c1915fceaf1de10d6fa389f8a7d5bcd6e62
