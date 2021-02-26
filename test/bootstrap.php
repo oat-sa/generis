@@ -32,4 +32,4 @@ if (is_dir($extensionRoot . '../vendor')) {
     throw new \Exception('Vendor directory not found');
 }
 
-\common_Config::load($extensionRoot . 'test/config/generis.conf.php');
+common_Config::load($extensionRoot . 'test/config/generis.conf.php');
