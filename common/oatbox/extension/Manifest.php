@@ -49,7 +49,7 @@ class Manifest implements ServiceLocatorAwareInterface
      * @var string
      */
     private $version = null;
-    
+
     /**
      * The dependencies of the Extension the manifest describes.
      * @var array
@@ -199,7 +199,7 @@ class Manifest implements ServiceLocatorAwareInterface
         }
         return $result;
     }
-    
+
     /**
      * Return the uninstall data as an array if present, or null if not
      * @return mixed
@@ -208,7 +208,7 @@ class Manifest implements ServiceLocatorAwareInterface
     {
         return isset($this->manifest['uninstall']) ? $this->manifest['uninstall'] : null;
     }
-    
+
     /**
      * Return the className of the updateHandler
      * @return string
@@ -217,7 +217,7 @@ class Manifest implements ServiceLocatorAwareInterface
     {
         return isset($this->manifest['update']) ? $this->manifest['update'] : null;
     }
-    
+
     /**
       * PHP scripts to execute in order to add some sample data to an install
       * @return array
@@ -281,10 +281,7 @@ class Manifest implements ServiceLocatorAwareInterface
         if (!is_readable($file)) {
             throw new ManifestNotFoundException(sprintf('The Extension Manifest file located at %s could not be read.', $file));
         }
-        //ROOT_URL constant may be used in the manifest file.
-        if (!defined('ROOT_URL')) {
-            define('ROOT_URL', '');
-        }
+
         $manifest = require($file);
         $returnValue = $manifest['install']['checks'] ?? [];
         foreach ($returnValue as &$component) {
