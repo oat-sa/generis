@@ -19,8 +19,9 @@
  */
 
 declare(strict_types=1);
+use oat\oatbox\extension\exception\ManifestException;
 
-class common_ext_UpdaterNotFoundException extends common_ext_ManifestException
+class common_ext_UpdaterNotFoundException extends ManifestException
 {
 
 }
