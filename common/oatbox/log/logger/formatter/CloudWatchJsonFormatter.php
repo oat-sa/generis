@@ -82,7 +82,13 @@ class CloudWatchJsonFormatter implements FormatterInterface
             'message' => $record['message'],
             'tag' => $record['context'],
         ];
-
+        
+        if (isset($record['extra']['stack']['host_type'])) {
+            $output['host_type'] = $record['extra']['stack']['host_type'];
+        }
+        if (isset($record['extra']['stack']['id'])) {
+            $output['instance_id'] = $record['extra']['stack']['id'];
+        }
         if (isset($record['extra']['trace'])) {
             $output['trace'] = $record['extra']['trace'];
         }
