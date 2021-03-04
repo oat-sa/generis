@@ -29,17 +29,15 @@
 return [
     'name' => 'complex',
     'description' => 'complex testing manifest',
-    'version' => '1.0',
     'author' => 'TAO Team',
-    'dependencies' => ['taoItemBank', 'taoDocuments'],
     'models' => [
         'http://www.tao.lu/Ontologies/taoFuncACL.rdf',
         'http://www.tao.lu/Ontologies/taoItemBank.rdf'
     ],
     'install' => [
         'rdf' => [
-                ['ns' => 'http://www.tao.lu/Ontologies/taoFuncACL.rdf', 'file' => '/extension/path/models/ontology/taofuncacl.rdf'],
-                ['ns' => 'http://www.tao.lu/Ontologies/taoItemBank.rdf', 'file' => '/extension/path/models/ontology/taoitembank.rdf']
+            '/extension/path/models/ontology/taofuncacl.rdf',
+            '/extension/path/models/ontology/taoitembank.rdf'
         ],
         'checks' => [
             ['type' => 'CheckPHPRuntime', 'value' => ['id' => 'php_runtime', 'min' => '5.3', 'max' => '5.3.18']],

@@ -34,7 +34,6 @@ return [
     'license' => 'GPL-2.0',
     'version' => '13.14.1',
     'author' => 'Open Assessment Technologies, CRP Henri Tudor',
-    'requires' => [],
     'install' => [
         'rdf' => [
             __DIR__ . '/core/ontology/22-rdf-syntax-ns.rdf',
