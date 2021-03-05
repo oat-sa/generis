@@ -96,9 +96,9 @@ class common_log_SingleFileAppender extends common_log_BaseAppender
     /**
      *
      * @access public
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param array $configuration
      * @return boolean
-     * @author Joel Bout, <joel.bout@tudor.lu>
      */
     public function init($configuration)
     {
@@ -122,35 +122,28 @@ class common_log_SingleFileAppender extends common_log_BaseAppender
             $this->reduceRatio = 1 - abs($configuration['rotation-ratio']);
         }
 
-        return !empty($this->filename) ? parent::init($configuration) : false;
+        return ! empty($this->filename) ? parent::init($configuration) : false;
     }
 
     /**
      * Initialises the logfile, and checks whenever the file require pruning
      *
      * @access protected
-     * @return mixed
      * @author Joel Bout, <joel.bout@tudor.lu>
+     * @return mixed
      */
     protected function initFile()
     {
         if ($this->maxFileSize > 0 && file_exists($this->filename) && filesize($this->filename) >= $this->maxFileSize) {
             // need to reduce the file size
-            //@TODO consider using file object SPL file iterator
             $file = file($this->filename);
             $file = array_splice($file, ceil(count($file) * $this->reduceRatio));
             $this->filehandle = @fopen($this->filename, 'w');
-            if ($this->filehandle !== false) {
-                flock($this->filehandle, LOCK_EX);
-            }
             foreach ($file as $line) {
                 @fwrite($this->filehandle, $line);
             }
         } else {
             $this->filehandle = @fopen($this->filename, 'a');
-            if ($this->filehandle !== false) {
-                flock($this->filehandle, LOCK_EX);
-            }
         }
     }
 
@@ -158,14 +151,15 @@ class common_log_SingleFileAppender extends common_log_BaseAppender
      * Prepares and saves log entries to file
      *
      * @access public
+     * @author Joel Bout, <joel.bout@tudor.lu>
      * @param common_log_Item $item
      * @return mixed
-     * @author Joel Bout, <joel.bout@tudor.lu>
      */
     public function doLog(common_log_Item $item)
     {
-        $this->initFile();
-
+        if (is_null($this->filehandle)) {
+            $this->initFile();
+        }
         if ($this->filehandle !== false) {
             $map = [
                 '%d' => gmdate('Y-m-d H:i:s', $item->getDateTime()),
@@ -183,7 +177,6 @@ class common_log_SingleFileAppender extends common_log_BaseAppender
             }
             $str = strtr($this->format, $map) . PHP_EOL;
             @fwrite($this->filehandle, $str);
-            @fclose($this->filehandle);
         }
     }
 
@@ -191,12 +184,12 @@ class common_log_SingleFileAppender extends common_log_BaseAppender
      * Closes file descriptor when logger object was destroyed
      *
      * @access public
-     * @return mixed
      * @author Joel Bout, <joel.bout@tudor.lu>
+     * @return mixed
      */
     public function __destruct()
     {
-        if (!is_null($this->filehandle) && $this->filehandle !== false) {
+        if (! is_null($this->filehandle) && $this->filehandle !== false) {
             @fclose($this->filehandle);
         }
     }

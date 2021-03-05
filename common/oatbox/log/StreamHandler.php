@@ -27,36 +27,37 @@ use Monolog\Logger;
 /**
  * Stores to any stream resource
  *
- * Provides the ability to use command line parameters --log-file-path and --log-level:
+ * Provides the ability to use command line parameters --log-file and --log-level:
  *
- * if the --log-file-path parameter is specified, the path to the file for logging is taken from this parameter,
+ * if the --log-file parameter is specified, the path to the file for logging is taken from this parameter,
  * if this parameter is not specified, the path to the file is taken from the system configuration
  * for example:
- * php index.php 'oat\taoTaskQueue\scripts\tools\RunWorker' --log-file-path /var/www/html/data/tao/log/tao-nccer.log
+ * php index.php 'oat\taoTaskQueue\scripts\tools\RunWorker' --log-file /var/www/html/data/tao/log/tao-nccer.log
  *
  * if the --log-level parameter is specified, the path to the file for logging is taken from this parameter,
  * if this parameter is not specified, the path to the file is taken from the system configuration
+ * can take values DEBUG, INFO, NOTICE, WARNING, ERROR, CRITICAL, ALERT or EMERGENCY
  * for example:
- * php index.php 'oat\taoTaskQueue\scripts\tools\RunWorker' --log-level 100
+ * php index.php 'oat\taoTaskQueue\scripts\tools\RunWorker' --log-level DEBUG
  *
  * @author Andrey Niahrou, <andrei.niahrou@taotesting.com>
  */
 class StreamHandler extends MonologStreamHandler
 {
     /**
-     * @param resource|string $defaultStream  (Unless this parameter is specified on the command line as --log-file-path, otherwise it is ignored) resource where data will be output
-     * @param int             $defaultLevel   (Unless this parameter is specified on the command line as --log-level, otherwise it is ignored) The minimum logging level at which this handler will be triggered
-     * @param bool            $bubble         Whether the messages that are handled can bubble up the stack or not
-     * @param int|null        $filePermission Optional file permissions (default (0644) are only for owner read/write)
-     * @param bool            $useLocking     Try to lock log file before doing any writes
+     * @param resource|string $defaultStream (Unless this parameter is specified on the command line as --log-file, otherwise it is ignored) resource where data will be output
+     * @param int $defaultLevel (Unless this parameter is specified on the command line as --log-level, otherwise it is ignored) The minimum logging level at which this handler will be triggered
+     * @param bool $bubble Whether the messages that are handled can bubble up the stack or not
+     * @param int|null $filePermission Optional file permissions (default (0644) are only for owner read/write)
+     * @param bool $useLocking Try to lock log file before doing any writes
      *
      * @throws \Exception                If a missing directory is not buildable
      * @throws \InvalidArgumentException If stream is not a resource or string
      */
     public function __construct($defaultStream, int $defaultLevel = Logger::DEBUG, bool $bubble = true, $filePermission = null, bool $useLocking = false)
     {
-        $stream = $this->getScriptParameter('--log-file-path') ?: $defaultStream;
-        $logLevel = $this->getScriptParameter('--log-level') ?: $defaultLevel;
+        $stream = $this->getScriptParameter('--log-file') ?: $defaultStream;
+        $logLevel = $this->getLogLevelParameter() ?: $defaultLevel;
         parent::__construct($stream, $logLevel, $bubble, $filePermission, $useLocking);
     }
 
@@ -66,10 +67,30 @@ class StreamHandler extends MonologStreamHandler
      */
     private function getScriptParameter(string $parameter): ?string
     {
-        if (in_array($parameter, $_SERVER['argv'])) {
-            $indexValueParameter = array_search($parameter, $_SERVER['argv']) + 1;
-            return $_SERVER['argv'][$indexValueParameter];
+        if (!in_array($parameter, $_SERVER['argv'])) {
+            return null;
         }
-        return null;
+
+        $indexValueParameter = array_search($parameter, $_SERVER['argv']) + 1;
+        return $_SERVER['argv'][$indexValueParameter];
+    }
+
+    /**
+     * @return string|null
+     * @throws \Exception
+     */
+    private function getLogLevelParameter(): ?string
+    {
+        $logLevelParameter = $this->getScriptParameter('--log-level');
+        if (!$logLevelParameter) {
+            return null;
+        }
+
+        $errorLevels = Logger::getLevels();
+        if (!isset($errorLevels[$logLevelParameter])) {
+            throw new \Exception('There is no such level of logging. Use DEBUG, INFO, NOTICE, WARNING, ERROR, CRITICAL, ALERT or EMERGENCY');
+        }
+
+        return $errorLevels[$logLevelParameter];
     }
 }
