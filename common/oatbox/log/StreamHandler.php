@@ -80,10 +80,10 @@ class StreamHandler extends MonologStreamHandler
     }
 
     /**
-     * @return string|null
+     * @return int|null
      * @throws \Exception
      */
-    private function getLogLevelParameter(): ?string
+    private function getLogLevelParameter(): ?int
     {
         $logLevelParameter = $this->getScriptParameter(self::PARAM_LOG_LEVEL);
         if (!$logLevelParameter) {
