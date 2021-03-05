@@ -34,8 +34,8 @@ use Monolog\Logger;
  * for example:
  * php index.php 'oat\taoTaskQueue\scripts\tools\RunWorker' --log-file /var/www/html/data/tao/log/tao-nccer.log
  *
- * if the --log-level parameter is specified, the path to the file for logging is taken from this parameter,
- * if this parameter is not specified, the path to the file is taken from the system configuration
+ * if the --log-level parameter is specified, the minimum logging level is taken from this parameter,
+ * if this parameter is not specified, the minimum logging level is taken from the system configuration
  * can take values DEBUG, INFO, NOTICE, WARNING, ERROR, CRITICAL, ALERT or EMERGENCY
  * for example:
  * php index.php 'oat\taoTaskQueue\scripts\tools\RunWorker' --log-level DEBUG
