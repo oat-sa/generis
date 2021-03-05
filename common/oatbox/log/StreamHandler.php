@@ -19,6 +19,8 @@
  *
  */
 
+declare(strict_types=1);
+
 namespace oat\oatbox\log;
 
 use Monolog\Handler\StreamHandler as MonologStreamHandler;
@@ -44,6 +46,9 @@ use Monolog\Logger;
  */
 class StreamHandler extends MonologStreamHandler
 {
+    public const PARAM_LOG_FILE = '--log-file';
+    public const PARAM_LOG_LEVEL = '--log-level';
+
     /**
      * @param resource|string $defaultStream (Unless this parameter is specified on the command line as --log-file, otherwise it is ignored) resource where data will be output
      * @param int $defaultLevel (Unless this parameter is specified on the command line as --log-level, otherwise it is ignored) The minimum logging level at which this handler will be triggered
@@ -56,7 +61,7 @@ class StreamHandler extends MonologStreamHandler
      */
     public function __construct($defaultStream, int $defaultLevel = Logger::DEBUG, bool $bubble = true, $filePermission = null, bool $useLocking = false)
     {
-        $stream = $this->getScriptParameter('--log-file') ?: $defaultStream;
+        $stream = $this->getScriptParameter(self::PARAM_LOG_FILE) ?: $defaultStream;
         $logLevel = $this->getLogLevelParameter() ?: $defaultLevel;
         parent::__construct($stream, $logLevel, $bubble, $filePermission, $useLocking);
     }
@@ -71,8 +76,7 @@ class StreamHandler extends MonologStreamHandler
             return null;
         }
 
-        $indexValueParameter = array_search($parameter, $_SERVER['argv']) + 1;
-        return $_SERVER['argv'][$indexValueParameter];
+        return $_SERVER['argv'][array_search($parameter, $_SERVER['argv']) + 1];
     }
 
     /**
@@ -81,14 +85,14 @@ class StreamHandler extends MonologStreamHandler
      */
     private function getLogLevelParameter(): ?string
     {
-        $logLevelParameter = $this->getScriptParameter('--log-level');
+        $logLevelParameter = $this->getScriptParameter(self::PARAM_LOG_LEVEL);
         if (!$logLevelParameter) {
             return null;
         }
 
         $errorLevels = Logger::getLevels();
         if (!isset($errorLevels[$logLevelParameter])) {
-            throw new \Exception('There is no such level of logging. Use DEBUG, INFO, NOTICE, WARNING, ERROR, CRITICAL, ALERT or EMERGENCY');
+            throw new \Exception(sprintf('There is no such level of logging. Use %s', implode(', ', array_flip($errorLevels))));
         }
 
         return $errorLevels[$logLevelParameter];
