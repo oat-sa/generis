@@ -92,7 +92,7 @@ class StreamHandler extends MonologStreamHandler
 
         $errorLevels = Logger::getLevels();
         if (!isset($errorLevels[$logLevelParameter])) {
-            throw new \Exception(sprintf('There is no such level of logging. Use %s', implode(', ', array_flip($errorLevels))));
+            throw new \Exception(sprintf('There is not exist such log level. Please, use one of: %s', implode(', ', array_flip($errorLevels))));
         }
 
         return $errorLevels[$logLevelParameter];
