@@ -19,6 +19,8 @@
  *
  */
 
+use oat\oatbox\extension\Manifest;
+
 /**
  * the generis autoloader
  *
@@ -129,6 +131,33 @@ class common_legacy_LegacyAutoLoader
                     return;
                 }
             }
+
+
+            $this->tryLoadFromRootFolder($pClassName);
+        }
+    }
+
+    private function tryLoadFromRootFolder($pClassName)
+    {
+        $tokens = explode("_", $pClassName);
+        if (!file_exists($this->root.'manifest.php')) {
+            return;
+        }
+        $manifest = new Manifest($this->root.'manifest.php');
+        if ($manifest->getName() !== $tokens[0]) {
+            return;
+        }
+        $path = implode('/', array_slice($tokens, 1, -1)) . '/';
+        $classFilePath = $this->root . $path . 'class.' . end($tokens) . '.php';
+        $interfaceFilePath = $this->root . $path . 'interface.' . end($tokens) . '.php';
+
+        if (file_exists($classFilePath)) {
+            require_once $classFilePath;
+            return;
+        }
+        if (file_exists($interfaceFilePath)) {
+            require_once $interfaceFilePath;
+            return;
         }
     }
     

@@ -105,7 +105,7 @@ class common_log_SingleFileAppender extends common_log_BaseAppender
         if (isset($configuration['file'])) {
             $this->filename = $configuration['file'];
         }
-        
+
         if (isset($configuration['format'])) {
             $this->format = $configuration['format'];
         }
