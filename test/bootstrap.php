@@ -21,15 +21,26 @@
  * @subpackage
  */
 
-$extensionRoot = __DIR__ . '/../';
+$extensionRoot = realpath(__DIR__ . '/../');
 
-// Use TAO dependency resolver first.
-if (is_dir($extensionRoot . '../vendor')) {
-    require_once $extensionRoot . '../vendor/autoload.php';
-} elseif (is_dir($extensionRoot . 'vendor')){
-    require_once $extensionRoot . 'vendor/autoload.php';
+function generisInstalledAsExtension(string $extensionRoot)
+{
+    return is_dir($extensionRoot . '/../vendor') && is_dir($extensionRoot . '/../generis');
+}
+
+function generisInstalledAsRootPackage(string $extensionRoot)
+{
+    return is_dir($extensionRoot . '/vendor');
+}
+
+if (generisInstalledAsExtension($extensionRoot)) {
+    define('ROOT_PATH', realpath(__DIR__.'/../../'));
+    require_once $extensionRoot . '/../vendor/autoload.php';
+} elseif (generisInstalledAsRootPackage($extensionRoot)) {
+    define('ROOT_PATH', realpath(__DIR__.'/../'));
+    require_once $extensionRoot . '/vendor/autoload.php';
 } else {
     throw new \Exception('Vendor directory not found');
 }
 
-\common_Config::load($extensionRoot . 'test/config/generis.conf.php');
+\common_Config::load($extensionRoot . '/test/config/generis.conf.php');
