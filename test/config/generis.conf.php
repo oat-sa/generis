@@ -38,8 +38,6 @@ define('LOCAL_NAMESPACE', '');
 define('GENERIS_INSTANCE_NAME', '');
 define('GENERIS_SESSION_NAME', 'test');
 
-# paths
-define('ROOT_PATH', '');
 // trailing slash is important!
 define('ROOT_URL', 'http://demo.taotesting.com/');
 
