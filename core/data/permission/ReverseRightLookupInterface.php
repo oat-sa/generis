@@ -22,11 +22,6 @@ declare(strict_types=1);
 
 namespace oat\generis\model\data\permission;
 
-/**
- * ReverseRightLookupInterface
- *
- * @package oat\generis\model\data\permission
- */
 interface ReverseRightLookupInterface
 {
     /**
@@ -45,9 +40,6 @@ interface ReverseRightLookupInterface
      *        'READ'
      *    ],
      * ]
-     *
-     * @param string $resourceId
-     * @return array
      */
     public function getResourceAccessData(string $resourceId): array;
 }
