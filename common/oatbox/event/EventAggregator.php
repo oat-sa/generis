@@ -42,7 +42,7 @@ class EventAggregator extends ConfigurableService implements LoggerAwareInterfac
     {
         parent::__construct($options);
 
-        $this->numberOfAggregatedEvents = $options['numberOfAggregatedEvents'];
+        $this->numberOfAggregatedEvents = $this->getOption('numberOfAggregatedEvents', 10);
     }
 
     public function put(string $eventId, Event $event): void
