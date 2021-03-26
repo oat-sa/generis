@@ -21,10 +21,12 @@
  *               2017 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
 
+use oat\generis\model\data\event\ClassDeletedEvent;
 use oat\generis\model\data\event\ResourceCreated;
 use oat\generis\model\OntologyRdf;
 use oat\generis\model\resource\ResourceCollection;
 use oat\oatbox\event\EventManager;
+use oat\oatbox\event\EventManagerAwareTrait;
 
 /**
  * The class of rdfs:classes. It implements basic tests like isSubClassOf(Class
@@ -40,6 +42,8 @@ use oat\oatbox\event\EventManager;
  */
 class core_kernel_classes_Class extends core_kernel_classes_Resource
 {
+    use EventManagerAwareTrait;
+
     /**
      *
      * @return core_kernel_persistence_ClassInterface
@@ -430,7 +434,13 @@ class core_kernel_classes_Class extends core_kernel_classes_Resource
      */
     public function delete($deleteReference = false)
     {
-        return (bool) $this->getImplementation()->delete($this, $deleteReference);
+        $delete = (bool)$this->getImplementation()->delete($this, $deleteReference);
+
+        if ($delete) {
+            $this->getEventManager()->trigger(new ClassDeletedEvent($this));
+        }
+
+        return $delete;
     }
 
     /**
