@@ -38,14 +38,21 @@ class FluentdHandler extends AbstractProcessingHandler
     /**
      * Initialize Handler
      *
-     * @param FluentLogger $logger
+     * @param FluentLogger|string $logger
      * @param int          $level
      * @param bool         $bubble
+     * @param array        $options
      */
-    public function __construct(FluentLogger $logger = null, $level = Logger::DEBUG, $bubble = true)
+    public function __construct($logger = null, $level = Logger::DEBUG, $bubble = true, $options = [])
     {
         parent::__construct($level, $bubble);
 
+        if (!is_a($logger, FluentLogger::class, true)) {
+            throw new \TypeError('Logger must be an instance of FluentLogger type');
+        }
+        if (is_string($logger)) {
+            $logger = new $logger(...$options);
+        }
         $this->logger = $logger;
     }
 
