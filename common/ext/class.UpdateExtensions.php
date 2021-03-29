@@ -73,7 +73,6 @@ class common_ext_UpdateExtensions implements Action, ServiceLocatorAwareInterfac
             } catch (Exception $e) {
                 $this->logError('Exception during update of ' . $ext->getId() . ': ' . get_class($e) . ' "' . $e->getMessage() . '"');
                 $report->setType(Report::TYPE_ERROR);
-                $report->setTitle('Update failed');
                 $report->add(new Report(Report::TYPE_ERROR, 'Exception during update of ' . $ext->getId() . '.'));
                 break;
             }
