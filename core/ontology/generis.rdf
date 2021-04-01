@@ -352,6 +352,11 @@
     <rdfs:label xml:lang="en-US"><![CDATA[User Role]]></rdfs:label>
     <rdfs:comment xml:lang="en-US"><![CDATA[The user centric Role Class]]></rdfs:comment>
   </rdf:Description>
+  <rdf:Description rdf:about="http://www.tao.lu/Ontologies/generis.rdf#ItemRole">
+    <rdfs:subClassOf rdf:resource="http://www.tao.lu/Ontologies/generis.rdf#UserRole"/>
+    <rdfs:label xml:lang="en-US"><![CDATA[Item Role]]></rdfs:label>
+    <rdfs:comment xml:lang="en-US"><![CDATA[Atomic Item User Role Class]]></rdfs:comment>
+  </rdf:Description>
 
   <rdf:Description rdf:about="http://www.tao.lu/Ontologies/generis.rdf#GenerisRole">
   	<rdf:type rdf:resource="http://www.tao.lu/Ontologies/generis.rdf#AbstractRole"/>
