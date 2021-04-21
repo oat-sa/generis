@@ -58,24 +58,38 @@ class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDrive
      */
     function connectionSet(array $params)
     {
-        $this->connection = new Redis();
-        if ($this->connection == false) {
-            throw new common_exception_Error("Redis php module not found");
-        }
         if (!isset($params['host'])) {
             throw new common_exception_Error('Missing host information for Redis driver');
         }
-        $host    = $params['host'];
+
         $port    = isset($params['port']) ? $params['port'] : self::DEFAULT_PORT;
         $timeout = isset($params['timeout']) ? $params['timeout'] : self::DEFAULT_TIMEOUT;
         $persist = isset($params['pconnect']) ? $params['pconnect'] : true;
         $this->params['attempt'] = isset($params['attempt']) ? $params['attempt'] : self::DEFAULT_ATTEMPT;
 
+        if (is_array($params['host'])) {
+            $this->connectToCluster($params['host'], $timeout, $persist);
+        } else {
+            $this->connectToSingleNode($params['host'], $port, $timeout, $persist);
+        }
+    }
+
+    private function connectToSingleNode(string $host, int $port, int $timeout, bool $persist)
+    {
+        $this->connection = new Redis();
+        if ($this->connection == false) {
+            throw new common_exception_Error("Redis php module not found");
+        }
         if ($persist) {
             $this->connection->pconnect($host, $port, $timeout);
         } else {
             $this->connection->connect($host, $port, $timeout);
         }
+    }
+
+    private function connectToCluster(array $host, int $timeout, bool $persist)
+    {
+        $this->connection = new RedisCluster(null, $host, $timeout, null, $persist);
     }
 
     /**
