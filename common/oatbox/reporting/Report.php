@@ -59,7 +59,7 @@ class Report extends common_report_Report
      *
      * @throws common_exception_Error
      */
-    public static function create(string $type, string $interpolationMessage, array $interpolationData): Report
+    public static function create(string $type, string $interpolationMessage, array $interpolationData = []): Report
     {
         return (new self($type, sprintf($interpolationMessage, ...$interpolationData)))
             ->setInterpolationMessage($interpolationMessage, $interpolationData);
