@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -14,10 +15,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2013 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
+ * Copyright (c) 2013-2021 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use oat\generis\test\TestCase;
 use oat\oatbox\reporting\Report;
@@ -67,8 +68,8 @@ class ReportTest extends TestCase
 
     public function testToArray()
     {
-        $report = Report::createInfo('foo', ['baz'=>'bar']);
-        $report->add(Report::createWarning('foo', ['baz'=>'bar']));
+        $report = Report::createInfo('foo', ['baz' => 'bar']);
+        $report->add(Report::createWarning('foo', ['baz' => 'bar']));
         $expectedArray = [
             'type' => 'info',
             'message' => 'foo',
@@ -111,7 +112,7 @@ class ReportTest extends TestCase
         self::assertTrue($report->hasChildren());
         self::assertCount(3, $report->getChildren());
     }
-    
+
     public function testDataInReport(): void
     {
         $exception = new Exception('testing');
@@ -127,7 +128,7 @@ class ReportTest extends TestCase
 
         self::assertSame($exception, $report->getData());
     }
-   
+
     public function testNestedReport(): void
     {
         $report = new Report(Report::TYPE_WARNING, 'test message3');
@@ -135,7 +136,7 @@ class ReportTest extends TestCase
         $sub2 = new Report(Report::TYPE_ERROR, 'error31');
         $sub3 = new Report(Report::TYPE_WARNING, 'warning31');
         $report->add([$sub1, $sub2, $sub3]);
-        
+
         self::assertTrue($report->hasChildren());
         self::assertEquals('test message3', (string)$report);
         self::assertEquals(Report::TYPE_WARNING, $report->getType());
@@ -147,14 +148,14 @@ class ReportTest extends TestCase
         self::assertCount(3, $array);
 
         [$first, $second, $third] = $array;
-        
+
         self::assertFalse($first->hasChildren());
         self::assertEquals('info31', (string)$first);
         self::assertEquals(Report::TYPE_INFO, $first->getType());
         foreach ($first as $child) {
             self::fail('Should not contain children');
         }
-        
+
         self::assertFalse($second->hasChildren());
         self::assertEquals('error31', (string)$second);
         self::assertEquals(Report::TYPE_ERROR, $second->getType());
@@ -240,12 +241,12 @@ class ReportTest extends TestCase
         $report->add($success_1);
         $report->add($success_2);
 
-        $successes = (array) $report->getSuccesses(true);
+        $successes = (array)$report->getSuccesses(true);
 
         self::assertCount(3, $successes, '3 successes should be returned');
-        self::assertEquals('success_1', (string) array_shift($successes));
-        self::assertEquals('success_1_1', (string) array_shift($successes));
-        self::assertEquals('success_2', (string) array_shift($successes));
+        self::assertEquals('success_1', (string)array_shift($successes));
+        self::assertEquals('success_1_1', (string)array_shift($successes));
+        self::assertEquals('success_2', (string)array_shift($successes));
     }
 
     public function testGetInfosAsFlat(): void
@@ -259,12 +260,12 @@ class ReportTest extends TestCase
         $report->add($info_1);
         $report->add($info_2);
 
-        $infos = (array) $report->getInfos(true);
+        $infos = (array)$report->getInfos(true);
 
         self::assertCount(3, $infos, '3 infos should be returned');
-        self::assertEquals('info_1', (string) array_shift($infos));
-        self::assertEquals('info_1_1', (string) array_shift($infos));
-        self::assertEquals('info_2', (string) array_shift($infos));
+        self::assertEquals('info_1', (string)array_shift($infos));
+        self::assertEquals('info_1_1', (string)array_shift($infos));
+        self::assertEquals('info_2', (string)array_shift($infos));
     }
 
     public function testGetWarningsAsFlat(): void
@@ -278,12 +279,12 @@ class ReportTest extends TestCase
         $report->add($warning_1);
         $report->add($warning_2);
 
-        $warnings = (array) $report->getWarnings(true);
+        $warnings = (array)$report->getWarnings(true);
 
         self::assertCount(3, $warnings, '3 warnings should be returned');
-        self::assertEquals('warning_1', (string) array_shift($warnings));
-        self::assertEquals('warning_1_1', (string) array_shift($warnings));
-        self::assertEquals('warning_2', (string) array_shift($warnings));
+        self::assertEquals('warning_1', (string)array_shift($warnings));
+        self::assertEquals('warning_1_1', (string)array_shift($warnings));
+        self::assertEquals('warning_2', (string)array_shift($warnings));
     }
 
     public function testGetErrorsAsFlat(): void
@@ -297,12 +298,12 @@ class ReportTest extends TestCase
         $report->add($error_1);
         $report->add($error_2);
 
-        $errors = (array) $report->getErrors(true);
+        $errors = (array)$report->getErrors(true);
 
         self::assertCount(3, $errors, '3 errors should be returned');
-        self::assertEquals('error_1', (string) array_shift($errors));
-        self::assertEquals('error_1_1', (string) array_shift($errors));
-        self::assertEquals('error_2', (string) array_shift($errors));
+        self::assertEquals('error_1', (string)array_shift($errors));
+        self::assertEquals('error_1_1', (string)array_shift($errors));
+        self::assertEquals('error_2', (string)array_shift($errors));
     }
 
     public function testStaticReportCreation(): void
@@ -351,5 +352,30 @@ class ReportTest extends TestCase
 
         self::assertCount(2, $output[Report::TYPE_ERROR]);
         self::assertCount(2, $output[Report::TYPE_WARNING]);
+    }
+
+    public function testCreateWithInterpolation(): void
+    {
+        $report = Report::create(
+            Report::TYPE_ERROR,
+            'my data %s',
+            [
+                'test'
+            ]
+        );
+
+        $serialized = $report->jsonSerialize();
+
+        /** @var Report $unSerialized */
+        $unSerialized = Report::jsonUnserialize($serialized);
+
+        self::assertSame(Report::TYPE_ERROR, $report->getType());
+        self::assertSame('my data test', $report->getMessage());
+        self::assertSame('my data %s', $serialized['interpolationMessage']);
+        self::assertSame(['test'], $serialized['interpolationData']);
+
+        self::assertSame(Report::TYPE_ERROR, $unSerialized->getType());
+        self::assertSame('my data test', $unSerialized->getMessage());
+        self::assertSame('my data test', $unSerialized->translateMessage());
     }
 }
