@@ -14,13 +14,14 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2020 (original work) Open Assessment Technologies SA;
+ * Copyright (c) 2020-2021 (original work) Open Assessment Technologies SA;
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace oat\oatbox\reporting;
 
+use common_exception_Error;
 use common_report_Report;
 
 /**
@@ -47,5 +48,67 @@ use common_report_Report;
  */
 class Report extends common_report_Report
 {
+    /** @var string */
+    private $interpolationMessage;
 
+    /** @var array */
+    private $interpolationData;
+
+    /**
+     * Create Report with translations support
+     *
+     * @throws common_exception_Error
+     */
+    public static function create(string $type, string $interpolationMessage, array $interpolationData = []): Report
+    {
+        return (new self($type, sprintf($interpolationMessage, ...$interpolationData)))
+            ->setInterpolationMessage($interpolationMessage, $interpolationData);
+    }
+
+    public function setInterpolationMessage(string $interpolationMessage, array $interpolationData = []): self
+    {
+        $this->interpolationMessage = $interpolationMessage;
+        $this->interpolationData = $interpolationData;
+
+        return $this;
+    }
+
+    public function jsonSerialize(): array
+    {
+        $data = parent::jsonSerialize();
+
+        if ($this->interpolationMessage) {
+            $data['interpolationMessage'] = $this->interpolationMessage;
+        }
+
+        if ($this->interpolationData) {
+            $data['interpolationData'] = $this->interpolationData;
+        }
+
+        return $data;
+    }
+
+    public static function jsonUnserialize($data): ?common_report_Report
+    {
+        /** @var Report $report */
+        $report = parent::jsonUnserialize($data);
+
+        if (isset($data['interpolationMessage'])) {
+            $report->setInterpolationMessage(
+                (string) $data['interpolationMessage'],
+                (array) ($data['interpolationData'] ?? [])
+            );
+        }
+
+        return $report;
+    }
+
+    public function translateMessage(): string
+    {
+        if ($this->interpolationMessage && count($this->interpolationData) > 0) {
+            return __($this->interpolationMessage, ...$this->interpolationData);
+        }
+
+        return __($this->interpolationMessage ?? $this->getMessage());
+    }
 }
