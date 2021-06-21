@@ -104,37 +104,15 @@ class core_kernel_impl_ApiModelOO extends core_kernel_impl_Api implements core_k
                         'xmlns:rdfs'    => 'http://www.w3.org/2000/01/rdf-schema#'
                     ];
 
-        $query = 'SELECT "models"."modelid", "models"."modeluri" FROM "models" INNER JOIN "statements" ON "statements"."modelid" = "models"."modelid"
-											WHERE "statements"."subject" = ' . $subject;
-        $query = $dbWrapper->limitStatement($query, 1);
-        $result = $dbWrapper->query($query);
-        if ($row = $result->fetch()) {
-            $modelId  = $row['modelid'];
-            $modelUri =  $row['modeluri'];
-            if (!preg_match("/#$/", $modelUri)) {
-                $modelUri .= '#';
-            }
+        $modelId  = core_kernel_persistence_smoothsql_SmoothModel::DEFAULT_WRITABLE_MODEL;
+        $modelUri = LOCAL_NAMESPACE . '#';
 
-            $result->closeCursor();
-        }
         $currentNs = ["xmlns:ns{$modelId}" => $modelUri];
         $currentNs = array_merge($baseNs, $currentNs);
 
 
-        $allModels = [];
-        $result = $dbWrapper->query('SELECT * FROM "models"');
-        while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-            $allModels[] = $row;
-        }
-
-        $allNs = [];
-        foreach ($allModels as $model) {
-            if (!preg_match("/#$/", $model['modeluri'])) {
-                $model['modeluri'] .= '#';
-            }
-            $allNs["xmlns:ns{$model['modelid']}"] = $model['modeluri'];
-        }
-        $allNs = array_merge($baseNs, $allNs);
+        $allNs = $currentNs;
+        $allNs['xmlns:ns' . core_kernel_persistence_smoothsql_SmoothModel::DEFAULT_READ_ONLY_MODEL] = $modelUri;
 
         try {
             $dom = new DOMDocument();
