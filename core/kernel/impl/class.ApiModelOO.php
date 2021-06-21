@@ -229,8 +229,7 @@ class core_kernel_impl_ApiModelOO extends core_kernel_impl_Api implements core_k
                                  * <![CDATA[ ]]> to <CDATA></CDATA>
                                  * @todo check if this behavior is the right
                                  */
-                                $object = str_replace('<![CDATA[', '<CDATA>', $object);
-                                $object = str_replace(']]>', '</CDATA>', $object);
+                                $object = str_replace(['<![CDATA[', ']]>'], ['<CDATA>', '</CDATA>'], $object);
 
                                 $node->appendChild($dom->createCDATASection($object));
                             }
