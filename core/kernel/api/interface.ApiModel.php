@@ -37,17 +37,6 @@ interface core_kernel_api_ApiModel extends core_kernel_api_Api
 
 
     /**
-     * build xml rdf containing rdf:Description of all meta-data the conected
-     * may get
-     *
-     * @access public
-     * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
-     * @param  array sourceNamespaces
-     * @return string
-     */
-    public function exportXmlRdf($sourceNamespaces = []);
-
-    /**
      * import xml rdf files into the knowledge base
      *
      * @access public

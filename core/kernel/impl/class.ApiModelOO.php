@@ -63,37 +63,6 @@ class core_kernel_impl_ApiModelOO extends core_kernel_impl_Api implements core_k
 
 
     /**
-     * build xml rdf containing rdf:Description of all meta-data the conected
-     * may get
-     *
-     * @deprecated
-     * @access public
-     * @author firstname and lastname of author, <author@example.org>
-     * @param  array sourceNamespaces
-     * @return string
-     */
-    public function exportXmlRdf($sourceNamespaces = [])
-    {
-        $modelIds = [];
-        foreach ($sourceNamespaces as $namespace) {
-            if (!preg_match('/#$/', $namespace)) {
-                $namespace .= "#";
-            }
-
-            $dbWrapper = core_kernel_classes_DbWrapper::singleton();
-
-            $result = $dbWrapper->query('SELECT * FROM "models"  WHERE "modeluri" = ?', [
-                $namespace
-            ]);
-            if ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-                $modelIds[] = $row['modelid'];
-                $result->closeCursor();
-            }
-        }
-        return $xml = core_kernel_api_ModelExporter::exportXmlRdf($modelIds);
-    }
-
-    /**
      * import xml rdf files into the knowledge base
      *
      * @access public
@@ -394,8 +363,6 @@ class core_kernel_impl_ApiModelOO extends core_kernel_impl_Api implements core_k
             $container->debug = __METHOD__ ;
             $returnValue->add($container);
         }
-
-
 
         return $returnValue;
     }
