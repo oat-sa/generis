@@ -382,10 +382,6 @@ class core_kernel_impl_ApiModelOO extends core_kernel_impl_Api implements core_k
      */
     public function getSubject($predicate, $object)
     {
-        $returnValue = null;
-
-
-
         $sqlQuery = "SELECT subject FROM statements WHERE predicate = ? AND object= ? ";
         $dbWrapper = core_kernel_classes_DbWrapper::singleton();
         $sqlResult = $dbWrapper->query($sqlQuery, [
