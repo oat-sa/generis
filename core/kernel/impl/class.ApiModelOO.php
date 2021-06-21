@@ -159,7 +159,7 @@ class core_kernel_impl_ApiModelOO extends core_kernel_impl_Api implements core_k
         }
 
         $allNs = [];
-        foreach ($allModels as $i => $model) {
+        foreach ($allModels as $model) {
             if (!preg_match("/#$/", $model['modeluri'])) {
                 $model['modeluri'] .= '#';
             }
@@ -203,7 +203,7 @@ class core_kernel_impl_ApiModelOO extends core_kernel_impl_Api implements core_k
                 }
 
                 $resourceValue = false;
-                foreach ($allNs as $namespaceId => $namespaceUri) {
+                foreach ($allNs as $namespaceUri) {
                     if (
                         preg_match('/^' . preg_quote($namespaceUri, '/') . '/', $object) ||
                         preg_match("/^http:\/\/(.*)#[a-zA-Z1-9]*/", $object)
