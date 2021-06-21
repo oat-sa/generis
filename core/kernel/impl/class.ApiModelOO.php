@@ -477,17 +477,12 @@ class core_kernel_impl_ApiModelOO extends core_kernel_impl_Api implements core_k
      */
     public static function singleton()
     {
-        $returnValue = null;
-
-
         if (!isset(self::$instance)) {
             $c = __CLASS__;
             self::$instance = new $c();
         }
-        $returnValue = self::$instance;
 
-
-        return $returnValue;
+        return self::$instance;
     }
 
     /**
