@@ -20,6 +20,7 @@
  *               2012-2014 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
 
+use oat\generis\model\data\ModelManager;
 use oat\generis\test\GenerisPhpUnitTestRunner;
 
 class RdfExportTest extends GenerisPhpUnitTestRunner
@@ -29,18 +30,15 @@ class RdfExportTest extends GenerisPhpUnitTestRunner
         $dbWrapper = core_kernel_classes_DbWrapper::singleton();
         $result = $dbWrapper->query('SELECT count(*) as count FROM (SELECT DISTINCT subject, predicate, object, l_language FROM statements) as supercount')->fetch();
         $triples = $result['count'];
-        
 
-        $result = $dbWrapper->query('SELECT modelid FROM "models"');
-        $modelIds = [];
-        while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-            $modelIds[] = $row['modelid'];
-        }
-        $xml = core_kernel_api_ModelExporter::exportModels($modelIds);
-        
+
+        $xml = core_kernel_api_ModelExporter::exportModels(
+            ModelManager::getModel()->getReadableModels()
+        );
+
         $doc = new DOMDocument();
         $doc->loadXML($xml);
-        
+
         $count = 0;
         $descriptions = $doc->getElementsByTagNameNS('http://www.w3.org/1999/02/22-rdf-syntax-ns#', 'Description');
         foreach ($descriptions as $description) {
@@ -50,7 +48,7 @@ class RdfExportTest extends GenerisPhpUnitTestRunner
                 }
             }
         }
-        
-        $this->assertEquals($triples, $count);
+
+        static::assertEquals($triples, $count);
     }
 }
