@@ -264,7 +264,7 @@ class core_kernel_impl_ApiModelOO extends core_kernel_impl_Api implements core_k
         $returnValue = $this->createClassCollection(__METHOD__);
 
         $classClass = new core_kernel_classes_Class(OntologyRdfs::RDFS_CLASS);
-        foreach ($classClass->getSubClasses(true) as $uri => $subClass) {
+        foreach ($classClass->getSubClasses(true) as $subClass) {
             $returnValue->add($subClass);
         }
 
