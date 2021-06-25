@@ -44,14 +44,14 @@ class common_legacy_LegacyAutoLoader
 
     private $legacyPrefixes = [];
 
-    private $root;
+    private $generisPath;
 
     /**
      * protect the cunstructer, singleton pattern
      */
     private function __construct()
     {
-        $this->root = dirname(__DIR__, 2) . DIRECTORY_SEPARATOR;
+        $this->generisPath = dirname(__DIR__, 2) . DIRECTORY_SEPARATOR;
     }
 
     /**
@@ -97,32 +97,32 @@ class common_legacy_LegacyAutoLoader
 
         // Search for class.X.php
         $filePath = '/' . $path . 'class.' . $tokens[$size - 1] . '.php';
-        if (file_exists($this->root . $filePath)) {
-            require_once $this->root . $filePath;
+        if (file_exists($this->generisPath . $filePath)) {
+            require_once $this->generisPath . $filePath;
             return;
         }
 
         // Search for interface.X.php
         $filePathInterface = '/' . $path . 'interface.' . $tokens[$size - 1] . '.php';
-        if (file_exists($this->root . $filePathInterface)) {
-            require_once $this->root . $filePathInterface;
+        if (file_exists($this->generisPath . $filePathInterface)) {
+            require_once $this->generisPath . $filePathInterface;
             return;
         }
 
         // Search for trait.X.php
         $filePathTrait = '/' . $path . 'trait.' . $tokens[$size - 1] . '.php';
-        if (file_exists($this->root . $filePathTrait)) {
-            require_once $this->root . $filePathTrait;
+        if (file_exists($this->generisPath . $filePathTrait)) {
+            require_once $this->generisPath . $filePathTrait;
             return;
         }
 
-        if (file_exists($this->root . '..' . DIRECTORY_SEPARATOR . $filePath)) {
-            require_once $this->root . '..' . DIRECTORY_SEPARATOR . $filePath;
+        if (file_exists($this->generisPath . '..' . DIRECTORY_SEPARATOR . $filePath)) {
+            require_once $this->generisPath . '..' . DIRECTORY_SEPARATOR . $filePath;
             return;
         }
 
-        if (file_exists($this->root . '..' . DIRECTORY_SEPARATOR . $filePathInterface)) {
-            require_once $this->root . '..' . DIRECTORY_SEPARATOR . $filePathInterface;
+        if (file_exists($this->generisPath . '..' . DIRECTORY_SEPARATOR . $filePathInterface)) {
+            require_once $this->generisPath . '..' . DIRECTORY_SEPARATOR . $filePathInterface;
             return;
         }
 
