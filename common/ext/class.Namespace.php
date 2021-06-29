@@ -88,26 +88,4 @@ class common_ext_Namespace
     {
         return $this->getUri();
     }
-
-    /**
-     * Remove a namespace from the ontology. All triples bound to the model will
-     * be removed.
-     *
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     *
-     * @return boolean
-     * @throws core_kernel_persistence_Exception
-     */
-    public function remove()
-    {
-        $db = core_kernel_classes_DbWrapper::singleton();
-
-        // TODO refactor this to use triple store abstraction.
-        if (false === $db->exec("DELETE FROM statements WHERE modelid = ?", [$this->getModelId()])) {
-            return false;
-        }
-
-        // TODO refactor this to use triple store abstraction.
-        return $db->exec("DELETE FROM models WHERE modelid = ?", [$this->getModelId()]);
-    }
 }

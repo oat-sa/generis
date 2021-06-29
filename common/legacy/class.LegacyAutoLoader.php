@@ -19,8 +19,6 @@
  *
  */
 
-use oat\oatbox\extension\Manifest;
-
 /**
  * the generis autoloader
  *
@@ -31,7 +29,7 @@ use oat\oatbox\extension\Manifest;
 class common_legacy_LegacyAutoLoader
 {
     private static $singleton = null;
-    
+
     /**
      *
      * @return common_legacy_LegacyAutoLoader
@@ -43,19 +41,19 @@ class common_legacy_LegacyAutoLoader
         }
         return self::$singleton;
     }
-    
+
     private $legacyPrefixes = [];
-    
-    private $root;
-    
+
+    private $generisPath;
+
     /**
      * protect the cunstructer, singleton pattern
      */
     private function __construct()
     {
-        $this->root = dirname(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR;
+        $this->generisPath = dirname(__DIR__, 2) . DIRECTORY_SEPARATOR;
     }
-    
+
     /**
      * Register this instance of ClassLoader as a php autoloader
      *
@@ -67,7 +65,7 @@ class common_legacy_LegacyAutoLoader
         // init the autloader for generis
         spl_autoload_register([self::singleton(), 'autoload']);
     }
-    
+
     /**
      * add support for legacy prefix
      */
@@ -75,7 +73,7 @@ class common_legacy_LegacyAutoLoader
     {
         self::singleton()->legacyPrefixes[$prefix] = $namespace;
     }
-    
+
     /**
      * Attempt to autload classes in tao
      *
@@ -86,81 +84,57 @@ class common_legacy_LegacyAutoLoader
      */
     public function autoload($pClassName)
     {
-        if (strpos($pClassName, '_') !== false) {
-            $tokens = explode("_", $pClassName);
-            $size = count($tokens);
-            $path = '';
-            for ($i = 0; $i < $size - 1; $i++) {
-                $path .= $tokens[$i] . '/';
-            }
-            
-            // Search for class.X.php
-            $filePath = '/' . $path . 'class.' . $tokens[$size - 1] . '.php';
-            if (file_exists($this->root . 'generis' . DIRECTORY_SEPARATOR . $filePath)) {
-                require_once $this->root . 'generis' . DIRECTORY_SEPARATOR . $filePath;
-                return;
-            }
-            
-            // Search for interface.X.php
-            $filePathInterface = '/' . $path . 'interface.' . $tokens[$size - 1] . '.php';
-            if (file_exists($this->root . 'generis' . DIRECTORY_SEPARATOR . $filePathInterface)) {
-                require_once $this->root . 'generis' . DIRECTORY_SEPARATOR . $filePathInterface;
-                return;
-            }
-            
-            // Search for trait.X.php
-            $filePathTrait = '/' . $path . 'trait.' . $tokens[$size - 1] . '.php';
-            if (file_exists($this->root . 'generis' . DIRECTORY_SEPARATOR . $filePathTrait)) {
-                require_once $this->root . 'generis' . DIRECTORY_SEPARATOR . $filePathTrait;
-                return;
-            }
-            
-            if (file_exists($this->root . $filePath)) {
-                require_once $this->root . $filePath;
-                return;
-            } elseif (file_exists($this->root . $filePathInterface)) {
-                    require_once $this->root . $filePathInterface;
-                    return;
-            }
-            
-            $legacyPrefix = false;
-            foreach ($this->legacyPrefixes as $key => $namespace) {
-                if (substr($pClassName, 0, strlen($key)) == $key) {
-                    $newClass = $namespace . strtr(substr($pClassName, strlen($key)), '_', '\\');
-                    $this->wrapClass($pClassName, $newClass);
-                    return;
-                }
-            }
-
-
-            $this->tryLoadFromRootFolder($pClassName);
+        if (strpos($pClassName, '_') === false) {
+            return;
         }
-    }
 
-    private function tryLoadFromRootFolder($pClassName)
-    {
         $tokens = explode("_", $pClassName);
-        if (!file_exists($this->root.'manifest.php')) {
-            return;
+        $size = count($tokens);
+        $path = '';
+        for ($i = 0; $i < $size - 1; $i++) {
+            $path .= $tokens[$i] . '/';
         }
-        $manifest = new Manifest($this->root.'manifest.php');
-        if ($manifest->getName() !== $tokens[0]) {
-            return;
-        }
-        $path = implode('/', array_slice($tokens, 1, -1)) . '/';
-        $classFilePath = $this->root . $path . 'class.' . end($tokens) . '.php';
-        $interfaceFilePath = $this->root . $path . 'interface.' . end($tokens) . '.php';
 
-        if (file_exists($classFilePath)) {
-            require_once $classFilePath;
+        // Search for class.X.php
+        $filePath = '/' . $path . 'class.' . $tokens[$size - 1] . '.php';
+        if (file_exists($this->generisPath . $filePath)) {
+            require_once $this->generisPath . $filePath;
             return;
         }
-        if (file_exists($interfaceFilePath)) {
-            require_once $interfaceFilePath;
+
+        // Search for interface.X.php
+        $filePathInterface = '/' . $path . 'interface.' . $tokens[$size - 1] . '.php';
+        if (file_exists($this->generisPath . $filePathInterface)) {
+            require_once $this->generisPath . $filePathInterface;
             return;
+        }
+
+        // Search for trait.X.php
+        $filePathTrait = '/' . $path . 'trait.' . $tokens[$size - 1] . '.php';
+        if (file_exists($this->generisPath . $filePathTrait)) {
+            require_once $this->generisPath . $filePathTrait;
+            return;
+        }
+
+        if (file_exists($this->generisPath . '..' . DIRECTORY_SEPARATOR . $filePath)) {
+            require_once $this->generisPath . '..' . DIRECTORY_SEPARATOR . $filePath;
+            return;
+        }
+
+        if (file_exists($this->generisPath . '..' . DIRECTORY_SEPARATOR . $filePathInterface)) {
+            require_once $this->generisPath . '..' . DIRECTORY_SEPARATOR . $filePathInterface;
+            return;
+        }
+
+        foreach ($this->legacyPrefixes as $key => $namespace) {
+            if (substr($pClassName, 0, strlen($key)) == $key) {
+                $newClass = $namespace . strtr(substr($pClassName, strlen($key)), '_', '\\');
+                $this->wrapClass($pClassName, $newClass);
+                return;
+            }
         }
     }
-    
+
     private function wrapClass($legacyClass, $realClass)
     {
         common_Logger::w('Legacy classname "' . $legacyClass . '" referenced, please use "' . $realClass . '" instead');
