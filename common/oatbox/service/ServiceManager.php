@@ -139,7 +139,7 @@ class ServiceManager implements ServiceLocatorInterface, ContainerInterface
      * (non-PHPdoc)
      * @see ContainerInterface::has()
      */
-    public function has($serviceKey)
+    public function has($serviceKey): bool
     {
         if (isset($this->services[$serviceKey])) {
             return true;
