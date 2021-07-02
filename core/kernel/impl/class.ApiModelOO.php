@@ -63,37 +63,6 @@ class core_kernel_impl_ApiModelOO extends core_kernel_impl_Api implements core_k
 
 
     /**
-     * build xml rdf containing rdf:Description of all meta-data the conected
-     * may get
-     *
-     * @deprecated
-     * @access public
-     * @author firstname and lastname of author, <author@example.org>
-     * @param  array sourceNamespaces
-     * @return string
-     */
-    public function exportXmlRdf($sourceNamespaces = [])
-    {
-        $modelIds = [];
-        foreach ($sourceNamespaces as $namespace) {
-            if (!preg_match('/#$/', $namespace)) {
-                $namespace .= "#";
-            }
-
-            $dbWrapper = core_kernel_classes_DbWrapper::singleton();
-
-            $result = $dbWrapper->query('SELECT * FROM "models"  WHERE "modeluri" = ?', [
-                $namespace
-            ]);
-            if ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-                $modelIds[] = $row['modelid'];
-                $result->closeCursor();
-            }
-        }
-        return $xml = core_kernel_api_ModelExporter::exportXmlRdf($modelIds);
-    }
-
-    /**
      * import xml rdf files into the knowledge base
      *
      * @access public
@@ -135,37 +104,15 @@ class core_kernel_impl_ApiModelOO extends core_kernel_impl_Api implements core_k
                         'xmlns:rdfs'    => 'http://www.w3.org/2000/01/rdf-schema#'
                     ];
 
-        $query = 'SELECT "models"."modelid", "models"."modeluri" FROM "models" INNER JOIN "statements" ON "statements"."modelid" = "models"."modelid"
-											WHERE "statements"."subject" = ' . $subject;
-        $query = $dbWrapper->limitStatement($query, 1);
-        $result = $dbWrapper->query($query);
-        if ($row = $result->fetch()) {
-            $modelId  = $row['modelid'];
-            $modelUri =  $row['modeluri'];
-            if (!preg_match("/#$/", $modelUri)) {
-                $modelUri .= '#';
-            }
+        $modelId  = core_kernel_persistence_smoothsql_SmoothModel::DEFAULT_WRITABLE_MODEL;
+        $modelUri = LOCAL_NAMESPACE . '#';
 
-            $result->closeCursor();
-        }
         $currentNs = ["xmlns:ns{$modelId}" => $modelUri];
         $currentNs = array_merge($baseNs, $currentNs);
 
 
-        $allModels = [];
-        $result = $dbWrapper->query('SELECT * FROM "models"');
-        while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-            $allModels[] = $row;
-        }
-
-        $allNs = [];
-        foreach ($allModels as $i => $model) {
-            if (!preg_match("/#$/", $model['modeluri'])) {
-                $model['modeluri'] .= '#';
-            }
-            $allNs["xmlns:ns{$model['modelid']}"] = $model['modeluri'];
-        }
-        $allNs = array_merge($baseNs, $allNs);
+        $allNs = $currentNs;
+        $allNs['xmlns:ns' . core_kernel_persistence_smoothsql_SmoothModel::DEFAULT_READ_ONLY_MODEL] = $modelUri;
 
         try {
             $dom = new DOMDocument();
@@ -203,7 +150,7 @@ class core_kernel_impl_ApiModelOO extends core_kernel_impl_Api implements core_k
                 }
 
                 $resourceValue = false;
-                foreach ($allNs as $namespaceId => $namespaceUri) {
+                foreach ($allNs as $namespaceUri) {
                     if (
                         preg_match('/^' . preg_quote($namespaceUri, '/') . '/', $object) ||
                         preg_match("/^http:\/\/(.*)#[a-zA-Z1-9]*/", $object)
@@ -229,8 +176,7 @@ class core_kernel_impl_ApiModelOO extends core_kernel_impl_Api implements core_k
                                  * <![CDATA[ ]]> to <CDATA></CDATA>
                                  * @todo check if this behavior is the right
                                  */
-                                $object = str_replace('<![CDATA[', '<CDATA>', $object);
-                                $object = str_replace(']]>', '</CDATA>', $object);
+                                $object = str_replace(['<![CDATA[', ']]>'], ['<CDATA>', '</CDATA>'], $object);
 
                                 $node->appendChild($dom->createCDATASection($object));
                             }
@@ -265,7 +211,7 @@ class core_kernel_impl_ApiModelOO extends core_kernel_impl_Api implements core_k
         $returnValue = $this->createClassCollection(__METHOD__);
 
         $classClass = new core_kernel_classes_Class(OntologyRdfs::RDFS_CLASS);
-        foreach ($classClass->getSubClasses(true) as $uri => $subClass) {
+        foreach ($classClass->getSubClasses(true) as $subClass) {
             $returnValue->add($subClass);
         }
 
@@ -383,10 +329,6 @@ class core_kernel_impl_ApiModelOO extends core_kernel_impl_Api implements core_k
      */
     public function getSubject($predicate, $object)
     {
-        $returnValue = null;
-
-
-
         $sqlQuery = "SELECT subject FROM statements WHERE predicate = ? AND object= ? ";
         $dbWrapper = core_kernel_classes_DbWrapper::singleton();
         $sqlResult = $dbWrapper->query($sqlQuery, [
@@ -399,8 +341,6 @@ class core_kernel_impl_ApiModelOO extends core_kernel_impl_Api implements core_k
             $container->debug = __METHOD__ ;
             $returnValue->add($container);
         }
-
-
 
         return $returnValue;
     }
@@ -445,8 +385,6 @@ class core_kernel_impl_ApiModelOO extends core_kernel_impl_Api implements core_k
      */
     public function getObject($subject, $predicate)
     {
-        $returnValue = null;
-
         $sqlQuery = "SELECT object FROM statements WHERE subject = ? AND predicate = ?";
         $dbWrapper = core_kernel_classes_DbWrapper::singleton();
         $sqlResult = $dbWrapper->query($sqlQuery, [
@@ -478,17 +416,12 @@ class core_kernel_impl_ApiModelOO extends core_kernel_impl_Api implements core_k
      */
     public static function singleton()
     {
-        $returnValue = null;
-
-
         if (!isset(self::$instance)) {
             $c = __CLASS__;
             self::$instance = new $c();
         }
-        $returnValue = self::$instance;
 
-
-        return $returnValue;
+        return self::$instance;
     }
 
     /**

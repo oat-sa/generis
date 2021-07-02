@@ -1,4 +1,7 @@
 <?php
+
+use oat\generis\model\data\ModelManager;
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,7 +24,7 @@
 
 class core_kernel_api_ModelExporter
 {
-    
+
     /**
      * Export the entire ontology
      *
@@ -33,7 +36,7 @@ class core_kernel_api_ModelExporter
         $result = $dbWrapper->query('SELECT DISTINCT "subject", "predicate", "object", "l_language" FROM "statements"');
         return self::statement2rdf($result);
     }
-    
+
     /**
      * Export models by id
      *
@@ -45,24 +48,21 @@ class core_kernel_api_ModelExporter
         $dbWrapper = core_kernel_classes_DbWrapper::singleton();
         $result = $dbWrapper->query('SELECT DISTINCT "subject", "predicate", "object", "l_language" FROM "statements" 
             WHERE "modelid" IN (\'' . implode('\',\'', $modelIds) . '\')');
-            
+
         common_Logger::i('Found ' . $result->rowCount() . ' entries for models ' . implode(',', $modelIds));
         return self::statement2rdf($result);
     }
-    
+
     /**
-     * Export a model by URI
-     *
-     * @param array $modelUri
      * @return string
      */
-    public static function exportModelByUri($modelUri)
+    public static function exportModelByUri()
     {
-        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
-        $result = $dbWrapper->query('SELECT modelid FROM "models"  WHERE "modeluri" = ?', [$modelUri])->fetch(PDO::FETCH_ASSOC);
-        self::exportModels($result['modelid']);
+        return self::exportModels(
+            self::getOntology()->getReadableModels()
+        );
     }
-    
+
     /**
      * @ignore
      */
@@ -78,8 +78,13 @@ class core_kernel_api_ModelExporter
                 $graph->addLiteral($r['subject'], $r['predicate'], $r['object']);
             }
         }
-        
+
         $format = EasyRdf_Format::getFormat('rdfxml');
         return $graph->serialise($format);
+    }
+
+    private static function getOntology(): core_kernel_persistence_smoothsql_SmoothModel
+    {
+        return ModelManager::getModel();
     }
 }
