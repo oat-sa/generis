@@ -46,7 +46,7 @@ class ServiceManager implements ServiceLocatorInterface, ContainerInterface
         return self::$instance;
     }
 
-    public static function setServiceManager(ServiceManager $serviceManager)
+    public static function setServiceManager(ServiceLocatorInterface $serviceManager)
     {
         self::$instance = $serviceManager;
     }
