@@ -19,6 +19,8 @@
  *
  */
 
+use oat\oatbox\extension\Manifest;
+
 /**
  * the generis autoloader
  *
@@ -42,9 +44,14 @@ class common_legacy_LegacyAutoLoader
         return self::$singleton;
     }
 
+    /** @var string[] */
     private $legacyPrefixes = [];
 
+    /** @var string */
     private $generisPath;
+
+    /** @var string */
+    private $rootPath;
 
     /**
      * protect the cunstructer, singleton pattern
@@ -52,6 +59,7 @@ class common_legacy_LegacyAutoLoader
     private function __construct()
     {
         $this->generisPath = dirname(__DIR__, 2) . DIRECTORY_SEPARATOR;
+        $this->rootPath    = $this->generisPath . '..' . DIRECTORY_SEPARATOR;
     }
 
     /**
@@ -82,15 +90,15 @@ class common_legacy_LegacyAutoLoader
      * @param  string pClassName
      * @return void
      */
-    public function autoload($pClassName)
+    public function autoload($pClassName): void
     {
         if (strpos($pClassName, '_') === false) {
             return;
         }
 
         $tokens = explode("_", $pClassName);
-        $size = count($tokens);
-        $path = '';
+        $size   = count($tokens);
+        $path   = '';
         for ($i = 0; $i < $size - 1; $i++) {
             $path .= $tokens[$i] . '/';
         }
@@ -116,13 +124,13 @@ class common_legacy_LegacyAutoLoader
             return;
         }
 
-        if (file_exists($this->generisPath . '..' . DIRECTORY_SEPARATOR . $filePath)) {
-            require_once $this->generisPath . '..' . DIRECTORY_SEPARATOR . $filePath;
+        if (file_exists($this->rootPath . $filePath)) {
+            require_once $this->rootPath . $filePath;
             return;
         }
 
-        if (file_exists($this->generisPath . '..' . DIRECTORY_SEPARATOR . $filePathInterface)) {
-            require_once $this->generisPath . '..' . DIRECTORY_SEPARATOR . $filePathInterface;
+        if (file_exists($this->rootPath . $filePathInterface)) {
+            require_once $this->rootPath . $filePathInterface;
             return;
         }
 
@@ -132,6 +140,36 @@ class common_legacy_LegacyAutoLoader
                 $this->wrapClass($pClassName, $newClass);
                 return;
             }
+        }
+
+        $this->loadFromRootExtension($tokens);
+    }
+
+    private function loadFromRootExtension(array $classNameTokens): void
+    {
+        $manifestPath = $this->rootPath . 'manifest.php';
+
+        if (!file_exists($manifestPath)) {
+            return;
+        }
+
+        $manifest = new Manifest($manifestPath);
+        if ($manifest->getName() !== reset($classNameTokens)) {
+            return;
+        }
+
+        $path = implode(DIRECTORY_SEPARATOR, array_slice($classNameTokens, 1, -1)) . DIRECTORY_SEPARATOR;
+
+        $classFilePath = $this->rootPath . $path . 'class.' . end($classNameTokens) . '.php';
+        if (file_exists($classFilePath)) {
+            require_once $classFilePath;
+
+            return;
+        }
+
+        $interfaceFilePath = $this->rootPath . $path . 'interface.' . end($classNameTokens) . '.php';
+        if (file_exists($interfaceFilePath)) {
+            require_once $interfaceFilePath;
         }
     }
 
