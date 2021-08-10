@@ -90,37 +90,24 @@ class core_kernel_impl_ApiModelOO extends core_kernel_impl_Api implements core_k
      */
     public function getResourceDescriptionXML($uriResource)
     {
-        $returnValue = (string) '';
-
-
-
-
-
         $dbWrapper = core_kernel_classes_DbWrapper::singleton();
         $subject = $dbWrapper->quote($uriResource);
 
-        $baseNs = [
-                        'xmlns:rdf'     => 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
-                        'xmlns:rdfs'    => 'http://www.w3.org/2000/01/rdf-schema#'
-                    ];
+        $namespaceCounter = core_kernel_persistence_smoothsql_SmoothModel::DEFAULT_WRITABLE_MODEL;
 
-        $modelId  = core_kernel_persistence_smoothsql_SmoothModel::DEFAULT_WRITABLE_MODEL;
-        $modelUri = LOCAL_NAMESPACE . '#';
-
-        $currentNs = ["xmlns:ns{$modelId}" => $modelUri];
-        $currentNs = array_merge($baseNs, $currentNs);
-
-
-        $allNs = $currentNs;
-        $allNs['xmlns:ns' . core_kernel_persistence_smoothsql_SmoothModel::DEFAULT_READ_ONLY_MODEL] = $modelUri;
+        $namespaces = [
+            'http://www.w3.org/1999/02/22-rdf-syntax-ns#' => 'rdf',
+            'http://www.w3.org/2000/01/rdf-schema#'       => 'rdfs',
+            ROOT_URL . '#'                                => "ns{$namespaceCounter}",
+        ];
 
         try {
             $dom = new DOMDocument();
             $dom->formatOutput = true;
             $root = $dom->createElement('rdf:RDF');
 
-            foreach ($currentNs as $namespaceId => $namespaceUri) {
-                $root->setAttribute($namespaceId, $namespaceUri);
+            foreach ($namespaces as $namespace => $namespaceId) {
+                $root->setAttribute("xmlns:$namespaceId", $namespace);
             }
             $dom->appendChild($root);
 
@@ -133,58 +120,44 @@ class core_kernel_impl_ApiModelOO extends core_kernel_impl_Api implements core_k
                 $object     = trim($row['object']);
                 $lang       = trim($row['l_language']);
 
-                $nodeName = null;
-
-                foreach ($allNs as $namespaceId => $namespaceUri) {
-                    if ($namespaceId === 'xml:base') {
-                        continue;
-                    }
-                    if (preg_match("/^" . preg_quote($namespaceUri, '/') . "/", $predicate)) {
-                        if (!array_key_exists($namespaceId, $currentNs)) {
-                            $currentNs[$namespaceId] = $namespaceUri;
-                            $root->setAttribute($namespaceId, $namespaceUri);
-                        }
-                        $nodeName = str_replace('xmlns:', '', $namespaceId) . ':' . str_replace($namespaceUri, '', $predicate);
-                        break;
-                    }
+                if (strpos($predicate, '#') === false) {
+                    continue;
                 }
 
-                $resourceValue = false;
-                foreach ($allNs as $namespaceUri) {
-                    if (
-                        preg_match('/^' . preg_quote($namespaceUri, '/') . '/', $object) ||
-                        preg_match("/^http:\/\/(.*)#[a-zA-Z1-9]*/", $object)
-                    ) {
-                        $resourceValue = true;
-                        break;
-                    }
+                [$namespace, $property] = explode('#', $predicate, 2);
+                $namespace = "$namespace#";
+
+                if (!isset($namespaces[$namespace])) {
+                    $namespaceId            = sprintf('ns%u', ++$namespaceCounter);
+                    $namespaces[$namespace] = $namespaceId;
+                    $root->setAttribute("xmlns:$namespaceId", $namespace);
                 }
-                if (!is_null($nodeName)) {
-                    try {
-                        $node = $dom->createElement($nodeName);
-                        if (!empty($lang)) {
-                            $node->setAttribute('xml:lang', $lang);
-                        }
 
-                        if ($resourceValue) {
-                                $node->setAttribute('rdf:resource', $object);
-                        } else {
-                            if (!empty($object) && !is_null($object)) {
+                $namespaceId = $namespaces[$namespace];
+                $nodeName    = "$namespaceId:$property";
 
-                                /**
-                                 * Replace the CDATA section inside XML fields by a replacement tag:
-                                 * <![CDATA[ ]]> to <CDATA></CDATA>
-                                 * @todo check if this behavior is the right
-                                 */
-                                $object = str_replace(['<![CDATA[', ']]>'], ['<CDATA>', '</CDATA>'], $object);
-
-                                $node->appendChild($dom->createCDATASection($object));
-                            }
-                        }
-                        $description->appendChild($node);
-                    } catch (DOMException $de) {
-                        //print $de;
+                try {
+                    $node = $dom->createElement($nodeName);
+                    if (!empty($lang)) {
+                        $node->setAttribute('xml:lang', $lang);
                     }
+
+                    if (preg_match("/^http:\/\/(.*)#[a-zA-Z1-9]*/", $object)) {
+                        $node->setAttribute('rdf:resource', $object);
+                    } elseif (!empty($object) && !is_null($object)) {
+
+                        /**
+                         * Replace the CDATA section inside XML fields by a replacement tag:
+                         * <![CDATA[ ]]> to <CDATA></CDATA>
+                         * @todo check if this behavior is the right
+                         */
+                        $object = str_replace(['<![CDATA[', ']]>'], ['<CDATA>', '</CDATA>'], $object);
+
+                        $node->appendChild($dom->createCDATASection($object));
+                    }
+                    $description->appendChild($node);
+                } catch (DOMException $de) {
+                    //print $de;
                 }
             }
             $root->appendChild($description);
