@@ -24,6 +24,7 @@ use oat\generis\model\OntologyRdf;
 use oat\generis\model\OntologyRdfs;
 use Doctrine\DBAL\DBALException;
 use oat\generis\model\data\import\RdfImporter;
+use oat\oatbox\log\LoggerAwareTrait;
 use oat\oatbox\service\ServiceManager;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -46,6 +47,8 @@ error_reporting(E_ALL);
  */
 class core_kernel_impl_ApiModelOO extends core_kernel_impl_Api implements core_kernel_api_ApiModel
 {
+    use LoggerAwareTrait;
+
     // --- ASSOCIATIONS ---
 
 
@@ -90,6 +93,8 @@ class core_kernel_impl_ApiModelOO extends core_kernel_impl_Api implements core_k
      */
     public function getResourceDescriptionXML($uriResource)
     {
+        $returnValue = '';
+
         $dbWrapper = core_kernel_classes_DbWrapper::singleton();
         $subject = $dbWrapper->quote($uriResource);
 
@@ -156,18 +161,16 @@ class core_kernel_impl_ApiModelOO extends core_kernel_impl_Api implements core_k
                         $node->appendChild($dom->createCDATASection($object));
                     }
                     $description->appendChild($node);
-                } catch (DOMException $de) {
-                    //print $de;
+                } catch (DOMException $exception) {
+                    $this->logCritical($exception->getMessage(), ['exception' => $exception]);
                 }
             }
             $root->appendChild($description);
             $returnValue = $dom->saveXml();
-        } catch (DomException $e) {
-            print $e;
+        } catch (DomException $exception) {
+            $this->logError($exception->getMessage(), ['exception' => $exception]);
+            print $exception;
         }
-
-
-
 
         return (string) $returnValue;
     }
