@@ -98,7 +98,7 @@ class core_kernel_impl_ApiModelOO extends core_kernel_impl_Api implements core_k
         $namespaces = [
             'http://www.w3.org/1999/02/22-rdf-syntax-ns#' => 'rdf',
             'http://www.w3.org/2000/01/rdf-schema#'       => 'rdfs',
-            ROOT_URL . '#'                                => "ns{$namespaceCounter}",
+            ROOT_URL . '#'                                => "ns$namespaceCounter",
         ];
 
         try {
