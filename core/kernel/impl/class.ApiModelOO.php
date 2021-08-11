@@ -62,6 +62,12 @@ class core_kernel_impl_ApiModelOO extends core_kernel_impl_Api implements core_k
      */
     private static $instance = null;
 
+    /** @var string[] */
+    private $namespaces = [];
+
+    /** @var int */
+    private $customNamespacesCounter = 0;
+
     // --- OPERATIONS ---
 
 
@@ -98,22 +104,12 @@ class core_kernel_impl_ApiModelOO extends core_kernel_impl_Api implements core_k
         $dbWrapper = core_kernel_classes_DbWrapper::singleton();
         $subject = $dbWrapper->quote($uriResource);
 
-        $namespaceCounter = core_kernel_persistence_smoothsql_SmoothModel::DEFAULT_WRITABLE_MODEL;
-
-        $namespaces = [
-            'http://www.w3.org/1999/02/22-rdf-syntax-ns#' => 'rdf',
-            'http://www.w3.org/2000/01/rdf-schema#'       => 'rdfs',
-            ROOT_URL . '#'                                => "ns$namespaceCounter",
-        ];
-
         try {
             $dom = new DOMDocument();
             $dom->formatOutput = true;
             $root = $dom->createElement('rdf:RDF');
 
-            foreach ($namespaces as $namespace => $namespaceId) {
-                $root->setAttribute("xmlns:$namespaceId", $namespace);
-            }
+            $this->addCoreNamespaces($root);
             $dom->appendChild($root);
 
             $description = $dom->createElement('rdf:Description');
@@ -130,15 +126,8 @@ class core_kernel_impl_ApiModelOO extends core_kernel_impl_Api implements core_k
                 }
 
                 [$namespace, $property] = explode('#', $predicate, 2);
-                $namespace = "$namespace#";
 
-                if (!isset($namespaces[$namespace])) {
-                    $namespaceId            = sprintf('ns%u', ++$namespaceCounter);
-                    $namespaces[$namespace] = $namespaceId;
-                    $root->setAttribute("xmlns:$namespaceId", $namespace);
-                }
-
-                $namespaceId = $namespaces[$namespace];
+                $namespaceId = $this->addCustomNamespace($root, $namespace);
                 $nodeName    = "$namespaceId:$property";
 
                 try {
@@ -149,7 +138,7 @@ class core_kernel_impl_ApiModelOO extends core_kernel_impl_Api implements core_k
 
                     if (preg_match("/^http:\/\/(.*)#[a-zA-Z1-9]*/", $object)) {
                         $node->setAttribute('rdf:resource', $object);
-                    } elseif (!empty($object) && !is_null($object)) {
+                    } elseif (!empty($object)) {
 
                         /**
                          * Replace the CDATA section inside XML fields by a replacement tag:
@@ -422,5 +411,42 @@ class core_kernel_impl_ApiModelOO extends core_kernel_impl_Api implements core_k
     private function createClassCollection(string $debug = ''): core_kernel_classes_ContainerCollection
     {
         return new core_kernel_classes_ContainerCollection(new core_kernel_classes_Container(), $debug);
+    }
+
+    private function addCoreNamespaces(DOMElement $root): void
+    {
+        $this->namespaces = [
+            'http://www.w3.org/1999/02/22-rdf-syntax-ns' => 'rdf',
+            'http://www.w3.org/2000/01/rdf-schema'       => 'rdfs',
+        ];
+
+        foreach ($this->namespaces as $namespace => $namespaceId) {
+            $this->addNamespace($root, $namespaceId, $namespace);
+        }
+
+        $this->customNamespacesCounter = 0;
+        $this->addCustomNamespace($root, ROOT_URL);
+    }
+
+    /**
+     * @param DOMElement $root
+     * @param string $namespace
+     *
+     * @return string|null A namespace ID
+     */
+    private function addCustomNamespace(DOMElement $root, string $namespace): string
+    {
+        if (!isset($this->namespaces[$namespace])) {
+            $namespaceId = sprintf('ns%u', ++$this->customNamespacesCounter);
+            $this->namespaces[$namespace] = $namespaceId;
+            $this->addNamespace($root, $namespaceId, $namespace);
+        }
+
+        return $this->namespaces[$namespace];
+    }
+
+    private function addNamespace(DOMElement $root, string $namespaceId, string $namespace): void
+    {
+        $root->setAttribute("xmlns:$namespaceId", "$namespace#");
     }
 }
