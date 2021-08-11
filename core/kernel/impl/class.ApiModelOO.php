@@ -425,7 +425,7 @@ class core_kernel_impl_ApiModelOO extends core_kernel_impl_Api implements core_k
         }
 
         $this->customNamespacesCounter = 0;
-        $this->addCustomNamespace($root, ROOT_URL);
+        $this->addCustomNamespace($root, LOCAL_NAMESPACE);
     }
 
     /**
