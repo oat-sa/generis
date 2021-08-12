@@ -24,6 +24,7 @@ use oat\generis\model\OntologyRdf;
 use oat\generis\model\OntologyRdfs;
 use Doctrine\DBAL\DBALException;
 use oat\generis\model\data\import\RdfImporter;
+use oat\oatbox\log\LoggerAwareTrait;
 use oat\oatbox\service\ServiceManager;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -46,6 +47,8 @@ error_reporting(E_ALL);
  */
 class core_kernel_impl_ApiModelOO extends core_kernel_impl_Api implements core_kernel_api_ApiModel
 {
+    use LoggerAwareTrait;
+
     // --- ASSOCIATIONS ---
 
 
@@ -58,6 +61,12 @@ class core_kernel_impl_ApiModelOO extends core_kernel_impl_Api implements core_k
      * @var self
      */
     private static $instance = null;
+
+    /** @var string[] */
+    private $namespaces = [];
+
+    /** @var int */
+    private $customNamespacesCounter = 0;
 
     // --- OPERATIONS ---
 
@@ -90,38 +99,17 @@ class core_kernel_impl_ApiModelOO extends core_kernel_impl_Api implements core_k
      */
     public function getResourceDescriptionXML($uriResource)
     {
-        $returnValue = (string) '';
-
-
-
-
+        $returnValue = '';
 
         $dbWrapper = core_kernel_classes_DbWrapper::singleton();
         $subject = $dbWrapper->quote($uriResource);
-
-        $baseNs = [
-                        'xmlns:rdf'     => 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
-                        'xmlns:rdfs'    => 'http://www.w3.org/2000/01/rdf-schema#'
-                    ];
-
-        $modelId  = core_kernel_persistence_smoothsql_SmoothModel::DEFAULT_WRITABLE_MODEL;
-        $modelUri = LOCAL_NAMESPACE . '#';
-
-        $currentNs = ["xmlns:ns{$modelId}" => $modelUri];
-        $currentNs = array_merge($baseNs, $currentNs);
-
-
-        $allNs = $currentNs;
-        $allNs['xmlns:ns' . core_kernel_persistence_smoothsql_SmoothModel::DEFAULT_READ_ONLY_MODEL] = $modelUri;
 
         try {
             $dom = new DOMDocument();
             $dom->formatOutput = true;
             $root = $dom->createElement('rdf:RDF');
 
-            foreach ($currentNs as $namespaceId => $namespaceUri) {
-                $root->setAttribute($namespaceId, $namespaceUri);
-            }
+            $this->addCoreNamespaces($root);
             $dom->appendChild($root);
 
             $description = $dom->createElement('rdf:Description');
@@ -133,68 +121,45 @@ class core_kernel_impl_ApiModelOO extends core_kernel_impl_Api implements core_k
                 $object     = trim($row['object']);
                 $lang       = trim($row['l_language']);
 
-                $nodeName = null;
-
-                foreach ($allNs as $namespaceId => $namespaceUri) {
-                    if ($namespaceId === 'xml:base') {
-                        continue;
-                    }
-                    if (preg_match("/^" . preg_quote($namespaceUri, '/') . "/", $predicate)) {
-                        if (!array_key_exists($namespaceId, $currentNs)) {
-                            $currentNs[$namespaceId] = $namespaceUri;
-                            $root->setAttribute($namespaceId, $namespaceUri);
-                        }
-                        $nodeName = str_replace('xmlns:', '', $namespaceId) . ':' . str_replace($namespaceUri, '', $predicate);
-                        break;
-                    }
+                if (strpos($predicate, '#') === false) {
+                    continue;
                 }
 
-                $resourceValue = false;
-                foreach ($allNs as $namespaceUri) {
-                    if (
-                        preg_match('/^' . preg_quote($namespaceUri, '/') . '/', $object) ||
-                        preg_match("/^http:\/\/(.*)#[a-zA-Z1-9]*/", $object)
-                    ) {
-                        $resourceValue = true;
-                        break;
+                [$namespace, $property] = explode('#', $predicate, 2);
+
+                $namespaceId = $this->addCustomNamespace($root, $namespace);
+                $nodeName    = "$namespaceId:$property";
+
+                try {
+                    $node = $dom->createElement($nodeName);
+                    if (!empty($lang)) {
+                        $node->setAttribute('xml:lang', $lang);
                     }
-                }
-                if (!is_null($nodeName)) {
-                    try {
-                        $node = $dom->createElement($nodeName);
-                        if (!empty($lang)) {
-                            $node->setAttribute('xml:lang', $lang);
-                        }
 
-                        if ($resourceValue) {
-                                $node->setAttribute('rdf:resource', $object);
-                        } else {
-                            if (!empty($object) && !is_null($object)) {
+                    if (preg_match("/^http:\/\/(.*)#[a-zA-Z1-9]*/", $object)) {
+                        $node->setAttribute('rdf:resource', $object);
+                    } elseif (!empty($object)) {
 
-                                /**
-                                 * Replace the CDATA section inside XML fields by a replacement tag:
-                                 * <![CDATA[ ]]> to <CDATA></CDATA>
-                                 * @todo check if this behavior is the right
-                                 */
-                                $object = str_replace(['<![CDATA[', ']]>'], ['<CDATA>', '</CDATA>'], $object);
+                        /**
+                         * Replace the CDATA section inside XML fields by a replacement tag:
+                         * <![CDATA[ ]]> to <CDATA></CDATA>
+                         * @todo check if this behavior is the right
+                         */
+                        $object = str_replace(['<![CDATA[', ']]>'], ['<CDATA>', '</CDATA>'], $object);
 
-                                $node->appendChild($dom->createCDATASection($object));
-                            }
-                        }
-                        $description->appendChild($node);
-                    } catch (DOMException $de) {
-                        //print $de;
+                        $node->appendChild($dom->createCDATASection($object));
                     }
+                    $description->appendChild($node);
+                } catch (DOMException $exception) {
+                    $this->logCritical($exception->getMessage(), ['exception' => $exception]);
                 }
             }
             $root->appendChild($description);
             $returnValue = $dom->saveXml();
-        } catch (DomException $e) {
-            print $e;
+        } catch (DomException $exception) {
+            $this->logError($exception->getMessage(), ['exception' => $exception]);
+            print $exception;
         }
-
-
-
 
         return (string) $returnValue;
     }
@@ -446,5 +411,42 @@ class core_kernel_impl_ApiModelOO extends core_kernel_impl_Api implements core_k
     private function createClassCollection(string $debug = ''): core_kernel_classes_ContainerCollection
     {
         return new core_kernel_classes_ContainerCollection(new core_kernel_classes_Container(), $debug);
+    }
+
+    private function addCoreNamespaces(DOMElement $root): void
+    {
+        $this->namespaces = [
+            'http://www.w3.org/1999/02/22-rdf-syntax-ns' => 'rdf',
+            'http://www.w3.org/2000/01/rdf-schema'       => 'rdfs',
+        ];
+
+        foreach ($this->namespaces as $namespace => $namespaceId) {
+            $this->addNamespace($root, $namespaceId, $namespace);
+        }
+
+        $this->customNamespacesCounter = 0;
+        $this->addCustomNamespace($root, LOCAL_NAMESPACE);
+    }
+
+    /**
+     * @param DOMElement $root
+     * @param string $namespace
+     *
+     * @return string|null A namespace ID
+     */
+    private function addCustomNamespace(DOMElement $root, string $namespace): string
+    {
+        if (!isset($this->namespaces[$namespace])) {
+            $namespaceId = sprintf('ns%u', ++$this->customNamespacesCounter);
+            $this->namespaces[$namespace] = $namespaceId;
+            $this->addNamespace($root, $namespaceId, $namespace);
+        }
+
+        return $this->namespaces[$namespace];
+    }
+
+    private function addNamespace(DOMElement $root, string $namespaceId, string $namespace): void
+    {
+        $root->setAttribute("xmlns:$namespaceId", "$namespace#");
     }
 }
