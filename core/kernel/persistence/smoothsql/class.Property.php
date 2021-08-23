@@ -144,13 +144,13 @@ class core_kernel_persistence_smoothsql_Property extends core_kernel_persistence
     public function setDependsOnProperty(
         core_kernel_classes_Resource $resource,
         core_kernel_classes_Property $property
-    ): int {
+    ): void {
         $dependsOnProperty = new core_kernel_classes_Property(
             GenerisRdf::PROPERTY_DEPENDS_ON_PROPERTY,
             __METHOD__
         );
 
-        return $this->setPropertyValue($resource, $dependsOnProperty, $property->getUri());
+        $this->setPropertyValue($resource, $dependsOnProperty, $property->getUri());
     }
 
     /**

@@ -244,15 +244,11 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
         return $this->dependsOnProperty;
     }
 
-    public function setDependsOnProperty(core_kernel_classes_Property $property): bool
+    public function setDependsOnProperty(core_kernel_classes_Property $property): void
     {
-        $numberOfUpdatedRows = $this->getImplementation()->setDependsOnProperty($this, $property);
+        $this->getImplementation()->setDependsOnProperty($this, $property);
 
-        if ($numberOfUpdatedRows) {
-            $this->dependsOnProperty = $property;
-        }
-
-        return (bool) $numberOfUpdatedRows;
+        $this->dependsOnProperty = $property;
     }
 
     /**

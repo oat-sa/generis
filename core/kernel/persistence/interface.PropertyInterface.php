@@ -87,7 +87,7 @@ interface core_kernel_persistence_PropertyInterface
     public function setDependsOnProperty(
         core_kernel_classes_Resource $resource,
         core_kernel_classes_Property $property
-    ): int;
+    ): void;
 
     /**
      * Short description of method setMultiple
