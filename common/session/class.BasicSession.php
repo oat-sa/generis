@@ -142,11 +142,17 @@ class common_session_BasicSession implements common_session_Session, ServiceLoca
      */
     public function getInterfaceLanguage()
     {
-        if (PHPSession::singleton()->hasAttribute('overrideInterfaceLanguage')) {
-            return PHPSession::singleton()->getAttribute('overrideInterfaceLanguage');
+        /** @var PHPSession $session */
+        $session = PHPSession::singleton();
+
+        /** @var UserLanguageServiceInterface $userLanguageService */
+        $userLanguageService = $this->getServiceLocator()->get(UserLanguageServiceInterface::class);
+
+        if ($session->hasAttribute('overrideInterfaceLanguage')) {
+            $userLanguageService->setCustomInterfaceLanguage($session->getAttribute('overrideInterfaceLanguage'));
         }
 
-        return $this->getServiceLocator()->get(UserLanguageServiceInterface::class)->getInterfaceLanguage($this->getUser());
+        return $userLanguageService->getInterfaceLanguage($this->getUser());
     }
     
     /**
