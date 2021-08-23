@@ -21,6 +21,8 @@
  *               2017 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
 
+declare(strict_types=1);
+
 use oat\generis\model\GenerisRdf;
 use oat\generis\model\OntologyRdfs;
 
@@ -139,6 +141,18 @@ class core_kernel_persistence_smoothsql_Property extends core_kernel_persistence
         return $returnValue;
     }
 
+    public function setDependsOnProperty(
+        core_kernel_classes_Resource $resource,
+        core_kernel_classes_Property $property
+    ): int {
+        $dependsOnProperty = new core_kernel_classes_Property(
+            GenerisRdf::PROPERTY_DEPENDS_ON_PROPERTY,
+            __METHOD__
+        );
+
+        return $this->setPropertyValue($resource, $dependsOnProperty, $property->getUri());
+    }
+
     /**
      * Short description of method setMultiple
      *
@@ -150,7 +164,7 @@ class core_kernel_persistence_smoothsql_Property extends core_kernel_persistence
      */
     public function setMultiple(core_kernel_classes_Resource $resource, $isMultiple)
     {
-        
+
         $multipleProperty = new core_kernel_classes_Property(GenerisRdf::PROPERTY_MULTIPLE);
         $value = ((bool)$isMultiple) ?  GenerisRdf::GENERIS_TRUE : GenerisRdf::GENERIS_FALSE ;
         $this->removePropertyValues($resource, $multipleProperty);
@@ -168,7 +182,7 @@ class core_kernel_persistence_smoothsql_Property extends core_kernel_persistence
      */
     public function setLgDependent(core_kernel_classes_Resource $resource, $isLgDependent)
     {
-        
+
         $lgDependentProperty = new core_kernel_classes_Property(GenerisRdf::PROPERTY_IS_LG_DEPENDENT, __METHOD__);
         $value = ((bool)$isLgDependent) ?  GenerisRdf::GENERIS_TRUE : GenerisRdf::GENERIS_FALSE ;
         $this->removePropertyValues($resource, $lgDependentProperty);

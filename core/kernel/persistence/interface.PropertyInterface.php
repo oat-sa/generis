@@ -84,6 +84,11 @@ interface core_kernel_persistence_PropertyInterface
      */
     public function setRange(core_kernel_classes_Resource $resource, core_kernel_classes_Class $class);
 
+    public function setDependsOnProperty(
+        core_kernel_classes_Resource $resource,
+        core_kernel_classes_Property $property
+    ): int;
+
     /**
      * Short description of method setMultiple
      *

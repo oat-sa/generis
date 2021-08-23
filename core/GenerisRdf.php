@@ -60,6 +60,7 @@ interface GenerisRdf
     public const PROPERTY_MASK_SUBJECT = 'http://www.tao.lu/Ontologies/generis.rdf#MaskSubject';
     public const PROPERTY_MASK_PREDICATE = 'http://www.tao.lu/Ontologies/generis.rdf#MaskPredicate';
     public const PROPERTY_MASK_OBJECT = 'http://www.tao.lu/Ontologies/generis.rdf#MaskObject';
+    public const PROPERTY_DEPENDS_ON_PROPERTY = 'http://www.tao.lu/Ontologies/generis.rdf#DependsOnProperty';
     //@deprecated use UserRdf::CLASS_URI
     public const CLASS_GENERIS_USER = 'http://www.tao.lu/Ontologies/generis.rdf#User';
     //@deprecated use UserRdf::PROPERTY_LOGIN
