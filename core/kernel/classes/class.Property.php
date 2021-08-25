@@ -26,6 +26,7 @@ declare(strict_types=1);
 use oat\generis\model\WidgetRdf;
 use oat\generis\model\GenerisRdf;
 use oat\generis\model\OntologyRdfs;
+use oat\generis\model\resource\DependsOnPropertyCollection;
 
 /**
  * uriProperty must be a valid property otherwis return false, add this as a
@@ -89,8 +90,8 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
      */
     public $multiple = false;
 
-    /** @var core_kernel_classes_Property|null */
-    private $dependsOnProperty = null;
+    /** @var DependsOnPropertyCollection */
+    private $dependsOnPropertyCollection;
 
     // --- OPERATIONS ---
     /**
@@ -117,6 +118,7 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
 
         $this->lgDependent = null;
         $this->multiple = null;
+        $this->dependsOnPropertyCollection = new DependsOnPropertyCollection();
     }
 
     /**
@@ -226,29 +228,35 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
         return (bool) $returnValue;
     }
 
-    public function getDependsOnProperty(): ?core_kernel_classes_Property
+    /**
+     * @TODO Improve getter
+     */
+    public function getDependsOnPropertyCollection(): DependsOnPropertyCollection
     {
-        if ($this->dependsOnProperty === null) {
-            $dependsOnProperty = $this->getProperty(GenerisRdf::PROPERTY_DEPENDS_ON_PROPERTY);
-            $dependsOnPropertyValue = $this->getOnePropertyValue($dependsOnProperty);
+        $dependsOnProperty = $this->getProperty(GenerisRdf::PROPERTY_DEPENDS_ON_PROPERTY);
+        $dependsOnPropertyValues = $this->getPropertyValues($dependsOnProperty);
 
-            if (
-                $dependsOnPropertyValue !== null
-                && $dependsOnPropertyValue->getUri() !== GenerisRdf::PROPERTY_DEPENDS_ON_PROPERTY
-            ) {
-                $returnValue = $this->getProperty($dependsOnPropertyValue);
-                $this->dependsOnProperty = $returnValue;
+        foreach ($dependsOnPropertyValues as $dependsOnPropertyValue) {
+            if ($dependsOnPropertyValue !== GenerisRdf::PROPERTY_DEPENDS_ON_PROPERTY) {
+                $this->dependsOnPropertyCollection->append(
+                    $this->getProperty($dependsOnPropertyValue)
+                );
             }
         }
 
-        return $this->dependsOnProperty;
+        return $this->dependsOnPropertyCollection;
     }
 
-    public function setDependsOnProperty(core_kernel_classes_Property $property): void
+    /**
+     * @TODO Improve setter
+     */
+    public function setDependsOnPropertyCollection(DependsOnPropertyCollection $dependsOnPropertyCollection): void
     {
-        $this->getImplementation()->setDependsOnProperty($this, $property);
+        foreach ($dependsOnPropertyCollection as $dependsOnProperty) {
+            $this->getImplementation()->setDependsOnProperty($this, $dependsOnProperty);
+        }
 
-        $this->dependsOnProperty = $property;
+        $this->dependsOnPropertyCollection = $dependsOnPropertyCollection;
     }
 
     /**
