@@ -150,6 +150,9 @@ class common_session_BasicSession implements common_session_Session, ServiceLoca
 
         if ($session->hasAttribute('overrideInterfaceLanguage')) {
             $userLanguageService->setCustomInterfaceLanguage($session->getAttribute('overrideInterfaceLanguage'));
+        } else {
+            // Just to be sure the custom interface language is removed when the session attribute is gone
+            $userLanguageService->setCustomInterfaceLanguage(null);
         }
 
         return $userLanguageService->getInterfaceLanguage($this->getUser());
