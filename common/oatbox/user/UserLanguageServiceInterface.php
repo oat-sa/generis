@@ -52,4 +52,12 @@ interface UserLanguageServiceInterface
      * @return boolean
      */
     public function isDataLanguageEnabled();
+
+    /**
+     * When a custom interface language is set, it overrides the interface language retrieved in the getInterfaceLanguage
+     * method.
+     *
+     * @param ?string $customInterfaceLanguage
+     */
+    public function setCustomInterfaceLanguage(?string $customInterfaceLanguage): void;
 }
