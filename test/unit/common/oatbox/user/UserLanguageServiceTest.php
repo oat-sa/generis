@@ -22,8 +22,12 @@ declare(strict_types=1);
 
 namespace oat\generis\test\unit\common\oatbox\user;
 
+use oat\generis\model\GenerisRdf;
 use oat\generis\test\TestCase;
+use oat\oatbox\user\User;
 use oat\oatbox\user\UserLanguageService;
+use Prophecy\Argument;
+use Prophecy\Prophecy\ObjectProphecy;
 
 class UserLanguageServiceTest extends TestCase
 {
@@ -49,5 +53,41 @@ class UserLanguageServiceTest extends TestCase
         $this->subject->setOptions([]);
 
         $this->assertSame($this->subject->getDefaultLanguage(), $this->subject->getAuthoringLanguage());
+    }
+
+    public function testGetInterfaceLanguageReturnsDefaultLanguageWhenUserDoesNotHaveItSet(): void
+    {
+        $user = $this->createUser();
+
+        $this->assertSame($this->subject->getDefaultLanguage(), $this->subject->getInterfaceLanguage($user));
+    }
+
+    public function testGetInterfaceLanguageReturnsLanguageFromUser(): void
+    {
+        $user = $this->createUser('en-US');
+
+        $this->assertSame('en-US', $this->subject->getInterfaceLanguage($user));
+    }
+
+    public function testGetInterfaceLanguageReturnsCustomInterfaceLanguage(): void
+    {
+        $this->subject->setCustomInterfaceLanguage('es-ES');
+
+        $user = $this->createUser();
+
+        $this->assertSame('es-ES', $this->subject->getInterfaceLanguage($user));
+    }
+
+    private function createUser(?string $withLanguage = null): User
+    {
+        /** @var User|ObjectProphecy $user */
+        $user = $this->prophesize(User::class);
+
+        if ($withLanguage !== null) {
+            $user->getPropertyValues(Argument::is(GenerisRdf::PROPERTY_USER_UILG))
+                ->willReturn([$withLanguage]);
+        }
+
+        return $user->reveal();
     }
 }

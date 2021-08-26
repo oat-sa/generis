@@ -29,6 +29,9 @@ class UserLanguageService extends ConfigurableService implements UserLanguageSer
     public const OPTION_LOCK_DATA_LANGUAGE = 'lock_data_language';
     public const OPTION_AUTHORING_LANGUAGE = 'authoring_language';
 
+    /** @var ?string */
+    private $customInterfaceLanguage;
+
     /**
      * {@inheritDoc}
      * @see \oat\oatbox\user\UserLanguageServiceInterface::getDefaultLanguage()
@@ -56,6 +59,10 @@ class UserLanguageService extends ConfigurableService implements UserLanguageSer
      */
     public function getInterfaceLanguage(User $user)
     {
+        if (!empty($this->customInterfaceLanguage)) {
+            return $this->customInterfaceLanguage;
+        }
+
         $lang = $user->getPropertyValues(GenerisRdf::PROPERTY_USER_UILG);
         return empty($lang) ? $this->getDefaultLanguage() : (string)current($lang);
     }
@@ -71,5 +78,13 @@ class UserLanguageService extends ConfigurableService implements UserLanguageSer
     public function getAuthoringLanguage(): string
     {
         return $this->getOption(self::OPTION_AUTHORING_LANGUAGE, $this->getDefaultLanguage());
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setCustomInterfaceLanguage(?string $customInterfaceLanguage): void
+    {
+        $this->customInterfaceLanguage = $customInterfaceLanguage;
     }
 }

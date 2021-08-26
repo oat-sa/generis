@@ -15,7 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2017 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
+ * Copyright (c) 2017-2021 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  *
  */
 
@@ -142,7 +142,20 @@ class common_session_BasicSession implements common_session_Session, ServiceLoca
      */
     public function getInterfaceLanguage()
     {
-        return $this->getServiceLocator()->get(UserLanguageServiceInterface::class)->getInterfaceLanguage($this->getUser());
+        /** @var PHPSession $session */
+        $session = PHPSession::singleton();
+
+        /** @var UserLanguageServiceInterface $userLanguageService */
+        $userLanguageService = $this->getServiceLocator()->get(UserLanguageServiceInterface::class);
+
+        if ($session->hasAttribute('overrideInterfaceLanguage')) {
+            $userLanguageService->setCustomInterfaceLanguage($session->getAttribute('overrideInterfaceLanguage'));
+        } else {
+            // Just to be sure the custom interface language is removed when the session attribute is gone
+            $userLanguageService->setCustomInterfaceLanguage(null);
+        }
+
+        return $userLanguageService->getInterfaceLanguage($this->getUser());
     }
     
     /**
