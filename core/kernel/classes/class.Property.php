@@ -21,10 +21,12 @@
  *
  */
 
-use oat\generis\model\data\ModelManager;
+declare(strict_types=1);
+
+use oat\generis\model\WidgetRdf;
 use oat\generis\model\GenerisRdf;
 use oat\generis\model\OntologyRdfs;
-use oat\generis\model\WidgetRdf;
+use oat\generis\model\resource\DependsOnPropertyCollection;
 
 /**
  * uriProperty must be a valid property otherwis return false, add this as a
@@ -88,6 +90,9 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
      */
     public $multiple = false;
 
+    /** @var DependsOnPropertyCollection */
+    private $dependsOnPropertyCollection;
+
     // --- OPERATIONS ---
     /**
      * @return core_kernel_persistence_PropertyInterface
@@ -96,7 +101,7 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
     {
         return $this->getModel()->getRdfsInterface()->getPropertyImplementation();
     }
-    
+
 
     /**
      * constructor
@@ -109,10 +114,11 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
      */
     public function __construct($uri, $debug = '')
     {
-        
         parent::__construct($uri, $debug);
+
         $this->lgDependent = null;
         $this->multiple = null;
+        $this->dependsOnPropertyCollection = new DependsOnPropertyCollection();
     }
 
     /**
@@ -145,7 +151,7 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
             }
         }
         $returnValue = $this->domain;
-        
+
 
         return $returnValue;
     }
@@ -161,7 +167,7 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
     public function setDomain(core_kernel_classes_Class $class)
     {
         $returnValue = (bool) false;
- 
+
         if (!is_null($class)) {
             foreach ($this->getDomain()->getIterator() as $domainClass) {
                 if ($class->equals($domainClass)) {
@@ -190,7 +196,7 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
     public function getRange()
     {
         $returnValue = null;
-   
+
         if (is_null($this->range)) {
             $rangeProperty = $this->getProperty(OntologyRdfs::RDFS_RANGE);
             $rangeValues = $this->getPropertyValues($rangeProperty);
@@ -223,6 +229,37 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
     }
 
     /**
+     * @TODO Improve getter
+     */
+    public function getDependsOnPropertyCollection(): DependsOnPropertyCollection
+    {
+        $dependsOnProperty = $this->getProperty(GenerisRdf::PROPERTY_DEPENDS_ON_PROPERTY);
+        $dependsOnPropertyValues = $this->getPropertyValues($dependsOnProperty);
+
+        foreach ($dependsOnPropertyValues as $dependsOnPropertyValue) {
+            if ($dependsOnPropertyValue !== GenerisRdf::PROPERTY_DEPENDS_ON_PROPERTY) {
+                $this->dependsOnPropertyCollection->append(
+                    $this->getProperty($dependsOnPropertyValue)
+                );
+            }
+        }
+
+        return $this->dependsOnPropertyCollection;
+    }
+
+    /**
+     * @TODO Improve setter
+     */
+    public function setDependsOnPropertyCollection(DependsOnPropertyCollection $dependsOnPropertyCollection): void
+    {
+        foreach ($dependsOnPropertyCollection as $dependsOnProperty) {
+            $this->getImplementation()->setDependsOnProperty($this, $dependsOnProperty);
+        }
+
+        $this->dependsOnPropertyCollection = $dependsOnPropertyCollection;
+    }
+
+    /**
      * Get the Property object corresponding to the widget of this Property.
      *
      * @author Cédric Alfonsi <cedric.alfonsi@tudor.lu>
@@ -235,7 +272,7 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
         if ($this->widget === false) {
             $this->widget = $this->getOnePropertyValue($this->getProperty(WidgetRdf::PROPERTY_WIDGET));
         }
-        
+
         return $this->widget;
     }
 
@@ -282,7 +319,7 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
         if (is_null($this->multiple)) {
             $multipleProperty = $this->getProperty(GenerisRdf::PROPERTY_MULTIPLE);
             $multiple = $this->getOnePropertyValue($multipleProperty);
-             
+
             if (is_null($multiple)) {
                 $returnValue = false;
             } else {
@@ -290,7 +327,7 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
             }
             $this->multiple = $returnValue;
         }
- 
+
         $returnValue = $this->multiple;
         return (bool) $returnValue;
     }
@@ -306,7 +343,7 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
      */
     public function setMultiple($isMultiple)
     {
-        
+
         $this->getImplementation()->setMultiple($this, $isMultiple);
         $this->multiple = $isMultiple;
     }
