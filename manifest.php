@@ -1,5 +1,7 @@
 <?php
 
+use oat\generis\scripts\update\Updater;
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,14 +18,12 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2020 (original work) Open Assessment Technologies SA;
- *
  */
 
 use oat\generis\scripts\install\SetupDefaultKvPersistence;
 use oat\generis\scripts\install\TaskQueue;
 
 /**
- *
  * @author CRP Henri Tudor - TAO Team - {@link http://www.tao.lu}
  * @license GPLv2 http://www.opensource.org/licenses/gpl-2.0.php
  */
@@ -48,5 +48,5 @@ return [
             SetupDefaultKvPersistence::class
         ],
     ],
-    'update' => 'oat\\generis\\scripts\\update\\Updater',
+    'update' => Updater::class,
 ];

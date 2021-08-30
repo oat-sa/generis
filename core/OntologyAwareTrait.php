@@ -23,7 +23,7 @@ namespace oat\generis\model;
 
 use oat\generis\model\data\ModelManager;
 use oat\generis\model\data\Ontology;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Laminas\ServiceManager\ServiceLocatorAwareInterface;
 
 /**
  * Trait for classes that want to access the ontology
