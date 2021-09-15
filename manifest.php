@@ -19,6 +19,7 @@
  *
  */
 
+use oat\generis\model\DependencyInjection\ContainerServiceProvider;
 use oat\generis\scripts\install\SetupDefaultKvPersistence;
 use oat\generis\scripts\install\TaskQueue;
 
@@ -49,4 +50,7 @@ return [
         ],
     ],
     'update' => 'oat\\generis\\scripts\\update\\Updater',
+    'containerServiceProviders' => [
+        ContainerServiceProvider::class
+    ]
 ];
