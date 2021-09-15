@@ -78,7 +78,9 @@
     "mikey179/vfsstream": "1.4.0",
     "phpunit/phpunit": "^8.5",
     "php-mock/php-mock": "^2.0",
-    "symfony/cache": "~4.1"
+    "symfony/cache": "~4.1",
+    "symfony/dependency-injection": "5.0.*",
+    "symfony/config":"5.3.*"
   },
   "suggest": {
     "superbalist/flysystem-google-storage": "Supports google flystore"
