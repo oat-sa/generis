@@ -37,3 +37,15 @@ return [
     ]
 ];
 ```
+
+## How is the container started?
+
+This needs to be added in the application bootstrap.
+
+```php
+$container = (new oat\generis\model\DependencyInjection\ContainerBuilder(
+    CONFIG_PATH, // TAO config path
+    GENERIS_CACHE_PATH . '/_di/container.php', // Container cache file
+    true // Debug mode - no cache
+))->build();
+```

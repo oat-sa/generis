@@ -4,30 +4,79 @@ namespace oat\generis\model\DependencyInjection;
 
 use common_ext_Extension;
 use common_ext_ExtensionsManager;
+use InvalidArgumentException;
 use oat\oatbox\service\ServiceManager;
+use Psr\Container\ContainerInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder as SymfonyContainerBuilder;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 
 class ContainerBuilder extends SymfonyContainerBuilder
 {
+    /** @var ContainerCache */
+    private $cache;
+
+    /** @var bool|null */
+    private $temporaryDirectory;
+
+    /** @var string|null */
+    private $configPath;
+
+    public function __construct(
+        string $configPath,
+        string $cacheFile,
+        bool $isDebug = null,
+        bool $temporaryDirectory = null,
+        ContainerCache $cache = null
+    ) {
+        $this->cache = $cache ?? new ContainerCache(
+            $cacheFile,
+            $this,
+            null,
+            null,
+            $isDebug ?? false
+        );
+
+        $this->configPath = $configPath;
+        $this->temporaryDirectory = $temporaryDirectory ?? sys_get_temp_dir();
+
+        parent::__construct();
+    }
+
     public function build(): ContainerInterface
     {
-        /**
-         * @TODO
-         * [ ] Cache layer
-         */
-        $tmpDir = sys_get_temp_dir();
-        file_put_contents($tmpDir . '/services.php', $this->getTemporaryServiceFileContent());
+        if (!is_writable($this->temporaryDirectory)) {
+            throw new InvalidArgumentException(
+                sprintf(
+                    'DI container build requires directory "%" to be writable',
+                    $this->temporaryDirectory
+                )
+            );
+        }
 
-        $loader1 = new PhpFileLoader($this, new FileLocator([$tmpDir]));
-        $loader1->load('services.php');
+        file_put_contents($this->temporaryDirectory . '/services.php', $this->getTemporaryServiceFileContent());
 
-        $loader2 = new LegacyFileLoader($this, new FileLocator([CONFIG_PATH]));
-        $loader2->load('*/*.conf.php');
+        $phpLoader = new PhpFileLoader(
+            $this,
+            new FileLocator(
+                [
+                    $this->temporaryDirectory
+                ]
+            )
+        );
+        $phpLoader->load('services.php');
 
-        return $this;
+        $legacyLoader = new LegacyFileLoader(
+            $this,
+            new FileLocator(
+                [
+                    $this->configPath
+                ]
+            )
+        );
+        $legacyLoader->load('*/*.conf.php');
+
+        return $this->cache->load();
     }
 
     private function getServiceLocator(): ServiceManager

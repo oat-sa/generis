@@ -15,6 +15,7 @@ class ContainerServiceProvider implements ContainerServiceProviderInterface
         $services->set(LegacyServiceGateway::class, LegacyServiceGateway::class);
 
         $services->set(MyService::class, MyService::class)
+            ->public()
             ->args([service(PersistenceManager::SERVICE_ID)]);
     }
 }
