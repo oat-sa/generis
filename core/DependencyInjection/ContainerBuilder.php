@@ -47,7 +47,7 @@ class ContainerBuilder extends SymfonyContainerBuilder
         /** @var common_ext_Extension $extension */
         foreach ($this->getExtensionManager()->getInstalledExtensions() as $extension) {
             foreach ($extension->getManifest()->getContainerServiceProvider() as $serviceProvider) {
-                $contents[] = '(new ' . $serviceProvider . '())($configurator, $services);';
+                $contents[] = '(new ' . $serviceProvider . '())($configurator);';
             }
         }
 
