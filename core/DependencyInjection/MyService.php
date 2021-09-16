@@ -7,6 +7,8 @@ use oat\generis\persistence\PersistenceManager;
 //@TODO @FIXME Delete this class after PoC...
 class MyService
 {
+    public const OPTION_TEST = 'option_test';
+
     /** @var PersistenceManager */
     private $persistenceManager;
 

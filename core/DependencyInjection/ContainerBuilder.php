@@ -5,7 +5,6 @@ namespace oat\generis\model\DependencyInjection;
 use common_ext_Extension;
 use common_ext_ExtensionsManager;
 use InvalidArgumentException;
-use oat\oatbox\service\ServiceManager;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder as SymfonyContainerBuilder;
@@ -22,9 +21,13 @@ class ContainerBuilder extends SymfonyContainerBuilder
     /** @var string|null */
     private $configPath;
 
+    /** @var common_ext_ExtensionsManager */
+    private $extensionsManager;
+
     public function __construct(
         string $configPath,
         string $cacheFile,
+        common_ext_ExtensionsManager $extensionsManager,
         bool $isDebug = null,
         bool $temporaryDirectory = null,
         ContainerCache $cache = null
@@ -38,6 +41,7 @@ class ContainerBuilder extends SymfonyContainerBuilder
         );
 
         $this->configPath = $configPath;
+        $this->extensionsManager = $extensionsManager;
         $this->temporaryDirectory = $temporaryDirectory ?? sys_get_temp_dir();
 
         parent::__construct();
@@ -79,22 +83,12 @@ class ContainerBuilder extends SymfonyContainerBuilder
         return $this->cache->load();
     }
 
-    private function getServiceLocator(): ServiceManager
-    {
-        return ServiceManager::getServiceManager();
-    }
-
-    private function getExtensionManager(): common_ext_ExtensionsManager
-    {
-        return $this->getServiceLocator()->get(common_ext_ExtensionsManager::SERVICE_ID);
-    }
-
     private function getTemporaryServiceFileContent(): string
     {
         $contents = [];
 
         /** @var common_ext_Extension $extension */
-        foreach ($this->getExtensionManager()->getInstalledExtensions() as $extension) {
+        foreach ($this->extensionsManager->getInstalledExtensions() as $extension) {
             foreach ($extension->getManifest()->getContainerServiceProvider() as $serviceProvider) {
                 $contents[] = '(new ' . $serviceProvider . '())($configurator);';
             }

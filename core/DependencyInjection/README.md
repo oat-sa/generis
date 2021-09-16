@@ -46,6 +46,7 @@ This needs to be added in the application bootstrap.
 $container = (new oat\generis\model\DependencyInjection\ContainerBuilder(
     CONFIG_PATH, // TAO config path
     GENERIS_CACHE_PATH . '/_di/container.php', // Container cache file
+    ServiceManager::getServiceManager()->get(common_ext_ExtensionsManager::SERVICE_ID), //ExtensionsManager
     true // Debug mode - no cache
 ))->build();
 ```

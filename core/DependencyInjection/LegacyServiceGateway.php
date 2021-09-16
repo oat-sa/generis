@@ -6,12 +6,16 @@ use oat\oatbox\service\ServiceManager;
 
 class LegacyServiceGateway
 {
+    /** @var ServiceManager|null */
+    private $serviceManager;
+
+    public function __construct(ServiceManager $serviceManager = null)
+    {
+        $this->serviceManager = $serviceManager ?? ServiceManager::getServiceManager();
+    }
+
     public function __invoke($id = null)
     {
-        if ($id) {
-            return ServiceManager::getServiceManager()->get($id);
-        }
-
-        return ServiceManager::getServiceManager();
+        return $id ? $this->serviceManager->get($id) : $this->serviceManager;
     }
 }
