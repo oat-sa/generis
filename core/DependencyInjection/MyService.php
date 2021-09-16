@@ -13,11 +13,11 @@ class MyService
     /** @var OptionsInterface */
     private $options;
 
-//    public function __construct(OptionsInterface $options, PersistenceManager $persistenceManager)
-//    {
-//        $this->persistenceManager = $persistenceManager;
-//        $this->options = $options;
-//    }
+    public function __construct(PersistenceManager $persistenceManager)
+    {
+        $this->persistenceManager = $persistenceManager;
+        //$this->options = $options;
+    }
 
     public function test()
     {

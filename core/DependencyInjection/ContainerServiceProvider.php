@@ -2,7 +2,9 @@
 
 namespace oat\generis\model\DependencyInjection;
 
+use oat\generis\persistence\PersistenceManager;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
 class ContainerServiceProvider implements ContainerServiceProviderInterface
 {
@@ -10,7 +12,9 @@ class ContainerServiceProvider implements ContainerServiceProviderInterface
     {
         $services = $configurator->services();
 
+        $services->set(LegacyServiceGateway::class, LegacyServiceGateway::class);
+
         $services->set(MyService::class, MyService::class)
-            ->args([]);
+            ->args([service(PersistenceManager::SERVICE_ID)]);
     }
 }
