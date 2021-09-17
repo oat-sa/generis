@@ -32,6 +32,9 @@ class MyContainerServiceProvider implements ContainerServiceProviderInterface
 }
 ```
 
+**RECOMMENDATION:** Avoid inflate the `ContainerServiceProvider` with too many services/params/etc. 
+Be wise and use common sense to group your services within different `Service Providers` classes.  
+
 For more information read the [Symfony Dependency Injection documentation](https://symfony.com/doc/current/components/dependency_injection.html).
 
 2) Add the new `Service Provider` to the `manifest.php` file of the extension.
@@ -122,7 +125,7 @@ class MyContainerServiceProvider implements ContainerServiceProviderInterface
 }
 ```
 
-2) Call it inside the new service like:
+3) Call it inside the new service like:
 
 ```php
 use oat\generis\model\DependencyInjection\ServiceOptionsInterface;
