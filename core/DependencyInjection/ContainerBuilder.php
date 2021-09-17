@@ -8,6 +8,7 @@ use InvalidArgumentException;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder as SymfonyContainerBuilder;
+use Symfony\Component\DependencyInjection\Loader\FileLoader;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 
 class ContainerBuilder extends SymfonyContainerBuilder
@@ -28,7 +29,7 @@ class ContainerBuilder extends SymfonyContainerBuilder
         string $configPath,
         string $cacheFile,
         common_ext_ExtensionsManager $extensionsManager,
-        bool $isDebug = null,
+        bool $isDebugEnabled = null,
         bool $temporaryDirectory = null,
         ContainerCache $cache = null
     ) {
@@ -37,7 +38,7 @@ class ContainerBuilder extends SymfonyContainerBuilder
             $this,
             null,
             null,
-            $isDebug ?? false
+            $isDebugEnabled
         );
 
         $this->configPath = $configPath;
@@ -48,6 +49,15 @@ class ContainerBuilder extends SymfonyContainerBuilder
     }
 
     public function build(): ContainerInterface
+    {
+        if (!$this->cache->isFresh()) {
+            $this->loadServices();
+        }
+
+        return $this->cache->load();
+    }
+
+    private function loadServices(): void
     {
         if (!is_writable($this->temporaryDirectory)) {
             throw new InvalidArgumentException(
@@ -79,8 +89,6 @@ class ContainerBuilder extends SymfonyContainerBuilder
             )
         );
         $legacyLoader->load('*/*.conf.php');
-
-        return $this->cache->load();
     }
 
     private function getTemporaryServiceFileContent(): string

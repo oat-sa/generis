@@ -15,12 +15,15 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2015 (original work) Open Assessment Technologies SA;
+ * Copyright (c) 2015-2021 (original work) Open Assessment Technologies SA;
  *
  */
 
 namespace oat\oatbox\service;
 
+use common_ext_ExtensionsManager;
+use LogicException;
+use oat\generis\model\DependencyInjection\ContainerBuilder;
 use oat\oatbox\Configurable;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
@@ -33,6 +36,9 @@ use Psr\Container\ContainerInterface;
 class ServiceManager implements ServiceLocatorInterface, ContainerInterface
 {
     private static $instance;
+
+    /** @var ContainerInterface */
+    private $container;
 
     /**
      * @return \oat\oatbox\service\ServiceManager
@@ -71,6 +77,7 @@ class ServiceManager implements ServiceLocatorInterface, ContainerInterface
      * @return ConfigurableService
      * @throws ServiceNotFoundException
      * @see ContainerInterface::get()
+     * @deprecated Use $this->getContainer()->get()
      */
     public function get($serviceKey)
     {
@@ -138,6 +145,7 @@ class ServiceManager implements ServiceLocatorInterface, ContainerInterface
     /**
      * (non-PHPdoc)
      * @see ContainerInterface::has()
+     * @deprecated Use $this->getContainer()->has()
      */
     public function has($serviceKey)
     {
@@ -241,5 +249,35 @@ class ServiceManager implements ServiceLocatorInterface, ContainerInterface
     public function overload($serviceKey, ConfigurableService $service)
     {
         $this->services[$serviceKey] = $service;
+    }
+
+    /**
+     * @TODO Container creation will be removed from here as soon as we do not need ServiceManager anymore.
+     *
+     * @throws ServiceNotFoundException
+     */
+    public function getContainer(): ContainerInterface
+    {
+        if (!$this->container) {
+            if (
+                !defined('CONFIG_PATH') ||
+                !defined('GENERIS_CACHE_PATH') ||
+                !defined('DEBUG_MODE')
+            ) {
+                throw new LogicException('Required application constants were not initialized!');
+            }
+
+            /** @var common_ext_ExtensionsManager $extensionManager */
+            $extensionManager = $this->get(common_ext_ExtensionsManager::SERVICE_ID);
+
+            $this->container = new ContainerBuilder(
+                CONFIG_PATH,
+                GENERIS_CACHE_PATH . '_di/container.php',
+                $extensionManager
+            );
+            $this->container->build();
+        }
+
+        return $this->container;
     }
 }

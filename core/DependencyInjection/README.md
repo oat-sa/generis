@@ -40,13 +40,44 @@ return [
 
 ## How is the container started?
 
-This needs to be added in the application bootstrap.
+To start the container, we need to use the ContainerBuilder. Example:
 
 ```php
 $container = (new oat\generis\model\DependencyInjection\ContainerBuilder(
     CONFIG_PATH, // TAO config path
     GENERIS_CACHE_PATH . '/_di/container.php', // Container cache file
     ServiceManager::getServiceManager()->get(common_ext_ExtensionsManager::SERVICE_ID), //ExtensionsManager
-    true // Debug mode - no cache
 ))->build();
+```
+
+Notice that this is already on `ServiceManager->getContainer()`. So you do not need to do it. 
+
+## Accessing the container inside a legacy controller
+
+You just need to use this method `$this->getPsrContainer()`.
+
+```php
+use oat\tao\model\http\Controller;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorAwareTrait;
+
+class SomeController extends Controller implements ServiceLocatorAwareInterface
+{
+    use ServiceLocatorAwareTrait;
+
+    public function someMethod(): void
+    {
+        $service = $this->getPsrContainer()->get(MyService::class);
+        // Other logic...
+    }
+}
+```
+
+## Avoid caching / Debug mode
+
+To avoid container caching (useful on dev mode), please add the following variable on your `.env` file.
+
+```shell
+DI_CONTAINER_DEBUG=true
+DI_CONTAINER_FORCE_BUILD=true
 ```
