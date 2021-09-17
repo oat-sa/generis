@@ -51,16 +51,14 @@ class ContainerCache
 
     public function load(): ContainerInterface
     {
-        if (!$this->isFresh()) {
-            $this->storeCache();
+        if ($this->isFresh()) {
+            return $this->getCachedContainer();
         }
 
-        require_once $this->cacheFile;
-
-        return new $this->cachedContainerClassName();
+        return $this->forceLoad();
     }
 
-    private function storeCache(): void
+    public function forceLoad(): ContainerInterface
     {
         $this->builder->compile();
 
@@ -73,6 +71,15 @@ class ContainerCache
             ),
             $this->builder->getResources()
         );
+
+        return $this->getCachedContainer();
+    }
+
+    private function getCachedContainer(): ContainerInterface
+    {
+        require_once $this->cacheFile;
+
+        return new $this->cachedContainerClassName();
     }
 
     private function isEnvVarTrue(string $envVar): bool

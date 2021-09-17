@@ -40,6 +40,9 @@ class ServiceManager implements ServiceLocatorInterface, ContainerInterface
     /** @var ContainerInterface */
     private $container;
 
+    /** @var ContainerBuilder */
+    private $containerBuilder;
+
     /**
      * @return \oat\oatbox\service\ServiceManager
      * @deprecated Pass service locator instead of relying on static function
@@ -252,13 +255,23 @@ class ServiceManager implements ServiceLocatorInterface, ContainerInterface
     }
 
     /**
-     * @TODO Container creation will be removed from here as soon as we do not need ServiceManager anymore.
-     *
-     * @throws ServiceNotFoundException
+     * @TODO Container will be removed from here as soon as we do not need ServiceManager anymore.
      */
     public function getContainer(): ContainerInterface
     {
         if (!$this->container) {
+            $this->container = $this->getContainerBuilder()->build();
+        }
+
+        return $this->container;
+    }
+
+    /**
+     * @TODO ContainerBuilder will be removed from here as soon as we do not need ServiceManager anymore.
+     */
+    public function getContainerBuilder(): ContainerBuilder
+    {
+        if (!$this->containerBuilder) {
             if (
                 !defined('CONFIG_PATH') ||
                 !defined('GENERIS_CACHE_PATH') ||
@@ -270,14 +283,13 @@ class ServiceManager implements ServiceLocatorInterface, ContainerInterface
             /** @var common_ext_ExtensionsManager $extensionManager */
             $extensionManager = $this->get(common_ext_ExtensionsManager::SERVICE_ID);
 
-            $this->container = new ContainerBuilder(
+            $this->containerBuilder = new ContainerBuilder(
                 CONFIG_PATH,
-                GENERIS_CACHE_PATH . '_di/container.php',
+                GENERIS_CACHE_PATH,
                 $extensionManager
             );
-            $this->container->build();
         }
 
-        return $this->container;
+        return $this->containerBuilder;
     }
 }

@@ -16,7 +16,7 @@ class ContainerBuilder extends SymfonyContainerBuilder
     private $cache;
 
     /** @var bool|null */
-    private $temporaryDirectory;
+    private $cachePath;
 
     /** @var string|null */
     private $configPath;
@@ -26,54 +26,52 @@ class ContainerBuilder extends SymfonyContainerBuilder
 
     public function __construct(
         string $configPath,
-        string $cacheFile,
+        string $cachePath,
         common_ext_ExtensionsManager $extensionsManager,
         bool $isDebugEnabled = null,
-        bool $temporaryDirectory = null,
         ContainerCache $cache = null
     ) {
+        $this->configPath = $configPath;
+        $this->cachePath = $cachePath;
+        $this->extensionsManager = $extensionsManager;
         $this->cache = $cache ?? new ContainerCache(
-            $cacheFile,
+            $cachePath . '_di/container.php',
             $this,
             null,
             null,
             $isDebugEnabled
         );
 
-        $this->configPath = $configPath;
-        $this->extensionsManager = $extensionsManager;
-        $this->temporaryDirectory = $temporaryDirectory ?? sys_get_temp_dir();
-
         parent::__construct();
     }
 
     public function build(): ContainerInterface
     {
-        if (!$this->cache->isFresh()) {
-            $this->loadServices();
+        if ($this->cache->isFresh()) {
+            return $this->cache->load();
         }
 
-        return $this->cache->load();
+        return $this->forceBuild();
     }
 
-    private function loadServices(): void
+    public function forceBuild(): ContainerInterface
     {
-        if (!is_writable($this->temporaryDirectory)) {
+        if (!is_writable($this->cachePath)) {
             throw new InvalidArgumentException(
                 sprintf(
                     'DI container build requires directory "%" to be writable',
-                    $this->temporaryDirectory
+                    $this->cachePath
                 )
             );
         }
 
-        file_put_contents($this->temporaryDirectory . '/services.php', $this->getTemporaryServiceFileContent());
+        file_put_contents($this->cachePath . '/services.php', $this->getTemporaryServiceFileContent());
 
         $phpLoader = new PhpFileLoader(
             $this,
             new FileLocator(
                 [
-                    $this->temporaryDirectory
+                    $this->cachePath
                 ]
             )
         );
@@ -88,6 +86,8 @@ class ContainerBuilder extends SymfonyContainerBuilder
             )
         );
         $legacyLoader->load('*/*.conf.php');
+
+        return $this->cache->forceLoad();
     }
 
     private function getTemporaryServiceFileContent(): string
