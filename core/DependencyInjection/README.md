@@ -20,8 +20,7 @@ class MyContainerServiceProvider implements ContainerServiceProviderInterface
         
         $parameters->set('someParam', 'someValue');
 
-        $services->set(MyService::class, MyService::class)
-            ->args(
+        $services->set(MyService::class, MyService::class)->args(
             [
                 service(MyOtherService::class),
                 service(MyLegacyService::SERVICE_ID),
@@ -78,6 +77,69 @@ class SomeController extends Controller implements ServiceLocatorAwareInterface
     {
         $service = $this->getPsrContainer()->get(MyService::class);
         // Other logic...
+    }
+}
+```
+
+## Using legacy configuration on new services
+
+**ATTENTION!** It is **NOT RECOMMENDED** to use the `ServiceOptions` class. New services on 
+container should rely on **ENVIRONMENT VARIABLES**, but when this is _really not possible_ 
+and ObjectOriented techniques such as Proxy, Factory, Strategy, etc cannot solve the
+issue, then _maybe_ you should consider using it.
+
+1) Registering new configs
+
+In a new _migrations file_ or _installation script_, register the new options. Example:
+
+```php
+use oat\generis\model\DependencyInjection\ServiceOptions;
+
+$serviceOptions = $serviceLocator->get(ServiceOptions::SERVICE_ID);
+$serviceOptions->save(MyService::class, 'foo', 'bar');
+
+$serviceLocator->register(ServiceOptions::SERVICE_ID, $serviceOptions);
+```
+
+2) Inject the `ServiceOptions` in your service through the ServiceProvider:
+
+```php
+<?php
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use oat\generis\model\DependencyInjection\ServiceOptions;
+use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
+
+class MyContainerServiceProvider implements ContainerServiceProviderInterface
+{
+    public function __invoke(ContainerConfigurator $configurator): void
+    {
+        $configurator->services()->set(MyService::class, MyService::class)->args(
+            [
+                service(ServiceOptions::SERVICE_ID)
+            ]
+        );
+    }
+}
+```
+
+2) Call it inside the new service like:
+
+```php
+use oat\generis\model\DependencyInjection\ServiceOptionsInterface;
+
+class MyService
+{
+    /** @var ServiceOptionsInterface */
+    private $options;
+
+    public function __construct(ServiceOptionsInterface $options)
+    {
+        $this->options = $options;
+    }
+
+    public function foo()
+    {
+        $bar = $this->options->get(self::class, 'foo'); // Will get "bar" as response
     }
 }
 ```
