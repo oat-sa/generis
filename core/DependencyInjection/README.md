@@ -8,23 +8,32 @@
 <?php
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
+use function Symfony\Component\DependencyInjection\Loader\Configurator\env;
+use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
 
 class MyContainerServiceProvider implements ContainerServiceProviderInterface
 {
     public function __invoke(ContainerConfigurator $configurator): void
     {
         $services = $configurator->services();
+        $parameters = $configurator->parameters();
+        
+        $parameters->set('someParam', 'someValue');
 
         $services->set(MyService::class, MyService::class)
             ->args(
             [
                 service(MyOtherService::class),
                 service(MyLegacyService::SERVICE_ID),
+                env('MY_ENV_VAR'),
+                param('someParam'),
             ]
         );
     }
 }
 ```
+
+For more information read the [Symfony Dependency Injection documentation](https://symfony.com/doc/current/components/dependency_injection.html).
 
 2) Add the new `Service Provider` to the `manifest.php` file of the extension.
 
@@ -46,11 +55,11 @@ To start the container, we need to use the ContainerBuilder. Example:
 $container = (new oat\generis\model\DependencyInjection\ContainerBuilder(
     CONFIG_PATH, // TAO config path
     GENERIS_CACHE_PATH . '/_di/container.php', // Container cache file
-    ServiceManager::getServiceManager()->get(common_ext_ExtensionsManager::SERVICE_ID), //ExtensionsManager
+    oat\oatbox\service\ServiceManager::getServiceManager()->get(common_ext_ExtensionsManager::SERVICE_ID), //ExtensionsManager
 ))->build();
 ```
 
-Notice that this is already on `ServiceManager->getContainer()`. So you do not need to do it. 
+Notice that this is already on `oat\oatbox\service\ServiceManager->getContainer()`. So you do not need to do it. 
 
 ## Accessing the container inside a legacy controller
 
