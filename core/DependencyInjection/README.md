@@ -1,5 +1,12 @@
 # Dependency Injection
 
+We are **deprecating** the current service registry (`oat\oatbox\service\ServiceManager`) in favor of a 
+faster and more modern [PSR-11](https://www.php-fig.org/psr/psr-11/) compliant solution based on
+[Symfony Dependency Injection documentation](https://symfony.com/doc/current/components/dependency_injection.html).
+
+- For now on, all the new services MUST be created as explained bellow.
+- Whenever is possible, old services SHOULD be migrated to the new container.
+
 ## How to add new services to container?
 
 1) In _any_ tao extension, create a `Container Service Provider`. Example: 
