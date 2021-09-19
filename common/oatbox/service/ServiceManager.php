@@ -170,6 +170,7 @@ class ServiceManager implements ServiceLocatorInterface, ContainerInterface
      * @param string $serviceKey
      * @param ConfigurableService $service
      * @throws \common_Exception
+     * @deprecated New services must be registered using Dependency Injection Container
      */
     public function register($serviceKey, ConfigurableService $service)
     {
@@ -185,6 +186,9 @@ class ServiceManager implements ServiceLocatorInterface, ContainerInterface
         }
     }
 
+    /**
+     * @deprecated New services must be registered using Dependency Injection Container
+     */
     public function unregister($serviceKey)
     {
         unset($this->services[$serviceKey]);
@@ -206,6 +210,7 @@ class ServiceManager implements ServiceLocatorInterface, ContainerInterface
      * @return mixed
      *
      * @deprecated - If class uses ServiceManagerAwareTrait use $this->propagate($service)
+     * @deprecated New services must be registered using Dependency Injection Container
      */
     public function propagate($service)
     {
@@ -222,6 +227,7 @@ class ServiceManager implements ServiceLocatorInterface, ContainerInterface
      * @param $className
      * @param array $options
      * @return mixed
+     * @deprecated New services must be registered using Dependency Injection Container
      */
     public function build($className, array $options = [])
     {
@@ -248,6 +254,7 @@ class ServiceManager implements ServiceLocatorInterface, ContainerInterface
      *
      * @param $serviceKey
      * @param ConfigurableService $service
+     * @deprecated New services must be registered using Dependency Injection Container
      */
     public function overload($serviceKey, ConfigurableService $service)
     {

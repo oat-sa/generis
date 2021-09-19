@@ -15,8 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2014 (original work) Open Assessment Technologies SA;
- *
+ * Copyright (c) 2014-2021 (original work) Open Assessment Technologies SA;
  */
 
 namespace oat\oatbox;
@@ -31,24 +30,29 @@ use oat\oatbox\log\TaoLoggerAwareInterface;
  * https://github.com/basdenooijer/solarium/blob/master/library/Solarium/Core/Configurable.php
  *
  * @author Joel Bout <joel@taotesting.com>
+ * @deprecated New services must be registered using Dependency Injection Container
  */
 abstract class Configurable implements PhpSerializable, TaoLoggerAwareInterface
 {
     use LoggerAwareTrait;
 
-
+    /** @var array */
     private $options = [];
-    
+
     /**
      * public constructor to allow the object to be recreated from php code
      *
      * @param array $options
+     * @deprecated New services must be registered using Dependency Injection Container
      */
     public function __construct($options = [])
     {
         $this->setOptions($options);
     }
 
+    /**
+     * @deprecated Use \oat\generis\model\DependencyInjection\ServiceOptions instead
+     */
     public function setOption($name, $value)
     {
         $this->options[$name] = $value;
@@ -60,6 +64,7 @@ abstract class Configurable implements PhpSerializable, TaoLoggerAwareInterface
      * @param array $options
      * @return void
      * @throws \common_exception_Error
+     * @deprecated Use \oat\generis\model\DependencyInjection\ServiceOptions instead
      */
     public function setOptions(array $options)
     {
@@ -72,12 +77,13 @@ abstract class Configurable implements PhpSerializable, TaoLoggerAwareInterface
         }
         $this->options = $options;
     }
-    
+
     /**
      * Returns whenever or not the option is defined
      *
      * @param  string $name
      * @return boolean
+     * @deprecated Use \oat\generis\model\DependencyInjection\ServiceOptions instead
     */
     public function hasOption($name)
     {
@@ -92,25 +98,28 @@ abstract class Configurable implements PhpSerializable, TaoLoggerAwareInterface
      * @param string        $name
      * @param mixed|null    $default Default value to return if option is not set.
      * @return mixed
+     * @deprecated Use \oat\generis\model\DependencyInjection\ServiceOptions instead
      */
     public function getOption($name, $default = null)
     {
         return $this->options[$name] ?? $default;
     }
-    
-    /**
-     * Get all options
-     *
-     * @return array
+
+   /**
+    * Get all options
+    *
+    * @return array
+    * @deprecated Use \oat\generis\model\DependencyInjection\ServiceOptions instead
     */
     public function getOptions()
     {
         return $this->options;
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see \oat\oatbox\PhpSerializable::__toPhpCode()
+     * @deprecated Use \oat\generis\model\DependencyInjection\ServiceOptions instead
      */
     public function __toPhpCode()
     {

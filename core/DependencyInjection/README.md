@@ -2,7 +2,7 @@
 
 ## How to add new services to container?
 
-1) In the extension, create a `Service Provider`. Example: 
+1) In _any_ tao extension, create a `Container Service Provider`. Example: 
 
 ```php
 <?php
@@ -32,12 +32,12 @@ class MyContainerServiceProvider implements ContainerServiceProviderInterface
 }
 ```
 
-**RECOMMENDATION:** Avoid inflate the `ContainerServiceProvider` with too many services/params/etc. 
-Be wise and use common sense to group your services within different `Service Providers` classes.  
+**RECOMMENDATION:** Avoid inflating the `ContainerServiceProvider` with too many services/params/etc. 
+Be wise and use common sense to group your services within different `Container Service Providers` classes.  
 
 For more information read the [Symfony Dependency Injection documentation](https://symfony.com/doc/current/components/dependency_injection.html).
 
-2) Add the new `Service Provider` to the `manifest.php` file of the extension.
+2) Add the new `Container Service Provider` to the `manifest.php` file of the extension.
 
 ```php
 <?php
@@ -54,14 +54,16 @@ return [
 To start the container, we need to use the ContainerBuilder. Example:
 
 ```php
+use oat\oatbox\service\ServiceManager;
+
 $container = (new oat\generis\model\DependencyInjection\ContainerBuilder(
-    CONFIG_PATH, // TAO config path
-    GENERIS_CACHE_PATH . '/_di/container.php', // Container cache file
-    oat\oatbox\service\ServiceManager::getServiceManager()->get(common_ext_ExtensionsManager::SERVICE_ID), //ExtensionsManager
+    CONFIG_PATH,
+    GENERIS_CACHE_PATH,
+    ServiceManager::getServiceManager()->get(common_ext_ExtensionsManager::SERVICE_ID) //ExtensionsManager
 ))->build();
 ```
 
-Notice that this is already on `oat\oatbox\service\ServiceManager->getContainer()`. So you do not need to do it. 
+**IMPORTANT**: This is already done on `ServiceManager->getContainer()`, so you do not need to do it. 
 
 ## Accessing the container inside a legacy controller
 
@@ -72,11 +74,11 @@ use oat\tao\model\http\Controller;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 
-class SomeController extends Controller implements ServiceLocatorAwareInterface
+class MyController extends Controller implements ServiceLocatorAwareInterface
 {
     use ServiceLocatorAwareTrait;
 
-    public function someMethod(): void
+    public function myMethod(): void
     {
         $service = $this->getPsrContainer()->get(MyService::class);
         // Other logic...
@@ -146,6 +148,14 @@ class MyService
     }
 }
 ```
+
+## Warming up container cache
+
+The cache warmup happens when we run `taoUpdate.php`, but if you need to warmup the cache only, run:
+
+````shell
+php index.php 'oat\generis\scripts\tools\ContainerCacheWarmup'
+````
 
 ## Avoid caching / Debug mode
 
