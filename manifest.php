@@ -20,6 +20,7 @@
  */
 
 use oat\generis\model\DependencyInjection\ContainerServiceProvider;
+use oat\generis\scripts\install\RegisterServices;
 use oat\generis\scripts\install\SetupDefaultKvPersistence;
 use oat\generis\scripts\install\TaskQueue;
 
@@ -46,7 +47,8 @@ return [
         'checks' => [],
         'php' => [
             TaskQueue::class,
-            SetupDefaultKvPersistence::class
+            SetupDefaultKvPersistence::class,
+            RegisterServices::class
         ],
     ],
     'update' => 'oat\\generis\\scripts\\update\\Updater',
