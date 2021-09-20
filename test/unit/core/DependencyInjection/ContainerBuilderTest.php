@@ -22,10 +22,15 @@ declare(strict_types=1);
 
 namespace oat\generis\test\unit\model\DependencyInjection;
 
+use common_ext_Extension;
 use common_ext_ExtensionsManager;
 use oat\generis\model\DependencyInjection\ContainerBuilder;
+use oat\generis\model\DependencyInjection\ContainerCache;
+use oat\generis\model\DependencyInjection\ContainerServiceProviderInterface;
 use oat\generis\test\TestCase;
+use oat\oatbox\extension\Manifest;
 use PHPUnit\Framework\MockObject\MockObject;
+use Psr\Container\ContainerInterface;
 
 class ContainerBuilderTest extends TestCase
 {
@@ -35,23 +40,67 @@ class ContainerBuilderTest extends TestCase
     /** @var common_ext_ExtensionsManager|MockObject */
     private $extensionManager;
 
+    /** @var ContainerCache|MockObject */
+    private $cache;
+
+    /** @var string */
+    private $tempDir;
+
     public function setUp(): void
     {
+        $this->tempDir = sys_get_temp_dir();
         $this->extensionManager = $this->createMock(common_ext_ExtensionsManager::class);
-        $this->subject = new ContainerBuilder('', '', $this->extensionManager);
+        $this->cache = $this->createMock(ContainerCache::class);
+        $this->subject = new ContainerBuilder(
+            $this->tempDir,
+            $this->tempDir,
+            $this->extensionManager,
+            true,
+            $this->cache
+        );
     }
 
-    public function testBuild(): void
+    public function testBuildFromCache(): void
     {
-        $this->markTestIncomplete('TODO');
+        $container = $this->createMock(ContainerInterface::class);
 
-        $this->subject->build();
+        $this->cache
+            ->expects($this->once())
+            ->method('isFresh')
+            ->willReturn(true);
+
+        $this->cache
+            ->expects($this->once())
+            ->method('load')
+            ->willReturn($container);
+
+        $this->assertSame($container, $this->subject->build());
     }
 
     public function testForceBuild(): void
     {
-        $this->markTestIncomplete('TODO');
+        $container = $this->createMock(ContainerInterface::class);
 
-        $this->subject->forceBuild();
+        $mock = $this->createMock(ContainerServiceProviderInterface::class);
+
+        $manifest = $this->createMock(Manifest::class);
+        $manifest->method('getContainerServiceProvider')
+            ->willReturn([get_class($mock)]);
+
+        $extension = $this->createMock(common_ext_Extension::class);
+        $extension->method('getManifest')
+            ->willReturn($manifest);
+
+        $this->extensionManager
+            ->expects($this->once())
+            ->method('getInstalledExtensions')
+            ->willReturn([$extension]);
+
+        $this->cache
+            ->expects($this->once())
+            ->method('forceLoad')
+            ->willReturn($container);
+
+        $this->assertSame($container, $this->subject->forceBuild());
     }
 }
