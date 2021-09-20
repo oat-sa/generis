@@ -207,10 +207,3 @@ class LegacyFileLoader extends FileLoader
         }
     }
 }
-
-/**
- * @internal
- */
-final class ProtectedPhpFileLoader extends PhpFileLoader
-{
-}

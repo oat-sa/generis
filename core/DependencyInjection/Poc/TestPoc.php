@@ -36,8 +36,8 @@ class TestPoc extends ConfigurableService
         $container = $this->getServiceManager()->getContainer();
 
         for ($i = 0; $i <= self::LIMIT; $i++) {
-            /** @var MyService $myService */
-            //$myService = $container->get(MyService::class); // This service includes all the previous 5 in its constructor
+            /** @var MyService $myService */ // This service includes all the previous 5 in its constructor
+            //$myService = $container->get(MyService::class);
 
             $persistenceManager = $container->get(PersistenceManager::SERVICE_ID);
             $fileSystemService = $container->get(FileSystemService::SERVICE_ID);

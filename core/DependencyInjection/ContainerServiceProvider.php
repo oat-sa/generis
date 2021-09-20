@@ -29,6 +29,7 @@ use oat\oatbox\filesystem\FileSystemService;
 use oat\oatbox\log\LoggerService;
 use oat\tao\model\security\ActionProtector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
 class ContainerServiceProvider implements ContainerServiceProviderInterface
