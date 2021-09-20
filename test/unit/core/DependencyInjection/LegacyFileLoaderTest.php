@@ -27,6 +27,7 @@ use oat\generis\model\DependencyInjection\LegacyFileLoader;
 use oat\generis\test\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Config\FileLocatorInterface;
+use Symfony\Component\DependencyInjection\Alias;
 
 class LegacyFileLoaderTest extends TestCase
 {
@@ -48,15 +49,43 @@ class LegacyFileLoaderTest extends TestCase
 
     public function testLoad(): void
     {
-        $this->markTestIncomplete('TODO');
+        $alias = $this->createMock(Alias::class);
 
-        $this->subject->load();
+        $this->containerBuilder
+            ->expects($this->exactly(1))
+            ->method('setAlias')
+            ->willReturn($alias);
+
+        $this->containerBuilder
+            ->expects($this->atLeast(2))
+            ->method('setDefinition');
+
+        $injectableService = '<?php
+        use oat\oatbox\service\ServiceFactoryInterface;
+        use Zend\ServiceManager\ServiceLocatorInterface;
+        
+        return new class implements ServiceFactoryInterface {
+            public function __invoke(ServiceLocatorInterface $serviceLocator) {}
+        };';
+
+        $legacyService = '<?php
+        return new \oat\oatbox\config\ConfigurationService();';
+
+        $tmpDir = sys_get_temp_dir();
+        file_put_contents($tmpDir . '/injectable.conf.php', $injectableService);
+        file_put_contents($tmpDir . '/legacy.conf.php', $legacyService);
+
+        $this->fileLocator
+            ->expects($this->exactly(1))
+            ->method('locate')
+            ->willReturn($tmpDir);
+
+        $this->assertNull($this->subject->load('*.conf.php'));
     }
 
     public function testSupports(): void
     {
-        $this->markTestIncomplete('TODO');
-
-        $this->subject->supports();
+        $this->assertTrue($this->subject->supports('something.conf.php'));
+        $this->assertFalse($this->subject->supports('*.conf.php'));
     }
 }

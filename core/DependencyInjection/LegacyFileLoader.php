@@ -37,7 +37,6 @@ use ReflectionClass;
 use SplFileInfo;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Loader\FileLoader;
-use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
 use taoItems_models_classes_ItemsService;
 use taoQtiTest_models_classes_QtiTestService;
