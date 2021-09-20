@@ -26,6 +26,7 @@ use Closure;
 use oat\oatbox\config\ConfigurationService;
 use oat\oatbox\Configurable;
 use oat\oatbox\service\ConfigurableService;
+use oat\oatbox\service\ServiceFactoryInterface;
 use oat\tao\model\OntologyClassService;
 use oat\taoDeliveryRdf\model\DeliveryAssemblyService;
 use oat\taoGroups\models\GroupsService;
@@ -84,6 +85,10 @@ class LegacyFileLoader extends FileLoader
             try {
                 $class = $loadClassClosure($path);
 
+                if ($class instanceof ServiceFactoryInterface) {
+                    $this->registerInjectableClassDefinition($info);
+                }
+
                 if ($this->isLegacyClass($class)) {
                     $this->registerClassDefinition($info, $class);
                 }
@@ -94,6 +99,19 @@ class LegacyFileLoader extends FileLoader
         }
 
         $this->autoWireUnsupportedLegacyClasses();
+    }
+
+    private function registerInjectableClassDefinition(SplFileInfo $info): void
+    {
+        $alias = $this->createAlias($info);
+
+        $definition = (new Definition(ServiceFactoryInterface::class))
+            ->setAutowired(true)
+            ->setPublic(true)
+            ->setFactory(new Reference(LegacyServiceGateway::class))
+            ->setArguments([$alias]);
+
+        $this->container->setDefinition($alias, $definition);
     }
 
     /**

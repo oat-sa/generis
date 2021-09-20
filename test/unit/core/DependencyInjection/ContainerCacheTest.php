@@ -26,6 +26,8 @@ use oat\generis\model\DependencyInjection\ContainerBuilder;
 use oat\generis\model\DependencyInjection\ContainerCache;
 use oat\generis\test\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use Symfony\Component\Config\ConfigCache;
+use Symfony\Component\DependencyInjection\Dumper\PhpDumper;
 
 class ContainerCacheTest extends TestCase
 {
@@ -35,30 +37,89 @@ class ContainerCacheTest extends TestCase
     /** @var ContainerBuilder|MockObject */
     private $containerBuilder;
 
+    /** @var MockObject|PhpDumper */
+    private $phpDumper;
+
+    /** @var MockObject|ConfigCache */
+    private $configCache;
+
     public function setUp(): void
     {
         $this->containerBuilder = $this->createMock(ContainerBuilder::class);
-        $this->subject = new ContainerCache('', $this->containerBuilder);
+        $this->configCache = $this->createMock(ConfigCache::class);
+        $this->phpDumper = $this->createMock(PhpDumper::class);
+        $this->subject = new ContainerCache(
+            __DIR__ . '/DummyCachedContainer.php',
+            $this->containerBuilder,
+            $this->configCache,
+            $this->phpDumper,
+            true,
+            DummyCachedContainer::class
+        );
     }
 
-    public function testLoad(): void
+    public function testLoadFromCache(): void
     {
-        $this->markTestIncomplete('TODO');
+        $_ENV['DI_CONTAINER_FORCE_BUILD'] = false;
 
-        $this->subject->load();
+        $this->configCache->expects($this->once())
+            ->method('isFresh')
+            ->willReturn(true);
+
+        $this->configCache->expects($this->never())
+            ->method('write');
+
+        $this->containerBuilder->expects($this->never())
+            ->method('getResources');
+
+        $this->containerBuilder->expects($this->never())
+            ->method('compile');
+
+        $this->phpDumper->expects($this->never())
+            ->method('dump');
+
+        $this->assertInstanceOf(DummyCachedContainer::class, $this->subject->load());
     }
 
     public function testForceLoad(): void
     {
-        $this->markTestIncomplete('TODO');
+        $cacheValue = '';
+        $resources = [];
 
-        $this->subject->forceLoad();
+        $this->configCache->expects($this->once())
+            ->method('write')
+            ->with($cacheValue);
+
+        $this->containerBuilder->expects($this->once())
+            ->method('getResources')
+            ->willReturn($resources);
+
+        $this->containerBuilder->expects($this->once())
+            ->method('compile')
+            ->willReturn(false);
+
+        $this->phpDumper->expects($this->once())
+            ->method('dump')
+            ->willReturn($cacheValue);
+
+        $this->assertInstanceOf(DummyCachedContainer::class, $this->subject->forceLoad());
     }
 
     public function testIsFresh(): void
     {
-        $this->markTestIncomplete('TODO');
+        $_ENV['DI_CONTAINER_FORCE_BUILD'] = false;
 
-        $this->subject->isFresh();
+        $this->configCache->expects($this->once())
+            ->method('isFresh')
+            ->willReturn(true);
+
+        $this->assertTrue($this->subject->isFresh());
+    }
+
+    public function testIsNotFreshForced(): void
+    {
+        $_ENV['DI_CONTAINER_FORCE_BUILD'] = true;
+
+        $this->assertFalse($this->subject->isFresh());
     }
 }
