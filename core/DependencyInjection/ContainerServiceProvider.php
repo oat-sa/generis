@@ -24,6 +24,7 @@ namespace oat\generis\model\DependencyInjection;
 
 use oat\generis\model\data\Ontology;
 use oat\generis\model\DependencyInjection\Poc\MyService;
+use oat\generis\model\DependencyInjection\Poc\MyServiceAutowired;
 use oat\generis\persistence\PersistenceManager;
 use oat\oatbox\filesystem\FileSystemService;
 use oat\oatbox\log\LoggerService;
@@ -39,6 +40,11 @@ class ContainerServiceProvider implements ContainerServiceProviderInterface
         $services = $configurator->services();
 
         $services->set(LegacyServiceGateway::class, LegacyServiceGateway::class);
+
+        //@TODO @FIXME Remove this service after tests
+        $services->set(MyServiceAutowired::class, MyServiceAutowired::class)
+            ->autowire()
+            ->public();
 
         //@TODO @FIXME Remove this service after tests
         $services->set(MyService::class, MyService::class)

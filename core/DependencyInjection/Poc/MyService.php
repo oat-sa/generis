@@ -12,8 +12,6 @@ use oat\tao\model\security\ActionProtector;
 //@TODO @FIXME Delete this class after PoC...
 class MyService
 {
-    public const OPTION_TEST = 'option_test';
-
     /** @var PersistenceManager */
     private $persistenceManager;
 
@@ -28,9 +26,8 @@ class MyService
 
     /** @var Ontology */
     private $ontology;
-    /**
-     * @var ActionProtector
-     */
+
+    /** @var ActionProtector */
     private $actionProtector;
 
     public function __construct(
