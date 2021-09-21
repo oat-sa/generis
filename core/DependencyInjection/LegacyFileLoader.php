@@ -154,8 +154,8 @@ class LegacyFileLoader extends FileLoader
     {
         $interfacesWithServiceId = array_filter(
             (new ReflectionClass($className))->getInterfaces(),
-            function (ReflectionClass $int) {
-                return array_key_exists('SERVICE_ID', $int->getConstants());
+            function (ReflectionClass $interface) {
+                return array_key_exists('SERVICE_ID', $interface->getConstants());
             }
         );
 
@@ -177,14 +177,14 @@ class LegacyFileLoader extends FileLoader
     }
 
     /**
-     * @param object $aClass
+     * @param object $subjectClass
      */
-    private function isLegacyClass($aClass): bool
+    private function isLegacyClass($subjectClass): bool
     {
         $legacy = array_filter(
             self::LEGACY_CONFIGURABLE_CLASS_LIST,
-            function ($class) use ($aClass) {
-                return is_a($aClass, $class);
+            function ($class) use ($subjectClass) {
+                return is_a($subjectClass, $class);
             }
         );
 

@@ -26,7 +26,7 @@ use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 
 /**
  * @note This class if for internal DI container usage only.
- *       Please do change its behavior unless you are aware the consequences.
+ *       Please do not change its behavior unless you are aware the consequences.
  *
  * @internal
  */

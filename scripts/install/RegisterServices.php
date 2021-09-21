@@ -18,6 +18,8 @@
  * Copyright (c) 2021 (original work) Open Assessment Technologies SA;
  */
 
+declare(strict_types=1);
+
 namespace oat\generis\scripts\install;
 
 use oat\generis\model\DependencyInjection\ServiceOptions;
