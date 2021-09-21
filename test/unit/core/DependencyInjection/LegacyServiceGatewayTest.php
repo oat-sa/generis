@@ -57,4 +57,24 @@ class LegacyServiceGatewayTest extends TestCase
 
         $this->assertSame($service, $this->subject->__invoke('someId'));
     }
+
+    public function testGet(): void
+    {
+        $service = new stdClass();
+
+        $this->serviceManager
+            ->method('get')
+            ->willReturn($service);
+
+        $this->assertSame($service, $this->subject->get('someId'));
+    }
+
+    public function testHas(): void
+    {
+        $this->serviceManager
+            ->method('has')
+            ->willReturn(true);
+
+        $this->assertTrue($this->subject->has('someId'));
+    }
 }

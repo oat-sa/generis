@@ -27,20 +27,11 @@ use oat\oatbox\config\ConfigurationService;
 use oat\oatbox\Configurable;
 use oat\oatbox\service\ConfigurableService;
 use oat\oatbox\service\ServiceFactoryInterface;
-use oat\tao\model\OntologyClassService;
-use oat\taoDeliveryRdf\model\DeliveryAssemblyService;
-use oat\taoGroups\models\GroupsService;
-use oat\taoLti\models\classes\ConsumerService;
-use oat\taoOutcomeUi\model\ResultsService;
-use oat\taoTestTaker\models\TestTakerService;
 use ReflectionClass;
 use SplFileInfo;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Loader\FileLoader;
 use Symfony\Component\DependencyInjection\Reference;
-use taoItems_models_classes_ItemsService;
-use taoQtiTest_models_classes_QtiTestService;
-use taoTests_models_classes_TestsService;
 
 class LegacyFileLoader extends FileLoader
 {
@@ -48,17 +39,6 @@ class LegacyFileLoader extends FileLoader
         ConfigurableService::class,
         Configurable::class,
         ConfigurationService::class
-    ];
-
-    private const UNSUPPORTED_LEGACY_CLASSES = [
-        taoTests_models_classes_TestsService::class,
-        taoItems_models_classes_ItemsService::class,
-        TestTakerService::class,
-        GroupsService::class,
-        ResultsService::class,
-        ConsumerService::class,
-        DeliveryAssemblyService::class,
-        taoQtiTest_models_classes_QtiTestService::class,
     ];
 
     /**
@@ -96,8 +76,6 @@ class LegacyFileLoader extends FileLoader
                 $this->registerAliasesForSinglyImplementedInterfaces();
             }
         }
-
-        $this->autoWireUnsupportedLegacyClasses();
     }
 
     private function registerInjectableClassDefinition(SplFileInfo $info): void
@@ -189,20 +167,5 @@ class LegacyFileLoader extends FileLoader
         );
 
         return !empty($legacy);
-    }
-
-    private function autoWireUnsupportedLegacyClasses(): void
-    {
-        foreach (array_merge(get_declared_classes(), self::UNSUPPORTED_LEGACY_CLASSES) as $class) {
-            if (is_subclass_of($class, OntologyClassService::class)) {
-                $this->container->setDefinition(
-                    $class,
-                    (new Definition($class))
-                        ->setAutowired(true)
-                        ->setPublic(true)
-                        ->setClass($class)
-                );
-            }
-        }
     }
 }

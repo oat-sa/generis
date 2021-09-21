@@ -24,7 +24,6 @@ namespace oat\generis\model\DependencyInjection;
 
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Config\ConfigCache;
-use Symfony\Component\DependencyInjection\Container as SymfonyContainer;
 use Symfony\Component\DependencyInjection\ContainerBuilder as SymfonyContainerBuilder;
 use Symfony\Component\DependencyInjection\Dumper\PhpDumper;
 
@@ -86,7 +85,7 @@ class ContainerCache
             $this->getDumper()->dump(
                 [
                     'class' => $this->cachedContainerClassName,
-                    'base_class' => SymfonyContainer::class
+                    'base_class' => BaseContainer::class
                 ]
             ),
             $this->builder->getResources()

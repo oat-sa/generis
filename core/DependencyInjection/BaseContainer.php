@@ -22,30 +22,39 @@ declare(strict_types=1);
 
 namespace oat\generis\model\DependencyInjection;
 
-use oat\oatbox\service\ServiceManager;
 use Psr\Container\ContainerInterface;
+use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
-class LegacyServiceGateway implements ContainerInterface
+/**
+ * @note Class used only to help load not supported services from container.
+ *       Please DO NOT use it for other purposes.
+ *
+ * @internal
+ */
+class BaseContainer extends Container
 {
-    /** @var ServiceManager|null */
-    private $serviceManager;
+    /** @var LegacyServiceGateway|null */
+    private $legacyContainer;
 
-    public function __construct(ServiceManager $serviceManager = null)
+    public function __construct(ParameterBagInterface $parameterBag = null, ContainerInterface $legacyContainer = null)
     {
-        $this->serviceManager = $serviceManager ?? ServiceManager::getServiceManager();
-    }
+        parent::__construct($parameterBag);
 
-    public function __invoke($id = null)
-    {
-        return $id ? $this->serviceManager->get($id) : $this->serviceManager;
+        $this->legacyContainer = $legacyContainer ?? new LegacyServiceGateway();
     }
 
     /**
      * @inheritDoc
      */
-    public function get($id)
+    public function get($id, int $invalidBehavior = 1)
     {
-        return $this->serviceManager->get($id);
+        try {
+            return parent::get($id, $invalidBehavior);
+        } catch (ServiceNotFoundException $exception) {
+            return $this->legacyContainer->get($id);
+        }
     }
 
     /**
@@ -53,6 +62,6 @@ class LegacyServiceGateway implements ContainerInterface
      */
     public function has($id)
     {
-        return $this->serviceManager->has($id);
+        return parent::has($id) || $this->legacyContainer->has($id);
     }
 }
