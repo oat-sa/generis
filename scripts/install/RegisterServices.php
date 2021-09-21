@@ -24,11 +24,16 @@ namespace oat\generis\scripts\install;
 
 use oat\generis\model\DependencyInjection\ServiceOptions;
 use oat\oatbox\extension\InstallAction;
+use oat\oatbox\log\LoggerService;
 
 class RegisterServices extends InstallAction
 {
     public function __invoke($params = [])
     {
+        if (!$this->getServiceManager()->has(LoggerService::SERVICE_ID)) {
+            $this->getServiceManager()->register(LoggerService::SERVICE_ID, new LoggerService());
+        }
+
         $this->getServiceManager()->register(ServiceOptions::SERVICE_ID, new ServiceOptions());
     }
 }
