@@ -172,3 +172,47 @@ To avoid container caching (useful on dev mode), please add the following variab
 DI_CONTAINER_DEBUG=true
 DI_CONTAINER_FORCE_BUILD=true
 ```
+
+## Testing container inside Legacy Services (ConfigurableService)
+
+While in a legacy class (extending ConfigurableService) and calling the container inside, 
+you can mock the services with `getServiceLocatorMock` (The same way we do for `ServiceManager`). Example: 
+
+Having a class:
+
+```php
+use oat\oatbox\service\ConfigurableService;
+use oat\generis\persistence\PersistenceManager;
+
+class MyLegacyServiceTest extends ConfigurableService
+{
+    public function something()
+    {
+        return get_class($this->getServiceLocator()->getContainer()->get(PersistenceManager::SERVICE_ID));
+    }
+}
+```
+
+In your test:
+
+```php
+use oat\generis\persistence\PersistenceManager;
+use oat\generis\test\TestCase;
+
+class MyLegacyServiceTest extends TestCase
+{
+    public function testSomething(): void
+    {
+        $sut = new MyLegacyService();
+        $sut->setServiceLocator(
+            $this->getServiceLocatorMock(
+                [
+                    PersistenceManager::SERVICE_ID => $this->createMock(PersistenceManager::class),
+                ]
+            )
+        );
+        
+        echo $sut->something(); // Will return the $persistenceManager class
+    }
+}
+```
