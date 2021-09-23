@@ -21,9 +21,8 @@
 
 namespace oat\oatbox\service;
 
-use common_ext_ExtensionsManager;
-use LogicException;
 use oat\generis\model\DependencyInjection\ContainerBuilder;
+use oat\generis\model\DependencyInjection\ContainerStarter;
 use oat\oatbox\Configurable;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
@@ -37,11 +36,8 @@ class ServiceManager implements ServiceLocatorInterface, ContainerInterface
 {
     private static $instance;
 
-    /** @var ContainerInterface */
-    private $container;
-
-    /** @var ContainerBuilder */
-    private $containerBuilder;
+    /** @var ContainerStarter */
+    private $containerStarter;
 
     /**
      * @return \oat\oatbox\service\ServiceManager
@@ -266,11 +262,7 @@ class ServiceManager implements ServiceLocatorInterface, ContainerInterface
      */
     public function getContainer(): ContainerInterface
     {
-        if (!$this->container) {
-            $this->container = $this->getContainerBuilder()->build();
-        }
-
-        return $this->container;
+        return $this->getContainerStarter()->getContainer();
     }
 
     /**
@@ -278,25 +270,18 @@ class ServiceManager implements ServiceLocatorInterface, ContainerInterface
      */
     public function getContainerBuilder(): ContainerBuilder
     {
-        if (!$this->containerBuilder) {
-            if (
-                !defined('CONFIG_PATH') ||
-                !defined('GENERIS_CACHE_PATH') ||
-                !defined('DEBUG_MODE')
-            ) {
-                throw new LogicException('Required application constants were not initialized!');
-            }
+        return $this->getContainerStarter()->getContainerBuilder();
+    }
 
-            /** @var common_ext_ExtensionsManager $extensionManager */
-            $extensionManager = $this->get(common_ext_ExtensionsManager::SERVICE_ID);
-
-            $this->containerBuilder = new ContainerBuilder(
-                CONFIG_PATH,
-                GENERIS_CACHE_PATH,
-                $extensionManager
-            );
+    /**
+     * @TODO ContainerBuilder will be removed from here as soon as we do not need ServiceManager anymore.
+     */
+    private function getContainerStarter(): ContainerStarter
+    {
+        if (!$this->containerStarter) {
+            $this->containerStarter = new ContainerStarter($this);
         }
 
-        return $this->containerBuilder;
+        return $this->containerStarter;
     }
 }

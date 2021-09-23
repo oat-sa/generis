@@ -62,12 +62,9 @@ To start the container, we need to use the ContainerBuilder. Example:
 
 ```php
 use oat\oatbox\service\ServiceManager;
+use oat\generis\model\DependencyInjection\ContainerStarter;
 
-$container = (new oat\generis\model\DependencyInjection\ContainerBuilder(
-    CONFIG_PATH,
-    GENERIS_CACHE_PATH,
-    ServiceManager::getServiceManager()->get(common_ext_ExtensionsManager::SERVICE_ID) //ExtensionsManager
-))->build();
+$container = (new ContainerStarter(ServiceManager::getServiceManager()))->getContainer();
 ```
 
 **IMPORTANT**: This is already done on `ServiceManager->getContainer()`, so you do not need to do it. 

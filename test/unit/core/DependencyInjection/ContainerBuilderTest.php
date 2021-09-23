@@ -48,13 +48,18 @@ class ContainerBuilderTest extends TestCase
 
     public function setUp(): void
     {
-        $this->tempDir = sys_get_temp_dir();
         $this->extensionManager = $this->createMock(common_ext_ExtensionsManager::class);
+
+        $legacyContainer = $this->createMock(ContainerInterface::class);
+        $legacyContainer->method('get')
+            ->willReturn($this->extensionManager);
+
+        $this->tempDir = sys_get_temp_dir();
         $this->cache = $this->createMock(ContainerCache::class);
         $this->subject = new ContainerBuilder(
             $this->tempDir,
             $this->tempDir,
-            $this->extensionManager,
+            $legacyContainer,
             true,
             $this->cache
         );

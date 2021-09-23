@@ -41,19 +41,19 @@ class ContainerBuilder extends SymfonyContainerBuilder
     /** @var string|null */
     private $configPath;
 
-    /** @var common_ext_ExtensionsManager */
-    private $extensionsManager;
+    /** @var ContainerInterface */
+    private $legacyContainer;
 
     public function __construct(
         string $configPath,
         string $cachePath,
-        common_ext_ExtensionsManager $extensionsManager,
+        ContainerInterface $legacyContainer,
         bool $isDebugEnabled = null,
         ContainerCache $cache = null
     ) {
         $this->configPath = $configPath;
         $this->cachePath = $cachePath;
-        $this->extensionsManager = $extensionsManager;
+        $this->legacyContainer = $legacyContainer;
         $this->cache = $cache ?? new ContainerCache(
             $cachePath . '_di/container.php',
             $this,
@@ -115,7 +115,7 @@ class ContainerBuilder extends SymfonyContainerBuilder
         $contents = [];
 
         /** @var common_ext_Extension $extension */
-        foreach ($this->extensionsManager->getInstalledExtensions() as $extension) {
+        foreach ($this->getExtensionsManager()->getInstalledExtensions() as $extension) {
             foreach ($extension->getManifest()->getContainerServiceProvider() as $serviceProvider) {
                 $contents[] = '(new ' . $serviceProvider . '())($configurator);';
             }
@@ -131,5 +131,14 @@ class ContainerBuilder extends SymfonyContainerBuilder
         };',
             $contents
         );
+    }
+
+    /**
+     * @note This method as the $legacyContainer needs to be here in order to avoid to load the
+     *       common_ext_ExtensionsManager unnecessarily during this class initialization.
+     */
+    private function getExtensionsManager(): common_ext_ExtensionsManager
+    {
+        return $this->legacyContainer->get(common_ext_ExtensionsManager::SERVICE_ID);
     }
 }
