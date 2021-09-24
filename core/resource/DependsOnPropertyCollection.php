@@ -32,7 +32,7 @@ class DependsOnPropertyCollection extends ArrayIterator
 {
     public function isEqual(DependsOnPropertyCollection $dependsOnPropertyCollection): bool
     {
-        return $this->isArraysEqual($this->getPropertyUris(), $dependsOnPropertyCollection->getPropertyUris());
+        return $this->areArraysEqual($this->getPropertyUris(), $dependsOnPropertyCollection->getPropertyUris());
     }
 
     public function getPropertyUris(): array
@@ -45,7 +45,7 @@ class DependsOnPropertyCollection extends ArrayIterator
         );
     }
 
-    private function isArraysEqual(array $array1, array $array2): bool
+    private function areArraysEqual(array $array1, array $array2): bool
     {
         return empty(array_diff($array1, $array2)) && empty(array_diff($array2, $array1));
     }
