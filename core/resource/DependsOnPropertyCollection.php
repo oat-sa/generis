@@ -26,8 +26,27 @@ use ArrayIterator;
 use core_kernel_classes_Property;
 
 /**
- * @method core_kernel_classes_Property current()
+ * @method core_kernel_classes_Property|null current()
  */
 class DependsOnPropertyCollection extends ArrayIterator
 {
+    public function isEqual(DependsOnPropertyCollection $dependsOnPropertyCollection): bool
+    {
+        return $this->areArraysEqual($this->getPropertyUris(), $dependsOnPropertyCollection->getPropertyUris());
+    }
+
+    public function getPropertyUris(): array
+    {
+        return array_map(
+            static function (core_kernel_classes_Property $property) {
+                return $property->getUri();
+            },
+            $this->getArrayCopy()
+        );
+    }
+
+    private function areArraysEqual(array $array1, array $array2): bool
+    {
+        return empty(array_diff($array1, $array2)) && empty(array_diff($array2, $array1));
+    }
 }
