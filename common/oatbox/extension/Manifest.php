@@ -22,6 +22,7 @@ declare(strict_types=1);
 
 namespace oat\oatbox\extension;
 
+use oat\generis\model\DependencyInjection\ContainerServiceProviderInterface;
 use oat\oatbox\extension\exception\ManifestException;
 use oat\oatbox\extension\exception\ManifestNotFoundException;
 use oat\oatbox\service\exception\InvalidServiceManagerException;
@@ -254,6 +255,14 @@ class Manifest implements ServiceLocatorAwareInterface
     public function getExtra()
     {
         return isset($this->manifest['extra']) ? $this->manifest['extra'] : [];
+    }
+
+    /**
+     * @return ContainerServiceProviderInterface[]
+     */
+    public function getContainerServiceProvider(): array
+    {
+        return $this->manifest['containerServiceProviders'] ?? [];
     }
 
     /**
