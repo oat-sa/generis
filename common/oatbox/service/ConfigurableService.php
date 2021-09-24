@@ -15,17 +15,14 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2015 (original work) Open Assessment Technologies SA;
- *
+ * Copyright (c) 2015-2021 (original work) Open Assessment Technologies SA;
  */
 
 namespace oat\oatbox\service;
 
 use oat\oatbox\Configurable;
-use oat\oatbox\log\LoggerAwareTrait;
 use oat\oatbox\service\exception\InvalidService;
 use oat\oatbox\service\exception\InvalidServiceManagerException;
-use Psr\Log\LoggerAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 
 /**
@@ -35,23 +32,25 @@ use Zend\ServiceManager\ServiceLocatorAwareInterface;
  * https://github.com/basdenooijer/solarium/blob/master/library/Solarium/Core/Configurable.php
  *
  * @author Joel Bout <joel@taotesting.com>
+ * @deprecated New services must be registered using Dependency Injection Container
  */
 abstract class ConfigurableService extends Configurable implements ServiceLocatorAwareInterface
 {
     use ServiceManagerAwareTrait;
 
     /** @var string Documentation header */
-    
-
     protected $header = null;
+
+    /** @var object[]  */
     private $subServices = [];
+
     /**
-         * Get the service manager
-         *
-         * @deprecated Use $this->propagate instead
-         *
-         * @param $serviceManager
-         */
+     * Get the service manager
+     *
+     * @deprecated Use $this->propagate instead
+     *
+     * @param $serviceManager
+     */
     public function setServiceManager($serviceManager)
     {
         $this->setServiceLocator($serviceManager);
@@ -65,6 +64,7 @@ abstract class ConfigurableService extends Configurable implements ServiceLocato
      * @return mixed
      * @throws InvalidService
      * @throws InvalidServiceManagerException
+     * @deprecated New services must be registered using Dependency Injection Container
      */
     public function getSubService($id, $interface = null)
     {
@@ -87,6 +87,7 @@ abstract class ConfigurableService extends Configurable implements ServiceLocato
      * Set the documentation header uses into config file
      *
      * @param $header
+     * @deprecated New services must be registered using Dependency Injection Container
      */
     public function setHeader($header)
     {
@@ -97,6 +98,7 @@ abstract class ConfigurableService extends Configurable implements ServiceLocato
      * Return the documentation header
      *
      * @return string
+     * @deprecated New services must be registered using Dependency Injection Container
      */
     public function getHeader()
     {
@@ -111,6 +113,7 @@ abstract class ConfigurableService extends Configurable implements ServiceLocato
      * Get the documentation header
      *
      * @return string
+     * @deprecated New services must be registered using Dependency Injection Container
      */
     protected function getDefaultHeader()
     {
@@ -128,6 +131,7 @@ abstract class ConfigurableService extends Configurable implements ServiceLocato
      * @return mixed
      * @throws InvalidService
      * @throws InvalidServiceManagerException
+     * @deprecated New services must be registered using Dependency Injection Container
      */
     protected function buildService($serviceDefinition, $interfaceName = null)
     {

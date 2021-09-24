@@ -15,9 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2014-2017 (original work) Open Assessment Technologies SA;
- *
- *
+ * Copyright (c) 2014-2021 (original work) Open Assessment Technologies SA;
  */
 
 namespace oat\oatbox\service;
@@ -37,6 +35,7 @@ use Zend\ServiceManager\ServiceLocatorAwareTrait;
  *
  * @package oat\oatbox\service
  * @author Moyon Camille
+ * @deprecated New services must be registered using Dependency Injection Container
  */
 trait ServiceManagerAwareTrait
 {
@@ -50,6 +49,7 @@ trait ServiceManagerAwareTrait
      *
      * @return ServiceManager
      * @throws InvalidServiceManagerException
+     * @deprecated New services must be registered using Dependency Injection Container
      */
     public function getServiceManager()
     {
@@ -70,6 +70,7 @@ trait ServiceManagerAwareTrait
      * @param ConfigurableService $service
      * @param bool $allowOverride
      * @throws \common_Exception
+     * @deprecated New services must be registered using Dependency Injection Container
      */
     public function registerService($serviceKey, ConfigurableService $service, $allowOverride = true)
     {
@@ -83,6 +84,7 @@ trait ServiceManagerAwareTrait
      *
      * @param $service
      * @return mixed
+     * @deprecated New services must be registered using Dependency Injection Container
      */
     protected function propagate($service)
     {

@@ -199,6 +199,14 @@ class PersistenceManager extends ConfigurableService
 
     private function getDriverConfigFeeder(): ?DriverConfigurationFeeder
     {
+        /**
+         * This class is directly instantiated directly in some installation process, so the ServiceLocator
+         * might not be available, therefore this if is necessary.
+         */
+        if (!$this->getServiceLocator()) {
+            return null;
+        }
+
         try {
             return $this->getServiceLocator()->get(DriverConfigurationFeeder::SERVICE_ID);
         } catch (ServiceNotFoundException $exception) {
