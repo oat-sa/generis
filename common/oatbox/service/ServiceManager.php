@@ -274,7 +274,7 @@ class ServiceManager implements ServiceLocatorInterface, ContainerInterface
     }
 
     /**
-     * @TODO ContainerBuilder will be removed from here as soon as we do not need ServiceManager anymore.
+     * @TODO ContainerStarter will be removed from here as soon as we do not need ServiceManager anymore.
      */
     private function getContainerStarter(): ContainerStarter
     {
