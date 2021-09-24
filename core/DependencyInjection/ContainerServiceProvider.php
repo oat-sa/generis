@@ -22,16 +22,7 @@ declare(strict_types=1);
 
 namespace oat\generis\model\DependencyInjection;
 
-use oat\generis\model\data\Ontology;
-use oat\generis\model\DependencyInjection\Poc\MyService;
-use oat\generis\model\DependencyInjection\Poc\MyServiceAutowired;
-use oat\generis\persistence\PersistenceManager;
-use oat\oatbox\filesystem\FileSystemService;
-use oat\oatbox\log\LoggerService;
-use oat\tao\model\security\ActionProtector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-
-use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
 class ContainerServiceProvider implements ContainerServiceProviderInterface
 {
@@ -40,24 +31,5 @@ class ContainerServiceProvider implements ContainerServiceProviderInterface
         $services = $configurator->services();
 
         $services->set(LegacyServiceGateway::class, LegacyServiceGateway::class);
-
-        //@TODO @FIXME Remove this service after tests
-        $services->set(MyServiceAutowired::class, MyServiceAutowired::class)
-            ->autowire()
-            ->public();
-
-        //@TODO @FIXME Remove this service after tests
-        $services->set(MyService::class, MyService::class)
-            ->public()
-            ->args(
-                [
-                    service(PersistenceManager::SERVICE_ID),
-                    service(FileSystemService::SERVICE_ID),
-                    service(LoggerService::SERVICE_ID),
-                    service(Ontology::SERVICE_ID),
-                    service(ServiceOptions::SERVICE_ID),
-                    service(ActionProtector::SERVICE_ID)
-                ]
-            );
     }
 }
