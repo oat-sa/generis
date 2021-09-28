@@ -127,7 +127,7 @@ class ContainerBuilder extends SymfonyContainerBuilder
         
         return function (ContainerConfigurator $configurator): void
         {
-            %s
+            ' . str_repeat('%s' . PHP_EOL, count($contents)) . '
         };',
             $contents
         );
