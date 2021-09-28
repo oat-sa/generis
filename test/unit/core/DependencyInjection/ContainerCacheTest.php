@@ -60,8 +60,6 @@ class ContainerCacheTest extends TestCase
 
     public function testLoadFromCache(): void
     {
-        $_ENV['DI_CONTAINER_FORCE_BUILD'] = false;
-
         $this->configCache->expects($this->once())
             ->method('isFresh')
             ->willReturn(true);
@@ -107,19 +105,10 @@ class ContainerCacheTest extends TestCase
 
     public function testIsFresh(): void
     {
-        $_ENV['DI_CONTAINER_FORCE_BUILD'] = false;
-
         $this->configCache->expects($this->once())
             ->method('isFresh')
             ->willReturn(true);
 
         $this->assertTrue($this->subject->isFresh());
-    }
-
-    public function testIsNotFreshForced(): void
-    {
-        $_ENV['DI_CONTAINER_FORCE_BUILD'] = true;
-
-        $this->assertFalse($this->subject->isFresh());
     }
 }

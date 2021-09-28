@@ -58,7 +58,6 @@ class ContainerBuilderTest extends TestCase
         $this->cache = $this->createMock(ContainerCache::class);
         $this->subject = new ContainerBuilder(
             $this->tempDir,
-            $this->tempDir,
             $legacyContainer,
             true,
             $this->cache
