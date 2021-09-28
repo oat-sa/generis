@@ -28,7 +28,7 @@ use InvalidArgumentException;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder as SymfonyContainerBuilder;
-use Symfony\Component\DependencyInjection\ContainerInterface as SynfonyContainerInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface as SymfonyContainerInterface;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException as SymfonyServiceNotFoundException;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
@@ -103,7 +103,7 @@ class ContainerBuilder extends SymfonyContainerBuilder
     /**
      * @inheritDoc
      */
-    public function get(string $id, int $invalidBehavior = SynfonyContainerInterface::EXCEPTION_ON_INVALID_REFERENCE)
+    public function get(string $id, int $invalidBehavior = SymfonyContainerInterface::EXCEPTION_ON_INVALID_REFERENCE)
     {
         try {
             return parent::get($id, $invalidBehavior);
