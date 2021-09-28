@@ -43,20 +43,15 @@ class ContainerBuilder extends SymfonyContainerBuilder
     /** @var bool|null */
     private $cachePath;
 
-    /** @var string|null */
-    private $configPath;
-
     /** @var ContainerInterface */
     private $legacyContainer;
 
     public function __construct(
-        string $configPath,
         string $cachePath,
         ContainerInterface $legacyContainer,
         bool $isDebugEnabled = null,
         ContainerCache $cache = null
     ) {
-        $this->configPath = $configPath;
         $this->cachePath = $cachePath;
         $this->legacyContainer = $legacyContainer;
         $this->cache = $cache ?? new ContainerCache(
@@ -101,16 +96,6 @@ class ContainerBuilder extends SymfonyContainerBuilder
             )
         );
         $phpLoader->load('services.php');
-
-        $legacyLoader = new LegacyFileLoader(
-            $this,
-            new FileLocator(
-                [
-                    $this->configPath
-                ]
-            )
-        );
-        $legacyLoader->load('*/*.conf.php');
 
         return $this->cache->forceLoad();
     }
