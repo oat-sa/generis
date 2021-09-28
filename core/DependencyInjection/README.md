@@ -27,14 +27,16 @@ class MyContainerServiceProvider implements ContainerServiceProviderInterface
         
         $parameters->set('someParam', 'someValue');
 
-        $services->set(MyService::class, MyService::class)->args(
-            [
-                service(MyOtherService::class),
-                service(MyLegacyService::SERVICE_ID),
-                env('MY_ENV_VAR'),
-                param('someParam'),
-            ]
-        );
+        $services->set(MyService::class, MyService::class)
+            ->public()
+            ->args(
+                [
+                    service(MyOtherService::class),
+                    service(MyLegacyService::SERVICE_ID),
+                    env('MY_ENV_VAR'),
+                    param('someParam'),
+                ]
+            );
     }
 }
 ```
@@ -167,7 +169,6 @@ To avoid container caching (useful on dev mode), please add the following variab
 
 ```shell
 DI_CONTAINER_DEBUG=true
-DI_CONTAINER_FORCE_BUILD=true
 ```
 
 ## Testing container inside Legacy Services (ConfigurableService)

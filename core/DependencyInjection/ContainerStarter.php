@@ -37,30 +37,21 @@ final class ContainerStarter
     private $legacyContainer;
 
     /** @var string|null */
-    private $configPath;
-
-    /** @var string|null */
     private $cachePath;
 
     public function __construct(
         ContainerInterface $legacyContainer,
-        string $configPath = null,
         string $cachePath = null
     ) {
-        if (!$configPath) {
-            $configPath = defined('CONFIG_PATH') ? CONFIG_PATH : null;
-        }
-
         if (!$cachePath) {
             $cachePath = defined('GENERIS_CACHE_PATH') ? GENERIS_CACHE_PATH : null;
         }
 
-        if (!$configPath || !$cachePath) {
+        if (!$cachePath) {
             throw new LogicException('Required application constants were not initialized!');
         }
 
         $this->legacyContainer = $legacyContainer;
-        $this->configPath = $configPath;
         $this->cachePath = $cachePath;
     }
 
@@ -77,7 +68,6 @@ final class ContainerStarter
     {
         if (!$this->containerBuilder) {
             $this->containerBuilder = new ContainerBuilder(
-                $this->configPath,
                 $this->cachePath,
                 $this->legacyContainer
             );
