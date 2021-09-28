@@ -28,7 +28,12 @@ use InvalidArgumentException;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder as SymfonyContainerBuilder;
+use Symfony\Component\DependencyInjection\ContainerInterface as SynfonyContainerInterface;
+use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException as SymfonyServiceNotFoundException;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
+use oat\oatbox\service\ServiceNotFoundException;
+use Symfony\Component\DependencyInjection\Reference;
 
 class ContainerBuilder extends SymfonyContainerBuilder
 {
@@ -108,6 +113,57 @@ class ContainerBuilder extends SymfonyContainerBuilder
         $legacyLoader->load('*/*.conf.php');
 
         return $this->cache->forceLoad();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function get(string $id, int $invalidBehavior = SynfonyContainerInterface::EXCEPTION_ON_INVALID_REFERENCE)
+    {
+        try {
+            return parent::get($id, $invalidBehavior);
+        } catch (SymfonyServiceNotFoundException $exception) {
+        }
+
+        try {
+            return $this->legacyContainer->get($id);
+        } catch (ServiceNotFoundException $exception) {
+            throw new SymfonyServiceNotFoundException($id);
+        }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function has(string $id)
+    {
+        if (parent::has($id)) {
+            return true;
+        }
+
+        try {
+            $this->legacyContainer->get($id);
+
+            return true;
+        } catch (ServiceNotFoundException $exception) {
+            return false;
+        }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function findDefinition(string $id)
+    {
+        try {
+            return parent::findDefinition($id);
+        } catch (SymfonyServiceNotFoundException $exception) {
+            return (new Definition($id))
+                ->setAutowired(true)
+                ->setPublic(true)
+                ->setFactory(new Reference(LegacyServiceGateway::class))
+                ->setArguments([$id]);
+        }
     }
 
     private function getTemporaryServiceFileContent(): string
