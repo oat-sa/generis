@@ -28,7 +28,12 @@ use InvalidArgumentException;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder as SymfonyContainerBuilder;
+use Symfony\Component\DependencyInjection\ContainerInterface as SymfonyContainerInterface;
+use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException as SymfonyServiceNotFoundException;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
+use oat\oatbox\service\ServiceNotFoundException;
+use Symfony\Component\DependencyInjection\Reference;
 
 class ContainerBuilder extends SymfonyContainerBuilder
 {
@@ -38,20 +43,15 @@ class ContainerBuilder extends SymfonyContainerBuilder
     /** @var bool|null */
     private $cachePath;
 
-    /** @var string|null */
-    private $configPath;
-
     /** @var ContainerInterface */
     private $legacyContainer;
 
     public function __construct(
-        string $configPath,
         string $cachePath,
         ContainerInterface $legacyContainer,
         bool $isDebugEnabled = null,
         ContainerCache $cache = null
     ) {
-        $this->configPath = $configPath;
         $this->cachePath = $cachePath;
         $this->legacyContainer = $legacyContainer;
         $this->cache = $cache ?? new ContainerCache(
@@ -97,17 +97,58 @@ class ContainerBuilder extends SymfonyContainerBuilder
         );
         $phpLoader->load('services.php');
 
-        $legacyLoader = new LegacyFileLoader(
-            $this,
-            new FileLocator(
-                [
-                    $this->configPath
-                ]
-            )
-        );
-        $legacyLoader->load('*/*.conf.php');
-
         return $this->cache->forceLoad();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function get(string $id, int $invalidBehavior = SymfonyContainerInterface::EXCEPTION_ON_INVALID_REFERENCE)
+    {
+        try {
+            return parent::get($id, $invalidBehavior);
+        } catch (SymfonyServiceNotFoundException $exception) {
+        }
+
+        try {
+            return $this->legacyContainer->get($id);
+        } catch (ServiceNotFoundException $exception) {
+            throw new SymfonyServiceNotFoundException($id);
+        }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function has(string $id)
+    {
+        if (parent::has($id)) {
+            return true;
+        }
+
+        try {
+            $this->legacyContainer->get($id);
+
+            return true;
+        } catch (ServiceNotFoundException $exception) {
+            return false;
+        }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function findDefinition(string $id)
+    {
+        try {
+            return parent::findDefinition($id);
+        } catch (SymfonyServiceNotFoundException $exception) {
+            return (new Definition($id))
+                ->setAutowired(true)
+                ->setPublic(true)
+                ->setFactory(new Reference(LegacyServiceGateway::class))
+                ->setArguments([$id]);
+        }
     }
 
     private function getTemporaryServiceFileContent(): string
@@ -127,7 +168,7 @@ class ContainerBuilder extends SymfonyContainerBuilder
         
         return function (ContainerConfigurator $configurator): void
         {
-            %s
+            ' . str_repeat('%s' . PHP_EOL, count($contents)) . '
         };',
             $contents
         );

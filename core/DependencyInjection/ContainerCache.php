@@ -65,7 +65,7 @@ class ContainerCache
 
     public function isFresh(): bool
     {
-        return !$this->isEnvVarTrue('DI_CONTAINER_FORCE_BUILD') && $this->configCache->isFresh();
+        return $this->configCache->isFresh();
     }
 
     public function load(): ContainerInterface
