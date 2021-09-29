@@ -36,9 +36,9 @@ class EventManager extends ConfigurableService
      * @deprecated use SERVICE_ID
      */
     const CONFIG_ID = 'generis/event';
-    
+
     const OPTION_LISTENERS = 'listeners';
-    
+
     /**
      * Dispatch an event and trigger its listeners
      *
@@ -49,21 +49,23 @@ class EventManager extends ConfigurableService
     {
         $eventObject = is_object($event) ? $event : new GenericEvent($event, $params);
         foreach ($this->getListeners($eventObject) as $callback) {
-            if (is_array($callback) && count($callback) == 2) {
-                list($key, $function) = $callback;
+            if (is_array($callback) && count($callback) === 2) {
+                [$key, $function] = $callback;
+
                 if (is_string($key)) {
                     try {
-                        $service = $this->getServiceManager()->get($key);
+                        $service = $this->getServiceLocator()->getContainer()->get($key);
                         $callback = [$service, $function];
                     } catch (ServiceNotFoundException $e) {
                         //do nothing
                     }
                 }
             }
+
             call_user_func($callback, $eventObject);
         }
     }
-    
+
     /**
      * Attach a Listener to one or multiple events
      *
@@ -86,7 +88,7 @@ class EventManager extends ConfigurableService
         }
         $this->setOption(self::OPTION_LISTENERS, $listeners);
     }
-    
+
     /**
      * remove listener from an event and delete event if it dosn't have any listeners
      * @param array $listeners
@@ -126,7 +128,7 @@ class EventManager extends ConfigurableService
         }
         $this->setOption(self::OPTION_LISTENERS, $listeners);
     }
-    
+
     /**
      * Get all Listeners listening to this kind of event
      *
