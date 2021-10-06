@@ -118,7 +118,7 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
 
         $this->lgDependent = null;
         $this->multiple = null;
-        $this->dependsOnPropertyCollection = new DependsOnPropertyCollection();
+//        $this->dependsOnPropertyCollection = new DependsOnPropertyCollection();
     }
 
     /**
@@ -228,21 +228,23 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
         return (bool) $returnValue;
     }
 
-    /**
-     * @TODO Improve getter
-     */
     public function getDependsOnPropertyCollection(): DependsOnPropertyCollection
     {
-        $dependsOnProperty = $this->getProperty(GenerisRdf::PROPERTY_DEPENDS_ON_PROPERTY);
-        $dependsOnPropertyValues = $this->getPropertyValues($dependsOnProperty);
+        if (!isset($this->dependsOnPropertyCollection)) {
+            $dependsOnProperty = $this->getProperty(GenerisRdf::PROPERTY_DEPENDS_ON_PROPERTY);
+            $dependsOnPropertyValues = $this->getPropertyValues($dependsOnProperty);
+            $this->dependsOnPropertyCollection = new DependsOnPropertyCollection();
 
-        foreach ($dependsOnPropertyValues as $dependsOnPropertyValue) {
-            if ($dependsOnPropertyValue !== GenerisRdf::PROPERTY_DEPENDS_ON_PROPERTY) {
-                $this->dependsOnPropertyCollection->append(
-                    $this->getProperty($dependsOnPropertyValue)
-                );
+            foreach ($dependsOnPropertyValues as $dependsOnPropertyValue) {
+                if ($dependsOnPropertyValue !== GenerisRdf::PROPERTY_DEPENDS_ON_PROPERTY) {
+                    $this->dependsOnPropertyCollection->append(
+                        $this->getProperty($dependsOnPropertyValue)
+                    );
+                }
             }
         }
+
+        $this->dependsOnPropertyCollection->rewind();
 
         return $this->dependsOnPropertyCollection;
     }
