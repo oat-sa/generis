@@ -118,7 +118,6 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
 
         $this->lgDependent = null;
         $this->multiple = null;
-//        $this->dependsOnPropertyCollection = new DependsOnPropertyCollection();
     }
 
     /**
