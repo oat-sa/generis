@@ -45,6 +45,11 @@ class DependsOnPropertyCollection extends ArrayIterator
         );
     }
 
+    public function isEmpty(): bool
+    {
+        return $this->count() === 0;
+    }
+
     private function areArraysEqual(array $array1, array $array2): bool
     {
         return empty(array_diff($array1, $array2)) && empty(array_diff($array2, $array1));

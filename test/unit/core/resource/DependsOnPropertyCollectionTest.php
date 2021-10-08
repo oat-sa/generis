@@ -80,4 +80,12 @@ class DependsOnPropertyCollectionTest extends TestCase
         $this->sut->append($secondProperty);
         $this->assertEquals(['firstProperty', 'secondProperty'], $this->sut->getPropertyUris());
     }
+
+    public function testIsEmpty(): void
+    {
+        $this->assertTrue($this->sut->isEmpty());
+
+        $this->sut->append('value');
+        $this->assertFalse($this->sut->isEmpty());
+    }
 }
