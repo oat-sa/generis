@@ -15,17 +15,22 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2013-2020 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
+ * Copyright (c) 2013-2021 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  *
  * @author Lionel Lecaque  <lionel@taotesting.com>
  * @author Jerome Bogaerts, <jerome@taotesting.com>
  *
  */
 
+declare(strict_types=1);
+
+use Doctrine\DBAL\Configuration;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Driver\ResultStatement;
 use Doctrine\DBAL\Driver\Statement;
+use Doctrine\DBAL\DriverManager;
+use oat\generis\persistence\sql\dbal\MasterSlaveConnection\MasterSlaveSqlLogger;
 
 /**
  * Dbal Driver
@@ -80,9 +85,9 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
      */
     protected function persistentConnect($connectionParams)
     {
-        $config = new \Doctrine\DBAL\Configuration();
-        //          $logger = new Doctrine\DBAL\Logging\EchoSQLLogger();
-        //          $config->setSQLLogger($logger);
+        $config = new Configuration();
+//        $logger = new MasterSlaveSqlLogger();
+//        $config->setSQLLogger($logger);
 
         $connLimit = 3; // Max connection attempts.
         $counter = 0; // Connection attempts counter.
@@ -91,8 +96,6 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
             try {
                 /** @var Connection connection */
                 $this->connection = $this->getConnection($connectionParams, $config);
-                // to generate DBALException if no connection
-                $this->connection->ping();
                 break;
             } catch (DBALException $e) {
                 $this->connection = null;
@@ -125,7 +128,7 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
     private function getDriverManagerClass()
     {
         if (!$this->driverManagerClass || !class_exists($this->driverManagerClass)) {
-            $this->driverManagerClass = \Doctrine\DBAL\DriverManager::class;
+            $this->driverManagerClass = DriverManager::class;
         }
         return $this->driverManagerClass;
     }
@@ -146,7 +149,7 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
     {
         return new common_persistence_sql_Platform($this->getDbalConnection());
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see common_persistence_sql_Driver::getSchemaManager()
@@ -184,7 +187,7 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
     {
         return $this->connection->executeQuery($statement, $params, $types);
     }
-    
+
     /**
      * Convenience access to PDO::quote.
      *
@@ -217,7 +220,7 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
         }
         return $this->connection->insert($tableName, $cleanColumns, $types);
     }
-    
+
     /**
      * Convenience access to PDO::lastInsertId.
      *
@@ -236,7 +239,7 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
     {
         return $this->connection;
     }
-    
+
     /**
      * Returns the name of the connections database
      * @return string
