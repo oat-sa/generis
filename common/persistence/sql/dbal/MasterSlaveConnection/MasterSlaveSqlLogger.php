@@ -27,8 +27,8 @@ use Doctrine\DBAL\Logging\SQLLogger;
 
 class MasterSlaveSqlLogger implements SQLLogger
 {
-    static $read = 0;
-    static $write = 0;
+    private static $read = 0;
+    private static $write = 0;
 
     private $label;
 
