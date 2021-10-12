@@ -27,8 +27,8 @@ use Doctrine\DBAL\Logging\SQLLogger;
 
 class MasterSlaveSqlLogger implements SQLLogger
 {
-    private static $read = 0;
-    private static $write = 0;
+    private static int $read = 0;
+    private static int $write = 0;
 
     private $label;
 
@@ -63,9 +63,8 @@ class MasterSlaveSqlLogger implements SQLLogger
 
     public function __destruct()
     {
-        \common_Logger::d('########################################');
-        \common_Logger::d('[READ] - ' . print_r(self::$read,true));
-        \common_Logger::d('[WRITE] - ' . print_r(self::$write,true));
+        \common_Logger::d(sprintf('[READ] - %s', self::$read));
+        \common_Logger::d(sprintf('[WRITE] - %s', self::$write));
     }
 
     /**
