@@ -30,6 +30,7 @@ use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Driver\ResultStatement;
 use Doctrine\DBAL\Driver\Statement;
 use Doctrine\DBAL\DriverManager;
+use Doctrine\DBAL\Logging\SQLLogger;
 use oat\generis\persistence\sql\dbal\MasterSlaveConnection\MasterSlaveSqlLogger;
 
 /**
@@ -68,7 +69,7 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
             $connectionParams['driver'] = str_replace('dbal_', '', $connectionParams['driver']);
         }
 
-        $this->persistentConnect($connectionParams);
+        $this->persistentConnect($connectionParams, $params['sqlLoggerClass'] ?? null);
 
         if ($isMysqlDbal) {
             $this->exec('SET SESSION SQL_MODE=\'ANSI_QUOTES\';');
@@ -83,11 +84,12 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
      * @param $connectionParams
      * @throws DBALException
      */
-    protected function persistentConnect($connectionParams)
+    protected function persistentConnect($connectionParams, string $sqlClassLogger = null)
     {
         $config = new Configuration();
-//        $logger = new MasterSlaveSqlLogger();
-//        $config->setSQLLogger($logger);
+        if ($sqlClassLogger !== null && is_a($sqlClassLogger, SQLLogger::class, true)) {
+            $config->setSQLLogger(new $sqlClassLogger());
+        }
 
         $connLimit = 3; // Max connection attempts.
         $counter = 0; // Connection attempts counter.

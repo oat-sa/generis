@@ -27,8 +27,8 @@ use Doctrine\DBAL\Logging\SQLLogger;
 
 class MasterSlaveSqlLogger implements SQLLogger
 {
-    private static int $read = 0;
-    private static int $write = 0;
+    private static $read = 0;
+    private static $write = 0;
 
     private $label;
 
@@ -52,11 +52,11 @@ class MasterSlaveSqlLogger implements SQLLogger
 
         if ($target !== $this->label ) {
             \common_Logger::e(
-                sprintf('[ERROR] %s [%s] %s' . debug_backtrace()[1]['function'], $this->label, $sql)
+                sprintf('[ERROR] %s [%s] %s', debug_backtrace()[1]['function'], $this->label, $sql)
             );
         } else {
             \common_Logger::i(
-                sprintf('[INFO] %s [%s] %s...' . debug_backtrace()[1]['function'], $this->label, substr($sql, 0 ,10))
+                sprintf('[INFO] %s [%s] %s...', debug_backtrace()[1]['function'], $this->label, substr($sql, 0 ,10))
             );
         }
     }
