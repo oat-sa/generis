@@ -15,12 +15,14 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2015 (original work) Open Assessment Technologies SA;
+ * Copyright (c) 2015-2021 (original work) Open Assessment Technologies SA;
  *
  */
 
 namespace oat\oatbox\service;
 
+use oat\generis\model\DependencyInjection\ContainerBuilder;
+use oat\generis\model\DependencyInjection\ContainerStarter;
 use oat\oatbox\Configurable;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
@@ -33,6 +35,9 @@ use Psr\Container\ContainerInterface;
 class ServiceManager implements ServiceLocatorInterface, ContainerInterface
 {
     private static $instance;
+
+    /** @var ContainerStarter */
+    private $containerStarter;
 
     /**
      * @return \oat\oatbox\service\ServiceManager
@@ -71,6 +76,7 @@ class ServiceManager implements ServiceLocatorInterface, ContainerInterface
      * @return ConfigurableService
      * @throws ServiceNotFoundException
      * @see ContainerInterface::get()
+     * @deprecated Use $this->getContainer()->get()
      */
     public function get($serviceKey)
     {
@@ -138,6 +144,7 @@ class ServiceManager implements ServiceLocatorInterface, ContainerInterface
     /**
      * (non-PHPdoc)
      * @see ContainerInterface::has()
+     * @deprecated Use $this->getContainer()->has()
      */
     public function has($serviceKey)
     {
@@ -159,6 +166,7 @@ class ServiceManager implements ServiceLocatorInterface, ContainerInterface
      * @param string $serviceKey
      * @param ConfigurableService $service
      * @throws \common_Exception
+     * @deprecated New services must be registered using Dependency Injection Container
      */
     public function register($serviceKey, ConfigurableService $service)
     {
@@ -174,6 +182,9 @@ class ServiceManager implements ServiceLocatorInterface, ContainerInterface
         }
     }
 
+    /**
+     * @deprecated New services must be registered using Dependency Injection Container
+     */
     public function unregister($serviceKey)
     {
         unset($this->services[$serviceKey]);
@@ -195,6 +206,7 @@ class ServiceManager implements ServiceLocatorInterface, ContainerInterface
      * @return mixed
      *
      * @deprecated - If class uses ServiceManagerAwareTrait use $this->propagate($service)
+     * @deprecated New services must be registered using Dependency Injection Container
      */
     public function propagate($service)
     {
@@ -211,6 +223,7 @@ class ServiceManager implements ServiceLocatorInterface, ContainerInterface
      * @param $className
      * @param array $options
      * @return mixed
+     * @deprecated New services must be registered using Dependency Injection Container
      */
     public function build($className, array $options = [])
     {
@@ -237,9 +250,38 @@ class ServiceManager implements ServiceLocatorInterface, ContainerInterface
      *
      * @param $serviceKey
      * @param ConfigurableService $service
+     * @deprecated New services must be registered using Dependency Injection Container
      */
     public function overload($serviceKey, ConfigurableService $service)
     {
         $this->services[$serviceKey] = $service;
+    }
+
+    /**
+     * @TODO Container will be removed from here as soon as we do not need ServiceManager anymore.
+     */
+    public function getContainer(): ContainerInterface
+    {
+        return $this->getContainerStarter()->getContainer();
+    }
+
+    /**
+     * @TODO ContainerBuilder will be removed from here as soon as we do not need ServiceManager anymore.
+     */
+    public function getContainerBuilder(): ContainerBuilder
+    {
+        return $this->getContainerStarter()->getContainerBuilder();
+    }
+
+    /**
+     * @TODO ContainerStarter will be removed from here as soon as we do not need ServiceManager anymore.
+     */
+    private function getContainerStarter(): ContainerStarter
+    {
+        if (!$this->containerStarter) {
+            $this->containerStarter = new ContainerStarter($this);
+        }
+
+        return $this->containerStarter;
     }
 }
