@@ -49,7 +49,7 @@ class MasterSlaveSqlLogger implements SQLLogger
             $target = 'master';
         }
 
-        if ($target !== $this->label ) {
+        if ($target !== $this->label) {
             \common_Logger::e(
                 sprintf(
                     '[ERROR] %s [%s] %s',
