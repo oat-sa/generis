@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,6 +19,8 @@
  * @author "Julien Sébire, <julien@taotesting.com>"
  */
 
+declare(strict_types = 1);
+
 namespace oat\generis\Helper;
 
 use Exception;
@@ -29,12 +30,10 @@ trait UuidPrimaryKeyTrait
 {
     /**
      * Generates a unique, not auto-increment based, primary key.
-     *
-     * @return string
      * @throws Exception
      */
-    public function getUniquePrimaryKey()
+    public function getUniquePrimaryKey(): string
     {
-        return (string)Uuid::uuid4();
+        return Uuid::uuid4()->toString();
     }
 }
