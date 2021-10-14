@@ -16,7 +16,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2021 (original work) Open Assessment Technologies SA
- *
  */
 
 declare(strict_types=1);
@@ -40,7 +39,7 @@ class MasterSlaveSqlLogger implements SQLLogger
     /**
      * {@inheritdoc}
      */
-    public function startQuery($sql, ?array $params = null, ?array $types = null)
+    public function startQuery($sql, ?array $params = null, ?array $types = null): void
     {
         if (stripos($sql, 'SELECT') === 0) {
             self::$read++;
@@ -52,11 +51,21 @@ class MasterSlaveSqlLogger implements SQLLogger
 
         if ($target !== $this->label ) {
             \common_Logger::e(
-                sprintf('[ERROR] %s [%s] %s', debug_backtrace()[1]['function'], $this->label, $sql)
+                sprintf(
+                    '[ERROR] %s [%s] %s',
+                    debug_backtrace()[1]['function'],
+                    $this->label,
+                    $sql
+                )
             );
         } else {
             \common_Logger::i(
-                sprintf('[INFO] %s [%s] %s...', debug_backtrace()[1]['function'], $this->label, substr($sql, 0 ,10))
+                sprintf(
+                    '[INFO] %s [%s] %s...',
+                    debug_backtrace()[1]['function'],
+                    $this->label,
+                    substr($sql, 0, 10)
+                )
             );
         }
     }
