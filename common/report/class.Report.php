@@ -145,12 +145,9 @@ class common_report_Report implements ReportInterface
     {
         $messages = [$this->getMessage()];
 
-        array_map(
-            function (Report $child) use (&$messages) {
-                $messages[] = $child->getAllMessages();
-            },
-            $this->children
-        );
+        foreach ($this->children as $child) {
+            $messages[] = $child->getAllMessages();
+        }
 
         return implode(', ', $messages);
     }
