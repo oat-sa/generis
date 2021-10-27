@@ -378,4 +378,16 @@ class ReportTest extends TestCase
         self::assertSame('my data test', $unSerialized->getMessage());
         self::assertSame('my data test', $unSerialized->translateMessage());
     }
+
+    public function testGetAllMessages(): void
+    {
+        $report = Report::createInfo('1')
+            ->add(
+                Report::createSuccess('2')
+                    ->add(Report::createWarning('3')
+                )
+            );
+
+        self::assertEquals('1, 2, 3', $report->getAllMessages());
+    }
 }
