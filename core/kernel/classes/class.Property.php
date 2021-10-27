@@ -155,6 +155,17 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
         return $returnValue;
     }
 
+    public function getRelatedClass(): ?core_kernel_classes_Class
+    {
+        try {
+            $class = $this->getDomain()->get(0);
+
+            return $class instanceof core_kernel_classes_Class ? $class : null;
+        } catch (common_Exception $exception) {
+            return null;
+        }
+    }
+
     /**
      * Short description of method setDomain
      *
@@ -225,6 +236,17 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
             $this->range = $class;
         }
         return (bool) $returnValue;
+    }
+
+    public function getAlias(): ?string
+    {
+        $container = $this->getOnePropertyValue($this->getProperty(GenerisRdf::PROPERTY_ALIAS));
+
+        if ($container instanceof core_kernel_classes_Literal) {
+            return $container->__toString();
+        }
+
+        return null;
     }
 
     public function getDependsOnPropertyCollection(): DependsOnPropertyCollection

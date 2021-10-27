@@ -141,6 +141,17 @@ class common_report_Report implements ReportInterface
         return $this->message;
     }
 
+    public function getAllMessages(): string
+    {
+        $messages = [$this->getMessage()];
+
+        foreach ($this->children as $child) {
+            $messages[] = $child->getAllMessages();
+        }
+
+        return implode(', ', $messages);
+    }
+
     /**
      * Update message of the report
      *
