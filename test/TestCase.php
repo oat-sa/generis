@@ -61,7 +61,7 @@ abstract class TestCase extends UnitTestCase
         return $serviceLocatorProphecy->reveal();
     }
 
-    public function createIteratorMock(string $originalClassName, array $items): MockObject
+    public function createIteratorMock(string $originalClassName, array $items = []): MockObject
     {
         $iteratorData = new stdClass();
         $iteratorData->array = $items;
