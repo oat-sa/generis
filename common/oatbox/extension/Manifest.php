@@ -266,6 +266,14 @@ class Manifest implements ServiceLocatorAwareInterface
     }
 
     /**
+     * @return AbstractAction[]
+     */
+    public function getE2ePrerequisiteActions(): array
+    {
+        return $this->manifest['e2ePrerequisiteActions'] ?? [];
+    }
+
+    /**
      * Extract dependencies for extensions
      * @param string $file
      * @return array
