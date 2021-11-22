@@ -22,19 +22,28 @@ declare(strict_types=1);
 
 namespace oat\oatbox\log\logger;
 
+use oat\oatbox\session\SessionService;
 use Psr\Log\LoggerInterface;
 use Throwable;
 
 class AdvancedLogger implements LoggerInterface
 {
     public const CONTEXT_EXCEPTION = 'contextException';
+    public const CONTEXT_USER_DATA = 'contextUserData';
 
     /** @var LoggerInterface */
     private $logger;
 
-    public function __construct(LoggerInterface $logger)
+    /** @var SessionService */
+    private $sessionService;
+
+    /** @var array|null */
+    private $userData;
+
+    public function __construct(LoggerInterface $logger, SessionService $sessionService)
     {
         $this->logger = $logger;
+        $this->sessionService = $sessionService;
     }
 
     public function emergency($message, array $context = [])
@@ -86,10 +95,13 @@ class AdvancedLogger implements LoggerInterface
     {
         //@TODO @FIXME Add user, URL and method
 
-        if (isset($context[self::CONTEXT_EXCEPTION]) && $context[self::CONTEXT_EXCEPTION] instanceof Throwable) {
-            $message = $message . '. Exception: ' . $this->buildLogMessage($context[self::CONTEXT_EXCEPTION]);
+        $context[self::CONTEXT_USER_DATA] = isset($context[self::CONTEXT_USER_DATA])
+        && is_array($context[self::CONTEXT_USER_DATA])
+            ? array_merge($context[self::CONTEXT_USER_DATA], $this->getUserData())
+            : $this->getUserData();
 
-            unset($context[self::CONTEXT_EXCEPTION]);
+        if (isset($context[self::CONTEXT_EXCEPTION]) && $context[self::CONTEXT_EXCEPTION] instanceof Throwable) {
+            $context[self::CONTEXT_EXCEPTION] = $this->buildLogMessage($context[self::CONTEXT_EXCEPTION]);
         }
 
         $level === null
@@ -121,5 +133,26 @@ class AdvancedLogger implements LoggerInterface
             $exception->getFile(),
             $exception->getLine()
         );
+    }
+
+    private function getUserData(): array
+    {
+        //@TODO Create a service to retrieve user from Rest API, Session or other formats.
+
+        if ($this->userData === null) {
+            $user = $this->sessionService->getCurrentUser();
+
+            if ($user) {
+                $this->userData = [
+                    'id' => $user->getIdentifier()
+                ];
+
+                return $this->userData;
+            }
+
+            $this->userData = []; //@TODO Get API user
+        }
+
+        return $this->userData;
     }
 }

@@ -25,6 +25,7 @@ namespace oat\oatbox\log\ServiceProvider;
 use oat\generis\model\DependencyInjection\ContainerServiceProviderInterface;
 use oat\oatbox\log\logger\AdvancedLogger;
 use oat\oatbox\log\LoggerService;
+use oat\oatbox\session\SessionService;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
@@ -40,6 +41,7 @@ class LogServiceProvider implements ContainerServiceProviderInterface
             ->args(
                 [
                     service(LoggerService::SERVICE_ID),
+                    service(SessionService::SERVICE_ID),
                 ]
             );
     }
