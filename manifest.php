@@ -24,6 +24,7 @@ use oat\generis\model\DependencyInjection\ContainerServiceProvider;
 use oat\generis\scripts\install\RegisterServices;
 use oat\generis\scripts\install\SetupDefaultKvPersistence;
 use oat\generis\scripts\install\TaskQueue;
+use oat\oatbox\log\ServiceProvider\LogServiceProvider;
 
 /**
  * @author CRP Henri Tudor - TAO Team - {@link http://www.tao.lu}
@@ -53,6 +54,7 @@ return [
     ],
     'update' => Updater::class,
     'containerServiceProviders' => [
-        ContainerServiceProvider::class
+        ContainerServiceProvider::class,
+        LogServiceProvider::class,
     ]
 ];
