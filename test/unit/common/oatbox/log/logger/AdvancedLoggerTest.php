@@ -59,9 +59,13 @@ class AdvancedLoggerTest extends TestCase
 
     private function createException(): Throwable
     {
-        $exception1 = new Exception('Message 1', 1);
-        $exception2 = new Exception('Message 2', 2, $exception1);
-
-        return new Exception('Message 3', 3, $exception2);
+        return new Exception(
+            'Last error',
+            200,
+            new Exception(
+                'Original error',
+                100
+            )
+        );
     }
 }
