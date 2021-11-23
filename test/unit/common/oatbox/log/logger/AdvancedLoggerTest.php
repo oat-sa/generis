@@ -20,14 +20,11 @@
 
 namespace oat\generis\test\unit\common\oatbox\log\logger;
 
-use Exception;
 use oat\oatbox\log\logger\AdvancedLogger;
 use oat\generis\test\TestCase;
-use oat\oatbox\session\SessionService;
-use oat\oatbox\user\User;
+use oat\oatbox\log\logger\extender\ContextExtenderInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
-use Throwable;
 
 class AdvancedLoggerTest extends TestCase
 {
@@ -37,22 +34,15 @@ class AdvancedLoggerTest extends TestCase
     /** @var AdvancedLogger */
     private $sut;
 
-    /** @var SessionService|MockObject */
-    private $sessionService;
+    /** @var ContextExtenderInterface|MockObject */
+    private $contextExtender;
 
     public function setUp(): void
     {
         $this->logger = $this->createMock(LoggerInterface::class);
-        $this->sessionService = $this->createMock(SessionService::class);
-        $this->sut = new AdvancedLogger($this->logger, $this->sessionService);
-        $this->sut->withServerData(
-            [
-                'SERVER_ADDR' => '127.0.0.1',
-                'SERVER_NAME' => 'localhost',
-                'REQUEST_URI' => '/my/endpoint',
-                'REQUEST_METHOD' => 'POST',
-            ]
-        );
+        $this->contextExtender = $this->createMock(ContextExtenderInterface::class);
+        $this->sut = new AdvancedLogger($this->logger);
+        $this->sut->addContextExtender($this->contextExtender);
     }
 
     /**
@@ -60,13 +50,13 @@ class AdvancedLoggerTest extends TestCase
      */
     public function testLog(string $level): void
     {
-        $user = $this->createMock(User::class);
-        $user->method('getIdentifier')
-            ->willReturn('userUri');
-
-        $this->sessionService
-            ->method('getCurrentUser')
-            ->willReturn($user);
+        $this->contextExtender
+            ->method('extend')
+            ->willReturn(
+                [
+                    'extended' => true,
+                ]
+            );
 
         $this->logger
             ->expects($this->exactly(1))
@@ -74,26 +64,13 @@ class AdvancedLoggerTest extends TestCase
             ->with(
                 'Error description',
                 [
-                    'contextException' => '"Last error", code: 200, file: "'
-                        . __FILE__ . '", line: 116, previous: "Original error", code: 100, file: "'
-                        . __FILE__ . '", line: 119',
-                    'contextRequestData' => [
-                        'serverIp' => '127.0.0.1',
-                        'serverName' => 'localhost',
-                        'requestUri' => '/my/endpoint',
-                        'requestMethod' => 'POST'
-                    ],
-                    'contextUserData' => [
-                        'id' => 'userUri',
-                    ],
+                    'extended' => true,
                 ]
             );
 
         $this->sut->{$level}(
             'Error description',
-            [
-                AdvancedLogger::CONTEXT_EXCEPTION => $this->createException(),
-            ]
+            []
         );
     }
 
@@ -109,17 +86,5 @@ class AdvancedLoggerTest extends TestCase
             ['info'],
             ['debug'],
         ];
-    }
-
-    private function createException(): Throwable
-    {
-        return new Exception(
-            'Last error',
-            200,
-            new Exception(
-                'Original error',
-                100
-            )
-        );
     }
 }

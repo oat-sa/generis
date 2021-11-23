@@ -21,6 +21,7 @@ It will log the exception details based on custom `context parameters`.
 
 ```php
 use oat\oatbox\log\logger\AdvancedLogger;
+use \oat\oatbox\log\logger\extender\ContextExtenderInterface;
 
 $someExceptionCaught = new Exception(
     'Error 2',
@@ -35,7 +36,7 @@ $someExceptionCaught = new Exception(
 $logger->critical(
     'My messaged',
     [
-        AdvancedLogger::CONTEXT_EXCEPTION => $someExceptionCaught
+        ContextExtenderInterface::CONTEXT_EXCEPTION => $someExceptionCaught
     ]
 );
 ```
