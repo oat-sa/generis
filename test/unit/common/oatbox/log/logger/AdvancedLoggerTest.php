@@ -18,6 +18,8 @@
  * Copyright (c) 2021 (original work) Open Assessment Technologies SA;
  */
 
+declare(strict_types=1);
+
 namespace oat\generis\test\unit\common\oatbox\log\logger;
 
 use oat\oatbox\log\logger\AdvancedLogger;
@@ -59,7 +61,7 @@ class AdvancedLoggerTest extends TestCase
             );
 
         $this->logger
-            ->expects($this->exactly(1))
+            ->expects($this->once())
             ->method($level)
             ->with(
                 'Error description',

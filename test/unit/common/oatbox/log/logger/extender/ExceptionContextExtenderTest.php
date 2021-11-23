@@ -18,6 +18,8 @@
  * Copyright (c) 2021 (original work) Open Assessment Technologies SA;
  */
 
+declare(strict_types=1);
+
 namespace oat\generis\test\unit\common\oatbox\log\logger\extender;
 
 use Exception;
@@ -41,14 +43,22 @@ class ExceptionContextExtenderTest extends TestCase
         $this->assertSame(
             [
                 ContextExtenderInterface::CONTEXT_EXCEPTION => '"Last error", code: 200, file: "'
-                    . __FILE__ . '", line: 57, previous: "Original error", code: 100, file: "'
-                    . __FILE__ . '", line: 60',
+                    . __FILE__ . '", line: 67, previous: "Original error", code: 100, file: "'
+                    . __FILE__ . '", line: 70',
             ],
             $this->sut->extend(
                 [
                     ContextExtenderInterface::CONTEXT_EXCEPTION => $this->createException(),
                 ]
             )
+        );
+    }
+
+    public function testExtendWithoutException(): void
+    {
+        $this->assertSame(
+            [],
+            $this->sut->extend([])
         );
     }
 

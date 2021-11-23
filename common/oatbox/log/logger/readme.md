@@ -233,3 +233,5 @@ To use the old format:
    }
 }
 ```
+
+Check more information [here](../README.md).

@@ -40,10 +40,16 @@ class UserContextExtender implements ContextExtenderInterface
 
     public function extend(array $context): array
     {
-        $context[self::CONTEXT_USER_DATA] = isset($context[self::CONTEXT_USER_DATA])
-            && is_array($context[self::CONTEXT_USER_DATA])
-            ? array_merge($context[self::CONTEXT_USER_DATA], $this->getContextUserData())
-            : $this->getContextUserData();
+        if (isset($context[self::CONTEXT_USER_DATA]) && is_array($context[self::CONTEXT_USER_DATA])) {
+            $context[self::CONTEXT_USER_DATA] = array_merge(
+                $context[self::CONTEXT_USER_DATA],
+                $this->getContextUserData()
+            );
+
+            return $context;
+        }
+
+        $context[self::CONTEXT_USER_DATA] = $this->getContextUserData();
 
         return $context;
     }

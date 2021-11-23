@@ -18,6 +18,8 @@
  * Copyright (c) 2021 (original work) Open Assessment Technologies SA;
  */
 
+declare(strict_types=1);
+
 namespace oat\generis\test\unit\common\oatbox\log\logger\extender;
 
 use oat\oatbox\log\logger\AdvancedLogger;
@@ -65,6 +67,42 @@ class UserContextExtenderTest extends TestCase
                     ContextExtenderInterface::CONTEXT_USER_DATA => [],
                 ]
             )
+        );
+    }
+
+    public function testExtendWithoutUserData(): void
+    {
+        $user = $this->createMock(User::class);
+        $user->method('getIdentifier')
+            ->willReturn('userUri');
+
+        $this->sessionService
+            ->method('getCurrentUser')
+            ->willReturn($user);
+
+        $this->assertSame(
+            [
+                ContextExtenderInterface::CONTEXT_USER_DATA => [
+                    'id' => 'userUri',
+                ],
+            ],
+            $this->sut->extend([])
+        );
+    }
+
+    public function testExtendWithAnonymous(): void
+    {
+        $this->sessionService
+            ->method('isAnonymous')
+            ->willReturn(true);
+
+        $this->assertSame(
+            [
+                ContextExtenderInterface::CONTEXT_USER_DATA => [
+                    'id' => 'anonymous',
+                ],
+            ],
+            $this->sut->extend([])
         );
     }
 }

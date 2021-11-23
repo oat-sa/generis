@@ -39,10 +39,16 @@ class RequestContextExtender implements ContextExtenderInterface
 
     public function extend(array $context): array
     {
-        $context[self::CONTEXT_REQUEST_DATA] = isset($context[self::CONTEXT_REQUEST_DATA])
-        && is_array($context[self::CONTEXT_REQUEST_DATA])
-            ? array_merge($context[self::CONTEXT_REQUEST_DATA], $this->getContextRequestData())
-            : $this->getContextRequestData();
+        if (isset($context[self::CONTEXT_REQUEST_DATA]) && is_array($context[self::CONTEXT_REQUEST_DATA])) {
+            $context[self::CONTEXT_REQUEST_DATA] = array_merge(
+                $context[self::CONTEXT_REQUEST_DATA],
+                $this->getContextRequestData()
+            );
+
+            return $context;
+        }
+
+        $context[self::CONTEXT_REQUEST_DATA] = $this->getContextRequestData();
 
         return $context;
     }

@@ -2,6 +2,8 @@
 
 Here you can find help on how to log information in TAO.
 
+More docs [here](./logger/readme.md).
+
 ## Advanced Log
 
 The **advanced log** implements `PSR-3` and is useful to add extra information to the log, such as:
@@ -32,7 +34,13 @@ $someExceptionCaught = new Exception(
     )
 );
 
-/** @var AdvancedLogger $logger */
+/** 
+ * You can also add extra context information for your logs by providing context extenders.
+ * 
+ * @var ContextExtenderInterface $extraContextExtender
+ * @var AdvancedLogger $logger 
+ */
+$logger->addContextExtender($extraContextExtender);
 $logger->critical(
     'My messaged',
     [

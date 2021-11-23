@@ -18,6 +18,8 @@
  * Copyright (c) 2021 (original work) Open Assessment Technologies SA;
  */
 
+declare(strict_types=1);
+
 namespace oat\generis\test\unit\common\oatbox\log\logger\extender;
 
 use oat\generis\test\TestCase;
@@ -58,6 +60,21 @@ class RequestContextExtenderTest extends TestCase
                     ContextExtenderInterface::CONTEXT_REQUEST_DATA => [],
                 ]
             )
+        );
+    }
+
+    public function testExtendWithoutRequestData(): void
+    {
+        $this->assertSame(
+            [
+                ContextExtenderInterface::CONTEXT_REQUEST_DATA => [
+                    'serverIp' => '127.0.0.1',
+                    'serverName' => 'localhost',
+                    'requestUri' => '/my/endpoint',
+                    'requestMethod' => 'POST'
+                ],
+            ],
+            $this->sut->extend([])
         );
     }
 }
