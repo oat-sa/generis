@@ -30,6 +30,7 @@ class AdvancedLogger implements LoggerInterface
 {
     public const CONTEXT_EXCEPTION = 'contextException';
     public const CONTEXT_USER_DATA = 'contextUserData';
+    public const CONTEXT_REQUEST_DATA = 'contextRequestData';
 
     /** @var LoggerInterface */
     private $logger;
@@ -40,10 +41,23 @@ class AdvancedLogger implements LoggerInterface
     /** @var array|null */
     private $userData;
 
+    /** @var array */
+    private $requestData = [];
+
+    /** @var array */
+    private $serverData;
+
     public function __construct(LoggerInterface $logger, SessionService $sessionService)
     {
         $this->logger = $logger;
         $this->sessionService = $sessionService;
+    }
+
+    public function withServerData(array $data): self
+    {
+        $this->serverData = $data;
+
+        return $this;
     }
 
     public function emergency($message, array $context = [])
@@ -93,20 +107,30 @@ class AdvancedLogger implements LoggerInterface
 
     private function logData(string $methodName, $message, array $context = [], $level = null): void
     {
-        //@TODO @FIXME Add user, URL and method
+        $context = $this->extendContext($context);
+
+        $level === null
+            ? $this->logger->{$methodName}($message, $context)
+            : $this->logger->{$methodName}($level, $message, $context);
+    }
+
+    private function extendContext(array $context): array
+    {
+        $context[self::CONTEXT_REQUEST_DATA] = isset($context[self::CONTEXT_REQUEST_DATA])
+            && is_array($context[self::CONTEXT_REQUEST_DATA])
+            ? array_merge($context[self::CONTEXT_REQUEST_DATA], $this->getContextRequestData())
+            : $this->getContextRequestData();
 
         $context[self::CONTEXT_USER_DATA] = isset($context[self::CONTEXT_USER_DATA])
-        && is_array($context[self::CONTEXT_USER_DATA])
-            ? array_merge($context[self::CONTEXT_USER_DATA], $this->getUserData())
-            : $this->getUserData();
+            && is_array($context[self::CONTEXT_USER_DATA])
+            ? array_merge($context[self::CONTEXT_USER_DATA], $this->getContextUserData())
+            : $this->getContextUserData();
 
         if (isset($context[self::CONTEXT_EXCEPTION]) && $context[self::CONTEXT_EXCEPTION] instanceof Throwable) {
             $context[self::CONTEXT_EXCEPTION] = $this->buildLogMessage($context[self::CONTEXT_EXCEPTION]);
         }
 
-        $level === null
-            ? $this->logger->{$methodName}($message, $context)
-            : $this->logger->{$methodName}($level, $message, $context);
+        return $context;
     }
 
     private function buildLogMessage(Throwable $exception): string
@@ -135,24 +159,53 @@ class AdvancedLogger implements LoggerInterface
         );
     }
 
-    private function getUserData(): array
+    private function getContextUserData(): array
     {
-        //@TODO Create a service to retrieve user from Rest API, Session or other formats.
-
         if ($this->userData === null) {
             $user = $this->sessionService->getCurrentUser();
 
             if ($user) {
                 $this->userData = [
-                    'id' => $user->getIdentifier()
+                    'id' => $user->getIdentifier(),
                 ];
 
                 return $this->userData;
             }
 
-            $this->userData = []; //@TODO Get API user
+            $this->userData = [
+                'id' => 'anonymous'
+            ];
         }
 
         return $this->userData;
+    }
+
+    private function getContextRequestData(): array
+    {
+        if (!empty($this->requestData)) {
+            return $this->requestData;
+        }
+
+        $serverData = $this->serverData ?? $_SERVER;
+
+        $this->requestData = [];
+
+        if (isset($serverData['SERVER_ADDR'])) {
+            $this->requestData['serverIp'] = $serverData['SERVER_ADDR'];
+        }
+
+        if (isset($serverData['SERVER_NAME'])) {
+            $this->requestData['serverName'] = $serverData['SERVER_NAME'];
+        }
+
+        if (isset($serverData['REQUEST_URI'])) {
+            $this->requestData['requestUri'] = substr($serverData['REQUEST_URI'], 0, 500);
+        }
+
+        if (isset($serverData['REQUEST_METHOD'])) {
+            $this->requestData['requestMethod'] = $serverData['REQUEST_METHOD'];
+        }
+
+        return $this->requestData;
     }
 }

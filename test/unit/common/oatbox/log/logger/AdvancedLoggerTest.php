@@ -23,6 +23,8 @@ namespace oat\generis\test\unit\common\oatbox\log\logger;
 use Exception;
 use oat\oatbox\log\logger\AdvancedLogger;
 use oat\generis\test\TestCase;
+use oat\oatbox\session\SessionService;
+use oat\oatbox\user\User;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
 use Throwable;
@@ -35,26 +37,78 @@ class AdvancedLoggerTest extends TestCase
     /** @var AdvancedLogger */
     private $sut;
 
+    /** @var SessionService|MockObject */
+    private $sessionService;
+
     public function setUp(): void
     {
         $this->logger = $this->createMock(LoggerInterface::class);
-        $this->sut = new AdvancedLogger($this->logger);
-    }
-
-    public function testLog(): void
-    {
-        $exception = $this->createException();
-
-        $this->logger
-            ->method('critical')
-            ->with('bla bla bla');
-
-        $this->sut->critical(
-            'Error description',
+        $this->sessionService = $this->createMock(SessionService::class);
+        $this->sut = new AdvancedLogger($this->logger, $this->sessionService);
+        $this->sut->withServerData(
             [
-                AdvancedLogger::CONTEXT_EXCEPTION => $exception
+                'SERVER_ADDR' => '127.0.0.1',
+                'SERVER_NAME' => 'localhost',
+                'REQUEST_URI' => '/my/endpoint',
+                'REQUEST_METHOD' => 'POST',
             ]
         );
+    }
+
+    /**
+     * @dataProvider levelDataProvider
+     */
+    public function testLog(string $level): void
+    {
+        $user = $this->createMock(User::class);
+        $user->method('getIdentifier')
+            ->willReturn('userUri');
+
+        $this->sessionService
+            ->method('getCurrentUser')
+            ->willReturn($user);
+
+        $this->logger
+            ->expects($this->exactly(1))
+            ->method($level)
+            ->with(
+                'Error description',
+                [
+                    'contextException' => '"Last error", code: "200", file: "'
+                        . __FILE__ . '", line: "116", previous: "Original error", code: "100", file: "'
+                        . __FILE__ . '", line: "119"',
+                    'contextRequestData' => [
+                        'serverIp' => '127.0.0.1',
+                        'serverName' => 'localhost',
+                        'requestUri' => '/my/endpoint',
+                        'requestMethod' => 'POST'
+                    ],
+                    'contextUserData' => [
+                        'id' => 'userUri',
+                    ],
+                ]
+            );
+
+        $this->sut->{$level}(
+            'Error description',
+            [
+                AdvancedLogger::CONTEXT_EXCEPTION => $this->createException(),
+            ]
+        );
+    }
+
+    public function levelDataProvider(): array
+    {
+        return [
+            ['emergency'],
+            ['alert'],
+            ['critical'],
+            ['error'],
+            ['warning'],
+            ['notice'],
+            ['info'],
+            ['debug'],
+        ];
     }
 
     private function createException(): Throwable
