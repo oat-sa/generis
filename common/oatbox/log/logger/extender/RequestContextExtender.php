@@ -28,7 +28,7 @@ class RequestContextExtender implements ContextExtenderInterface
     private $requestData = [];
 
     /** @var array */
-    private $serverData = [];
+    private $serverData;
 
     public function withServerData(array $serverData): self
     {
