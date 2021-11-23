@@ -151,7 +151,7 @@ class AdvancedLogger implements LoggerInterface
     private function createMessage(Throwable $exception): string
     {
         return sprintf(
-            '"%s", code: "%s", file: "%s", line: "%s"',
+            '"%s", code: %s, file: "%s", line: %s',
             $exception->getMessage(),
             $exception->getCode(),
             $exception->getFile(),

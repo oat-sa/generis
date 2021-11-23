@@ -74,9 +74,9 @@ class AdvancedLoggerTest extends TestCase
             ->with(
                 'Error description',
                 [
-                    'contextException' => '"Last error", code: "200", file: "'
-                        . __FILE__ . '", line: "116", previous: "Original error", code: "100", file: "'
-                        . __FILE__ . '", line: "119"',
+                    'contextException' => '"Last error", code: 200, file: "'
+                        . __FILE__ . '", line: 116, previous: "Original error", code: 100, file: "'
+                        . __FILE__ . '", line: 119',
                     'contextRequestData' => [
                         'serverIp' => '127.0.0.1',
                         'serverName' => 'localhost',
