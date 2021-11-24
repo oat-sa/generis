@@ -4,7 +4,7 @@ Here you can find help on how to log information in TAO.
 
 ## Advanced Logger
 
-The **advanced log** implements `PSR-3` and is useful to add extra log information, such as:
+The **advanced logger** implements `PSR-3` and is useful to add extra log information, such as:
 
 - User data.
 - Exception trace.
@@ -16,7 +16,7 @@ The **advanced log** implements `PSR-3` and is useful to add extra log informati
 - Check the [AdvancedLogger](./logger/AdvancedLogger.php) for more details.
 - Check the [ContextExtenderInterface](./logger/extender/ContextExtenderInterface.php) for more details.
 
-**IMPORTANT**: The AdvancedLogger is already available from the __DI container__. 
+**IMPORTANT**: The AdvancedLogger is already available from the __DI Container__. 
 
 ### Example:
 
@@ -43,11 +43,21 @@ $someExceptionCaught = new Exception(
  */
 $logger->addContextExtender($extraContextExtender);
 $logger->critical(
-    'My messaged',
+    'My message',
     [
         ContextExtenderInterface::CONTEXT_EXCEPTION => $someExceptionCaught
     ]
 );
+```
+
+The log result will be something like this:
+
+```shell
+[2021-11-24 09:12:11] NULL.CRITICAL: My message {
+    "contextException":"[object] (Exception(code: 2): Error 2 at /var/www/html/index.php:36, Exception(code: 1): Error 1 at /var/www/html/index.php:39)",
+    "contextRequestData":{"serverIp":"172.18.0.3","serverName":"tao.localhost","requestUri":"/taoItems/Items/index","requestMethod":"GET"},
+    "contextUserData":{"id":"https://test-tao-deploy.docker.localhost/ontologies/tao.rdf#superUser"}
+}
 ```
 
 ## Logger
