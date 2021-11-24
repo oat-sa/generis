@@ -40,6 +40,7 @@ class RequestContextExtenderTest extends TestCase
                 'SERVER_NAME' => 'localhost',
                 'REQUEST_URI' => '/my/endpoint',
                 'REQUEST_METHOD' => 'POST',
+                'argv' => ['a', 'b', 'c'],
             ]
         );
     }
@@ -52,7 +53,8 @@ class RequestContextExtenderTest extends TestCase
                     'serverIp' => '127.0.0.1',
                     'serverName' => 'localhost',
                     'requestUri' => '/my/endpoint',
-                    'requestMethod' => 'POST'
+                    'requestMethod' => 'POST',
+                    'argv' => ['a', 'b', 'c'],
                 ],
             ],
             $this->sut->extend(
@@ -71,7 +73,8 @@ class RequestContextExtenderTest extends TestCase
                     'serverIp' => '127.0.0.1',
                     'serverName' => 'localhost',
                     'requestUri' => '/my/endpoint',
-                    'requestMethod' => 'POST'
+                    'requestMethod' => 'POST',
+                    'argv' => ['a', 'b', 'c'],
                 ],
             ],
             $this->sut->extend([])

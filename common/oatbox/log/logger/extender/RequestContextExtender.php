@@ -79,6 +79,10 @@ class RequestContextExtender implements ContextExtenderInterface
             $this->requestData['requestMethod'] = $serverData['REQUEST_METHOD'];
         }
 
+        if (isset($serverData['argv'])) {
+            $this->requestData['argv'] = $serverData['argv'];
+        }
+
         return $this->requestData;
     }
 }

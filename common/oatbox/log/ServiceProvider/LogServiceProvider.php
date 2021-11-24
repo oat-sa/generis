@@ -24,7 +24,6 @@ namespace oat\oatbox\log\ServiceProvider;
 
 use oat\generis\model\DependencyInjection\ContainerServiceProviderInterface;
 use oat\oatbox\log\logger\AdvancedLogger;
-use oat\oatbox\log\logger\extender\ExceptionContextExtender;
 use oat\oatbox\log\logger\extender\RequestContextExtender;
 use oat\oatbox\log\logger\extender\UserContextExtender;
 use oat\oatbox\log\LoggerService;
@@ -39,7 +38,6 @@ class LogServiceProvider implements ContainerServiceProviderInterface
     {
         $services = $configurator->services();
 
-        $services->set(ExceptionContextExtender::class, ExceptionContextExtender::class);
         $services->set(RequestContextExtender::class, RequestContextExtender::class);
         $services->set(UserContextExtender::class, UserContextExtender::class)
             ->args(
@@ -50,12 +48,6 @@ class LogServiceProvider implements ContainerServiceProviderInterface
 
         $services->set(AdvancedLogger::class, AdvancedLogger::class)
             ->public()
-            ->call(
-                'addContextExtender',
-                [
-                    service(ExceptionContextExtender::class),
-                ]
-            )
             ->call(
                 'addContextExtender',
                 [
