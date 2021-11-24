@@ -40,7 +40,6 @@ class RequestContextExtenderTest extends TestCase
                 'SERVER_NAME' => 'localhost',
                 'REQUEST_URI' => '/my/endpoint',
                 'REQUEST_METHOD' => 'POST',
-                'argv' => ['a', 'b', 'c'],
             ]
         );
     }
@@ -54,7 +53,6 @@ class RequestContextExtenderTest extends TestCase
                     'serverName' => 'localhost',
                     'requestUri' => '/my/endpoint',
                     'requestMethod' => 'POST',
-                    'argv' => ['a', 'b', 'c'],
                 ],
             ],
             $this->sut->extend(
@@ -74,6 +72,23 @@ class RequestContextExtenderTest extends TestCase
                     'serverName' => 'localhost',
                     'requestUri' => '/my/endpoint',
                     'requestMethod' => 'POST',
+                ],
+            ],
+            $this->sut->extend([])
+        );
+    }
+
+    public function testExtendWhenCLIRequest(): void
+    {
+        $this->sut->withServerData(
+            [
+                'argv' => ['a', 'b', 'c'],
+            ]
+        );
+
+        $this->assertSame(
+            [
+                ContextExtenderInterface::CONTEXT_REQUEST_DATA => [
                     'argv' => ['a', 'b', 'c'],
                 ],
             ],

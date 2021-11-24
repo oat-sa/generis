@@ -49,14 +49,6 @@ class ContainerCacheWarmup extends ScriptAction
 
     protected function run(): Report
     {
-        //FIXME
-        $logger = $this->getServiceManager()->getContainer()->get(\oat\oatbox\log\logger\AdvancedLogger::class);
-
-        $logger->critical('TEST', [
-            \oat\oatbox\log\logger\extender\ContextExtenderInterface::CONTEXT_EXCEPTION => new \Exception('Message 1', 1, new \Exception('Message 2', 2))
-        ]);
-        //FIXME
-
         $this->getServiceManager()->getContainerBuilder()->forceBuild();
 
         return Report::createSuccess('Dependency Injection Container cache warmed up!');
