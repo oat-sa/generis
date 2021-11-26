@@ -27,7 +27,7 @@ use Psr\Log\LoggerInterface;
 
 class AdvancedLogger implements LoggerInterface
 {
-    public const ACL_LOGGER = self::class . '::ACL_LOGGER';
+    public const ACL_SERVICE_ID = self::class . '::ACL';
 
     /** @var LoggerInterface */
     private $logger;

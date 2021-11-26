@@ -27,7 +27,7 @@ use oat\oatbox\session\SessionService;
 
 class UserContextExtender implements ContextExtenderInterface
 {
-    public const USER_ACL_CONTEXT_EXTENDER = self::class . '::USER_ACL_CONTEXT_EXTENDER';
+    public const ACL_SERVICE_ID = self::class . '::ACL';
 
     /** @var SessionService */
     private $sessionService;

@@ -51,7 +51,7 @@ class LogServiceProvider implements ContainerServiceProviderInterface
             );
 
         $services
-            ->set(UserContextExtender::USER_ACL_CONTEXT_EXTENDER, UserContextExtender::class)
+            ->set(UserContextExtender::ACL_SERVICE_ID, UserContextExtender::class)
             ->args(
                 [
                     service(SessionService::SERVICE_ID),
@@ -87,7 +87,7 @@ class LogServiceProvider implements ContainerServiceProviderInterface
             );
 
         $services
-            ->set(AdvancedLogger::ACL_LOGGER, AdvancedLogger::class)
+            ->set(AdvancedLogger::ACL_SERVICE_ID, AdvancedLogger::class)
             ->public()
             ->args(
                 [
@@ -109,7 +109,7 @@ class LogServiceProvider implements ContainerServiceProviderInterface
             ->call(
                 'addContextExtender',
                 [
-                    service(UserContextExtender::USER_ACL_CONTEXT_EXTENDER),
+                    service(UserContextExtender::ACL_SERVICE_ID),
                 ]
             );
     }
