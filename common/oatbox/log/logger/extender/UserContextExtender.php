@@ -23,19 +23,20 @@ declare(strict_types=1);
 namespace oat\oatbox\log\logger\extender;
 
 use Throwable;
-use oat\oatbox\user\User;
 use oat\oatbox\session\SessionService;
 
 class UserContextExtender implements ContextExtenderInterface
 {
+    public const USER_ACL_CONTEXT_EXTENDER = self::class . '::USER_ACL_CONTEXT_EXTENDER';
+
     /** @var SessionService */
     private $sessionService;
 
     /** @var array|null */
     private $userData;
 
-    /** @var User|null */
-    private $user;
+    /** @var bool */
+    private $extendWithUserRoles = false;
 
     public function __construct(SessionService $sessionService)
     {
@@ -47,26 +48,30 @@ class UserContextExtender implements ContextExtenderInterface
         if (isset($context[self::CONTEXT_USER_DATA]) && is_array($context[self::CONTEXT_USER_DATA])) {
             $context[self::CONTEXT_USER_DATA] = array_merge(
                 $context[self::CONTEXT_USER_DATA],
-                $this->getContextUserData($context)
+                $this->getContextUserData()
             );
 
             return $context;
         }
 
-        $context[self::CONTEXT_USER_DATA] = $this->getContextUserData($context);
+        $context[self::CONTEXT_USER_DATA] = $this->getContextUserData();
 
         return $context;
     }
 
-    private function getContextUserData(array &$context): array
+    public function extendWithUserRoles(): void
+    {
+        $this->extendWithUserRoles = true;
+    }
+
+    private function getContextUserData(): array
     {
         if ($this->userData === null) {
             $this->userData = [
                 'id' => $this->getUserIdentifier(),
             ];
 
-            if ($context[self::CONTEXT_INCLUDE_USER_ROLES] ?? false) {
-                unset($context[self::CONTEXT_INCLUDE_USER_ROLES]);
+            if ($this->extendWithUserRoles) {
                 $this->userData['roles'] = $this->getUserRoles();
             }
         }
@@ -81,7 +86,7 @@ class UserContextExtender implements ContextExtenderInterface
                 return 'anonymous';
             }
 
-            $user = $this->getUser();
+            $user = $this->sessionService->getCurrentUser();
 
             return $user ? $user->getIdentifier() : 'system';
         } catch (Throwable $exception) {
@@ -92,24 +97,11 @@ class UserContextExtender implements ContextExtenderInterface
     private function getUserRoles(): array
     {
         try {
-            return !$this->sessionService->isAnonymous() && $this->getUser()
-                ? $this->getUser()->getRoles()
-                : [];
+            $user = $this->sessionService->getCurrentUser();
+
+            return $user ? $user->getRoles() : [];
         } catch (Throwable $exception) {
             return [];
         }
-    }
-
-    private function getUser(): ?User
-    {
-        if (!isset($this->user)) {
-            try {
-                $this->user = $this->sessionService->getCurrentUser();
-            } catch (Throwable $exception) {
-                $this->user = null;
-            }
-        }
-
-        return $this->user;
     }
 }
