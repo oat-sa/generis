@@ -22,12 +22,13 @@ declare(strict_types=1);
 
 namespace oat\oatbox\log\ServiceProvider;
 
-use oat\generis\model\DependencyInjection\ContainerServiceProviderInterface;
-use oat\oatbox\log\logger\AdvancedLogger;
-use oat\oatbox\log\logger\extender\RequestContextExtender;
-use oat\oatbox\log\logger\extender\UserContextExtender;
 use oat\oatbox\log\LoggerService;
 use oat\oatbox\session\SessionService;
+use oat\oatbox\log\logger\AdvancedLogger;
+use oat\oatbox\log\logger\extender\UserContextExtender;
+use oat\oatbox\log\logger\extender\RequestContextExtender;
+use oat\oatbox\log\logger\extender\ExceptionContextExtender;
+use oat\generis\model\DependencyInjection\ContainerServiceProviderInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
@@ -38,6 +39,7 @@ class LogServiceProvider implements ContainerServiceProviderInterface
     {
         $services = $configurator->services();
 
+        $services->set(ExceptionContextExtender::class, ExceptionContextExtender::class);
         $services->set(RequestContextExtender::class, RequestContextExtender::class);
         $services
             ->set(UserContextExtender::class, UserContextExtender::class)
@@ -58,6 +60,12 @@ class LogServiceProvider implements ContainerServiceProviderInterface
         $services
             ->set(AdvancedLogger::class, AdvancedLogger::class)
             ->public()
+            ->call(
+                'addContextExtender',
+                [
+                    service(ExceptionContextExtender::class),
+                ]
+            )
             ->call(
                 'addContextExtender',
                 [
@@ -82,6 +90,12 @@ class LogServiceProvider implements ContainerServiceProviderInterface
             ->args(
                 [
                     service(LoggerService::SERVICE_ID),
+                ]
+            )
+            ->call(
+                'addContextExtender',
+                [
+                    service(ExceptionContextExtender::class),
                 ]
             )
             ->call(

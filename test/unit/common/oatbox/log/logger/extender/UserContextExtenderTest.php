@@ -33,7 +33,7 @@ use Psr\Log\LoggerInterface;
 
 class UserContextExtenderTest extends TestCase
 {
-    /** @var AdvancedLogger */
+    /** @var UserContextExtender */
     private $sut;
 
     /** @var SessionService|MockObject */
@@ -41,7 +41,6 @@ class UserContextExtenderTest extends TestCase
 
     public function setUp(): void
     {
-        $this->logger = $this->createMock(LoggerInterface::class);
         $this->sessionService = $this->createMock(SessionService::class);
         $this->sut = new UserContextExtender($this->sessionService);
     }
@@ -49,7 +48,8 @@ class UserContextExtenderTest extends TestCase
     public function testExtend(): void
     {
         $user = $this->createMock(User::class);
-        $user->method('getIdentifier')
+        $user
+            ->method('getIdentifier')
             ->willReturn('userUri');
 
         $this->sessionService
@@ -73,7 +73,8 @@ class UserContextExtenderTest extends TestCase
     public function testExtendWithoutUserData(): void
     {
         $user = $this->createMock(User::class);
-        $user->method('getIdentifier')
+        $user
+            ->method('getIdentifier')
             ->willReturn('userUri');
 
         $this->sessionService
@@ -100,6 +101,33 @@ class UserContextExtenderTest extends TestCase
             [
                 ContextExtenderInterface::CONTEXT_USER_DATA => [
                     'id' => 'anonymous',
+                ],
+            ],
+            $this->sut->extend([])
+        );
+    }
+
+    public function testExtendWithUserRoles(): void
+    {
+        $user = $this->createMock(User::class);
+        $user
+            ->method('getIdentifier')
+            ->willReturn('userUri');
+        $user
+            ->method('getRoles')
+            ->willReturn(['userRole']);
+
+        $this->sessionService
+            ->method('getCurrentUser')
+            ->willReturn($user);
+
+        $this->sut->extendWithUserRoles();
+
+        $this->assertSame(
+            [
+                ContextExtenderInterface::CONTEXT_USER_DATA => [
+                    'id' => 'userUri',
+                    'roles' => ['userRole'],
                 ],
             ],
             $this->sut->extend([])
