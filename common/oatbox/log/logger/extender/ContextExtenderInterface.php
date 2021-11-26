@@ -27,6 +27,7 @@ interface ContextExtenderInterface
     public const CONTEXT_EXCEPTION = 'contextException';
     public const CONTEXT_REQUEST_DATA = 'contextRequestData';
     public const CONTEXT_USER_DATA = 'contextUserData';
+    public const CONTEXT_INCLUDE_USER_ROLES = 'contextIncludeUserRoles';
 
     public function extend(array $context): array;
 }
