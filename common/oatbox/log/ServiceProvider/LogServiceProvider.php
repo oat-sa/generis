@@ -31,6 +31,7 @@ use oat\oatbox\log\logger\extender\ExceptionContextExtender;
 use oat\generis\model\DependencyInjection\ContainerServiceProviderInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
+use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
 class LogServiceProvider implements ContainerServiceProviderInterface
@@ -48,14 +49,15 @@ class LogServiceProvider implements ContainerServiceProviderInterface
                     service(SessionService::SERVICE_ID),
                 ]
             );
+
         $services
             ->set(UserContextExtender::USER_ACL_CONTEXT_EXTENDER, UserContextExtender::class)
             ->args(
                 [
                     service(SessionService::SERVICE_ID),
+                    true,
                 ]
-            )
-            ->call('extendWithUserRoles');
+            );
 
         $services
             ->set(AdvancedLogger::class, AdvancedLogger::class)

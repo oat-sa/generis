@@ -36,11 +36,12 @@ class UserContextExtender implements ContextExtenderInterface
     private $userData;
 
     /** @var bool */
-    private $extendWithUserRoles = false;
+    private $extendWithUserRoles;
 
-    public function __construct(SessionService $sessionService)
+    public function __construct(SessionService $sessionService, bool $extendWithUserRoles = false)
     {
         $this->sessionService = $sessionService;
+        $this->extendWithUserRoles = $extendWithUserRoles;
     }
 
     public function extend(array $context): array
@@ -57,11 +58,6 @@ class UserContextExtender implements ContextExtenderInterface
         $context[self::CONTEXT_USER_DATA] = $this->getContextUserData();
 
         return $context;
-    }
-
-    public function extendWithUserRoles(): void
-    {
-        $this->extendWithUserRoles = true;
     }
 
     private function getContextUserData(): array
