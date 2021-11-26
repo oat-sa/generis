@@ -22,8 +22,9 @@ declare(strict_types=1);
 
 namespace oat\oatbox\log\logger\extender;
 
-use oat\oatbox\session\SessionService;
 use Throwable;
+use oat\oatbox\user\User;
+use oat\oatbox\session\SessionService;
 
 class UserContextExtender implements ContextExtenderInterface
 {
@@ -32,6 +33,9 @@ class UserContextExtender implements ContextExtenderInterface
 
     /** @var array|null */
     private $userData;
+
+    /** @var User|null */
+    private $user;
 
     public function __construct(SessionService $sessionService)
     {
@@ -43,23 +47,28 @@ class UserContextExtender implements ContextExtenderInterface
         if (isset($context[self::CONTEXT_USER_DATA]) && is_array($context[self::CONTEXT_USER_DATA])) {
             $context[self::CONTEXT_USER_DATA] = array_merge(
                 $context[self::CONTEXT_USER_DATA],
-                $this->getContextUserData()
+                $this->getContextUserData($context)
             );
 
             return $context;
         }
 
-        $context[self::CONTEXT_USER_DATA] = $this->getContextUserData();
+        $context[self::CONTEXT_USER_DATA] = $this->getContextUserData($context);
 
         return $context;
     }
 
-    private function getContextUserData(): array
+    private function getContextUserData(array &$context): array
     {
         if ($this->userData === null) {
             $this->userData = [
                 'id' => $this->getUserIdentifier(),
             ];
+
+            if ($context[self::CONTEXT_INCLUDE_USER_ROLES] ?? false) {
+                unset($context[self::CONTEXT_INCLUDE_USER_ROLES]);
+                $this->userData['roles'] = $this->getUserRoles();
+            }
         }
 
         return $this->userData;
@@ -72,11 +81,35 @@ class UserContextExtender implements ContextExtenderInterface
                 return 'anonymous';
             }
 
-            $user = $this->sessionService->getCurrentUser();
+            $user = $this->getUser();
 
             return $user ? $user->getIdentifier() : 'system';
         } catch (Throwable $exception) {
             return 'unreachable';
         }
+    }
+
+    private function getUserRoles(): array
+    {
+        try {
+            return !$this->sessionService->isAnonymous() && $this->getUser()
+                ? $this->getUser()->getRoles()
+                : [];
+        } catch (Throwable $exception) {
+            return [];
+        }
+    }
+
+    private function getUser(): ?User
+    {
+        if (!isset($this->user)) {
+            try {
+                $this->user = $this->sessionService->getCurrentUser();
+            } catch (Throwable $exception) {
+                $this->user = null;
+            }
+        }
+
+        return $this->user;
     }
 }
