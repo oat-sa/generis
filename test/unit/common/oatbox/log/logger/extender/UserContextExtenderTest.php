@@ -121,7 +121,7 @@ class UserContextExtenderTest extends TestCase
             ->method('getCurrentUser')
             ->willReturn($user);
 
-        $this->sut->extendWithUserRoles();
+        $sut = new UserContextExtender($this->sessionService, true);
 
         $this->assertSame(
             [
@@ -130,7 +130,7 @@ class UserContextExtenderTest extends TestCase
                     'roles' => ['userRole'],
                 ],
             ],
-            $this->sut->extend([])
+            $sut->extend([])
         );
     }
 }
