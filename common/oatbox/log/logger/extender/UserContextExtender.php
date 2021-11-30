@@ -22,20 +22,26 @@ declare(strict_types=1);
 
 namespace oat\oatbox\log\logger\extender;
 
-use oat\oatbox\session\SessionService;
 use Throwable;
+use oat\oatbox\session\SessionService;
 
 class UserContextExtender implements ContextExtenderInterface
 {
+    public const ACL_SERVICE_ID = self::class . '::ACL';
+
     /** @var SessionService */
     private $sessionService;
 
     /** @var array|null */
     private $userData;
 
-    public function __construct(SessionService $sessionService)
+    /** @var bool */
+    private $extendWithUserRoles;
+
+    public function __construct(SessionService $sessionService, bool $extendWithUserRoles = false)
     {
         $this->sessionService = $sessionService;
+        $this->extendWithUserRoles = $extendWithUserRoles;
     }
 
     public function extend(array $context): array
@@ -60,6 +66,10 @@ class UserContextExtender implements ContextExtenderInterface
             $this->userData = [
                 'id' => $this->getUserIdentifier(),
             ];
+
+            if ($this->extendWithUserRoles) {
+                $this->userData['roles'] = $this->getUserRoles();
+            }
         }
 
         return $this->userData;
@@ -77,6 +87,17 @@ class UserContextExtender implements ContextExtenderInterface
             return $user ? $user->getIdentifier() : 'system';
         } catch (Throwable $exception) {
             return 'unreachable';
+        }
+    }
+
+    private function getUserRoles(): array
+    {
+        try {
+            $user = $this->sessionService->getCurrentUser();
+
+            return $user ? $user->getRoles() : [];
+        } catch (Throwable $exception) {
+            return [];
         }
     }
 }

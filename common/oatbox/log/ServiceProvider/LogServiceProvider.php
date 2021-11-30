@@ -22,14 +22,16 @@ declare(strict_types=1);
 
 namespace oat\oatbox\log\ServiceProvider;
 
-use oat\generis\model\DependencyInjection\ContainerServiceProviderInterface;
-use oat\oatbox\log\logger\AdvancedLogger;
-use oat\oatbox\log\logger\extender\RequestContextExtender;
-use oat\oatbox\log\logger\extender\UserContextExtender;
 use oat\oatbox\log\LoggerService;
 use oat\oatbox\session\SessionService;
+use oat\oatbox\log\logger\AdvancedLogger;
+use oat\oatbox\log\logger\extender\UserContextExtender;
+use oat\oatbox\log\logger\extender\RequestContextExtender;
+use oat\oatbox\log\logger\extender\ExceptionContextExtender;
+use oat\generis\model\DependencyInjection\ContainerServiceProviderInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
+use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
 class LogServiceProvider implements ContainerServiceProviderInterface
@@ -38,16 +40,34 @@ class LogServiceProvider implements ContainerServiceProviderInterface
     {
         $services = $configurator->services();
 
+        $services->set(ExceptionContextExtender::class, ExceptionContextExtender::class);
         $services->set(RequestContextExtender::class, RequestContextExtender::class);
-        $services->set(UserContextExtender::class, UserContextExtender::class)
+        $services
+            ->set(UserContextExtender::class, UserContextExtender::class)
             ->args(
                 [
                     service(SessionService::SERVICE_ID),
                 ]
             );
 
-        $services->set(AdvancedLogger::class, AdvancedLogger::class)
+        $services
+            ->set(UserContextExtender::ACL_SERVICE_ID, UserContextExtender::class)
+            ->args(
+                [
+                    service(SessionService::SERVICE_ID),
+                    true,
+                ]
+            );
+
+        $services
+            ->set(AdvancedLogger::class, AdvancedLogger::class)
             ->public()
+            ->call(
+                'addContextExtender',
+                [
+                    service(ExceptionContextExtender::class),
+                ]
+            )
             ->call(
                 'addContextExtender',
                 [
@@ -63,6 +83,33 @@ class LogServiceProvider implements ContainerServiceProviderInterface
             ->args(
                 [
                     service(LoggerService::SERVICE_ID),
+                ]
+            );
+
+        $services
+            ->set(AdvancedLogger::ACL_SERVICE_ID, AdvancedLogger::class)
+            ->public()
+            ->args(
+                [
+                    service(LoggerService::SERVICE_ID),
+                ]
+            )
+            ->call(
+                'addContextExtender',
+                [
+                    service(ExceptionContextExtender::class),
+                ]
+            )
+            ->call(
+                'addContextExtender',
+                [
+                    service(RequestContextExtender::class),
+                ]
+            )
+            ->call(
+                'addContextExtender',
+                [
+                    service(UserContextExtender::ACL_SERVICE_ID),
                 ]
             );
     }
