@@ -22,7 +22,9 @@ declare(strict_types=1);
 
 namespace oat\generis\model\DependencyInjection;
 
+use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\ServerRequest;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
@@ -38,6 +40,9 @@ class ContainerServiceProvider implements ContainerServiceProviderInterface
         $services->set(ServerRequestInterface::class, ServerRequestInterface::class)
             ->public()
             ->factory(ServerRequest::class . '::fromGlobals');
+
+        $services->set(ResponseInterface::class, Response::class)
+            ->public();
 
         $services->set(LegacyServiceGateway::class, LegacyServiceGateway::class);
     }

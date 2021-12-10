@@ -58,18 +58,101 @@ return [
 ];
 ```
 
-## How is the container started?
+## Actions/Controllers as part of DI container
 
-To start the container, we need to use the ContainerBuilder. Example:
+Now we must add our actions/controllers as DI container services and avoid usage of `ServiceLocator`.
+
+### Option 1 - Services as constructor parameters
+
+**REQUIREMENT**: You need to declare your controller in the DI container as explained above. 
 
 ```php
-use oat\oatbox\service\ServiceManager;
-use oat\generis\model\DependencyInjection\ContainerStarter;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
-$container = (new ContainerStarter(ServiceManager::getServiceManager()))->getContainer();
+class MyActionController
+{
+    /** @var ServerRequestInterface */
+    private $request;
+    
+    /** @var ServerRequestInterface */
+    private $response;
+
+    public function __construct(ServerRequestInterface $request, ResponseInterface $response) 
+    {
+        $this->request = $request;
+        $this->response = $response;
+    }
+
+    public function foo(): ResponseInterface
+    {
+        $bar = $this->request->getQueryParams()['foo'];
+        $this->response->getBody()->write('Hello ' . $bar);
+        
+        return $this->response;
+    }
+}
 ```
 
-**IMPORTANT**: This is already done on `ServiceManager->getContainer()`, so you do not need to do it. 
+### Option 2 - Services as method parameters
+
+**Not recommended**, because you can have multiple implementations of the same service in your container.
+
+```php
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+
+class MyActionController
+{
+    public function foo(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
+    {
+        $bar = $request->getQueryParams()['foo'];
+        $response->getBody()->write('Hello ' . $bar);
+        
+        return $response;
+    }
+}
+```
+
+### Option 3 - Legacy actions/controllers
+
+In this case, you can still use the legacy `actions/controllers`, but also inject parameters in the constructor.
+
+**This should be avoided!**. Ok, but there are still some reasons to use *actions/controllers*.
+
+- Gradually migrate to DI container.
+- Usage of legacy methods when not new implementation still available.
+
+```php
+use oat\tao\model\http\Controller;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorAwareTrait;
+
+class MyLegacyController extends Controller implements ServiceLocatorAwareInterface
+{
+    use ServiceLocatorAwareTrait;
+
+    /** @var ServerRequestInterface */
+    private $request;
+    
+    /** @var ServerRequestInterface */
+    private $response;
+
+    public function __construct(ServerRequestInterface $request, ResponseInterface $response) 
+    {
+        $this->request = $request;
+        $this->response = $response;
+    }
+    
+    public function foo(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
+    {
+        $bar = $request->getQueryParams()['foo'];
+        $response->getBody()->write('Hello ' . $bar);
+        
+        return $response;
+    }
+}
+```
 
 ## Accessing the container inside a legacy controller
 
@@ -91,6 +174,18 @@ class MyController extends Controller implements ServiceLocatorAwareInterface
     }
 }
 ```
+
+## How is the container started?
+
+To start the container, we need to use the ContainerBuilder. Example:
+
+```php
+use oat\oatbox\service\ServiceManager;
+use oat\generis\model\DependencyInjection\ContainerStarter;
+
+$container = (new ContainerStarter(ServiceManager::getServiceManager()))->getContainer();
+```
+**IMPORTANT**: This is already done on `ServiceManager->getContainer()`, so you do not need to do it.
 
 ## Using legacy configuration on new services
 
