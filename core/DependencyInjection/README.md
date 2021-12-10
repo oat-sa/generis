@@ -60,11 +60,12 @@ return [
 
 ## Actions/Controllers as part of DI container
 
-Now we must add our actions/controllers as DI container services and avoid usage of `ServiceLocator`.
+How it works:
+
+- You can optionally add the `actions/controllers` as `DI container services`.
+- If you do not do that, the constructor or methods parameters will be **autowired**. 
 
 ### Option 1 - Services as constructor parameters
-
-**REQUIREMENT**: You need to declare your controller in the DI container as explained above. 
 
 ```php
 use Psr\Http\Message\ResponseInterface;
@@ -118,10 +119,10 @@ class MyActionController
 
 In this case, you can still use the legacy `actions/controllers`, but also inject parameters in the constructor.
 
-**This should be avoided!**. Ok, but there are still some reasons to use *actions/controllers*.
+**Not recommended**, but there are still some reasons to use legacy *actions/controllers*.
 
-- Gradually migrate to DI container.
-- Usage of legacy methods when not new implementation still available.
+- We might be deprecating them gradually while migrating to DI container.
+- You might need legacy methods where you do not have decoupled implementation still available.
 
 ```php
 use oat\tao\model\http\Controller;
@@ -144,12 +145,12 @@ class MyLegacyController extends Controller implements ServiceLocatorAwareInterf
         $this->response = $response;
     }
     
-    public function foo(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
+    public function foo(): ResponseInterface
     {
-        $bar = $request->getQueryParams()['foo'];
-        $response->getBody()->write('Hello ' . $bar);
+        $bar = $this->request->getQueryParams()['foo'];
+        $this->response->getBody()->write('Hello ' . $bar);
         
-        return $response;
+        return $this->response;
     }
 }
 ```
