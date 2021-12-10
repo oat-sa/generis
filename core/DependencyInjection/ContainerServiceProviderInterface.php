@@ -26,5 +26,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 
 interface ContainerServiceProviderInterface
 {
+    public const CONTAINER_SERVICE_ID = 'service_container';
+
     public function __invoke(ContainerConfigurator $configurator): void;
 }

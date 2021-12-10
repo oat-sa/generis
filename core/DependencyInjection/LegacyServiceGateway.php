@@ -22,6 +22,7 @@ declare(strict_types=1);
 
 namespace oat\generis\model\DependencyInjection;
 
+use oat\oatbox\service\ConfigurableService;
 use oat\oatbox\service\ServiceManager;
 use Psr\Container\ContainerInterface;
 
@@ -53,6 +54,11 @@ class LegacyServiceGateway implements ContainerInterface
      */
     public function has($id)
     {
-        return $this->serviceManager->has($id);
+        return $this->serviceManager->has($id) || $this->isConfigurableService($id);
+    }
+
+    private function isConfigurableService($id): bool
+    {
+        return class_exists($id) && is_subclass_of($id, ConfigurableService::class);
     }
 }
