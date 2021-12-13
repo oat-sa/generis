@@ -38,11 +38,7 @@ class UserLanguageService extends ConfigurableService implements UserLanguageSer
      */
     public function getDefaultLanguage()
     {
-        if($this->hasOption(self::OPTION_DEFAULT_LANGUAGE)) {
-            $language = $this->getOption(self::OPTION_DEFAULT_LANGUAGE);
-        }
-
-        return $language ?? DEFAULT_LANG;
+        return $this->getOption(self::OPTION_DEFAULT_LANGUAGE, DEFAULT_LANG);
     }
 
     /**
