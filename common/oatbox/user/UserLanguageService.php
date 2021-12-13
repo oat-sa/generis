@@ -16,7 +16,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2018-2021 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
  */
 
 namespace oat\oatbox\user;
@@ -28,6 +27,7 @@ class UserLanguageService extends ConfigurableService implements UserLanguageSer
 {
     public const OPTION_LOCK_DATA_LANGUAGE = 'lock_data_language';
     public const OPTION_AUTHORING_LANGUAGE = 'authoring_language';
+    public const OPTION_DEFAULT_LANGUAGE = 'default_language';
 
     /** @var ?string */
     private $customInterfaceLanguage;
@@ -38,7 +38,11 @@ class UserLanguageService extends ConfigurableService implements UserLanguageSer
      */
     public function getDefaultLanguage()
     {
-        return DEFAULT_LANG;
+        if($this->hasOption(self::OPTION_DEFAULT_LANGUAGE)) {
+            $language = $this->getOption(self::OPTION_DEFAULT_LANGUAGE);
+        }
+
+        return $language ?? DEFAULT_LANG;
     }
 
     /**
