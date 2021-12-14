@@ -115,46 +115,6 @@ class MyActionController
 }
 ```
 
-### Option 3 - Legacy actions/controllers
-
-In this case, you can still use the legacy `actions/controllers`, but also inject parameters in the constructor.
-
-**Not recommended**, but there are still some reasons to use legacy *actions/controllers*.
-
-- We might be deprecating them gradually while migrating to DI container.
-- You might need legacy methods where you do not have decoupled implementation still available.
-
-```php
-use oat\tao\model\http\Controller;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
-
-class MyLegacyController extends Controller implements ServiceLocatorAwareInterface
-{
-    use ServiceLocatorAwareTrait;
-
-    /** @var ServerRequestInterface */
-    private $request;
-    
-    /** @var ServerRequestInterface */
-    private $response;
-
-    public function __construct(ServerRequestInterface $request, ResponseInterface $response) 
-    {
-        $this->request = $request;
-        $this->response = $response;
-    }
-    
-    public function foo(): ResponseInterface
-    {
-        $bar = $this->request->getQueryParams()['foo'];
-        $this->response->getBody()->write('Hello ' . $bar);
-        
-        return $this->response;
-    }
-}
-```
-
 ## Accessing the container inside a legacy controller
 
 You just need to use this method `$this->getPsrContainer()`.
