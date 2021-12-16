@@ -425,20 +425,20 @@ class core_kernel_classes_Class extends core_kernel_classes_Resource
     }
 
     /**
-     * Short description of method delete
+     * @deprecated Use \oat\tao\model\resources\Repository\ClassRepository::delete() instead
      *
-     * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  boolean deleteReference
-     * @return boolean
+     *
+     * @param  bool deleteReference
+     *
+     * @return bool
      */
     public function delete($deleteReference = false)
     {
-        $parentClass = current($this->getParentClasses()) ?: null;
         $delete = (bool)$this->getImplementation()->delete($this, $deleteReference);
 
         if ($delete) {
-            $this->getEventManager()->trigger(new ClassDeletedEvent($this, $parentClass));
+            $this->getEventManager()->trigger(new ClassDeletedEvent($this));
         }
 
         return $delete;
