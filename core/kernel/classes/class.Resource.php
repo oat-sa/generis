@@ -578,9 +578,16 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
      */
     public function delete($deleteReference = false)
     {
+        try {
+            $parentClass = $this->getOnePropertyValue($this->getProperty(OntologyRdf::RDF_TYPE));
+        } catch (Throwable $exception) {
+            $parentClass = null;
+        }
+
         $returnValue = $this->getImplementation()->delete($this, $deleteReference);
         $eventManager = $this->getServiceManager()->get(EventManager::SERVICE_ID);
-        $eventManager->trigger(new ResourceDeleted($this->getUri()));
+        $eventManager->trigger(new ResourceDeleted($this->getUri(), $parentClass));
+
         return (bool) $returnValue;
     }
 

@@ -22,17 +22,22 @@ declare(strict_types=1);
 
 namespace oat\generis\model\data\event;
 
-use core_kernel_classes_Class;
+use JsonSerializable;
 use oat\oatbox\event\Event;
+use core_kernel_classes_Class;
 
-class ClassDeletedEvent implements Event
+class ClassDeletedEvent implements Event, JsonSerializable
 {
     /** @var core_kernel_classes_Class */
     private $class;
 
-    public function __construct(core_kernel_classes_Class $class)
+    /** @var core_kernel_classes_Class|null */
+    private $parentClass;
+
+    public function __construct(core_kernel_classes_Class $class, core_kernel_classes_Class $parentClass = null)
     {
         $this->class = $class;
+        $this->parentClass = $parentClass;
     }
 
     public function getName(): string
@@ -43,5 +48,21 @@ class ClassDeletedEvent implements Event
     public function getClass(): core_kernel_classes_Class
     {
         return $this->class;
+    }
+
+    public function jsonSerialize(): array
+    {
+        $data = [
+            'uri' => $this->class->getUri(),
+        ];
+
+        if ($this->parentClass !== null) {
+            $data['class'] = [
+                'uri' => $this->parentClass->getUri(),
+                'label' => $this->parentClass->getLabel(),
+            ];
+        }
+
+        return $data;
     }
 }

@@ -15,46 +15,60 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2018 (original work) Open Assessment Technologies SA;
- *
- *
+ * Copyright (c) 2018-2021 (original work) Open Assessment Technologies SA.
  */
+
+declare(strict_types=1);
 
 namespace oat\generis\model\data\event;
 
+use JsonSerializable;
 use oat\oatbox\event\Event;
+use core_kernel_classes_Resource;
 
-/**
- * Class ResourceDeleted
- * @package oat\generis\model\data\event
- */
-class ResourceDeleted implements Event
+class ResourceDeleted implements Event, JsonSerializable
 {
+    /** @var string */
     private $uri;
+
+    /** @var core_kernel_classes_Resource|null */
+    private $parentClass;
 
     /**
      * @param string $uri
      */
-    function __construct($uri)
+    function __construct($uri, core_kernel_classes_Resource $parentClass = null)
     {
         $this->uri = $uri;
+        $this->parentClass = $parentClass;
     }
 
-    /**
-     * Return the URI of the deleted resource
-     * @return string
-     */
-    function getId()
+    function getId(): string
     {
         return $this->uri;
     }
 
     /**
-     * (non-PHPdoc)
-     * @see \oat\oatbox\event\Event::getName()
+     * {@inheritdoc}
      */
     function getName()
     {
         return __CLASS__;
+    }
+
+    public function jsonSerialize(): array
+    {
+        $data = [
+            'uri' => $this->uri,
+        ];
+
+        if ($this->parentClass !== null) {
+            $data['class'] = [
+                'uri' => $this->parentClass->getUri(),
+                'label' => $this->parentClass->getLabel(),
+            ];
+        }
+
+        return $data;
     }
 }
