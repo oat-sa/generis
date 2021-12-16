@@ -434,7 +434,7 @@ class core_kernel_classes_Class extends core_kernel_classes_Resource
      */
     public function delete($deleteReference = false)
     {
-        $parentClass = array_values($this->getParentClasses())[0] ?? null;
+        $parentClass = current($this->getParentClasses()) ?: null;
         $delete = (bool)$this->getImplementation()->delete($this, $deleteReference);
 
         if ($delete) {
