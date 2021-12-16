@@ -569,24 +569,21 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
     }
 
     /**
-     * remove any assignation made to this resource, the uri is consequently
+     * Remove any assignation made to this resource, the uri is consequently
      *
-     * @access public
+     * @deprecated Use \oat\tao\model\resources\Repository\ResourceRepository::delete() instead
+     *
      * @author patrick.plichart@tudor.lu
-     * @param  boolean deleteReference set deleteRefence to true when you need that all reference to this resource are removed.
-     * @return boolean
+     *
+     * @param  bool deleteReference set deleteReference to true when you need that all reference to this resource are removed.
+     *
+     * @return bool
      */
     public function delete($deleteReference = false)
     {
-        try {
-            $parentClass = $this->getOnePropertyValue($this->getProperty(OntologyRdf::RDF_TYPE));
-        } catch (Throwable $exception) {
-            $parentClass = null;
-        }
-
         $returnValue = $this->getImplementation()->delete($this, $deleteReference);
         $eventManager = $this->getServiceManager()->get(EventManager::SERVICE_ID);
-        $eventManager->trigger(new ResourceDeleted($this->getUri(), $parentClass));
+        $eventManager->trigger(new ResourceDeleted($this->getUri()));
 
         return (bool) $returnValue;
     }

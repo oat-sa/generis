@@ -32,12 +32,14 @@ class ClassDeletedEvent implements Event, JsonSerializable
     private $class;
 
     /** @var core_kernel_classes_Class|null */
+    private $selectedClass;
+
+    /** @var core_kernel_classes_Class|null */
     private $parentClass;
 
-    public function __construct(core_kernel_classes_Class $class, core_kernel_classes_Class $parentClass = null)
+    public function __construct(core_kernel_classes_Class $class)
     {
         $this->class = $class;
-        $this->parentClass = $parentClass;
     }
 
     public function getName(): string
@@ -50,14 +52,35 @@ class ClassDeletedEvent implements Event, JsonSerializable
         return $this->class;
     }
 
+    public function setSelectedClass(?core_kernel_classes_Class $class): self
+    {
+        $this->selectedClass = $class;
+
+        return $this;
+    }
+
+    public function setParentClass(?core_kernel_classes_Class $class): self
+    {
+        $this->parentClass = $class;
+
+        return $this;
+    }
+
     public function jsonSerialize(): array
     {
         $data = [
             'uri' => $this->class->getUri(),
         ];
 
+        if ($this->selectedClass !== null && $this->selectedClass !== $this->class) {
+            $data['selected'] = [
+                'uri' => $this->selectedClass->getUri(),
+                'label' => $this->selectedClass->getLabel(),
+            ];
+        }
+
         if ($this->parentClass !== null) {
-            $data['class'] = [
+            $data['parent'] = [
                 'uri' => $this->parentClass->getUri(),
                 'label' => $this->parentClass->getLabel(),
             ];

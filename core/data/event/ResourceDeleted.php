@@ -24,6 +24,7 @@ namespace oat\generis\model\data\event;
 
 use JsonSerializable;
 use oat\oatbox\event\Event;
+use core_kernel_classes_Class;
 use core_kernel_classes_Resource;
 
 class ResourceDeleted implements Event, JsonSerializable
@@ -31,16 +32,18 @@ class ResourceDeleted implements Event, JsonSerializable
     /** @var string */
     private $uri;
 
+    /** @var core_kernel_classes_Class|null */
+    private $selectedClass;
+
     /** @var core_kernel_classes_Resource|null */
     private $parentClass;
 
     /**
      * @param string $uri
      */
-    function __construct($uri, core_kernel_classes_Resource $parentClass = null)
+    function __construct($uri)
     {
         $this->uri = $uri;
-        $this->parentClass = $parentClass;
     }
 
     function getId(): string
@@ -56,14 +59,35 @@ class ResourceDeleted implements Event, JsonSerializable
         return __CLASS__;
     }
 
+    public function setSelectedClass(?core_kernel_classes_Class $class): self
+    {
+        $this->selectedClass = $class;
+
+        return $this;
+    }
+
+    public function setParentClass(?core_kernel_classes_Class $class): self
+    {
+        $this->parentClass = $class;
+
+        return $this;
+    }
+
     public function jsonSerialize(): array
     {
         $data = [
             'uri' => $this->uri,
         ];
 
+        if ($this->selectedClass !== null) {
+            $data['selected'] = [
+                'uri' => $this->selectedClass->getUri(),
+                'label' => $this->selectedClass->getLabel(),
+            ];
+        }
+
         if ($this->parentClass !== null) {
-            $data['class'] = [
+            $data['parent'] = [
                 'uri' => $this->parentClass->getUri(),
                 'label' => $this->parentClass->getLabel(),
             ];
