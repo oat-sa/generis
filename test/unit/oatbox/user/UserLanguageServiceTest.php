@@ -44,7 +44,7 @@ class UserLanguageServiceTest extends TestCase
      */
     public function testGetDefaultLanguage(string $expected, array $serviceParams): void
     {
-        $service = new UserLanguageService($serviceParams);
+        $service = $this->getService($serviceParams);
 
         $this->assertEquals($expected, $service->getDefaultLanguage());
     }
@@ -67,7 +67,7 @@ class UserLanguageServiceTest extends TestCase
 
     public function testGetInterfaceLanguage()
     {
-        $service = new UserLanguageService();
+        $service = $this->getService();
         $user = $this->getUser();
         $this->assertEquals('en-US', $service->getInterfaceLanguage($user));
         $user = $this->getUser('fr-FR');
@@ -76,7 +76,7 @@ class UserLanguageServiceTest extends TestCase
 
     public function testGetInterfaceLanguageWithCustomInterfaceLanguage()
     {
-        $service = new UserLanguageService();
+        $service = $this->getService();
 
         $user = $this->getUser();
         $this->assertEquals('en-US', $service->getInterfaceLanguage($user));
@@ -86,7 +86,7 @@ class UserLanguageServiceTest extends TestCase
 
     public function testGetDataLanguageWithOptionDisabled()
     {
-        $service = new UserLanguageService([
+        $service = $this->getService([
             UserLanguageService::OPTION_LOCK_DATA_LANGUAGE => false
         ]);
 
@@ -98,7 +98,7 @@ class UserLanguageServiceTest extends TestCase
 
     public function testGetDataLanguageWithOptionEnabled()
     {
-        $service = new UserLanguageService([
+        $service = $this->getService([
             UserLanguageService::OPTION_LOCK_DATA_LANGUAGE => true
         ]);
 
@@ -110,7 +110,7 @@ class UserLanguageServiceTest extends TestCase
 
     public function testIsDataLanguageEnabled()
     {
-        $service = new UserLanguageService();
+        $service = $this->getService();
         $this->assertEquals(true, $service->isDataLanguageEnabled());
 
         $service = new UserLanguageService([
@@ -118,7 +118,7 @@ class UserLanguageServiceTest extends TestCase
         ]);
         $this->assertEquals(true, $service->isDataLanguageEnabled());
 
-        $service = new UserLanguageService([
+        $service = $this->getService([
             UserLanguageService::OPTION_LOCK_DATA_LANGUAGE => true
         ]);
         $this->assertEquals(false, $service->isDataLanguageEnabled());
@@ -138,5 +138,14 @@ class UserLanguageServiceTest extends TestCase
             ->willReturn($uiLg === null ? [] : [$uiLg]);
 
         return $user->reveal();
+    }
+
+    /**
+     * @param array $options
+     * @return UserLanguageService
+     */
+    private function getService($options = [])
+    {
+        return new UserLanguageService($options);
     }
 }
