@@ -75,31 +75,52 @@ class core_kernel_users_GenerisUser extends common_user_User implements UserInte
         } elseif (!isset($this->cache[$property])) {
             $this->cache[$property] = $this->getUncached($property);
         }
+
         return $this->cache[$property];
     }
 
     private function getUncached($property)
     {
-        $value = [];
         switch ($property) {
             case GenerisRdf::PROPERTY_USER_DEFLG:
+                $lang = $this->findLanguage($property);
+                return !empty($lang) ? $lang : [DEFAULT_LANG];
+
             case GenerisRdf::PROPERTY_USER_UILG:
-                $resource = $this->getUserResource()->getOnePropertyValue(new core_kernel_classes_Property($property));
-                if (!is_null($resource)) {
-                    if ($resource instanceof core_kernel_classes_Resource) {
-                        $value = (string)$resource->getUniquePropertyValue(new core_kernel_classes_Property(OntologyRdf::RDF_VALUE));
-                        return [$value];
-                    } else {
-                        common_Logger::w('Language ' . $resource . ' is not a resource');
-                        return [DEFAULT_LANG];
-                    }
-                } else {
-                    return [DEFAULT_LANG];
-                }
-                break;
+                return $this->findLanguage($property);
+
             default:
                 return $this->getUserResource()->getPropertyValues(new core_kernel_classes_Property($property));
         }
+    }
+
+    /**
+     * @param $property
+     * @return array|string[]
+     * @throws common_Exception
+     * @throws core_kernel_classes_EmptyProperty
+     * @throws core_kernel_persistence_Exception
+     */
+    private function findLanguage($property): array
+    {
+        $language = [];
+        $resource = $this->getUserResource()->getOnePropertyValue(
+            new core_kernel_classes_Property($property)
+        );
+
+        if (!is_null($resource)) {
+            if ($resource instanceof core_kernel_classes_Resource) {
+                $language =  [
+                    (string) $resource->getUniquePropertyValue(
+                        new core_kernel_classes_Property(OntologyRdf::RDF_VALUE)
+                    )
+                ];
+            } else {
+                common_Logger::w("Language {$resource} is not a resource");
+            }
+        }
+
+        return $language;
     }
     
     public function refresh()
