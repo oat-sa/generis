@@ -64,11 +64,8 @@ class UserLanguageService extends ConfigurableService implements UserLanguageSer
         }
 
         $lang = $user->getPropertyValues(GenerisRdf::PROPERTY_USER_UILG);
-        if(!empty($lang)) {
-            return (string)current($lang);
-        }
 
-        return $this->getOption(self::OPTION_DEFAULT_LANGUAGE, DEFAULT_LANG);
+        return empty($lang) ? $this->getOption(self::OPTION_DEFAULT_LANGUAGE, DEFAULT_LANG) : (string)current($lang);
     }
 
     /**
