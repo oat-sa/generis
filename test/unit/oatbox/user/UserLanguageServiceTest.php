@@ -59,18 +59,18 @@ class UserLanguageServiceTest extends TestCase
     public function getInterfaceLanguageDataProvider(): array
     {
         return [
-            'OPTION_DEFAULT_LANGUAGE=nb-NO, User UI Language not set' => [
+            'OPTION_INTERFACE_LANGUAGE=nb-NO, User UI Language not set' => [
                 'expected' => 'nb-NO',
                 'user' => $this->getUser(),
                 'serviceParams' => [
-                    UserLanguageService::OPTION_DEFAULT_LANGUAGE => 'nb-NO'
+                    UserLanguageService::OPTION_INTERFACE_LANGUAGE => 'nb-NO'
                 ],
             ],
-            'OPTION_DEFAULT_LANGUAGE=en-US, User UI Language set to fr-FR' => [
+            'OPTION_INTERFACE_LANGUAGE=en-US, User UI Language set to fr-FR' => [
                 'expected' => 'fr-FR',
                 'user' => $this->getUser('fr-FR'),
                 'serviceParams' => [
-                    UserLanguageService::OPTION_DEFAULT_LANGUAGE => 'en-US'
+                    UserLanguageService::OPTION_INTERFACE_LANGUAGE => 'en-US'
                 ],
             ],
             'OPTION_DEFAULT_LANGUAGE not set, User UI Language not set' => [
