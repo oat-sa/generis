@@ -27,7 +27,7 @@ class UserLanguageService extends ConfigurableService implements UserLanguageSer
 {
     public const OPTION_LOCK_DATA_LANGUAGE = 'lock_data_language';
     public const OPTION_AUTHORING_LANGUAGE = 'authoring_language';
-    public const OPTION_DEFAULT_LANGUAGE = 'default_language';
+    public const OPTION_INTERFACE_LANGUAGE = 'interface_language';
 
     /** @var ?string */
     private $customInterfaceLanguage;
@@ -65,7 +65,7 @@ class UserLanguageService extends ConfigurableService implements UserLanguageSer
 
         $lang = $user->getPropertyValues(GenerisRdf::PROPERTY_USER_UILG);
 
-        return empty($lang) ? $this->getOption(self::OPTION_DEFAULT_LANGUAGE, DEFAULT_LANG) : (string)current($lang);
+        return empty($lang) ? $this->getOption(self::OPTION_INTERFACE_LANGUAGE, DEFAULT_LANG) : (string)current($lang);
     }
 
     /**
