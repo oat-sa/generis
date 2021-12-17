@@ -569,7 +569,7 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
     /**
      * Remove any assignation made to this resource, the uri is consequently
      *
-     * @deprecated Use \oat\tao\model\resources\Repository\ResourceRepository::delete() instead
+     * @deprecated Use \oat\generis\model\resource\Repository\ResourceRepository::delete() instead
      *
      * @author patrick.plichart@tudor.lu
      *
