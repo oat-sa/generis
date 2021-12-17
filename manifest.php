@@ -1,7 +1,5 @@
 <?php
 
-use oat\generis\scripts\update\Updater;
-
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -17,14 +15,18 @@ use oat\generis\scripts\update\Updater;
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2020 (original work) Open Assessment Technologies SA;
+ * Copyright (c) 2020-2021 (original work) Open Assessment Technologies SA;
  */
 
-use oat\generis\model\DependencyInjection\ContainerServiceProvider;
-use oat\generis\scripts\install\RegisterServices;
-use oat\generis\scripts\install\SetupDefaultKvPersistence;
+declare(strict_types=1);
+
+use oat\generis\scripts\update\Updater;
 use oat\generis\scripts\install\TaskQueue;
+use oat\generis\scripts\install\RegisterServices;
 use oat\oatbox\log\ServiceProvider\LogServiceProvider;
+use oat\generis\model\resource\ResourceServiceProvider;
+use oat\generis\scripts\install\SetupDefaultKvPersistence;
+use oat\generis\model\DependencyInjection\ContainerServiceProvider;
 
 /**
  * @author CRP Henri Tudor - TAO Team - {@link http://www.tao.lu}
@@ -49,12 +51,13 @@ return [
         'php' => [
             TaskQueue::class,
             SetupDefaultKvPersistence::class,
-            RegisterServices::class
+            RegisterServices::class,
         ],
     ],
     'update' => Updater::class,
     'containerServiceProviders' => [
         ContainerServiceProvider::class,
         LogServiceProvider::class,
-    ]
+        ResourceServiceProvider::class,
+    ],
 ];

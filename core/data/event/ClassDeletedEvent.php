@@ -73,14 +73,14 @@ class ClassDeletedEvent implements Event, JsonSerializable
         ];
 
         if ($this->selectedClass !== null && $this->selectedClass !== $this->class) {
-            $data['selected'] = [
+            $data['selectedClass'] = [
                 'uri' => $this->selectedClass->getUri(),
                 'label' => $this->selectedClass->getLabel(),
             ];
         }
 
         if ($this->parentClass !== null) {
-            $data['parent'] = [
+            $data['parentClass'] = [
                 'uri' => $this->parentClass->getUri(),
                 'label' => $this->parentClass->getLabel(),
             ];
