@@ -39,49 +39,51 @@ class UserLanguageServiceTest extends TestCase
         }
     }
 
+    public function testGetDefaultLanguage(): void
+    {
+        $service = $this->getService();
+
+        $this->assertEquals(DEFAULT_LANG, $service->getDefaultLanguage());
+    }
+
     /**
-     * @dataProvider getDefaultLanguageDataProvider
+     * @dataProvider getInterfaceLanguageDataProvider
      */
-    public function testGetDefaultLanguage(string $expected, array $serviceParams): void
+    public function testGetInterfaceLanguage(string $expected, User $user, array $serviceParams): void
     {
         $service = $this->getService($serviceParams);
 
-        $this->assertEquals($expected, $service->getDefaultLanguage());
+        $this->assertEquals($expected, $service->getInterfaceLanguage($user));
     }
 
-    public function getDefaultLanguageDataProvider(): array
+    public function getInterfaceLanguageDataProvider(): array
     {
         return [
-            'With OPTION_DEFAULT_LANGUAGE set' => [
+            'OPTION_DEFAULT_LANGUAGE=nb-NO, User UI Language not set' => [
                 'expected' => 'nb-NO',
+                'user' => $this->getUser(),
                 'serviceParams' => [
                     UserLanguageService::OPTION_DEFAULT_LANGUAGE => 'nb-NO'
                 ],
             ],
-            'With OPTION_DEFAULT_LANGUAGE not set' => [
-                'expected' => DEFAULT_LANG,
+            'OPTION_DEFAULT_LANGUAGE=en-US, User UI Language set to fr-FR' => [
+                'expected' => 'fr-FR',
+                'user' => $this->getUser('fr-FR'),
+                'serviceParams' => [
+                    UserLanguageService::OPTION_DEFAULT_LANGUAGE => 'en-US'
+                ],
+            ],
+            'OPTION_DEFAULT_LANGUAGE not set, User UI Language not set' => [
+                'expected' => 'en-US', // should match DEFAULT_LANG from setUp
+                'user' => $this->getUser(),
+                'serviceParams' => [],
+            ],
+            'OPTION_DEFAULT_LANGUAGE not set, User UI Language set to fr-FR' => [
+                'expected' => 'fr-FR',
+                'user' => $this->getUser('fr-FR'),
                 'serviceParams' => [],
             ],
         ];
-    }
-
-    public function testGetInterfaceLanguage()
-    {
-        $service = $this->getService();
-        $user = $this->getUser();
-        $this->assertEquals('en-US', $service->getInterfaceLanguage($user));
-        $user = $this->getUser('fr-FR');
-        $this->assertEquals('fr-FR', $service->getInterfaceLanguage($user));
-    }
-
-    public function testGetInterfaceLanguageWithCustomInterfaceLanguage()
-    {
-        $service = $this->getService();
-
-        $user = $this->getUser();
-        $this->assertEquals('en-US', $service->getInterfaceLanguage($user));
-        $user = $this->getUser('fr-FR');
-        $this->assertEquals('fr-FR', $service->getInterfaceLanguage($user));
     }
 
     public function testGetDataLanguageWithOptionDisabled()
