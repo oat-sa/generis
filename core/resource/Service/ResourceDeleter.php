@@ -44,14 +44,14 @@ class ResourceDeleter implements ResourceDeleterInterface
     public function delete(core_kernel_classes_Resource $resource): void
     {
         try {
-            $this->resourceRepository->delete(
-                new ResourceRepositoryContext(
-                    [
-                        ResourceRepositoryContext::PARAM_RESOURCE => $resource,
-                        ResourceRepositoryContext::PARAM_PARENT_CLASS => $this->getParentClass($resource),
-                    ]
-                )
-            );
+            $context = new ResourceRepositoryContext([ResourceRepositoryContext::PARAM_RESOURCE => $resource]);
+            $parentClass = $this->getParentClass($resource);
+
+            if ($parentClass !== null) {
+                $context->setParameter(ResourceRepositoryContext::PARAM_PARENT_CLASS, $parentClass);
+            }
+
+            $this->resourceRepository->delete($context);
         } catch (Throwable $exception) {
             throw new ResourceDeletionException(
                 sprintf(
