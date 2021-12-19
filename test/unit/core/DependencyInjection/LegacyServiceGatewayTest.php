@@ -25,6 +25,7 @@ namespace oat\generis\test\unit\model\DependencyInjection;
 use oat\generis\model\DependencyInjection\LegacyServiceGateway;
 use oat\generis\test\TestCase;
 use oat\oatbox\service\ServiceManager;
+use oat\tao\model\routing\ControllerService;
 use PHPUnit\Framework\MockObject\MockObject;
 use stdClass;
 
@@ -76,5 +77,14 @@ class LegacyServiceGatewayTest extends TestCase
             ->willReturn(true);
 
         $this->assertTrue($this->subject->has('someId'));
+    }
+
+    public function testHasWillReturnTrueForConfigurableService(): void
+    {
+        $this->serviceManager
+            ->method('has')
+            ->willReturn(false);
+
+        $this->assertTrue($this->subject->has(ControllerService::class));
     }
 }

@@ -57,6 +57,10 @@ return [
     ]
 ];
 ```
+## Actions/Controllers and DI container
+
+You can find the documentation in **tao-core extension** on 
+the [routing section](https://github.com/oat-sa/tao-core/tree/master/models/classes/routing).
 
 ## How is the container started?
 
@@ -68,29 +72,7 @@ use oat\generis\model\DependencyInjection\ContainerStarter;
 
 $container = (new ContainerStarter(ServiceManager::getServiceManager()))->getContainer();
 ```
-
-**IMPORTANT**: This is already done on `ServiceManager->getContainer()`, so you do not need to do it. 
-
-## Accessing the container inside a legacy controller
-
-You just need to use this method `$this->getPsrContainer()`.
-
-```php
-use oat\tao\model\http\Controller;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
-
-class MyController extends Controller implements ServiceLocatorAwareInterface
-{
-    use ServiceLocatorAwareTrait;
-
-    public function myMethod(): void
-    {
-        $service = $this->getPsrContainer()->get(MyService::class);
-        // Other logic...
-    }
-}
-```
+**IMPORTANT**: This is already done on `ServiceManager->getContainer()`, so you do not need to do it.
 
 ## Using legacy configuration on new services
 
