@@ -40,6 +40,7 @@ class ResourceServiceProvider implements ContainerServiceProviderInterface
 
         $services
             ->set(ClassRepository::class, ClassRepository::class)
+            ->public()
             ->args(
                 [
                     service(Ontology::SERVICE_ID),
@@ -49,6 +50,7 @@ class ResourceServiceProvider implements ContainerServiceProviderInterface
 
         $services
             ->set(ResourceRepository::class, ResourceRepository::class)
+            ->public()
             ->args(
                 [
                     service(Ontology::SERVICE_ID),
