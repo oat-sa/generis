@@ -15,22 +15,28 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2018 (original work) Open Assessment Technologies SA;
- *
- *
+ * Copyright (c) 2018-2021 (original work) Open Assessment Technologies SA.
  */
+
+declare(strict_types=1);
 
 namespace oat\generis\model\data\event;
 
+use JsonSerializable;
 use oat\oatbox\event\Event;
+use core_kernel_classes_Class;
+use core_kernel_classes_Resource;
 
-/**
- * Class ResourceDeleted
- * @package oat\generis\model\data\event
- */
-class ResourceDeleted implements Event
+class ResourceDeleted implements Event, JsonSerializable
 {
+    /** @var string */
     private $uri;
+
+    /** @var core_kernel_classes_Class|null */
+    private $selectedClass;
+
+    /** @var core_kernel_classes_Resource|null */
+    private $parentClass;
 
     /**
      * @param string $uri
@@ -40,21 +46,53 @@ class ResourceDeleted implements Event
         $this->uri = $uri;
     }
 
-    /**
-     * Return the URI of the deleted resource
-     * @return string
-     */
-    function getId()
+    function getId(): string
     {
         return $this->uri;
     }
 
     /**
-     * (non-PHPdoc)
-     * @see \oat\oatbox\event\Event::getName()
+     * {@inheritdoc}
      */
     function getName()
     {
         return __CLASS__;
+    }
+
+    public function setSelectedClass(?core_kernel_classes_Class $class): self
+    {
+        $this->selectedClass = $class;
+
+        return $this;
+    }
+
+    public function setParentClass(?core_kernel_classes_Class $class): self
+    {
+        $this->parentClass = $class;
+
+        return $this;
+    }
+
+    public function jsonSerialize(): array
+    {
+        $data = [
+            'uri' => $this->uri,
+        ];
+
+        if ($this->selectedClass !== null) {
+            $data['selectedClass'] = [
+                'uri' => $this->selectedClass->getUri(),
+                'label' => $this->selectedClass->getLabel(),
+            ];
+        }
+
+        if ($this->parentClass !== null) {
+            $data['parentClass'] = [
+                'uri' => $this->parentClass->getUri(),
+                'label' => $this->parentClass->getLabel(),
+            ];
+        }
+
+        return $data;
     }
 }

@@ -109,19 +109,6 @@ class OntologyRdfsTest extends GenerisTestCase
         $this->assertNotEquals($resource, $resourceClone);
     }
 
-    /**
-     * @dataProvider getOntologies
-     */
-    public function testDeleteInstance(Ontology $model)
-    {
-        $class = $model->getClass('http://testing#class');
-        $resource = $class->createInstance('sample');
-        $this->assertInstanceOf(\core_kernel_classes_Resource::class, $resource);
-        $this->assertTrue($resource->exists());
-        $resource->delete();
-        $this->assertFalse($resource->exists());
-    }
-
     public function getOntologies()
     {
         return [

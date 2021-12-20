@@ -18,7 +18,7 @@
  * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
  *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- *               2017 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
+ *               2017-2021 (update and modification) Open Assessment Technologies SA;
  */
 
 use oat\generis\model\OntologyRdf;
@@ -26,22 +26,20 @@ use oat\generis\model\OntologyRdfs;
 use oat\oatbox\event\EventAggregator;
 use oat\oatbox\service\ServiceManager;
 use oat\generis\model\OntologyAwareTrait;
-use oat\oatbox\event\EventManager;
-use oat\generis\model\data\event\ResourceUpdated;
-use oat\generis\model\data\event\ResourceDeleted;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
+use oat\generis\model\data\event\ResourceUpdated;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use oat\generis\model\resource\Repository\ResourceRepository;
+use oat\generis\model\resource\Context\ResourceRepositoryContext;
+use oat\generis\model\resource\Contract\ResourceRepositoryInterface;
 
 /**
  * Resource implements rdf:resource container identified by an uri (a string).
  * Methods enable meta data management for this resource
  *
- * @access public
  * @author patrick.plichart@tudor.lu
- * @package generis
+ *
  * @see http://www.w3.org/RDF/
-
- * @version v1.0
  */
 class core_kernel_classes_Resource extends core_kernel_classes_Container
 {
@@ -569,19 +567,32 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
     }
 
     /**
-     * remove any assignation made to this resource, the uri is consequently
+     * Remove any assignation made to this resource, the uri is consequently
      *
-     * @access public
+     * @deprecated Use \oat\generis\model\resource\Repository\ResourceRepository::delete() instead
+     *
      * @author patrick.plichart@tudor.lu
-     * @param  boolean deleteReference set deleteRefence to true when you need that all reference to this resource are removed.
-     * @return boolean
+     *
+     * @param  bool deleteReference set deleteReference to true when you need that all reference to this resource are removed.
+     *
+     * @return bool
      */
     public function delete($deleteReference = false)
     {
-        $returnValue = $this->getImplementation()->delete($this, $deleteReference);
-        $eventManager = $this->getServiceManager()->get(EventManager::SERVICE_ID);
-        $eventManager->trigger(new ResourceDeleted($this->getUri()));
-        return (bool) $returnValue;
+        try {
+            $this->getResourceRepository()->delete(
+                new ResourceRepositoryContext(
+                    [
+                        ResourceRepositoryContext::PARAM_RESOURCE => $this,
+                        ResourceRepositoryContext::PARAM_DELETE_REFERENCE => $deleteReference,
+                    ]
+                )
+            );
+
+            return true;
+        } catch (Throwable $exception) {
+            return false;
+        }
     }
 
 
@@ -767,5 +778,10 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
         /** @var EventAggregator $eventAggregator */
         $eventAggregator = $this->getServiceManager()->get(EventAggregator::SERVICE_ID);
         $eventAggregator->put($this->getUri(), new ResourceUpdated($this));
+    }
+
+    private function getResourceRepository(): ResourceRepositoryInterface
+    {
+        return $this->getServiceManager()->getContainer()->get(ResourceRepository::class);
     }
 }
