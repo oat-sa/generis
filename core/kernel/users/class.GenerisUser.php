@@ -111,20 +111,20 @@ class core_kernel_users_GenerisUser extends common_user_User implements UserInte
         if (is_null($resource)) {
             return $language;
         }
-        
+
         if (!$resource instanceof core_kernel_classes_Resource) {
             common_Logger::w("Language {$resource} is not a resource");
-            
+
             return $language;
         }
-        
-       return [
+
+        return [
            (string) $resource->getUniquePropertyValue(
                new core_kernel_classes_Property(OntologyRdf::RDF_VALUE)
            )
-       ];
+        ];
     }
-    
+
     public function refresh()
     {
         $this->roles = false;
