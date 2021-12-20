@@ -18,27 +18,27 @@
  * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
  *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- *               2017 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
+ *               2017-2021 (update and modification) Open Assessment Technologies SA.
  */
 
-use oat\generis\model\data\event\ClassDeletedEvent;
-use oat\generis\model\data\event\ResourceCreated;
 use oat\generis\model\OntologyRdf;
-use oat\generis\model\resource\ResourceCollection;
 use oat\oatbox\event\EventManager;
 use oat\oatbox\event\EventManagerAwareTrait;
+use oat\generis\model\data\event\ResourceCreated;
+use oat\generis\model\resource\ResourceCollection;
+use oat\generis\model\resource\Repository\ClassRepository;
+use oat\generis\model\resource\Context\ResourceRepositoryContext;
+use oat\generis\model\resource\Contract\ResourceRepositoryInterface;
 
 /**
  * The class of rdfs:classes. It implements basic tests like isSubClassOf(Class
  * instances, properties and subclasses retrieval, but also enable to edit it
  * setSubClassOf setProperty, etc.
  *
- *
  * @author patrick.plichart@tudor.lu
- * @package generis
+ *
  * @see http://www.w3.org/RDF/
  * @see http://www.w3.org/TR/rdf-schema/
- *
  */
 class core_kernel_classes_Class extends core_kernel_classes_Resource
 {
@@ -425,22 +425,30 @@ class core_kernel_classes_Class extends core_kernel_classes_Resource
     }
 
     /**
-     * Short description of method delete
+     * @deprecated Use \oat\generis\model\resource\Repository\ClassRepository::delete() instead
      *
-     * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  boolean deleteReference
-     * @return boolean
+     *
+     * @param  bool deleteReference
+     *
+     * @return bool
      */
     public function delete($deleteReference = false)
     {
-        $delete = (bool)$this->getImplementation()->delete($this, $deleteReference);
+        try {
+            $this->getClassRepository()->delete(
+                new ResourceRepositoryContext(
+                    [
+                        ResourceRepositoryContext::PARAM_CLASS => $this,
+                        ResourceRepositoryContext::PARAM_DELETE_REFERENCE => $deleteReference,
+                    ]
+                )
+            );
 
-        if ($delete) {
-            $this->getEventManager()->trigger(new ClassDeletedEvent($this));
+            return true;
+        } catch (Throwable $exception) {
+            return false;
         }
-
-        return $delete;
     }
 
     /**
@@ -457,5 +465,10 @@ class core_kernel_classes_Class extends core_kernel_classes_Resource
         // If the Class has one or more direct parent classes (this rdfs:isSubClassOf C),
         // we know that the class exists.
         return (bool) (count($this->getParentClasses(false)) > 0);
+    }
+
+    private function getClassRepository(): ResourceRepositoryInterface
+    {
+        return $this->getServiceManager()->getContainer()->get(ClassRepository::class);
     }
 }
