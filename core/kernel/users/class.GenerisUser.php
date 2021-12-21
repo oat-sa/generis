@@ -95,17 +95,16 @@ class core_kernel_users_GenerisUser extends common_user_User implements UserInte
     }
 
     /**
-     * @param $property
      * @return array|string[]
      * @throws common_Exception
      * @throws core_kernel_classes_EmptyProperty
      * @throws core_kernel_persistence_Exception
      */
-    private function findLanguage($property): array
+    private function findLanguage(string $propertyURI): array
     {
         $language = [];
         $resource = $this->getUserResource()->getOnePropertyValue(
-            new core_kernel_classes_Property($property)
+            new core_kernel_classes_Property($propertyURI)
         );
 
         if (is_null($resource)) {
