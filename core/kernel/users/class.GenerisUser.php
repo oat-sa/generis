@@ -84,7 +84,8 @@ class core_kernel_users_GenerisUser extends common_user_User implements UserInte
         switch ($property) {
             case GenerisRdf::PROPERTY_USER_DEFLG:
                 $lang = $this->findLanguage($property);
-                return !empty($lang) ? $lang : [DEFAULT_LANG];
+
+                return $lang ?: [DEFAULT_LANG];
 
             case GenerisRdf::PROPERTY_USER_UILG:
                 return $this->findLanguage($property);
