@@ -21,9 +21,9 @@
 
 declare(strict_types = 1);
 
+use oat\oatbox\reporting\Report;
 use oat\oatbox\service\ServiceManagerAwareTrait;
 use oat\oatbox\service\ServiceManagerAwareInterface;
-use common_report_Report as Report;
 
 /**
  * Short description of class common_ext_ExtensionInstaller
@@ -36,7 +36,6 @@ use common_report_Report as Report;
  */
 abstract class common_ext_ExtensionUpdater extends common_ext_ExtensionHandler implements ServiceManagerAwareInterface
 {
-
     use ServiceManagerAwareTrait;
 
     /** @var Report[] */

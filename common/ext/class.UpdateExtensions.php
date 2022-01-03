@@ -21,13 +21,14 @@
 
 declare(strict_types = 1);
 
+use Laminas\ServiceManager\ServiceLocatorAwareInterface;
+use Laminas\ServiceManager\ServiceLocatorAwareTrait;
 use oat\oatbox\action\Action;
 use oat\oatbox\log\LoggerAwareTrait;
-use common_report_Report as Report;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
+use oat\oatbox\reporting\Report;
 use Psr\Log\LoggerAwareInterface;
 use oat\oatbox\cache\SimpleCache;
+
 /**
  * Run the extension updater
  *
@@ -44,7 +45,7 @@ class common_ext_UpdateExtensions implements Action, ServiceLocatorAwareInterfac
      * (non-PHPdoc)
      * @see \oat\oatbox\action\Action::__invoke()
      */
-    public function __invoke($params)
+    public function __invoke($params): Report
     {
         $extManager = $this->getExtensionManager();
         $merged = array_merge(
