@@ -216,6 +216,7 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
         $cleanColumns = $this->clearQuoteColumns($data);
 
         if (is_string(key($types))) {
+            $types = $this->filterNotNumericParamTypes($types);
             $types = $this->clearQuoteColumns($types);
         }
 
@@ -276,5 +277,12 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
         }
 
         return $cleanColumnsAssociatedArray;
+    }
+
+    private function filterNotNumericParamTypes(array $types): array
+    {
+        return array_filter($types, static function ($element) {
+            return is_int($element);
+        });
     }
 }
