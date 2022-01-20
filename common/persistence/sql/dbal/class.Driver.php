@@ -31,7 +31,6 @@ use Doctrine\DBAL\Driver\ResultStatement;
 use Doctrine\DBAL\Driver\Statement;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\Logging\SQLLogger;
-use oat\generis\persistence\sql\dbal\MasterSlaveConnection\MasterSlaveSqlLogger;
 
 /**
  * Dbal Driver
@@ -216,10 +215,12 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
      */
     public function insert($tableName, array $data, array $types = [])
     {
-        $cleanColumns = [];
-        foreach ($data as $columnName => $value) {
-            $cleanColumns[$this->getPlatForm()->quoteIdentifier($columnName)] = $value;
+        $cleanColumns = $this->clearQuoteColumns($data);
+
+        if (is_string(key($types))) {
+            $types = $this->clearQuoteColumns($types);
         }
+
         return $this->connection->insert($tableName, $cleanColumns, $types);
     }
 
@@ -264,5 +265,18 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
     public function transactional(Closure $func)
     {
         return $this->connection->transactional($func);
+    }
+
+    /**
+     * add quotes to column names in column associated array
+     */
+    private function clearQuoteColumns(array $columnsAssociatedArray): array
+    {
+        $cleanColumnsAssociatedArray = [];
+        foreach ($columnsAssociatedArray as $column => $associatedValue) {
+            $cleanColumnsAssociatedArray[$this->getPlatForm()->quoteIdentifier($column)] = $associatedValue;
+        }
+
+        return $cleanColumnsAssociatedArray;
     }
 }
