@@ -213,11 +213,11 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
      */
     public function insert($tableName, array $data, array $types = [])
     {
-        $cleanColumns = $this->clearQuoteColumns($data);
+        $cleanColumns = $this->quoteColumnsMap($data);
 
         if (is_string(key($types))) {
             $types = $this->filterNotNumericParamTypes($types);
-            $types = $this->clearQuoteColumns($types);
+            $types = $this->quoteColumnsMap($types);
         }
 
         return $this->connection->insert($tableName, $cleanColumns, $types);
@@ -269,20 +269,18 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
     /**
      * add quotes to column names in column associated array
      */
-    private function clearQuoteColumns(array $columnsAssociatedArray): array
+    private function quoteColumnsMap(array $columnsMap): array
     {
-        $cleanColumnsAssociatedArray = [];
-        foreach ($columnsAssociatedArray as $column => $associatedValue) {
-            $cleanColumnsAssociatedArray[$this->getPlatForm()->quoteIdentifier($column)] = $associatedValue;
+        $quotedColumnsMap = [];
+        foreach ($columnsMap as $column => $associatedValue) {
+            $quotedColumnsMap[$this->getPlatForm()->quoteIdentifier($column)] = $associatedValue;
         }
 
-        return $cleanColumnsAssociatedArray;
+        return $quotedColumnsMap;
     }
 
     private function filterNotNumericParamTypes(array $types): array
     {
-        return array_filter($types, static function ($element) {
-            return is_int($element);
-        });
+        return array_filter($types, 'is_int');
     }
 }
