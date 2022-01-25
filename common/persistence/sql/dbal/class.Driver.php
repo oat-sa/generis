@@ -31,7 +31,6 @@ use Doctrine\DBAL\Driver\ResultStatement;
 use Doctrine\DBAL\Driver\Statement;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\Logging\SQLLogger;
-use oat\generis\persistence\sql\dbal\MasterSlaveConnection\MasterSlaveSqlLogger;
 
 /**
  * Dbal Driver
@@ -216,10 +215,13 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
      */
     public function insert($tableName, array $data, array $types = [])
     {
-        $cleanColumns = [];
-        foreach ($data as $columnName => $value) {
-            $cleanColumns[$this->getPlatForm()->quoteIdentifier($columnName)] = $value;
+        $cleanColumns = $this->quoteColumnsMap($data);
+
+        if (is_string(key($types))) {
+            $types = $this->filterNotNumericParamTypes($types);
+            $types = $this->quoteColumnsMap($types);
         }
+
         return $this->connection->insert($tableName, $cleanColumns, $types);
     }
 
@@ -264,5 +266,23 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
     public function transactional(Closure $func)
     {
         return $this->connection->transactional($func);
+    }
+
+    /**
+     * add quotes to column names in column associated array
+     */
+    private function quoteColumnsMap(array $columnsMap): array
+    {
+        $quotedColumnsMap = [];
+        foreach ($columnsMap as $column => $associatedValue) {
+            $quotedColumnsMap[$this->getPlatForm()->quoteIdentifier($column)] = $associatedValue;
+        }
+
+        return $quotedColumnsMap;
+    }
+
+    private function filterNotNumericParamTypes(array $types): array
+    {
+        return array_filter($types, 'is_int');
     }
 }
