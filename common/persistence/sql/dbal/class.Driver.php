@@ -15,7 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2013-2020 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
+ * Copyright (c) 2013-2021 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  *
  * @author Lionel Lecaque  <lionel@taotesting.com>
  * @author Jerome Bogaerts, <jerome@taotesting.com>
@@ -26,6 +26,8 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Driver\ResultStatement;
 use Doctrine\DBAL\Driver\Statement;
+use Doctrine\DBAL\DriverManager;
+use Doctrine\DBAL\Logging\SQLLogger;
 
 /**
  * Dbal Driver
@@ -125,7 +127,7 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
     private function getDriverManagerClass()
     {
         if (!$this->driverManagerClass || !class_exists($this->driverManagerClass)) {
-            $this->driverManagerClass = \Doctrine\DBAL\DriverManager::class;
+            $this->driverManagerClass = DriverManager::class;
         }
         return $this->driverManagerClass;
     }
@@ -146,7 +148,7 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
     {
         return new common_persistence_sql_Platform($this->getDbalConnection());
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see common_persistence_sql_Driver::getSchemaManager()
@@ -184,7 +186,7 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
     {
         return $this->connection->executeQuery($statement, $params, $types);
     }
-    
+
     /**
      * Convenience access to PDO::quote.
      *
@@ -211,13 +213,16 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
      */
     public function insert($tableName, array $data, array $types = [])
     {
-        $cleanColumns = [];
-        foreach ($data as $columnName => $value) {
-            $cleanColumns[$this->getPlatForm()->quoteIdentifier($columnName)] = $value;
+        $cleanColumns = $this->quoteColumnsMap($data);
+
+        if (is_string(key($types))) {
+            $types = $this->filterNotNumericParamTypes($types);
+            $types = $this->quoteColumnsMap($types);
         }
+
         return $this->connection->insert($tableName, $cleanColumns, $types);
     }
-    
+
     /**
      * Convenience access to PDO::lastInsertId.
      *
@@ -236,7 +241,7 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
     {
         return $this->connection;
     }
-    
+
     /**
      * Returns the name of the connections database
      * @return string
@@ -259,5 +264,23 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
     public function transactional(Closure $func)
     {
         return $this->connection->transactional($func);
+    }
+
+    /**
+     * add quotes to column names in column associated array
+     */
+    private function quoteColumnsMap(array $columnsMap): array
+    {
+        $quotedColumnsMap = [];
+        foreach ($columnsMap as $column => $associatedValue) {
+            $quotedColumnsMap[$this->getPlatForm()->quoteIdentifier($column)] = $associatedValue;
+        }
+
+        return $quotedColumnsMap;
+    }
+
+    private function filterNotNumericParamTypes(array $types): array
+    {
+        return array_filter($types, 'is_int');
     }
 }
