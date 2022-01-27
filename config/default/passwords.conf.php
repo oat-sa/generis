@@ -5,14 +5,6 @@
  */
 
 return [
-    'constrains' => //constrains configuration params
-        [
-            'length' => 4,
-            'upper'  => false,
-            'lower'  => true,
-            'number' => false,
-            'spec'   => false
-        ],
     'generator'  => [
         'chars'      => 'abcdefghijklmnopqrstuvwxyz',
         'nums'       => '0123456789',
@@ -22,5 +14,4 @@ return [
         //used for human readable generator
         'dictionary' => '/usr/share/dict/words'
     ]
-
 ];
