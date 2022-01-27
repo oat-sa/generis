@@ -29,7 +29,6 @@ use core_kernel_classes_Class;
 use core_kernel_classes_Resource;
 use oat\oatbox\event\EventManager;
 use oat\generis\model\data\Ontology;
-use oat\search\base\ResultSetInterface;
 use core_kernel_persistence_ResourceInterface;
 use oat\generis\model\Context\ContextInterface;
 use oat\generis\model\data\event\ResourceDeleted;

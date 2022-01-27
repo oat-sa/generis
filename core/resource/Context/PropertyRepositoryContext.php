@@ -39,7 +39,6 @@ class PropertyRepositoryContext extends AbstractContext
     protected function validateParameter(string $parameter, $parameterValue): void
     {
         if ($parameter === self::PARAM_ALIASES && !is_array($parameterValue)) {
-
             throw new InvalidArgumentException(
                 sprintf(
                     'Context parameter %s is not valid. It must be an array.',
