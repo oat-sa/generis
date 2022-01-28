@@ -81,7 +81,7 @@ class Report extends common_report_Report
             $data['interpolationMessage'] = $this->interpolationMessage;
         }
 
-        if ($this->interpolationData) {
+        if ($this->interpolationData || $this->interpolationMessage) {
             $data['interpolationData'] = $this->interpolationData;
         }
 
