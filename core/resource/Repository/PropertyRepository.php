@@ -48,16 +48,22 @@ class PropertyRepository implements ResourceRepositoryInterface
     {
         $queryBuilder = $this->complexSearch->query();
 
+        $query = $this->complexSearch->searchType($queryBuilder, OntologyRdf::RDF_PROPERTY, true);
+        $query->addCriterion(
+            OntologyRdf::RDF_TYPE,
+            SupportedOperatorHelper::EQUAL,
+            OntologyRdf::RDF_PROPERTY
+        );
+
         if ($context->hasParameter(PropertyRepositoryContext::PARAM_ALIASES)) {
-            $query = $this->complexSearch->searchType($queryBuilder, OntologyRdf::RDF_PROPERTY, true);
             $query->addCriterion(
                 GenerisRdf::PROPERTY_ALIAS,
                 SupportedOperatorHelper::IN,
                 $context->getParameter(PropertyRepositoryContext::PARAM_ALIASES, [])
             );
-
-            $queryBuilder->setCriteria($query);
         }
+
+        $queryBuilder->setCriteria($query);
 
         return iterator_to_array($this->complexSearch->getGateway()->search($queryBuilder));
     }
