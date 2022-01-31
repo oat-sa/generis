@@ -35,6 +35,17 @@ abstract class AbstractContext implements ContextInterface
         }
     }
 
+    public function hasParameter(string $parameter): bool
+    {
+        try {
+            $this->checkParameterSupport($parameter);
+        } catch (InvalidArgumentException $exception) {
+            return false;
+        }
+
+        return isset($this->parameters[$parameter]);
+    }
+
     public function getParameter(string $parameter, $default = null)
     {
         $this->checkParameterSupport($parameter);

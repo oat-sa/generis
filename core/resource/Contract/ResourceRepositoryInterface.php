@@ -23,11 +23,24 @@ declare(strict_types=1);
 namespace oat\generis\model\resource\Contract;
 
 use RuntimeException;
+use BadMethodCallException;
+use common_exception_Error;
 use InvalidArgumentException;
+use core_kernel_classes_Resource;
 use oat\generis\model\Context\ContextInterface;
+use oat\search\base\exception\SearchGateWayExeption;
 
 interface ResourceRepositoryInterface
 {
+    /**
+     * @throws common_exception_Error
+     * @throws SearchGateWayExeption
+     * @throws BadMethodCallException
+     *
+     * @return array|core_kernel_classes_Resource[]
+     */
+    public function findBy(ContextInterface $context): array;
+
     /**
      * @throws InvalidArgumentException
      * @throws RuntimeException

@@ -24,6 +24,8 @@ namespace oat\generis\model\Context;
 
 interface ContextInterface
 {
+    public function hasParameter(string $parameter): bool;
+
     /**
      * @param mixed $default
      *
