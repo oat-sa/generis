@@ -168,7 +168,7 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
 
     public function isStatistical(): bool
     {
-        $value = $this->getOnePropertyValue(new core_kernel_classes_Property(GenerisRdf::PROPERTY_IS_STATISTICAL));
+        $value = $this->getOnePropertyValue($this->getProperty(GenerisRdf::PROPERTY_IS_STATISTICAL));
 
         return $value instanceof core_kernel_classes_Resource && $value->getUri() === GenerisRdf::GENERIS_TRUE;
     }
