@@ -29,6 +29,7 @@ interface GenerisRdf
     public const GENERIS_FALSE = 'http://www.tao.lu/Ontologies/generis.rdf#False';
     public const PROPERTY_ALIAS = 'http://www.tao.lu/Ontologies/generis.rdf#alias';
     public const PROPERTY_IS_LG_DEPENDENT = 'http://www.tao.lu/Ontologies/generis.rdf#is_language_dependent';
+    public const PROPERTY_IS_STATISTICAL = 'http://www.tao.lu/Ontologies/generis.rdf#is_statistical';
     public const CLASS_GENERIS_RESOURCE = 'http://www.tao.lu/Ontologies/generis.rdf#generis_Ressource';
     public const PROPERTY_MULTIPLE = 'http://www.tao.lu/Ontologies/generis.rdf#Multiple';
     public const CLASS_GENERIS_FILE = 'http://www.tao.lu/Ontologies/generis.rdf#File';
