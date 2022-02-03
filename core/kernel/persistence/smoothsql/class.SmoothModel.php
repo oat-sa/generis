@@ -75,9 +75,11 @@ class core_kernel_persistence_smoothsql_SmoothModel extends ConfigurableService 
 
     public function isWritable(core_kernel_classes_Resource $resource): bool
     {
+        $writableModels = $this->getWritableModels();
+
         /** @var core_kernel_classes_Triple $triple */
         foreach ($resource->getRdfTriples() as $triple) {
-            if (!in_array((int)$triple->modelid, $this->getWritableModels(), true)) {
+            if (!in_array((int)$triple->modelid, $writableModels, true)) {
                 return false;
             }
         }
