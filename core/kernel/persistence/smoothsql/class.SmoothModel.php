@@ -51,7 +51,7 @@ class core_kernel_persistence_smoothsql_SmoothModel extends ConfigurableService 
      * @var common_persistence_SqlPersistence
      */
     private $persistence;
-    
+
     function getResource($uri)
     {
         $resource = new \core_kernel_classes_Resource($uri);
@@ -71,6 +71,18 @@ class core_kernel_persistence_smoothsql_SmoothModel extends ConfigurableService 
         $property = new \core_kernel_classes_Property($uri);
         $property->setModel($this);
         return $property;
+    }
+
+    public function isWritable(core_kernel_classes_Resource $resource): bool
+    {
+        /** @var core_kernel_classes_Triple $triple */
+        foreach ($resource->getRdfTriples() as $triple) {
+            if (!in_array((int)$triple->modelid, $this->getWritableModels(), true)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -99,7 +111,7 @@ class core_kernel_persistence_smoothsql_SmoothModel extends ConfigurableService 
     {
         return new core_kernel_persistence_smoothsql_SmoothRdf($this);
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see \oat\generis\model\data\Model::getRdfsInterface()
@@ -108,7 +120,7 @@ class core_kernel_persistence_smoothsql_SmoothModel extends ConfigurableService 
     {
         return new core_kernel_persistence_smoothsql_SmoothRdfs($this);
     }
-    
+
     /**
      * @return ComplexSearchService
      */
@@ -120,7 +132,7 @@ class core_kernel_persistence_smoothsql_SmoothModel extends ConfigurableService 
     }
 
     // Manage the sudmodels of the smooth mode
-    
+
     /**
      * Returns the id of the model to add to
      *
@@ -130,7 +142,7 @@ class core_kernel_persistence_smoothsql_SmoothModel extends ConfigurableService 
     {
         return $this->getOption(self::OPTION_NEW_TRIPLE_MODEL);
     }
-    
+
     public function getReadableModels()
     {
         return $this->getOption(self::OPTION_READABLE_MODELS);
@@ -140,7 +152,7 @@ class core_kernel_persistence_smoothsql_SmoothModel extends ConfigurableService 
     {
         return $this->getOption(self::OPTION_WRITEABLE_MODELS);
     }
-    
+
     //
     // Deprecated functions
     //
@@ -176,7 +188,7 @@ class core_kernel_persistence_smoothsql_SmoothModel extends ConfigurableService 
         }
         return $model->getReadableModels();
     }
-    
+
     /**
      * Returns the submodel ids that are updatable
      *
