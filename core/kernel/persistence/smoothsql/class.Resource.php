@@ -97,7 +97,6 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
             $returnValue[$uri] = $this->getModel()->getClass($uri);
         }
 
-
         return (array) $returnValue;
     }
 
@@ -505,7 +504,6 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
                 $returnValue = true;
             }
         }
-
 
         return (bool) $returnValue;
     }
