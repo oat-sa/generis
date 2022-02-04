@@ -29,6 +29,9 @@ use oat\generis\test\GenerisTestCase;
 
 class SmoothModelTest extends GenerisTestCase
 {
+    /** @var core_kernel_persistence_smoothsql_SmoothModel */
+    private $sut;
+
     public function setUp(): void
     {
         $this->sut = new core_kernel_persistence_smoothsql_SmoothModel();
