@@ -150,6 +150,17 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
         return (bool) $returnValue;
     }
 
+    public function isWritable(): bool
+    {
+        $implementation = $this->getImplementation();
+
+        if ($implementation instanceof core_kernel_persistence_smoothsql_Resource) {
+            return $implementation->isWritable($this);
+        }
+
+        return true;
+    }
+
     /**
      * returns true if the resource is a valid property (using facts or
      * rules)
