@@ -22,22 +22,22 @@
 
 namespace oat\generis\model\kernel\persistence\file;
 
-use EasyRdf_Graph;
+use EasyRdf\Graph;
 use core_kernel_classes_Triple;
 use IteratorAggregate;
 use ArrayIterator;
 
 class FileIterator implements IteratorAggregate
 {
-    
     private $triples = [];
-    
+
     /**
+     * @param string      $file
+     * @param string|null $forceModelId
      *
-     * @param string $file
-     * @param string $forceModelId
+     * @throws \common_exception_Error
      */
-    public function __construct($file, $forceModelId = null)
+    public function __construct(string $file, string $forceModelId = null)
     {
         $modelId = is_null($forceModelId) ? FileModel::getModelIdFromXml($file) : $forceModelId;
         $this->load($modelId, $file);
@@ -46,7 +46,7 @@ class FileIterator implements IteratorAggregate
     /**
      * @see IteratorAggregate::getIterator()
      */
-    public function getIterator()
+    public function getIterator(): ArrayIterator
     {
         return new ArrayIterator($this->triples);
     }
@@ -59,19 +59,18 @@ class FileIterator implements IteratorAggregate
      */
     protected function load($modelId, $file)
     {
-        
-        $easyRdf = new EasyRdf_Graph();
+        $easyRdf = new Graph();
         $easyRdf->parseFile($file);
         
         foreach ($easyRdf->toRdfPhp() as $subject => $propertiesValues) {
             foreach ($propertiesValues as $predicate => $values) {
-                foreach ($values as $k => $v) {
+                foreach ($values as $v) {
                     $triple = new core_kernel_classes_Triple();
                     $triple->modelid = $modelId;
                     $triple->subject = $subject;
                     $triple->predicate = $predicate;
                     $triple->object = $v['value'];
-                    $triple->lg = isset($v['lang']) ? $v['lang'] : null;
+                    $triple->lg = $v['lang'] ?? null;
                     $this->triples[] = $triple;
                 }
             }

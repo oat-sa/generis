@@ -28,7 +28,6 @@ use common_ext_ExtensionsManager;
 use common_ext_ExtensionUpdater;
 use core_kernel_impl_ApiModelOO;
 use core_kernel_persistence_smoothsql_SmoothModel;
-use EasyRdf_Exception;
 use League\Flysystem\Adapter\Local;
 use League\Flysystem\Memory\MemoryAdapter;
 use oat\generis\model\data\ModelManager;
@@ -74,7 +73,8 @@ class Updater extends common_ext_ExtensionUpdater
      *
      * @return string $versionUpdatedTo
      * @throws common_Exception
-     * @throws EasyRdf_Exception
+     * @throws \EasyRdf\Exception
+     * @throws \oat\oatbox\service\ServiceNotFoundException
      */
     public function update($initialVersion)
     {
