@@ -56,7 +56,7 @@
   "require": {
     "php": "^7.1",
     "clearfw/clearfw": "~1.2.0",
-    "easyrdf/easyrdf": "^0.9.0",
+    "easyrdf/easyrdf": "^1.1",
     "doctrine/dbal": "2.10.1",
     "doctrine/annotations": "~1.6.0",
     "laminas/laminas-servicemanager": "~2.5.0",
