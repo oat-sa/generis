@@ -97,6 +97,7 @@
     },
     "files": [
       "common/legacy/class.LegacyAutoLoader.php",
+      "common/legacy/ClassAliases.php",
       "common/constants.php"
     ]
   },
