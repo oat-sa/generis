@@ -32,7 +32,7 @@ abstract class FileSystemHandler implements ServiceLocatorAwareInterface
 {
     use ServiceLocatorAwareTrait;
 
-    protected const UNSERIALIZABLE_PROPERTIES = ['fileSystem', 'serviceLocator'];
+    private const UNSERIALIZABLE_PROPERTIES = ['fileSystem', 'serviceLocator'];
 
     /**
      * @var mixed
