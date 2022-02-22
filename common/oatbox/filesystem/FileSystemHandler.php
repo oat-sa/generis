@@ -32,7 +32,7 @@ abstract class FileSystemHandler implements ServiceLocatorAwareInterface
 {
     use ServiceLocatorAwareTrait;
 
-    private const UNSERIALIZABLE_PROPERTIES = ['fileSystem', 'serviceLocator'];
+    private const NOT_SERIALIZABLE_PROPERTIES = ['fileSystem', 'serviceLocator'];
 
     /**
      * @var mixed
@@ -134,7 +134,7 @@ abstract class FileSystemHandler implements ServiceLocatorAwareInterface
 
     public function __sleep()
     {
-        return array_diff($this->getAllProperties(), self::UNSERIALIZABLE_PROPERTIES);
+        return array_diff($this->getAllProperties(), self::NOT_SERIALIZABLE_PROPERTIES);
     }
 
     public function __wakeup()
