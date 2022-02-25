@@ -22,12 +22,17 @@
 
 namespace oat\oatbox\filesystem;
 
+use oat\oatbox\service\ServiceManager;
+use ReflectionClass;
+use ReflectionProperty;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 
 abstract class FileSystemHandler implements ServiceLocatorAwareInterface
 {
     use ServiceLocatorAwareTrait;
+
+    private const NOT_SERIALIZABLE_PROPERTIES = ['fileSystem', 'serviceLocator'];
 
     /**
      * @var mixed
@@ -125,5 +130,25 @@ abstract class FileSystemHandler implements ServiceLocatorAwareInterface
         $path = trim($path, '/');
 
         return $path;
+    }
+
+    public function __sleep()
+    {
+        return array_diff($this->getAllProperties(), self::NOT_SERIALIZABLE_PROPERTIES);
+    }
+
+    public function __wakeup()
+    {
+        $this->setServiceLocator(ServiceManager::getServiceManager());
+    }
+
+    private function getAllProperties(): array
+    {
+        return array_map(
+            static function (ReflectionProperty $property): string {
+                return $property->getName();
+            },
+            (new ReflectionClass($this))->getProperties()
+        );
     }
 }
