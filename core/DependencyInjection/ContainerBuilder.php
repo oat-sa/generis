@@ -79,7 +79,7 @@ class ContainerBuilder extends SymfonyContainerBuilder
         if (!is_writable($this->cachePath)) {
             throw new InvalidArgumentException(
                 sprintf(
-                    'DI container build requires directory "%" to be writable',
+                    'DI container build requires directory "%s" to be writable',
                     $this->cachePath
                 )
             );
