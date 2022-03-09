@@ -25,9 +25,9 @@ namespace oat\generis\test;
 use Psr\Container\ContainerInterface;
 use oat\oatbox\service\ServiceManager;
 
-trait ServiceLocatorMockTrait
+trait ServiceManagerMockTrait
 {
-    public function getServiceLocatorMock(array $services = []): ServiceManager
+    public function getServiceManagerMock(array $services = []): ServiceManager
     {
         $container = $this->createMock(ContainerInterface::class);
         $container
@@ -45,7 +45,7 @@ trait ServiceLocatorMockTrait
                 }
             );
 
-        $serviceManager  = $this->createMock(ServiceManager::class);
+        $serviceManager = $this->createMock(ServiceManager::class);
         $serviceManager
             ->method('getContainer')
             ->willReturn($container);
