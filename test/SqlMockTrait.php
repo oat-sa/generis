@@ -27,12 +27,14 @@ use common_persistence_sql_dbal_Driver;
 use oat\generis\persistence\PersistenceManager;
 
 /**
- * @deprecated Use \oat\generis\test\PersistenceManagerMockTrait
+ * @deprecated Use \oat\generis\test\PersistenceManagerMockTrait.
+ *             Since PHPUnit does all the work, we no longer have to use Prophecy to reduce dependencies.
  */
 trait SqlMockTrait
 {
     /**
-     * @deprecated Use \oat\generis\test\PersistenceManagerMockTrait::getPersistenceManagerMock() instead
+     * @deprecated Use \oat\generis\test\PersistenceManagerMockTrait::getPersistenceManagerMock() instead.
+     *             Since PHPUnit does all the work, we no longer have to use Prophecy to reduce dependencies.
      */
     public function getSqlMock(string $key): PersistenceManager
     {

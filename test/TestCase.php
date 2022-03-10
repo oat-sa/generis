@@ -29,14 +29,17 @@ use oat\oatbox\service\ServiceManager;
 use PHPUnit\Framework\TestCase as UnitTestCase;
 
 /**
- * @deprecated Use \PHPUnit\Framework\TestCase instead
+ * @deprecated Use \PHPUnit\Framework\TestCase instead.
+ *             To reduce number of dependencies, we must not use generis TestCase anymore, since SQL and ServiceLocator
+ *             mocks can be used separately via specific traits.
  */
 abstract class TestCase extends UnitTestCase
 {
     use SqlMockTrait;
 
     /**
-     * @deprecated Use \oat\generis\test\ServiceManagerMockTrait::getServiceManagerMock() instead
+     * @deprecated Use \oat\generis\test\ServiceManagerMockTrait::getServiceManagerMock() instead.
+     *             Since PHPUnit does all the work, we no longer have to use Prophecy to reduce dependencies.
      *
      * @param array<string, object> $services
      *
@@ -80,7 +83,8 @@ abstract class TestCase extends UnitTestCase
     }
 
     /**
-     * @deprecated Use PHPUnit mocks instead
+     * @deprecated Use PHPUnit mocks instead.
+     *             Since PHPUnit does all the work, we no longer have to use Prophecy to reduce dependencies.
      */
     protected function prophesize($classOrInterface = null): ObjectProphecy
     {
