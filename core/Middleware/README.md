@@ -35,6 +35,8 @@ class MyMiddleware implements MiddlewareInterface
 
 1) Create a `middleware configuration` as showed bellow:
 
+The config MUST be added under the following namespace `oat\{myExtension}\controller\Middleware`.
+
 ```php
 <?php
 declare(strict_types=1);
@@ -80,7 +82,7 @@ class MiddlewareConfig implements MiddlewareConfigInterface
 return [
     // above, other manifest data...
     'middlewares' => [
-        oat\{myExtension}\model\Middleware\MyMiddleware::class,
+        oat\{myExtension}\controller\Middleware\MyMiddleware::class,
     ]
 ];
 ```
