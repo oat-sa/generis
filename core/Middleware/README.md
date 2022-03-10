@@ -9,7 +9,7 @@ The middleware implementation is complient with [PSR-15](https://www.php-fig.org
 
 Create a `Middleare` class as bellow and add it to the DI container.
 
-```injectablephp
+```php
 <?php
 
 declare(strict_types=1);
@@ -35,7 +35,7 @@ class MyMiddleware implements MiddlewareInterface
 
 1) Create a `middleware configuration` as showed bellow:
 
-```injectablephp
+```php
 <?php
 declare(strict_types=1);
 
@@ -75,7 +75,7 @@ class MiddlewareConfig implements MiddlewareConfigInterface
 
 2) Then add it to your `manifest.php`.
 
-```injectablephp
+```php
 <?php
 return [
     // above, other manifest data...
