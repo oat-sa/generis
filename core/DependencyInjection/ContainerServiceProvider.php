@@ -25,7 +25,7 @@ namespace oat\generis\model\DependencyInjection;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\ServerRequest;
 use oat\generis\model\Middleware\MiddlewareExtensionsMapper;
-use oat\tao\model\Middleware\MiddlewareRequestHandler;
+use oat\generis\model\Middleware\MiddlewareRequestHandler;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;

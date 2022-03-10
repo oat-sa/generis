@@ -7,7 +7,7 @@ The middleware implementation is complient with [PSR-15](https://www.php-fig.org
 
 ### How to create a new Middleware?
 
-Create a `Middleare` class as bellow and add it to the DI container.
+Create a `Middleware` class as bellow and add it to the DI container.
 
 ```php
 <?php
