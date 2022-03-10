@@ -15,34 +15,26 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2018-2022 (original work) Open Assessment Technologies SA.
+ * Copyright (c) 2022 (original work) Open Assessment Technologies SA.
  */
 
 declare(strict_types=1);
 
 namespace oat\generis\test;
 
-use Prophecy\Argument;
 use common_persistence_sql_dbal_Driver;
 use oat\generis\persistence\PersistenceManager;
 
-/**
- * @deprecated Use \oat\generis\test\PersistenceManagerMockTrait.
- *             Since PHPUnit does all the work, we no longer have to use Prophecy to reduce dependencies.
- */
-trait SqlMockTrait
+trait PersistenceManagerMockTrait
 {
-    /**
-     * @deprecated Use \oat\generis\test\PersistenceManagerMockTrait::getPersistenceManagerMock() instead.
-     *             Since PHPUnit does all the work, we no longer have to use Prophecy to reduce dependencies.
-     */
-    public function getSqlMock(string $key): PersistenceManager
+    public function getPersistenceManagerMock(string $key): PersistenceManager
     {
         if (!extension_loaded('pdo_sqlite')) {
-            $this->markTestSkipped('sqlite not found, tests skipped.');
+            $this->markTestSkipped('Extension "pdo_sqlite" not loaded, test skipped');
         }
 
-        $persistence = (new common_persistence_sql_dbal_Driver())->connect(
+        $driver = new common_persistence_sql_dbal_Driver();
+        $persistence = $driver->connect(
             $key,
             [
                 'connection' => [
@@ -51,14 +43,15 @@ trait SqlMockTrait
             ]
         );
 
-        $pmProphecy = $this->prophesize(PersistenceManager::class);
-        $pmProphecy
-            ->setServiceLocator(Argument::any())
+        $persistenceManager = $this->createMock(PersistenceManager::class);
+        $persistenceManager
+            ->method('setServiceLocator')
             ->willReturn(null);
-        $pmProphecy
-            ->getPersistenceById($key)
+        $persistenceManager
+            ->method('getPersistenceById')
+            ->with($key)
             ->willReturn($persistence);
 
-        return $pmProphecy->reveal();
+        return $persistenceManager;
     }
 }
