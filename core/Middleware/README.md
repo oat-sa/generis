@@ -52,23 +52,25 @@ class MiddlewareConfig implements MiddlewareConfigInterface
     public function __invoke(): array
     {
         return [
-            MiddlewareMap::perRoute(
-                '/some/path/foo',
-                [
-                    MyMiddleware::class
-                ],
-                [
-                    'POST', 'GET'
-                ]
+            MiddlewareMap::byRoute('/some/path/foo')
+                ->andHttpMethod('POST')
+                ->andHttpMethod('GET')
+                ->andMiddlewareId(MyMiddleware::class)
+                ->andMiddlewareId(MyOtherMiddleware::class)
             ),
-            MiddlewareMap::perRoute(
-                '/some/path/bar',
-                [
-                    MyMiddleware::class
-                ],
-                [
-                    'POST'
-                ]
+            MiddlewareMap::byRoutes(['/some/path/foo', '/some/path/bar'])
+                ->andHttpMethod('GET')
+                ->andMiddlewareId(MyMiddleware::class)
+                ->andMiddlewareId(MyOtherMiddleware::class)
+            ),
+            MiddlewareMap::byMiddlewareId(MyMiddleware::class)
+                ->andRoute('/some/path/foo')
+                ->andRoute('/some/path/bar')
+                ->andHttpMethod('GET')
+            ),
+            MiddlewareMap::byMiddlewareIds([MyMiddleware::class, MyOtherMiddleware::class])
+                ->andRoute('/some/path/foo')
+                ->andHttpMethod('GET')
             ),
         ];
     }
@@ -90,5 +92,4 @@ return [
 ## TODO
 
 - [ ] Add support for dynamic routes like `/path/{id:[0-9]}/something`
-- [ ] Add possibility to apply same middlewares to multiple routes with `MiddlwareMap` class.
 - [ ] Add possibility to set oder of execution of middlewares.

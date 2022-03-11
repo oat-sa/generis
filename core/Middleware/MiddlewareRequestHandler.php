@@ -38,15 +38,15 @@ class MiddlewareRequestHandler implements RequestHandlerInterface
     private $originalResponse;
 
     /** @var array[] */
-    private $map;
+    private $middlewareMap;
 
     /** @var ContainerInterface */
     private $container;
 
-    public function __construct(ContainerInterface $container, array $map)
+    public function __construct(ContainerInterface $container, array $middlewareMap)
     {
         $this->container = $container;
-        $this->map = $map;
+        $this->middlewareMap = $middlewareMap;
     }
 
     public function handle(ServerRequestInterface $request): ResponseInterface
@@ -94,19 +94,21 @@ class MiddlewareRequestHandler implements RequestHandlerInterface
     {
         $filteredMap = [];
 
-        $maps = $this->map[$request->getUri()->getPath()] ?? [];
-
-        foreach ($maps as $map) {
+        foreach ($this->middlewareMap[$request->getUri()->getPath()] ?? [] as $map) {
             $middlewareMap = MiddlewareMap::fromJson($map);
-            if (in_array($request->getMethod(), $middlewareMap->getHttpMethods(), true)) {
-                $filteredMap = array_merge(
-                    $filteredMap,
-                    $middlewareMap->getMiddlewaresIds()
-                );
+
+            if ($this->isHttpMethodAllowed($request, $middlewareMap)) {
+                $filteredMap = array_merge($filteredMap, $middlewareMap->getMiddlewaresIds());
             }
         }
 
         return $filteredMap;
+    }
+
+    private function isHttpMethodAllowed(RequestInterface $request, MiddlewareMapInterface $middlewareMap): bool
+    {
+        return empty($middlewareMap->getHttpMethods())
+            || in_array($request->getMethod(), $middlewareMap->getHttpMethods(), true);
     }
 
     private function getMiddleware(string $middlewareId): MiddlewareInterface

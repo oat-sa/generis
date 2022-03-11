@@ -26,10 +26,6 @@ use JsonSerializable;
 
 interface MiddlewareMapInterface extends JsonSerializable
 {
-    public const OPTION_MIDDLEWARES = 'middlewares';
-    public const OPTION_ROUTES = 'routes';
-    public const OPTION_HTTP_METHODS = 'httpMethods';
-
     public function getRoutes(): array;
 
     public function getMiddlewaresIds(): array;

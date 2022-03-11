@@ -24,30 +24,58 @@ namespace oat\generis\model\Middleware;
 
 final class MiddlewareMap implements MiddlewareMapInterface
 {
-    /** @var string[] */
-    private $routes;
+    private const OPTION_MIDDLEWARES = 'middlewares';
+    private const OPTION_ROUTES = 'routes';
+    private const OPTION_HTTP_METHODS = 'httpMethods';
 
     /** @var string[] */
-    private $middlewaresIds;
+    private $routes = [];
+
+    /** @var string[] */
+    private $middlewaresIds = [];
 
     /** @var string[]|null */
-    private $httpMethods;
+    private $httpMethods = [];
 
-    /**
-     * For now, we only map middlewares per single route.
-     *
-     * @TODO Create mapping per multiple routes and per middlewares in the future
-     */
-    public static function perRoute(
-        string $route,
-        array $middlewaresIds,
-        array $httpMethods = null
-    ): MiddlewareMapInterface {
-        return new self(
-            [$route],
-            $middlewaresIds,
-            $httpMethods
-        );
+    public static function byRoute(string $route): self
+    {
+        return new self([$route]);
+    }
+
+    public static function byRoutes(string ...$route): self
+    {
+        return new self($route);
+    }
+
+    public static function byMiddlewareId(string $middlewareId): self
+    {
+        return new self([], [$middlewareId]);
+    }
+
+    public static function byMiddlewareIds(string ...$middlewareIds): self
+    {
+        return new self([], $middlewareIds);
+    }
+
+    public function andMiddlewareId(string $middlewareId): self
+    {
+        $this->middlewaresIds[] = $middlewareId;
+
+        return $this;
+    }
+
+    public function andHttpMethod(string $httpMethod): self
+    {
+        $this->httpMethods[] = $httpMethod;
+
+        return $this;
+    }
+
+    public function andRoute(string $route): self
+    {
+        $this->routes[] = $route;
+
+        return $this;
     }
 
     public function getRoutes(): array
@@ -83,7 +111,7 @@ final class MiddlewareMap implements MiddlewareMapInterface
         );
     }
 
-    private function __construct(array $routes, array $middlewaresIds, array $httpMethods = null)
+    private function __construct(array $routes = [], array $middlewaresIds = [], array $httpMethods = [])
     {
         $this->routes = $routes;
         $this->middlewaresIds = $middlewaresIds;
