@@ -22,6 +22,8 @@ declare(strict_types=1);
 
 namespace oat\generis\model\Middleware;
 
+use LogicException;
+
 final class MiddlewareMap implements MiddlewareMapInterface
 {
     private const OPTION_MIDDLEWARES = 'middlewares';
@@ -66,6 +68,10 @@ final class MiddlewareMap implements MiddlewareMapInterface
 
     public function andHttpMethod(string $httpMethod): self
     {
+        if (!in_array($httpMethod, ['POST', 'PUT', 'GET', 'DELETE', 'PATCH'], true)) {
+            throw new LogicException(sprintf('Invalid HTTP method "%s" for middleware map', $httpMethod));
+        }
+
         $this->httpMethods[] = $httpMethod;
 
         return $this;
@@ -95,6 +101,14 @@ final class MiddlewareMap implements MiddlewareMapInterface
 
     public function jsonSerialize(): array
     {
+        if (empty($this->routes)) {
+            throw new LogicException('A middleware map should have at least one route');
+        }
+
+        if (empty($this->middlewaresIds)) {
+            throw new LogicException('A middleware map should have at least one middlewareId');
+        }
+
         return [
             self::OPTION_ROUTES => $this->routes,
             self::OPTION_HTTP_METHODS => $this->httpMethods,
@@ -104,10 +118,20 @@ final class MiddlewareMap implements MiddlewareMapInterface
 
     public static function fromJson(array $json): MiddlewareMapInterface
     {
+        if (
+            empty($json[self::OPTION_ROUTES]) ||
+            empty($json[self::OPTION_MIDDLEWARES]) ||
+            !is_array($json[self::OPTION_ROUTES]) ||
+            !is_array($json[self::OPTION_MIDDLEWARES]) ||
+            (!empty($json[self::OPTION_HTTP_METHODS]) && !is_array($json[self::OPTION_HTTP_METHODS]))
+        ) {
+            throw new LogicException(sprintf('Wrong middleware json: %s', json_encode($json)));
+        }
+
         return new self(
             $json[self::OPTION_ROUTES],
             $json[self::OPTION_MIDDLEWARES],
-            $json[self::OPTION_HTTP_METHODS]
+            $json[self::OPTION_HTTP_METHODS] ?? []
         );
     }
 

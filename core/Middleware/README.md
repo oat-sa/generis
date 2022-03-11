@@ -56,18 +56,15 @@ class MiddlewareConfig implements MiddlewareConfigInterface
                 ->andHttpMethod('POST')
                 ->andHttpMethod('GET')
                 ->andMiddlewareId(MyMiddleware::class)
-                ->andMiddlewareId(MyOtherMiddleware::class)
-            ),
+                ->andMiddlewareId(MyOtherMiddleware::class),
             MiddlewareMap::byRoutes(['/some/path/foo', '/some/path/bar'])
                 ->andHttpMethod('GET')
                 ->andMiddlewareId(MyMiddleware::class)
-                ->andMiddlewareId(MyOtherMiddleware::class)
-            ),
+                ->andMiddlewareId(MyOtherMiddleware::class),
             MiddlewareMap::byMiddlewareId(MyMiddleware::class)
                 ->andRoute('/some/path/foo')
                 ->andRoute('/some/path/bar')
-                ->andHttpMethod('GET')
-            ),
+                ->andHttpMethod('GET'),
             MiddlewareMap::byMiddlewareIds([MyMiddleware::class, MyOtherMiddleware::class])
                 ->andRoute('/some/path/foo')
                 ->andHttpMethod('GET')

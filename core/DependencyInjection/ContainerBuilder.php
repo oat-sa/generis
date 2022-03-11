@@ -165,14 +165,13 @@ class ContainerBuilder extends SymfonyContainerBuilder
         /** @var common_ext_Extension[] $extensions */
         $extensions = $this->getExtensionsManager()->getInstalledExtensions();
 
-
         foreach ($extensions as $extension) {
             foreach ($extension->getManifest()->getContainerServiceProvider() as $serviceProvider) {
                 $contents[] = '(new ' . $serviceProvider . '())($configurator);';
             }
         }
 
-        return vsprintf(
+        return sprintf(
             '<?php
         use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
         use \oat\generis\model\Middleware\MiddlewareExtensionsMapper;
@@ -180,14 +179,12 @@ class ContainerBuilder extends SymfonyContainerBuilder
         return function (ContainerConfigurator $configurator): void
         {
             $parameter = $configurator->parameters();
-            $parameter->set(
-                MiddlewareExtensionsMapper::MAP_KEY, 
-                ' . var_export($this->middlewareExtensionsMapper->map($extensions), true) . '
-            );
+            $parameter->set(MiddlewareExtensionsMapper::MAP_KEY, %s);
         
-            ' . str_repeat('%s' . PHP_EOL, count($contents)) . '
+            %s
         };',
-            $contents
+            var_export($this->middlewareExtensionsMapper->map($extensions), true),
+            implode('', $contents)
         );
     }
 

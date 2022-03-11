@@ -22,7 +22,6 @@ declare(strict_types=1);
 
 namespace oat\generis\model\Middleware;
 
-use GuzzleHttp\Psr7\Response;
 use LogicException;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\RequestInterface;
@@ -52,6 +51,7 @@ class MiddlewareRequestHandler implements RequestHandlerInterface
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $queue = $this->build($request);
+
         return (new Relay($queue))->handle($request);
     }
 
@@ -66,16 +66,13 @@ class MiddlewareRequestHandler implements RequestHandlerInterface
             $mapping[] = $this->getMiddleware($middlewareClass);
         }
 
+        $response = $this->container->get(ResponseInterface::class);
+
         return array_merge(
-            [
-                function ($request, $next) {
-                    return $this->originalResponse ?? new Response();
-                }
-            ],
             $mapping,
             [
-                function ($request, $next) {
-                    return new Response();
+                static function ($request, $next) use ($response): ResponseInterface {
+                    return $response;
                 }
             ]
         );
@@ -84,6 +81,7 @@ class MiddlewareRequestHandler implements RequestHandlerInterface
     public function withOriginalResponse(ResponseInterface $response): self
     {
         $this->originalResponse = $response;
+
         return $this;
     }
 
