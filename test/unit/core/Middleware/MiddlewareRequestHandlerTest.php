@@ -62,14 +62,20 @@ class MiddlewareRequestHandlerTest extends TestCase
         $this->middlewareMap = [
             '/my/path1' => [
                 MiddlewareMap::byRoute('/my/path1')
-                    ->andMiddlewareId('middlewarePath1_2')
-                    ->andMiddlewareId('middlewarePath1_2')
+                    ->andMiddlewareId('middlewarePath1_1')
                     ->andHttpMethod('POST')
+                    ->jsonSerialize(),
+                MiddlewareMap::byRoute('/my/path1')
+                    ->andMiddlewareId('middlewarePath1_2')
+                    ->jsonSerialize(),
+                MiddlewareMap::byRoute('/my/path1')
+                    ->andMiddlewareId('middlewarePath1_3') // Not called
+                    ->andHttpMethod('GET')
                     ->jsonSerialize()
             ],
             '/my/path2' => [
                 MiddlewareMap::byRoute('/my/path2')
-                    ->andMiddlewareId('middlewarePath2_1')
+                    ->andMiddlewareId('middlewarePath2_1') // Not called
                     ->andHttpMethod('POST')
                     ->jsonSerialize()
             ]
