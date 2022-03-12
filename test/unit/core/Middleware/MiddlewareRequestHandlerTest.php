@@ -59,43 +59,18 @@ class MiddlewareRequestHandlerTest extends TestCase
 
     public function setUp(): void
     {
-        $this->middlewareMap = [
-            '/my/path1' => [
-                MiddlewareMap::byRoute('/my/path1')
-                    ->andMiddlewareId('middlewarePath1_1')
-                    ->andHttpMethod('POST')
-                    ->jsonSerialize(),
-                MiddlewareMap::byRoute('/my/path1')
-                    ->andMiddlewareId('middlewarePath1_2')
-                    ->jsonSerialize(),
-                MiddlewareMap::byRoute('/my/path1')
-                    ->andMiddlewareId('middlewarePath1_3') // Not called
-                    ->andHttpMethod('GET')
-                    ->jsonSerialize()
-            ],
-            '/my/path2' => [
-                MiddlewareMap::byRoute('/my/path2')
-                    ->andMiddlewareId('middlewarePath2_1') // Not called
-                    ->andHttpMethod('POST')
-                    ->jsonSerialize()
-            ]
-        ];
         $this->container = $this->createMock(ContainerInterface::class);
         $this->relayBuilder = $this->createMock(RelayBuilder::class);
         $this->relay = $this->createMock(Relay::class);
         $this->request = $this->createMock(ServerRequestInterface::class);
         $this->uri = $this->createMock(UriInterface::class);
         $this->originalResponse = $this->createMock(ResponseInterface::class);
-        $this->subject = (new MiddlewareRequestHandler($this->container, $this->relayBuilder, $this->middlewareMap))
-            ->withOriginalResponse($this->originalResponse);
+        $this->subject = new MiddlewareRequestHandler($this->container, $this->relayBuilder, $this->getMiddlewareMap());
+        $this->subject->withOriginalResponse($this->originalResponse);
 
         $this->request
             ->method('getUri')
             ->willReturn($this->uri);
-
-        $this->request
-            ->method('getMethod')
-            ->willReturn('POST');
 
         $this->relay
             ->method('handle')
@@ -103,38 +78,44 @@ class MiddlewareRequestHandlerTest extends TestCase
             ->willReturn($this->originalResponse);
     }
 
-    public function testHandle(): void
+    /**
+     * @dataProvider assertRouteProvider
+     */
+    public function testAssertRoute(string $path, string $httpMethod, array $middlewares): void
     {
-        $middlewarePath1_1 = $this->createMock(MiddlewareInterface::class);
-        $middlewarePath1_2 = $this->createMock(MiddlewareInterface::class);
+        $middlewaresMocks = [];
 
-        $queue = [
-            $middlewarePath1_1,
-            $middlewarePath1_2,
-            static function ($request, $next): ResponseInterface {
-                return $this->originalResponse;
-            }
-        ];
+        foreach ($middlewares as $middleware) {
+            $middlewaresMocks[$middleware] = $this->createMock(MiddlewareInterface::class);
+        }
+
+        $queue = array_merge(
+            array_values($middlewaresMocks),
+            [
+                static function ($request, $next): ResponseInterface {
+                    return $this->originalResponse;
+                }
+            ]
+        );
 
         $this->container
+            ->expects($this->exactly(count($middlewares)))
             ->method('get')
             ->willReturnCallback(
-                static function (string $middlewareId) use (
-                    $middlewarePath1_1,
-                    $middlewarePath1_2
-                ): MiddlewareInterface {
-                    $middlewares = [
-                        'middlewarePath1_1' => $middlewarePath1_1,
-                        'middlewarePath1_2' => $middlewarePath1_2,
-                    ];
-
-                    return $middlewares[$middlewareId];
+                static function (string $middlewareId) use ($middlewaresMocks): MiddlewareInterface {
+                    return $middlewaresMocks[$middlewareId];
                 }
             );
 
         $this->uri
+            ->expects($this->once())
             ->method('getPath')
-            ->willReturn('/my/path1');
+            ->willReturn($path);
+
+        $this->request
+            ->expects($this->once())
+            ->method('getMethod')
+            ->willReturn($httpMethod);
 
         $this->relayBuilder
             ->expects($this->once())
@@ -142,6 +123,176 @@ class MiddlewareRequestHandlerTest extends TestCase
             ->with($queue)
             ->willReturn($this->relay);
 
-        $this->subject->handle($this->request);
+        $this->assertSame($this->originalResponse, $this->subject->handle($this->request));
+    }
+
+    public function assertRouteProvider(): array
+    {
+        return [
+            /**
+             * PATH 1: Multiple middlewares for different HTTP methods
+             */
+            [
+                '/my/path1',
+                'POST',
+                [
+                    'middlewarePath1_1',
+                    'middlewarePath1_2',
+                    'middlewarePath1_4',
+                ]
+            ],
+            /**
+             * PATH 2: Dynamic path with optional segment
+             */
+            [
+                '/my/path2/foo',
+                'POST',
+                [
+                    'middlewarePath2_1',
+                    'middlewarePath2_2',
+                ]
+            ],
+            /**
+             * PATH 3: Dynamic path with multiple segment
+             */
+            [
+                '/my/path3/user/1',
+                'POST',
+                [
+                    'middlewarePath3_1',
+                    'middlewarePath3_2',
+                ]
+            ]
+        ];
+    }
+
+    /**
+     * @dataProvider assertNoRouteProvider
+     */
+    public function testAssertNoRoute(string $path, string $httpMethod): void
+    {
+        $queue = array_merge(
+            [
+                static function ($request, $next): ResponseInterface {
+                    return $this->originalResponse;
+                }
+            ]
+        );
+
+        $this->container
+            ->expects($this->never())
+            ->method('get');
+
+        $this->uri
+            ->expects($this->once())
+            ->method('getPath')
+            ->willReturn($path);
+
+        $this->request
+            ->expects($this->once())
+            ->method('getMethod')
+            ->willReturn($httpMethod);
+
+        $this->relayBuilder
+            ->expects($this->once())
+            ->method('newInstance')
+            ->with($queue)
+            ->willReturn($this->relay);
+
+        $this->assertSame($this->originalResponse, $this->subject->handle($this->request));
+    }
+
+    public function assertNoRouteProvider(): array
+    {
+        return [
+            /**
+             * PATH 1: Multiple middlewares for different HTTP methods
+             */
+            [
+                '/my/path1/a',
+                'POST'
+            ],
+            [
+                '/my/path1',
+                'DELETE'
+            ],
+            /**
+             * PATH 2: Dynamic path with optional segment
+             */
+            [
+                '/my/path2/foo/bar',
+                'POST'
+            ],
+            /**
+             * PATH 3: Dynamic path with multiple segment
+             */
+            [
+                '/my/path3/user2/1',
+                'POST'
+            ]
+        ];
+    }
+
+    private function getMiddlewareMap(): array
+    {
+        return [
+            /**
+             * PATH 1: Multiple middlewares for different HTTP methods
+             */
+            '/^(POST)\/my\/path1$/' => [
+                MiddlewareMap::byRoute('/my/path1')
+                    ->andMiddlewareId('middlewarePath1_1')
+                    ->andHttpMethod('POST')
+                    ->jsonSerialize(),
+            ],
+            '/^(PUT|POST)\/my\/path1$/' => [
+                MiddlewareMap::byRoute('/my/path1')
+                    ->andMiddlewareId('middlewarePath1_2')
+                    ->andHttpMethod('PUT')
+                    ->andHttpMethod('POST')
+                    ->jsonSerialize(),
+            ],
+            '/^(GET)\/my\/path1$/' => [
+                MiddlewareMap::byRoute('/my/path1')
+                    ->andMiddlewareId('middlewarePath1_3')
+                    ->andHttpMethod('GET')
+                    ->jsonSerialize()
+            ],
+            '/^(GET|POST)\/my\/path1$/' => [
+                MiddlewareMap::byRoute('/my/path1')
+                    ->andMiddlewareId('middlewarePath1_4')
+                    ->andHttpMethod('GET')
+                    ->andHttpMethod('POST')
+                    ->jsonSerialize()
+            ],
+            /**
+             * PATH 2: Dynamic path with optional segment
+             */
+            '/^(POST)\/my\/path2\/[a-z]{0,}$/' => [
+                MiddlewareMap::byRoute('/my/path2/[a-z]{0,}')
+                    ->andMiddlewareId('middlewarePath2_1')
+                    ->andHttpMethod('POST')
+                    ->jsonSerialize()
+            ],
+            '/^(.*)\/my\/path2\/?[a-z]{0,}$/' => [
+                MiddlewareMap::byRoute('/my/path2/?[a-z]{0,}')
+                    ->andMiddlewareId('middlewarePath2_2')
+                    ->jsonSerialize()
+            ],
+            /**
+             * PATH 3: Dynamic path with multiple segment
+             */
+            '/^(POST)\/my\/path3\/[a-z]{0,}\/[0-9]{0,}$/' => [
+                MiddlewareMap::byRoute('/my/path3/[a-z]{0,}/[0-9]{0,}')
+                    ->andMiddlewareId('middlewarePath3_1')
+                    ->andHttpMethod('POST')
+                    ->jsonSerialize()
+            ],
+            '/^(.*)\/my\/path3\/[a-z]{0,}\/?[0-9]{0,}$/' => [
+                MiddlewareMap::byRoute('/my/path3/[a-z]{0,}/?[0-9]{0,}')
+                    ->andMiddlewareId('middlewarePath3_2')
+                    ->jsonSerialize()
+            ]
+        ];
     }
 }

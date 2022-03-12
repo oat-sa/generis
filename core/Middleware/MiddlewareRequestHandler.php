@@ -77,11 +77,13 @@ class MiddlewareRequestHandler implements RequestHandlerInterface
             $mapping[] = $this->getMiddleware($middlewareId);
         }
 
+        $originalResponse = $this->originalResponse;
+
         return array_merge(
             $mapping,
             [
-                static function ($request, $next): ResponseInterface {
-                    return $this->originalResponse;
+                static function ($request, $next) use ($originalResponse): ResponseInterface {
+                    return $originalResponse;
                 }
             ]
         );
@@ -93,22 +95,19 @@ class MiddlewareRequestHandler implements RequestHandlerInterface
     private function discoverMiddlewareIds(RequestInterface $request): array
     {
         $filteredMap = [];
+        $preparedRoute = $request->getMethod() . $request->getUri()->getPath();
 
-        foreach (($this->middlewareMap[$request->getUri()->getPath()] ?? []) as $map) {
-            $middlewareMap = MiddlewareMap::fromJson($map);
+        foreach ($this->middlewareMap as $routeRegex => $mapGroup) {
+            if (preg_match($routeRegex, $preparedRoute) !== 1) {
+                continue;
+            }
 
-            if ($this->isHttpMethodAllowed($request, $middlewareMap)) {
-                $filteredMap = array_merge($filteredMap, $middlewareMap->getMiddlewaresIds());
+            foreach ($mapGroup as $map) {
+                $filteredMap = array_merge($filteredMap, MiddlewareMap::fromJson($map)->getMiddlewaresIds());
             }
         }
 
         return $filteredMap;
-    }
-
-    private function isHttpMethodAllowed(RequestInterface $request, MiddlewareMapInterface $middlewareMap): bool
-    {
-        return empty($middlewareMap->getHttpMethods())
-            || in_array($request->getMethod(), $middlewareMap->getHttpMethods(), true);
     }
 
     private function getMiddleware(string $middlewareId): MiddlewareInterface

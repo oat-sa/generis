@@ -43,10 +43,19 @@ class MiddlewareExtensionsMapper
 
                 /** @var MiddlewareMapInterface $middlewareConfig */
                 foreach ($middlewareConfigs as $middlewareConfig) {
-                    $route = current($middlewareConfig->getRoutes());
+                    foreach ($middlewareConfig->getRoutes() as $route) {
+                        $methods = empty($middlewareConfig->getHttpMethods())
+                            ? '(.*)'
+                            : ('(' . implode('|', (array)$middlewareConfig->getHttpMethods()) . ')');
 
-                    $middlewareMap[$route] = $middlewareMap[$route] ?? [];
-                    $middlewareMap[$route][] = $middlewareConfig->jsonSerialize();
+                        $route = strpos($route, '/') > 0 ? ('/' . $route) : $route;
+                        $route = addslashes($route);
+                        $route = str_replace('/', '\/', $route);
+                        $route = '/^' . $methods . $route . '$/';
+
+                        $middlewareMap[$route] = $middlewareMap[$route] ?? [];
+                        $middlewareMap[$route][] = $middlewareConfig->jsonSerialize();
+                    }
                 }
             }
         }

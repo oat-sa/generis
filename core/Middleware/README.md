@@ -86,7 +86,32 @@ return [
 ];
 ```
 
+3) Regenerate the DI container cache
+
+```injectablephp
+php index.php 'oat\generis\scripts\tools\ContainerCacheWarmup'
+```
+
+## What are the supported types of routes?
+
+The supported routes are regex based (with no need to scape `/` or add delimiters). Examples:
+
+- `/foo/bar` = Exact URI path. Example of matching URIs:
+  - `/foo/bar` 
+- `/foo/bar/[a-z]{0,}` = Dynamic URI path segment. Example of matching URIs:
+  - `/foo/bar/users`
+  - `/foo/bar/items`
+- `/foo/bar/[a-z]{0,}/[0-1]{0,}` = Dynamic URI path segments. Example of matching URIs:
+  - `/foo/bar/users/42`
+  - `/foo/bar/items/777`
+- `/foo/bar/[a-z]{0,}/?[0-1]{0,}`: Dynamic URI path with optional segments. Example of matching URIs:
+  - `/foo/bar/users`
+  - `/foo/bar/users/42`
+
+## What is the order of execution of the middlewares
+
+For now, they are executed in the order they are registered in the configuration files.
+
 ## TODO
 
-- [ ] Add support for dynamic routes like `/path/{id:[0-9]}/something`
 - [ ] Add possibility to set oder of execution of middlewares.
