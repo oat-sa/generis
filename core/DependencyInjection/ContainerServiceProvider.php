@@ -28,6 +28,7 @@ use oat\generis\model\Middleware\MiddlewareExtensionsMapper;
 use oat\generis\model\Middleware\MiddlewareRequestHandler;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Relay\RelayBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
@@ -39,15 +40,14 @@ class ContainerServiceProvider implements ContainerServiceProviderInterface
     {
         $services = $configurator->services();
 
-        /**
-         * @TODO This needs to be override in the scope of middleware task [ADF-731]
-         */
         $services->set(ServerRequestInterface::class, ServerRequestInterface::class)
             ->public()
             ->factory(ServerRequest::class . '::fromGlobals');
 
         $services->set(ResponseInterface::class, Response::class)
             ->public();
+
+        $services->set(RelayBuilder::class, RelayBuilder::class);
 
         $services->set(LegacyServiceGateway::class, LegacyServiceGateway::class);
 
@@ -56,6 +56,7 @@ class ContainerServiceProvider implements ContainerServiceProviderInterface
             ->args(
                 [
                     service(ContainerServiceProviderInterface::CONTAINER_SERVICE_ID),
+                    service(RelayBuilder::class),
                     param(MiddlewareExtensionsMapper::MAP_KEY),
                 ]
             );

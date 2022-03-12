@@ -29,7 +29,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Relay\Relay;
+use Relay\RelayBuilder;
 
 class MiddlewareRequestHandler implements RequestHandlerInterface
 {
@@ -42,40 +42,21 @@ class MiddlewareRequestHandler implements RequestHandlerInterface
     /** @var ContainerInterface */
     private $container;
 
-    public function __construct(ContainerInterface $container, array $middlewareMap)
+    /** @var RelayBuilder */
+    private $relayBuilder;
+
+    public function __construct(ContainerInterface $container, RelayBuilder $relayBuilder, array $middlewareMap)
     {
         $this->container = $container;
         $this->middlewareMap = $middlewareMap;
+        $this->relayBuilder = $relayBuilder;
     }
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $queue = $this->build($request);
-
-        return (new Relay($queue))->handle($request);
-    }
-
-    /**
-     * @return MiddlewareInterface[]
-     */
-    private function build(RequestInterface $request): array
-    {
-        $mapping = [];
-
-        foreach ($this->maps($request) as $middlewareClass) {
-            $mapping[] = $this->getMiddleware($middlewareClass);
-        }
-
-        $response = $this->container->get(ResponseInterface::class);
-
-        return array_merge(
-            $mapping,
-            [
-                static function ($request, $next) use ($response): ResponseInterface {
-                    return $response;
-                }
-            ]
-        );
+        return $this->relayBuilder
+            ->newInstance($this->createMiddlewareQueue($request))
+            ->handle($request);
     }
 
     public function withOriginalResponse(ResponseInterface $response): self
@@ -86,13 +67,34 @@ class MiddlewareRequestHandler implements RequestHandlerInterface
     }
 
     /**
+     * @return MiddlewareInterface[]
+     */
+    private function createMiddlewareQueue(RequestInterface $request): array
+    {
+        $mapping = [];
+
+        foreach ($this->discoverMiddlewareIds($request) as $middlewareId) {
+            $mapping[] = $this->getMiddleware($middlewareId);
+        }
+
+        return array_merge(
+            $mapping,
+            [
+                static function ($request, $next): ResponseInterface {
+                    return $this->originalResponse;
+                }
+            ]
+        );
+    }
+
+    /**
      * @return string[]
      */
-    private function maps(RequestInterface $request): array
+    private function discoverMiddlewareIds(RequestInterface $request): array
     {
         $filteredMap = [];
 
-        foreach ($this->middlewareMap[$request->getUri()->getPath()] ?? [] as $map) {
+        foreach (($this->middlewareMap[$request->getUri()->getPath()] ?? []) as $map) {
             $middlewareMap = MiddlewareMap::fromJson($map);
 
             if ($this->isHttpMethodAllowed($request, $middlewareMap)) {
