@@ -44,7 +44,7 @@ final class MiddlewareMap implements MiddlewareMapInterface
         return new self([$route]);
     }
 
-    public static function byRoutes(string ...$route): self
+    public static function byRoutes(array $route): self
     {
         return new self($route);
     }
@@ -54,7 +54,7 @@ final class MiddlewareMap implements MiddlewareMapInterface
         return new self([], [$middlewareId]);
     }
 
-    public static function byMiddlewareIds(string ...$middlewareIds): self
+    public static function byMiddlewareIds(array $middlewareIds): self
     {
         return new self([], $middlewareIds);
     }

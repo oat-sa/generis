@@ -28,11 +28,10 @@ class MiddlewareExtensionsMapper
 {
     public const MAP_KEY = 'middlewaresMap';
 
-    public function map(array $extensions): array
+    public function map(common_ext_Extension ...$extensions): array
     {
         $middlewareMap = [];
 
-        /** @var common_ext_Extension[] $extensions */
         foreach ($extensions as $extension) {
             foreach ($extension->getManifest()->getMiddlewares() as $map) {
                 if (!in_array(MiddlewareConfigInterface::class, class_implements($map), true)) {

@@ -104,7 +104,7 @@ The supported routes are regex based (with no need to scape `/` or add delimiter
 - `/foo/bar/[a-z]{0,}/[0-1]{0,}` = Dynamic URI path segments. Example of matching URIs:
   - `/foo/bar/users/42`
   - `/foo/bar/items/777`
-- `/foo/bar/[a-z]{0,}/?[0-1]{0,}`: Dynamic URI path with optional segments. Example of matching URIs:
+- `/foo/bar/[a-z]{0,}/?[0-1]{0,}` = Dynamic URI path with optional segments. Example of matching URIs:
   - `/foo/bar/users`
   - `/foo/bar/users/42`
 
