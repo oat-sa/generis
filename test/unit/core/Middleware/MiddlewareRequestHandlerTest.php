@@ -26,8 +26,8 @@ namespace oat\generis\test\unit\core\Middleware;
 
 use oat\generis\model\Middleware\MiddlewareMap;
 use oat\generis\model\Middleware\MiddlewareRequestHandler;
-use oat\generis\test\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;

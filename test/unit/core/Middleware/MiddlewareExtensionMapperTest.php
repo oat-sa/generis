@@ -28,8 +28,8 @@ use common_ext_Extension;
 use oat\generis\model\Middleware\MiddlewareConfigInterface;
 use oat\generis\model\Middleware\MiddlewareExtensionsMapper;
 use oat\generis\model\Middleware\MiddlewareMap;
-use oat\generis\test\TestCase;
 use oat\oatbox\extension\Manifest;
+use PHPUnit\Framework\TestCase;
 
 class MiddlewareExtensionMapperTest extends TestCase
 {
