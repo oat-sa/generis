@@ -1,7 +1,7 @@
 # Middleware
 
-The goal of this feature is to **intercept requests** with Middlewares and 
-handle them before reaching your controller with a **chain of responsibility pattern**.
+The goal of this feature is to **intercept requests** with Middlewares and handle them before reaching your controller
+with a **chain of responsibility pattern**.
 
 The middleware implementation is complient with [PSR-15](https://www.php-fig.org/psr/psr-15/).
 
@@ -96,17 +96,12 @@ php index.php 'oat\generis\scripts\tools\ContainerCacheWarmup'
 
 The supported routes are regex based (with no need to scape `/` or add delimiters). Examples:
 
-- `/foo/bar` = Exact URI path. Example of matching URIs:
-  - `/foo/bar` 
-- `/foo/bar/[a-z]{0,}` = Dynamic URI path segment. Example of matching URIs:
-  - `/foo/bar/users`
-  - `/foo/bar/items`
-- `/foo/bar/[a-z]{0,}/[0-1]{0,}` = Dynamic URI path segments. Example of matching URIs:
-  - `/foo/bar/users/42`
-  - `/foo/bar/items/777`
-- `/foo/bar/[a-z]{0,}/?[0-1]{0,}` = Dynamic URI path with optional segments. Example of matching URIs:
-  - `/foo/bar/users`
-  - `/foo/bar/users/42`
+| Example                         | Description                            | Matching URIs                             |
+|---------------------------------|----------------------------------------|-------------------------------------------|
+| `/foo/bar`                      | Exact URI path                         | `/foo/bar`                                |
+| `/foo/bar/[a-z]{0,}`            | Dynamic URI path segment               | `/foo/bar/users`, `/foo/bar/items`        |
+| `/foo/bar/[a-z]{0,}/[0-1]{0,}`  | Dynamic URI path segments              | `/foo/bar/users/42`, `/foo/bar/items/777` |
+| `/foo/bar/[a-z]{0,}/?[0-1]{0,}` | Dynamic URI path with optional segment | `/foo/bar/users`, `/foo/bar/users/42`     |
 
 ## What is the order of execution of the middlewares
 
