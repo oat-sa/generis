@@ -183,7 +183,7 @@ class ContainerBuilder extends SymfonyContainerBuilder
         
             %s
         };',
-            var_export($this->middlewareExtensionsMapper->map($extensions), true),
+            var_export($this->middlewareExtensionsMapper->map(...$extensions), true),
             implode('', $contents)
         );
     }
