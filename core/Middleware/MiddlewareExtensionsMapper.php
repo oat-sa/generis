@@ -30,7 +30,10 @@ class MiddlewareExtensionsMapper
 {
     public const MAP_KEY = 'middlewaresMap';
 
-    public function map(common_ext_Extension ...$extensions): array
+    /**
+     * @param common_ext_Extension[] $extensions
+     */
+    public function map(array $extensions): array
     {
         $middlewareMap = [];
 

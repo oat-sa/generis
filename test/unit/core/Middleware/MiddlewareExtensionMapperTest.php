@@ -43,11 +43,11 @@ class MiddlewareExtensionMapperTest extends TestCase
 
     public function testMap(): void
     {
-        $extensions = [
-            $this->createExtension([MiddlewareConfigMock::class])
-        ];
-
-        $map = $this->subject->map(...$extensions);
+        $map = $this->subject->map(
+            [
+                $this->createExtension([MiddlewareConfigMock::class])
+            ]
+        );
 
         $this->assertSame(
             [
