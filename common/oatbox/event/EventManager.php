@@ -15,7 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2015 (original work) Open Assessment Technologies SA;
+ * Copyright (c) 2015-2022 (original work) Open Assessment Technologies SA;
  *
  */
 
@@ -47,20 +47,24 @@ class EventManager extends ConfigurableService
      */
     public function trigger($event, $params = [])
     {
-        $eventObject = is_object($event) ? $event : new GenericEvent($event, $params);
-        foreach ($this->getListeners($eventObject) as $callback) {
+        $container = $this->getServiceManager()->getContainer();
+
+        $event = is_object($event) ? $event : new GenericEvent($event, $params);
+
+        foreach ($this->getListeners($event) as $callback) {
             if (is_array($callback) && count($callback) == 2) {
                 list($key, $function) = $callback;
                 if (is_string($key)) {
                     try {
-                        $service = $this->getServiceManager()->get($key);
+                        $service = $container->get($key);
                         $callback = [$service, $function];
                     } catch (ServiceNotFoundException $e) {
                         //do nothing
                     }
                 }
             }
-            call_user_func($callback, $eventObject);
+
+            call_user_func($callback, $event);
         }
     }
     
