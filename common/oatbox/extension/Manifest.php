@@ -26,6 +26,7 @@ use oat\generis\model\DependencyInjection\ContainerServiceProviderInterface;
 use oat\oatbox\extension\exception\ManifestException;
 use oat\oatbox\extension\exception\ManifestNotFoundException;
 use oat\oatbox\service\exception\InvalidServiceManagerException;
+use oat\tao\model\Middleware\Contract\MiddlewareMapInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Composer\InstalledVersions;
@@ -258,11 +259,19 @@ class Manifest implements ServiceLocatorAwareInterface
     }
 
     /**
-     * @return ContainerServiceProviderInterface[]
+     * @return string[] Array with ContainerServiceProviderInterface FQNs
      */
     public function getContainerServiceProvider(): array
     {
         return $this->manifest['containerServiceProviders'] ?? [];
+    }
+
+    /**
+     * @return string[] Array with MiddlewareMapInterface FQNs
+     */
+    public function getMiddlewares(): array
+    {
+        return $this->manifest['middlewares'] ?? [];
     }
 
     /**

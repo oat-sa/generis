@@ -16,6 +16,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2021 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
+ *
+ * @author Gabriel Felipe Soares <gabriel.felipe.soares@taotesting.com>
  */
 
 declare(strict_types=1);
@@ -25,6 +27,8 @@ namespace oat\generis\model\DependencyInjection;
 use common_ext_Extension;
 use common_ext_ExtensionsManager;
 use InvalidArgumentException;
+use oat\generis\model\Middleware\MiddlewareExtensionsMapper;
+use oat\tao\model\Middleware\Contract\MiddlewareMapInterface;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder as SymfonyContainerBuilder;
@@ -46,11 +50,15 @@ class ContainerBuilder extends SymfonyContainerBuilder
     /** @var ContainerInterface */
     private $legacyContainer;
 
+    /** @var MiddlewareExtensionsMapper|null */
+    private $middlewareExtensionsMapper;
+
     public function __construct(
         string $cachePath,
         ContainerInterface $legacyContainer,
         bool $isDebugEnabled = null,
-        ContainerCache $cache = null
+        ContainerCache $cache = null,
+        MiddlewareExtensionsMapper $middlewareExtensionsMapper = null
     ) {
         $this->cachePath = $cachePath;
         $this->legacyContainer = $legacyContainer;
@@ -63,6 +71,7 @@ class ContainerBuilder extends SymfonyContainerBuilder
         );
 
         parent::__construct();
+        $this->middlewareExtensionsMapper = $middlewareExtensionsMapper ?? new MiddlewareExtensionsMapper();
     }
 
     public function build(): ContainerInterface
@@ -155,22 +164,29 @@ class ContainerBuilder extends SymfonyContainerBuilder
     {
         $contents = [];
 
-        /** @var common_ext_Extension $extension */
-        foreach ($this->getExtensionsManager()->getInstalledExtensions() as $extension) {
+        /** @var common_ext_Extension[] $extensions */
+        $extensions = $this->getExtensionsManager()->getInstalledExtensions();
+
+        foreach ($extensions as $extension) {
             foreach ($extension->getManifest()->getContainerServiceProvider() as $serviceProvider) {
                 $contents[] = '(new ' . $serviceProvider . '())($configurator);';
             }
         }
 
-        return vsprintf(
+        return sprintf(
             '<?php
         use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+        use \oat\generis\model\Middleware\MiddlewareExtensionsMapper;
         
         return function (ContainerConfigurator $configurator): void
         {
-            ' . str_repeat('%s' . PHP_EOL, count($contents)) . '
+            $parameter = $configurator->parameters();
+            $parameter->set(MiddlewareExtensionsMapper::MAP_KEY, %s);
+        
+            %s
         };',
-            $contents
+            var_export($this->middlewareExtensionsMapper->map($extensions), true),
+            implode('', $contents)
         );
     }
 
