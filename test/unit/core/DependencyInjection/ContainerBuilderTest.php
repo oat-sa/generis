@@ -15,7 +15,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2021 (original work) Open Assessment Technologies SA;
+ * Copyright (c) 2021-2022 (original work) Open Assessment Technologies SA;
+ *
+ * @author Gabriel Felipe Soares <gabriel.felipe.soares@taotesting.com>
  */
 
 declare(strict_types=1);
@@ -46,22 +48,36 @@ class ContainerBuilderTest extends TestCase
     /** @var string */
     private $tempDir;
 
+    /** @var MockObject|ContainerInterface */
+    private $legacyContainer;
+
     public function setUp(): void
     {
         $this->extensionManager = $this->createMock(common_ext_ExtensionsManager::class);
 
-        $legacyContainer = $this->createMock(ContainerInterface::class);
-        $legacyContainer->method('get')
+        $this->legacyContainer = $this->createMock(ContainerInterface::class);
+        $this->legacyContainer->method('get')
             ->willReturn($this->extensionManager);
 
         $this->tempDir = sys_get_temp_dir();
+
+        touch($this->tempDir . '/generis/installation.conf.php');
+
         $this->cache = $this->createMock(ContainerCache::class);
         $this->subject = new ContainerBuilder(
             $this->tempDir,
-            $legacyContainer,
+            $this->legacyContainer,
             true,
-            $this->cache
+            $this->cache,
+            $this->tempDir . '/'
         );
+    }
+
+    public function testDoNotBuildIfApplicationIsNotInstalled(): void
+    {
+        unlink($this->tempDir . '/generis/installation.conf.php');
+
+        $this->assertSame($this->legacyContainer, $this->subject->build());
     }
 
     public function testBuildFromCache(): void
