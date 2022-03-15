@@ -53,12 +53,16 @@ class ContainerBuilder extends SymfonyContainerBuilder
     /** @var MiddlewareExtensionsMapper|null */
     private $middlewareExtensionsMapper;
 
+    /** @var string|null */
+    private $configPath;
+
     public function __construct(
         string $cachePath,
         ContainerInterface $legacyContainer,
         bool $isDebugEnabled = null,
         ContainerCache $cache = null,
-        MiddlewareExtensionsMapper $middlewareExtensionsMapper = null
+        MiddlewareExtensionsMapper $middlewareExtensionsMapper = null,
+        string $configPath = null
     ) {
         $this->cachePath = $cachePath;
         $this->legacyContainer = $legacyContainer;
@@ -72,6 +76,7 @@ class ContainerBuilder extends SymfonyContainerBuilder
 
         parent::__construct();
         $this->middlewareExtensionsMapper = $middlewareExtensionsMapper ?? new MiddlewareExtensionsMapper();
+        $this->configPath = $configPath  === null ? (defined('CONFIG_PATH') ? CONFIG_PATH : null) : $configPath;
     }
 
     public function build(): ContainerInterface
@@ -85,6 +90,10 @@ class ContainerBuilder extends SymfonyContainerBuilder
 
     public function forceBuild(): ContainerInterface
     {
+        if (!$this->isApplicationInstalled()) {
+            return $this->legacyContainer;
+        }
+
         if (!is_writable($this->cachePath)) {
             throw new InvalidArgumentException(
                 sprintf(
@@ -197,5 +206,10 @@ class ContainerBuilder extends SymfonyContainerBuilder
     private function getExtensionsManager(): common_ext_ExtensionsManager
     {
         return $this->legacyContainer->get(common_ext_ExtensionsManager::SERVICE_ID);
+    }
+
+    private function isApplicationInstalled(): bool
+    {
+        return file_exists($this->configPath . 'generis/installation.conf.php');
     }
 }
