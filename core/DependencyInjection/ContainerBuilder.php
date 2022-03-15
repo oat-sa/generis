@@ -176,17 +176,17 @@ class ContainerBuilder extends SymfonyContainerBuilder
         return sprintf(
             '<?php
         use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-        use \oat\generis\model\Middleware\MiddlewareExtensionsMapper;
+        use oat\generis\model\Middleware\MiddlewareExtensionsMapper;
+        use oat\generis\model\Middleware\MiddlewareTemporaryServiceProvider;
         
         return function (ContainerConfigurator $configurator): void
         {
-            $parameter = $configurator->parameters();
-            $parameter->set(MiddlewareExtensionsMapper::MAP_KEY, %s);
+            (new MiddlewareTemporaryServiceProvider(%s))($configurator);
         
             %s
         };',
             var_export($this->middlewareExtensionsMapper->map($extensions), true),
-            implode('', $contents)
+            implode(PHP_EOL, $contents)
         );
     }
 
