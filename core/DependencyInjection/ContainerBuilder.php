@@ -46,11 +46,15 @@ class ContainerBuilder extends SymfonyContainerBuilder
     /** @var ContainerInterface */
     private $legacyContainer;
 
+    /** @var string|null */
+    private $configPath;
+
     public function __construct(
         string $cachePath,
         ContainerInterface $legacyContainer,
         bool $isDebugEnabled = null,
-        ContainerCache $cache = null
+        ContainerCache $cache = null,
+        string $configPath = null
     ) {
         $this->cachePath = $cachePath;
         $this->legacyContainer = $legacyContainer;
@@ -63,6 +67,7 @@ class ContainerBuilder extends SymfonyContainerBuilder
         );
 
         parent::__construct();
+        $this->configPath = $configPath  === null ? (defined('CONFIG_PATH') ? CONFIG_PATH : null) : $configPath;
     }
 
     public function build(): ContainerInterface
@@ -76,10 +81,14 @@ class ContainerBuilder extends SymfonyContainerBuilder
 
     public function forceBuild(): ContainerInterface
     {
+        if (!$this->isApplicationInstalled()) {
+            return $this->legacyContainer;
+        }
+
         if (!is_writable($this->cachePath)) {
             throw new InvalidArgumentException(
                 sprintf(
-                    'DI container build requires directory "%" to be writable',
+                    'DI container build requires directory "%s" to be writable',
                     $this->cachePath
                 )
             );
@@ -162,15 +171,18 @@ class ContainerBuilder extends SymfonyContainerBuilder
             }
         }
 
-        return vsprintf(
+        return sprintf(
             '<?php
         use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+        use \oat\generis\model\Middleware\MiddlewareExtensionsMapper;
         
         return function (ContainerConfigurator $configurator): void
         {
-            ' . str_repeat('%s' . PHP_EOL, count($contents)) . '
+            $parameter = $configurator->parameters();
+        
+            %s
         };',
-            $contents
+            implode('', $contents)
         );
     }
 
@@ -181,5 +193,10 @@ class ContainerBuilder extends SymfonyContainerBuilder
     private function getExtensionsManager(): common_ext_ExtensionsManager
     {
         return $this->legacyContainer->get(common_ext_ExtensionsManager::SERVICE_ID);
+    }
+
+    private function isApplicationInstalled(): bool
+    {
+        return file_exists($this->configPath . 'generis/installation.conf.php');
     }
 }
