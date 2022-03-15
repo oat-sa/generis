@@ -16,6 +16,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2021 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
+ *
+ * @author Gabriel Felipe Soares <gabriel.felipe.soares@taotesting.com>
  */
 
 declare(strict_types=1);
@@ -67,7 +69,7 @@ class ContainerBuilder extends SymfonyContainerBuilder
         );
 
         parent::__construct();
-        $this->configPath = $configPath  === null ? (defined('CONFIG_PATH') ? CONFIG_PATH : null) : $configPath;
+        $this->configPath = $configPath ?? (defined('CONFIG_PATH') ? CONFIG_PATH : null);
     }
 
     public function build(): ContainerInterface
@@ -171,18 +173,15 @@ class ContainerBuilder extends SymfonyContainerBuilder
             }
         }
 
-        return sprintf(
+        return vsprintf(
             '<?php
         use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-        use \oat\generis\model\Middleware\MiddlewareExtensionsMapper;
         
         return function (ContainerConfigurator $configurator): void
         {
-            $parameter = $configurator->parameters();
-        
-            %s
+            ' . str_repeat('%s' . PHP_EOL, count($contents)) . '
         };',
-            implode('', $contents)
+            $contents
         );
     }
 
@@ -197,6 +196,6 @@ class ContainerBuilder extends SymfonyContainerBuilder
 
     private function isApplicationInstalled(): bool
     {
-        return file_exists($this->configPath . 'generis/installation.conf.php');
+        return file_exists(rtrim((string)$this->configPath, '/') . '/generis/installation.conf.php');
     }
 }

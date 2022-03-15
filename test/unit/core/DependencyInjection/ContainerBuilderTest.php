@@ -29,9 +29,9 @@ use common_ext_ExtensionsManager;
 use oat\generis\model\DependencyInjection\ContainerBuilder;
 use oat\generis\model\DependencyInjection\ContainerCache;
 use oat\generis\model\DependencyInjection\ContainerServiceProviderInterface;
-use oat\generis\test\TestCase;
 use oat\oatbox\extension\Manifest;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 
 class ContainerBuilderTest extends TestCase
@@ -69,7 +69,7 @@ class ContainerBuilderTest extends TestCase
             $this->legacyContainer,
             true,
             $this->cache,
-            $this->tempDir . '/'
+            $this->tempDir
         );
     }
 
