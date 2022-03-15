@@ -28,7 +28,6 @@ use common_ext_Extension;
 use common_ext_ExtensionsManager;
 use InvalidArgumentException;
 use oat\generis\model\Middleware\MiddlewareExtensionsMapper;
-use oat\tao\model\Middleware\Contract\MiddlewareMapInterface;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder as SymfonyContainerBuilder;
@@ -76,7 +75,7 @@ class ContainerBuilder extends SymfonyContainerBuilder
 
         parent::__construct();
         $this->middlewareExtensionsMapper = $middlewareExtensionsMapper ?? new MiddlewareExtensionsMapper();
-        $this->configPath = $configPath  === null ? (defined('CONFIG_PATH') ? CONFIG_PATH : null) : $configPath;
+        $this->configPath = $configPath ?? (defined('CONFIG_PATH') ? CONFIG_PATH : null);
     }
 
     public function build(): ContainerInterface
@@ -210,6 +209,6 @@ class ContainerBuilder extends SymfonyContainerBuilder
 
     private function isApplicationInstalled(): bool
     {
-        return file_exists($this->configPath . 'generis/installation.conf.php');
+        return file_exists(rtrim((string)$this->configPath, '/') . '/generis/installation.conf.php');
     }
 }

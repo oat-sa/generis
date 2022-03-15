@@ -30,9 +30,9 @@ use oat\generis\model\DependencyInjection\ContainerBuilder;
 use oat\generis\model\DependencyInjection\ContainerCache;
 use oat\generis\model\DependencyInjection\ContainerServiceProviderInterface;
 use oat\generis\model\Middleware\MiddlewareExtensionsMapper;
-use oat\generis\test\TestCase;
 use oat\oatbox\extension\Manifest;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 
 class ContainerBuilderTest extends TestCase
@@ -75,7 +75,7 @@ class ContainerBuilderTest extends TestCase
             true,
             $this->cache,
             $this->middlewareExtensionsMapper,
-            $this->tempDir . '/'
+            $this->tempDir
         );
     }
 
