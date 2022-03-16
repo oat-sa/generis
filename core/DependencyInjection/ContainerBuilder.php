@@ -28,6 +28,7 @@ use common_ext_Extension;
 use common_ext_ExtensionsManager;
 use InvalidArgumentException;
 use oat\generis\model\Middleware\MiddlewareExtensionsMapper;
+use oat\tao\model\Middleware\Contract\MiddlewareMapInterface;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder as SymfonyContainerBuilder;
@@ -52,16 +53,12 @@ class ContainerBuilder extends SymfonyContainerBuilder
     /** @var MiddlewareExtensionsMapper|null */
     private $middlewareExtensionsMapper;
 
-    /** @var string|null */
-    private $configPath;
-
     public function __construct(
         string $cachePath,
         ContainerInterface $legacyContainer,
         bool $isDebugEnabled = null,
         ContainerCache $cache = null,
-        MiddlewareExtensionsMapper $middlewareExtensionsMapper = null,
-        string $configPath = null
+        MiddlewareExtensionsMapper $middlewareExtensionsMapper = null
     ) {
         $this->cachePath = $cachePath;
         $this->legacyContainer = $legacyContainer;
@@ -75,7 +72,6 @@ class ContainerBuilder extends SymfonyContainerBuilder
 
         parent::__construct();
         $this->middlewareExtensionsMapper = $middlewareExtensionsMapper ?? new MiddlewareExtensionsMapper();
-        $this->configPath = $configPath ?? (defined('CONFIG_PATH') ? CONFIG_PATH : null);
     }
 
     public function build(): ContainerInterface
@@ -89,10 +85,6 @@ class ContainerBuilder extends SymfonyContainerBuilder
 
     public function forceBuild(): ContainerInterface
     {
-        if (!$this->isApplicationInstalled()) {
-            return $this->legacyContainer;
-        }
-
         if (!is_writable($this->cachePath)) {
             throw new InvalidArgumentException(
                 sprintf(
@@ -205,10 +197,5 @@ class ContainerBuilder extends SymfonyContainerBuilder
     private function getExtensionsManager(): common_ext_ExtensionsManager
     {
         return $this->legacyContainer->get(common_ext_ExtensionsManager::SERVICE_ID);
-    }
-
-    private function isApplicationInstalled(): bool
-    {
-        return file_exists(rtrim((string)$this->configPath, '/') . '/generis/installation.conf.php');
     }
 }

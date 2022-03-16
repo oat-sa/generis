@@ -30,9 +30,9 @@ use oat\generis\model\DependencyInjection\ContainerBuilder;
 use oat\generis\model\DependencyInjection\ContainerCache;
 use oat\generis\model\DependencyInjection\ContainerServiceProviderInterface;
 use oat\generis\model\Middleware\MiddlewareExtensionsMapper;
+use oat\generis\test\TestCase;
 use oat\oatbox\extension\Manifest;
 use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 
 class ContainerBuilderTest extends TestCase
@@ -52,38 +52,24 @@ class ContainerBuilderTest extends TestCase
     /** @var MiddlewareExtensionsMapper|MockObject */
     private $middlewareExtensionsMapper;
 
-    /** @var MockObject|ContainerInterface */
-    private $legacyContainer;
-
     public function setUp(): void
     {
         $this->extensionManager = $this->createMock(common_ext_ExtensionsManager::class);
         $this->middlewareExtensionsMapper = $this->createMock(MiddlewareExtensionsMapper::class);
 
-        $this->legacyContainer = $this->createMock(ContainerInterface::class);
-        $this->legacyContainer->method('get')
+        $legacyContainer = $this->createMock(ContainerInterface::class);
+        $legacyContainer->method('get')
             ->willReturn($this->extensionManager);
 
         $this->tempDir = sys_get_temp_dir();
-
-        touch($this->tempDir . '/generis/installation.conf.php');
-
         $this->cache = $this->createMock(ContainerCache::class);
         $this->subject = new ContainerBuilder(
             $this->tempDir,
-            $this->legacyContainer,
+            $legacyContainer,
             true,
             $this->cache,
-            $this->middlewareExtensionsMapper,
-            $this->tempDir
+            $this->middlewareExtensionsMapper
         );
-    }
-
-    public function testDoNotBuildIfApplicationIsNotInstalled(): void
-    {
-        unlink($this->tempDir . '/generis/installation.conf.php');
-
-        $this->assertSame($this->legacyContainer, $this->subject->build());
     }
 
     public function testBuildFromCache(): void
