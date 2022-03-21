@@ -56,7 +56,7 @@
   "require": {
     "php": "^7.1",
     "clearfw/clearfw": "~1.2.0",
-    "easyrdf/easyrdf": "^0.9.0",
+    "easyrdf/easyrdf": "^1.1",
     "doctrine/dbal": "2.10.1",
     "doctrine/annotations": "~1.6.0",
     "laminas/laminas-servicemanager": "~2.5.0",
@@ -75,7 +75,9 @@
     "psr/container": "^1.1.1",
     "psr/simple-cache" : "^1.0.1",
     "ramsey/uuid": "^3.8",
-    "composer-runtime-api": "^2.0"
+    "relay/relay": "~2.0",
+    "composer-runtime-api": "^2.0",
+    "ext-pdo": "*"
   },
   "require-dev": {
     "mikey179/vfsstream": "1.4.0",
@@ -96,6 +98,7 @@
     },
     "files": [
       "common/legacy/class.LegacyAutoLoader.php",
+      "common/legacy/ClassAliases.php",
       "common/constants.php"
     ]
   },

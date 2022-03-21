@@ -15,38 +15,31 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) (original work) 2015 Open Assessment Technologies SA
+ * Copyright (c) (original work) 2015-2022 Open Assessment Technologies SA
  *
  */
 
 namespace oat\generis\test\unit\oatbox;
 
+use oat\generis\test\ServiceManagerMockTrait;
 use oat\oatbox\event\EventManager;
-use oat\oatbox\service\ConfigurableService;
-use oat\oatbox\service\ServiceManager;
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\Prediction\CallTimesPrediction;
 use oat\oatbox\event\GenericEvent;
-use oat\generis\test\TestCase;
 
-class EmptyClass
+class CallableListener
 {
-    public function testfunction($event)
-    {
-    }
-    public function testfunction2($event)
-    {
-    }
-    public function testfunction3($event)
+    public function invoke($event): void
     {
     }
 }
 
-class EmptyClassService extends ConfigurableService
+class ServiceListener
 {
     public static $called = false;
 
-    public function testfunction($event)
+    public function invoke($event): void
     {
         self::$called = true;
     }
@@ -54,88 +47,65 @@ class EmptyClassService extends ConfigurableService
 
 class EventManagerTest extends TestCase
 {
-    public function testInit()
+    use ServiceManagerMockTrait;
+
+    /** @var EventManager */
+    private $eventManager;
+
+    public function setUp(): void
     {
-        $eventManager = new EventManager();
+        $this->eventManager = new EventManager();
 
-        $config = new \common_persistence_KeyValuePersistence([], new \common_persistence_InMemoryKvDriver());
-        $eventManager->setServiceLocator(new ServiceManager($config));
+        $this->eventManager->setServiceLocator(
+            $this->getServiceManagerMock(
+                [
+                    ServiceListener::class => new ServiceListener()
+                ]
+            )
+        );
+    }
 
-        $this->assertInstanceOf(EventManager::class, $eventManager);
+    public function testAttachedListenerIsInvokedWhenEventIsTriggered(): void
+    {
+        $callable = $this->prophesize(CallableListener::class);
+        $callable->invoke(Argument::any())->should(new CallTimesPrediction(1));
         
-        return $eventManager;
-        //no cleanup required, not persisted
-    }
-
-    /**
-     * @depends testInit
-     */
-    public function testAttachOne($eventManager)
-    {
-        $callable = $this->prophesize(EmptyClass::class);
-        $callable->testfunction(Argument::any())->should(new CallTimesPrediction(1));
-        
-        $eventManager->attach('testEvent', [$callable->reveal(), 'testfunction']);
-        $eventManager->trigger('testEvent');
+        $this->eventManager->attach('testEvent', [$callable->reveal(), 'invoke']);
+        $this->eventManager->trigger('testEvent');
     }
     
-    /**
-     * @depends testInit
-     */
-    public function testAttachMultiple($eventManager)
+    public function testListenerIsInvokedWhenAttachedToMultipleEvents(): void
     {
-        $callable = $this->prophesize(EmptyClass::class);
-        $callable->testfunction(Argument::any())->should(new CallTimesPrediction(2));
-    
-        $eventManager->attach(['testEvent1','testEvent2'], [$callable->reveal(), 'testfunction']);
-        $eventManager->trigger('testEvent1');
-        $eventManager->trigger('testEvent2');
-        $eventManager->trigger('testEvent3');
-    }
-    
-    /**
-     * @depends testInit
-     */
-    public function testTriggerEventObj($eventManager)
-    {
-        $genericEvent = new GenericEvent('objEvent', ['param1' => '1']);
+        $callable = $this->prophesize(CallableListener::class);
+        $callable->invoke(Argument::any())->should(new CallTimesPrediction(2));
 
-        $callable = $this->prophesize(EmptyClass::class);
-        $callable->testfunction($genericEvent)->should(new CallTimesPrediction(1));
+        $this->eventManager->attach(['testEvent1','testEvent2'], [$callable->reveal(), 'invoke']);
 
-
-        $eventManager->attach($genericEvent->getName(), [$callable->reveal(), 'testfunction']);
-        $eventManager->trigger($genericEvent);
-
-        $genericEvent2 = new GenericEvent('objEvent2', ['param1' => '2']);
-        $eventManager->attach($genericEvent2->getName(), [EmptyClassService::class, 'testfunction']);
-        $eventManager->trigger($genericEvent2);
-        $this->assertTrue(EmptyClassService::$called);
+        $this->eventManager->trigger('testEvent1');
+        $this->eventManager->trigger('testEvent2');
     }
 
-
-    /**
-     * @depends testInit
-     */
-    public function testDetach($eventManager)
+    public function testServiceIsInvokedFromContainer(): void
     {
-        $callable = $this->prophesize(EmptyClass::class);
+        $event = new GenericEvent('test', ['param1' => '2']);
 
-        $callable->testfunction(Argument::any())->should(new CallTimesPrediction(1));
-        $callable->testfunction2(Argument::any())->should(new CallTimesPrediction(1));
-        $callable->testfunction3(Argument::any())->should(new CallTimesPrediction(1));
-        $revelation = $callable->reveal();
+        $this->eventManager->attach($event->getName(), [ServiceListener::class, 'invoke']);
+        $this->eventManager->trigger($event);
 
-        $eventManager->attach(['testEvent'], [$revelation, 'testfunction']);
-        $eventManager->attach(['testEvent'], [$revelation, 'testfunction2']);
-        $eventManager->attach(['testEvent'], [$revelation, 'testfunction3']);
+        $this->assertTrue(ServiceListener::$called);
+    }
 
-        $eventManager->trigger('testEvent');
+    public function testDetachedListenerIsNotInvoked(): void
+    {
+        $callable = $this->prophesize(CallableListener::class);
 
-        $eventManager->detach(['testEvent'], [$revelation, 'testfunction']);
-        $eventManager->detach(['testEvent'], [$revelation, 'testfunction2']);
-        $eventManager->detach(['testEvent'], [$revelation, 'testfunction3']);
+        $callable->invoke(Argument::any())->should(new CallTimesPrediction(0));
+        $listener = $callable->reveal();
 
-        $eventManager->trigger('testEvent');
+        $this->eventManager->attach(['testEvent'], [$listener, 'invoke']);
+
+        $this->eventManager->detach(['testEvent'], [$listener, 'invoke']);
+
+        $this->eventManager->trigger('testEvent');
     }
 }

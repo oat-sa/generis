@@ -1,5 +1,7 @@
 <?php
 
+use EasyRdf\Format;
+use EasyRdf\Graph;
 use oat\generis\model\data\ModelManager;
 
 /**
@@ -64,11 +66,12 @@ class core_kernel_api_ModelExporter
     }
 
     /**
+     * @throws \EasyRdf\Exception
      * @ignore
      */
     private static function statement2rdf(PDOStatement $statement)
     {
-        $graph = new EasyRdf_Graph();
+        $graph = new Graph();
         while ($r = $statement->fetch()) {
             if (isset($r['l_language']) && !empty($r['l_language'])) {
                 $graph->addLiteral($r['subject'], $r['predicate'], $r['object'], $r['l_language']);
@@ -79,7 +82,8 @@ class core_kernel_api_ModelExporter
             }
         }
 
-        $format = EasyRdf_Format::getFormat('rdfxml');
+        $format = Format::getFormat('rdfxml');
+
         return $graph->serialise($format);
     }
 

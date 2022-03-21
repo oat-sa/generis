@@ -15,26 +15,34 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2021 (original work) Open Assessment Technologies SA;
- *
- * @author Gabriel Felipe Soares <gabriel.felipe.soares@taotesting.com>
+ * Copyright (c) 2022 (original work) Open Assessment Technologies SA;
  */
 
 declare(strict_types=1);
 
-namespace oat\generis\test\unit\model\DependencyInjection;
+namespace oat\generis\migrations;
 
-use Psr\Container\ContainerInterface;
+use Doctrine\DBAL\Schema\Schema;
+use oat\oatbox\reporting\Report;
+use oat\tao\scripts\update\OntologyUpdater;
+use oat\tao\scripts\tools\migrations\AbstractMigration;
 
-class DummyCachedContainer implements ContainerInterface
+final class Version202201010708595959_generis extends AbstractMigration
 {
-    public function get($id)
+    public function getDescription(): string
     {
-        return null;
+        return 'Synchronize models to add new "Is Statistical" class property';
     }
 
-    public function has($id)
+    public function up(Schema $schema): void
     {
-        return true;
+        OntologyUpdater::syncModels();
+
+        $this->addReport(Report::createSuccess('Models were successfully synchronized'));
+    }
+
+    public function down(Schema $schema): void
+    {
+        $this->throwIrreversibleMigrationException();
     }
 }
