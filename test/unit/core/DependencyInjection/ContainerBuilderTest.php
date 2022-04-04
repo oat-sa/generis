@@ -55,6 +55,12 @@ class ContainerBuilderTest extends TestCase
     /** @var MockObject|ContainerInterface */
     private $legacyContainer;
 
+    /** @var string */
+    private $installationDir;
+
+    /** @var string */
+    private $installationFile;
+
     public function setUp(): void
     {
         $this->extensionManager = $this->createMock(common_ext_ExtensionsManager::class);
@@ -65,8 +71,14 @@ class ContainerBuilderTest extends TestCase
             ->willReturn($this->extensionManager);
 
         $this->tempDir = sys_get_temp_dir();
+        $this->installationDir = $this->tempDir . '/generis';
+        $this->installationFile = $this->installationDir . '/installation.conf.php';
 
-        touch($this->tempDir . '/generis/installation.conf.php');
+        if (!file_exists($this->installationDir)) {
+            mkdir($this->installationDir);
+        }
+
+        touch($this->installationFile);
 
         $this->cache = $this->createMock(ContainerCache::class);
         $this->subject = new ContainerBuilder(
@@ -81,7 +93,7 @@ class ContainerBuilderTest extends TestCase
 
     public function testDoNotBuildIfApplicationIsNotInstalled(): void
     {
-        unlink($this->tempDir . '/generis/installation.conf.php');
+        unlink($this->installationFile);
 
         $this->assertSame($this->legacyContainer, $this->subject->build());
     }
