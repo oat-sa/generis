@@ -37,6 +37,7 @@ use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException as 
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 use oat\oatbox\service\ServiceNotFoundException;
 use Symfony\Component\DependencyInjection\Reference;
+use Throwable;
 
 class ContainerBuilder extends SymfonyContainerBuilder
 {
@@ -54,6 +55,9 @@ class ContainerBuilder extends SymfonyContainerBuilder
 
     /** @var string|null */
     private $configPath;
+
+    /** @var bool */
+    private static $containerIsAlreadyBuilt = false;
 
     public function __construct(
         string $cachePath,
@@ -89,6 +93,10 @@ class ContainerBuilder extends SymfonyContainerBuilder
 
     public function forceBuild(): ContainerInterface
     {
+        if (self::$containerIsAlreadyBuilt) {
+            return $this->cache->load();
+        }
+
         if (!$this->isApplicationInstalled()) {
             return $this->legacyContainer;
         }
@@ -102,19 +110,27 @@ class ContainerBuilder extends SymfonyContainerBuilder
             );
         }
 
-        file_put_contents($this->cachePath . '/services.php', $this->getTemporaryServiceFileContent());
+        try {
+            file_put_contents($this->cachePath . '/services.php', $this->getTemporaryServiceFileContent());
 
-        $phpLoader = new PhpFileLoader(
-            $this,
-            new FileLocator(
-                [
-                    $this->cachePath
-                ]
-            )
-        );
-        $phpLoader->load('services.php');
+            $phpLoader = new PhpFileLoader(
+                $this,
+                new FileLocator(
+                    [
+                        $this->cachePath
+                    ]
+                )
+            );
+            $phpLoader->load('services.php');
 
-        return $this->cache->forceLoad();
+            self::$containerIsAlreadyBuilt = true;
+
+            return $this->cache->forceLoad();
+        } catch (Throwable $exception) {
+            self::$containerIsAlreadyBuilt = false;
+
+            throw $exception;
+        }
     }
 
     /**
