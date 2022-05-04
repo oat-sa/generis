@@ -23,29 +23,29 @@
  *
  */
 
-use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Schema\Schema;
+use Doctrine\DBAL\TransactionIsolationLevel;
 
 class common_persistence_sql_Platform
 {
-    
+
     const TRANSACTION_PLATFORM_DEFAULT = 0;
-    
-    const TRANSACTION_READ_UNCOMMITTED = Connection::TRANSACTION_READ_UNCOMMITTED;
-    
-    const TRANSACTION_READ_COMMITTED = Connection::TRANSACTION_READ_COMMITTED;
-    
-    const TRANSACTION_REPEATABLE_READ = Connection::TRANSACTION_REPEATABLE_READ;
-    
-    const TRANSACTION_SERIALIZABLE = Connection::TRANSACTION_SERIALIZABLE;
-    
+
+    const TRANSACTION_READ_UNCOMMITTED = TransactionIsolationLevel::READ_UNCOMMITTED;
+
+    const TRANSACTION_READ_COMMITTED = TransactionIsolationLevel::READ_COMMITTED;
+
+    const TRANSACTION_REPEATABLE_READ = TransactionIsolationLevel::REPEATABLE_READ;
+
+    const TRANSACTION_SERIALIZABLE = TransactionIsolationLevel::SERIALIZABLE;
+
     protected $dbalPlatform;
 
     /** @var \Doctrine\DBAL\Connection */
     protected $dbalConnection;
 
-    
+
     /**
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
      * @param $dbalConnection \Doctrine\DBAL\Connection
@@ -90,7 +90,7 @@ class common_persistence_sql_Platform
     {
         return $text;
     }
-    
+
     /**
      *
      * @author Lionel Lecaque, lionel@taotesting.com
@@ -108,7 +108,7 @@ class common_persistence_sql_Platform
     {
         return "''";
     }
-    
+
     /**
      *
      * @param string $columnName
@@ -183,7 +183,7 @@ class common_persistence_sql_Platform
 
         return $queryCount;
     }
-    
+
     /**
      * Return driver name mysql, postgresql, oracle, mssql
      *
@@ -276,7 +276,7 @@ class common_persistence_sql_Platform
     {
         $this->dbalConnection->beginTransaction();
     }
-    
+
     /**
      * Sets the transaction isolation level for the current connection.
      *
@@ -301,10 +301,10 @@ class common_persistence_sql_Platform
         if ($level === self::TRANSACTION_PLATFORM_DEFAULT) {
             $level = $this->dbalPlatform->getDefaultTransactionIsolationLevel();
         }
-        
+
         $this->dbalConnection->setTransactionIsolation($level);
     }
-    
+
     /**
      * Gets the currently active transaction isolation level for the current sesson.
      *
@@ -314,7 +314,7 @@ class common_persistence_sql_Platform
     {
         return $this->dbalConnection->getTransactionIsolation();
     }
-    
+
     /**
      * Checks whether or not a transaction is currently active.
      *
@@ -363,7 +363,7 @@ class common_persistence_sql_Platform
             }
         }
     }
-    
+
     public function getTruncateTableSql($tableName)
     {
         return $this->dbalPlatform->getTruncateTableSql($tableName);
