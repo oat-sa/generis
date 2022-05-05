@@ -22,16 +22,16 @@
 
 namespace oat\generis\model\kernel\persistence\file;
 
-use EasyRdf_Graph;
+use EasyRdf\Graph;
 use core_kernel_classes_Triple;
 use IteratorAggregate;
 use ArrayIterator;
 
 class FileIterator implements IteratorAggregate
 {
-    
+
     private $triples = [];
-    
+
     /**
      *
      * @param string $file
@@ -42,7 +42,7 @@ class FileIterator implements IteratorAggregate
         $modelId = is_null($forceModelId) ? FileModel::getModelIdFromXml($file) : $forceModelId;
         $this->load($modelId, $file);
     }
-    
+
     /**
      * @see IteratorAggregate::getIterator()
      */
@@ -50,7 +50,7 @@ class FileIterator implements IteratorAggregate
     {
         return new ArrayIterator($this->triples);
     }
-    
+
     /**
      * load triples from rdf file
      *
@@ -59,10 +59,10 @@ class FileIterator implements IteratorAggregate
      */
     protected function load($modelId, $file)
     {
-        
-        $easyRdf = new EasyRdf_Graph();
+
+        $easyRdf = new Graph();
         $easyRdf->parseFile($file);
-        
+
         foreach ($easyRdf->toRdfPhp() as $subject => $propertiesValues) {
             foreach ($propertiesValues as $predicate => $values) {
                 foreach ($values as $k => $v) {
