@@ -27,79 +27,82 @@ use PHPUnit\Framework\MockObject\MockObject;
 
 trait IteratorMockTrait
 {
-    public function createIteratorMock(string $originalClassName, array $items = []): MockObject
-    {
+    public function createIteratorMock(
+        string $originalClassName,
+        array $items = [],
+        array $exceptMethods = []
+    ): MockObject {
         $iteratorData = new stdClass();
         $iteratorData->array = $items;
         $iteratorData->position = 0;
 
         $iteratorMock = $this->createMock($originalClassName);
 
-        $iteratorMock
-            ->expects($this->any())
-            ->method('rewind')
-            ->will(
-                $this->returnCallback(
-                    static function() use ($iteratorData): void {
+        if (!in_array('rewind', $exceptMethods, true)) {
+            $iteratorMock
+                ->expects($this->any())
+                ->method('rewind')
+                ->willReturnCallback(
+                    static function () use ($iteratorData): void {
                         $iteratorData->position = 0;
                     }
-                )
-            );
+                );
+        }
 
-        $iteratorMock
-            ->expects($this->any())
-            ->method('current')
-            ->will(
-                $this->returnCallback(
-                    static function() use ($iteratorData) {
+        if (!in_array('current', $exceptMethods, true)) {
+            $iteratorMock
+                ->expects($this->any())
+                ->method('current')
+                ->willReturnCallback(
+                    static function () use ($iteratorData) {
                         return $iteratorData->array[$iteratorData->position];
                     }
-                )
-            );
+                );
+        }
 
-        $iteratorMock
-            ->expects($this->any())
-            ->method('key')
-            ->will(
-                $this->returnCallback(
-                    static function() use ($iteratorData) {
+        if (!in_array('key', $exceptMethods, true)) {
+            $iteratorMock
+                ->expects($this->any())
+                ->method('key')
+                ->willReturnCallback(
+                    static function () use ($iteratorData) {
                         return $iteratorData->position;
                     }
-                )
-            );
+                );
+        }
 
-        $iteratorMock
-            ->expects($this->any())
-            ->method('next')
-            ->will(
-                $this->returnCallback(
-                    static function() use ($iteratorData): void {
+        if (!in_array('next', $exceptMethods, true)) {
+            $iteratorMock
+                ->expects($this->any())
+                ->method('next')
+                ->willReturnCallback(
+                    static function () use ($iteratorData): void {
                         ++$iteratorData->position;
                     }
-                )
-            );
+                );
+        }
 
-        $iteratorMock
-            ->expects($this->any())
-            ->method('valid')
-            ->will(
-                $this->returnCallback(
-                    static function() use ($iteratorData): bool {
+        if (!in_array('valid', $exceptMethods, true)) {
+            $iteratorMock
+                ->expects($this->any())
+                ->method('valid')
+                ->willReturnCallback(
+                    static function () use ($iteratorData): bool {
                         return isset($iteratorData->array[$iteratorData->position]);
                     }
-                )
-            );
+                );
+        }
 
-        $iteratorMock
-            ->expects($this->any())
-            ->method('count')
-            ->will(
-                $this->returnCallback(
-                    static function() use ($iteratorData): int {
+        if (!in_array('count', $exceptMethods, true)) {
+            $iteratorMock
+                ->expects($this->any())
+                ->method('count')
+                ->willReturnCallback(
+                    static function () use ($iteratorData): int {
                         return count($iteratorData->array);
                     }
-                )
-            );
+                );
+        }
 
         return $iteratorMock;
     }

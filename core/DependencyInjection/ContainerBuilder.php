@@ -16,6 +16,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2021 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
+ *
+ * @author Gabriel Felipe Soares <gabriel.felipe.soares@taotesting.com>
  */
 
 declare(strict_types=1);
@@ -25,6 +27,7 @@ namespace oat\generis\model\DependencyInjection;
 use common_ext_Extension;
 use common_ext_ExtensionsManager;
 use InvalidArgumentException;
+use oat\generis\model\Middleware\MiddlewareExtensionsMapper;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder as SymfonyContainerBuilder;
@@ -34,6 +37,7 @@ use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException as 
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 use oat\oatbox\service\ServiceNotFoundException;
 use Symfony\Component\DependencyInjection\Reference;
+use Throwable;
 
 class ContainerBuilder extends SymfonyContainerBuilder
 {
@@ -46,11 +50,22 @@ class ContainerBuilder extends SymfonyContainerBuilder
     /** @var ContainerInterface */
     private $legacyContainer;
 
+    /** @var MiddlewareExtensionsMapper|null */
+    private $middlewareExtensionsMapper;
+
+    /** @var string|null */
+    private $configPath;
+
+    /** @var bool */
+    private static $containerIsAlreadyBuilt = false;
+
     public function __construct(
         string $cachePath,
         ContainerInterface $legacyContainer,
         bool $isDebugEnabled = null,
-        ContainerCache $cache = null
+        ContainerCache $cache = null,
+        MiddlewareExtensionsMapper $middlewareExtensionsMapper = null,
+        string $configPath = null
     ) {
         $this->cachePath = $cachePath;
         $this->legacyContainer = $legacyContainer;
@@ -63,6 +78,8 @@ class ContainerBuilder extends SymfonyContainerBuilder
         );
 
         parent::__construct();
+        $this->middlewareExtensionsMapper = $middlewareExtensionsMapper ?? new MiddlewareExtensionsMapper();
+        $this->configPath = $configPath ?? (defined('CONFIG_PATH') ? CONFIG_PATH : null);
     }
 
     public function build(): ContainerInterface
@@ -76,28 +93,44 @@ class ContainerBuilder extends SymfonyContainerBuilder
 
     public function forceBuild(): ContainerInterface
     {
+        if (self::$containerIsAlreadyBuilt) {
+            return $this->cache->load();
+        }
+
+        if (!$this->isApplicationInstalled()) {
+            return $this->legacyContainer;
+        }
+
         if (!is_writable($this->cachePath)) {
             throw new InvalidArgumentException(
                 sprintf(
-                    'DI container build requires directory "%" to be writable',
+                    'DI container build requires directory "%s" to be writable',
                     $this->cachePath
                 )
             );
         }
 
-        file_put_contents($this->cachePath . '/services.php', $this->getTemporaryServiceFileContent());
+        try {
+            file_put_contents($this->cachePath . '/services.php', $this->getTemporaryServiceFileContent());
 
-        $phpLoader = new PhpFileLoader(
-            $this,
-            new FileLocator(
-                [
-                    $this->cachePath
-                ]
-            )
-        );
-        $phpLoader->load('services.php');
+            $phpLoader = new PhpFileLoader(
+                $this,
+                new FileLocator(
+                    [
+                        $this->cachePath
+                    ]
+                )
+            );
+            $phpLoader->load('services.php');
 
-        return $this->cache->forceLoad();
+            self::$containerIsAlreadyBuilt = true;
+
+            return $this->cache->forceLoad();
+        } catch (Throwable $exception) {
+            self::$containerIsAlreadyBuilt = false;
+
+            throw $exception;
+        }
     }
 
     /**
@@ -155,22 +188,29 @@ class ContainerBuilder extends SymfonyContainerBuilder
     {
         $contents = [];
 
-        /** @var common_ext_Extension $extension */
-        foreach ($this->getExtensionsManager()->getInstalledExtensions() as $extension) {
+        /** @var common_ext_Extension[] $extensions */
+        $extensions = $this->getExtensionsManager()->getInstalledExtensions();
+
+        foreach ($extensions as $extension) {
             foreach ($extension->getManifest()->getContainerServiceProvider() as $serviceProvider) {
                 $contents[] = '(new ' . $serviceProvider . '())($configurator);';
             }
         }
 
-        return vsprintf(
+        return sprintf(
             '<?php
         use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+        use \oat\generis\model\Middleware\MiddlewareExtensionsMapper;
         
         return function (ContainerConfigurator $configurator): void
         {
-            ' . str_repeat('%s' . PHP_EOL, count($contents)) . '
+            $parameter = $configurator->parameters();
+            $parameter->set(MiddlewareExtensionsMapper::MAP_KEY, %s);
+        
+            %s
         };',
-            $contents
+            var_export($this->middlewareExtensionsMapper->map($extensions), true),
+            implode('', $contents)
         );
     }
 
@@ -181,5 +221,10 @@ class ContainerBuilder extends SymfonyContainerBuilder
     private function getExtensionsManager(): common_ext_ExtensionsManager
     {
         return $this->legacyContainer->get(common_ext_ExtensionsManager::SERVICE_ID);
+    }
+
+    private function isApplicationInstalled(): bool
+    {
+        return file_exists(rtrim((string)$this->configPath, '/') . '/generis/installation.conf.php');
     }
 }

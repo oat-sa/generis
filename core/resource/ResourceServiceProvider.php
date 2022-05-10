@@ -26,8 +26,10 @@ use oat\oatbox\event\EventManager;
 use oat\generis\model\data\Ontology;
 use oat\generis\model\resource\Service\ResourceDeleter;
 use oat\generis\model\resource\Repository\ClassRepository;
+use oat\generis\model\resource\Repository\PropertyRepository;
 use oat\generis\model\resource\Repository\ResourceRepository;
 use oat\generis\model\DependencyInjection\ContainerServiceProviderInterface;
+use oat\generis\model\kernel\persistence\smoothsql\search\ComplexSearchService;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
@@ -64,6 +66,14 @@ class ResourceServiceProvider implements ContainerServiceProviderInterface
             ->args(
                 [
                     service(ResourceRepository::class),
+                ]
+            );
+
+        $services
+            ->set(PropertyRepository::class, PropertyRepository::class)
+            ->args(
+                [
+                    service(ComplexSearchService::SERVICE_ID),
                 ]
             );
     }

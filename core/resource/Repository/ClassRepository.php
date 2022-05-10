@@ -23,6 +23,7 @@ declare(strict_types=1);
 namespace oat\generis\model\resource\Repository;
 
 use RuntimeException;
+use BadMethodCallException;
 use InvalidArgumentException;
 use core_kernel_classes_Class;
 use oat\oatbox\event\EventManager;
@@ -45,6 +46,11 @@ class ClassRepository implements ResourceRepositoryInterface
     {
         $this->ontology = $ontology;
         $this->eventManager = $eventManager;
+    }
+
+    public function findBy(ContextInterface $context): array
+    {
+        throw new BadMethodCallException(sprintf('Method %s not implemented.', __METHOD__));
     }
 
     public function delete(ContextInterface $context): void

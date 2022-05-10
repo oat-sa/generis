@@ -15,7 +15,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2021 (original work) Open Assessment Technologies SA;
+ * Copyright (c) 2021-2022 (original work) Open Assessment Technologies SA;
+ *
+ * @author Gabriel Felipe Soares <gabriel.felipe.soares@taotesting.com>
  */
 
 declare(strict_types=1);
@@ -27,9 +29,10 @@ use common_ext_ExtensionsManager;
 use oat\generis\model\DependencyInjection\ContainerBuilder;
 use oat\generis\model\DependencyInjection\ContainerCache;
 use oat\generis\model\DependencyInjection\ContainerServiceProviderInterface;
-use oat\generis\test\TestCase;
+use oat\generis\model\Middleware\MiddlewareExtensionsMapper;
 use oat\oatbox\extension\Manifest;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 
 class ContainerBuilderTest extends TestCase
@@ -46,22 +49,53 @@ class ContainerBuilderTest extends TestCase
     /** @var string */
     private $tempDir;
 
+    /** @var MiddlewareExtensionsMapper|MockObject */
+    private $middlewareExtensionsMapper;
+
+    /** @var MockObject|ContainerInterface */
+    private $legacyContainer;
+
+    /** @var string */
+    private $installationDir;
+
+    /** @var string */
+    private $installationFile;
+
     public function setUp(): void
     {
         $this->extensionManager = $this->createMock(common_ext_ExtensionsManager::class);
+        $this->middlewareExtensionsMapper = $this->createMock(MiddlewareExtensionsMapper::class);
 
-        $legacyContainer = $this->createMock(ContainerInterface::class);
-        $legacyContainer->method('get')
+        $this->legacyContainer = $this->createMock(ContainerInterface::class);
+        $this->legacyContainer->method('get')
             ->willReturn($this->extensionManager);
 
         $this->tempDir = sys_get_temp_dir();
+        $this->installationDir = $this->tempDir . '/generis';
+        $this->installationFile = $this->installationDir . '/installation.conf.php';
+
+        if (!file_exists($this->installationDir)) {
+            mkdir($this->installationDir);
+        }
+
+        touch($this->installationFile);
+
         $this->cache = $this->createMock(ContainerCache::class);
         $this->subject = new ContainerBuilder(
             $this->tempDir,
-            $legacyContainer,
+            $this->legacyContainer,
             true,
-            $this->cache
+            $this->cache,
+            $this->middlewareExtensionsMapper,
+            $this->tempDir
         );
+    }
+
+    public function testDoNotBuildIfApplicationIsNotInstalled(): void
+    {
+        unlink($this->installationFile);
+
+        $this->assertSame($this->legacyContainer, $this->subject->build());
     }
 
     public function testBuildFromCache(): void
@@ -99,6 +133,11 @@ class ContainerBuilderTest extends TestCase
             ->expects($this->once())
             ->method('getInstalledExtensions')
             ->willReturn([$extension]);
+
+        $this->middlewareExtensionsMapper
+            ->expects($this->once())
+            ->method('map')
+            ->willReturn([]);
 
         $this->cache
             ->expects($this->once())

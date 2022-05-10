@@ -42,17 +42,17 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
      * @var core_kernel_persistence_smoothsql_SmoothModel
      */
     private $model;
-    
+
     public function __construct(core_kernel_persistence_smoothsql_SmoothModel $model)
     {
         $this->model = $model;
     }
-    
+
     protected function getModel()
     {
         return $this->model;
     }
-    
+
     /**
      * @return common_persistence_SqlPersistence
      */
@@ -60,17 +60,17 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
     {
         return $this->model->getPersistence();
     }
-    
+
     protected function getModelReadSqlCondition()
     {
         return 'modelid IN (' . implode(',', $this->model->getReadableModels()) . ')';
     }
-    
+
     protected function getModelWriteSqlCondition()
     {
         return 'modelid IN (' . implode(',', $this->model->getWritableModels()) . ')';
     }
-    
+
     protected function getNewTripleModelId()
     {
         return $this->model->getNewTripleModelId();
@@ -96,7 +96,6 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
             $uri = $this->getPersistence()->getPlatForm()->getPhpTextValue($row['object']);
             $returnValue[$uri] = $this->getModel()->getClass($uri);
         }
-        
 
         return (array) $returnValue;
     }
@@ -121,7 +120,7 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
             throw new core_kernel_persistence_Exception('Option \'last\' no longer supported');
         }
         $platform = $this->getPersistence()->getPlatForm();
-        
+
         // Define language if required
         $defaultLg = '';
         if (isset($options['lg'])) {
@@ -139,7 +138,7 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
 		    		AND predicate = ?
 					AND (l_language = ? OR l_language = ' . $this->getPersistence()->quote('') . $defaultLg . ')
 		    		AND ' . $this->getModelReadSqlCondition();
-        
+
         if ($one) {
             // Select first
             $query .= ' ORDER BY id DESC';
@@ -149,7 +148,7 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
             // Select All
             $result = $this->getPersistence()->query($query, [$resource->getUri(), $property->getUri(), $lang]);
         }
-        
+
         // Treat the query result
         if ($result == true) {
             if (isset($options['lg'])) {
@@ -162,7 +161,7 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
                 $returnValue = core_kernel_persistence_smoothsql_Utils::filterByLanguage($this->getPersistence(), $result->fetchAll(), 'l_language', $lang, $default);
             }
         }
-        
+
         return (array) $returnValue;
     }
 
@@ -180,12 +179,12 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
     public function getPropertyValuesByLg(core_kernel_classes_Resource $resource, core_kernel_classes_Property $property, $lg)
     {
         $options =  ['lg' => $lg];
-        
+
         $returnValue = new core_kernel_classes_ContainerCollection($resource);
         foreach ($this->getPropertyValues($resource, $property, $options) as $value) {
             $returnValue->add(common_Utils::toResource($value));
         }
-        
+
         return $returnValue;
     }
 
@@ -316,14 +315,14 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
                 $conditions[] = "{$multiCondition} ) ";
             }
         }
-            
+
         foreach ($conditions as $i => $additionalCondition) {
             $query .= " AND ( {$additionalCondition} ) ";
         }
-        
+
         //be sure the property we try to remove is included in an updatable model
         $query .= ' AND ' . $this->getModelWriteSqlCondition();
-        
+
         if ($property->isLgDependent()) {
             $query .=  ' AND (l_language = ? OR l_language = ?) ';
             $returnValue = $this->getPersistence()->exec($query, [
@@ -338,11 +337,11 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
                 $property->getUri()
             ]);
         }
-        
+
         if (!$returnValue) {
             $returnValue = false;
         }
-        
+
         return (bool) $returnValue;
     }
 
@@ -362,13 +361,13 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
         $sqlQuery = 'DELETE FROM statements WHERE subject = ? and predicate = ? and l_language = ?';
         //be sure the property we try to remove is included in an updatable model
         $sqlQuery .= ' AND ' . $this->getModelWriteSqlCondition();
-        
+
         $returnValue = $this->getPersistence()->exec($sqlQuery, [
             $resource->getUri(),
             $property->getUri(),
             ($property->isLgDependent() ? $lg : ''),
         ]);
-        
+
         if (!$returnValue) {
             $returnValue = false;
         }
@@ -389,7 +388,7 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
         // TODO: refactor this to use a triple store abstraction
         $query = 'SELECT * FROM statements WHERE subject = ? AND ' . $this->getModelReadSqlCondition() . ' ORDER BY predicate';
         $result = $this->getPersistence()->query($query, [$resource->getUri()]);
-        
+
         $returnValue = new core_kernel_classes_ContainerCollection(new common_Object(__METHOD__));
         while ($statement = $result->fetch()) {
             $triple = new core_kernel_classes_Triple();
@@ -405,6 +404,11 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
         }
 
         return $returnValue;
+    }
+
+    public function isWritable(core_kernel_classes_Resource $resource): bool
+    {
+        return $this->model->isWritable($resource);
     }
 
     /**
@@ -495,12 +499,11 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
         } elseif ($deleteReference) {
             $sqlQuery = 'DELETE FROM statements WHERE ' . $this->getPersistence()->getPlatForm()->getObjectTypeCondition() . ' = ? AND ' . $this->getModelWriteSqlCondition();
             $return = $this->getPersistence()->exec($sqlQuery, [$resource->getUri()]);
-            
+
             if ($return !== false) {
                 $returnValue = true;
             }
         }
-        
 
         return (bool) $returnValue;
     }
@@ -522,7 +525,7 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
         if (count($properties) == 0) {
             return [];
         }
-        
+
         $predicatesQuery = '';
         //build the predicate query
         //$predicatesQuery = implode(',', $properties);
@@ -549,7 +552,7 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
                     ' OR l_language = ' . $this->getPersistence()->quote($lang) . ')
                 AND ' . $this->getModelReadSqlCondition();
         $result = $this->getPersistence()->query($query);
-        
+
         $rows = $result->fetchAll();
         foreach ($rows as $row) {
             $value = $platform->getPhpTextValue($row['object']);
@@ -588,16 +591,16 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
     {
         $query =  'DELETE FROM statements 
 		    		WHERE subject = ? AND predicate = ? AND ' . $this->getPersistence()->getPlatForm()->getObjectTypeCondition() . ' = ?';
-        
+
         //be sure the property we try to remove is included in an updatable model
         $query .= ' AND ' . $this->getModelWriteSqlCondition();
-        
+
         $returnValue = $this->getPersistence()->exec($query, [
             $resource->getUri(),
             OntologyRdf::RDF_TYPE,
             $class->getUri()
         ]);
-        
+
         $returnValue = true;
 
         return $returnValue;

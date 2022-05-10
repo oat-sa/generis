@@ -24,33 +24,35 @@
  */
 
 use core_kernel_persistence_smoothsql_SmoothModel as SmoothModel;
+use EasyRdf\Format;
+use EasyRdf\Graph;
 
 class core_kernel_api_ModelFactory
 {
     /**
      * @param string $namespace
      * @param string $data xml content
+     *
+     * @throws \EasyRdf\Exception
      */
     public function createModel($namespace, $data)
     {
         $modelId = SmoothModel::DEFAULT_READ_ONLY_MODEL;
 
-        $modelDefinition = new EasyRdf_Graph($namespace);
+        $modelDefinition = new Graph($namespace);
+
         if (is_file($data)) {
             $modelDefinition->parseFile($data);
         } else {
             $modelDefinition->parse($data);
         }
-        $graph = $modelDefinition->toRdfPhp();
-        $resources = $modelDefinition->resources();
-        $format = EasyRdf_Format::getFormat('php');
         
-        $data = $modelDefinition->serialise($format);
+        $data = $modelDefinition->serialise(Format::getFormat('php'));
         
         foreach ($data as $subjectUri => $propertiesValues) {
             foreach ($propertiesValues as $prop => $values) {
                 foreach ($values as $k => $v) {
-                    $this->addStatement($modelId, $subjectUri, $prop, $v['value'], isset($v['lang']) ? $v['lang'] : null);
+                    $this->addStatement($modelId, $subjectUri, $prop, $v['value'], $v['lang'] ?? null);
                 }
             }
         }

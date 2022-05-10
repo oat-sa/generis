@@ -21,6 +21,8 @@
 
 namespace oat\generis\model\kernel\persistence\file;
 
+use EasyRdf\Format;
+use EasyRdf\Graph;
 use oat\generis\model\data\Model;
 use \common_exception_MissingParameter;
 use \common_exception_Error;
@@ -45,10 +47,13 @@ class FileModel implements Model
     {
         return new self(['file' => $filePath]);
     }
-    
+
+    /**
+     * @throws \EasyRdf\Exception
+     */
     public static function toFile($filePath, $triples)
     {
-        $graph = new \EasyRdf_Graph();
+        $graph = new Graph();
         foreach ($triples as $triple) {
             if (!empty($triple->lg)) {
                 $graph->addLiteral($triple->subject, $triple->predicate, $triple->object, $triple->lg);
@@ -58,7 +63,7 @@ class FileModel implements Model
                 $graph->addLiteral($triple->subject, $triple->predicate, $triple->object);
             }
         }
-        $format = \EasyRdf_Format::getFormat('rdfxml');
+        $format = Format::getFormat('rdfxml');
         return file_put_contents($filePath, $graph->serialise($format));
     }
     
