@@ -126,6 +126,13 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
         throw new common_exception_DeprecatedApiMethod('Use duplicated instead, because clone resource could not share same uri that original');
     }
 
+    public function isCustom(): bool
+    {
+        $uri = $this->getUri();
+
+        return strpos($uri, 'www.tao.lu') === false && strpos($uri, 'www.w3.org') === false;
+    }
+
     /**
      * returns true if the resource is a valid class (using facts or entailment
      *
