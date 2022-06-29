@@ -101,16 +101,7 @@ class ContainerBuilder extends SymfonyContainerBuilder
             return $this->legacyContainer;
         }
 
-        $this->ensureCacheDirectoryIsCreated();
-
-        if (!is_writable($this->cachePath)) {
-            throw new InvalidArgumentException(
-                sprintf(
-                    'DI container build requires directory "%s" to be writable',
-                    $this->cachePath
-                )
-            );
-        }
+        $this->ensureCacheDirectoryIsCreatedAndWritable();
 
         try {
             file_put_contents($this->cachePath . '/services.php', $this->getTemporaryServiceFileContent());
@@ -230,8 +221,24 @@ class ContainerBuilder extends SymfonyContainerBuilder
         return file_exists(rtrim((string)$this->configPath, '/') . '/generis/installation.conf.php');
     }
 
-    private function ensureCacheDirectoryIsCreated(): void
+    private function ensureCacheDirectoryIsCreatedAndWritable(): void
     {
-        @mkdir($this->cachePath, 0700, true);
+        if (!mkdir($this->cachePath, 0700, true) && !is_dir($this->cachePath)) {
+            throw new InvalidArgumentException(
+                sprintf(
+                    'DI container build could not create "%s" directory',
+                    $this->cachePath
+                )
+            );
+        }
+
+        if (!is_writable($this->cachePath)) {
+            throw new InvalidArgumentException(
+                sprintf(
+                    'DI container build requires directory "%s" to be writable',
+                    $this->cachePath
+                )
+            );
+        }
     }
 }
