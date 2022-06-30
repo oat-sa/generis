@@ -21,6 +21,7 @@ declare(strict_types=1);
 
 namespace oat\oatbox\cache;
 
+use Exception;
 use oat\generis\persistence\PersistenceManager;
 use oat\oatbox\service\ConfigurableService;
 
@@ -28,13 +29,15 @@ class SetupFileCache extends ConfigurableService
 {
     public const PERSISTENCE = 'cache';
 
-    public function createDirectory($cachePath): bool
+    public function createDirectory($cachePath): void
     {
         if (is_dir($cachePath) && is_writable($cachePath)) {
             return true;
         }
 
-        return @mkdir($cachePath, 0700, true);
+        if (!@mkdir($cachePath, 0700, true)) {
+            throw new Exception(sprintf( 'Could not create application cache at "%s"', $cachePath) );
+        }
     }
 
     public function createPersistence(): void
