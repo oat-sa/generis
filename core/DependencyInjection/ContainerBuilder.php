@@ -101,8 +101,6 @@ class ContainerBuilder extends SymfonyContainerBuilder
             return $this->legacyContainer;
         }
 
-        $this->ensureCacheDirectoryIsCreated();
-
         if (!is_writable($this->cachePath)) {
             throw new InvalidArgumentException(
                 sprintf(
@@ -228,10 +226,5 @@ class ContainerBuilder extends SymfonyContainerBuilder
     private function isApplicationInstalled(): bool
     {
         return file_exists(rtrim((string)$this->configPath, '/') . '/generis/installation.conf.php');
-    }
-
-    private function ensureCacheDirectoryIsCreated(): void
-    {
-        @mkdir($this->cachePath, 0700, true);
     }
 }
