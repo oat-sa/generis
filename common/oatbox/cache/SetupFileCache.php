@@ -30,7 +30,11 @@ class SetupFileCache extends ConfigurableService
 
     public function createDirectory($cachePath): bool
     {
-        return mkdir($cachePath, 0700, true) || is_dir($cachePath);
+        if (is_dir($cachePath) && is_writable($cachePath)) {
+            return true;
+        }
+
+        return @mkdir($cachePath, 0700, true);
     }
 
     public function createPersistence(): void
