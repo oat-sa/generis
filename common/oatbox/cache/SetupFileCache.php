@@ -39,7 +39,12 @@ class SetupFileCache extends ConfigurableService
         }
 
         if (!@mkdir($cachePath, 0700, true)) {
-            throw new Exception(sprintf( 'Could not create application cache at "%s"', $cachePath) );
+            $error = error_get_last();
+            throw new Exception(sprintf(
+                'Could not create application cache at "%s". Error message: %s',
+                $cachePath,
+                $error['message'] ?? 'unknown')
+            );
         }
     }
 
