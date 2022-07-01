@@ -31,6 +31,7 @@ use oat\generis\model\DependencyInjection\ContainerCache;
 use oat\generis\model\DependencyInjection\ContainerServiceProviderInterface;
 use oat\generis\model\Middleware\MiddlewareExtensionsMapper;
 use oat\oatbox\extension\Manifest;
+use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
@@ -70,7 +71,8 @@ class ContainerBuilderTest extends TestCase
         $this->legacyContainer->method('get')
             ->willReturn($this->extensionManager);
 
-        $this->tempDir = sys_get_temp_dir();
+        vfsStream::setup('testRoot', 0777);
+        $this->tempDir = vfsStream::url('testRoot');
         $this->installationDir = $this->tempDir . '/generis';
         $this->installationFile = $this->installationDir . '/installation.conf.php';
 
