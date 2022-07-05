@@ -53,7 +53,7 @@ class VerboseLogger extends AbstractLogger
      */
     public function __construct($minimumLevel)
     {
-        if (! in_array($minimumLevel, array_keys($this->levels))) {
+        if (!in_array($minimumLevel, $this->levels, true)) {
             throw new \common_Exception('Level "' . $minimumLevel . '" is not managed by verbose logger');
         }
         $this->levelPosition = array_search($minimumLevel, $this->levels);
