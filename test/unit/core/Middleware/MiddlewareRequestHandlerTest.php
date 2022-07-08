@@ -94,7 +94,7 @@ class MiddlewareRequestHandlerTest extends TestCase
         $queue = array_merge(
             array_values($middlewaresMocks),
             [
-                static function ($request, $next): ResponseInterface {
+                function ($request, $next): ResponseInterface {
                     return $this->originalResponse;
                 }
             ]
@@ -175,7 +175,7 @@ class MiddlewareRequestHandlerTest extends TestCase
     {
         $queue = array_merge(
             [
-                static function ($request, $next): ResponseInterface {
+                function ($request, $next): ResponseInterface {
                     return $this->originalResponse;
                 }
             ]
