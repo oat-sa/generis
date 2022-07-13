@@ -27,7 +27,7 @@ namespace oat\generis\test\unit\model\DependencyInjection;
 use oat\generis\model\DependencyInjection\LegacyServiceGateway;
 use oat\generis\test\TestCase;
 use oat\oatbox\service\ServiceManager;
-use oat\tao\model\routing\ControllerService;
+use oat\oatbox\session\SessionService;
 use PHPUnit\Framework\MockObject\MockObject;
 use stdClass;
 
@@ -87,6 +87,6 @@ class LegacyServiceGatewayTest extends TestCase
             ->method('has')
             ->willReturn(false);
 
-        $this->assertTrue($this->subject->has(ControllerService::class));
+        $this->assertTrue($this->subject->has(SessionService::class));
     }
 }
