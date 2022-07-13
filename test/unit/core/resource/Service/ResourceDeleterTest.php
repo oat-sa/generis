@@ -23,15 +23,15 @@ declare(strict_types=1);
 namespace oat\generis\test\unit\model\resource\Service;
 
 use core_kernel_classes_Class;
-use oat\generis\test\TestCase;
-use core_kernel_classes_Resource;
 use core_kernel_classes_Property;
-use PHPUnit\Framework\MockObject\MockObject;
-use oat\generis\model\Context\ContextInterface;
-use oat\generis\model\resource\Service\ResourceDeleter;
+use core_kernel_classes_Resource;
+use Exception;
 use oat\generis\model\resource\Context\ResourceRepositoryContext;
-use oat\generis\model\resource\exception\ResourceDeletionException;
 use oat\generis\model\resource\Contract\ResourceRepositoryInterface;
+use oat\generis\model\resource\exception\ResourceDeletionException;
+use oat\generis\model\resource\Service\ResourceDeleter;
+use oat\generis\test\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class ResourceDeleterTest extends TestCase
 {
@@ -109,17 +109,12 @@ class ResourceDeleterTest extends TestCase
 
     public function testDeleteWithRepositoryError(): void
     {
-        $resourceRepositoryContext = $this->createMock(ContextInterface::class);
-        $resourceRepositoryContext
-            ->expects($this->once())
-            ->method('getParameter')
-            ->with(self::PARAM_RESOURCE)
-            ->willReturn(null);
+        $exception = new Exception('test');
 
         $this->resourceRepository
             ->expects($this->once())
-            ->with($resourceRepositoryContext)
-            ->method('delete');
+            ->method('delete')
+            ->willThrowException($exception);
 
         $this->resource
             ->expects($this->once())
@@ -141,7 +136,7 @@ class ResourceDeleterTest extends TestCase
 
         $this->expectException(ResourceDeletionException::class);
         $this->expectExceptionMessage(
-            'Unable to delete resource "resourceLabel::resourceUri" (Resource was not provided for deletion.).'
+            "Unable to delete resource \"resourceLabel::resourceUri\" ({$exception->getMessage()})."
         );
 
         $this->sut->delete($this->resource);
