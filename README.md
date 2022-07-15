@@ -1,6 +1,8 @@
 Generis
 =======
 
+[![codecov](https://codecov.io/gh/oat-sa/generis/branch/master/graph/badge.svg?token=vg7OS2U3A7)](https://codecov.io/gh/oat-sa/generis)
+
 Core extension, provide the low level framework and an API to manage ontologies
 
 ## Components
