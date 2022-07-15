@@ -22,14 +22,14 @@ declare(strict_types=1);
 
 namespace oat\generis\model\resource\Service;
 
-use Throwable;
 use core_kernel_classes_Class;
 use core_kernel_classes_Resource;
 use oat\generis\model\OntologyRdf;
 use oat\generis\model\resource\Context\ResourceRepositoryContext;
 use oat\generis\model\resource\Contract\ResourceDeleterInterface;
-use oat\generis\model\resource\Exception\ResourceDeletionException;
 use oat\generis\model\resource\Contract\ResourceRepositoryInterface;
+use oat\generis\model\resource\exception\ResourceDeletionException;
+use Throwable;
 
 class ResourceDeleter implements ResourceDeleterInterface
 {

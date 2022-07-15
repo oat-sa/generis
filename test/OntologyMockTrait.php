@@ -21,24 +21,24 @@
 
 namespace oat\generis\test;
 
-use oat\oatbox\event\EventAggregator;
-use oat\generis\persistence\DriverConfigurationFeeder;
-use oat\oatbox\user\UserLanguageServiceInterface;
-use oat\oatbox\session\SessionService;
-use Prophecy\Argument;
 use common_session_Session;
-use oat\oatbox\event\EventManager;
-use Psr\Log\LoggerInterface;
-use oat\oatbox\log\LoggerService;
-use oat\generis\persistence\PersistenceManager;
-use oat\generis\model\kernel\uri\UriProvider;
-use oat\generis\model\kernel\uri\Bin2HexUriProvider;
-use oat\generis\model\data\Ontology;
 use core_kernel_persistence_smoothsql_SmoothModel;
+use oat\generis\model\data\Ontology;
 use oat\generis\model\kernel\persistence\newsql\NewSqlOntology;
+use oat\generis\model\kernel\uri\Bin2HexUriProvider;
+use oat\generis\model\kernel\uri\UriProvider;
+use oat\generis\persistence\DriverConfigurationFeeder;
+use oat\generis\persistence\PersistenceManager;
 use oat\generis\persistence\sql\SchemaProviderInterface;
-use oat\oatbox\cache\SimpleCache;
 use oat\oatbox\cache\NoCache;
+use oat\oatbox\cache\SimpleCache;
+use oat\oatbox\event\EventAggregator;
+use oat\oatbox\event\EventManager;
+use oat\oatbox\log\LoggerService;
+use oat\oatbox\session\SessionService;
+use oat\oatbox\user\UserLanguageServiceInterface;
+use Prophecy\Argument;
+use Psr\Log\LoggerInterface;
 
 trait OntologyMockTrait
 {
@@ -79,12 +79,13 @@ trait OntologyMockTrait
 
         $persistenceManagerWithSqlMock = $this->getPersistenceManagerWithSqlMock('mockSql');
         $session = new \common_session_AnonymousSession();
+        $eventManager = new EventManager();
         $serviceLocatorMock = $this->getServiceLocatorMock([
             Ontology::SERVICE_ID => $onto,
             PersistenceManager::SERVICE_ID => $persistenceManagerWithSqlMock,
             UserLanguageServiceInterface::SERVICE_ID => $this->getUserLanguageServiceMock('xx_XX'),
             SessionService::SERVICE_ID => $this->getSessionServiceMock($session),
-            EventManager::SERVICE_ID => new EventManager(),
+            EventManager::SERVICE_ID => $eventManager,
             LoggerService::SERVICE_ID => $this->prophesize(LoggerInterface::class)->reveal(),
             UriProvider::SERVICE_ID => new Bin2HexUriProvider([Bin2HexUriProvider::OPTION_NAMESPACE => 'http://ontology.mock/bin2hex#']),
             SimpleCache::SERVICE_ID => new NoCache(),
@@ -93,6 +94,7 @@ trait OntologyMockTrait
         ]);
         $eventAggregator->setServiceLocator($serviceLocatorMock);
         $session->setServiceLocator($serviceLocatorMock);
+        $eventManager->setServiceLocator($serviceLocatorMock);
         $onto->setServiceLocator($serviceLocatorMock);
         $persistenceManagerWithSqlMock->setServiceLocator($serviceLocatorMock);
 

@@ -22,18 +22,18 @@ declare(strict_types=1);
 
 namespace oat\generis\test\unit\model\resource\Repository;
 
-use RuntimeException;
-use InvalidArgumentException;
 use core_kernel_classes_Class;
-use oat\generis\test\TestCase;
-use oat\oatbox\event\EventManager;
+use core_kernel_persistence_ClassInterface;
+use InvalidArgumentException;
+use oat\generis\model\Context\ContextInterface;
 use oat\generis\model\data\Ontology;
 use oat\generis\model\data\RdfsInterface;
-use core_kernel_persistence_ClassInterface;
-use PHPUnit\Framework\MockObject\MockObject;
-use oat\generis\model\Context\ContextInterface;
-use oat\generis\model\resource\Repository\ClassRepository;
 use oat\generis\model\resource\Context\ResourceRepositoryContext;
+use oat\generis\model\resource\Repository\ClassRepository;
+use oat\generis\test\TestCase;
+use oat\oatbox\event\EventManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use RuntimeException;
 
 class ClassRepositoryTest extends TestCase
 {
@@ -147,7 +147,7 @@ class ClassRepositoryTest extends TestCase
         $class
             ->expects($uri !== null ? $this->once() : $this->never())
             ->method('getUri')
-            ->willReturn($uri);
+            ->willReturn((string)$uri);
         $class
             ->expects($label !== null ? $this->once() : $this->never())
             ->method('getLabel')
