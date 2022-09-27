@@ -57,12 +57,12 @@ class MyClass
 }
 ````
 
-2) **Legacy / Not recommended***: Using PersistenceManager factory method:
+2) **Legacy / NOT RECOMMENDED**: Using PersistenceManager factory method:
 
 ```php
 <?php
 
-use \oat\generis\persistence\PersistenceManager;
+use oat\generis\persistence\PersistenceManager;
 
 /** @var ContainerInterface $contaner */
 $container = $this->getServiceManager()->getContainer();
