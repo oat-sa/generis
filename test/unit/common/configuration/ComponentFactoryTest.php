@@ -98,11 +98,11 @@ class ComponentFactoryTest extends TestCase
         $this->assertTrue($output->isOptional());
         $this->assertTrue($output->getRecursive());
         $this->assertTrue($output->getMustCheckIfEmpty());
-        $this->assertEquals('FileSystemComponentCheck_3', $output->getName());
+        $this->assertStringStartsWith('FileSystemComponentCheck_', $output->getName());
 
         $output2 = $this->subject->buildFileSystemComponent('/path2', 'rw');
 
-        $this->assertEquals('FileSystemComponentCheck_4', $output2->getName());
+        $this->assertStringStartsWith('FileSystemComponentCheck_', $output2->getName());
     }
 
     public function testBuildCustomFailureOnNonExistingExtension()

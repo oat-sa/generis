@@ -6,7 +6,7 @@ use Symfony\Component\Lock\Store\FlockStore;
 use oat\oatbox\mutex\NoLockStorage;
 
 // phpcs:disable
-require __DIR__ . '/../../../../../vendor/autoload.php';
+require __DIR__ . '/../../../bootstrap.php';
 
 function getInstance($class, $dir): LockService
 {

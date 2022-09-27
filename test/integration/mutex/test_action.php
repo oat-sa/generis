@@ -10,17 +10,14 @@ $actionId = $argv[0];
 $sleep = (int) $argv[1];
 $timeout = (int) $argv[2];
 
-$service = getInstance();
+$service = getLockServiceInstance();
 $factory = $service->getLockFactory();
 $lock = $factory->createLock($actionId, $timeout);
 $lock->acquire(true);
 sleep($sleep);
 $lock->release();
 
-/**
- * @return LockService
- */
-function getInstance()
+function getLockServiceInstance(): LockService
 {
     return ServiceManager::getServiceManager()->get(LockService::class);
 }

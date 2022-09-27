@@ -52,7 +52,7 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
      * @var string
      */
     private $directory;
-    
+
     /**
      * Nr of subfolder levels in order to prevent filesystem bottlenecks
      * Only used in non human readable mode
@@ -60,7 +60,7 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
      * @var int
      */
     private $levels;
-    
+
     /**
      * Whenever or not the filenames should be human readable
      * FALSE by default for performance issues with many keys
@@ -81,7 +81,7 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
      * @var int
      */
     const DEFAULT_LEVELS = 3;
-    
+
     const DEFAULT_MASK = 0700;
 
     /**
@@ -103,7 +103,7 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
 
         return new common_persistence_KeyValuePersistence($params, $this);
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see common_persistence_KvDriver::set()
@@ -239,7 +239,13 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
      */
     private function readFile($id)
     {
-        return @include $this->getPath($id);
+        $path = $this->getPath($id);
+
+        if (is_readable($path)) {
+            return @include $path;
+        }
+
+        return false;
     }
 
     /**
@@ -264,7 +270,7 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
             return $this->get($id) !== false;
         }
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see common_persistence_KvDriver::del()
@@ -386,7 +392,7 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
         }
         return  $this->directory . $path . '.php';
     }
-    
+
     /**
      * Cannot use helpers_File::sanitizeInjectively() because
      * of backwards compatibility
@@ -402,7 +408,7 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
         }
         return $path;
     }
-    
+
     /**
      * Generate the php code that returns the provided value
      *
