@@ -5,13 +5,8 @@ use oat\oatbox\service\ServiceManager;
 use Symfony\Component\Lock\Store\FlockStore;
 use oat\oatbox\mutex\NoLockStorage;
 
-$extRoot = __DIR__ . '/../../../../../';
 
-if (is_dir($extRoot . 'vendor')) {
-    require($extRoot . 'vendor/autoload.php');
-} elseif (is_dir($extRoot . '../vendor')) {
-    require($extRoot . '../vendor/autoload.php');
-}
+require __DIR__ . '/../../../../../vendor/autoload.php';
 
 /**
  * @param $class
