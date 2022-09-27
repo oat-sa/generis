@@ -20,6 +20,7 @@
 
 declare(strict_types=1);
 
+use oat\generis\persistence\PersistenceServiceProvider;
 use oat\generis\scripts\update\Updater;
 use oat\generis\scripts\install\TaskQueue;
 use oat\generis\scripts\install\RegisterServices;
@@ -59,5 +60,6 @@ return [
         ContainerServiceProvider::class,
         LogServiceProvider::class,
         ResourceServiceProvider::class,
+        PersistenceServiceProvider::class,
     ],
 ];

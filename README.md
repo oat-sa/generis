@@ -9,11 +9,15 @@ Core extension, provide the low level framework and an API to manage ontologies
 
 ### Dependency Injection
 
-Read here [how to use Dependency Injection](./core/DependencyInjection/README.md).
+Read here [how to use the Dependency Injection](./core/DependencyInjection/README.md).
+
+### Persistence
+
+Read here [how to use the Persistence](./common/persistence/README.md).
 
 ### Middleware
 
-Read here [how to use Middlewares](./core/Middleware/README.md).
+Read here [how to use the Middlewares](./core/Middleware/README.md).
 
 ### Log
 
