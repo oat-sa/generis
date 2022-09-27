@@ -24,12 +24,10 @@ declare(strict_types=1);
 
 namespace oat\generis\model\DependencyInjection;
 
-use common_persistence_SqlPersistence;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\ServerRequest;
 use oat\generis\model\Middleware\MiddlewareExtensionsMapper;
 use oat\generis\model\Middleware\MiddlewareRequestHandler;
-use oat\generis\persistence\PersistenceManager;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Relay\RelayBuilder;
@@ -38,6 +36,9 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
+/**
+ * @codeCoverageIgnore
+ */
 class ContainerServiceProvider implements ContainerServiceProviderInterface
 {
     public function __invoke(ContainerConfigurator $configurator): void
@@ -64,10 +65,5 @@ class ContainerServiceProvider implements ContainerServiceProviderInterface
                     param(MiddlewareExtensionsMapper::MAP_KEY),
                 ]
             );
-
-        $services->set(common_persistence_SqlPersistence::class, common_persistence_SqlPersistence::class)
-            ->factory([service(PersistenceManager::SERVICE_ID), 'getPersistenceById'])
-            ->args(['default'])
-            ->public();
     }
 }
