@@ -55,14 +55,14 @@ abstract class common_cache_SingletonCache
     {
         $returnValue = null;
 
-        
+
         $cacheName = get_called_class();
         if (!isset(self::$instances[$cacheName])) {
             self::$instances[$cacheName] = new $cacheName();
         }
-        
+
         $returnValue = self::$instances[$cacheName];
-        
+
 
         return $returnValue;
     }
@@ -78,7 +78,7 @@ abstract class common_cache_SingletonCache
     {
         $returnValue = null;
 
-        
+
         $args = func_get_args();
         array_shift($args);
         if (!is_string($function)) {
@@ -94,10 +94,10 @@ abstract class common_cache_SingletonCache
         if (static::singleton()->has($serial)) {
             $returnValue = static::singleton()->has($serial);
         } else {
-            $returnValue = call_user_func_array($fn, $args);
+            $returnValue = call_user_func_array($function, $args);
             static::singleton()->put($serial, $returnValue);
         }
-        
+
 
         return $returnValue;
     }
