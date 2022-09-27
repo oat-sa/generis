@@ -5,9 +5,6 @@ use oat\oatbox\service\ServiceManager;
 use Symfony\Component\Lock\Store\FlockStore;
 use oat\oatbox\mutex\NoLockStorage;
 
-
-require __DIR__ . '/../../../../../vendor/autoload.php';
-
 /**
  * @param $class
  * @param $dir
@@ -26,6 +23,8 @@ function getInstance($class, $dir)
     $service->setServiceLocator($serviceManager);
     return $service;
 }
+
+require __DIR__ . '/../../../../../vendor/autoload.php';
 
 array_shift($argv);
 $actionId = $argv[0];
