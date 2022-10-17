@@ -169,7 +169,7 @@ class common_log_SingleFileAppender extends common_log_BaseAppender
                 '%t' => $item->getDateTime(),
                 '%r' => $item->getRequest(),
                 '%f' => $item->getCallerFile(),
-                '%g' => implode(',', $item->getTags()),
+                '%g' => json_encode($item->getTags()),
                 '%l' => $item->getCallerLine()
             ];
             if (strpos($this->format, '%b')) {
