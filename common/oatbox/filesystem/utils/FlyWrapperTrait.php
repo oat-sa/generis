@@ -36,7 +36,7 @@ trait FlyWrapperTrait
     
     /**
      * (non-PHPdoc)
-     * @see \League\Flysystem\FilesystemAdapter::update()
+     * @see \League\Flysystem\FilesystemAdapter::write()
      */
     public function update($path, $contents, Config $config)
     {
@@ -47,7 +47,7 @@ trait FlyWrapperTrait
     
     /**
      * (non-PHPdoc)
-     * @see \League\Flysystem\FilesystemAdapter::updateStream()
+     * @see \League\Flysystem\FilesystemAdapter::writeStream()
      */
     public function updateStream($path, $resource, Config $config)
     {
