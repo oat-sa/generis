@@ -22,11 +22,11 @@
 namespace oat\oatbox\filesystem;
 
 use oat\oatbox\service\ConfigurableService;
-use League\Flysystem\AdapterInterface;
+use League\Flysystem\FilesystemAdapter;
 use common_exception_Error;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use \League\Flysystem\Filesystem as FlyFileSystem;
-use League\Flysystem\FilesystemInterface;
+use League\Flysystem\FilesystemOperator;
 
  /**
  * A service to reference and retrieve filesystems
@@ -98,7 +98,7 @@ class FileSystemService extends ConfigurableService
      * Retrieve an existing FileSystem by ID.
      *
      * @param string $id
-     * @return FilesystemInterface
+     * @return FilesystemOperator
      * @throws \common_exception_Error
      * @throws \common_exception_NotFound
      */
@@ -118,7 +118,7 @@ class FileSystemService extends ConfigurableService
      *
      * @param string $id
      * @param string $subPath
-     * @return FilesystemInterface
+     * @return FilesystemOperator
      */
     public function createFileSystem($id, $subPath = null)
     {
@@ -131,7 +131,7 @@ class FileSystemService extends ConfigurableService
      *
      * @deprecated never rely on a directory being local, use addDir instead
      * @param string $id
-     * @return FilesystemInterface
+     * @return FilesystemOperator
      */
     public function createLocalFileSystem($id)
     {
@@ -189,7 +189,7 @@ class FileSystemService extends ConfigurableService
      * Get file adapter by file
      *
      * @param File $file
-     * @return AdapterInterface
+     * @return FilesystemAdapter
      * @throws \common_exception_NotFound
      * @throws common_exception_Error
      */
@@ -229,7 +229,7 @@ class FileSystemService extends ConfigurableService
      * @param string $id
      * @throws \common_exception_NotFound if adapter doesn't exist
      * @throws \common_exception_Error if adapter is not valid
-     * @return AdapterInterface
+     * @return FilesystemAdapter
      */
     protected function getFlysystemAdapter($id)
     {
@@ -255,7 +255,7 @@ class FileSystemService extends ConfigurableService
             }
         }
 
-        if (!is_subclass_of($class, 'League\Flysystem\AdapterInterface')) {
+        if (!is_subclass_of($class, 'League\Flysystem\FilesystemAdapter')) {
             throw new common_exception_Error('"' . $class . '" is not a flysystem adapter');
         }
         $adapter = (new \ReflectionClass($class))->newInstanceArgs($options);
