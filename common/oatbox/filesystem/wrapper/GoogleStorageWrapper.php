@@ -183,7 +183,7 @@ class GoogleStorageWrapper extends ConfigurableService implements FilesystemOper
      */
     public function copy(string $source, string $destination, array $config = []): void
     {
-       $this->getAdapter()->copy($source, $destination, new Config($config));
+        $this->getAdapter()->copy($source, $destination, new Config($config));
     }
 
     public function listContents(string $location, bool $deep = self::LIST_SHALLOW): DirectoryListing
