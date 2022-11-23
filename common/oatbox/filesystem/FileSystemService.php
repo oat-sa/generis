@@ -25,7 +25,7 @@ use oat\oatbox\service\ConfigurableService;
 use League\Flysystem\FilesystemAdapter;
 use common_exception_Error;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use \League\Flysystem\Filesystem as FlyFileSystem;
+use League\Flysystem\Filesystem as FlyFileSystem;
 use League\Flysystem\FilesystemOperator;
 
  /**
@@ -33,17 +33,17 @@ use League\Flysystem\FilesystemOperator;
  */
 class FileSystemService extends ConfigurableService
 {
-    const SERVICE_ID = 'generis/filesystem';
+    public const SERVICE_ID = 'generis/filesystem';
 
-    const OPTION_FILE_PATH = 'filesPath';
+    public const OPTION_FILE_PATH = 'filesPath';
 
-    const OPTION_ADAPTERS = 'adapters';
+    public const OPTION_ADAPTERS = 'adapters';
 
-    const OPTION_DIRECTORIES = 'dirs';
+    public const OPTION_DIRECTORIES = 'dirs';
 
-    const FLYSYSTEM_ADAPTER_NS = '\\League\\Flysystem\\Adapter\\';
+    public const FLYSYSTEM_ADAPTER_NS = '\\League\\Flysystem\\Adapter\\';
 
-    const FLYSYSTEM_LOCAL_ADAPTER = 'Local';
+    public const FLYSYSTEM_LOCAL_ADAPTER = 'Local';
 
     private $filesystems = [];
 
@@ -79,7 +79,7 @@ class FileSystemService extends ConfigurableService
         $dirs[$id] = $adapterId;
         $this->setOption(self::OPTION_DIRECTORIES, $dirs);
     }
-    
+
     /**
      * Returns whenever or not a FS exists
      * @param string $id
@@ -111,7 +111,7 @@ class FileSystemService extends ConfigurableService
         }
         return $this->filesystems[$id];
     }
-    
+
     /**
      * Creates a filesystem using the default implementation (Local)
      * Override this function to create your files elsewhere by default
@@ -139,7 +139,7 @@ class FileSystemService extends ConfigurableService
         $this->registerLocalFileSystem($id, $path);
         return $this->getFileSystem($id);
     }
-    
+
     /**
      * Registers a local file system, used for transition
      *

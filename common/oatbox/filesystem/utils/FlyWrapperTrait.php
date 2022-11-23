@@ -22,7 +22,7 @@ trait FlyWrapperTrait
 
         return $this->getAdapter()->fileExists($path);
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see \League\Flysystem\FilesystemAdapter::writeStream()
@@ -33,7 +33,7 @@ trait FlyWrapperTrait
 
         return $this->getAdapter()->fileExists($path);
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see \League\Flysystem\FilesystemAdapter::write()
@@ -44,7 +44,7 @@ trait FlyWrapperTrait
 
         return $this->getAdapter()->fileExists($path);
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see \League\Flysystem\FilesystemAdapter::writeStream()
@@ -55,7 +55,7 @@ trait FlyWrapperTrait
 
         return $this->getAdapter()->fileExists($path);
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see \League\Flysystem\FilesystemAdapter::rename()
@@ -66,7 +66,7 @@ trait FlyWrapperTrait
 
         return $this->getAdapter()->fileExists($newpath);
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see \League\Flysystem\FilesystemAdapter::copy()
@@ -75,7 +75,7 @@ trait FlyWrapperTrait
     {
         $this->getAdapter()->copy($path, $newpath, $config);
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see \League\Flysystem\FilesystemAdapter::delete()
@@ -86,7 +86,7 @@ trait FlyWrapperTrait
 
         return !$this->getAdapter()->fileExists($path);
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see \League\Flysystem\FilesystemAdapter::deleteDir()
@@ -97,7 +97,7 @@ trait FlyWrapperTrait
 
         return !$this->getAdapter()->directoryExists($dirname);
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see \League\Flysystem\FilesystemAdapter::createDir()
@@ -108,7 +108,7 @@ trait FlyWrapperTrait
 
         return $this->getAdapter()->directoryExists($dirname);
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see \League\Flysystem\FilesystemAdapter::setVisibility()
@@ -118,7 +118,7 @@ trait FlyWrapperTrait
         $this->getAdapter()->setVisibility($path, $visibility);
         return $this->getAdapter()->visibility($path);
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see \League\Flysystem\ReadInterface::has()
@@ -127,7 +127,7 @@ trait FlyWrapperTrait
     {
         return $this->getAdapter()->fileExists($path);
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see \League\Flysystem\FilesystemAdapter::read()
@@ -136,7 +136,7 @@ trait FlyWrapperTrait
     {
         return $this->getAdapter()->read($path);
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see \League\Flysystem\FilesystemAdapter::readStream()
@@ -145,7 +145,7 @@ trait FlyWrapperTrait
     {
         return $this->getAdapter()->readStream($path);
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see \League\Flysystem\FilesystemAdapter::listContents()
@@ -154,7 +154,7 @@ trait FlyWrapperTrait
     {
         return $this->getAdapter()->listContents($directory, $recursive);
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see \League\Flysystem\FilesystemAdapter::getMetadata()
@@ -164,7 +164,7 @@ trait FlyWrapperTrait
         $list = iterator_to_array($this->getAdapter()->listContents($path));
         return (array)$list[0];
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see \League\Flysystem\FilesystemAdapter::getSize()
@@ -173,7 +173,7 @@ trait FlyWrapperTrait
     {
         return $this->getAdapter()->fileSize($path);
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see \League\Flysystem\FilesystemAdapter::getMimetype()
@@ -182,7 +182,7 @@ trait FlyWrapperTrait
     {
         return $this->getAdapter()->mimeType($path);
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see \League\Flysystem\FilesystemAdapter::getTimestamp()
@@ -192,7 +192,7 @@ trait FlyWrapperTrait
         $list = iterator_to_array($this->getAdapter()->listContents($path));
         return (array)$list[0]['createdAt'] ?? (array)$list[0]['timestamp'];
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see \League\Flysystem\FilesystemAdapter::getVisibility()
@@ -201,7 +201,7 @@ trait FlyWrapperTrait
     {
         return $this->getAdapter()->visibility($path);
     }
-    
+
     /**
      * Return the adapter implementation
      *

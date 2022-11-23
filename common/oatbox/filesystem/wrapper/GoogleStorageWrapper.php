@@ -43,13 +43,13 @@ class GoogleStorageWrapper extends ConfigurableService implements FilesystemOper
 {
     use FlyWrapperTrait;
     use LoggerAwareTrait;
-    
-    const OPTION_BUCKET = 'bucket';
 
-    const OPTION_CLIENT_CONFIG = 'clientConfig';
+    public const OPTION_BUCKET = 'bucket';
+
+    public const OPTION_CLIENT_CONFIG = 'clientConfig';
 
     private $adapter;
-    
+
     /**
      * @return StorageClient
      */
@@ -57,7 +57,7 @@ class GoogleStorageWrapper extends ConfigurableService implements FilesystemOper
     {
         return new StorageClient($this->getOption(self::OPTION_CLIENT_CONFIG));
     }
-    
+
     /**
      * @return FilesystemAdapter
      */
@@ -183,7 +183,7 @@ class GoogleStorageWrapper extends ConfigurableService implements FilesystemOper
      */
     public function copy(string $source, string $destination, array $config = []): void
     {
-       $this->getAdapter()->copy($source, $destination, new Config($config));
+        $this->getAdapter()->copy($source, $destination, new Config($config));
     }
 
     public function listContents(string $location, bool $deep = self::LIST_SHALLOW): DirectoryListing
