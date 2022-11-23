@@ -82,7 +82,7 @@ class FileSystem implements FilesystemOperator
      *
      * @return FilesystemAdapter adapter
      */
-    private function getAdapter()
+    public function getAdapter()
     {
         return $this->getFileSystem()->getAdapter();
     }
