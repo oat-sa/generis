@@ -71,26 +71,27 @@ class common_ext_ExtensionInstaller extends common_ext_ExtensionHandler
     {
         $this->log('i', 'Installing extension ' . $this->extension->getId());
 
-        if ($this->extension->getId() == 'generis') {
+        if ($this->extension->getId() === 'generis') {
             throw new common_ext_ForbiddenActionException(
                 'Tried to install generis using the ExtensionInstaller',
                 $this->extension->getId()
             );
         }
+
         if (common_ext_ExtensionsManager::singleton()->isInstalled($this->extension->getId())) {
             throw new common_ext_AlreadyInstalledException(
-                'Problem installing extension ' . $this->extension->getId() . ' : Already installed',
+                sprintf('Problem installing extension %s: already installed', $this->extension->getId()),
                 $this->extension->getId()
             );
         }
 
-        // we purge the whole cache.
+        $serviceManager = $this->getServiceManager();
+
+        // We purge the whole cache
         $this->log('d', 'Purging cache...');
-        $cache = $this->getServiceManager()->get(SimpleCache::SERVICE_ID);
-        $cache->clear();
+        $serviceManager->get(SimpleCache::SERVICE_ID)->clear();
 
-
-        // check required extensions, throws exception if failed
+        // Check required extensions, throws exception if failed
         helpers_ExtensionHelper::checkRequiredExtensions($this->getExtension());
 
         $this->installLoadDefaultConfig();
@@ -101,18 +102,18 @@ class common_ext_ExtensionInstaller extends common_ext_ExtensionHandler
         $this->installCustomScript();
         $this->log('d', 'Done installing custom script for extension ' . $this->extension->getId());
 
-        if ($this->getLocalData() == true) {
+        if ($this->getLocalData() === true) {
             $this->log('d', 'Installing local data for extension ' . $this->extension->getId());
             $this->installLocalData();
             $this->log('d', 'Done installing local data for extension ' . $this->extension->getId());
         }
+
         $this->log('d', 'Extended install for extension ' . $this->extension->getId());
 
-        // Method to be overridden by subclasses
-        // to extend the installation mechanism.
+        // Method to be overridden by subclasses to extend the installation mechanism
         $this->extendedInstall();
         $this->log('d', 'Done extended install for extension ' . $this->extension->getId());
-        $eventManager = ServiceManager::getServiceManager()->get(EventManager::CONFIG_ID);
+        $eventManager = $serviceManager->get(EventManager::CONFIG_ID);
         $eventManager->trigger(new common_ext_event_ExtensionInstalled($this->extension));
     }
 
