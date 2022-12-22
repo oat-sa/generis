@@ -250,6 +250,16 @@ class Manifest implements ServiceLocatorAwareInterface
     }
 
     /**
+     * Get an array of roles to be handled by the extension.
+     * @return array
+     */
+    public function getIncludedRoles(): array
+    {
+        return isset($this->manifest['includedRoles']) && is_array($this->manifest['includedRoles'])
+            ? $this->manifest['includedRoles'] : [];
+    }
+
+    /**
      * Get the array with unformatted extra data
      * @return array
      */
