@@ -96,5 +96,6 @@ class ManifestTest extends TestCase
             $manifest->getInstallModelFiles()
         );
         $this->assertEquals(['WS_ENDPOINT_TWITTER' => 'http://twitter.com/statuses/', 'WS_ENDPOINT_FACEBOOK' => 'http://api.facebook.com/restserver.php'], $manifest->getConstants());
+        $this->assertEquals(['BigRole' => ['AtomicRole1']], $manifest->getIncludedRoles());
     }
 }

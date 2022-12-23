@@ -60,5 +60,8 @@ return [
      'optimizableProperties' => [
         'http://www.linkeddata.org/ontologies/props.rdf#myProp1',
         'http://www.linkeddata.org/ontologies/props.rdf#myProp2'
-     ]
+     ],
+    'includedRoles' => [
+        'BigRole' => ['AtomicRole1']
+    ]
 ];
