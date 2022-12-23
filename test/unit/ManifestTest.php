@@ -22,16 +22,15 @@
  */
 
 use oat\generis\test\TestCase;
-use \oat\oatbox\extension\ComposerInfo;
+use oat\oatbox\extension\ComposerInfo;
 use oat\oatbox\extension\Manifest;
 
 class ManifestTest extends TestCase
 {
-
-    const SAMPLES_PATH = '/../../test/samples/manifests/';
-    const MANIFEST_PATH_DOES_NOT_EXIST = 'idonotexist.php';
-    const MANIFEST_PATH_LIGHTWEIGHT = 'lightweightManifest.php';
-    const MANIFEST_PATH_COMPLEX = 'complexManifest.php';
+    public const SAMPLES_PATH = '/../../test/samples/manifests/';
+    public const MANIFEST_PATH_DOES_NOT_EXIST = 'idonotexist.php';
+    public const MANIFEST_PATH_LIGHTWEIGHT = 'lightweightManifest.php';
+    public const MANIFEST_PATH_COMPLEX = 'complexManifest.php';
 
     private function getComposerInfoMock()
     {
