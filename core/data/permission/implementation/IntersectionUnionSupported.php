@@ -33,8 +33,6 @@ use oat\oatbox\user\User;
  */
 class IntersectionUnionSupported extends ConfigurableService implements PermissionInterface
 {
-
-
     /**
      * @param PermissionInterface $service
      * @return $this
@@ -70,8 +68,7 @@ class IntersectionUnionSupported extends ConfigurableService implements Permissi
         }
         return $results;
     }
-    
-    
+
     /**
      * (non-PHPdoc)
      * @see PermissionInterface::getPermissions()
@@ -106,7 +103,7 @@ class IntersectionUnionSupported extends ConfigurableService implements Permissi
         
         return $rights;
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see PermissionInterface::onResourceCreated()
@@ -117,7 +114,7 @@ class IntersectionUnionSupported extends ConfigurableService implements Permissi
             $impl->onResourceCreated($resource);
         }
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see PermissionInterface::getSupportedPermissions()
