@@ -100,7 +100,7 @@ class IntersectionUnionSupported extends ConfigurableService implements Permissi
             }
             $rights[$id] = array_values($intersect);
         }
-        
+
         return $rights;
     }
 
