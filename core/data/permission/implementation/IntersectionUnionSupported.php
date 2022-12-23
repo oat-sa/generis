@@ -61,7 +61,7 @@ class IntersectionUnionSupported extends ConfigurableService implements Permissi
     /**
      * @return PermissionInterface[]
      */
-    protected function getInner()
+    public function getInner()
     {
         $results = [];
         foreach ($this->getOption('inner') as $impl) {
