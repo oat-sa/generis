@@ -258,7 +258,6 @@ class Manifest implements ServiceLocatorAwareInterface
 
     /**
      * Get an array of roles to be handled by the extension (a role hierarchy).
-     * @return array
      */
     public function getIncludedRoles(): array
     {
