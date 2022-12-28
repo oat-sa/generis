@@ -203,7 +203,8 @@ class Manifest implements ServiceLocatorAwareInterface
         $result = [];
         if (isset($this->manifest['install']['php'])) {
             $result = is_array($this->manifest['install']['php'])
-                ? $this->manifest['install']['php'] : [$this->manifest['install']['php']];
+                ? $this->manifest['install']['php']
+                : [$this->manifest['install']['php']];
         }
         return $result;
     }
