@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -113,11 +114,11 @@ class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDrive
             try {
                 $result = call_user_func_array([$this->connection , $method], $params);
                 $success = true;
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $lastException = $e;
-                \common_Logger::d('Redis  ' . $method . ' failed ' . $attempt . '/' . $retry . ' :  ' . $e->getMessage());
+                common_Logger::d('Redis  ' . $method . ' failed ' . $attempt . '/' . $retry . ' :  ' . $e->getMessage());
                 if ($e->getMessage() == 'Failed to AUTH connection' && isset($this->params['password'])) {
-                    \common_Logger::d('Authenticating Redis connection');
+                    common_Logger::d('Authenticating Redis connection');
                     $this->connection->auth($this->params['password']);
                 }
                 $delay = rand(self::RETRY_DELAY, self::RETRY_DELAY * 2);
@@ -148,18 +149,18 @@ class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDrive
         };
         return $this->callWithRetry('set', [$key, $value, $options]);
     }
-    
+
     public function get($key)
     {
 
         return $this->callWithRetry('get', [$key]);
     }
-    
+
     public function exists($key)
     {
         return (bool)$this->callWithRetry('exists', [$key]);
     }
-    
+
     public function del($key)
     {
         return $this->callWithRetry('del', [$key]);
@@ -211,6 +212,58 @@ class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDrive
     public function decr($key)
     {
         return $this->callWithRetry('decr', [$key]);
+    }
+
+    /**
+     * @throws RedisException
+     * @throws common_exception_Error
+     */
+    public function scan(int &$iterator = null, string $pattern = null, int $count = 1000): array
+    {
+        $retry = $this->params['attempt'];
+        $attempt = 0;
+
+        while ($attempt <= $retry) {
+            try {
+                return $this->connection->scan($iterator, $pattern, $count);
+            } catch (Exception $exception) {
+                common_Logger::d('Redis  ' . $method . ' failed ' . $attempt . '/' . $retry . ' :  ' . $exception->getMessage());
+
+                if ($e->getMessage() == 'Failed to AUTH connection' && isset($this->params['password'])) {
+                    common_Logger::d('Authenticating Redis connection');
+                    $this->connection->auth($this->params['password']);
+                }
+
+                $delay = rand(self::RETRY_DELAY, self::RETRY_DELAY * 2);
+
+                usleep($delay);
+
+                $this->connectionSet($this->params);
+            }
+
+            $attempt++;
+        }
+
+        if ($exception) {
+            throw $exception;
+        }
+
+        return [];
+    }
+
+    public function mGet(array $keys): array
+    {
+        return $this->callWithRetry('mGet', [$keys]);
+    }
+
+    public function mDel(array $keys)
+    {
+        return $this->callWithRetry('del', $keys);
+    }
+
+    public function mSet(array $keyValues)
+    {
+        return $this->callWithRetry('mSet', [$keyValues]);
     }
 
     /**
