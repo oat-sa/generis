@@ -25,10 +25,10 @@
 class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDriver, common_persistence_KeyValue_Nx
 {
 
-    const DEFAULT_PORT     = 6379;
-    const DEFAULT_ATTEMPT  = 3;
-    const DEFAULT_TIMEOUT  = 5; // in seconds
-    const RETRY_DELAY      = 500000; // Eq to 0.5s
+    const DEFAULT_PORT = 6379;
+    const DEFAULT_ATTEMPT = 3;
+    const DEFAULT_TIMEOUT = 5; // in seconds
+    const RETRY_DELAY = 500000; // Eq to 0.5s
 
     /**
      * @var Redis
@@ -63,7 +63,7 @@ class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDrive
             throw new common_exception_Error('Missing host information for Redis driver');
         }
 
-        $port    = isset($params['port']) ? $params['port'] : self::DEFAULT_PORT;
+        $port = isset($params['port']) ? $params['port'] : self::DEFAULT_PORT;
         $timeout = isset($params['timeout']) ? $params['timeout'] : self::DEFAULT_TIMEOUT;
         $persist = isset($params['pconnect']) ? $params['pconnect'] : true;
         $this->params['attempt'] = isset($params['attempt']) ? $params['attempt'] : self::DEFAULT_ATTEMPT;
@@ -104,15 +104,15 @@ class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDrive
     protected function callWithRetry($method, array $params, $attempt = 1)
     {
 
-        $success       = false;
+        $success = false;
         $lastException = null;
-        $result        = false;
+        $result = false;
 
         $retry = $this->params['attempt'];
 
         while (!$success && $attempt <= $retry) {
             try {
-                $result = call_user_func_array([$this->connection , $method], $params);
+                $result = call_user_func_array([$this->connection, $method], $params);
                 $success = true;
             } catch (Exception $e) {
                 $lastException = $e;
@@ -171,6 +171,7 @@ class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDrive
     {
         return $this->callWithRetry('hmSet', [$key, $fields]);
     }
+
     //Time complexity: O(1)
     public function hExists($key, $field)
     {
@@ -182,6 +183,7 @@ class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDrive
     {
         return $this->callWithRetry('hSet', [$key, $field, $value]);
     }
+
     //Time complexity: O(1)
     public function hGet($key, $field)
     {
@@ -190,7 +192,7 @@ class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDrive
 
     public function hDel($key, $field): bool
     {
-        return (bool) $this->callWithRetry('hDel', [$key, $field]);
+        return (bool)$this->callWithRetry('hDel', [$key, $field]);
     }
 
     //Time complexity: O(N) where N is the size of the hash.
@@ -198,16 +200,19 @@ class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDrive
     {
         return $this->callWithRetry('hGetAll', [$key]);
     }
+
     //Time complexity: O(N)
     public function keys($pattern)
     {
         return $this->callWithRetry('keys', [$pattern]);
     }
+
     //Time complexity: O(1)
     public function incr($key)
     {
         return $this->callWithRetry('incr', [$key]);
     }
+
     //Time complexity: O(1)
     public function decr($key)
     {
@@ -251,16 +256,25 @@ class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDrive
         return [];
     }
 
-    public function mGet(array $keys): array
+    /**
+     * @return array|bool
+     */
+    public function mGet(array $keys)
     {
         return $this->callWithRetry('mGet', [$keys]);
     }
 
+    /**
+     * @return bool|mixed
+     */
     public function mDel(array $keys)
     {
         return $this->callWithRetry('del', $keys);
     }
 
+    /**
+     * @return bool|mixed
+     */
     public function mSet(array $keyValues)
     {
         return $this->callWithRetry('mSet', [$keyValues]);
