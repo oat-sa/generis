@@ -15,13 +15,14 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2013-2017 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
+ * Copyright (c) 2013-2023 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  *
  * @author Lionel Lecaque  <lionel@taotesting.com>
  * @license GPLv2
  * @package
- *
+ * phpcs:disable Squiz.Classes.ValidClassName
  */
+
 class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDriver, common_persistence_KeyValue_Nx
 {
     public const DEFAULT_PORT = 6379;
