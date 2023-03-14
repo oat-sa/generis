@@ -24,11 +24,10 @@
  */
 class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDriver, common_persistence_KeyValue_Nx
 {
-
-    const DEFAULT_PORT = 6379;
-    const DEFAULT_ATTEMPT = 3;
-    const DEFAULT_TIMEOUT = 5; // in seconds
-    const RETRY_DELAY = 500000; // Eq to 0.5s
+    public const DEFAULT_PORT = 6379;
+    public const DEFAULT_ATTEMPT = 3;
+    public const DEFAULT_TIMEOUT = 5; // in seconds
+    public const RETRY_DELAY = 500000; // Eq to 0.5s
 
     /**
      * @var Redis
@@ -44,7 +43,7 @@ class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDrive
      * store connection params and try to connect
      * @see common_persistence_Driver::connect()
      */
-    function connect($key, array $params)
+    public function connect($key, array $params)
     {
         $this->params = $params;
         $this->connectionSet($params);
@@ -57,7 +56,7 @@ class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDrive
      * @param array $params
      * @throws common_exception_Error
      */
-    function connectionSet(array $params)
+    public function connectionSet(array $params)
     {
         if (!isset($params['host'])) {
             throw new common_exception_Error('Missing host information for Redis driver');
@@ -108,7 +107,7 @@ class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDrive
         $lastException = null;
         $result = false;
 
-        $retry = $this->params['attempt'];
+        $retry = (int)$this->params['attempt'];
 
         while (!$success && $attempt <= $retry) {
             try {
@@ -116,14 +115,8 @@ class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDrive
                 $success = true;
             } catch (Exception $e) {
                 $lastException = $e;
-                common_Logger::d('Redis  ' . $method . ' failed ' . $attempt . '/' . $retry . ' :  ' . $e->getMessage());
-                if ($e->getMessage() == 'Failed to AUTH connection' && isset($this->params['password'])) {
-                    common_Logger::d('Authenticating Redis connection');
-                    $this->connection->auth($this->params['password']);
-                }
-                $delay = rand(self::RETRY_DELAY, self::RETRY_DELAY * 2);
-                usleep($delay);
-                $this->connectionSet($this->params);
+
+                $this->reconnectOnException($lastException, $method, $attempt, $retry);
             }
             $attempt++;
         }
@@ -131,6 +124,7 @@ class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDrive
         if (!$success) {
             throw $lastException;
         }
+
         return $result;
     }
 
@@ -225,31 +219,20 @@ class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDrive
      */
     public function scan(int &$iterator = null, string $pattern = null, int $count = 1000): array
     {
-        $retry = $this->params['attempt'];
+        $retry = (int)$this->params['attempt'];
         $attempt = 0;
 
         while ($attempt <= $retry) {
             try {
                 return $this->connection->scan($iterator, $pattern, $count);
             } catch (Exception $exception) {
-                common_Logger::d('Redis  ' . $method . ' failed ' . $attempt . '/' . $retry . ' :  ' . $exception->getMessage());
-
-                if ($e->getMessage() == 'Failed to AUTH connection' && isset($this->params['password'])) {
-                    common_Logger::d('Authenticating Redis connection');
-                    $this->connection->auth($this->params['password']);
-                }
-
-                $delay = rand(self::RETRY_DELAY, self::RETRY_DELAY * 2);
-
-                usleep($delay);
-
-                $this->connectionSet($this->params);
+                $this->reconnectOnException($exception, $method, $attempt, $retry);
             }
 
             $attempt++;
         }
 
-        if ($exception) {
+        if (isset($exception)) {
             throw $exception;
         }
 
@@ -286,5 +269,35 @@ class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDrive
     public function getConnection()
     {
         return $this->connection;
+    }
+
+    /**
+     * @return void
+     * @throws RedisException
+     * @throws common_exception_Error
+     */
+    private function reconnectOnException(Exception $exception, string $method, int $attempt, int $retry): void
+    {
+        common_Logger::d(
+            sprintf(
+                'Redis %s failed %s/%s:  %s',
+                $method,
+                $attempt,
+                $retry,
+                $exception->getMessage(),
+            )
+        );
+
+        if ($exception->getMessage() == 'Failed to AUTH connection' && isset($this->params['password'])) {
+            common_Logger::d('Authenticating Redis connection');
+
+            $this->connection->auth($this->params['password']);
+        }
+
+        $delay = rand(self::RETRY_DELAY, self::RETRY_DELAY * 2);
+
+        usleep($delay);
+
+        $this->connectionSet($this->params);
     }
 }
