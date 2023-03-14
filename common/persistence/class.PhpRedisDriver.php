@@ -253,7 +253,7 @@ class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDrive
      */
     public function mDel(array $keys)
     {
-        return $this->callWithRetry('del', $keys);
+        return $this->callWithRetry('del', [$keys]);
     }
 
     /**
