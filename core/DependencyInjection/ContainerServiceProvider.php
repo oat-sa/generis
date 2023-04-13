@@ -24,14 +24,14 @@ declare(strict_types=1);
 
 namespace oat\generis\model\DependencyInjection;
 
-use Relay\RelayBuilder;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\ServerRequest;
+use oat\generis\model\Middleware\MiddlewareExtensionsMapper;
+use oat\generis\model\Middleware\MiddlewareRequestHandler;
 use oat\oatbox\service\ServiceManager;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use oat\generis\model\Middleware\MiddlewareRequestHandler;
-use oat\generis\model\Middleware\MiddlewareExtensionsMapper;
+use Relay\RelayBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
@@ -46,8 +46,7 @@ class ContainerServiceProvider implements ContainerServiceProviderInterface
     {
         $services = $configurator->services();
 
-        $services
-            ->set(ServerRequestInterface::class, ServerRequestInterface::class)
+        $services->set(ServerRequestInterface::class, ServerRequestInterface::class)
             ->public()
             ->factory(ServerRequest::class . '::fromGlobals');
 
@@ -56,16 +55,14 @@ class ContainerServiceProvider implements ContainerServiceProviderInterface
             ->public()
             ->factory(ServiceManager::class . '::getServiceManager');
 
-        $services
-            ->set(ResponseInterface::class, Response::class)
+        $services->set(ResponseInterface::class, Response::class)
             ->public();
 
         $services->set(RelayBuilder::class, RelayBuilder::class);
 
         $services->set(LegacyServiceGateway::class, LegacyServiceGateway::class);
 
-        $services
-            ->set(MiddlewareRequestHandler::class, MiddlewareRequestHandler::class)
+        $services->set(MiddlewareRequestHandler::class, MiddlewareRequestHandler::class)
             ->public()
             ->args(
                 [
