@@ -30,7 +30,8 @@ use oat\generis\model\OntologyRdf;
  * @access public
  * @author Joel Bout, <joel@taotesting.com>
  * @package generis
-
+ *
+ * phpcs:disable Squiz.Classes.ValidClassName.NotCamelCaps
  */
 class core_kernel_users_GenerisUser extends common_user_User implements UserInternalInterface
 {
