@@ -30,7 +30,8 @@ use oat\generis\model\OntologyRdf;
  * @access public
  * @author Joel Bout, <joel@taotesting.com>
  * @package generis
-
+ *
+ * phpcs:disable Squiz.Classes.ValidClassName.NotCamelCaps
  */
 class core_kernel_users_GenerisUser extends common_user_User implements UserInternalInterface
 {
@@ -85,7 +86,7 @@ class core_kernel_users_GenerisUser extends common_user_User implements UserInte
             case GenerisRdf::PROPERTY_USER_DEFLG:
                 $lang = $this->findLanguage($property);
 
-                return $lang ?: [DEFAULT_LANG];
+                return $lang ?: [DEFAULT_ANONYMOUS_INTERFACE_LANG];
 
             case GenerisRdf::PROPERTY_USER_UILG:
                 return $this->findLanguage($property);
