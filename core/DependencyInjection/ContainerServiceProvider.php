@@ -28,6 +28,7 @@ use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\ServerRequest;
 use oat\generis\model\Middleware\MiddlewareExtensionsMapper;
 use oat\generis\model\Middleware\MiddlewareRequestHandler;
+use oat\oatbox\service\ServiceManager;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Relay\RelayBuilder;
@@ -48,6 +49,11 @@ class ContainerServiceProvider implements ContainerServiceProviderInterface
         $services->set(ServerRequestInterface::class, ServerRequestInterface::class)
             ->public()
             ->factory(ServerRequest::class . '::fromGlobals');
+
+        $services
+            ->set(ServiceManager::class, ServiceManager::class)
+            ->public()
+            ->factory(ServiceManager::class . '::getServiceManager');
 
         $services->set(ResponseInterface::class, Response::class)
             ->public();
