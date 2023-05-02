@@ -26,6 +26,7 @@ interface SchemaProviderInterface
 {
     /**
      * Allows a class to adapt the schemas as required
+     *
      * @param SchemaCollection $schemaCollection
      */
     public function provideSchema(SchemaCollection $schemaCollection);

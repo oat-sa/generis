@@ -16,55 +16,60 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2016 (original work) Open Assessment Technologies SA;
- *
  */
 
 namespace oat\oatbox\validator;
 
+use RuntimeException;
+
 /**
  * base of validator
+ *
  * @author Christophe GARCIA <christopheg@taotesting.com>
  */
 abstract class AbstractFormValidator
 {
-    
     /**
      * configuration of validation
+     *
      * @var array
      */
     protected $validation = [];
     /**
-     *
      * @var array
      */
     protected $errors = [];
     /**
-     *
      * @var boolean
      */
     protected $isValid;
 
-
     /**
      * valid a form.
+     *
      * @param array $form
+     *
      * @return $this
      */
     public function validate(array $form)
     {
         $this->isValid = true;
+
         foreach ($form as $field => $value) {
             if (array_key_exists($field, $this->validation)) {
                 $this->validField($field, $value, $this->validation[$field]);
             }
         }
+
         return $this;
     }
-    
+
     /**
      * add an error message
+     *
      * @param type $field
      * @param type $message
+     *
      * @return \oat\oatbox\validator\AbstractFormValidator
      */
     protected function addError($field, $message)
@@ -74,11 +79,13 @@ abstract class AbstractFormValidator
         } else {
             $this->errors[$field] = [$message];
         }
+
         return $this;
     }
-    
+
     /**
      * execute all validation for a field
+     *
      * @param string $field
      * @param mixed $value
      * @param array $config
@@ -86,10 +93,11 @@ abstract class AbstractFormValidator
     protected function validField($field, $value, $config)
     {
         foreach ($config as $validator) {
-            $class  = $validator['class'];
+            $class = $validator['class'];
             $option = $validator['options'];
             /* @var $test ValidatorInterface */
             $test = new $class($option);
+
             if (!$this->executeTest($value, $test)) {
                 $this->isValid = false;
                 $this->addError($field, $test->getMessage());
@@ -98,17 +106,20 @@ abstract class AbstractFormValidator
     }
     /**
      * execute a validator
+     *
      * @param mixed $value
      * @param \oat\oatbox\validator\ValidatorInterface $validator
+     *
      * @return boolena
      */
     protected function executeTest($value, ValidatorInterface $validator)
     {
         return $validator->evaluate($value);
     }
-    
+
     /**
      * return all errors
+     *
      * @return array
      */
     public function getErrors()
@@ -117,7 +128,9 @@ abstract class AbstractFormValidator
     }
     /**
      * return error message for a field
+     *
      * @param string $field
+     *
      * @return array
      */
     public function getError($field)
@@ -125,18 +138,22 @@ abstract class AbstractFormValidator
         if (array_key_exists($field, $this->errors)) {
             return $this->errors[$field];
         }
+
         return null;
     }
     /**
      * return form valiation status
+     *
+     * @throws RuntimeException
+     *
      * @return boolean
-     * @throws \RuntimeException
      */
     public function isValid()
     {
         if (is_null($this->isValid)) {
-            throw new \RuntimeException('you must validate a form');
+            throw new RuntimeException('you must validate a form');
         }
+
         return $this->isValid;
     }
 }

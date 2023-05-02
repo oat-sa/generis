@@ -41,6 +41,13 @@ final class MiddlewareMap implements MiddlewareMapInterface
     /** @var string[]|null */
     private $httpMethods = [];
 
+    private function __construct(array $routes = [], array $middlewaresIds = [], array $httpMethods = [])
+    {
+        $this->routes = $routes;
+        $this->middlewaresIds = $middlewaresIds;
+        $this->httpMethods = $httpMethods;
+    }
+
     public static function byRoute(string $route): self
     {
         return new self([$route]);
@@ -135,12 +142,5 @@ final class MiddlewareMap implements MiddlewareMapInterface
             $json[self::OPTION_MIDDLEWARES],
             $json[self::OPTION_HTTP_METHODS] ?? []
         );
-    }
-
-    private function __construct(array $routes = [], array $middlewaresIds = [], array $httpMethods = [])
-    {
-        $this->routes = $routes;
-        $this->middlewaresIds = $middlewaresIds;
-        $this->httpMethods = $httpMethods;
     }
 }

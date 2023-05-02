@@ -16,12 +16,14 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2018 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
  */
 
 namespace oat\generis\model\user;
 
+use common_user_User;
 use core_kernel_classes_Resource;
+use core_kernel_users_GenerisUser;
+use Exception;
 use oat\oatbox\service\ConfigurableService;
 
 class UserFactoryService extends ConfigurableService implements UserFactoryServiceInterface
@@ -29,12 +31,14 @@ class UserFactoryService extends ConfigurableService implements UserFactoryServi
     /**
      * @param core_kernel_classes_Resource $userResource
      * @param string $hashForEncryption
-     * @return \common_user_User
-     * @throws \Exception
+     *
+     * @throws Exception
+     *
+     * @return common_user_User
      */
     public function createUser(core_kernel_classes_Resource $userResource, $hashForEncryption = null)
     {
-        $user = new \core_kernel_users_GenerisUser($userResource);
+        $user = new core_kernel_users_GenerisUser($userResource);
 
         $this->propagate($user);
 

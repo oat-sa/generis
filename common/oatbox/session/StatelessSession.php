@@ -16,14 +16,16 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2019 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
  */
 
 namespace oat\oatbox\session;
 
+use common_session_BasicSession;
+use common_session_StatelessSession;
+
 /**
  * Represents a Session that is not persistent.
  */
-class StatelessSession extends \common_session_BasicSession implements \common_session_StatelessSession
+class StatelessSession extends common_session_BasicSession implements common_session_StatelessSession
 {
 }

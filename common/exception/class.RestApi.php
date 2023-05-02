@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,6 +21,7 @@
 /**
  * Class common_exception_RestApi
  * Note: Exception message is supposed to be shown to the end user.
+ *
  * @author Aleh Hutnikau, <hutnikau@1pt.com>
  */
 class common_exception_RestApi extends common_exception_ClientException
@@ -28,6 +30,7 @@ class common_exception_RestApi extends common_exception_ClientException
 
     /**
      * common_exception_RestApi constructor.
+     *
      * @param null $message
      * @param int $code
      */
@@ -42,14 +45,14 @@ class common_exception_RestApi extends common_exception_ClientException
      * to be translated and does not contain any confidential information
      * about the system and its sensitive data.
      *
-     * @return string A human-readable message.
+     * @return string a human-readable message
      */
     public function getUserMessage()
     {
         if ($this->userMessage === null) {
-            return __("Wrong request type, try again please or contact your system administrator");
-        } else {
-            return $this->userMessage;
+            return __('Wrong request type, try again please or contact your system administrator');
         }
+
+        return $this->userMessage;
     }
 }

@@ -19,14 +19,14 @@
  *
  * @author Bout Joel, <joel@taotesting.com>
  * @license GPLv2
- * @package generis
  *
+ * @package generis
  */
 
 return [
     [
         'driver' => 'oat\\generis\\model\\user\\AuthAdapter',
-        'user_factory' => 'generis/userFactory'
+        'user_factory' => 'generis/userFactory',
     ],
     /*
     array(

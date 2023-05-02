@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -18,9 +19,10 @@
  */
 
 /**
- *
  * @access public
+ *
  * @author Patrick Plichart
+ *
  * @package generis
  */
 class common_exception_BadRequest extends common_exception_ClientException
@@ -30,10 +32,10 @@ class common_exception_BadRequest extends common_exception_ClientException
      * to be translated and does not contain any confidential information
      * about the system and its sensitive data.
      *
-     * @return string A human-readable message.
+     * @return string a human-readable message
      */
     public function getUserMessage()
     {
-        return __("Wrong request type, try again please or contact your system administrator");
+        return __('Wrong request type, try again please or contact your system administrator');
     }
 }

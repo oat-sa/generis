@@ -16,6 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2015-2022 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
+ *
  * @author Mikhail Kamarouski, <kamarouski@1pt.com>
  */
 
@@ -27,11 +28,12 @@ use oat\oatbox\service\ServiceManager;
 
 /**
  * @deprecated Please use `oat\tao\model\password\PasswordConstraintsService::SERVICE_ID` instead
+ *
  * @package generis
  */
 class PasswordConstraintsService
 {
-    static public function singleton()
+    public static function singleton()
     {
         return ServiceManager::getServiceManager()->get(\oat\tao\model\password\PasswordConstraintsService::SERVICE_ID);
     }

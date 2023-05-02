@@ -30,22 +30,26 @@ class PermissionHelper extends ConfigurableService
 {
     /**
      * Filters resources by the provided right if it is supported
+     *
      * @return array identifiers of resources that have permission for the provided right
      */
     public function filterByPermission(array $resourceIds, string $right): array
     {
         $provider = $this->getServiceLocator()->get(PermissionInterface::SERVICE_ID);
+
         if (!in_array($right, $provider->getSupportedRights())) {
             return $resourceIds;
         }
-        $permissions = $provider->getPermissions($this->getCurrentUser(),$resourceIds);
+        $permissions = $provider->getPermissions($this->getCurrentUser(), $resourceIds);
 
-        return array_filter($resourceIds, function($id) use ($right, $permissions){ return isset($permissions[$id]) && in_array($right, $permissions[$id]); });
+        return array_filter($resourceIds, function ($id) use ($right, $permissions) {
+            return isset($permissions[$id]) && in_array($right, $permissions[$id]);
+        });
     }
 
     private function getCurrentUser(): User
     {
-        /** @noinspection PhpIncompatibleReturnTypeInspection */
+        /* @noinspection PhpIncompatibleReturnTypeInspection */
         return $this->getServiceLocator()->get(SessionService::SERVICE_ID)->getCurrentUser();
     }
 }

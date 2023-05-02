@@ -22,13 +22,15 @@ declare(strict_types=1);
 
 namespace oat\generis\test\unit\common\persistence;
 
+use common_exception_InconsistentData;
+use Doctrine\DBAL\Schema\Schema;
+use helpers_File;
 use oat\generis\persistence\DriverConfigurationFeeder;
-use oat\generis\test\TestCase;
 use oat\generis\persistence\PersistenceManager;
 use oat\generis\persistence\sql\SchemaCollection;
-use Doctrine\DBAL\Schema\Schema;
-use oat\oatbox\log\LoggerService;
 use oat\generis\persistence\sql\SchemaProviderInterface;
+use oat\generis\test\TestCase;
+use oat\oatbox\log\LoggerService;
 use PHPUnit\Framework\MockObject\MockObject;
 
 class PersistenceManagerTest extends TestCase
@@ -44,7 +46,7 @@ class PersistenceManagerTest extends TestCase
 
     public function setUp(): void
     {
-        $this->path = sys_get_temp_dir() . DIRECTORY_SEPARATOR . "generis_unittest_" . mt_rand() . DIRECTORY_SEPARATOR;
+        $this->path = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'generis_unittest_' . mt_rand() . DIRECTORY_SEPARATOR;
         $this->driverConfigurationFeeder = $this->createMock(DriverConfigurationFeeder::class);
         $this->pm = new PersistenceManager(
             [
@@ -53,9 +55,9 @@ class PersistenceManagerTest extends TestCase
                     'sql2' => $this->getSqlConfig(),
                     'notsql' => [
                         'driver' => 'phpfile',
-                        'dir' => $this->path
-                    ]
-                ]
+                        'dir' => $this->path,
+                    ],
+                ],
             ]
         );
         $this->pm->setServiceLocator(
@@ -76,7 +78,7 @@ class PersistenceManagerTest extends TestCase
     {
         // path is only created if persistence was used
         if (file_exists($this->path)) {
-            \helpers_File::remove($this->path);
+            helpers_File::remove($this->path);
         }
     }
 
@@ -87,6 +89,7 @@ class PersistenceManagerTest extends TestCase
         $this->assertEquals(['sql1', 'sql2'], array_keys(iterator_to_array($sc)));
         $this->assertInstanceOf(Schema::class, $sc->getSchema('sql1'));
         $this->assertInstanceOf(Schema::class, $sc->getSchema('sql2'));
+
         return $sc;
     }
 
@@ -95,7 +98,7 @@ class PersistenceManagerTest extends TestCase
      */
     public function testGetWrongSchema(SchemaCollection $sc)
     {
-        $this->expectException(\common_exception_InconsistentData::class);
+        $this->expectException(common_exception_InconsistentData::class);
         $sc->getSchema('notsql');
     }
 
@@ -113,6 +116,7 @@ class PersistenceManagerTest extends TestCase
         $this->assertNotEquals($sc->getOriginalSchema('sql1'), $schema);
         $this->assertNotEquals($sc->getOriginalSchema('sql1'), $sc->getSchema('sql1'));
         $this->assertEquals($sc->getOriginalSchema('sql2'), $sc->getSchema('sql2'));
+
         return $sc;
     }
 
@@ -132,7 +136,7 @@ class PersistenceManagerTest extends TestCase
             public function provideSchema(SchemaCollection $schemaCollection)
             {
                 $table = $schemaCollection->getSchema('sql1')->createTable('serviceTable');
-                $table->addColumn('sample', "text");
+                $table->addColumn('sample', 'text');
             }
         };
         $this->assertFalse($this->pm->getSqlSchemas()->getSchema('sql1')->hasTable('serviceTable'));
@@ -145,11 +149,12 @@ class PersistenceManagerTest extends TestCase
         if (!extension_loaded('pdo_sqlite')) {
             $this->markTestSkipped('sqlite not found, tests skipped.');
         }
+
         return [
             'driver' => 'dbal',
             'connection' => [
-                'url' => 'sqlite:///:memory:'
-            ]
+                'url' => 'sqlite:///:memory:',
+            ],
         ];
     }
 }

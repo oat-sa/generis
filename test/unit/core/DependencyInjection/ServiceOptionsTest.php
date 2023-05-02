@@ -39,7 +39,7 @@ class ServiceOptionsTest extends TestCase
                 'class1' => [
                     'option1' => 'option1Value',
                     'option2' => 'option2Value',
-                ]
+                ],
             ]
         );
     }

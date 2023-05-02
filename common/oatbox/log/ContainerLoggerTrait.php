@@ -16,11 +16,11 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2017 (original work) Open Assessment Technologies SA
- *
  */
 
 namespace oat\oatbox\log;
 
+use InvalidArgumentException;
 use oat\oatbox\PimpleContainerTrait;
 use Pimple\Container;
 
@@ -28,15 +28,14 @@ trait ContainerLoggerTrait
 {
     // Adding container.
     use PimpleContainerTrait;
-
     // Adding logger.
     use LoggerAwareTrait;
 
     /**
      * Initialize the container and the logger.
      *
-     * @param Container $container   The dependency container instance.
-     * @param string    $key         The returning dependency key.
+     * @param Container $container the dependency container instance
+     * @param string $key the returning dependency key
      *
      * @return mixed
      */
@@ -52,7 +51,7 @@ trait ContainerLoggerTrait
             if (!empty($key)) {
                 try {
                     return $this->getContainer()->offsetGet($key);
-                } catch (\InvalidArgumentException $e) {
+                } catch (InvalidArgumentException $e) {
                 }
             }
 

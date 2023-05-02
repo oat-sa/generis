@@ -8,23 +8,25 @@
 
 namespace oat\generis\model\kernel\persistence\smoothsql\search\exception;
 
+use common_exception_UserReadableException;
+use InvalidArgumentException;
+
 /**
  * Query invalid value exception
  *
  * @author Christophe GARCIA <christopheg@taotesting.com>
  */
-class InvalidValueException extends \InvalidArgumentException implements \common_exception_UserReadableException
+class InvalidValueException extends InvalidArgumentException implements common_exception_UserReadableException
 {
-    
     /**
      * Get the human-readable message for the end-user. It is supposed
      * to be translated and does not contain any confidential information
      * about the system and its sensitive data.
      *
-     * @return string A human-readable message.
+     * @return string a human-readable message
      */
     public function getUserMessage()
     {
-        return __("Wrong Value, try again please or contact your system administrator");
+        return __('Wrong Value, try again please or contact your system administrator');
     }
 }

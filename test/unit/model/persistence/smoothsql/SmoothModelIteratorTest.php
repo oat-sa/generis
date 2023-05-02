@@ -16,51 +16,48 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) (original work) 2015 Open Assessment Technologies SA
- *
  */
 
 namespace oat\generis\test\unit\model\persistence\smoothsql;
 
+use core_kernel_persistence_smoothsql_SmoothIterator;
 use oat\generis\test\TestCase;
 use Prophecy\Argument;
 use Prophecy\Promise\ReturnPromise;
 
 class SmoothModelIteratorTest extends TestCase
 {
-
     public function setUp(): void
     {
     }
 
-
     private function createIterator()
     {
-
         $persistenceProphecy = $this->prophesize('common_persistence_SqlPersistence');
 
         $statementProphecy = $this->prophesize('PDOStatement');
         $statementValue = [
-            "modelid"    => 1,
-            "subject"    => '#subject',
-            "predicate"  => '#predicate',
-            "object"     => 'obb',
-            "id"         => 898,
-            "l_language" => 'en-US',
-            "author"     => 'testauthor'
+            'modelid' => 1,
+            'subject' => '#subject',
+            'predicate' => '#predicate',
+            'object' => 'obb',
+            'id' => 898,
+            'l_language' => 'en-US',
+            'author' => 'testauthor',
         ];
         $statementValue2 = [
-            "modelid"    => 1,
-            "subject"    => '#subject2',
-            "predicate"  => '#predicate2',
-            "object"     => 'ob2',
-            "id"         => 899,
-            "l_language" => 'en-US',
-            "author"     => 'testauthor'
+            'modelid' => 1,
+            'subject' => '#subject2',
+            'predicate' => '#predicate2',
+            'object' => 'ob2',
+            'id' => 899,
+            'l_language' => 'en-US',
+            'author' => 'testauthor',
         ];
         $return = new ReturnPromise([
             $statementValue,
             $statementValue2,
-            false
+            false,
         ]);
 
         $statementProphecy->fetch()->will($return);
@@ -79,7 +76,8 @@ class SmoothModelIteratorTest extends TestCase
             ->query($finalQuery, Argument::type('array'), Argument::type('array'))
             ->willReturn($plop);
 
-        $iterator = new \core_kernel_persistence_smoothsql_SmoothIterator($persistenceProphecy->reveal());
+        $iterator = new core_kernel_persistence_smoothsql_SmoothIterator($persistenceProphecy->reveal());
+
         return $iterator;
     }
 
@@ -93,7 +91,6 @@ class SmoothModelIteratorTest extends TestCase
      */
     public function testCurrent()
     {
-
         $iterator = $this->createIterator();
         $this->assertTrue($iterator->valid());
 

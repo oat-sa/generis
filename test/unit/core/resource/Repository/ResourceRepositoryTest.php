@@ -22,19 +22,19 @@ declare(strict_types=1);
 
 namespace oat\generis\test\unit\model\resource\Repository;
 
-use RuntimeException;
-use InvalidArgumentException;
 use core_kernel_classes_Class;
-use oat\generis\test\TestCase;
 use core_kernel_classes_Resource;
-use oat\oatbox\event\EventManager;
+use core_kernel_persistence_ResourceInterface;
+use InvalidArgumentException;
+use oat\generis\model\Context\ContextInterface;
 use oat\generis\model\data\Ontology;
 use oat\generis\model\data\RdfsInterface;
-use PHPUnit\Framework\MockObject\MockObject;
-use core_kernel_persistence_ResourceInterface;
-use oat\generis\model\Context\ContextInterface;
-use oat\generis\model\resource\Repository\ResourceRepository;
 use oat\generis\model\resource\Context\ResourceRepositoryContext;
+use oat\generis\model\resource\Repository\ResourceRepository;
+use oat\generis\test\TestCase;
+use oat\oatbox\event\EventManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use RuntimeException;
 
 class ResourceRepositoryTest extends TestCase
 {

@@ -16,7 +16,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2020 (original work) Open Assessment Technologies SA;
- *
  */
 
 namespace oat\generis\test;
@@ -30,20 +29,22 @@ trait FileSystemMockTrait
     {
         $adapterparam = [
             'testfs' => [
-                'class' => MemoryAdapter::class
-            ]
+                'class' => MemoryAdapter::class,
+            ],
         ];
         $dirparam = [];
+
         foreach ($dirs as $dir) {
             $dirparam[$dir] = 'testfs';
         }
         $service = new FileSystemService([
             FileSystemService::OPTION_ADAPTERS => $adapterparam,
-            FileSystemService::OPTION_DIRECTORIES => $dirparam
+            FileSystemService::OPTION_DIRECTORIES => $dirparam,
         ]);
         $service->setServiceLocator($this->getServiceLocatorMock([
-            FileSystemService::SERVICE_ID => $service
+            FileSystemService::SERVICE_ID => $service,
         ]));
+
         return $service;
     }
 }

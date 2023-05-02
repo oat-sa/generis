@@ -20,13 +20,10 @@ use oat\generis\model\data\ModelManager;
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2014 (original work) Open Assessment Technologies SA;
- *
- *
  */
 
 class core_kernel_api_ModelExporter
 {
-
     /**
      * Export the entire ontology
      *
@@ -36,6 +33,7 @@ class core_kernel_api_ModelExporter
     {
         $dbWrapper = core_kernel_classes_DbWrapper::singleton();
         $result = $dbWrapper->query('SELECT DISTINCT "subject", "predicate", "object", "l_language" FROM "statements"');
+
         return self::statement2rdf($result);
     }
 
@@ -43,6 +41,7 @@ class core_kernel_api_ModelExporter
      * Export models by id
      *
      * @param array $modelIds
+     *
      * @return string
      */
     public static function exportModels($modelIds)
@@ -52,6 +51,7 @@ class core_kernel_api_ModelExporter
             WHERE "modelid" IN (\'' . implode('\',\'', $modelIds) . '\')');
 
         common_Logger::i('Found ' . $result->rowCount() . ' entries for models ' . implode(',', $modelIds));
+
         return self::statement2rdf($result);
     }
 
@@ -67,11 +67,13 @@ class core_kernel_api_ModelExporter
 
     /**
      * @throws \EasyRdf\Exception
+     *
      * @ignore
      */
     private static function statement2rdf(PDOStatement $statement)
     {
         $graph = new Graph();
+
         while ($r = $statement->fetch()) {
             if (isset($r['l_language']) && !empty($r['l_language'])) {
                 $graph->addLiteral($r['subject'], $r['predicate'], $r['object'], $r['l_language']);

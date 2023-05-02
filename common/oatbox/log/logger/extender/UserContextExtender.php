@@ -22,8 +22,8 @@ declare(strict_types=1);
 
 namespace oat\oatbox\log\logger\extender;
 
-use Throwable;
 use oat\oatbox\session\SessionService;
+use Throwable;
 
 class UserContextExtender implements ContextExtenderInterface
 {

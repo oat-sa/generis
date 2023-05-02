@@ -22,13 +22,13 @@ declare(strict_types=1);
 
 namespace oat\generis\model\resource\Contract;
 
-use RuntimeException;
 use BadMethodCallException;
 use common_exception_Error;
-use InvalidArgumentException;
 use core_kernel_classes_Resource;
+use InvalidArgumentException;
 use oat\generis\model\Context\ContextInterface;
 use oat\search\base\exception\SearchGateWayExeption;
+use RuntimeException;
 
 interface ResourceRepositoryInterface
 {

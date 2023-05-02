@@ -18,16 +18,18 @@ declare(strict_types=1);
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) (original work) 2020 Open Assessment Technologies SA
- *
  */
 
 namespace oat\generis\test\unit\model\persistence\newsql;
 
+use common_persistence_sql_Platform;
+use common_persistence_SqlPersistence;
+use core_kernel_classes_Triple;
 use Doctrine\DBAL\ParameterType;
 use oat\generis\model\kernel\persistence\newsql\NewSqlOntology;
 use oat\generis\model\kernel\persistence\newsql\NewSqlRdf;
-use Prophecy\Argument;
 use oat\generis\test\TestCase;
+use Prophecy\Argument;
 
 class NewSqlRdfTest extends TestCase
 {
@@ -35,7 +37,7 @@ class NewSqlRdfTest extends TestCase
     {
         $query = 'INSERT INTO statements ( id, modelId, subject, predicate, object, l_language, epoch, author) VALUES ( ?, ? , ? , ? , ? , ? , ?, ?);';
 
-        $triple = new \core_kernel_classes_Triple();
+        $triple = new core_kernel_classes_Triple();
         $triple->modelid = 22;
         $triple->subject = 'subjectUri';
         $triple->predicate = 'predicateUri';
@@ -48,15 +50,14 @@ class NewSqlRdfTest extends TestCase
             'objectUri',
             '',
             'now',
-            ''
+            '',
         ];
 
         $persistence = $this->getPersistenceProphecy();
         $persistence->exec(
             $query,
-            Argument::that(function($value) use ($expected) {
-               return array_slice($value, 1) == $expected && is_string($value[0]);
-
+            Argument::that(function ($value) use ($expected) {
+                return array_slice($value, 1) == $expected && is_string($value[0]);
             }),
             $this->getExpectedTripleParameterTypes()
         )->shouldBeCalled()->willReturn(true);
@@ -68,14 +69,14 @@ class NewSqlRdfTest extends TestCase
     {
         $table = 'statements';
 
-        $triple1 = new \core_kernel_classes_Triple();
+        $triple1 = new core_kernel_classes_Triple();
         $triple1->modelid = 11;
         $triple1->subject = 'subjectUri1';
         $triple1->predicate = 'predicateUri1';
         $triple1->object = 'objectUri1';
         $triple1->author = '';
 
-        $triple2 = new \core_kernel_classes_Triple();
+        $triple2 = new core_kernel_classes_Triple();
         $triple2->modelid = 22;
         $triple2->subject = 'subjectUri2';
         $triple2->predicate = 'predicateUri2';
@@ -105,13 +106,13 @@ class NewSqlRdfTest extends TestCase
                 'l_language' => '',
                 'author' => 'JohnDoe2',
                 'epoch' => 'now',
-            ]
+            ],
         ];
 
         $persistence = $this->getPersistenceProphecy();
         $persistence->insertMultiple(
             Argument::exact($table),
-            Argument::that(function($value) use ($expectedValue) {
+            Argument::that(function ($value) use ($expectedValue) {
                 return array_slice($value[0], 1) == $expectedValue[0] && is_string($value[0]['id'])
                     && array_slice($value[1], 1) == $expectedValue[1] && is_string($value[1]['id']);
             }),
@@ -123,10 +124,10 @@ class NewSqlRdfTest extends TestCase
 
     protected function getPersistenceProphecy()
     {
-        $platform = $this->prophesize(\common_persistence_sql_Platform::class);
+        $platform = $this->prophesize(common_persistence_sql_Platform::class);
         $platform->getNowExpression()->willReturn('now');
 
-        $persistence = $this->prophesize(\common_persistence_SqlPersistence::class);
+        $persistence = $this->prophesize(common_persistence_SqlPersistence::class);
         $persistence->getPlatForm()->willReturn($platform->reveal());
 
         return $persistence;
@@ -137,7 +138,7 @@ class NewSqlRdfTest extends TestCase
         $model = $this->prophesize(NewSqlOntology::class);
         $model->getPersistence()->willReturn($persistence);
 
-        return new NewSqlRdf($model->reveal());;
+        return new NewSqlRdf($model->reveal());
     }
 
     protected function getExpectedTripleParameterTypes()

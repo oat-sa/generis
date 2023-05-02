@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -15,25 +16,28 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2020 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
  */
 
 declare(strict_types=1);
 
 namespace oat\oatbox\extension;
 
+use common_configuration_ComponentCollection;
+use common_ext_ExtensionException;
+use Composer\InstalledVersions;
 use oat\generis\model\DependencyInjection\ContainerServiceProviderInterface;
 use oat\oatbox\extension\exception\ManifestException;
 use oat\oatbox\extension\exception\ManifestNotFoundException;
 use oat\oatbox\service\exception\InvalidServiceManagerException;
 use oat\tao\model\Middleware\Contract\MiddlewareMapInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Composer\InstalledVersions;
+use Zend\ServiceManager\ServiceLocatorAwareTrait;
 
 /**
  * Class Manifest
+ *
  * @author Jerome Bogaerts <jerome@taotesting.com>
+ *
  * @package oat\oatbox\extension
  */
 class Manifest implements ServiceLocatorAwareInterface
@@ -42,18 +46,21 @@ class Manifest implements ServiceLocatorAwareInterface
 
     /**
      * The path to the file where the manifest is described.
+     *
      * @var string
      */
     private $filePath = '';
 
     /**
      * The version of the Extension the manifest describes.
+     *
      * @var string
      */
     private $version = null;
 
     /**
      * The dependencies of the Extension the manifest describes.
+     *
      * @var array
      */
     private $dependencies = [];
@@ -72,8 +79,10 @@ class Manifest implements ServiceLocatorAwareInterface
      * Creates a new instance of Manifest.
      *
      * @access public
+     *
      * @param string $filePath The path to the manifest.php file to parse.
      * @param ComposerInfo|null $composerInfo
+     *
      * @throws ManifestNotFoundException
      * @throws exception\MalformedManifestException
      */
@@ -94,69 +103,79 @@ class Manifest implements ServiceLocatorAwareInterface
 
     /**
      * Get the name of the Extension the manifest describes.
+     *
      * @return string
      */
     public function getName(): string
     {
-        return isset($this->manifest['name']) ? $this->manifest['name'] : '';
+        return $this->manifest['name'] ?? '';
     }
 
     /**
      * Get the description of the Extension the manifest describes.
+     *
      * @return string
      */
     public function getDescription(): string
     {
-        return isset($this->manifest['description']) ? $this->manifest['description'] : '';
+        return $this->manifest['description'] ?? '';
     }
 
     /**
      * Get the author of the Extension the manifest describes.
+     *
      * @return string
      */
     public function getAuthor(): string
     {
-        return isset($this->manifest['author']) ? $this->manifest['author'] : '';
+        return $this->manifest['author'] ?? '';
     }
 
     /**
      * Get the human readable label of the Extension the manifest describes.
+     *
      * @return string
      */
     public function getLabel(): string
     {
-        return isset($this->manifest['label']) ? $this->manifest['label'] : '';
+        return $this->manifest['label'] ?? '';
     }
 
     /**
      * Returns the Access Control Layer table
+     *
      * @return array
      */
     public function getAclTable(): array
     {
-        return isset($this->manifest['acl']) ? $this->manifest['acl'] : [];
+        return $this->manifest['acl'] ?? [];
     }
 
     /**
      * Get the version of the Extension the manifest describes.
-     * @return string
+     *
      * @throws ManifestException
+     *
+     * @return string
      */
-    public function getVersion():string
+    public function getVersion(): string
     {
         if ($this->version === null) {
             $packageId = $this->getComposerInfo()->getPackageId();
             $this->version = InstalledVersions::getVersion($packageId);
         }
+
         return (string) $this->version;
     }
 
     /**
      * Get the dependencies of the Extension the manifest describes.
      * The content of the array are extensionIDs, represented as strings.
-     * @return array
+     *
      * @throws ManifestException
      * @throws InvalidServiceManagerException
+     *
+     * @return array
      */
     public function getDependencies(): array
     {
@@ -168,12 +187,14 @@ class Manifest implements ServiceLocatorAwareInterface
                 $this->dependencies = array_merge($this->dependencies, $this->manifest['requires']);
             }
         }
+
         return $this->dependencies;
     }
 
     /**
      * returns an array of RDF files to import during install.
      * The returned array contains paths to the files to be imported.
+     *
      * @return array
      */
     public function getInstallModelFiles(): array
@@ -185,62 +206,71 @@ class Manifest implements ServiceLocatorAwareInterface
             $this->manifest['install']['rdf'] :
             [$this->manifest['install']['rdf']];
         $files = array_filter($files);
+
         return (array) $files;
     }
 
     /**
      * Get a list of PHP files to be executed at installation time.
      * The returned array contains absolute paths to the files to execute.
+     *
      * @return array
      */
     public function getInstallPHPFiles(): array
     {
         $result = [];
+
         if (isset($this->manifest['install']['php'])) {
             $result = is_array($this->manifest['install']['php']) ? $this->manifest['install']['php'] : [$this->manifest['install']['php']];
         }
+
         return $result;
     }
 
     /**
      * Return the uninstall data as an array if present, or null if not
+     *
      * @return mixed
      */
     public function getUninstallData()
     {
-        return isset($this->manifest['uninstall']) ? $this->manifest['uninstall'] : null;
+        return $this->manifest['uninstall'] ?? null;
     }
 
     /**
      * Return the className of the updateHandler
+     *
      * @return string
      */
     public function getUpdateHandler()
     {
-        return isset($this->manifest['update']) ? $this->manifest['update'] : null;
+        return $this->manifest['update'] ?? null;
     }
 
     /**
-      * PHP scripts to execute in order to add some sample data to an install
-      * @return array
-      */
+     * PHP scripts to execute in order to add some sample data to an install
+     *
+     * @return array
+     */
     public function getLocalData()
     {
-        return isset($this->manifest['local']) ? $this->manifest['local'] : [];
+        return $this->manifest['local'] ?? [];
     }
 
     /**
      * Gets the controller routes of this extension.
+     *
      * @return array
      */
     public function getRoutes()
     {
-        return isset($this->manifest['routes']) ? $this->manifest['routes'] : [];
+        return $this->manifest['routes'] ?? [];
     }
 
     /**
      * Get an array of constants to be defined where array keys are constant names
      * and values are the values of these constants.
+     *
      * @return array
      */
     public function getConstants(): array
@@ -251,11 +281,12 @@ class Manifest implements ServiceLocatorAwareInterface
 
     /**
      * Get the array with unformatted extra data
+     *
      * @return array
      */
     public function getExtra()
     {
-        return isset($this->manifest['extra']) ? $this->manifest['extra'] : [];
+        return $this->manifest['extra'] ?? [];
     }
 
     /**
@@ -284,22 +315,29 @@ class Manifest implements ServiceLocatorAwareInterface
 
     /**
      * Extract dependencies for extensions
+     *
      * @param string $file
+     *
+     * @throws common_ext_ExtensionException
+     *
      * @return array
-     * @throws \common_ext_ExtensionException
      */
     public static function extractDependencies(string $file)
     {
         $file = realpath($file);
         $composer = new ComposerInfo(dirname($file));
+
         return array_keys($composer->extractExtensionDependencies());
     }
 
     /**
      * Extract checks from a given manifest file.
+     *
      * @param $file string The path to a manifest.php file.
-     * @return \common_configuration_ComponentCollection
+     *
      * @throws ManifestNotFoundException
+     *
+     * @return common_configuration_ComponentCollection
      */
     public static function extractChecks(string $file)
     {
@@ -310,6 +348,7 @@ class Manifest implements ServiceLocatorAwareInterface
 
         $manifest = require($file);
         $returnValue = $manifest['install']['checks'] ?? [];
+
         foreach ($returnValue as &$component) {
             if (strpos($component['type'], 'FileSystemComponent') !== false) {
                 $root = realpath(dirname(__FILE__) . '/../../../../');
@@ -322,22 +361,25 @@ class Manifest implements ServiceLocatorAwareInterface
 
     /**
      * Get the Role dedicated to manage this extension. Returns null if there is
+     *
      * @return string
      */
     public function getManagementRoleUri()
     {
-        return isset($this->manifest['managementRole']) ? $this->manifest['managementRole'] : '';
+        return $this->manifest['managementRole'] ?? '';
     }
 
     /**
+     * @throws common_ext_ExtensionException
+     *
      * @return ComposerInfo
-     * @throws \common_ext_ExtensionException
      */
     private function getComposerInfo()
     {
         if ($this->composerInfo === null) {
             $this->composerInfo = new ComposerInfo(dirname($this->filePath));
         }
+
         return $this->composerInfo;
     }
 }

@@ -18,7 +18,6 @@ declare(strict_types=1);
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2017-2020 (original work) Open Assessment Technologies SA
- *
  */
 
 use Doctrine\DBAL\ParameterType;
@@ -29,6 +28,7 @@ use oat\generis\model\data\RdfInterface;
  * Implementation of the RDF interface for the smooth sql driver
  *
  * @author joel bout <joel@taotesting.com>
+ *
  * @package generis
  */
 class core_kernel_persistence_smoothsql_SmoothRdf implements RdfInterface
@@ -56,20 +56,24 @@ class core_kernel_persistence_smoothsql_SmoothRdf implements RdfInterface
      * @var core_kernel_persistence_smoothsql_SmoothModel
      */
     private $model;
-    
+
     public function __construct(core_kernel_persistence_smoothsql_SmoothModel $model)
     {
         $this->model = $model;
     }
-    
+
     protected function getPersistence()
     {
         return $this->model->getPersistence();
     }
-    
+
     /**
      * (non-PHPdoc)
+     *
      * @see \oat\generis\model\data\RdfInterface::get()
+     *
+     * @param mixed $subject
+     * @param mixed $predicate
      */
     public function get($subject, $predicate)
     {
@@ -78,12 +82,13 @@ class core_kernel_persistence_smoothsql_SmoothRdf implements RdfInterface
 
     /**
      * (non-PHPdoc)
+     *
      * @see \oat\generis\model\data\RdfInterface::add()
      */
     public function add(core_kernel_classes_Triple $triple)
     {
-        $query = "INSERT INTO statements ( modelId, subject, predicate, object, l_language, epoch, author) "
-            . "VALUES ( ? , ? , ? , ? , ? , ?, ?);";
+        $query = 'INSERT INTO statements ( modelId, subject, predicate, object, l_language, epoch, author) '
+            . 'VALUES ( ? , ? , ? , ? , ? , ?, ?);';
 
         return $this->getPersistence()->exec(
             $query,
@@ -94,7 +99,7 @@ class core_kernel_persistence_smoothsql_SmoothRdf implements RdfInterface
                 $triple->object,
                 is_null($triple->lg) ? '' : $triple->lg,
                 $this->getPersistence()->getPlatForm()->getNowExpression(),
-                is_null($triple->author) ? '' : $triple->author
+                is_null($triple->author) ? '' : $triple->author,
             ],
             $this->getTripleParameterTypes()
         );
@@ -123,39 +128,47 @@ class core_kernel_persistence_smoothsql_SmoothRdf implements RdfInterface
 
     protected function insertTriples(array $triples)
     {
-        $values = array_map([$this,"tripleToValue"], $triples);
+        $values = array_map([$this,'tripleToValue'], $triples);
+
         return $this->insertValues($values);
     }
 
     protected function insertValues(array $valuesToInsert)
     {
         $types = [];
+
         foreach ($valuesToInsert as $value) {
             array_push($types, ...$this->getTripleParameterTypes());
         }
 
         return $this->getPersistence()->insertMultiple('statements', $valuesToInsert, $types);
     }
-    
+
     /**
      * (non-PHPdoc)
+     *
      * @see \oat\generis\model\data\RdfInterface::remove()
      */
     public function remove(core_kernel_classes_Triple $triple)
     {
-        $query = "DELETE FROM statements WHERE subject = ? AND predicate = ? AND object = ? AND l_language = ?;";
+        $query = 'DELETE FROM statements WHERE subject = ? AND predicate = ? AND object = ? AND l_language = ?;';
+
         return $this->getPersistence()->exec($query, [$triple->subject, $triple->predicate, $triple->object, is_null($triple->lg) ? '' : $triple->lg]);
     }
-    
+
     /**
      * (non-PHPdoc)
+     *
      * @see \oat\generis\model\data\RdfInterface::search()
+     *
+     * @param mixed $predicate
+     * @param mixed $object
      */
     public function search($predicate, $object)
     {
         throw new \common_Exception('Not implemented');
     }
-    
+
     public function getIterator()
     {
         return new core_kernel_persistence_smoothsql_SmoothIterator($this->getPersistence());
@@ -171,9 +184,10 @@ class core_kernel_persistence_smoothsql_SmoothRdf implements RdfInterface
 
     /**
      * @param core_kernel_classes_Triple $triple
+     *
      * @return array
      */
-    protected function tripleToValue(core_kernel_classes_Triple $triple) : array
+    protected function tripleToValue(core_kernel_classes_Triple $triple): array
     {
         return [
             'modelid' => $triple->modelid,
@@ -182,11 +196,11 @@ class core_kernel_persistence_smoothsql_SmoothRdf implements RdfInterface
             'object' => $triple->object,
             'l_language' => is_null($triple->lg) ? '' : $triple->lg,
             'author' => is_null($triple->author) ? '' : $triple->author,
-            'epoch' => $this->getPersistence()->getPlatForm()->getNowExpression()
+            'epoch' => $this->getPersistence()->getPlatForm()->getNowExpression(),
         ];
     }
 
-    protected function getTripleParameterTypes() : array
+    protected function getTripleParameterTypes(): array
     {
         return self::TRIPLE_PARAMETER_TYPE;
     }

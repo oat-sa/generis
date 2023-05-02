@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,8 +28,6 @@ use oat\generis\test\GenerisPhpUnitTestRunner;
 
 class TermTest extends GenerisPhpUnitTestRunner
 {
-
-
     public function setUp(): void
     {
         GenerisPhpUnitTestRunner::initTest();
@@ -36,8 +35,6 @@ class TermTest extends GenerisPhpUnitTestRunner
 
     public function testEvaluate()
     {
-
-
         //bad term
         $badTermResource = core_kernel_classes_ResourceFactory::create(
             new core_kernel_classes_Class(RulesRdf::CLASS_TERM),
@@ -45,6 +42,7 @@ class TermTest extends GenerisPhpUnitTestRunner
             __METHOD__
         );
         $badTerm = new core_kernel_rules_Term($badTermResource->getUri());
+
         try {
             $badTerm->evaluate();
             $this->fail('should raise exception : Forbidden type');
@@ -80,8 +78,8 @@ class TermTest extends GenerisPhpUnitTestRunner
         $result = $operationTerm->evaluate();
         $this->assertEquals($result->literal, '17');
 
-
         $fakeTerm = new core_kernel_rules_Term($maybe->getUri());
+
         try {
             $fakeTerm->evaluate();
             $this->fail('should raise exception : Forbidden type');

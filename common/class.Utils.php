@@ -1,8 +1,8 @@
 <?php
 
+use oat\generis\model\kernel\uri\UriProvider;
 use oat\oatbox\PhpSerializable;
 use oat\oatbox\service\ServiceManager;
-use oat\generis\model\kernel\uri\UriProvider;
 
 /**
  * This program is free software; you can redistribute it and/or
@@ -22,11 +22,9 @@ use oat\generis\model\kernel\uri\UriProvider;
  * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
  *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- *
  */
 
 /**
- *
  * Generis Object Oriented API - common/class.Utils.php
  *
  * Utility functions
@@ -34,15 +32,16 @@ use oat\generis\model\kernel\uri\UriProvider;
  * This file is part of Generis Object Oriented API.
  *
  * @author lionel.lecaque@tudor.lu
+ *
  * @package generis
 
+ *
  * @see @license  GNU General Public (GPL) Version 2 http://www.opensource.org/licenses/gpl-2.0.php
  */
 
 class common_Utils
 {
     // --- ASSOCIATIONS ---
-
 
     // --- ATTRIBUTES ---
 
@@ -52,45 +51,57 @@ class common_Utils
      * Check if the given string is a proper uri
      *
      * @access public
+     *
      * @author Joel Bout, <joel@taotesting.com>
+     *
      * @param  string strarg
+     * @param mixed $strarg
+     *
      * @return boolean
      */
     public static function isUri($strarg)
     {
         $returnValue = (bool) false;
         $uri = trim($strarg);
+
         if (!empty($uri)) {
-            if ((preg_match("/^(http|https|file|ftp):\/\/[\/:.A-Za-z0-9_-]+#[A-Za-z0-9_-]+$/", $uri) && strpos($uri, '#') > 0) || strpos($uri, "#") === 0) {
+            if ((preg_match("/^(http|https|file|ftp):\/\/[\/:.A-Za-z0-9_-]+#[A-Za-z0-9_-]+$/", $uri) && strpos($uri, '#') > 0) || strpos($uri, '#') === 0) {
                 $returnValue = true;
             }
         }
+
         return (bool) $returnValue;
     }
-    
+
     public static function toResource($value)
     {
         if (is_array($value)) {
             $returnValue = [];
+
             foreach ($value as $val) {
                 $returnValue[] = self::toResource($val);
             }
+
             return $returnValue;
-        } else {
-            if (common_Utils::isUri($value)) {
-                return new core_kernel_classes_Resource($value);
-            } else {
-                return new core_kernel_classes_Literal($value);
-            }
         }
+
+        if (common_Utils::isUri($value)) {
+            return new core_kernel_classes_Resource($value);
+        }
+
+        return new core_kernel_classes_Literal($value);
     }
 
     /**
      * Removes starting/ending spaces, strip html tags out, remove any \r and \n
      *
      * @access public
+     *
      * @author Joel Bout, <joel@taotesting.com>
+     *
      * @param  string strarg
+     * @param mixed $strarg
+     *
      * @return string
      */
     public static function fullTrim($strarg)
@@ -98,13 +109,15 @@ class common_Utils
         return strip_tags(trim($strarg));
     }
 
-
     /**
      * Backward compatibility function for URI Provider
      *
      * @access public
+     *
      * @author Joel Bout, <joel@taotesting.com>
+     *
      * @return string
+     *
      * @deprecated
      */
     public static function getNewUri()
@@ -117,54 +130,67 @@ class common_Utils
      * would return the value provided
      *
      * @access public
+     *
      * @author Joel Bout, <joel@taotesting.com>
+     *
      * @param  value
+     * @param mixed $value
+     *
      * @return string
      */
     public static function toPHPVariableString($value)
     {
         switch (gettype($value)) {
-            case "string":
+            case 'string':
                 $returnValue = '\'' . str_replace('\'', '\\\'', str_replace('\\', '\\\\', $value)) . '\'';
+
                 break;
-            case "boolean":
+            case 'boolean':
                 $returnValue = $value ? 'true' : 'false';
+
                 break;
-            case "integer":
-            case "double":
+            case 'integer':
+            case 'double':
                 $returnValue = $value;
+
                 break;
-            case "array":
-                $string = "";
+            case 'array':
+                $string = '';
+
                 foreach ($value as $key => $val) {
-                    $string .= self::toPHPVariableString($key) . " => " . self::toPHPVariableString($val) . ",";
+                    $string .= self::toPHPVariableString($key) . ' => ' . self::toPHPVariableString($val) . ',';
                 }
-                $returnValue = "array(" . substr($string, 0, -1) . ")";
+                $returnValue = 'array(' . substr($string, 0, -1) . ')';
+
                 break;
-            case "NULL":
+            case 'NULL':
                 $returnValue = 'null';
+
                 break;
-            case "object":
+            case 'object':
                 if ($value instanceof PhpSerializable) {
                     $returnValue = $value->__toPhpCode();
                 } else {
-                    $returnValue =  'unserialize(' . self::toPHPVariableString(serialize($value)) . ')';
+                    $returnValue = 'unserialize(' . self::toPHPVariableString(serialize($value)) . ')';
                 }
+
                 break;
             default:
                 // resource and unexpected types
-                throw new common_exception_Error("Could not convert variable of type " . gettype($value) . " to PHP variable string");
+                throw new common_exception_Error('Could not convert variable of type ' . gettype($value) . ' to PHP variable string');
         }
 
         return (string) $returnValue;
     }
-    
+
     /**
      * Same as toPHPVariableString except the sting
      * is easier for humans to read
      *
      * @param mixed $value
      * @param number indentation
+     * @param mixed $indentation
+     *
      * @return string
      */
     public static function toHumanReadablePhpString($value, $indentation = 0)
@@ -172,28 +198,29 @@ class common_Utils
         if (is_array($value)) {
             $array = array_keys($value);
             $assocArray = ($array !== array_keys($array));
-            $string = "";
+            $string = '';
+
             if ($assocArray) {
                 foreach ($value as $key => $val) {
                     $string .= PHP_EOL . str_repeat('    ', $indentation + 1)
                        . self::toPHPVariableString($key)
-                       . " => "
-                       . self::toHumanReadablePhpString($val, $indentation + 1) . ",";
+                       . ' => '
+                       . self::toHumanReadablePhpString($val, $indentation + 1) . ',';
                 }
             } else {
                 foreach ($value as $val) {
                     $string .= PHP_EOL . str_repeat('    ', $indentation + 1)
-                        . self::toHumanReadablePhpString($val, $indentation + 1) . ",";
+                        . self::toHumanReadablePhpString($val, $indentation + 1) . ',';
                 }
             }
-            $returnValue = "array(" . substr($string, 0, -1) . PHP_EOL . str_repeat('    ', $indentation) . ")";
+            $returnValue = 'array(' . substr($string, 0, -1) . PHP_EOL . str_repeat('    ', $indentation) . ')';
         } elseif (is_string($value)) {
             $returnValue = self::toPHPVariableString($value);
         } else {
             $lines = explode(PHP_EOL, self::toPHPVariableString($value));
             $returnValue = implode(PHP_EOL . str_repeat('    ', $indentation), $lines);
         }
-        
+
         return (string) $returnValue;
     }
 }

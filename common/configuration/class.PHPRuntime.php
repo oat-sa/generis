@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -17,21 +18,40 @@
  * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
  *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- *
  */
 
 /**
  * Short description of class common_configuration_PHPRuntime
  *
  * @access public
+ *
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+ *
  * @package generis
-
  */
 class common_configuration_PHPRuntime extends common_configuration_BoundableComponent
 {
+    /**
+     * Short description of method __construct
+     *
+     * @access public
+     *
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
+     * @param  string min
+     * @param  string max
+     * @param  boolean optional
+     * @param mixed $min
+     * @param mixed $max
+     * @param mixed $optional
+     *
+     * @return mixed
+     */
+    public function __construct($min, $max, $optional = false)
+    {
+        parent::__construct($min, $max, 'tao.configuration.phpruntime', $optional);
+    }
     // --- ASSOCIATIONS ---
-
 
     // --- ATTRIBUTES ---
 
@@ -41,20 +61,21 @@ class common_configuration_PHPRuntime extends common_configuration_BoundableComp
      * Short description of method check
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @return common_configuration_Report
      */
     public function check()
     {
         $returnValue = null;
 
-        
         $validity = null;
         $message = null;
         $min = $this->getMin();
         $max = $this->getMax();
         $current = $this->getValue();
-        
+
         if (!empty($min) && !empty($max)) {
             // min & max are specifed.
             if (version_compare($current, $min, '>=') && version_compare($current, $max, '<=')) {
@@ -81,9 +102,8 @@ class common_configuration_PHPRuntime extends common_configuration_BoundableComp
                 $message = "PHP Version (${current}) is greater than ${max}.";
             }
         }
-        
+
         $returnValue = new common_configuration_Report($validity, $message, $this);
-        
 
         return $returnValue;
     }
@@ -92,33 +112,17 @@ class common_configuration_PHPRuntime extends common_configuration_BoundableComp
      * Short description of method getValue
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @return string
      */
     public function getValue()
     {
         $returnValue = (string) '';
 
-        
         $returnValue = phpversion();
-        
 
         return (string) $returnValue;
-    }
-
-    /**
-     * Short description of method __construct
-     *
-     * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  string min
-     * @param  string max
-     * @param  boolean optional
-     * @return mixed
-     */
-    public function __construct($min, $max, $optional = false)
-    {
-        
-        parent::__construct($min, $max, 'tao.configuration.phpruntime', $optional);
     }
 }

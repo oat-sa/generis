@@ -16,18 +16,17 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 20013 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
  */
 
 /**
  * An exception representing an invalid signature
  *
  * @access public
+ *
  * @author Joel Bout, <joel@taotesting.com>
+ *
  * @package generis
-
  */
 class common_http_InvalidSignatureException extends common_Exception
 {
-
 }

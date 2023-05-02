@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -17,7 +18,6 @@
  * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
  *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- *
  */
 
 /**
@@ -27,15 +27,16 @@
  * subclasses to return a valid URI.
  *
  * @abstract
+ *
  * @access public
+ *
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+ *
  * @package generis
-
  */
 abstract class common_uri_AbstractUriProvider implements common_uri_UriProvider
 {
     // --- ASSOCIATIONS ---
-
 
     // --- ATTRIBUTES ---
 
@@ -43,9 +44,27 @@ abstract class common_uri_AbstractUriProvider implements common_uri_UriProvider
      * The database driver the UriProvider is using.
      *
      * @access protected
+     *
      * @var string
      */
     protected $driver = '';
+
+    /**
+     * Instantiates an instance of UriProvider for a given database driver.
+     *
+     * @access public
+     *
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
+     * @param  string driver A driver name such as 'mysql', 'postgres', ...
+     * @param mixed $driver
+     *
+     * @return mixed
+     */
+    public function __construct($driver)
+    {
+        $this->setDriver($driver);
+    }
 
     // --- OPERATIONS ---
 
@@ -54,16 +73,16 @@ abstract class common_uri_AbstractUriProvider implements common_uri_UriProvider
      * using.
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @return string
      */
     public function getDriver()
     {
         $returnValue = (string) '';
 
-        
         $returnValue = $this->driver;
-        
 
         return (string) $returnValue;
     }
@@ -72,27 +91,16 @@ abstract class common_uri_AbstractUriProvider implements common_uri_UriProvider
      * Sets the database driver that will be used for further URI generations.
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @param  string driver A driver name such as 'mysql', 'postgres', ...
+     * @param mixed $driver
+     *
      * @return void
      */
     public function setDriver($driver)
     {
-        
         $this->driver = strtolower($driver);
-    }
-
-    /**
-     * Instantiates an instance of UriProvider for a given database driver.
-     *
-     * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  string driver A driver name such as 'mysql', 'postgres', ...
-     * @return mixed
-     */
-    public function __construct($driver)
-    {
-        
-        $this->setDriver($driver);
     }
 } /* end of abstract class common_uri_AbstractUriProvider */

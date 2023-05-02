@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -15,22 +16,22 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2014 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
  */
 
 /**
  * Short description of class common_cache_SingletonCache
  *
  * @abstract
+ *
  * @access public
+ *
  * @author Joel Bout, <joel@taotesting.com>
+ *
  * @package generis
-
  */
 abstract class common_cache_SingletonCache
 {
     // --- ASSOCIATIONS ---
-
 
     // --- ATTRIBUTES ---
 
@@ -38,9 +39,23 @@ abstract class common_cache_SingletonCache
      * Short description of attribute instances
      *
      * @access private
+     *
      * @var array
      */
     private static $instances = [];
+
+    /**
+     * Short description of method __construct
+     *
+     * @access private
+     *
+     * @author Joel Bout, <joel@taotesting.com>
+     *
+     * @return mixed
+     */
+    private function __construct()
+    {
+    }
 
     // --- OPERATIONS ---
 
@@ -48,21 +63,22 @@ abstract class common_cache_SingletonCache
      * Short description of method singleton
      *
      * @access public
+     *
      * @author Joel Bout, <joel@taotesting.com>
+     *
      * @return common_cache_Cache
      */
     public static function singleton()
     {
         $returnValue = null;
 
-
         $cacheName = get_called_class();
+
         if (!isset(self::$instances[$cacheName])) {
             self::$instances[$cacheName] = new $cacheName();
         }
 
         $returnValue = self::$instances[$cacheName];
-
 
         return $returnValue;
     }
@@ -71,16 +87,19 @@ abstract class common_cache_SingletonCache
      * Short description of method getCached
      *
      * @access public
+     *
      * @author Joel Bout, <joel@taotesting.com>
+     *
      * @param  function
+     * @param mixed $function
      */
     public static function getCached($function)
     {
         $returnValue = null;
 
-
         $args = func_get_args();
         array_shift($args);
+
         if (!is_string($function)) {
             $r = new ReflectionFunction($function);
             $serial = md5(
@@ -91,6 +110,7 @@ abstract class common_cache_SingletonCache
         } else {
             $serial = md5($function . serialize($args));
         }
+
         if (static::singleton()->has($serial)) {
             $returnValue = static::singleton()->has($serial);
         } else {
@@ -98,18 +118,6 @@ abstract class common_cache_SingletonCache
             static::singleton()->put($serial, $returnValue);
         }
 
-
         return $returnValue;
-    }
-
-    /**
-     * Short description of method __construct
-     *
-     * @access private
-     * @author Joel Bout, <joel@taotesting.com>
-     * @return mixed
-     */
-    private function __construct()
-    {
     }
 } /* end of abstract class common_cache_SingletonCache */

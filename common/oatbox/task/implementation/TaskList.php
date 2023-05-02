@@ -16,17 +16,16 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2017 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
  */
 
 namespace oat\oatbox\task\implementation;
 
+use ArrayIterator;
 use oat\oatbox\task\TaskInterface\TaskListIterator;
 
 /**
  * @deprecated since version 7.10.0, to be removed in 8.0.
  */
-class TaskList extends \ArrayIterator implements TaskListIterator
+class TaskList extends ArrayIterator implements TaskListIterator
 {
-
 }

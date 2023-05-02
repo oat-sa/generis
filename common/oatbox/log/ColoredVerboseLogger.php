@@ -16,12 +16,10 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2017 (original work) Open Assessment Technologies SA;
- *
  */
 
 namespace oat\oatbox\log;
 
-use Psr\Log\AbstractLogger;
 use Psr\Log\LogLevel;
 
 class ColoredVerboseLogger extends VerboseLogger
@@ -31,13 +29,13 @@ class ColoredVerboseLogger extends VerboseLogger
      */
     protected $colors = [
         LogLevel::EMERGENCY => '1;31', // red
-        LogLevel::ALERT     => '1;31', // red
-        LogLevel::CRITICAL  => '1;31', // red
-        LogLevel::ERROR     => '1;31', // red
-        LogLevel::WARNING   => '1;33', // yellow
-        LogLevel::NOTICE    => '1;34', // light blue
-        LogLevel::INFO      => '0;32', // green
-        LogLevel::DEBUG     => '0;37', // light grey
+        LogLevel::ALERT => '1;31', // red
+        LogLevel::CRITICAL => '1;31', // red
+        LogLevel::ERROR => '1;31', // red
+        LogLevel::WARNING => '1;33', // yellow
+        LogLevel::NOTICE => '1;34', // light blue
+        LogLevel::INFO => '0;32', // green
+        LogLevel::DEBUG => '0;37', // light grey
     ];
 
     /**
@@ -72,9 +70,9 @@ class ColoredVerboseLogger extends VerboseLogger
     {
         if (array_key_exists($level, $this->colors)) {
             return "\033[" . $this->colors[$level] . 'm';
-        } else {
-            return $this->getDefaultColor();
         }
+
+        return $this->getDefaultColor();
     }
 
     /**

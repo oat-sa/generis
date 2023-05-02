@@ -16,12 +16,11 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2014 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
  */
 
 namespace oat\oatbox;
 
-use \common_ext_ExtensionsManager;
+use common_ext_ExtensionsManager;
 
 /**
  * Simple Registry for testing purpose
@@ -31,16 +30,14 @@ use \common_ext_ExtensionsManager;
 class BasicRegistry extends AbstractRegistry
 {
     /**
-     *
      * @see \oat\oatbox\AbstractRegistry::getConfigId()
      */
     protected function getConfigId()
     {
         return 'basic_registry';
     }
-    
+
     /**
-     *
      * @see \oat\oatbox\AbstractRegistry::getExtension()
      */
     protected function getExtension()

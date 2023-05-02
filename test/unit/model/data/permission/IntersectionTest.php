@@ -16,14 +16,13 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) (original work) 2015 Open Assessment Technologies SA
- *
  */
 
 namespace oat\generis\test\unit\model\data\permission;
 
 use oat\generis\model\data\permission\implementation\Intersection;
-use oat\oatbox\user\User;
 use oat\generis\test\TestCase;
+use oat\oatbox\user\User;
 
 class IntersectionTest extends TestCase
 {
@@ -39,7 +38,6 @@ class IntersectionTest extends TestCase
 
         $this->user = $user->reveal();
     }
-
 
     private function createIntersection()
     {

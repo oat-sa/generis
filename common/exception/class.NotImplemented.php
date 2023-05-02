@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,11 +23,9 @@
  * is not implemented yet.
  *
  * @author Patrick Plichart <patrick@taotesting.com>
+ *
  * @package generis
-
  */
 class common_exception_NotImplemented extends common_Exception
 {
-  
-   
 }

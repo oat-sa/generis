@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -15,54 +16,58 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2009-2012 (original work) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- *
- *
  */
 
 /**
  * Short description of class core_kernel_persistence_ClassInterface
  *
  * @access public
+ *
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+ *
  * @package generis
-
  */
 interface core_kernel_persistence_ClassInterface extends core_kernel_persistence_ResourceInterface
 {
-
-
-
     // --- OPERATIONS ---
 
     /**
      * Retrieve all subclass of the class
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  core_kernel_classes_Class $resource
+     *
+     * @param core_kernel_classes_Class $resource
      * @param  boolean recursive
+     * @param mixed $recursive
+     *
      * @return array
      */
     public function getSubClasses(core_kernel_classes_Class $resource, $recursive = false);
 
     /**
-     *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @param core_kernel_classes_Class $resource
      * @param core_kernel_classes_Class $iClass
+     *
      * @return boolean
      */
     public function setSubClassOf(core_kernel_classes_Class $resource, core_kernel_classes_Class $iClass);
-    
-    
+
     /**
      * check if the resource is a subclass of given parentClass
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @param  core_kernel_classes_Class resource
      * @param  core_kernel_classes_Class parentClass
+     *
      * @return boolean
      */
     public function isSubClassOf(core_kernel_classes_Class $resource, core_kernel_classes_Class $parentClass);
@@ -71,9 +76,13 @@ interface core_kernel_persistence_ClassInterface extends core_kernel_persistence
      * retrieve parent Classes
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  core_kernel_classes_Class $resource
+     *
+     * @param core_kernel_classes_Class $resource
      * @param  boolean recursive
+     * @param mixed $recursive
+     *
      * @return array
      */
     public function getParentClasses(core_kernel_classes_Class $resource, $recursive = false);
@@ -82,9 +91,13 @@ interface core_kernel_persistence_ClassInterface extends core_kernel_persistence
      * retrieve properties
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  Resource $resource
+     *
+     * @param Resource $resource
      * @param  boolean recursive
+     * @param mixed $recursive
+     *
      * @return array
      */
     public function getProperties(core_kernel_classes_Class $resource, $recursive = false);
@@ -93,10 +106,15 @@ interface core_kernel_persistence_ClassInterface extends core_kernel_persistence
      * retrieve all instances
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  Resource $resource
+     *
+     * @param Resource $resource
      * @param  boolean recursive
      * @param  array params
+     * @param mixed $recursive
+     * @param mixed $params
+     *
      * @return array
      */
     public function getInstances(core_kernel_classes_Class $resource, $recursive = false, $params = []);
@@ -110,14 +128,20 @@ interface core_kernel_persistence_ClassInterface extends core_kernel_persistence
      * Creates a new instance using the properties provided.
      * May NOT contain additional types in the properties array
      *
-     *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @param  Resource resource
      * @param  string label
      * @param  string comment
      * @param  string uri
+     * @param mixed $label
+     * @param mixed $comment
+     * @param mixed $uri
+     *
      * @return core_kernel_classes_Resource
+     *
      * @see core_kernel_classes_ResourceFactory
      */
     public function createInstance(core_kernel_classes_Class $resource, $label = '', $comment = '', $uri = '');
@@ -126,11 +150,17 @@ interface core_kernel_persistence_ClassInterface extends core_kernel_persistence
      * Short description of method createSubClass
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @param  Resource resource
      * @param  string label
      * @param  string comment
      * @param  string uri
+     * @param mixed $label
+     * @param mixed $comment
+     * @param mixed $uri
+     *
      * @return core_kernel_classes_Class
      */
     public function createSubClass(core_kernel_classes_Class $resource, $label = '', $comment = '', $uri = '');
@@ -139,11 +169,17 @@ interface core_kernel_persistence_ClassInterface extends core_kernel_persistence
      * Short description of method createProperty
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  core_kernel_classes_Class $resource
+     *
+     * @param core_kernel_classes_Class $resource
      * @param  string label
      * @param  string comment
      * @param  boolean isLgDependent
+     * @param mixed $label
+     * @param mixed $comment
+     * @param mixed $isLgDependent
+     *
      * @return core_kernel_classes_Property
      */
     public function createProperty(core_kernel_classes_Class $resource, $label = '', $comment = '', $isLgDependent = false);
@@ -152,10 +188,15 @@ interface core_kernel_persistence_ClassInterface extends core_kernel_persistence
      * Short description of method searchInstances
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  core_kernel_classes_Class $resource
+     *
+     * @param core_kernel_classes_Class $resource
      * @param  array propertyFilters
      * @param  array options
+     * @param mixed $propertyFilters
+     * @param mixed $options
+     *
      * @return array
      */
     public function searchInstances(core_kernel_classes_Class $resource, $propertyFilters = [], $options = []);
@@ -164,10 +205,15 @@ interface core_kernel_persistence_ClassInterface extends core_kernel_persistence
      * Short description of method countInstances
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  core_kernel_classes_Class $resource
+     *
+     * @param core_kernel_classes_Class $resource
      * @param  array propertyFilters
      * @param  array options
+     * @param mixed $propertyFilters
+     * @param mixed $options
+     *
      * @return Integer
      */
     public function countInstances(core_kernel_classes_Class $resource, $propertyFilters = [], $options = []);
@@ -176,11 +222,16 @@ interface core_kernel_persistence_ClassInterface extends core_kernel_persistence
      * Short description of method getInstancesPropertyValues
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  core_kernel_classes_Class $resource
+     *
+     * @param core_kernel_classes_Class $resource
      * @param  Property property
      * @param  array propertyFilters
      * @param  array options
+     * @param mixed $propertyFilters
+     * @param mixed $options
+     *
      * @return array
      */
     public function getInstancesPropertyValues(core_kernel_classes_Class $resource, core_kernel_classes_Property $property, $propertyFilters = [], $options = []);
@@ -195,10 +246,15 @@ interface core_kernel_persistence_ClassInterface extends core_kernel_persistence
      * May NOT contain additional types in the properties array
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @param  core_kernel_classes_Class type
      * @param  array properties
+     * @param mixed $properties
+     *
      * @return core_kernel_classes_Resource
+     *
      * @see core_kernel_classes_ResourceFactory
      */
     public function createInstanceWithProperties(core_kernel_classes_Class $type, $properties);
@@ -207,10 +263,15 @@ interface core_kernel_persistence_ClassInterface extends core_kernel_persistence
      * Delete a collection of instances of the Class.
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  Resource $resource The resource (class) on which to apply the deletion.
-     * @param  array resources An array containing core_kernel_classes_Resource objects or URIs.
-     * @param  boolean deleteReference If set to true, references to instances will be deleted accross the database.
+     *
+     * @param Resource $resource the resource (class) on which to apply the deletion
+     * @param  array resources An array containing core_kernel_classes_Resource objects or URIs
+     * @param  boolean deleteReference If set to true, references to instances will be deleted accross the database
+     * @param mixed $resources
+     * @param mixed $deleteReference
+     *
      * @return boolean
      */
     public function deleteInstances(core_kernel_classes_Class $resource, $resources, $deleteReference = false);

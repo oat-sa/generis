@@ -16,21 +16,17 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2018 (original work) Open Assessment Technologies SA;
- *
  */
 
 namespace oat\generis\test\integration\helpers;
 
+use helpers_File;
 use oat\generis\test\TestCase;
+use tao_helpers_File;
 
 class FileTest extends TestCase
 {
     private $rootDir;
-
-    public function tearDown(): void
-    {
-        \tao_helpers_File::delTree($this->rootDir);
-    }
 
     public function setUp(): void
     {
@@ -41,6 +37,11 @@ class FileTest extends TestCase
         mkdir($this->rootDir . 'FOO');
         touch($this->rootDir . 'directoryname/filename');
         touch($this->rootDir . 'secure_file');
+    }
+
+    public function tearDown(): void
+    {
+        tao_helpers_File::delTree($this->rootDir);
     }
 
     public function fileInsideDirectoryDataProvider()
@@ -60,9 +61,12 @@ class FileTest extends TestCase
 
     /**
      * @dataProvider fileInsideDirectoryDataProvider
+     *
+     * @param mixed $filename
+     * @param mixed $directoryName
      */
     public function testIsFileInsideDirectory($filename, $directoryName, bool $isInside)
     {
-        $this->assertEquals(\helpers_File::isFileInsideDirectory($filename, $this->rootDir . $directoryName), $isInside);
+        $this->assertEquals(helpers_File::isFileInsideDirectory($filename, $this->rootDir . $directoryName), $isInside);
     }
 }

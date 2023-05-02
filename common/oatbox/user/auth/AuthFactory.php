@@ -16,45 +16,50 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2014 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
  */
 
 namespace oat\oatbox\user\auth;
 
 use common_ext_ExtensionsManager;
+use common_Logger;
 
 /**
  * Create the configured auth adapters
  *
  * @access public
+ *
  * @author Joel Bout, <joel@taotesting.com>
+ *
  * @package generis
  */
 class AuthFactory
 {
-    const CONFIG_KEY = 'auth';
-    
+    public const CONFIG_KEY = 'auth';
+
     public static function createAdapters()
     {
         $adapters = [];
         $config = common_ext_ExtensionsManager::singleton()->getExtensionById('generis')->getConfig('auth');
+
         if (is_array($config)) {
             foreach ($config as $key => $adapterConf) {
                 if (isset($adapterConf['driver'])) {
                     $className = $adapterConf['driver'];
                     unset($adapterConf['driver']);
+
                     if (class_exists($className) && in_array(__NAMESPACE__ . '\LoginAdapter', class_implements($className))) {
                         $adapter = new $className();
                         $adapter->setOptions($adapterConf);
                         $adapters[] = $adapter;
                     } else {
-                        \common_Logger::e($className . ' is not a valid LoginAdapter');
+                        common_Logger::e($className . ' is not a valid LoginAdapter');
                     }
                 } else {
-                    \common_Logger::e('No driver for auth adapter ' . $key);
+                    common_Logger::e('No driver for auth adapter ' . $key);
                 }
             }
         }
+
         return $adapters;
     }
 }

@@ -16,11 +16,15 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2002-2017 (original work) 2014 Open Assessment Technologies SA
- *
  */
 
 namespace oat\generis\model\kernel\persistence\wrapper;
 
+use common_Exception;
+use core_kernel_classes_Class;
+use core_kernel_classes_Property;
+use core_kernel_classes_Resource;
+use core_kernel_classes_Triple;
 use oat\generis\model\data\RdfsInterface;
 use oat\generis\model\GenerisRdf;
 use oat\generis\model\OntologyRdf;
@@ -37,84 +41,103 @@ class RdfWrapper implements \oat\generis\model\data\RdfInterface
      * @var RdfsInterface
      */
     private $rdfsInterface;
-    
+
     public function __construct(RdfsInterface $rdfsInterface)
     {
         $this->rdfsInterface = $rdfsInterface;
     }
-    
+
     /**
      * (non-PHPdoc)
+     *
      * @see \oat\generis\model\data\RdfInterface::get()
+     *
+     * @param mixed $subject
+     * @param mixed $predicate
      */
     public function get($subject, $predicate)
     {
-        throw new \common_Exception('Not implemented');
-    }
-    
-    /**
-     * (non-PHPdoc)
-     * @see \oat\generis\model\data\RdfInterface::add()
-     */
-    public function add(\core_kernel_classes_Triple $triple)
-    {
-        switch ($triple->predicate) {
-            case OntologyRdf::RDF_TYPE:
-                $resource = new \core_kernel_classes_Resource($triple->subject);
-                $class = new \core_kernel_classes_Class($triple->object);
-                return $this->rdfsInterface->getResourceImplementation()->setType($resource, $class);
-                break;
-                
-            case OntologyRdfs::RDFS_RANGE:
-                $resource = new \core_kernel_classes_Property($triple->subject);
-                $class = new \core_kernel_classes_Class($triple->object);
-                return $this->rdfsInterface->getPropertyImplementation()->setRange($resource, $class);
-                break;
-                
-            case GenerisRdf::PROPERTY_MULTIPLE:
-                $resource = new \core_kernel_classes_Property($triple->subject);
-                $value = $triple->object == GenerisRdf::GENERIS_TRUE;
-                return $this->rdfsInterface->getPropertyImplementation()->setMultiple($resource, $value);
-                break;
-                
-            case GenerisRdf::PROPERTY_IS_LG_DEPENDENT:
-                $resource = new \core_kernel_classes_Property($triple->subject);
-                $value = $triple->object == GenerisRdf::GENERIS_TRUE;
-                return $this->rdfsInterface->getPropertyImplementation()->setLgDependent($resource, $value);
-                break;
-                
-            case OntologyRdfs::RDFS_DOMAIN:
-            default:
-                $resource = new \core_kernel_classes_Resource($triple->subject);
-                $property = new \core_kernel_classes_Property($triple->predicate);
-                if (empty($triple->lg)) {
-                    return $this->rdfsInterface->getResourceImplementation()->setPropertyValue($resource, $property, $triple->object);
-                } else {
-                    return $this->rdfsInterface->getResourceImplementation()->setPropertyValueByLg($resource, $property, $triple->object, $triple->lg);
-                }
-        }
-    }
-    
-    /**
-     * (non-PHPdoc)
-     * @see \oat\generis\model\data\RdfInterface::remove()
-     */
-    public function remove(\core_kernel_classes_Triple $triple)
-    {
-        throw new \common_Exception('Not implemented');
+        throw new common_Exception('Not implemented');
     }
 
     /**
      * (non-PHPdoc)
+     *
+     * @see \oat\generis\model\data\RdfInterface::add()
+     */
+    public function add(core_kernel_classes_Triple $triple)
+    {
+        switch ($triple->predicate) {
+            case OntologyRdf::RDF_TYPE:
+                $resource = new core_kernel_classes_Resource($triple->subject);
+                $class = new core_kernel_classes_Class($triple->object);
+
+                return $this->rdfsInterface->getResourceImplementation()->setType($resource, $class);
+
+                break;
+
+            case OntologyRdfs::RDFS_RANGE:
+                $resource = new core_kernel_classes_Property($triple->subject);
+                $class = new core_kernel_classes_Class($triple->object);
+
+                return $this->rdfsInterface->getPropertyImplementation()->setRange($resource, $class);
+
+                break;
+
+            case GenerisRdf::PROPERTY_MULTIPLE:
+                $resource = new core_kernel_classes_Property($triple->subject);
+                $value = $triple->object == GenerisRdf::GENERIS_TRUE;
+
+                return $this->rdfsInterface->getPropertyImplementation()->setMultiple($resource, $value);
+
+                break;
+
+            case GenerisRdf::PROPERTY_IS_LG_DEPENDENT:
+                $resource = new core_kernel_classes_Property($triple->subject);
+                $value = $triple->object == GenerisRdf::GENERIS_TRUE;
+
+                return $this->rdfsInterface->getPropertyImplementation()->setLgDependent($resource, $value);
+
+                break;
+
+            case OntologyRdfs::RDFS_DOMAIN:
+            default:
+                $resource = new core_kernel_classes_Resource($triple->subject);
+                $property = new core_kernel_classes_Property($triple->predicate);
+
+                if (empty($triple->lg)) {
+                    return $this->rdfsInterface->getResourceImplementation()->setPropertyValue($resource, $property, $triple->object);
+                }
+
+                return $this->rdfsInterface->getResourceImplementation()->setPropertyValueByLg($resource, $property, $triple->object, $triple->lg);
+        }
+    }
+
+    /**
+     * (non-PHPdoc)
+     *
+     * @see \oat\generis\model\data\RdfInterface::remove()
+     */
+    public function remove(core_kernel_classes_Triple $triple)
+    {
+        throw new common_Exception('Not implemented');
+    }
+
+    /**
+     * (non-PHPdoc)
+     *
      * @see \oat\generis\model\data\RdfInterface::search()
+     *
+     * @param mixed $predicate
+     * @param mixed $object
      */
     public function search($predicate, $object)
     {
-        throw new \common_Exception('Not implemented');
+        throw new common_Exception('Not implemented');
     }
-    
+
     public function getIterator()
     {
-        throw new \common_Exception('Not implemented');
+        throw new common_Exception('Not implemented');
     }
 }

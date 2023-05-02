@@ -23,10 +23,10 @@ declare(strict_types=1);
 namespace oat\generis\test\unit\common\oatbox\log\logger\extender;
 
 use Exception;
-use Throwable;
 use oat\generis\test\TestCase;
 use oat\oatbox\log\logger\extender\ContextExtenderInterface;
 use oat\oatbox\log\logger\extender\ExceptionContextExtender;
+use Throwable;
 
 class ExceptionContextExtenderTest extends TestCase
 {

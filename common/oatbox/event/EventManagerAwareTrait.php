@@ -16,7 +16,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2016 (original work) Open Assessment Technologies SA;
- *
  */
 
 namespace oat\oatbox\event;
@@ -26,6 +25,7 @@ use Zend\ServiceManager\ServiceLocatorAwareInterface;
 
 /**
  * Trait EventManagerAwareTrait
+ *
  * @package tao
  */
 trait EventManagerAwareTrait

@@ -16,17 +16,16 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) (original work) 2015-2022 Open Assessment Technologies SA
- *
  */
 
 namespace oat\generis\test\unit\oatbox;
 
 use oat\generis\test\ServiceManagerMockTrait;
 use oat\oatbox\event\EventManager;
+use oat\oatbox\event\GenericEvent;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\Prediction\CallTimesPrediction;
-use oat\oatbox\event\GenericEvent;
 
 class CallableListener
 {
@@ -59,7 +58,7 @@ class EventManagerTest extends TestCase
         $this->eventManager->setServiceLocator(
             $this->getServiceManagerMock(
                 [
-                    ServiceListener::class => new ServiceListener()
+                    ServiceListener::class => new ServiceListener(),
                 ]
             )
         );
@@ -69,11 +68,11 @@ class EventManagerTest extends TestCase
     {
         $callable = $this->prophesize(CallableListener::class);
         $callable->invoke(Argument::any())->should(new CallTimesPrediction(1));
-        
+
         $this->eventManager->attach('testEvent', [$callable->reveal(), 'invoke']);
         $this->eventManager->trigger('testEvent');
     }
-    
+
     public function testListenerIsInvokedWhenAttachedToMultipleEvents(): void
     {
         $callable = $this->prophesize(CallableListener::class);

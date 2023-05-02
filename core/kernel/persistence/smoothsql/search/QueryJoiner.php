@@ -19,8 +19,8 @@
  *
  * @author Christophe GARCIA <christopheg@taotesting.com>
  * @license GPLv2
- * @package generis
  *
+ * @package generis
  */
 
 namespace oat\generis\model\kernel\persistence\smoothsql\search;
@@ -38,83 +38,77 @@ use oat\search\UsableTrait\ParentFluateTrait;
 use oat\search\UsableTrait\SortableTrait;
 
 /**
- *
  * @author Christophe GARCIA <christopheg@taotesting.com>
  */
 class QueryJoiner implements DriverSensitiveInterface, SortableInterface, LimitableInterface, ParentFluateInterface, OptionsInterface
 {
     use SortableTrait;
-
     use LimitableTrait;
-
     use ParentFluateTrait;
-
     use DriverSensitiveTrait;
-
     use OptionsTrait;
 
     /**
-     *
      * @var QueryBuilderInterface
      */
     protected $query;
 
     /**
-     *
      * @var QueryBuilderInterface
      */
     protected $join;
 
     /**
-     *
      * @var string
      */
     protected $on;
     protected $count = false;
 
     /**
-     *
      * @param QueryBuilderInterface $query
+     *
      * @return $this
      */
     public function setQuery(QueryBuilderInterface $query)
     {
         $this->query = $query->sort([])->setOffset(null)->setLimit(null);
+
         return $this;
     }
 
     /**
-     *
      * @param QueryBuilderInterface $query
+     *
      * @return $this
      */
     public function join(QueryBuilderInterface $query)
     {
         $this->join = $query->sort([])->setOffset(null)->setLimit(null);
+
         return $this;
     }
 
     /**
-     *
      * @param string $predicate1
      * @param string $predicate2
+     * @param mixed $predicate
+     *
      * @return $this
      */
     public function on($predicate)
     {
         $this->on = $predicate;
+
         return $this;
     }
 
-    /**
-     *
-     */
     public function execute()
     {
         /* @var $gateWay GateWay */
         $gateWay = $this->getParent();
         $mainQuery = $gateWay->getSerialyser()->setCriteriaList($this->query)->serialyse();
         $joinQuery = $gateWay->getSerialyser()->setCriteriaList($this->join)->serialyse();
+
         return $this->createMetaQuery($mainQuery, $joinQuery, false);
     }
 
@@ -124,38 +118,45 @@ class QueryJoiner implements DriverSensitiveInterface, SortableInterface, Limita
         $gateWay = $this->getParent();
         $mainQuery = $gateWay->getSerialyser()->setCriteriaList($this->query)->serialyse();
         $joinQuery = $gateWay->getSerialyser()->setCriteriaList($this->join)->serialyse();
+
         return $this->createMetaQuery($mainQuery, $joinQuery, true);
     }
 
     /**
-     *
      * @param type $query
+     *
      * @return string
      */
     protected function addLimit($query)
     {
         $limit = $this->getLimit();
         $offset = $this->getOffset();
+
         if (intval($limit) > 0) {
             $query .= ' ' . $this->getDriverEscaper()->dbCommand('LIMIT') . ' ' . $limit;
+
             if (!is_null($offset)) {
                 $query .= ' ' . $this->getDriverEscaper()->dbCommand('OFFSET') . ' ' . $offset;
             }
         }
+
         return $query;
     }
 
     /**
      * create query begining
+     *
      * @return $this
      */
     public function getLanguage()
     {
         $options = $this->getOptions();
         $language = '';
+
         if (array_key_exists('language', $options)) {
             $language = $this->setLanguageCondition($options['language'], true);
         }
+
         if (array_key_exists('defaultLanguage', $options)) {
             $language = $this->setLanguageCondition($options['defaultLanguage'], true);
         }
@@ -168,6 +169,7 @@ class QueryJoiner implements DriverSensitiveInterface, SortableInterface, Limita
      *
      * @param string $language
      * @param boolean $emptyAvailable
+     *
      * @return string
      */
     public function setLanguageCondition($language, $emptyAvailable = false)
@@ -176,19 +178,21 @@ class QueryJoiner implements DriverSensitiveInterface, SortableInterface, Limita
         $languageValue = $this->getDriverEscaper()->escape($language);
         $sql = ' AND ( ';
         $sql .= $languageField . ' = ' . $this->getDriverEscaper()->quote($languageValue) . '';
+
         if ($emptyAvailable) {
             $sql .= ' ' . $this->getDriverEscaper()->dbCommand('OR') . ' ' . $languageField . ' = ' . $this->getDriverEscaper()->getEmpty();
         }
         $sql .= ' ) ';
+
         return $sql;
     }
 
     /**
-     *
+     * @param mixed $main
+     * @param mixed $join
      */
     protected function sortedQuery($main, $join)
     {
-
         $sort = $this->getSort();
         $index = 1;
 
@@ -230,9 +234,9 @@ class QueryJoiner implements DriverSensitiveInterface, SortableInterface, Limita
                 $this->getDriverEscaper()->reserved('T') . '.' . $this->getDriverEscaper()->reserved('subject') . ' = ' .
                 $this->getDriverEscaper()->reserved('R') . '.' . $this->getDriverEscaper()->reserved('subject') . ' ) ';
 
-
         $index = 1;
         $sortBy = [];
+
         foreach ($sort as $predicate => $sortOrder) {
             $alias = 'J' . $index;
             $orderSub = 'SUBJ' . $index;
@@ -277,14 +281,13 @@ class QueryJoiner implements DriverSensitiveInterface, SortableInterface, Limita
     }
 
     /**
-     *
      * @param string $main
      * @param string $join
+     *
      * @return string
      */
     protected function unSortedQuery($main, $join)
     {
-
         $query = $this->getDriverEscaper()->dbCommand('SELECT') . ' ' .
                 $this->getDriverEscaper()->dbCommand('DISTINCT') . ' ' .
                 $this->getDriverEscaper()->reserved('A') . '.' .
@@ -327,12 +330,15 @@ class QueryJoiner implements DriverSensitiveInterface, SortableInterface, Limita
                     $this->getDriverEscaper()->dbCommand('BY') . ' ' .
                     $this->getDriverEscaper()->random() . ' ';
         }
+
         return $query;
     }
 
     /**
      * @param string $main
      * @param string $join
+     * @param mixed $count
+     *
      * @return string
      */
     protected function createMetaQuery($main, $join, $count)
@@ -344,14 +350,17 @@ class QueryJoiner implements DriverSensitiveInterface, SortableInterface, Limita
         } else {
             $query = $this->sortedQuery($main, $join);
         }
+
         if ($count) {
             $query = $this->getDriverEscaper()->dbCommand('SELECT') . ' ' .
                     $this->getDriverEscaper()->dbCommand('COUNT') .
                     '( ' . $this->getDriverEscaper()->reserved('subject') . ' ) ' .
                     $this->getDriverEscaper()->dbCommand('AS') . ' ' . $this->getDriverEscaper()->reserved('cpt') . ' ' .
                     $this->getDriverEscaper()->dbCommand('FROM') . ' ( ' . $query . ' ) as cptQ';
+
             return $query;
         }
+
         return $this->addLimit($query);
     }
 }

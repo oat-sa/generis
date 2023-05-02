@@ -24,7 +24,6 @@ use oat\generis\test\GenerisPhpUnitTestRunner;
 
 class ExceptionTest extends GenerisPhpUnitTestRunner
 {
-
     public function setUp(): void
     {
         GenerisPhpUnitTestRunner::initTest();
@@ -36,7 +35,7 @@ class ExceptionTest extends GenerisPhpUnitTestRunner
         // the function expects a common_Object as first argument
         if (
             !($object instanceof common_Object) ||
-                ( ($object instanceof common_Object) && is_subclass_of($object, 'common_Object'))
+                (($object instanceof common_Object) && is_subclass_of($object, 'common_Object'))
         ) {
             throw new common_exception_InvalidArgumentType(__CLASS__, __METHOD__, 1, 'common_Object', $object);
         }

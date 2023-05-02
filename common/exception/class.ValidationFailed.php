@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -18,8 +19,11 @@
  *
  *
  * Content type accepted can't be satisfied
+ *
  * @access public
+ *
  * @author Gyula Szucs, <gyula@taotesting.com>
+ *
  * @package generis
  */
 class common_exception_ValidationFailed extends common_exception_BadRequest

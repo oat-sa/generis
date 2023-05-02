@@ -16,14 +16,13 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2014 (original work) Open Assessment Technologies SA;
- *
- *
  */
 
 namespace oat\oatbox\task;
- 
-use oat\oatbox\service\ConfigurableService;
+
+use common_exception_Error;
 use common_report_Report as Report;
+use oat\oatbox\service\ConfigurableService;
 
 /**
  * @deprecated since version 7.10.0, to be removed in 8.0. Use \oat\tao\model\taskQueue\QueueDispatcher instead.
@@ -33,19 +32,19 @@ class TaskService extends ConfigurableService
     /**
      * @deprecated since version 7.10.0, to be removed in 8.0.
      */
-    const TASK_QUEUE_MANAGER_ROLE = 'http://www.tao.lu/Ontologies/TAO.rdf#TaskQueueManager';
+    public const TASK_QUEUE_MANAGER_ROLE = 'http://www.tao.lu/Ontologies/TAO.rdf#TaskQueueManager';
 
     /**
      * @deprecated since version 7.10.0, to be removed in 8.0.
      */
-    const OPTION_LIMIT = 'limit';
-
+    public const OPTION_LIMIT = 'limit';
 
     /**
      * @deprecated since version 7.10.0, to be removed in 8.0.
      *
+     * @throws common_exception_Error
+     *
      * @return Report
-     * @throws \common_exception_Error
      */
     public function runQueue()
     {
@@ -54,6 +53,7 @@ class TaskService extends ConfigurableService
         $queue = $this->getServiceManager()->get(Queue::CONFIG_ID);
         $report = new Report(Report::TYPE_SUCCESS);
         $limit = $this->getLimit();
+
         foreach ($queue as $task) {
             $subReport = $queue->runTask($task);
             $statistics[$subReport->getType()] = isset($statistics[$subReport->getType()])
@@ -61,11 +61,12 @@ class TaskService extends ConfigurableService
             : 1;
             $report->add($subReport);
             $count++;
+
             if ($limit !== 0 && $count === $limit) {
                 break;
             }
         }
-        
+
         if (empty($statistics)) {
             $report = new Report(Report::TYPE_INFO, __('No tasks to run'));
         } else {
@@ -74,6 +75,7 @@ class TaskService extends ConfigurableService
             }
             $report->setMessage(__('Ran %s task(s):', array_sum($statistics)));
         }
+
         return $report;
     }
 
@@ -83,6 +85,7 @@ class TaskService extends ConfigurableService
     private function getLimit()
     {
         $limit = $this->hasOption(self::OPTION_LIMIT) ? $this->getOption(self::OPTION_LIMIT) : 0;
+
         return (int) $limit;
     }
 }

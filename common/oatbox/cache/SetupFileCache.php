@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,6 +31,8 @@ class SetupFileCache extends ConfigurableService
     public const PERSISTENCE = 'cache';
 
     /**
+     * @param mixed $cachePath
+     *
      * @throws Exception
      */
     public function createDirectory($cachePath): void
@@ -40,11 +43,12 @@ class SetupFileCache extends ConfigurableService
 
         if (!@mkdir($cachePath, 0700, true)) {
             $error = error_get_last();
+
             throw new Exception(sprintf(
                 'Could not create application cache at "%s". Error message: %s',
                 $cachePath,
-                $error['message'] ?? 'unknown')
-            );
+                $error['message'] ?? 'unknown'
+            ));
         }
     }
 
@@ -52,7 +56,7 @@ class SetupFileCache extends ConfigurableService
     {
         $persistenceManager = $this->getPersistenceManager();
         $persistenceManager->registerPersistence(self::PERSISTENCE, [
-            'driver' => 'phpfile'
+            'driver' => 'phpfile',
         ]);
         $persistenceManager->getPersistenceById(self::PERSISTENCE)->purge();
         $this->getServiceManager()->register(PersistenceManager::SERVICE_ID, $persistenceManager);

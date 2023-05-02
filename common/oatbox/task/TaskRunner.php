@@ -16,17 +16,18 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2014-2017 (original work) Open Assessment Technologies SA;
- *
  */
 
 namespace oat\oatbox\task;
- 
+
+use common_Logger;
+use common_report_Report as Report;
+use Exception;
 use oat\oatbox\action\ActionService;
 use oat\oatbox\task\TaskInterface\TaskQueue;
+use oat\oatbox\task\TaskInterface\TaskRunner as TaskRunnerInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use \oat\oatbox\task\TaskInterface\TaskRunner as TaskRunnerInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
-use common_report_Report as Report;
 
 /**
  * @deprecated since version 7.10.0, to be removed in 8.0. Use any implementation of \oat\tao\model\taskQueue\Worker\WorkerInterface instead.
@@ -40,15 +41,16 @@ class TaskRunner implements TaskRunnerInterface
      */
     public function run(Task $task)
     {
-
-        \common_Logger::d('Running task ' . $task->getId());
-        $report = new Report(\common_report_Report::TYPE_INFO, __('Running task %s at %s', $task->getId(), microtime(true)));
+        common_Logger::d('Running task ' . $task->getId());
+        $report = new Report(Report::TYPE_INFO, __('Running task %s at %s', $task->getId(), microtime(true)));
         /** @var TaskQueue $queue */
         $queue = $this->getServiceLocator()->get(Queue::SERVICE_ID);
         $queue->updateTaskStatus($task->getId(), Task::STATUS_RUNNING);
+
         try {
             $actionService = $this->getServiceLocator()->get(ActionService::SERVICE_ID);
             $invocable = $task->getInvocable();
+
             if (is_string($invocable)) {
                 $invocable = $actionService->resolve($task->getInvocable());
             } elseif ($invocable instanceof ServiceLocatorAwareInterface) {
@@ -57,14 +59,15 @@ class TaskRunner implements TaskRunnerInterface
             $subReport = call_user_func($invocable, $task->getParameters());
             $report->add($subReport);
             $report->setMessage($report->getMessage() . '; ' . __('Finished at %s', microtime(true)));
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $message = __('Failed at %s; Error message: %s', microtime(true), $e->getMessage());
-            \common_Logger::e($message);
+            common_Logger::e($message);
             $report->setType(Report::TYPE_ERROR);
             $report->setMessage($report->getMessage() . '; ' . $message);
         }
         $queue->updateTaskStatus($task->getId(), Task::STATUS_FINISHED);
         $queue->updateTaskReport($task->getId(), $report);
+
         return $report;
     }
 }

@@ -16,30 +16,26 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2016 (original work) Open Assessment Technologies SA;
- *
  */
 
 namespace oat\generis\test\unit\oatbox\extension;
 
+use oat\generis\test\TestCase;
 use oat\oatbox\event\EventManager;
 use oat\oatbox\extension\InstallAction;
 use oat\oatbox\service\ServiceManager;
-use oat\generis\test\TestCase;
 
 /**
- *
  * @author Christophe GARCIA <christopheg@taotesting.com>
  */
 class InstallActionTest extends TestCase
 {
-    
     public function testRegisterEvent()
     {
-        
-        $event    = 'testEvent';
+        $event = 'testEvent';
         $callBack = function () {
         };
-        
+
         $instance = $this->getMockForAbstractClass(
             InstallAction::class,
             [],
@@ -49,35 +45,34 @@ class InstallActionTest extends TestCase
             true,
             ['getServiceLocator' , 'getServiceManager']
         );
-        
+
         $prophetServiceManager = $this->prophesize(ServiceManager::class);
-        $prophetEventManager   = $this->prophesize(EventManager::class);
-        
+        $prophetEventManager = $this->prophesize(EventManager::class);
+
         $prophetEventManager->attach($event, $callBack)->willReturn(null);
-        
-        $EventManagerMock      = $prophetEventManager->reveal();
-        
+
+        $EventManagerMock = $prophetEventManager->reveal();
+
         $prophetServiceManager->get(EventManager::CONFIG_ID)->willReturn($EventManagerMock);
         $prophetServiceManager->register(EventManager::CONFIG_ID, $EventManagerMock)->willReturn(null);
-        
-        $serviceManagerMock    = $prophetServiceManager->reveal();
-        
+
+        $serviceManagerMock = $prophetServiceManager->reveal();
+
         $instance->expects($this->once())
                 ->method('getServiceLocator')
                 ->willReturn($serviceManagerMock);
-        
+
         $instance->expects($this->once())
                 ->method('getServiceManager')
                 ->willReturn($serviceManagerMock);
-        
+
         $instance->registerEvent($event, $callBack);
     }
-    
+
     public function testRegisterService()
     {
-        
         $fixtureService = 'test/service';
-        
+
         $instance = $this->getMockForAbstractClass(
             InstallAction::class,
             [],
@@ -87,22 +82,22 @@ class InstallActionTest extends TestCase
             true,
             ['getServiceManager']
         );
-        
+
         $serviceProphet = $this->prophesize()->willExtend(\oat\oatbox\service\ConfigurableService::class);
-        
+
         $prophetServiceManager = $this->prophesize(ServiceManager::class);
-        $serviceManagerMock    = $prophetServiceManager->reveal();
-        
+        $serviceManagerMock = $prophetServiceManager->reveal();
+
         $serviceProphet->setServiceLocator($serviceManagerMock)->willReturn($serviceProphet);
-        $serviceMock    = $serviceProphet->reveal();
-        
+        $serviceMock = $serviceProphet->reveal();
+
         $prophetServiceManager->register($fixtureService, $serviceMock)->willReturn(null);
-        $serviceManagerMock    = $prophetServiceManager->reveal();
-        
+        $serviceManagerMock = $prophetServiceManager->reveal();
+
         $instance->expects($this->exactly(1))
                 ->method('getServiceManager')
                 ->willReturn($serviceManagerMock);
-        
+
         $instance->registerService($fixtureService, $serviceMock);
     }
 }

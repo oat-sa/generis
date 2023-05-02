@@ -16,14 +16,16 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2016 (original work) Open Assessment Technologies SA
- *
  */
 
 namespace oat\generis\model;
 
+use core_kernel_classes_Class;
+use core_kernel_classes_Property;
+use core_kernel_classes_Resource;
+use Laminas\ServiceManager\ServiceLocatorAwareInterface;
 use oat\generis\model\data\ModelManager;
 use oat\generis\model\data\Ontology;
-use Laminas\ServiceManager\ServiceLocatorAwareInterface;
 
 /**
  * Trait for classes that want to access the ontology
@@ -36,53 +38,59 @@ trait OntologyAwareTrait
      * @var Ontology
      */
     private $ontology;
-    
+
     /**
      * Return the used model
+     *
      * @return Ontology
      */
-    function getModel()
+    public function getModel()
     {
         if (is_null($this->ontology)) {
             return ($this instanceof ServiceLocatorAwareInterface && !is_null($this->getServiceLocator()))
                 ? $this->getServiceLocator()->get(Ontology::SERVICE_ID)
                 : ModelManager::getModel();
         }
+
         return $this->ontology;
     }
 
     /**
      * Sets the model to use
+     *
      * @param Ontology $model
      */
-    function setModel(Ontology $model)
+    public function setModel(Ontology $model)
     {
         $this->ontology = $model;
     }
-    
+
     /**
      * @param string $uri
-     * @return \core_kernel_classes_Resource
+     *
+     * @return core_kernel_classes_Resource
      */
-    function getResource($uri)
+    public function getResource($uri)
     {
         return $this->getModel()->getResource($uri);
     }
-    
+
     /**
      * @param string $uri
-     * @return \core_kernel_classes_Class
+     *
+     * @return core_kernel_classes_Class
      */
-    function getClass($uri)
+    public function getClass($uri)
     {
         return $this->getModel()->getClass($uri);
     }
-    
+
     /**
      * @param string $uri
-     * @return \core_kernel_classes_Property
+     *
+     * @return core_kernel_classes_Property
      */
-    function getProperty($uri)
+    public function getProperty($uri)
     {
         return $this->getModel()->getProperty($uri);
     }

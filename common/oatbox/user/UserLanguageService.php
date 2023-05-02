@@ -20,8 +20,8 @@
 
 namespace oat\oatbox\user;
 
-use oat\oatbox\service\ConfigurableService;
 use oat\generis\model\GenerisRdf;
+use oat\oatbox\service\ConfigurableService;
 
 class UserLanguageService extends ConfigurableService implements UserLanguageServiceInterface
 {
@@ -34,6 +34,7 @@ class UserLanguageService extends ConfigurableService implements UserLanguageSer
 
     /**
      * {@inheritDoc}
+     *
      * @see \oat\oatbox\user\UserLanguageServiceInterface::getDefaultLanguage()
      */
     public function getDefaultLanguage()
@@ -47,10 +48,12 @@ class UserLanguageService extends ConfigurableService implements UserLanguageSer
     public function getDataLanguage(User $user)
     {
         $result = $this->getDefaultLanguage();
+
         if ($this->isDataLanguageEnabled()) {
             $lang = $user->getPropertyValues(GenerisRdf::PROPERTY_USER_DEFLG);
             $result = empty($lang) ? $this->getDefaultLanguage() : (string)current($lang);
         }
+
         return $result;
     }
 

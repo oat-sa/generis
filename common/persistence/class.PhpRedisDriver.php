@@ -19,6 +19,7 @@
  *
  * @author Lionel Lecaque  <lionel@taotesting.com>
  * @license GPLv2
+ *
  * @package
  * phpcs:disable Squiz.Classes.ValidClassName
  */
@@ -36,13 +37,16 @@ class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDrive
     private $connection;
 
     /**
-     * @var $params
+     * @var
      */
     private $params;
 
     /**
      * store connection params and try to connect
+     *
      * @see common_persistence_Driver::connect()
+     *
+     * @param mixed $key
      */
     public function connect($key, array $params)
     {
@@ -54,7 +58,9 @@ class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDrive
 
     /**
      * create a new connection using stored parameters
+     *
      * @param array $params
+     *
      * @throws common_exception_Error
      */
     public function connectionSet(array $params)
@@ -63,10 +69,10 @@ class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDrive
             throw new common_exception_Error('Missing host information for Redis driver');
         }
 
-        $port = isset($params['port']) ? $params['port'] : self::DEFAULT_PORT;
-        $timeout = isset($params['timeout']) ? $params['timeout'] : self::DEFAULT_TIMEOUT;
-        $persist = isset($params['pconnect']) ? $params['pconnect'] : true;
-        $this->params['attempt'] = isset($params['attempt']) ? $params['attempt'] : self::DEFAULT_ATTEMPT;
+        $port = $params['port'] ?? self::DEFAULT_PORT;
+        $timeout = $params['timeout'] ?? self::DEFAULT_TIMEOUT;
+        $persist = $params['pconnect'] ?? true;
+        $this->params['attempt'] = $params['attempt'] ?? self::DEFAULT_ATTEMPT;
 
         if (is_array($params['host'])) {
             $this->connectToCluster($params['host'], $timeout, $persist);
@@ -78,9 +84,11 @@ class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDrive
     private function connectToSingleNode(string $host, int $port, int $timeout, bool $persist)
     {
         $this->connection = new Redis();
+
         if ($this->connection == false) {
-            throw new common_exception_Error("Redis php module not found");
+            throw new common_exception_Error('Redis php module not found');
         }
+
         if ($persist) {
             $this->connection->pconnect($host, $port, $timeout);
         } else {
@@ -98,12 +106,13 @@ class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDrive
      * @param array $params
      * @param $retry
      * @param int $attempt
-     * @return mixed
+     *
      * @throws Exception
+     *
+     * @return mixed
      */
     protected function callWithRetry($method, array $params, $attempt = 1)
     {
-
         $success = false;
         $lastException = null;
         $result = false;
@@ -131,23 +140,31 @@ class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDrive
 
     /**
      * (non-PHPdoc)
+     *
      * @see common_persistence_KvDriver::set()
+     *
+     * @param mixed $key
+     * @param mixed $value
+     * @param null|mixed $ttl
+     * @param mixed $nx
      */
     public function set($key, $value, $ttl = null, $nx = false)
     {
         $options = [];
+
         if (!is_null($ttl)) {
             $options['ex'] = $ttl;
-        };
+        }
+
         if ($nx) {
             $options[] = 'nx';
-        };
+        }
+
         return $this->callWithRetry('set', [$key, $value, $options]);
     }
 
     public function get($key)
     {
-
         return $this->callWithRetry('get', [$key]);
     }
 
@@ -273,9 +290,10 @@ class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDrive
     }
 
     /**
-     * @return void
      * @throws RedisException
      * @throws common_exception_Error
+     *
+     * @return void
      */
     private function reconnectOnException(Exception $exception, string $method, int $attempt, int $retry): void
     {

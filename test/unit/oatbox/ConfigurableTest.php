@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -69,23 +70,23 @@ class ConfigurableTest extends TestCase
                 'options' => [],
                 'optionName' => 'TEST_OPTION',
                 'defaultValue' => 'DEFAULT',
-                'expected' => 'DEFAULT'
+                'expected' => 'DEFAULT',
             ],
             'Option is empty' => [
                 'options' => [
-                    'TEST_OPTION' => ''
+                    'TEST_OPTION' => '',
                 ],
                 'optionName' => 'TEST_OPTION',
                 'defaultValue' => 'DEFAULT',
-                'expected' => ''
+                'expected' => '',
             ],
             'Option is set' => [
                 'options' => [
-                    'TEST_OPTION' => 'TEST_VALUE'
+                    'TEST_OPTION' => 'TEST_VALUE',
                 ],
                 'optionName' => 'TEST_OPTION',
                 'defaultValue' => 'DEFAULT',
-                'expected' => 'TEST_VALUE'
+                'expected' => 'TEST_VALUE',
             ],
         ];
     }
@@ -101,21 +102,21 @@ class ConfigurableTest extends TestCase
             'Option is not set' => [
                 'options' => [],
                 'optionName' => 'TEST_OPTION',
-                'expected' => null
+                'expected' => null,
             ],
             'Option is empty' => [
                 'options' => [
-                    'TEST_OPTION' => ''
+                    'TEST_OPTION' => '',
                 ],
                 'optionName' => 'TEST_OPTION',
-                'expected' => ''
+                'expected' => '',
             ],
             'Option is set' => [
                 'options' => [
-                    'TEST_OPTION' => 'TEST_VALUE'
+                    'TEST_OPTION' => 'TEST_VALUE',
                 ],
                 'optionName' => 'TEST_OPTION',
-                'expected' => 'TEST_VALUE'
+                'expected' => 'TEST_VALUE',
             ],
         ];
     }
@@ -124,5 +125,6 @@ class ConfigurableTest extends TestCase
 /**
  * Configurable class implementation for test.
  */
-class ConfigurableImplementation extends Configurable {}
-
+class ConfigurableImplementation extends Configurable
+{
+}

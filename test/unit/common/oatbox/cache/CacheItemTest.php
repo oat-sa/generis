@@ -135,7 +135,6 @@ class CacheItemTest extends TestCase
 
         $this->subject->expiresAfter('string');
     }
-    
 
     public function getPrivateProperty(string $className, string $propertyName): ReflectionProperty
     {

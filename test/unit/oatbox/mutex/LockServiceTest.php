@@ -16,30 +16,33 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2019 (original work) Open Assessment Technologies SA;
- *
- *
  */
 
 namespace oat\generis\test\unit\oatbox\mutex;
 
+use common_Exception;
+use common_exception_NotImplemented;
+use common_persistence_InMemoryKvDriver;
+use common_persistence_KeyValuePersistence;
+use common_persistence_Manager;
 use oat\generis\test\TestCase;
 use oat\oatbox\mutex\LockService;
+use oat\oatbox\mutex\NoLockStorage;
 use oat\oatbox\service\ServiceManager;
 use Symfony\Component\Lock\Store\FlockStore;
-use oat\oatbox\mutex\NoLockStorage;
 
 /**
  * Class LockServiceTest
+ *
  * @package oat\generis\test\integration\mutex
+ *
  * @author Aleh Hutnikau, <hutnikau@1pt.com>
  */
 class LockServiceTest extends TestCase
 {
-
-
     public function testLock()
     {
-        $dir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . "generis_unittest_" . mt_rand() . DIRECTORY_SEPARATOR;
+        $dir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'generis_unittest_' . mt_rand() . DIRECTORY_SEPARATOR;
         mkdir($dir);
         $actionId1 = 'action_1';
         $actionId2 = 'action_2';
@@ -77,22 +80,27 @@ class LockServiceTest extends TestCase
     }
 
     /**
+     * @param mixed $class
+     * @param null|mixed $dir
+     *
+     * @throws common_Exception
+     * @throws common_exception_NotImplemented
+     *
      * @return LockService
-     * @throws \common_Exception
-     * @throws \common_exception_NotImplemented
      */
     public function getInstance($class, $dir = null)
     {
-        $config = new \common_persistence_KeyValuePersistence([], new \common_persistence_InMemoryKvDriver());
-        $config->set(\common_persistence_Manager::SERVICE_ID, new \common_persistence_Manager());
+        $config = new common_persistence_KeyValuePersistence([], new common_persistence_InMemoryKvDriver());
+        $config->set(common_persistence_Manager::SERVICE_ID, new common_persistence_Manager());
         $serviceManager = new ServiceManager($config);
 
         $service = new LockService([
             LockService::OPTION_PERSISTENCE_CLASS => $class,
-            LockService::OPTION_PERSISTENCE_OPTIONS => $dir
+            LockService::OPTION_PERSISTENCE_OPTIONS => $dir,
         ]);
         $service->setServiceLocator($serviceManager);
         $service->install();
+
         return $service;
     }
 }

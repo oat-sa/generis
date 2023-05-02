@@ -21,17 +21,17 @@
  *               2017-2021 (update and modification) Open Assessment Technologies SA;
  */
 
+use oat\generis\model\data\event\ResourceUpdated;
+use oat\generis\model\OntologyAwareTrait;
 use oat\generis\model\OntologyRdf;
 use oat\generis\model\OntologyRdfs;
-use oat\oatbox\event\EventAggregator;
-use oat\oatbox\service\ServiceManager;
-use oat\generis\model\OntologyAwareTrait;
-use Zend\ServiceManager\ServiceLocatorInterface;
-use oat\generis\model\data\event\ResourceUpdated;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use oat\generis\model\resource\Repository\ResourceRepository;
 use oat\generis\model\resource\Context\ResourceRepositoryContext;
 use oat\generis\model\resource\Contract\ResourceRepositoryInterface;
+use oat\generis\model\resource\Repository\ResourceRepository;
+use oat\oatbox\event\EventAggregator;
+use oat\oatbox\service\ServiceManager;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Resource implements rdf:resource container identified by an uri (a string).
@@ -47,7 +47,6 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
 
     // --- ASSOCIATIONS ---
 
-
     // --- ATTRIBUTES ---
 
     /**
@@ -56,7 +55,9 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
      * please use getUri()
      *
      * @access public
+     *
      * @var string
+     *
      * @deprecated
      */
     public $uriResource = '';
@@ -67,7 +68,9 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
      * please use getLabel()
      *
      * @access public
+     *
      * @var string
+     *
      * @deprecated
      */
     public $label = null;
@@ -78,29 +81,25 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
      * please use getComment()
      *
      * @access public
+     *
      * @var string
+     *
      * @deprecated
      */
     public $comment = '';
-
-    // --- OPERATIONS ---
-    /**
-     *
-     * @return core_kernel_persistence_ResourceInterface
-     */
-    private function getImplementation()
-    {
-        return $this->getModel()->getRdfsInterface()->getResourceImplementation();
-    }
-
 
     /**
      * create the object
      *
      * @access public
+     *
      * @author Joel Bout, <joel.bout@tudor.lu>
+     *
      * @param  mixed uri
      * @param  string debug
+     * @param mixed $uri
+     * @param mixed $debug
+     *
      * @return void
      */
     public function __construct($uri, $debug = '')
@@ -108,22 +107,46 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
         if (empty($uri)) {
             throw new common_exception_Error('cannot construct the resource because the uri cannot be empty, debug: ' . $debug);
         }
+
         if (!is_string($uri) && !$uri instanceof self) {
             throw new common_exception_Error('could not create resource from ' . (is_object($uri) ? get_class($uri) : gettype($uri)) . ' debug: ' . $debug);
         }
         $this->uriResource = $uri instanceof self ? $uri->getUri() : $uri;
     }
 
-
     /**
      * Conveniance method to duplicate a resource using the clone keyword
      *
      * @access public
+     *
      * @author Joel Bout, <joel.bout@tudor.lu>
      */
     public function __clone()
     {
         throw new common_exception_DeprecatedApiMethod('Use duplicated instead, because clone resource could not share same uri that original');
+    }
+
+    /**
+     * Short description of method __toString
+     *
+     * @access public
+     *
+     * @author Joel Bout, <joel.bout@tudor.lu>
+     *
+     * @return string
+     */
+    public function __toString(): string
+    {
+        return $this->getUri() . "\n" . $this->getLabel() ;
+    }
+
+    // --- OPERATIONS ---
+    /**
+     * @return core_kernel_persistence_ResourceInterface
+     */
+    private function getImplementation()
+    {
+        return $this->getModel()->getRdfsInterface()->getResourceImplementation();
     }
 
     public function isCustom(): bool
@@ -137,23 +160,29 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
      * returns true if the resource is a valid class (using facts or entailment
      *
      * @access public
+     *
      * @author patrick.plichart@tudor.lu
+     *
      * @return boolean
+     *
      * @see http://www.w3.org/RDF/
      */
     public function isClass()
     {
         $returnValue = (bool) false;
+
         if (count($this->getPropertyValues($this->getProperty(OntologyRdfs::RDFS_SUBCLASSOF))) > 0) {
             $returnValue = true;
         } else {
             foreach ($this->getTypes() as $type) {
                 if ($type->getUri() == OntologyRdfs::RDFS_CLASS) {
                     $returnValue = true;
+
                     break;
                 }
             }
         }
+
         return (bool) $returnValue;
     }
 
@@ -173,19 +202,25 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
      * rules)
      *
      * @access public
+     *
      * @author patrick.plichart@tudor.lu
+     *
      * @return boolean
+     *
      * @see http://www.w3.org/RDF/
      */
     public function isProperty()
     {
         $returnValue = (bool) false;
+
         foreach ($this->getTypes() as $type) {
             if ($type->getUri() == OntologyRdf::RDF_PROPERTY) {
                 $returnValue = true;
+
                 break;
             }
         }
+
         return (bool) $returnValue;
     }
 
@@ -193,7 +228,8 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
      * Returns all the types of this resource as core_kernel_classes_Class objects.
      *
      * @author Joel Bout <joel@taotesting.com>
-     * @return core_kernel_classes_Class[] An associative array where keys are class URIs and values are core_kernel_classes_Class objects.
+     *
+     * @return core_kernel_classes_Class[] an associative array where keys are class URIs and values are core_kernel_classes_Class objects
      */
     public function getTypes()
     {
@@ -206,18 +242,20 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
      * operation.
      *
      * @author Patrick Plichart <patrick@taotesting.com>
-     * @return string A Uniform Resource Identifier (URI).
+     *
+     * @return string a Uniform Resource Identifier (URI)
      */
     public function getLabel()
     {
         if (is_null($this->label)) {
-            $label =  $this->getOnePropertyValue($this->getProperty(OntologyRdfs::RDFS_LABEL));
+            $label = $this->getOnePropertyValue($this->getProperty(OntologyRdfs::RDFS_LABEL));
             $this->label = is_null($label)
                 ? ''
-                : ($label instanceof core_kernel_classes_Resource
+                : (
+                    $label instanceof core_kernel_classes_Resource
                     ? $label->getUri()
                     : (string)$label
-                   )
+                )
             ;
         }
 
@@ -228,8 +266,12 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
      * alias to setPropertyValue using rdfs:label property
      *
      * @access public
+     *
      * @author patrick.plichart@tudor:lu
+     *
      * @param  string label
+     * @param mixed $label
+     *
      * @return boolean
      */
     public function setLabel($label)
@@ -238,6 +280,7 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
         $this->removePropertyValues($this->getProperty(OntologyRdfs::RDFS_LABEL));
         $this->setPropertyValue($this->getProperty(OntologyRdfs::RDFS_LABEL), $label);
         $this->label = $label;
+
         return (bool) $returnValue;
     }
 
@@ -245,17 +288,21 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
      * Short description of method getComment
      *
      * @access public
+     *
      * @author Joel Bout, <joel.bout@tudor.lu>
+     *
      * @return string
      */
     public function getComment()
     {
         $returnValue = (string) '';
+
         if ($this->comment == '') {
-            $comment =  $this->getOnePropertyValue($this->getProperty(OntologyRdfs::RDFS_COMMENT));
+            $comment = $this->getOnePropertyValue($this->getProperty(OntologyRdfs::RDFS_COMMENT));
             $this->comment = $comment != null ? $comment->literal : '';
         }
         $returnValue = $this->comment;
+
         return (string) $returnValue;
     }
 
@@ -263,8 +310,12 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
      * alias to setPropertyValue using rdfs:label property
      *
      * @access public
+     *
      * @author patrick.plichart
+     *
      * @param  string comment
+     * @param mixed $comment
+     *
      * @return boolean
      */
     public function setComment($comment)
@@ -273,6 +324,7 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
         $this->removePropertyValues($this->getProperty(OntologyRdfs::RDFS_COMMENT));
         $this->setPropertyValue($this->getProperty(OntologyRdfs::RDFS_COMMENT), $comment);
         $this->comment = $comment;
+
         return (bool) $returnValue;
     }
 
@@ -282,15 +334,20 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
      * The return format is an array of strings
      *
      * @access public
+     *
      * @author Joel Bout, <joel.bout@tudor.lu>
+     *
      * @param  Property property uriProperty is string and may be short in the case of a locally defined property (module namespace), or long uri
      * @param  array options
+     * @param mixed $options
+     *
      * @return array
      */
     public function getPropertyValues(core_kernel_classes_Property $property, $options = [])
     {
         $returnValue = [];
         $returnValue = $this->getImplementation()->getPropertyValues($this, $property, $options);
+
         return (array) $returnValue;
     }
 
@@ -299,14 +356,17 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
      *
      * @param core_kernel_classes_Property $property
      * @param array $options
+     *
      * @return core_kernel_classes_ContainerCollection
      */
     public function getPropertyValuesCollection(core_kernel_classes_Property $property, $options = [])
     {
         $returnValue = new core_kernel_classes_ContainerCollection($this);
+
         foreach ($this->getPropertyValues($property, $options) as $value) {
             $returnValue->add($this->toResource($value));
         }
+
         return $returnValue;
     }
 
@@ -314,10 +374,14 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
      * Short description of method getUniquePropertyValue
      *
      * @access public
+     *
      * @author Joel Bout, <joel.bout@tudor.lu>
+     *
      * @param  Property property
+     *
      * @throws common_Exception
      * @throws core_kernel_classes_EmptyProperty
+     *
      * @return core_kernel_classes_Container
      */
     public function getUniquePropertyValue(core_kernel_classes_Property $property)
@@ -329,11 +393,13 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
         if ($collection->isEmpty()) {
             throw new core_kernel_classes_EmptyProperty($this, $property);
         }
+
         if ($collection->count() == 1) {
             $returnValue = $collection->get(0);
         } else {
             throw new core_kernel_classes_MultiplePropertyValuesException($this, $property);
         }
+
         return $returnValue;
     }
 
@@ -345,21 +411,26 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
      * and will be removed in future versions
      *
      * @access public
+     *
      * @author Joel Bout, <joel.bout@tudor.lu>
+     *
      * @param  Property property
      * @param  boolean last
+     * @param mixed $last
+     *
      * @return core_kernel_classes_Container
      */
     public function getOnePropertyValue(core_kernel_classes_Property $property, $last = false)
     {
         $returnValue = null;
+
         if ($last) {
             throw new core_kernel_persistence_Exception('parameter \'last\' for getOnePropertyValue no longer supported');
-        };
+        }
 
         $options = [
             'forceDefaultLg' => true,
-            'one' => true
+            'one' => true,
         ];
 
         $value = $this->getPropertyValues($property, $options);
@@ -375,15 +446,20 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
      * Short description of method getPropertyValuesByLg
      *
      * @access public
+     *
      * @author Joel Bout, <joel.bout@tudor.lu>
+     *
      * @param  Property property
      * @param  string lg
+     * @param mixed $lg
+     *
      * @return core_kernel_classes_ContainerCollection
      */
     public function getPropertyValuesByLg(core_kernel_classes_Property $property, $lg)
     {
         $returnValue = null;
         $returnValue = $this->getImplementation()->getPropertyValuesByLg($this, $property, $lg);
+
         return $returnValue;
     }
 
@@ -392,10 +468,15 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
      * resource
      *
      * @access public
+     *
      * @author Patrick.plichart
+     *
      * @param  Property property
      * @param  string object
+     * @param mixed $object
+     *
      * @return boolean
+     *
      * @version 1.0
      */
     public function setPropertyValue(core_kernel_classes_Property $property, $object)
@@ -403,6 +484,7 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
         $returnValue = (bool) false;
         $returnValue = $this->getImplementation()->setPropertyValue($this, $property, $object);
         $this->onUpdate();
+
         return (bool) $returnValue;
     }
 
@@ -411,8 +493,12 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
      * Conveniance method isntead of adding the property values one by one.
      *
      * @access public
+     *
      * @author Joel Bout, <joel.bout@tudor.lu>
+     *
      * @param  array propertiesValues
+     * @param mixed $propertiesValues
+     *
      * @return boolean
      */
     public function setPropertiesValues($propertiesValues)
@@ -420,6 +506,7 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
         $returnValue = (bool) false;
         $returnValue = $this->getImplementation()->setPropertiesValues($this, $propertiesValues);
         $this->onUpdate();
+
         return (bool) $returnValue;
     }
 
@@ -427,10 +514,15 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
      * Short description of method setPropertyValueByLg
      *
      * @access public
+     *
      * @author Joel Bout, <joel.bout@tudor.lu>
+     *
      * @param  Property property
      * @param  string value
      * @param  string lg
+     * @param mixed $value
+     * @param mixed $lg
+     *
      * @return boolean
      */
     public function setPropertyValueByLg(core_kernel_classes_Property $property, $value, $lg)
@@ -438,6 +530,7 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
         $returnValue = (bool) false;
         $returnValue = $this->getImplementation()->setPropertyValueByLg($this, $property, $value, $lg);
         $this->onUpdate();
+
         return (bool) $returnValue;
     }
 
@@ -447,14 +540,19 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
      * triple) shouldbe made using triple management
      *
      * @access public
+     *
      * @author Joel Bout, <joel.bout@tudor.lu>
+     *
      * @param  Property property
      * @param  string object
+     * @param mixed $object
+     *
      * @return boolean
      */
     public function editPropertyValues(core_kernel_classes_Property $property, $object)
     {
-        $returnValue =  $this->removePropertyValues($property);
+        $returnValue = $this->removePropertyValues($property);
+
         if (is_array($object)) {
             foreach ($object as $value) {
                 $returnValue = $this->setPropertyValue($property, $value);
@@ -470,10 +568,15 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
      * Short description of method editPropertyValueByLg
      *
      * @access public
+     *
      * @author Joel Bout, <joel.bout@tudor.lu>
+     *
      * @param  Property prop
      * @param  string value
      * @param  string lg
+     * @param mixed $value
+     * @param mixed $lg
+     *
      * @return boolean
      */
     public function editPropertyValueByLg(core_kernel_classes_Property $prop, $value, $lg)
@@ -481,6 +584,7 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
         $returnValue = (bool) false;
         $returnValue = $this->removePropertyValueByLg($prop, $lg);
         $returnValue &= $this->setPropertyValueByLg($prop, $value, $lg);
+
         return (bool) $returnValue;
     }
 
@@ -488,19 +592,24 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
      * remove a single triple with this subject and predicate
      *
      * @access public
+     *
      * @author Joel Bout, <joel.bout@tudor.lu>
+     *
      * @param  Property property
      * @param  mixed value
+     * @param mixed $value
+     *
      * @return boolean
      */
     public function removePropertyValue(core_kernel_classes_Property $property, $value)
     {
         $returnValue = (bool) false;
         $returnValue = $this->getImplementation()->removePropertyValues($this, $property, [
-            'pattern'   => (is_object($value) && $value instanceof self ? $value->getUri() : $value),
-            'like'      => false
+            'pattern' => (is_object($value) && $value instanceof self ? $value->getUri() : $value),
+            'like' => false,
         ]);
         $this->onUpdate();
+
         return (bool) $returnValue;
     }
 
@@ -508,9 +617,13 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
      * remove all triples with this subject and predicate
      *
      * @access public
+     *
      * @author Joel Bout, <joel.bout@tudor.lu>
+     *
      * @param  Property property
      * @param  array options
+     * @param mixed $options
+     *
      * @return boolean
      */
     public function removePropertyValues(core_kernel_classes_Property $property, $options = [])
@@ -518,6 +631,7 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
         $returnValue = (bool) false;
         $returnValue = $this->getImplementation()->removePropertyValues($this, $property, $options);
         $this->onUpdate();
+
         return (bool) $returnValue;
     }
 
@@ -525,10 +639,15 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
      * Short description of method removePropertyValueByLg
      *
      * @access public
+     *
      * @author Joel Bout, <joel.bout@tudor.lu>
+     *
      * @param  Property prop
      * @param  string lg
      * @param  array options
+     * @param mixed $lg
+     * @param mixed $options
+     *
      * @return boolean
      */
     public function removePropertyValueByLg(core_kernel_classes_Property $prop, $lg, $options = [])
@@ -536,6 +655,7 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
         $returnValue = (bool) false;
         $returnValue = $this->getImplementation()->removePropertyValueByLg($this, $prop, $lg, $options);
         $this->onUpdate();
+
         return (bool) $returnValue;
     }
 
@@ -545,13 +665,16 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
      * on statements
      *
      * @access public
+     *
      * @author Joel Bout, <joel.bout@tudor.lu>
+     *
      * @return core_kernel_classes_ContainerCollection
      */
     public function getRdfTriples()
     {
         $returnValue = null;
         $returnValue = $this->getImplementation()->getRdfTriples($this);
+
         return $returnValue;
     }
 
@@ -559,8 +682,11 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
      * return the languages in which a value exists for uriProperty for this
      *
      * @access public
+     *
      * @author aptrick.plichart@tudor.lu
+     *
      * @param  Property property
+     *
      * @return array
      */
     public function getUsedLanguages(core_kernel_classes_Property $property)
@@ -574,13 +700,18 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
      * The method returns the new resource.
      *
      * @access public
+     *
      * @author Joel Bout, <joel.bout@tudor.lu>
+     *
      * @param  array excludedProperties
+     * @param mixed $excludedProperties
+     *
      * @return core_kernel_classes_Resource
      */
     public function duplicate($excludedProperties = [])
     {
         $returnValue = $this->getImplementation()->duplicate($this, $excludedProperties);
+
         return $returnValue;
     }
 
@@ -591,7 +722,8 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
      *
      * @author patrick.plichart@tudor.lu
      *
-     * @param  bool deleteReference set deleteReference to true when you need that all reference to this resource are removed.
+     * @param  bool deleteReference set deleteReference to true when you need that all reference to this resource are removed
+     * @param mixed $deleteReference
      *
      * @return bool
      */
@@ -613,26 +745,16 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
         }
     }
 
-
-
-    /**
-     * Short description of method __toString
-     *
-     * @access public
-     * @author Joel Bout, <joel.bout@tudor.lu>
-     * @return string
-     */
-    public function __toString(): string
-    {
-        return $this->getUri() . "\n" . $this->getLabel() ;
-    }
-
     /**
      * Short description of method getPropertiesValues
      *
      * @access public
+     *
      * @author Joel Bout, <joel.bout@tudor.lu>
+     *
      * @param  array properties
+     * @param mixed $properties
+     *
      * @return array
      */
     public function getPropertiesValues($properties): array
@@ -641,6 +763,7 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
             throw new common_exception_InvalidArgumentType(__CLASS__, __FUNCTION__, 0, 'array', $properties);
         }
         $returnValue = $this->getImplementation()->getPropertiesValues($this, $properties/*, $last*/);
+
         return (array) $returnValue;
     }
 
@@ -648,8 +771,11 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
      * Short description of method setType
      *
      * @access public
+     *
      * @author Joel Bout, <joel.bout@tudor.lu>
+     *
      * @param  Class type
+     *
      * @return boolean
      */
     public function setType(core_kernel_classes_Class $type): bool
@@ -665,8 +791,11 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
      * Short description of method removeType
      *
      * @access public
+     *
      * @author Joel Bout, <joel.bout@tudor.lu>
+     *
      * @param  Class type
+     *
      * @return boolean
      */
     public function removeType(core_kernel_classes_Class $type): bool
@@ -682,19 +811,25 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
      * Short description of method hasType
      *
      * @access public
+     *
      * @author Joel Bout, <joel.bout@tudor.lu>
+     *
      * @param  Class class
+     *
      * @return boolean
      */
     public function hasType(core_kernel_classes_Class $class): bool
     {
         $returnValue = (bool) false;
+
         foreach ($this->getTypes() as $type) {
             if ($class->equals($type)) {
                 $returnValue = true;
+
                 break;
             }
         }
+
         return (bool) $returnValue;
     }
 
@@ -702,17 +837,21 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
      * Short description of method exists
      *
      * @access public
+     *
      * @author Joel Bout, <joel.bout@tudor.lu>
+     *
      * @return boolean
      */
     public function exists()
     {
         $returnValue = (bool) false;
+
         try {
             $returnValue = count($this->getTypes()) ? true : false;
         } catch (Exception $e) {
-            ;//return false by default
+            //return false by default
         }
+
         return (bool) $returnValue;
     }
 
@@ -720,7 +859,9 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
      * returns the full URI as string (including namespace)
      *
      * @access public
+     *
      * @author Joel Bout, <joel.bout@tudor.lu>
+     *
      * @return string
      */
     public function getUri(): string
@@ -732,8 +873,11 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
      * Short description of method equals
      *
      * @access public
+     *
      * @author Joel Bout, <joel.bout@tudor.lu>
+     *
      * @param  Resource resource
+     *
      * @return boolean
      */
     public function equals(core_kernel_classes_Resource $resource): bool
@@ -746,19 +890,25 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
      * an instance of the specified class
      *
      * @access public
+     *
      * @author Joel Bout, <joel.bout@tudor.lu>
+     *
      * @param  Class class
+     *
      * @return boolean
      */
     public function isInstanceOf(core_kernel_classes_Class $class): bool
     {
         $returnValue = (bool) false;
+
         foreach ($this->getTypes() as $type) {
             if ($class->equals($type) || $type->isSubClassOf($class)) {
                 $returnValue = true;
+
                 break;
             }
         }
+
         return (bool) $returnValue;
     }
 
@@ -771,24 +921,28 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
 
     /**
      * Moved from common_Utils to not break dependency ingestion chain
+     *
      * @param string $value
+     *
      * @return core_kernel_classes_Literal|core_kernel_classes_Resource|core_kernel_classes_Resource[]
      */
     protected function toResource($value)
     {
         if (is_array($value)) {
             $returnValue = [];
+
             foreach ($value as $val) {
                 $returnValue[] = $this->toResource($val);
             }
+
             return $returnValue;
-        } else {
-            if (common_Utils::isUri($value)) {
-                return $this->getResource($value);
-            } else {
-                return new core_kernel_classes_Literal($value);
-            }
         }
+
+        if (common_Utils::isUri($value)) {
+            return $this->getResource($value);
+        }
+
+        return new core_kernel_classes_Literal($value);
     }
 
     private function onUpdate(): void

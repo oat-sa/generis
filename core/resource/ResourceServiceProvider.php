@@ -22,14 +22,14 @@ declare(strict_types=1);
 
 namespace oat\generis\model\resource;
 
-use oat\oatbox\event\EventManager;
 use oat\generis\model\data\Ontology;
-use oat\generis\model\resource\Service\ResourceDeleter;
+use oat\generis\model\DependencyInjection\ContainerServiceProviderInterface;
+use oat\generis\model\kernel\persistence\smoothsql\search\ComplexSearchService;
 use oat\generis\model\resource\Repository\ClassRepository;
 use oat\generis\model\resource\Repository\PropertyRepository;
 use oat\generis\model\resource\Repository\ResourceRepository;
-use oat\generis\model\DependencyInjection\ContainerServiceProviderInterface;
-use oat\generis\model\kernel\persistence\smoothsql\search\ComplexSearchService;
+use oat\generis\model\resource\Service\ResourceDeleter;
+use oat\oatbox\event\EventManager;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -17,33 +18,39 @@
  * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
  *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- *
  */
 
 /**
  * Short description of class core_kernel_api_Api
  *
  * @abstract
+ *
  * @access public
+ *
  * @author firstname and lastname of author, <author@example.org>
+ *
  * @package generis
-
  */
 interface core_kernel_api_Api
 {
-
-
     // --- OPERATIONS ---
 
     /**
      * Short description of method logIn
      *
      * @access public
+     *
      * @author firstname and lastname of author, <author@example.org>
+     *
      * @param  string login
      * @param  string password
      * @param  string module
      * @param  boolean role
+     * @param mixed $login
+     * @param mixed $password
+     * @param mixed $module
+     * @param mixed $role
+     *
      * @return boolean
      */
     public function logIn($login, $password, $module, $role);
@@ -52,7 +59,9 @@ interface core_kernel_api_Api
      * Short description of method logOut
      *
      * @access public
+     *
      * @author firstname and lastname of author, <author@example.org>
+     *
      * @return boolean
      */
     public function logOut();

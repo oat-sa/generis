@@ -20,15 +20,19 @@
 
 namespace oat\generis\test\unit\common\persistence\sql\dbal;
 
+use common_persistence_Manager;
+use common_persistence_sql_dbal_Driver;
+use common_persistence_sql_Platform;
+use DateTime;
+use DateTimeZone;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Schema\Schema;
-use oat\generis\test\TestCase;
 use oat\generis\test\MockObject;
+use oat\generis\test\TestCase;
 
 class PlatformTest extends TestCase
 {
-
     public function testGetQueryBuilder()
     {
         $platform = $this->createInstance();
@@ -65,8 +69,8 @@ class PlatformTest extends TestCase
             ->getMock();
         $dbalConnection->method('getDatabasePlatform')->willReturn($dbalPlatform);
 
-        $platform = new \common_persistence_sql_Platform($dbalConnection);
-        $datetime = (new \DateTime('now', new \DateTimeZone('UTC')))->format($format);
+        $platform = new common_persistence_sql_Platform($dbalConnection);
+        $datetime = (new DateTime('now', new DateTimeZone('UTC')))->format($format);
         $this->assertEquals($datetime, $platform->getNowExpression());
     }
 
@@ -88,7 +92,7 @@ class PlatformTest extends TestCase
     }
 
     /**
-     * @return \common_persistence_sql_Platform
+     * @return common_persistence_sql_Platform
      */
     protected function createInstance()
     {
@@ -96,21 +100,23 @@ class PlatformTest extends TestCase
             $this->markTestSkipped('Php extension pdo_sqlite is not installed.');
         }
 
-        $driver = new \common_persistence_sql_dbal_Driver();
+        $driver = new common_persistence_sql_dbal_Driver();
         $driver->connect('test_connection', ['connection' => ['url' => 'sqlite:///:memory:']]);
+
         return $driver->getPlatForm();
     }
 
     /**
-     * @return \common_persistence_Manager
+     * @return common_persistence_Manager
      */
     protected function getPersistenceManager()
     {
-        $service = new \common_persistence_Manager();
+        $service = new common_persistence_Manager();
 
         $service->setServiceLocator(
             $this->getServiceLocatorMock([])
         );
+
         return $service;
     }
 }

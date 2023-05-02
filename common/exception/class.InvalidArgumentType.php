@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -17,21 +18,20 @@
  * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
  *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- *
  */
 
 /**
  * Short description of class common_exception_InvalidArgumentType
  *
  * @access public
+ *
  * @author Joel Bout, <joel.bout@tudor.lu>
+ *
  * @package generis
-
  */
 class common_exception_InvalidArgumentType extends common_exception_Error
 {
     // --- ASSOCIATIONS ---
-
 
     // --- ATTRIBUTES ---
 
@@ -41,17 +41,24 @@ class common_exception_InvalidArgumentType extends common_exception_Error
      * Short description of method __construct
      *
      * @access public
+     *
      * @author Joel Bout, <joel.bout@tudor.lu>
+     *
      * @param  string class
      * @param  string function
      * @param  int position
      * @param  string expectedType
      * @param  object
+     * @param null|mixed $class
+     * @param mixed $function
+     * @param mixed $position
+     * @param mixed $expectedType
+     * @param null|mixed $object
+     *
      * @return mixed
      */
     public function __construct($class = null, $function = 0, $position = 0, $expectedType = '', $object = null)
     {
-        
         $object = is_object($object) ? get_class($object) : gettype($object);
         $message = 'Argument ' . $position . ' passed to ' . $class . '::' . $function . '() must be an ' . $expectedType . ', ' . $object . ' given';
         parent::__construct($message);

@@ -22,8 +22,8 @@ declare(strict_types=1);
 
 namespace oat\generis\test;
 
-use Psr\Container\ContainerInterface;
 use oat\oatbox\service\ServiceManager;
+use Psr\Container\ContainerInterface;
 
 trait ServiceManagerMockTrait
 {

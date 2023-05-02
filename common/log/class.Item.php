@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -18,24 +19,24 @@
  *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
  *               2013 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
  */
 
 /**
  * Short description of class common_log_Item
  *
  * @access public
+ *
  * @author Joel Bout, <joel.bout@tudor.lu>
+ *
  * @package generis
-
  */
 class common_log_Item
 {
-
     /**
      * Short description of attribute datetime
      *
      * @access private
+     *
      * @var int
      */
     private $datetime = 0;
@@ -44,6 +45,7 @@ class common_log_Item
      * Short description of attribute description
      *
      * @access private
+     *
      * @var string
      */
     private $description = '';
@@ -52,6 +54,7 @@ class common_log_Item
      * Short description of attribute severity
      *
      * @access private
+     *
      * @var int
      */
     private $severity = 0;
@@ -60,6 +63,7 @@ class common_log_Item
      * Short description of attribute backtrace
      *
      * @access private
+     *
      * @var array
      */
     private $backtrace = [];
@@ -68,6 +72,7 @@ class common_log_Item
      * Short description of attribute request
      *
      * @access private
+     *
      * @var string
      */
     private $request = '';
@@ -76,6 +81,7 @@ class common_log_Item
      * Short description of attribute tags
      *
      * @access private
+     *
      * @var array
      */
     private $tags = [];
@@ -84,6 +90,7 @@ class common_log_Item
      * Short description of attribute errorFile
      *
      * @access private
+     *
      * @var string
      */
     private $errorFile = '';
@@ -92,6 +99,7 @@ class common_log_Item
      * Short description of attribute errorLine
      *
      * @access private
+     *
      * @var int
      */
     private $errorLine = 0;
@@ -100,7 +108,9 @@ class common_log_Item
      * Short description of method __construct
      *
      * @access public
+     *
      * @author Joel Bout, <joel.bout@tudor.lu>
+     *
      * @param  string description
      * @param  int severity
      * @param  int datetime
@@ -110,50 +120,64 @@ class common_log_Item
      * @param  string request
      * @param  string errorFile
      * @param  int errorLine
+     * @param mixed $description
+     * @param mixed $severity
+     * @param mixed $datetime
+     * @param mixed $backtrace
+     * @param mixed $tags
+     * @param mixed $request
+     * @param mixed $errorFile
+     * @param mixed $errorLine
+     *
      * @return mixed
      */
-    public function __construct($description, $severity, $datetime, $backtrace = [], $tags = [], $request = "", $errorFile = '', $errorLine = 0)
+    public function __construct($description, $severity, $datetime, $backtrace = [], $tags = [], $request = '', $errorFile = '', $errorLine = 0)
     {
         if (!is_string($description)) {
-            throw new InvalidArgumentException("The description must be a string, " . gettype($description) . " given");
+            throw new InvalidArgumentException('The description must be a string, ' . gettype($description) . ' given');
         }
-        
-        $this->description      = $description;
-        $this->severity         = $severity;
-        $this->datetime         = $datetime;
-        $this->tags             = is_array($tags) ? $tags : [$tags];
-        $this->request          = $request;
-        $this->errorFile        = $errorFile;
-        $this->errorLine        = $errorLine;
-        
+
+        $this->description = $description;
+        $this->severity = $severity;
+        $this->datetime = $datetime;
+        $this->tags = is_array($tags) ? $tags : [$tags];
+        $this->request = $request;
+        $this->errorFile = $errorFile;
+        $this->errorLine = $errorLine;
+
         // limit backtrace
         if (count($backtrace) > 50) {
             $backtrace = array_slice($backtrace, -50);
         }
-        
+
         $cleanbacktrace = [];
+
         foreach ($backtrace as $key => $row) {
             if (isset($backtrace[$key]['object'])) {
                 unset($backtrace[$key]['object']);
             }
-        
+
             // WARNING
             // do NOT modify the variables in the backtrace directly or
             // objects passed by reference will be modified aswell
             if (isset($backtrace[$key]['args'])) {
                 $vars = [];
+
                 foreach ($backtrace[$key]['args'] as $k => $v) {
                     switch (gettype($v)) {
                         case 'boolean':
                         case 'integer':
                         case 'double':
                             $vars[$k] = (string)$v;
+
                             break;
                         case 'string':
                             $vars[$k] = strlen($v) > 128 ? 'string(' . strlen($v) . ')' : $v;
+
                             break;
                         case 'class':
                             $vars[$k] = get_class($v);
+
                             break;
                         default:
                             $vars[$k] = gettype($v);
@@ -162,14 +186,16 @@ class common_log_Item
                 $backtrace[$key]['args'] = $vars;
             }
         }
-        $this->backtrace        = $backtrace;
+        $this->backtrace = $backtrace;
     }
 
     /**
      * Short description of method getDateTime
      *
      * @access public
+     *
      * @author Joel Bout, <joel.bout@tudor.lu>
+     *
      * @return int
      */
     public function getDateTime()
@@ -185,7 +211,9 @@ class common_log_Item
      * Short description of method getDescription
      *
      * @access public
+     *
      * @author Joel Bout, <joel.bout@tudor.lu>
+     *
      * @return string
      */
     public function getDescription()
@@ -201,7 +229,9 @@ class common_log_Item
      * Short description of method getSeverity
      *
      * @access public
+     *
      * @author Joel Bout, <joel.bout@tudor.lu>
+     *
      * @return int
      */
     public function getSeverity()
@@ -217,7 +247,9 @@ class common_log_Item
      * Short description of method getBacktrace
      *
      * @access public
+     *
      * @author Joel Bout, <joel.bout@tudor.lu>
+     *
      * @return array
      */
     public function getBacktrace()
@@ -233,7 +265,9 @@ class common_log_Item
      * Short description of method getRequest
      *
      * @access public
+     *
      * @author Joel Bout, <joel.bout@tudor.lu>
+     *
      * @return string
      */
     public function getRequest()
@@ -249,7 +283,9 @@ class common_log_Item
      * Short description of method getCallerFile
      *
      * @access public
+     *
      * @author Joel Bout, <joel.bout@tudor.lu>
+     *
      * @return string
      */
     public function getCallerFile()
@@ -265,7 +301,9 @@ class common_log_Item
      * Short description of method getCallerLine
      *
      * @access public
+     *
      * @author Joel Bout, <joel.bout@tudor.lu>
+     *
      * @return int
      */
     public function getCallerLine()
@@ -281,7 +319,9 @@ class common_log_Item
      * Short description of method getTags
      *
      * @access public
+     *
      * @author Joel Bout, <joel.bout@tudor.lu>
+     *
      * @return array
      */
     public function getTags()
@@ -297,7 +337,9 @@ class common_log_Item
      * Short description of method getSeverityDescriptionString
      *
      * @access public
+     *
      * @author Joel Bout, <joel.bout@tudor.lu>
+     *
      * @return string
      */
     public function getSeverityDescriptionString()
@@ -306,25 +348,31 @@ class common_log_Item
 
         switch ($this->severity) {
             case common_Logger::TRACE_LEVEL:
-                $returnValue = "TRACE";
+                $returnValue = 'TRACE';
+
                 break;
             case common_Logger::DEBUG_LEVEL:
-                $returnValue = "DEBUG";
+                $returnValue = 'DEBUG';
+
                 break;
             case common_Logger::INFO_LEVEL:
-                $returnValue = "INFO";
+                $returnValue = 'INFO';
+
                 break;
             case common_Logger::WARNING_LEVEL:
-                $returnValue = "WARNING";
+                $returnValue = 'WARNING';
+
                 break;
             case common_Logger::ERROR_LEVEL:
-                $returnValue = "ERROR";
+                $returnValue = 'ERROR';
+
                 break;
             case common_Logger::FATAL_LEVEL:
-                $returnValue = "FATAL";
+                $returnValue = 'FATAL';
+
                 break;
             default:
-                $returnValue = "UNKNOWN";
+                $returnValue = 'UNKNOWN';
         }
 
         return (string) $returnValue;

@@ -16,12 +16,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2015 (original work) Open Assessment Technologies SA;
- *
  */
 
 namespace oat\oatbox\event;
-
-use common_ext_ExtensionsManager;
 
 /**
  * A generic event used for events that are defined by name alone
@@ -37,12 +34,12 @@ class GenericEvent implements Event
      */
     private $eventName;
     /**
-         * Parameters of the event
-         *
-         * @var array()
-         */
+     * Parameters of the event
+     *
+     * @var array()
+     */
     private $params;
-    
+
     /**
      * Create a new generic event based on an event name
      * with optional parameters
@@ -55,9 +52,10 @@ class GenericEvent implements Event
         $this->eventName = (string)$eventName;
         $this->params = $params;
     }
-    
+
     /**
      * (non-PHPdoc)
+     *
      * @see \oat\oatbox\event\Event::getName()
      */
     public function getName()
@@ -67,6 +65,7 @@ class GenericEvent implements Event
 
     /**
      * Get parameters
+     *
      * @return array
      */
     public function getParams()

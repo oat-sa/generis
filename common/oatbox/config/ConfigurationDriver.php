@@ -16,12 +16,12 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2017 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
  */
 
 namespace oat\oatbox\config;
 
-interface ConfigurationDriver extends \common_persistence_KvDriver
-{
+use common_persistence_KvDriver;
 
+interface ConfigurationDriver extends common_persistence_KvDriver
+{
 }

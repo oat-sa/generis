@@ -22,14 +22,12 @@ declare(strict_types=1);
 
 namespace oat\generis\test\unit\common\oatbox\log\logger\extender;
 
-use oat\oatbox\log\logger\AdvancedLogger;
 use oat\generis\test\TestCase;
 use oat\oatbox\log\logger\extender\ContextExtenderInterface;
 use oat\oatbox\log\logger\extender\UserContextExtender;
 use oat\oatbox\session\SessionService;
 use oat\oatbox\user\User;
 use PHPUnit\Framework\MockObject\MockObject;
-use Psr\Log\LoggerInterface;
 
 class UserContextExtenderTest extends TestCase
 {

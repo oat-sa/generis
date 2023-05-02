@@ -16,7 +16,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2013 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
  */
 
 use oat\oatbox\service\ConfigurableService;
@@ -25,6 +24,7 @@ use oat\oatbox\service\ConfigurableService;
  * Session implementation as a Key Value storage and using the persistence
  *
  * @author Joel Bout <joel@taotesting.com>
+ *
  * @package generis
  */
 class common_session_php_KeyValueSessionHandler extends ConfigurableService implements common_session_php_SessionHandler
@@ -48,15 +48,20 @@ class common_session_php_KeyValueSessionHandler extends ConfigurableService impl
 
     /**
      * (non-PHPdoc)
+     *
      * @see common_session_storage_SessionStorage::open()
+     *
+     * @param mixed $savePath
+     * @param mixed $sessionName
      */
     public function open($savePath, $sessionName)
     {
-           return true;
+        return true;
     }
 
     /**
      * (non-PHPdoc)
+     *
      * @see common_session_storage_SessionStorage::close()
      */
     public function close()
@@ -66,17 +71,25 @@ class common_session_php_KeyValueSessionHandler extends ConfigurableService impl
 
     /**
      * (non-PHPdoc)
+     *
      * @see common_session_storage_SessionStorage::read()
+     *
+     * @param mixed $id
      */
     public function read($id)
     {
         $session = $this->getPersistence()->get(self::KEY_NAMESPACE . $id);
+
         return is_string($session) ? $session : '';
     }
 
     /**
      * (non-PHPdoc)
+     *
      * @see common_session_storage_SessionStorage::write()
+     *
+     * @param mixed $id
+     * @param mixed $data
      */
     public function write($id, $data)
     {
@@ -85,17 +98,24 @@ class common_session_php_KeyValueSessionHandler extends ConfigurableService impl
 
     /**
      * (non-PHPdoc)
+     *
      * @see common_session_storage_SessionStorage::destroy()
+     *
+     * @param mixed $id
      */
     public function destroy($id)
     {
         $this->getPersistence()->del(self::KEY_NAMESPACE . $id);
+
         return true;
     }
 
     /**
      * (non-PHPdoc)
+     *
      * @see common_session_storage_SessionStorage::gc()
+     *
+     * @param mixed $maxlifetime
      */
     public function gc($maxlifetime)
     {

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,7 +37,7 @@ final class Version202008201138552348_generis extends AbstractMigration
     {
         $eventAggregator = new EventAggregator(
             [
-                'numberOfAggregatedEvents' => 10
+                'numberOfAggregatedEvents' => 10,
             ]
         );
 

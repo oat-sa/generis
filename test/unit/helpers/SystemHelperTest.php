@@ -16,23 +16,25 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2018 (original work) Open Assessment Technologies SA;
- *
  */
 
 namespace oat\generis\test\unit\helpers;
 
 use oat\generis\Helper\SystemHelper;
 use oat\generis\test\TestCase;
+use ReflectionClass;
 
 class SystemHelperTest extends TestCase
 {
-
     /**
      * @dataProvider sizeProvider
+     *
+     * @param mixed $phpString
+     * @param mixed $size
      */
     public function testConversion($phpString, $size)
     {
-        $reflection = new \ReflectionClass(SystemHelper::class);
+        $reflection = new ReflectionClass(SystemHelper::class);
         $method = $reflection->getMethod('toBytes');
         $method->setAccessible(true);
         $bytes = $method->invokeArgs(null, [$phpString]);

@@ -16,10 +16,11 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2017 (original work) Open Assessment Technologies SA
- *
  */
 
 namespace oat\oatbox\service\exception;
+
+use common_Exception;
 
 /**
  * Class InvalidServiceManagerException
@@ -28,7 +29,6 @@ namespace oat\oatbox\service\exception;
  *
  * @package oat\oatbox\service\exception
  */
-class InvalidServiceManagerException extends \common_Exception
+class InvalidServiceManagerException extends common_Exception
 {
-
 }

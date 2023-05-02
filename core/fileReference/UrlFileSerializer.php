@@ -16,11 +16,12 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2016 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
  */
 
 namespace oat\generis\model\fileReference;
 
+use core_kernel_classes_Literal;
+use core_kernel_classes_Resource;
 use oat\oatbox\filesystem\Directory;
 use oat\oatbox\filesystem\File;
 use oat\oatbox\filesystem\FileSystemService;
@@ -30,6 +31,7 @@ class UrlFileSerializer extends ConfigurableService implements FileReferenceSeri
 {
     /**
      * {@inheritDoc}
+     *
      * @see FileReferenceSerializer::serialize()
      */
     public function serialize($abstraction)
@@ -46,32 +48,35 @@ class UrlFileSerializer extends ConfigurableService implements FileReferenceSeri
             return 'dir://' . urlencode($abstraction->getFileSystemId()) . '/' . urlencode(
                 $baseDir->getRelPath($abstraction)
             );
-        } else {
-            throw new FileSerializerException(
-                __CLASS__ . '::' . __FUNCTION__ . ' expects parameter to be an instance of Directory or File'
-            );
         }
+
+        throw new FileSerializerException(
+            __CLASS__ . '::' . __FUNCTION__ . ' expects parameter to be an instance of Directory or File'
+        );
     }
 
     /**
      * {@inheritDoc}
+     *
      * @see FileReferenceSerializer::unserialize()
      */
     public function unserialize($serial)
     {
         $serial = $this->cleanSerial($serial);
         $type = substr($serial, 0, strpos($serial, ':'));
+
         if ($type == 'file') {
             return $this->unserializeFile($serial);
         } elseif ($type == 'dir') {
             return $this->unserializeDirectory($serial);
-        } else {
-            throw new FileSerializerException('Unsupported type "' . $type . '" in ' . __CLASS__);
         }
+
+        throw new FileSerializerException('Unsupported type "' . $type . '" in ' . __CLASS__);
     }
 
     /**
      * {@inheritDoc}
+     *
      * @see FileReferenceSerializer::unserializeFile()
      */
     public function unserializeFile($serial)
@@ -83,6 +88,7 @@ class UrlFileSerializer extends ConfigurableService implements FileReferenceSeri
 
     /**
      * {@inheritDoc}
+     *
      * @see FileReferenceSerializer::unserializeDirectory()
      */
     public function unserializeDirectory($serial)
@@ -96,14 +102,16 @@ class UrlFileSerializer extends ConfigurableService implements FileReferenceSeri
      * Ensure serial is a string
      *
      * @param string $serial
+     *
      * @throws FileSerializerException
+     *
      * @return string
      */
     protected function cleanSerial($serial)
     {
-        if ($serial instanceof \core_kernel_classes_Resource) {
+        if ($serial instanceof core_kernel_classes_Resource) {
             $serial = $serial->getUri();
-        } elseif ($serial instanceof \core_kernel_classes_Literal) {
+        } elseif ($serial instanceof core_kernel_classes_Literal) {
             $serial = $serial->__toString();
         } elseif (!is_string($serial)) {
             throw new FileSerializerException('Unsupported serial "' . gettype($serial) . '" in ' . __CLASS__);
@@ -116,13 +124,16 @@ class UrlFileSerializer extends ConfigurableService implements FileReferenceSeri
      * Extract filesystem id and path from serial
      *
      * @param string $serial
+     *
      * @throws FileSerializerException
+     *
      * @return string[]
      */
     protected function extract($serial)
     {
         $serial = $this->cleanSerial($serial);
         $parts = explode('/', substr($serial, strpos($serial, '://') + 3), 2);
+
         if (count($parts) != 2) {
             throw new FileSerializerException('Unsupported dir in ' . __CLASS__);
         }
@@ -133,6 +144,8 @@ class UrlFileSerializer extends ConfigurableService implements FileReferenceSeri
     /**
      * Return root directory represented by the given uri
      *
+     * @param mixed $id
+     *
      * @return Directory
      */
     protected function getRootDirectory($id)
@@ -142,6 +155,7 @@ class UrlFileSerializer extends ConfigurableService implements FileReferenceSeri
 
     /**
      * {@inheritDoc}
+     *
      * @see FileReferenceSerializer::cleanUp()
      */
     public function cleanUp($serial)

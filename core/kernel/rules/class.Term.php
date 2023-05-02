@@ -27,14 +27,14 @@ use oat\generis\model\RulesRdf;
  * Short description of class core_kernel_rules_Term
  *
  * @access public
+ *
  * @author firstname and lastname of author, <author@example.org>
+ *
  * @package generis
-
  */
 class core_kernel_rules_Term extends core_kernel_classes_Resource
 {
     // --- ASSOCIATIONS ---
-
 
     // --- ATTRIBUTES ---
 
@@ -44,78 +44,82 @@ class core_kernel_rules_Term extends core_kernel_classes_Resource
      * Short description of method evaluate
      *
      * @access public
+     *
      * @author firstname and lastname of author, <author@example.org>
-     * @param  array $variable
+     *
+     * @param array $variable
+     *
      * @return mixed
      */
     public function evaluate($variable = [])
     {
-        
         common_Logger::i('Evaluating Term uri : ' . $this->getUri(), ['Generis Term']);
         common_Logger::i('Evaluating Term name : ' . $this->getLabel(), ['Generis Term']);
         $termType = $this->getUniquePropertyValue(new core_kernel_classes_Property(OntologyRdf::RDF_TYPE));
         common_Logger::d('Term s type : ' . $termType->getUri(), ['Generis Term']);
+
         switch ($termType->getUri()) {
             case RulesRdf::CLASS_TERM : {
-                throw new common_Exception("Forbidden Type of Term");
-              
-                break;
+                throw new common_Exception('Forbidden Type of Term');
 
+                break;
             }
             case RulesRdf::CLASS_TERM_SUJET_PREDICATE_X : {
-                    $returnValue = $this->evaluateSPX($variable);
-                break;
+                $returnValue = $this->evaluateSPX($variable);
 
+                break;
             }
             case RulesRdf::CLASS_URI_TERM_X_PREDICATE_OBJECT : {
-                    $returnValue = $this->evaluateXPO();
-                break;
+                $returnValue = $this->evaluateXPO();
 
+                break;
             }
             case RulesRdf::CLASS_URI_CONSTRUCTED_SET : {
-                    $returnValue = $this->evaluateSet();
-                break;
+                $returnValue = $this->evaluateSet();
 
+                break;
             }
             case RulesRdf::CLASS_TERM_CONST : {
-                    $returnValue = $this->evaluateConst();
-                break;
+                $returnValue = $this->evaluateConst();
 
+                break;
             }
             case RulesRdf::CLASS_OPERATION : {
-                    $returnValue = $this->evaluateOperation($variable);
-                break;
+                $returnValue = $this->evaluateOperation($variable);
 
+                break;
             }
             default:
                 throw new common_Exception('problem evaluating Term');
         }
-       
+
         return $returnValue;
     }
-
 
     /**
      * Short description of method evalutateSetOperation
      *
      * @access public
+     *
      * @author firstname and lastname of author, <author@example.org>
-     * @param  Resource $setOperator
-     * @param  Collection $actualSet
-     * @param  ContainerCollection $newSet
+     *
+     * @param Resource $setOperator
+     * @param Collection $actualSet
+     * @param ContainerCollection $newSet
+     *
      * @return core_kernel_classes_ContainerCollection
      */
     public function evalutateSetOperation(core_kernel_classes_Resource $setOperator, common_Collection $actualSet, core_kernel_classes_ContainerCollection $newSet)
     {
         $returnValue = null;
+
         if ($setOperator->getUri() == RulesRdf::INSTANCE_OPERATOR_UNION) {
             $returnValue = $actualSet->union($newSet);
         } elseif ($setOperator->getUri() == RulesRdf::INSTANCE_OPERATOR_INTERSECT) {
-            $returnValue =  $actualSet->intersect($newSet);
+            $returnValue = $actualSet->intersect($newSet);
         } else {
             throw new common_Exception('unknow set operator');
         }
-        
 
         return $returnValue;
     }
@@ -124,29 +128,33 @@ class core_kernel_rules_Term extends core_kernel_classes_Resource
      * Short description of method evaluateSPX
      *
      * @access protected
+     *
      * @author firstname and lastname of author, <author@example.org>
-     * @param  array $variable
+     *
+     * @param array $variable
+     *
      * @return mixed
      */
     protected function evaluateSPX($variable = [])
     {
-        
         common_Logger::d('SPX TYPE', ['Generis Term evaluateSPX']);
         $resource = $this->getUniquePropertyValue(new core_kernel_classes_Property(RulesRdf::PROPERTY_TERM_SPX_SUBJET));
+
         if ($resource instanceof core_kernel_classes_Resource) {
             if (array_key_exists($resource->getUri(), $variable)) {
-                common_Logger::d('Variable uri : ' .  $resource->getUri() . ' found', ['Generis Term evaluateSPX']);
-                common_Logger::d('Variable name : ' .  $resource->getLabel() . ' found', ['Generis Term evaluateSPX']);
+                common_Logger::d('Variable uri : ' . $resource->getUri() . ' found', ['Generis Term evaluateSPX']);
+                common_Logger::d('Variable name : ' . $resource->getLabel() . ' found', ['Generis Term evaluateSPX']);
                 $resource = new core_kernel_classes_Resource($variable[$resource->getUri()]);
-                common_Logger::d('Variable repaced uri : ' .  $resource->getUri(), ['Generis Term evaluateSPX']);
-                common_Logger::d('Variable repaced name : ' .  $resource->getLabel(), ['Generis Term evaluateSPX']);
+                common_Logger::d('Variable repaced uri : ' . $resource->getUri(), ['Generis Term evaluateSPX']);
+                common_Logger::d('Variable repaced name : ' . $resource->getLabel(), ['Generis Term evaluateSPX']);
             }
-           
+
             try {
                 $propertyInstance = $this->getUniquePropertyValue(new core_kernel_classes_Property(RulesRdf::PROPERTY_TERM_SPX_PREDICATE));
             } catch (common_Exception $e) {
                 echo $e;
                 var_dump($this);
+
                 die('unable to get property value in Term');
             }
             //          if(array_key_exists($propertyInstance->getUri(),$variable)) {
@@ -161,6 +169,7 @@ class core_kernel_rules_Term extends core_kernel_classes_Resource
             common_Logger::d('Property name ' . $property->getLabel(), ['Generis Term evaluateSPX']);
             $returnValue = $resource->getPropertyValuesCollection($property);
             common_Logger::d($returnValue->count() . ' values returned ', ['Generis Term evaluateSPX']);
+
             if ($returnValue->isEmpty()) {
                 $newEmptyTerm = new core_kernel_rules_Term(RulesRdf::INSTANCE_TERM_IS_NULL, __METHOD__);
                 common_Logger::d('Empty Term Created', ['Generis Term evaluateSPX']);
@@ -172,6 +181,7 @@ class core_kernel_rules_Term extends core_kernel_classes_Resource
                 }
             }
         }
+
         return $returnValue;
     }
 
@@ -179,28 +189,33 @@ class core_kernel_rules_Term extends core_kernel_classes_Resource
      * Short description of method evaluateXPO
      *
      * @access protected
+     *
      * @author firstname and lastname of author, <author@example.org>
+     *
      * @return mixed
      */
     protected function evaluateXPO()
     {
-        
         common_Logger::d('XPO TYPE', ['Generis Term evaluateXPO']);
         $classTerm = new core_kernel_classes_Class(RulesRdf::CLASS_URI_TERM_X_PREDICATE_OBJECT);
         $obj = $this->getUniquePropertyValue(new core_kernel_classes_Property(RulesRdf::PROPERTY_TERM_XPO_OBJECT));
         $pred = $this->getUniquePropertyValue(new core_kernel_classes_Property(RulesRdf::PROPERTY_TERM_XPO_PREDICATE));
+
         if ($obj instanceof core_kernel_classes_Literal) {
             $objValue = $obj->literal;
         }
+
         if ($obj instanceof core_kernel_classes_Resource) {
             $objValue = $pred->getUri();
         }
-     
+
         $returnValue = new core_kernel_classes_ContainerCollection(new common_Object(__METHOD__));
         $terms = $classTerm->searchInstances([$pred->getUri() => $objValue], ['like' => false]);
+
         foreach ($terms as $term) {
             $returnValue->add($term);
         }
+
         return $returnValue;
     }
 
@@ -208,20 +223,23 @@ class core_kernel_rules_Term extends core_kernel_classes_Resource
      * Short description of method evaluateSet
      *
      * @access protected
+     *
      * @author firstname and lastname of author, <author@example.org>
+     *
      * @return mixed
      */
     protected function evaluateSet()
     {
-        
         common_Logger::d('Constructed Set TYPE', ['Generis Term evaluateSet']);
         $operator = $this->getUniquePropertyValue(new core_kernel_classes_Property(RulesRdf::PROPERTY_SET_OPERATOR));
         $subSets = $this->getPropertyValuesCollection(new core_kernel_classes_Property(RulesRdf::PROPERTY_SUBSET));
         $returnValue = new core_kernel_classes_ContainerCollection($this);
+
         foreach ($subSets->getIterator() as $aSet) {
             if ($aSet instanceof core_kernel_classes_Resource) {
                 $newSet = new core_kernel_rules_Term($aSet->getUri());
                 $resultSet = $newSet->evaluate();
+
                 if ($resultSet instanceof core_kernel_classes_ContainerCollection) {
                     $returnValue = $this->evalutateSetOperation($operator, $returnValue, $resultSet);
                 } else {
@@ -233,7 +251,7 @@ class core_kernel_rules_Term extends core_kernel_classes_Resource
                 throw new common_Exception('Bad Type , waiting for a Resource ');
             }
         }
-       
+
         return $returnValue;
     }
 
@@ -241,14 +259,16 @@ class core_kernel_rules_Term extends core_kernel_classes_Resource
      * Short description of method evaluateConst
      *
      * @access protected
+     *
      * @author firstname and lastname of author, <author@example.org>
+     *
      * @return mixed
      */
     protected function evaluateConst()
     {
-        
         common_Logger::d('CONSTANTE TYPE', ['Generis Term evaluateConst']);
         $property = new core_kernel_classes_Property(RulesRdf::PROPERTY_TERM_VALUE);
+
         return $this->getUniquePropertyValue($property);
     }
 
@@ -256,14 +276,18 @@ class core_kernel_rules_Term extends core_kernel_classes_Resource
      * Short description of method evaluateOperation
      *
      * @access protected
+     *
      * @author firstname and lastname of author, <author@example.org>
+     *
      * @param  array variable
+     * @param mixed $variable
+     *
      * @return mixed
      */
     protected function evaluateOperation($variable = [])
     {
-        
         common_Logger::d('OPERATION TYPE', ['Generis Term evaluateOperation']);
+
         return $this->evaluateArithmOperation($variable);
     }
 
@@ -271,14 +295,17 @@ class core_kernel_rules_Term extends core_kernel_classes_Resource
      * Short description of method evaluateArtihmOperation
      *
      * @access public
+     *
      * @author firstname and lastname of author, <author@example.org>
-     * @param  array $variable
+     *
+     * @param array $variable
+     *
      * @return mixed
      */
     public function evaluateArithmOperation($variable = [])
     {
-        
         $operation = new core_kernel_rules_Operation($this->getUri(), __METHOD__);
+
         return  $operation->evaluate($variable);
     }
 }

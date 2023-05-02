@@ -16,23 +16,24 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2017 (original work) Open Assessment Technologies SA;
- *
  */
 
 namespace oat\oatbox\log;
 
+use common_Exception;
+use DateTime;
 use Psr\Log\AbstractLogger;
 use Psr\Log\LogLevel;
 
 class VerboseLogger extends AbstractLogger
 {
     /**
-     * @var int The position of logger verbosity.
+     * @var int the position of logger verbosity
      */
     protected $levelPosition;
 
     /**
-     * @var array Level priority list.
+     * @var array level priority list
      */
     protected $levels = [
         LogLevel::EMERGENCY,
@@ -49,12 +50,13 @@ class VerboseLogger extends AbstractLogger
      * VerboseLogger constructor.
      *
      * @param $minimumLevel
-     * @throws \common_Exception
+     *
+     * @throws common_Exception
      */
     public function __construct($minimumLevel)
     {
         if (!in_array($minimumLevel, $this->levels, true)) {
-            throw new \common_Exception('Level "' . $minimumLevel . '" is not managed by verbose logger');
+            throw new common_Exception('Level "' . $minimumLevel . '" is not managed by verbose logger');
         }
         $this->levelPosition = array_search($minimumLevel, $this->levels);
     }
@@ -102,7 +104,7 @@ class VerboseLogger extends AbstractLogger
      */
     public function getFormattedMessage($level, $message)
     {
-        return '[' . (new \DateTime())->format('Y-m-d H:i') . ']'
+        return '[' . (new DateTime())->format('Y-m-d H:i') . ']'
             . str_pad('[' . $level . ']', 12)
             . $message
             . PHP_EOL;

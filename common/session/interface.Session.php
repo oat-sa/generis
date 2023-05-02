@@ -1,4 +1,5 @@
 <?php
+
 use oat\oatbox\session\SessionContext;
 
 /**
@@ -17,35 +18,39 @@ use oat\oatbox\session\SessionContext;
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2013 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
  */
 
 /**
  * Represents a Session.
  *
  * @access private
+ *
  * @author Joel Bout, <joel@taotesting.com>
+ *
  * @package generis
  */
 interface common_session_Session
 {
-
     /**
      * Get the user of the session
      *
      * Returns null if there is no user
      *
      * @access public
+     *
      * @author Joel Bout, <joel@taotesting.com>
+     *
      * @return oat\oatbox\user\User
      */
     public function getUser();
-    
+
     /**
      * Get the URI identifying the currently authenticated user in persistent memory.
      *
      * @access public
+     *
      * @author Joel Bout, <joel@taotesting.com>
+     *
      * @return string
      */
     public function getUserUri();
@@ -54,16 +59,20 @@ interface common_session_Session
      * A string representation of the current user. Might not be unique
      *
      * @access public
+     *
      * @author Joel Bout, <joel@taotesting.com>
+     *
      * @return string
      */
     public function getUserLabel();
-    
+
     /**
      * returns the roles of the current user
      *
      * @access public
+     *
      * @author Joel Bout, <joel@taotesting.com>
+     *
      * @return array An array of strings
      */
     public function getUserRoles();
@@ -72,37 +81,44 @@ interface common_session_Session
      * returns the language identifier to use for data
      *
      * @access public
+     *
      * @author Joel Bout, <joel@taotesting.com>
+     *
      * @return string
      */
     public function getDataLanguage();
-    
+
     /**
      * returns the language identifier to use for the interface
      *
      * @access public
+     *
      * @author Joel Bout, <joel@taotesting.com>
+     *
      * @return string
      */
     public function getInterfaceLanguage();
-    
+
     /**
      * returns the timezone to use for times
      *
      * @access public
+     *
      * @author Joel Bout, <joel@taotesting.com>
+     *
      * @return string
      */
     public function getTimeZone();
-    
+
     /**
      * Generic information retrieval of user data
      *
      * @param string $property
+     *
      * @return array
      */
     public function getUserPropertyValues($property);
-    
+
     /**
      * refreshes the information stored in the current session
      */
@@ -110,7 +126,9 @@ interface common_session_Session
 
     /**
      * Returns additional contexts of the current session
+     *
      * @param string $class Class to filter the contexts by, or all if none provided
+     *
      * @return SessionContext[]
      */
     public function getContexts(string $class = null): array;

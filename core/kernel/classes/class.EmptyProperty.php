@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -17,7 +18,6 @@
  * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
  *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- *
  */
 
 /**
@@ -27,24 +27,27 @@
  * Extends common_exception_EmptyProperty to be backwards compatible
  *
  * @access public
+ *
  * @author Joel Bout, <joel@taotesting.com>
+ *
  * @package generis
  */
 class core_kernel_classes_EmptyProperty extends common_exception_EmptyProperty
 {
     // --- ASSOCIATIONS ---
 
-
     // --- ATTRIBUTES ---
 
     /**
      * @access private
+     *
      * @var core_kernel_classes_Property
      */
     private $property = null;
 
     /**
      * @access private
+     *
      * @var core_kenel_classes_Resource
      */
     private $resource = null;
@@ -55,8 +58,10 @@ class core_kernel_classes_EmptyProperty extends common_exception_EmptyProperty
      * Short description of method __construct
      *
      * @access public
+     *
      * @param  core_kernel_classes_Resource resource
      * @param  core_kernel_classes_Property property
+     *
      * @return mixed
      */
     public function __construct(core_kernel_classes_Resource $resource, core_kernel_classes_Property $property)
@@ -70,6 +75,7 @@ class core_kernel_classes_EmptyProperty extends common_exception_EmptyProperty
      * Returns the property that was empty
      *
      * @access public
+     *
      * @return core_kernel_classes_Property
      */
     public function getProperty()
@@ -81,6 +87,7 @@ class core_kernel_classes_EmptyProperty extends common_exception_EmptyProperty
      * Returns the resource with the empty property
      *
      * @access public
+     *
      * @return core_kernel_classes_Resource
      */
     public function getResource()

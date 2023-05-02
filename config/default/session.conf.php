@@ -2,7 +2,7 @@
 
 use oat\oatbox\session\SessionService;
 
-/**
+/*
  * Session config
  */
 

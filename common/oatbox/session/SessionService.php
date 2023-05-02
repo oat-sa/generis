@@ -16,11 +16,13 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2018 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
  */
 
 namespace oat\oatbox\session;
 
+use common_exception_Error;
+use common_session_Session;
+use common_session_SessionManager;
 use oat\oatbox\service\ConfigurableService;
 use oat\oatbox\user\AnonymousUser;
 
@@ -28,25 +30,30 @@ use oat\oatbox\user\AnonymousUser;
  * Represents a Session on Generis.
  *
  * @access private
+ *
  * @author Joel Bout, <joel@taotesting.com>
+ *
  * @package generis
  */
 class SessionService extends ConfigurableService
 {
-    const SERVICE_ID = 'generis/session';
+    public const SERVICE_ID = 'generis/session';
 
     /**
      * Returns the currently active session
-     * @return \common_session_Session
+     *
+     * @return common_session_Session
      */
     public function getCurrentSession()
     {
-        return \common_session_SessionManager::getSession();
+        return common_session_SessionManager::getSession();
     }
 
     /**
      * Returns the current user
-     * @throws \common_exception_Error
+     *
+     * @throws common_exception_Error
+     *
      * @return \oat\oatbox\user\User
      */
     public function getCurrentUser()
@@ -56,6 +63,7 @@ class SessionService extends ConfigurableService
 
     /**
      * Is the current session anonymous or associated to a user?
+     *
      * @return boolean
      */
     public function isAnonymous()
@@ -66,11 +74,12 @@ class SessionService extends ConfigurableService
     /**
      * Starts a new session and stores it in the session if stateful
      *
-     * @param \common_session_Session $session
+     * @param common_session_Session $session
+     *
      * @return boolean
      */
-    public function setSession(\common_session_Session $session)
+    public function setSession(common_session_Session $session)
     {
-        return \common_session_SessionManager::startSession($session);
+        return common_session_SessionManager::startSession($session);
     }
 }

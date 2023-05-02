@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -15,27 +16,26 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2017 (original work) Open Assessment Technologies SA;
- *
- *
  */
 
 /**
  * Class common_persistence_InMemoryKvDriver
+ *
  * @author Aleh Hutnikau, <hutnikau@1pt.com>
  */
 class common_persistence_InMemoryKvDriver implements common_persistence_KvDriver, common_persistence_Purgable
 {
-
     /**
      * @var array
      */
     protected $persistence = [];
 
     /**
-     *
      * @see common_persistence_Driver::connect()
+     *
+     * @param mixed $id
      */
-    function connect($id, array $params)
+    public function connect($id, array $params)
     {
         return new common_persistence_KeyValuePersistence($params, $this);
     }
@@ -43,6 +43,7 @@ class common_persistence_InMemoryKvDriver implements common_persistence_KvDriver
     public function set($id, $value, $ttl = null, $nx = false)
     {
         $this->persistence[$id] = $value;
+
         return true;
     }
 
@@ -50,7 +51,7 @@ class common_persistence_InMemoryKvDriver implements common_persistence_KvDriver
     {
         return $this->exists($id) ? $this->persistence[$id] : false;
     }
-    
+
     public function exists($id)
     {
         return array_key_exists($id, $this->persistence);
@@ -59,12 +60,14 @@ class common_persistence_InMemoryKvDriver implements common_persistence_KvDriver
     public function del($id)
     {
         unset($this->persistence[$id]);
+
         return true;
     }
 
     public function purge()
     {
         $this->persistence = [];
+
         return true;
     }
 
@@ -73,9 +76,11 @@ class common_persistence_InMemoryKvDriver implements common_persistence_KvDriver
         if (!isset($this->persistence[$id])) {
             $this->persistence[$id] = 0;
         }
+
         if (!is_int($this->persistence[$id])) {
             throw new common_exception_InconsistentData('Cannot increment non intvalue for ' . $id);
         }
+
         return ++$this->persistence[$id];
     }
 
@@ -84,9 +89,11 @@ class common_persistence_InMemoryKvDriver implements common_persistence_KvDriver
         if (!isset($this->persistence[$id])) {
             $this->persistence[$id] = 0;
         }
+
         if (!is_int($this->persistence[$id])) {
             throw new common_exception_InconsistentData('Cannot decrement non intvalue for ' . $id);
         }
+
         return --$this->persistence[$id];
     }
 }

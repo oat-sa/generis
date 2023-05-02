@@ -16,22 +16,23 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2018 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
  */
 
 namespace oat\generis\test\integration\core\kernel\classes;
 
-use oat\tao\test\TaoPhpUnitTestRunner;
+use core_kernel_classes_Class;
 use core_kernel_classes_ResourceIterator as ResourceIterator;
+use oat\tao\test\TaoPhpUnitTestRunner;
 
 /**
  * Class ResourceIteratorTest
+ *
  * @package oat\generis
+ *
  * @author Aleh Hutnikau, <hutnikau@1pt.com>
  */
 class ResourceIteratorTest extends TaoPhpUnitTestRunner
 {
-
     protected static $sampleClass = 'http://www.tao.lu/Ontologies/TAO.rdf#ResourceIteratorTest';
 
     public function tearDown(): void
@@ -42,7 +43,7 @@ class ResourceIteratorTest extends TaoPhpUnitTestRunner
     public function testNext()
     {
         $this->removeResources();
-        $class = new \core_kernel_classes_Class(self::$sampleClass);
+        $class = new core_kernel_classes_Class(self::$sampleClass);
 
         $iterator = new ResourceIterator([$class->getUri()]);
         $this->assertTrue($iterator->valid() === false);
@@ -53,6 +54,7 @@ class ResourceIteratorTest extends TaoPhpUnitTestRunner
 
         $iterator = new ResourceIterator([$class->getUri()]);
         $resources = [];
+
         foreach ($iterator as $resource) {
             $this->assertTrue(!isset($resources[$resource->getUri()]));
             $resources[$resource->getUri()] = $resource;
@@ -63,7 +65,8 @@ class ResourceIteratorTest extends TaoPhpUnitTestRunner
 
     private function removeResources()
     {
-        $class = new \core_kernel_classes_Class(self::$sampleClass);
+        $class = new core_kernel_classes_Class(self::$sampleClass);
+
         foreach ($class->getInstances() as $instance) {
             $instance->delete();
         }
@@ -71,7 +74,8 @@ class ResourceIteratorTest extends TaoPhpUnitTestRunner
 
     private function loadResources()
     {
-        $class = new \core_kernel_classes_Class(self::$sampleClass);
+        $class = new core_kernel_classes_Class(self::$sampleClass);
+
         for ($i = 0; $i < ResourceIterator::CACHE_SIZE * 2; $i++) {
             $class->createInstance($i);
         }

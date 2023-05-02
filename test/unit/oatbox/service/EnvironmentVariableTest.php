@@ -24,10 +24,11 @@ use common_Utils as Utils;
 use InvalidArgumentException;
 use oat\generis\test\TestCase;
 use oat\oatbox\service\EnvironmentVariable;
+use ReflectionProperty;
 
 class EnvironmentVariableTest extends TestCase
 {
-    const VAR_NAME = 'That\'s the variable\'s name.';
+    public const VAR_NAME = 'That\'s the variable\'s name.';
 
     /** @var EnvironmentVariable */
     private $subject;
@@ -41,7 +42,7 @@ class EnvironmentVariableTest extends TestCase
     {
         $this->assertInstanceOf(EnvironmentVariable::class, $this->subject);
 
-        $property = new \ReflectionProperty(EnvironmentVariable::class, 'name');
+        $property = new ReflectionProperty(EnvironmentVariable::class, 'name');
         $property->setAccessible(true);
         $this->assertSame(self::VAR_NAME, $property->getValue($this->subject));
     }

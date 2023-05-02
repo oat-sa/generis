@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -15,18 +16,18 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2017 (original work) Open Assessment Technologies SA;
- *
  */
 
 class common_persistence_InMemoryAdvKvDriver extends common_persistence_InMemoryKvDriver implements common_persistence_AdvKvDriver
 {
-    const HPREFIX = 'hPrfx_';
+    public const HPREFIX = 'hPrfx_';
 
     /**
-     *
      * @see common_persistence_Driver::connect()
+     *
+     * @param mixed $id
      */
-    function connect($id, array $params)
+    public function connect($id, array $params)
     {
         return new \common_persistence_AdvKeyValuePersistence($params, $this);
     }
@@ -36,9 +37,11 @@ class common_persistence_InMemoryAdvKvDriver extends common_persistence_InMemory
         if (!is_array($fields)) {
             return false;
         }
+
         foreach ($fields as $hashkey => $value) {
             $this->persistence[$key][self::HPREFIX . $hashkey] = $value;
         }
+
         return true;
     }
 
@@ -51,6 +54,7 @@ class common_persistence_InMemoryAdvKvDriver extends common_persistence_InMemory
     {
         $result = !isset($this->persistence[$key][self::HPREFIX . $field]);
         $this->persistence[$key][self::HPREFIX . $field] = $value;
+
         return $result;
     }
 
@@ -83,11 +87,13 @@ class common_persistence_InMemoryAdvKvDriver extends common_persistence_InMemory
         }
         $data = [];
         $prefixLength = strlen(self::HPREFIX);
+
         foreach ($this->persistence[$key] as $hash => $attributes) {
             if (mb_substr($hash, 0, $prefixLength) === self::HPREFIX) {
                 $data[mb_substr($hash, $prefixLength)] = $this->persistence[$key][$hash];
             }
         }
+
         return $data;
     }
 
@@ -96,6 +102,7 @@ class common_persistence_InMemoryAdvKvDriver extends common_persistence_InMemory
         if ($pattern == '*') {
             return array_keys($this->persistence);
         }
+
         return [];
     }
 }

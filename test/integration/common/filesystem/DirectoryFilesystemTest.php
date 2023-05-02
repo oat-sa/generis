@@ -20,12 +20,15 @@
 
 namespace oat\generis\test\integration\common\filesystem;
 
+use common_Exception;
+use common_exception_FileSystemError;
+use core_kernel_classes_Class;
 use oat\generis\scripts\tools\FileSerializerMigration\MigrationHelper;
+use oat\generis\test\FileSystemMockTrait;
 use oat\generis\test\GenerisTestCase;
 use oat\oatbox\filesystem\Directory;
 use oat\oatbox\filesystem\File;
 use oat\oatbox\filesystem\FileSystemService;
-use oat\generis\test\FileSystemMockTrait;
 
 class DirectoryFilesystemTest extends GenerisTestCase
 {
@@ -37,7 +40,7 @@ class DirectoryFilesystemTest extends GenerisTestCase
     protected $fileMigrationHelper;
 
     /**
-     * @var \core_kernel_classes_Class
+     * @var core_kernel_classes_Class
      */
     protected $testClass;
 
@@ -72,7 +75,7 @@ class DirectoryFilesystemTest extends GenerisTestCase
     {
         $this->generateFile('/testDirectory.exist/fileRename.txt');
         $directory = $this->tempDirectory->getDirectory('testDirectory.exist');
-        $this->expectException(\common_exception_FileSystemError::class);
+        $this->expectException(common_exception_FileSystemError::class);
         $directory->rename('testDirectory.exist');
     }
 
@@ -86,8 +89,8 @@ class DirectoryFilesystemTest extends GenerisTestCase
             FileSystemService::OPTION_ADAPTERS => [
                 $fileSystemId => [
                     'class' => FileSystemService::FLYSYSTEM_LOCAL_ADAPTER,
-                    'options' => ['root' => $file->getFileSystemId()]
-                ]
+                    'options' => ['root' => $file->getFileSystemId()],
+                ],
             ],
         ]);
 
@@ -98,17 +101,20 @@ class DirectoryFilesystemTest extends GenerisTestCase
         $this->assertEquals($result->getPathPrefix(), 'unit-test/');
     }
 
-
     /**
-     * @return bool
+     * @param mixed $path
+     *
      * @throws \League\Flysystem\FileExistsException
-     * @throws \common_Exception
+     * @throws common_Exception
+     *
+     * @return bool
      */
     private function generateFile($path)
     {
         $dir = $this->getTempDirectory();
         $this->testFile = $dir->getFile($path);
         $this->testFile->write($path, 'PHP Unit test file');
+
         return true;
     }
 
@@ -120,6 +126,7 @@ class DirectoryFilesystemTest extends GenerisTestCase
         if (!$this->tempDirectory) {
             $this->tempDirectory = $this->getFileSystemMock(['unit-test'])->getDirectory('unit-test');
         }
+
         return $this->tempDirectory;
     }
 
@@ -134,5 +141,4 @@ class DirectoryFilesystemTest extends GenerisTestCase
 
         return $this->fileSystemService;
     }
-
 }

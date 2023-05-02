@@ -18,14 +18,12 @@
  * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
  *               2017      (update and modification) Open Assessment Technologies SA;
- *
  */
 
 use oat\generis\test\TestCase;
 
 class FileHelperTest extends TestCase
 {
-
     protected function setUp(): void
     {
     }
@@ -53,21 +51,20 @@ class FileHelperTest extends TestCase
         $file = tempnam($basePath, 'dir');
         $this->assertTrue(unlink($file));
         $this->assertTrue(mkdir($file));
+
         return $file;
     }
-
 
     /**
      * @todo fix problematic test case
      * why does this case try to read files 'ExpressionFactoryTest.php', 'ExpressionTest.php', 'OperationFactoryTest.php', 'OperationTest.php', 'TermFactoryTest.php', 'TermTest.php'?
      *
-     *
      * @dataProvider scandirDataProvider
      *
      * @param string $toScan Directory path to be scanned
-     * @param array $expectedResult The expected return value of helpers_File::scanDir().
-     * @param boolean $recursive Value of the 'recursive' option.
-     * @param boolean $absolute Value of the 'absolute' option.
+     * @param array $expectedResult the expected return value of helpers_File::scanDir()
+     * @param boolean $recursive value of the 'recursive' option
+     * @param boolean $absolute value of the 'absolute' option
      */
     public function testScandir($toScan, $expectedResult, $recursive = false, $absolute = false)
     {
@@ -91,10 +88,10 @@ class FileHelperTest extends TestCase
     /**
      * @dataProvider containsFileTypeProvider
      *
-     * @param string $toScan The directory to be scanned.
+     * @param string $toScan the directory to be scanned
      * @param string|array $types The types to check for e.g. 'php', 'js', ...
-     * @param boolean $recursive Whether or not to check recursively in the directory.
-     * @param boolean $expectedResult The expected result of the containsFileType helper method.
+     * @param boolean $recursive whether or not to check recursively in the directory
+     * @param boolean $expectedResult the expected result of the containsFileType helper method
      */
     public function testContainsFileType($toScan, $types, $recursive, $expectedResult)
     {

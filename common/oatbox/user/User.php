@@ -16,8 +16,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2014 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
- *
  */
 
 namespace oat\oatbox\user;
@@ -30,20 +28,22 @@ interface User
      * @return string
      */
     public function getIdentifier();
-    
+
     /**
      * Extends the users explizit roles with the implizit rules
      * of the local system
      *
      * @return array the identifiers of the roles:
-    */
+     */
     public function getRoles();
-    
+
     /**
      * Retrieve custom attributes of a user
      *
      * @param string $attribute
+     * @param mixed $property
+     *
      * @return array an array of strings
-    */
+     */
     public function getPropertyValues($property);
 }

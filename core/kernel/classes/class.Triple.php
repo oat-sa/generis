@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -17,21 +18,20 @@
  * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
  *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- *
  */
 
 /**
  * Short description of class core_kernel_classes_Triple
  *
  * @access public
+ *
  * @author patrick.plichart@tudor.lu
+ *
  * @package generis
-
  */
 class core_kernel_classes_Triple extends core_kernel_classes_Container
 {
     // --- ASSOCIATIONS ---
-
 
     // --- ATTRIBUTES ---
 
@@ -39,6 +39,7 @@ class core_kernel_classes_Triple extends core_kernel_classes_Container
      * Short description of attribute modelid
      *
      * @access public
+     *
      * @var int
      */
     public $modelid = 0;
@@ -47,6 +48,7 @@ class core_kernel_classes_Triple extends core_kernel_classes_Container
      * Short description of attribute subject
      *
      * @access public
+     *
      * @var string
      */
     public $subject = '';
@@ -55,6 +57,7 @@ class core_kernel_classes_Triple extends core_kernel_classes_Container
      * Short description of attribute predicate
      *
      * @access public
+     *
      * @var string
      */
     public $predicate = '';
@@ -63,6 +66,7 @@ class core_kernel_classes_Triple extends core_kernel_classes_Container
      * Short description of attribute object
      *
      * @access public
+     *
      * @var string
      */
     public $object = '';
@@ -71,6 +75,7 @@ class core_kernel_classes_Triple extends core_kernel_classes_Container
      * Short description of attribute id
      *
      * @access public
+     *
      * @var int
      */
     public $id = 0;
@@ -79,6 +84,7 @@ class core_kernel_classes_Triple extends core_kernel_classes_Container
      * Short description of attribute lg
      *
      * @access public
+     *
      * @var string
      */
     public $lg = '';
@@ -87,6 +93,7 @@ class core_kernel_classes_Triple extends core_kernel_classes_Container
      * User asking for the triple creation
      *
      * @access public
+     *
      * @var string
      */
     public $author = '';
@@ -95,12 +102,14 @@ class core_kernel_classes_Triple extends core_kernel_classes_Container
      * Triple creation time
      *
      * @access public
+     *
      * @var string
      */
     public $epoch = '';
 
     /**
      * Helper to quickly hydrate a Triple
+     *
      * @return core_kernel_classes_Triple
      */
     public static function createTriple(
@@ -118,6 +127,7 @@ class core_kernel_classes_Triple extends core_kernel_classes_Container
         $triple->object = $object;
         $triple->lg = $lg;
         $triple->author = $author;
+
         return $triple;
     }
 }

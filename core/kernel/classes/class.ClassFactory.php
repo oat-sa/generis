@@ -28,14 +28,14 @@ use oat\generis\model\OntologyRdfs;
  * Short description of class core_kernel_classes_ClassFactory
  *
  * @access public
+ *
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+ *
  * @package generis
-
  */
 class core_kernel_classes_ClassFactory
 {
     // --- ASSOCIATIONS ---
-
 
     // --- ATTRIBUTES ---
 
@@ -45,11 +45,17 @@ class core_kernel_classes_ClassFactory
      * Short description of method createInstance
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @param  Class clazz
      * @param  string label
      * @param  string comment
      * @param  string uri
+     * @param mixed $label
+     * @param mixed $comment
+     * @param mixed $uri
+     *
      * @return core_kernel_classes_Resource
      */
     public static function createInstance(core_kernel_classes_Class $clazz, $label = '', $comment = '', $uri = '')
@@ -58,24 +64,25 @@ class core_kernel_classes_ClassFactory
         $newUri = (!empty($uri)) ? self::checkProvidedUri($uri) : common_Utils::getNewUri();
         $newResource = new core_kernel_classes_Class($newUri);
         $propertiesValues = [OntologyRdf::RDF_TYPE => $clazz->getUri()];
-     
+
         if (!empty($label)) {
             $propertiesValues[OntologyRdfs::RDFS_LABEL] = $label;
         }
-     
+
         if (!empty($comment)) {
             $propertiesValues[OntologyRdfs::RDFS_COMMENT] = $comment;
         }
-       
+
         $check = $newResource->setPropertiesValues($propertiesValues);
+
         if ($check) {
             $returnValue = $newResource;
         } else {
             $msg = "Failed to create an instance of class '" . $clazz->getUri() . "'.";
+
             throw new common_Exception($msg);
             common_Logger::e($msg);
         }
-        
 
         return $returnValue;
     }
@@ -84,12 +91,19 @@ class core_kernel_classes_ClassFactory
      * Short description of method createProperty
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @param  Class clazz
      * @param  string label
      * @param  string comment
      * @param  boolean isLgDependent
      * @param  string uri
+     * @param mixed $label
+     * @param mixed $comment
+     * @param mixed $isLgDependent
+     * @param mixed $uri
+     *
      * @return core_kernel_classes_Property
      */
     public static function createProperty(core_kernel_classes_Class $clazz, $label = '', $comment = '', $isLgDependent = false, $uri = '')
@@ -98,14 +112,12 @@ class core_kernel_classes_ClassFactory
         $property = new core_kernel_classes_Class(OntologyRdf::RDF_PROPERTY);
         $propertyInstance = self::createInstance($property, $label, $comment, $uri);
         $returnValue = new core_kernel_classes_Property($propertyInstance->getUri());
+
         if (!$returnValue->setDomain($clazz)) {
             throw new common_Exception('An error occured during Property creation.');
-        } else {
-            $returnValue->setLgDependent($isLgDependent);
         }
-
+        $returnValue->setLgDependent($isLgDependent);
         
-
         return $returnValue;
     }
 
@@ -113,20 +125,27 @@ class core_kernel_classes_ClassFactory
      * Short description of method createSubClass
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @param  Class clazz
      * @param  string label
      * @param  string comment
      * @param  string uri
+     * @param mixed $label
+     * @param mixed $comment
+     * @param mixed $uri
+     *
      * @return core_kernel_classes_Class
      */
     public static function createSubClass(core_kernel_classes_Class $clazz, $label = '', $comment = '', $uri = '')
     {
         $returnValue = null;
         $class = new core_kernel_classes_Class(OntologyRdfs::RDFS_CLASS);
-        $instance =  self::createInstance($class, $label, $comment, $uri);
+        $instance = self::createInstance($class, $label, $comment, $uri);
         $returnValue = new core_kernel_classes_Class($instance->getUri());
         $returnValue->setSubClassOf($clazz);
+
         return $returnValue;
     }
 
@@ -134,13 +153,18 @@ class core_kernel_classes_ClassFactory
      * Short description of method checkProvidedUri
      *
      * @access private
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @param  string uri
+     * @param mixed $uri
+     *
      * @return string
      */
     private static function checkProvidedUri($uri)
     {
         $returnValue = (string) '';
+
         if ($uri != '') {
             if (common_Utils::isUri($uri)) {
                 $returnValue = $uri;
@@ -150,7 +174,6 @@ class core_kernel_classes_ClassFactory
         } else {
             $returnValue = common_Utils::getNewUri();
         }
-        
 
         return (string) $returnValue;
     }

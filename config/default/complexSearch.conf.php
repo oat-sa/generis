@@ -12,7 +12,7 @@ return new oat\generis\model\kernel\persistence\smoothsql\search\ComplexSearchSe
         'search.query.builder' => false,
         'search.query.criterion' => false,
         'search.tao.serialyser' => false,
-        'search.tao.result' => false
+        'search.tao.result' => false,
     ],
     'invokables' => [
         'search.query.query' => '\\oat\\search\\Query',
@@ -26,15 +26,15 @@ return new oat\generis\model\kernel\persistence\smoothsql\search\ComplexSearchSe
         'search.factory.builder' => '\\oat\\search\\factory\\QueryBuilderFactory',
         'search.factory.criterion' => '\\oat\\search\\factory\\QueryCriterionFactory',
         'search.tao.gateway' => '\\oat\\generis\\model\\kernel\\persistence\\smoothsql\\search\\GateWay',
-        'search.tao.result' => '\\oat\\generis\\model\\kernel\\persistence\\smoothsql\\search\\TaoResultSet'
+        'search.tao.result' => '\\oat\\generis\\model\\kernel\\persistence\\smoothsql\\search\\TaoResultSet',
     ],
     'abstract_factories' => [
-        '\\oat\\search\\Command\\OperatorAbstractfactory'
+        '\\oat\\search\\Command\\OperatorAbstractfactory',
     ],
     'services' => [
         'search.options' => [
             'table' => 'statements',
-            'driver' => 'taoRdf'
-        ]
-    ]
+            'driver' => 'taoRdf',
+        ],
+    ],
 ]);

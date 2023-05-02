@@ -16,21 +16,22 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2017 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
  */
 
 namespace oat\oatbox\extension\script;
 
+use Exception;
+
 class MissingOptionException extends ScriptException
 {
     protected $optionName;
-    
-    public function __construct($message, $optionName, $code = 0, \Exception $previous = null)
+
+    public function __construct($message, $optionName, $code = 0, Exception $previous = null)
     {
         parent::__construct($message, $code, $previous);
         $this->optionName = $optionName;
     }
-    
+
     public function getOptionName()
     {
         return $this->optionName;

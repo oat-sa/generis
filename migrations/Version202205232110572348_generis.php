@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace oat\generis\migrations;
 
+use core_kernel_persistence_smoothsql_SmoothModel as SmoothModel;
 use Doctrine\DBAL\Schema\Schema;
 use oat\generis\model\data\Ontology;
 use oat\tao\scripts\tools\migrations\AbstractMigration;
-use core_kernel_persistence_smoothsql_SmoothModel as SmoothModel;
 
 final class Version202205232110572348_generis extends AbstractMigration
 {

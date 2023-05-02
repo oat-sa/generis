@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -17,44 +18,50 @@
  * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
  *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- *
  */
 
 /**
  * Short description of class core_kernel_api_ApiModel
  *
  * @abstract
+ *
  * @access public
+ *
  * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+ *
  * @package generis
-
  */
 interface core_kernel_api_ApiModel extends core_kernel_api_Api
 {
-
-
     // --- OPERATIONS ---
-
 
     /**
      * import xml rdf files into the knowledge base
      *
      * @access public
+     *
      * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     *
      * @param  string targetNameSpace
      * @param  string fileLocation
+     * @param mixed $targetNameSpace
+     * @param mixed $fileLocation
+     *
      * @return boolean
      */
     public function importXmlRdf($targetNameSpace, $fileLocation);
-
 
     /**
      * returns an xml rdf serialization for uriResource with all meta dat found
      * inferenced from te knowlege base about this resource
      *
      * @access public
+     *
      * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     *
      * @param  string uriResource
+     * @param mixed $uriResource
+     *
      * @return string
      */
     public function getResourceDescriptionXML($uriResource);
@@ -63,7 +70,9 @@ interface core_kernel_api_ApiModel extends core_kernel_api_Api
      * returns metaclasses tat are not subclasses of other metaclasses
      *
      * @access public
+     *
      * @author patrick.plichart@tudor.lu
+     *
      * @return core_kernel_classes_ContainerCollection
      */
     public function getMetaClasses();
@@ -72,7 +81,9 @@ interface core_kernel_api_ApiModel extends core_kernel_api_Api
      * returns classes that are not subclasses of other classes
      *
      * @access public
+     *
      * @author patrick.plichart@tudor.lu
+     *
      * @return core_kernel_classes_ContainerCollection
      */
     public function getRootClasses();
@@ -81,7 +92,9 @@ interface core_kernel_api_ApiModel extends core_kernel_api_Api
      * Short description of method getAllClasses
      *
      * @access public
+     *
      * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     *
      * @return core_kernel_classes_ContainerCollection
      */
     public function getAllClasses();
@@ -90,11 +103,18 @@ interface core_kernel_api_ApiModel extends core_kernel_api_Api
      * add a new statment to the knowledge base
      *
      * @access public
+     *
      * @author patrick.plichart@tudor.lu
+     *
      * @param  string subject
      * @param  string predicate
      * @param  string object
      * @param  string language
+     * @param mixed $subject
+     * @param mixed $predicate
+     * @param mixed $object
+     * @param mixed $language
+     *
      * @return boolean
      */
     public function setStatement($subject, $predicate, $object, $language);
@@ -103,11 +123,18 @@ interface core_kernel_api_ApiModel extends core_kernel_api_Api
      * Short description of method removeStatement
      *
      * @access public
+     *
      * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     *
      * @param  string subject
      * @param  string predicate
      * @param  string object
      * @param  string language
+     * @param mixed $subject
+     * @param mixed $predicate
+     * @param mixed $object
+     * @param mixed $language
+     *
      * @return boolean
      */
     public function removeStatement($subject, $predicate, $object, $language);
@@ -116,9 +143,14 @@ interface core_kernel_api_ApiModel extends core_kernel_api_Api
      * Short description of method getSubject
      *
      * @access public
+     *
      * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     *
      * @param  string predicate
      * @param  string object
+     * @param mixed $predicate
+     * @param mixed $object
+     *
      * @return core_kernel_classes_Resource
      */
     public function getSubject($predicate, $object);
@@ -127,9 +159,14 @@ interface core_kernel_api_ApiModel extends core_kernel_api_Api
      * Short description of method getObject
      *
      * @access public
+     *
      * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     *
      * @param  string subject
      * @param  string predicate
+     * @param mixed $subject
+     * @param mixed $predicate
+     *
      * @return core_kernel_classes_ContainerCollection
      */
     public function getObject($subject, $predicate);

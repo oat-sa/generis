@@ -16,19 +16,17 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) (original work) 2015 Open Assessment Technologies SA
- *
  */
 
 namespace oat\generis\test\integration\model\persistence\smoothsql;
 
-use \core_kernel_persistence_smoothsql_SmoothModel;
+use common_Exception;
+use core_kernel_persistence_smoothsql_SmoothModel;
 use oat\generis\test\GenerisPhpUnitTestRunner;
 
 class SmoothModelTest extends GenerisPhpUnitTestRunner
 {
-
     /**
-     *
      * @see PHPUnit_Framework_TestCase::setUp()
      */
     public function setUp(): void
@@ -37,22 +35,23 @@ class SmoothModelTest extends GenerisPhpUnitTestRunner
     }
 
     /**
-     *
      * @author Lionel Lecaque, lionel@taotesting.com
-     * @return \core_kernel_persistence_smoothsql_SmoothModel
+     *
+     * @return core_kernel_persistence_smoothsql_SmoothModel
      */
     public function testConstuct()
     {
         // $this->markTestSkipped('test it');
         try {
             $model = new core_kernel_persistence_smoothsql_SmoothModel([]);
-        } catch (\common_Exception $e) {
+        } catch (common_Exception $e) {
             $this->assertInstanceOf('common_exception_MissingParameter', $e);
         }
         $conf = [
-            'persistence' => 'default'
+            'persistence' => 'default',
         ];
         $model = new core_kernel_persistence_smoothsql_SmoothModel($conf);
+
         return $model;
     }
 
@@ -60,11 +59,13 @@ class SmoothModelTest extends GenerisPhpUnitTestRunner
      * @depends testConstuct
      *
      * @author Lionel Lecaque, lionel@taotesting.com
+     *
+     * @param mixed $model
      */
     public function testGetConfig($model)
     {
         $this->assertEquals([
-            'persistence' => 'default'
+            'persistence' => 'default',
         ], $model->getOptions());
     }
 
@@ -72,6 +73,7 @@ class SmoothModelTest extends GenerisPhpUnitTestRunner
      * @depends testConstuct
      *
      * @author Lionel Lecaque, lionel@taotesting.com
+     *
      * @param array $model
      */
     public function testGetRdfInterface($model)
@@ -83,6 +85,7 @@ class SmoothModelTest extends GenerisPhpUnitTestRunner
      * @depends testConstuct
      *
      * @author Lionel Lecaque, lionel@taotesting.com
+     *
      * @param array $model
      */
     public function testGetRdfsInterface($model)
@@ -91,26 +94,24 @@ class SmoothModelTest extends GenerisPhpUnitTestRunner
     }
 
     /**
-     *
      * @author Lionel Lecaque, lionel@taotesting.com
      */
     public function testGetUpdatableModelIds()
     {
         $models = core_kernel_persistence_smoothsql_SmoothModel::getUpdatableModelIds();
         $this->assertArraySubset([
-            1
+            1,
         ], $models);
     }
 
     /**
-     *
      * @author Lionel Lecaque, lionel@taotesting.com
      */
     public function testGetReadableModelIds()
     {
         $models = core_kernel_persistence_smoothsql_SmoothModel::getReadableModelIds();
         $this->assertArraySubset([
-            1
+            1,
         ], $models);
     }
 }

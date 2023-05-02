@@ -29,16 +29,16 @@ use oat\generis\model\kernel\persistence\smoothsql\search\filter\Filter;
  */
 class common_persistence_sql_Filter
 {
-    const OP_EQ  = '=';
-    const OP_NEQ = '!=';
-    const OP_LT  = '<';
-    const OP_LTE = '<=';
-    const OP_GT  = '>';
-    const OP_GTE = '>=';
-    const OP_LIKE = 'LIKE';
-    const OP_NOT_LIKE = 'NOT LIKE';
-    const OP_IN = 'IN';
-    const OP_NOT_IN = 'NOT IN';
+    public const OP_EQ = '=';
+    public const OP_NEQ = '!=';
+    public const OP_LT = '<';
+    public const OP_LTE = '<=';
+    public const OP_GT = '>';
+    public const OP_GTE = '>=';
+    public const OP_LIKE = 'LIKE';
+    public const OP_NOT_LIKE = 'NOT LIKE';
+    public const OP_IN = 'IN';
+    public const OP_NOT_IN = 'NOT IN';
 
     /**
      * @var array
@@ -75,11 +75,13 @@ class common_persistence_sql_Filter
 
     /**
      * @param mixed $sortBy
+     *
      * @return common_persistence_sql_Filter
      */
     public function setSortBy($sortBy)
     {
         $this->sortBy = $sortBy;
+
         return $this;
     }
 
@@ -93,11 +95,13 @@ class common_persistence_sql_Filter
 
     /**
      * @param string $sortOrder
+     *
      * @return common_persistence_sql_Filter
      */
     public function setSortOrder($sortOrder)
     {
         $this->sortOrder = $sortOrder;
+
         return $this;
     }
 
@@ -111,11 +115,13 @@ class common_persistence_sql_Filter
 
     /**
      * @param int $limit
+     *
      * @return common_persistence_sql_Filter
      */
     public function setLimit($limit)
     {
         $this->limit = max(0, $limit);
+
         return $this;
     }
 
@@ -129,11 +135,13 @@ class common_persistence_sql_Filter
 
     /**
      * @param int $offset
+     *
      * @return common_persistence_sql_Filter
      */
     public function setOffset($offset)
     {
         $this->offset = max(0, $offset);
+
         return $this;
     }
 
@@ -151,17 +159,18 @@ class common_persistence_sql_Filter
      * @param string $field
      * @param string $operator
      * @param mixed $value
+     *
      * @return common_persistence_sql_Filter
      */
     public function addFilter($field, $operator, $value)
     {
         $this->assertValidOperator($operator);
 
-        $this->filters[] =  [
+        $this->filters[] = [
             'column' => (string) $field,
             'valuePlaceholder' => uniqid(':' . $field),
             'operator' => $operator,
-            'value' => $value
+            'value' => $value,
         ];
 
         return $this;
@@ -171,6 +180,7 @@ class common_persistence_sql_Filter
      * Apply the filters
      *
      * @param QueryBuilder $qb
+     *
      * @return QueryBuilder
      */
     public function applyFilters(QueryBuilder $qb)
@@ -178,6 +188,7 @@ class common_persistence_sql_Filter
         foreach ($this->getFilters() as $filter) {
             $type = null;
             $placeholder = $filter['valuePlaceholder'];
+
             if (is_array($filter['value'])) {
                 $type = Connection::PARAM_STR_ARRAY;
                 $filter['valuePlaceholder'] = '(' . $placeholder . ')';
@@ -195,6 +206,7 @@ class common_persistence_sql_Filter
      *
      * @param string $field
      * @param mixed $value
+     *
      * @return common_persistence_sql_Filter
      */
     public function eq($field, $value)
@@ -207,6 +219,7 @@ class common_persistence_sql_Filter
      *
      * @param string $field
      * @param mixed $value
+     *
      * @return common_persistence_sql_Filter
      */
     public function neq($field, $value)
@@ -219,6 +232,7 @@ class common_persistence_sql_Filter
      *
      * @param string $field
      * @param mixed $value
+     *
      * @return common_persistence_sql_Filter
      */
     public function lt($field, $value)
@@ -231,6 +245,7 @@ class common_persistence_sql_Filter
      *
      * @param string $field
      * @param mixed $value
+     *
      * @return common_persistence_sql_Filter
      */
     public function lte($field, $value)
@@ -243,6 +258,7 @@ class common_persistence_sql_Filter
      *
      * @param string $field
      * @param mixed $value
+     *
      * @return common_persistence_sql_Filter
      */
     public function gt($field, $value)
@@ -255,6 +271,7 @@ class common_persistence_sql_Filter
      *
      * @param string $field
      * @param mixed $value
+     *
      * @return common_persistence_sql_Filter
      */
     public function gte($field, $value)
@@ -267,6 +284,7 @@ class common_persistence_sql_Filter
      *
      * @param string $field
      * @param mixed $value
+     *
      * @return common_persistence_sql_Filter
      */
     public function like($field, $value)
@@ -279,6 +297,7 @@ class common_persistence_sql_Filter
      *
      * @param string $field
      * @param mixed $value
+     *
      * @return common_persistence_sql_Filter
      */
     public function notLike($field, $value)
@@ -291,6 +310,7 @@ class common_persistence_sql_Filter
      *
      * @param string $field
      * @param array $value
+     *
      * @return common_persistence_sql_Filter
      */
     public function in($field, array $value)
@@ -303,6 +323,7 @@ class common_persistence_sql_Filter
      *
      * @param string $field
      * @param array $value
+     *
      * @return common_persistence_sql_Filter
      */
     public function notIn($field, array $value)
@@ -312,6 +333,7 @@ class common_persistence_sql_Filter
 
     /**
      * @param string $op
+     *
      * @throws InvalidArgumentException
      */
     private function assertValidOperator($op)

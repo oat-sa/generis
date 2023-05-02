@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -17,21 +18,24 @@
  * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
  *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- *
  */
 
 /**
  * Could be either a core_kernel_classes_Resource or core_kernel_classes_Literal
  *
  * @access public
+ *
  * @author patrick.plichart@tudor.lu
+ *
  * @package generis
  */
 class core_kernel_classes_Container extends common_Object
 {
     /**
      * Please serialize the value or the URI but not the resource or literal itself
+     *
      * @deprecated
+     *
      * @throws common_exception_NotImplemented
      */
     public function __serialize()

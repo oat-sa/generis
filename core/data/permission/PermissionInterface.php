@@ -16,12 +16,11 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2014 (original work) Open Assessment Technologies SA;
- *
- *
  */
 
 namespace oat\generis\model\data\permission;
 
+use core_kernel_classes_Resource;
 use oat\oatbox\user\User;
 
 /**
@@ -29,12 +28,12 @@ use oat\oatbox\user\User;
  * This is an experimental interface that has not been implemented yet
  *
  * @author Joel Bout, <joel@taotesting.com>
+ *
  * @package generis
-
  */
 interface PermissionInterface
 {
-    const SERVICE_ID = 'generis/permissions';
+    public const SERVICE_ID = 'generis/permissions';
 
     /**
      * All unsupported rigths will be mapped to this right
@@ -44,7 +43,7 @@ interface PermissionInterface
     public const RIGHT_UNSUPPORTED = 'unsupported';
     public const RIGHT_READ = 'READ';
     public const RIGHT_WRITE = 'WRITE';
-    
+
     /**
      * Return the permissions a specified user has on the resources
      * specified by their ids
@@ -54,15 +53,16 @@ interface PermissionInterface
      *
      * @param User $user
      * @param array $resourceIds
+     *
      * @return array
      */
     public function getPermissions(User $user, array $resourceIds);
-    
+
     /**
      * Hook to set initial permissions
      */
-    public function onResourceCreated(\core_kernel_classes_Resource $resource);
-    
+    public function onResourceCreated(core_kernel_classes_Resource $resource);
+
     /**
      * Returns a list of rights ids
      *

@@ -16,15 +16,13 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2014 (original work) Open Assessment Technologies SA;
- *
  */
 
 namespace oat\generis\model\data\permission;
 
-use oat\generis\model\data\permission\implementation\NoAccess;
-use common_ext_ExtensionsManager;
 use common_Logger;
 use oat\generis\model\data\event\ResourceCreated;
+use oat\generis\model\data\permission\implementation\NoAccess;
 use oat\oatbox\event\Event;
 use oat\oatbox\service\ServiceManager;
 use oat\oatbox\service\ServiceNotFoundException;
@@ -36,10 +34,11 @@ use oat\oatbox\service\ServiceNotFoundException;
  */
 class PermissionManager
 {
-    const CONFIG_KEY = 'permissions';
-    
+    public const CONFIG_KEY = 'permissions';
+
     /**
      * @return PermissionInterface
+     *
      * @deprecated
      */
     public static function getPermissionModel()
@@ -48,6 +47,7 @@ class PermissionManager
             return ServiceManager::getServiceManager()->get(PermissionInterface::SERVICE_ID);
         } catch (ServiceNotFoundException $e) {
             common_Logger::w('No permission implementation found');
+
             return new NoAccess();
         }
     }
@@ -59,7 +59,7 @@ class PermissionManager
     {
         return ServiceManager::getServiceManager()->register(PermissionInterface::SERVICE_ID, $model);
     }
-    
+
     public static function catchEvent(Event $event)
     {
         if ($event instanceof ResourceCreated) {

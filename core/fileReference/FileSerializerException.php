@@ -16,15 +16,18 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2016 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
  */
 
 namespace oat\generis\model\fileReference;
 
-class FileSerializerException extends \common_Exception implements \common_log_SeverityLevel
+use common_Exception;
+use common_log_SeverityLevel;
+use common_Logger;
+
+class FileSerializerException extends common_Exception implements common_log_SeverityLevel
 {
     public function getSeverity()
     {
-        return \common_Logger::ERROR_LEVEL;
+        return common_Logger::ERROR_LEVEL;
     }
 }

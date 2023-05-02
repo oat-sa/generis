@@ -96,7 +96,7 @@ class MiddlewareRequestHandlerTest extends TestCase
             [
                 function ($request, $next): ResponseInterface {
                     return $this->originalResponse;
-                }
+                },
             ]
         );
 
@@ -131,7 +131,7 @@ class MiddlewareRequestHandlerTest extends TestCase
     public function assertRouteProvider(): array
     {
         return [
-            /**
+            /*
              * PATH 1: Multiple middlewares for different HTTP methods
              */
             [
@@ -141,9 +141,9 @@ class MiddlewareRequestHandlerTest extends TestCase
                     'middlewarePath1_1',
                     'middlewarePath1_2',
                     'middlewarePath1_4',
-                ]
+                ],
             ],
-            /**
+            /*
              * PATH 2: Dynamic path with optional segment
              */
             [
@@ -152,9 +152,9 @@ class MiddlewareRequestHandlerTest extends TestCase
                 [
                     'middlewarePath2_1',
                     'middlewarePath2_2',
-                ]
+                ],
             ],
-            /**
+            /*
              * PATH 3: Dynamic path with multiple segment
              */
             [
@@ -163,8 +163,8 @@ class MiddlewareRequestHandlerTest extends TestCase
                 [
                     'middlewarePath3_1',
                     'middlewarePath3_2',
-                ]
-            ]
+                ],
+            ],
         ];
     }
 
@@ -177,7 +177,7 @@ class MiddlewareRequestHandlerTest extends TestCase
             [
                 function ($request, $next): ResponseInterface {
                     return $this->originalResponse;
-                }
+                },
             ]
         );
 
@@ -207,38 +207,38 @@ class MiddlewareRequestHandlerTest extends TestCase
     public function assertNoRouteProvider(): array
     {
         return [
-            /**
+            /*
              * PATH 1: Multiple middlewares for different HTTP methods
              */
             [
                 '/my/path1/a',
-                'POST'
+                'POST',
             ],
             [
                 '/my/path1',
-                'DELETE'
+                'DELETE',
             ],
-            /**
+            /*
              * PATH 2: Dynamic path with optional segment
              */
             [
                 '/my/path2/foo/bar',
-                'POST'
+                'POST',
             ],
-            /**
+            /*
              * PATH 3: Dynamic path with multiple segment
              */
             [
                 '/my/path3/user2/1',
-                'POST'
-            ]
+                'POST',
+            ],
         ];
     }
 
     private function getMiddlewareMap(): array
     {
         return [
-            /**
+            /*
              * PATH 1: Multiple middlewares for different HTTP methods
              */
             '/^(POST)\/my\/path1$/' => [
@@ -258,43 +258,43 @@ class MiddlewareRequestHandlerTest extends TestCase
                 MiddlewareMap::byRoute('/my/path1')
                     ->andMiddlewareId('middlewarePath1_3')
                     ->andHttpMethod('GET')
-                    ->jsonSerialize()
+                    ->jsonSerialize(),
             ],
             '/^(GET|POST)\/my\/path1$/' => [
                 MiddlewareMap::byRoute('/my/path1')
                     ->andMiddlewareId('middlewarePath1_4')
                     ->andHttpMethod('GET')
                     ->andHttpMethod('POST')
-                    ->jsonSerialize()
+                    ->jsonSerialize(),
             ],
-            /**
+            /*
              * PATH 2: Dynamic path with optional segment
              */
             '/^(POST)\/my\/path2\/[a-z]{0,}$/' => [
                 MiddlewareMap::byRoute('/my/path2/[a-z]{0,}')
                     ->andMiddlewareId('middlewarePath2_1')
                     ->andHttpMethod('POST')
-                    ->jsonSerialize()
+                    ->jsonSerialize(),
             ],
             '/^(.*)\/my\/path2\/?[a-z]{0,}$/' => [
                 MiddlewareMap::byRoute('/my/path2/?[a-z]{0,}')
                     ->andMiddlewareId('middlewarePath2_2')
-                    ->jsonSerialize()
+                    ->jsonSerialize(),
             ],
-            /**
+            /*
              * PATH 3: Dynamic path with multiple segment
              */
             '/^(POST)\/my\/path3\/[a-z]{0,}\/[0-9]{0,}$/' => [
                 MiddlewareMap::byRoute('/my/path3/[a-z]{0,}/[0-9]{0,}')
                     ->andMiddlewareId('middlewarePath3_1')
                     ->andHttpMethod('POST')
-                    ->jsonSerialize()
+                    ->jsonSerialize(),
             ],
             '/^(.*)\/my\/path3\/[a-z]{0,}\/?[0-9]{0,}$/' => [
                 MiddlewareMap::byRoute('/my/path3/[a-z]{0,}/?[0-9]{0,}')
                     ->andMiddlewareId('middlewarePath3_2')
-                    ->jsonSerialize()
-            ]
+                    ->jsonSerialize(),
+            ],
         ];
     }
 }

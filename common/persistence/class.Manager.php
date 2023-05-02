@@ -16,28 +16,30 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2013 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
  */
 
+use oat\generis\persistence\PersistenceManager;
 use oat\oatbox\service\ServiceManager;
 use oat\oatbox\service\ServiceNotFoundException;
-use oat\generis\persistence\PersistenceManager;
 
- /**
+/**
  * A backward compatibility wrapper for our persistence factory
  *
  * @author Lionel Lecaque  <lionel@taotesting.com>
  * @license GPLv2
+ *
  * @package generis
+ *
  * @deprecated use PersistenceManager
  */
 class common_persistence_Manager extends PersistenceManager
 {
     /** @deprecated */
-    const SERVICE_KEY = 'generis/persistences';
-    
+    public const SERVICE_KEY = 'generis/persistences';
+
     /**
      * @return common_persistence_Manager
+     *
      * @deprecated
      */
     protected static function getDefaultManager()
@@ -46,17 +48,19 @@ class common_persistence_Manager extends PersistenceManager
             $manager = ServiceManager::getServiceManager()->get(self::SERVICE_ID);
         } catch (ServiceNotFoundException $ex) {
             $manager = new self([
-                self::OPTION_PERSISTENCES => []
+                self::OPTION_PERSISTENCES => [],
             ]);
             $manager->setServiceManager(ServiceManager::getServiceManager());
         }
+
         return $manager;
     }
 
     /**
-     *
      * @param string $persistenceId
+     *
      * @return common_persistence_Persistence
+     *
      * @deprecated
      */
     public static function getPersistence($persistenceId)
@@ -69,6 +73,7 @@ class common_persistence_Manager extends PersistenceManager
      *
      * @param string $persistenceId
      * @param array $persistenceConf
+     *
      * @deprecated
      */
     public static function addPersistence($persistenceId, array $persistenceConf)

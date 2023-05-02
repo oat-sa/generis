@@ -27,14 +27,16 @@ use oat\generis\model\OntologyRdfs;
  * Short description of class core_kernel_classes_ResourceFactory
  *
  * @access public
+ *
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+ *
  * @package generis
+ *
  * @deprecated breaks dependency injection
  */
 class core_kernel_classes_ResourceFactory
 {
     // --- ASSOCIATIONS ---
-
 
     // --- ATTRIBUTES ---
 
@@ -44,26 +46,34 @@ class core_kernel_classes_ResourceFactory
      * Short description of method create
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @param  Class type
      * @param  string label
      * @param  string comment
+     * @param mixed $label
+     * @param mixed $comment
+     *
      * @return core_kernel_classes_Resource
+     *
      * @deprecated breaks dependency injection
      */
     public static function create(core_kernel_classes_Class $type, $label = '', $comment = '')
     {
         $returnValue = null;
         $propertiesValues = [];
+
         if (!empty($label)) {
             $propertiesValues[OntologyRdfs::RDFS_LABEL] = $label;
         }
-        
+
         if (!empty($comment)) {
             $propertiesValues[OntologyRdfs::RDFS_COMMENT] = $comment;
         }
-        
+
         $returnValue = $type->createInstanceWithProperties($propertiesValues);
+
         return $returnValue;
     }
 }

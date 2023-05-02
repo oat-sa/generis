@@ -16,11 +16,12 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2017 (original work) Open Assessment Technologies SA;
- *
  */
 
 namespace oat\oatbox\log\logger\processor;
 
+use common_exception_Error;
+use common_session_SessionManager;
 use Monolog\Logger;
 
 /**
@@ -37,6 +38,7 @@ class UserIdProcessor
 
     /**
      * UserIdProcessor constructor.
+     *
      * @param int $level
      */
     public function __construct($level = Logger::DEBUG)
@@ -46,8 +48,10 @@ class UserIdProcessor
 
     /**
      * @param array $record
+     *
+     * @throws common_exception_Error
+     *
      * @return array
-     * @throws \common_exception_Error
      */
     public function __invoke(array $record)
     {
@@ -62,11 +66,12 @@ class UserIdProcessor
     }
 
     /**
+     * @throws common_exception_Error
+     *
      * @return string
-     * @throws \common_exception_Error
      */
     private function getUserId()
     {
-        return \common_session_SessionManager::getSession()->getUser()->getIdentifier();
+        return common_session_SessionManager::getSession()->getUser()->getIdentifier();
     }
 }

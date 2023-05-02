@@ -86,7 +86,7 @@ class MiddlewareRequestHandler implements RequestHandlerInterface
             [
                 static function ($request, $next) use ($originalResponse): ResponseInterface {
                     return $originalResponse;
-                }
+                },
             ]
         );
     }

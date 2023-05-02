@@ -18,18 +18,21 @@
  * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
  *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- *
  */
 
 namespace oat\generis\model\kernel\uri;
+
+use common_Exception;
 
 /**
  * Exception thrown during uri generation
  *
  * @access public
+ *
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+ *
  * @package generis
  */
-class UriProviderException extends \common_Exception
+class UriProviderException extends common_Exception
 {
 }

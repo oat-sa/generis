@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -17,22 +18,22 @@
  * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
  *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- *
  */
 
 /**
  * Short description of class common_log_BaseAppender
  *
  * @abstract
+ *
  * @access public
+ *
  * @author Joel Bout, <joel.bout@tudor.lu>
+ *
  * @package generis
-
  */
 abstract class common_log_BaseAppender implements common_log_Appender
 {
     // --- ASSOCIATIONS ---
-
 
     // --- ATTRIBUTES ---
 
@@ -41,6 +42,7 @@ abstract class common_log_BaseAppender implements common_log_Appender
      * important severity (trace)
      *
      * @access private
+     *
      * @var Integer
      */
     private $mask = null;
@@ -50,6 +52,7 @@ abstract class common_log_BaseAppender implements common_log_Appender
      * for the logItem to be logged
      *
      * @access public
+     *
      * @var array
      */
     public $tags = [];
@@ -58,6 +61,7 @@ abstract class common_log_BaseAppender implements common_log_Appender
      * the prefix that will be added to each log message.
      *
      * @access protected
+     *
      * @var string
      */
     protected $prefix = '';
@@ -68,9 +72,13 @@ abstract class common_log_BaseAppender implements common_log_Appender
      * decides whenever the Item should be logged by doLog
      *
      * @access public
+     *
      * @author Joel Bout, <joel.bout@tudor.lu>
+     *
      * @param  Item item
+     *
      * @return mixed
+     *
      * @see doLog
      */
     public function log(common_log_Item $item)
@@ -87,20 +95,21 @@ abstract class common_log_BaseAppender implements common_log_Appender
      * Short description of method getLogThreshold
      *
      * @access public
+     *
      * @author Joel Bout, <joel.bout@tudor.lu>
+     *
      * @return int
      */
     public function getLogThreshold()
     {
         $returnValue = (int) 0;
 
-
         $threshold = 0;
+
         while (($this->mask & 1 << $threshold) == 0) {
             $threshold++;
         }
         $returnValue = $threshold;
-
 
         return (int) $returnValue;
     }
@@ -109,14 +118,17 @@ abstract class common_log_BaseAppender implements common_log_Appender
      * Short description of method init
      *
      * @access public
+     *
      * @author Joel Bout, <joel.bout@tudor.lu>
+     *
      * @param  array configuration
+     * @param mixed $configuration
+     *
      * @return boolean
      */
     public function init($configuration)
     {
         $returnValue = (bool) false;
-
 
         if (isset($configuration['mask']) && is_numeric($configuration['mask'])) {
             // take over the mask
@@ -138,7 +150,6 @@ abstract class common_log_BaseAppender implements common_log_Appender
         }
         $returnValue = true;
 
-
         return (bool) $returnValue;
     }
 
@@ -146,9 +157,13 @@ abstract class common_log_BaseAppender implements common_log_Appender
      * Logs the item
      *
      * @abstract
+     *
      * @access public
+     *
      * @author Joel Bout, <joel.bout@tudor.lu>
+     *
      * @param  Item item
+     *
      * @return mixed
      */
     abstract public function doLog(common_log_Item $item);

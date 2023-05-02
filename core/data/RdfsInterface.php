@@ -16,43 +16,44 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2014 (original work) Open Assessment Technologies SA;
- *
- *
  */
 
 namespace oat\generis\model\data;
+
+use core_kernel_persistence_ClassInterface;
+use core_kernel_persistence_PropertyInterface;
+use core_kernel_persistence_ResourceInterface;
 
 /**
  * Rdfs interface to access the ontology
  *
  * @author Joel Bout, <joel@taotesting.com>
+ *
  * @package generis
-
  */
 interface RdfsInterface
 {
-
     /**
      * Returns the implementation of the class interface
      *
-     * @return \core_kernel_persistence_ClassInterface
+     * @return core_kernel_persistence_ClassInterface
      */
     public function getClassImplementation();
-    
+
     /**
      * Returns the implementation of the resource interface
      *
-     * @return \core_kernel_persistence_ResourceInterface
+     * @return core_kernel_persistence_ResourceInterface
      */
     public function getResourceImplementation();
-    
+
     /**
      * Returns the implementation of the property interface
      *
-     * @return \core_kernel_persistence_PropertyInterface
+     * @return core_kernel_persistence_PropertyInterface
      */
     public function getPropertyImplementation();
-    
+
     // planned interface
     // public function getSearchImplementation();
 }

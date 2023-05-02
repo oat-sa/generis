@@ -20,8 +20,11 @@
 
 namespace oat\generis\scripts\tools;
 
+use common_exception_Error;
+use common_persistence_Manager;
 use common_report_Report as Report;
 use core_kernel_classes_Resource;
+use Exception;
 use oat\generis\model\fileReference\ResourceFileSerializer;
 use oat\generis\model\GenerisRdf;
 use oat\generis\model\OntologyAwareTrait;
@@ -60,7 +63,6 @@ class CleanUpOrphanFiles extends ScriptAction
                 'longPrefix' => 'Verbose',
                 'description' => 'Force script to be more details',
             ],
-
         ];
     }
 
@@ -74,14 +76,15 @@ class CleanUpOrphanFiles extends ScriptAction
         return [
             'prefix' => 'h',
             'longPrefix' => 'help',
-            'description' => 'Prints a help statement'
+            'description' => 'Prints a help statement',
         ];
     }
 
     /**
-     * @return Report
      * @throws \oat\oatbox\service\exception\InvalidServiceManagerException
-     * @throws \common_exception_Error
+     * @throws common_exception_Error
+     *
+     * @return Report
      */
     protected function run()
     {
@@ -93,8 +96,10 @@ class CleanUpOrphanFiles extends ScriptAction
         $serializer = $this->getServiceManager()->get(ResourceFileSerializer::SERVICE_ID);
         $total = 0;
         $resourceCollection = new ResourceCollection(GenerisRdf::CLASS_GENERIS_FILE);
+
         foreach ($resourceCollection as $resource) {
             $total++;
+
             try {
                 $subject = $this->getResource($resource['subject']);
                 $file = $serializer->unserialize($subject);
@@ -105,7 +110,7 @@ class CleanUpOrphanFiles extends ScriptAction
                 } else {
                     $this->manageOrphan($subject, $file);
                 }
-            } catch (\Exception $exception) {
+            } catch (Exception $exception) {
                 $this->errorsCount++;
                 $this->report->add(Report::createFailure($exception->getMessage()));
             }
@@ -135,6 +140,7 @@ class CleanUpOrphanFiles extends ScriptAction
 
     /**
      * @param core_kernel_classes_Resource $resource
+     *
      * @return bool
      */
     private function isOrphan(core_kernel_classes_Resource $resource)
@@ -149,24 +155,25 @@ class CleanUpOrphanFiles extends ScriptAction
     private function getPersistence()
     {
         return $this->getServiceLocator()
-            ->get(\common_persistence_Manager::SERVICE_ID)
+            ->get(common_persistence_Manager::SERVICE_ID)
             ->getPersistenceById('default');
     }
 
     private function getRedundantFiles()
     {
         return [
-            'qti.xml' //special case, see linked story ( has been stored at RDS, but never referenced via resource ).
+            'qti.xml', //special case, see linked story ( has been stored at RDS, but never referenced via resource ).
         ];
     }
 
     /**
      * @param $resource
+     *
      * @return void
      */
     private function markForRemoval(core_kernel_classes_Resource $resource)
     {
-            $this->markedTobeRemoved[] = $resource;
+        $this->markedTobeRemoved[] = $resource;
     }
 
     /**
@@ -177,6 +184,7 @@ class CleanUpOrphanFiles extends ScriptAction
     {
         $this->redundantCount++;
         $message = sprintf('resource URI %s : attached file %s', $resource->getUri(), $file->getPrefix());
+
         if ($this->verbose) {
             $this->report->add(new Report(Report::TYPE_INFO, $message));
         }
@@ -214,13 +222,13 @@ class CleanUpOrphanFiles extends ScriptAction
 
     /**
      * @param $file
+     *
      * @return bool
      */
     private function isRedundant(FileSystemHandler $file)
     {
         return $file->getFileSystemId() === null;
     }
-
 
     private function prepareReport()
     {

@@ -20,13 +20,14 @@
 
 namespace oat\generis\test\integration\common\persistence\sql\dbal;
 
+use common_persistence_sql_dbal_Driver;
 use common_persistence_sql_Platform;
 use common_persistence_SqlPersistence;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DBALException;
 use oat\generis\test\TestCase;
 
-class TestDbalDriver extends \common_persistence_sql_dbal_Driver
+class TestDbalDriver extends common_persistence_sql_dbal_Driver
 {
     public function setDriverManagerClass($class)
     {
@@ -43,15 +44,19 @@ class TestDbalDriverManager
     /**
      * @param $params
      * @param $conf
-     * @return mixed
+     *
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return mixed
      */
     public static function getConnection($params, $conf)
     {
         if (!self::$try || self::$try > self::$allowed) {
             self::$try++;
+
             throw new DBALException('Testing');
         }
+
         return self::$connection;
     }
 
@@ -70,6 +75,7 @@ class TestDbalDriverManager
 
 /**
  * @package oat\generis\test\unit\common\persistence\sql\dbal
+ *
  * @author  Aleh Hutnikau, <hutnikau@1pt.com>
  */
 class DriverTest extends TestCase

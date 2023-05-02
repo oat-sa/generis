@@ -41,13 +41,13 @@ class TestLogger implements LoggerInterface
     public function __construct()
     {
         $this->registry[LogLevel::EMERGENCY] = [];
-        $this->registry[LogLevel::ALERT]     = [];
-        $this->registry[LogLevel::CRITICAL]  = [];
-        $this->registry[LogLevel::ERROR]     = [];
-        $this->registry[LogLevel::WARNING]   = [];
-        $this->registry[LogLevel::NOTICE]    = [];
-        $this->registry[LogLevel::INFO]      = [];
-        $this->registry[LogLevel::DEBUG]     = [];
+        $this->registry[LogLevel::ALERT] = [];
+        $this->registry[LogLevel::CRITICAL] = [];
+        $this->registry[LogLevel::ERROR] = [];
+        $this->registry[LogLevel::WARNING] = [];
+        $this->registry[LogLevel::NOTICE] = [];
+        $this->registry[LogLevel::INFO] = [];
+        $this->registry[LogLevel::DEBUG] = [];
     }
 
     /**
@@ -57,8 +57,9 @@ class TestLogger implements LoggerInterface
      * @param string $message
      * @param array $context
      *
-     * @return void
      * @throws common_exception_InconsistentData
+     *
+     * @return void
      */
     public function log($level, $message, array $context = [])
     {
@@ -67,7 +68,7 @@ class TestLogger implements LoggerInterface
         }
         $this->registry[$level][] = [
             'message' => $message,
-            'context' => $context
+            'context' => $context,
         ];
     }
 
@@ -75,16 +76,18 @@ class TestLogger implements LoggerInterface
      * Return all log entries for an arbitrary level
      *
      * @param string $level
-     * @return array
+     *
      * @throws common_exception_InconsistentData
+     *
+     * @return array
      */
     public function get($level)
     {
         if (isset($this->registry[$level])) {
             return $this->registry[$level];
-        } else {
-            throw new common_exception_InconsistentData('Unknown level ' . $level);
         }
+
+        throw new common_exception_InconsistentData('Unknown level ' . $level);
     }
 
     /**
@@ -92,8 +95,10 @@ class TestLogger implements LoggerInterface
      *
      * @param $level
      * @param $message
-     * @return bool
+     *
      * @throws common_exception_InconsistentData
+     *
+     * @return bool
      */
     public function has($level, $message)
     {
@@ -103,9 +108,10 @@ class TestLogger implements LoggerInterface
                     return true;
                 }
             }
+
             return false;
-        } else {
-            throw new common_exception_InconsistentData('Unknown level ' . $level);
         }
+
+        throw new common_exception_InconsistentData('Unknown level ' . $level);
     }
 }

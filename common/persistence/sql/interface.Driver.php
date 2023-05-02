@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -18,14 +19,13 @@
  *
  * @author "Lionel Lecaque, <lionel@taotesting.com>"
  * @license GPLv2
- * @package generis
  *
+ * @package generis
  */
 interface common_persistence_sql_Driver extends common_persistence_Driver
 {
-    
     public function query($statement, $params, array $types = []);
-    
+
     public function exec($statement, $params, array $types = []);
 
     /**
@@ -34,19 +34,22 @@ interface common_persistence_sql_Driver extends common_persistence_Driver
      * column names and values will be encoded
      *
      * @param string $tableName name of the table
-     * @param array $data An associative array containing column-value pairs.
+     * @param array $data an associative array containing column-value pairs
      * @param array $types
-     * @return integer The number of affected rows.
+     *
+     * @return integer the number of affected rows
      */
     public function insert($tableName, array $data, array $types = []);
-    
+
     public function insertMultiple($tableName, array $data);
 
     /**
      * @param string $tableName
      * @param array $data
-     * @return bool
+     *
      * @throws Exception
+     *
+     * @return bool
      */
     public function updateMultiple($tableName, array $data);
 
@@ -56,9 +59,9 @@ interface common_persistence_sql_Driver extends common_persistence_Driver
      * @return common_persistence_sql_Platform
      */
     public function getPlatForm();
-    
+
     public function lastInsertId($name = null);
-    
+
     public function quote($parameter, $parameter_type = PDO::PARAM_STR);
 
     /**

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,12 +36,10 @@ use common_report_Report;
  * @method static self createSuccess(string $message, $data = null, array $children = []): self
  * @method static self createWarning(string $message, $data = null, array $children = []): self
  * @method static self createError(string $message, $data = null, array $children = []): self
- *
  * @method $this getInfos(bool $asFlat = false): array
  * @method $this getSuccesses(bool $asFlat = false): array
  * @method $this getWarnings(bool $asFlat = false): array
  * @method $this getErrors(bool $asFlat = false): array
- *
  * @method $this containsInfo() Whenever or not the report contains info messages
  * @method $this containsSuccess() Whenever or not the report contains successes
  * @method $this containsWarning() Whenever or not the report contains warnings

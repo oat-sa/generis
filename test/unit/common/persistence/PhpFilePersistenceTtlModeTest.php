@@ -16,16 +16,16 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2015 (original work) Open Assessment Technologies SA;
- *
- *
  */
 
 namespace oat\generis\test\unit\common\persistence;
 
-use \common_persistence_PhpFileDriver;
+use common_Exception;
+use common_persistence_KeyValuePersistence;
+use common_persistence_PhpFileDriver;
 use oat\generis\test\integration\tools\InvokeMethodTrait;
-use org\bovigo\vfs\vfsStream;
 use oat\generis\test\TestCase;
+use org\bovigo\vfs\vfsStream;
 
 class PhpFilePersistenceTtlModeTest extends TestCase
 {
@@ -37,7 +37,7 @@ class PhpFilePersistenceTtlModeTest extends TestCase
     /**
      * The used TTL value.
      */
-    const TTL = 15;
+    public const TTL = 15;
 
     private $root;
 
@@ -70,9 +70,9 @@ class PhpFilePersistenceTtlModeTest extends TestCase
      *
      * @author Lionel Lecaque, lionel@taotesting.com
      *
-     * @param \common_persistence_KeyValuePersistence $persistence
+     * @param common_persistence_KeyValuePersistence $persistence
      *
-     * @throws \common_Exception
+     * @throws common_Exception
      */
     public function testSet($persistence)
     {
@@ -139,9 +139,9 @@ class PhpFilePersistenceTtlModeTest extends TestCase
      *
      * @author Lionel Lecaque, lionel@taotesting.com
      *
-     * @param \common_persistence_KeyValuePersistence $persistence
+     * @param common_persistence_KeyValuePersistence $persistence
      *
-     * @throws \common_Exception
+     * @throws common_Exception
      */
     public function testGet($persistence)
     {
@@ -176,9 +176,9 @@ class PhpFilePersistenceTtlModeTest extends TestCase
      *
      * @author Lionel Lecaque, lionel@taotesting.com
      *
-     * @param \common_persistence_KeyValuePersistence $persistence
+     * @param common_persistence_KeyValuePersistence $persistence
      *
-     * @throws \common_Exception
+     * @throws common_Exception
      */
     public function testExists($persistence)
     {
@@ -200,9 +200,9 @@ class PhpFilePersistenceTtlModeTest extends TestCase
      *
      * @author Lionel Lecaque, lionel@taotesting.com
      *
-     * @param \common_persistence_KeyValuePersistence $persistence
+     * @param common_persistence_KeyValuePersistence $persistence
      *
-     * @throws \common_Exception
+     * @throws common_Exception
      */
     public function testDel($persistence)
     {
@@ -217,9 +217,9 @@ class PhpFilePersistenceTtlModeTest extends TestCase
      *
      * @author Lionel Lecaque, lionel@taotesting.com
      *
-     * @param \common_persistence_KeyValuePersistence $persistence
+     * @param common_persistence_KeyValuePersistence $persistence
      *
-     * @throws \common_Exception
+     * @throws common_Exception
      */
     public function testIncr($persistence)
     {
@@ -236,9 +236,9 @@ class PhpFilePersistenceTtlModeTest extends TestCase
      *
      * @author Lionel Lecaque, lionel@taotesting.com
      *
-     * @param \common_persistence_KeyValuePersistence $persistence
+     * @param common_persistence_KeyValuePersistence $persistence
      *
-     * @throws \common_Exception
+     * @throws common_Exception
      */
     public function testDecr($persistence)
     {
@@ -256,9 +256,9 @@ class PhpFilePersistenceTtlModeTest extends TestCase
      *
      * @author Lionel Lecaque, lionel@taotesting.com
      *
-     * @param \common_persistence_KeyValuePersistence $persistence
+     * @param common_persistence_KeyValuePersistence $persistence
      *
-     * @throws \common_Exception
+     * @throws common_Exception
      */
     public function testPurge($persistence)
     {
@@ -273,7 +273,7 @@ class PhpFilePersistenceTtlModeTest extends TestCase
     /**
      * @author Lionel Lecaque, lionel@taotesting.com
      *
-     * @throws \common_Exception
+     * @throws common_Exception
      */
     public function testNotHumanReadable()
     {
@@ -291,7 +291,7 @@ class PhpFilePersistenceTtlModeTest extends TestCase
     /**
      * Tests the ttl mode.
      *
-     * @param \common_persistence_KeyValuePersistence $persistence
+     * @param common_persistence_KeyValuePersistence $persistence
      *
      * @depends testConnect
      */

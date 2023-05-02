@@ -38,7 +38,7 @@ class ContainerCacheWarmup extends ScriptAction
         return [
             'prefix' => 'h',
             'longPrefix' => 'help',
-            'description' => 'Warmup Dependency Injection Container Cache'
+            'description' => 'Warmup Dependency Injection Container Cache',
         ];
     }
 

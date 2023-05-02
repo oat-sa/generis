@@ -16,24 +16,24 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2014 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
- *
  */
 
 namespace oat\oatbox\user;
 
-use oat\oatbox\user\auth\AuthFactory;
-use common_user_auth_AuthFailedException;
-use common_user_User;
+use common_Logger;
 use common_session_DefaultSession;
 use common_session_SessionManager;
-use common_Logger;
+use common_user_auth_AuthFailedException;
+use common_user_User;
+use oat\oatbox\user\auth\AuthFactory;
 
 /**
  * Login service
  *
  * @access public
+ *
  * @author Joel Bout, <joel@taotesting.com>
+ *
  * @package generis
  */
 class LoginService
@@ -43,6 +43,7 @@ class LoginService
      *
      * @param string $userLogin
      * @param string $userPassword
+     *
      * @return boolean
      */
     public static function login($userLogin, $userPassword)
@@ -53,25 +54,29 @@ class LoginService
         } catch (common_user_auth_AuthFailedException $e) {
             $loggedIn = false;
         }
+
         return $loggedIn;
     }
-    
+
     /**
-     *
      * @param string $userLogin
      * @param string $userPassword
+     *
      * @throws LoginFailedException
+     *
      * @return common_user_User
      */
     public static function authenticate($userLogin, $userPassword)
     {
         $user = null;
-        
+
         $adapters = AuthFactory::createAdapters();
         $exceptions = [];
+
         while (!empty($adapters) && is_null($user)) {
             $adapter = array_shift($adapters);
             $adapter->setCredentials($userLogin, $userPassword);
+
             try {
                 $user = $adapter->authenticate();
             } catch (common_user_auth_AuthFailedException $exception) {
@@ -80,24 +85,26 @@ class LoginService
                 $exceptions[] = $exception;
             }
         }
+
         if (!is_null($user)) {
             return $user;
-        } else {
-            throw new LoginFailedException($exceptions);
         }
+
+        throw new LoginFailedException($exceptions);
     }
-    
-    
+
     /**
      * Start a session for a provided user
      *
      * @param common_user_User $user
+     *
      * @return boolean
      */
     public static function startSession(common_user_User $user)
     {
         $session = new common_session_DefaultSession($user);
         common_session_SessionManager::startSession($session);
+
         return true;
     }
 }

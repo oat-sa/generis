@@ -16,7 +16,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2002-2008 (original work) 2014 Open Assessment Technologies SA
- *
  */
 
 namespace oat\generis\model\data;
@@ -29,21 +28,21 @@ namespace oat\generis\model\data;
  */
 interface Model
 {
-    
     /**
      * Creates a model from a configuration array provided by getConfig()
      *
      * @param array $config
+     * @param mixed $options
      */
-    function __construct($options = []);
-    
+    public function __construct($options = []);
+
     /**
      * Returns a configuration array that can be used to instanciate the model
      * should only contain scalars as values
      *
      * @return array
      */
-    function getOptions();
+    public function getOptions();
 
     /**
      * Experimental interface to access the data of the model
@@ -51,15 +50,15 @@ interface Model
      *
      * @return RdfInterface
      */
-    function getRdfInterface();
-    
+    public function getRdfInterface();
+
     /**
      * Expected interface to access the data of the model
      *
      * @return RdfsInterface
      */
-    function getRdfsInterface();
-    
+    public function getRdfsInterface();
+
     /**
      * Get search interface for model
      */

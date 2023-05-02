@@ -19,15 +19,19 @@
  *
  * @author Lionel Lecaque  <lionel@taotesting.com>
  * @license GPLv2
+ *
  * @package tao
  */
 
 namespace oat\generis\persistence\sql;
 
+use common_exception_InconsistentData;
+use common_persistence_SqlPersistence;
+use Doctrine\DBAL\Exception\ConnectionException;
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use oat\oatbox\log\LoggerAwareTrait;
 use Psr\Log\LoggerAwareInterface;
-use Doctrine\DBAL\Exception\ConnectionException;
+use tao_install_utils_Exception;
 
 class SetupDb implements LoggerAwareInterface
 {
@@ -35,10 +39,12 @@ class SetupDb implements LoggerAwareInterface
 
     /**
      * Setup the tables for the database
-     * @param \common_persistence_SqlPersistence $p
-     * @throws \common_exception_InconsistentData
+     *
+     * @param common_persistence_SqlPersistence $p
+     *
+     * @throws common_exception_InconsistentData
      */
-    public function setupDatabase(\common_persistence_SqlPersistence $p)
+    public function setupDatabase(common_persistence_SqlPersistence $p)
     {
         $dbalDriver = $p->getDriver()->getDbalConnection();
         $dbName = $dbalDriver->getDataBase();
@@ -48,17 +54,21 @@ class SetupDb implements LoggerAwareInterface
 
     /**
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
+     *
+     * @param mixed $dbName
      */
-    private function verifyDatabase(\common_persistence_SqlPersistence $p, $dbName)
+    private function verifyDatabase(common_persistence_SqlPersistence $p, $dbName)
     {
         $schemaManager = $p->getSchemaManager()->getDbalSchemaManager();
+
         if (!$this->dbExists($schemaManager, $dbName)) {
-            throw new \tao_install_utils_Exception('Unable to find the database, make sure that the db exists and that the db user has the rights to use it.');
+            throw new tao_install_utils_Exception('Unable to find the database, make sure that the db exists and that the db user has the rights to use it.');
         }
     }
 
     /**
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
+     *
      * @param string $dbName
      */
     private function dbExists(AbstractSchemaManager $schemaManager, $dbName)
@@ -67,6 +77,7 @@ class SetupDb implements LoggerAwareInterface
             return in_array($dbName, $schemaManager->listDatabases());
         } catch (ConnectionException $e) {
             $this->logWarning('Unable to connect to validate dbExists');
+
             return false;
         }
     }
@@ -74,10 +85,11 @@ class SetupDb implements LoggerAwareInterface
     /**
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
      */
-    private function cleanDb(\common_persistence_SqlPersistence $p)
+    private function cleanDb(common_persistence_SqlPersistence $p)
     {
         $schema = $p->getSchemaManager()->createSchema();
         $queries = $p->getPlatForm()->toDropSql($schema);
+
         foreach ($queries as $query) {
             $p->exec($query);
         }

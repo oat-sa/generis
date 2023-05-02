@@ -16,13 +16,13 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2017 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
  */
 
 namespace oat\oatbox\extension\script;
 
-use oat\oatbox\extension\AbstractAction;
 use common_report_Report as Report;
+use Exception;
+use oat\oatbox\extension\AbstractAction;
 
 /**
  * abstract base for extension scripts.
@@ -33,45 +33,33 @@ abstract class ScriptAction extends AbstractAction
 {
     private $options;
     private $optionsDescription;
-    
-    abstract protected function provideOptions();
-    
-    abstract protected function provideDescription();
-    
-    /**
-     * Run Script.
-     *
-     * Run the userland script. Implementers will use this method
-     * to implement the main logic of the script.
-     *
-     * @return \common_report_Report
-     */
-    abstract protected function run();
-    
+
     /**
      * Invoke
      *
      * This method makes the script invokable programatically.
      *
-     * @return \common_report_Report
+     * @param mixed $params
+     *
+     * @return Report
      */
     public function __invoke($params)
     {
         $this->optionsDescription = $this->provideOptions();
         $beginScript = microtime(true);
-        
+
         // Display help?
         if ($this->displayUsage($params)) {
             return $this->usage();
         }
-        
+
         // Build option container.
         try {
             $this->options = new OptionContainer(
                 $this->optionsDescription,
                 $params
             );
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return new Report(
                 Report::TYPE_ERROR,
                 $e->getMessage()
@@ -82,6 +70,7 @@ abstract class ScriptAction extends AbstractAction
         $report = $this->run();
 
         $endScript = microtime(true);
+
         if ($this->showTime()) {
             $report->add(
                 new Report(
@@ -94,21 +83,35 @@ abstract class ScriptAction extends AbstractAction
         return $report;
     }
 
+    abstract protected function provideOptions();
+
+    abstract protected function provideDescription();
+
+    /**
+     * Run Script.
+     *
+     * Run the userland script. Implementers will use this method
+     * to implement the main logic of the script.
+     *
+     * @return Report
+     */
+    abstract protected function run();
+
     protected function hasOption($optionName)
     {
         return $this->options->has($optionName);
     }
-    
+
     protected function getOption($optionName)
     {
         return $this->options->get($optionName);
     }
-    
+
     protected function provideUsage()
     {
         return [];
     }
-    
+
     protected function provideUsageOptionName()
     {
         return 'help';
@@ -118,11 +121,11 @@ abstract class ScriptAction extends AbstractAction
     {
         return false;
     }
-    
+
     private function displayUsage(array $params)
     {
         $usageDescription = $this->provideUsage();
-        
+
         if (!empty($usageDescription) && is_array($usageDescription)) {
             if (!empty($usageDescription['prefix']) && in_array('-' . $usageDescription['prefix'], $params)) {
                 return true;
@@ -130,49 +133,50 @@ abstract class ScriptAction extends AbstractAction
                 return true;
             }
         }
-        
+
         return false;
     }
-    
+
     private function usage()
     {
         $report = new Report(
             Report::TYPE_INFO,
             $this->provideDescription() . "\n"
         );
-        
+
         $optionsDescription = $this->optionsDescription;
         $optionsDescription[$this->provideUsageOptionName()] = $this->provideUsage();
-        
+
         $required = new Report(Report::TYPE_INFO, 'Required Arguments:');
         $optional = new Report(Report::TYPE_INFO, 'Optional Arguments:');
-        
+
         foreach ($optionsDescription as $optionName => $optionParams) {
             // Deal with prefixes.
             $prefixes = [];
             $optionDisplay = (!empty($optionParams['flag'])) ? '' : " ${optionName}";
-            
+
             if (!empty($optionParams['prefix'])) {
                 $prefixes[] = '-' . $optionParams['prefix'] . "${optionDisplay}";
             }
-            
+
             if (!empty($optionParams['longPrefix'])) {
                 $prefixes[] = '--' . $optionParams['longPrefix'] . "${optionDisplay}";
             }
-            
+
             $optionMsg = implode(', ', $prefixes);
+
             if (isset($optionParams['defaultValue'])) {
                 $optionMsg .= ' (default: ' . self::valueToString($optionParams['defaultValue']) . ')';
             }
-            
+
             $optionReport = new Report(Report::TYPE_INFO, $optionMsg);
-            
+
             if (!empty($optionParams['description'])) {
                 $optionReport->add(
                     new Report(Report::TYPE_INFO, $optionParams['description'])
                 );
             }
-            
+
             $targetReport = (empty($optionParams['required'])) ? $optional : $required;
             $targetReport->add($optionReport);
         }
@@ -187,27 +191,27 @@ abstract class ScriptAction extends AbstractAction
 
         // A little bit of formatting...
         if ($required->hasChildren() && $optional->hasChildren()) {
-            $required->add(new Report(Report::TYPE_INFO, ""));
+            $required->add(new Report(Report::TYPE_INFO, ''));
         }
-
 
         return $report;
     }
-    
+
     private static function valueToString($value)
     {
         $string = "\"${value}\"";
-        
+
         switch (gettype($value)) {
             case 'boolean':
                 $string = ($value === true) ? 'true' : 'false';
+
                 break;
-                
+
             case 'integer':
             case 'double':
                 $string = $value;
         }
-        
+
         return $string;
     }
 
@@ -217,6 +221,7 @@ abstract class ScriptAction extends AbstractAction
      * Format a given number of $seconds into a duration with format [hours]:[minutes]:[seconds].
      *
      * @param $seconds
+     *
      * @return string
      */
     private static function secondsToDuration($seconds)

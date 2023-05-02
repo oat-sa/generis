@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,32 +20,36 @@
 
 namespace oat\generis\test\unit\common\ext;
 
-use oat\generis\test\TestCase;
 use common_ext_Extension as Extension;
+use common_ext_ExtensionUpdater;
+use common_ext_ManifestException;
+use common_ext_ManifestNotFoundException;
+use oat\generis\test\TestCase;
 
 class ExtensionTest extends TestCase
 {
-
     /**
      * @runInSeparateProcess
-     * @throws \common_ext_ManifestException
-     * @throws \common_ext_ManifestNotFoundException
+     *
+     * @throws common_ext_ManifestException
+     * @throws common_ext_ManifestNotFoundException
      */
     public function testGetUpdater()
     {
-        $dir = __DIR__.DIRECTORY_SEPARATOR.'samples'.DIRECTORY_SEPARATOR;
-        $ext = new class ('foo', $dir) extends Extension {
+        $dir = __DIR__ . DIRECTORY_SEPARATOR . 'samples' . DIRECTORY_SEPARATOR;
+        $ext = new class('foo', $dir) extends Extension {
             private $dir;
-            public function __construct($id, $dir) {
+            public function __construct($id, $dir)
+            {
                 parent::__construct($id);
                 $this->dir = $dir;
             }
             public function getDir()
             {
-                return $this->dir.$this->getId().DIRECTORY_SEPARATOR;
+                return $this->dir . $this->getId() . DIRECTORY_SEPARATOR;
             }
         };
         $ext->setServiceLocator($this->getServiceLocatorMock([]));
-        $this->assertInstanceOf(\common_ext_ExtensionUpdater::class, $ext->getUpdater());
+        $this->assertInstanceOf(common_ext_ExtensionUpdater::class, $ext->getUpdater());
     }
 }

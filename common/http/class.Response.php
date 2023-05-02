@@ -16,20 +16,19 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 20013 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
  */
 
 /**
  * Represents an http response
  *
  * @access public
+ *
  * @author Patrick Plichart
+ *
  * @package generis
-
  */
 class common_http_Response
 {
-
     public $httpCode;
     public $headerOut; //CURLINFO_HEADER_OUT The request string sent. For this to work, add the CURLINFO_HEADER_OUT option to the handle by calling curl_setopt()
     public $effectiveUrl; // Last effective URL

@@ -22,21 +22,21 @@ declare(strict_types=1);
 
 namespace oat\generis\test\unit\model\resource\Repository;
 
-use oat\generis\test\TestCase;
 use core_kernel_classes_Resource;
-use oat\generis\model\GenerisRdf;
-use oat\generis\model\OntologyRdf;
-use oat\search\base\QueryInterface;
-use oat\generis\test\IteratorMockTrait;
-use oat\search\base\ResultSetInterface;
-use oat\search\base\QueryBuilderInterface;
-use oat\search\base\SearchGateWayInterface;
-use PHPUnit\Framework\MockObject\MockObject;
-use oat\search\helper\SupportedOperatorHelper;
 use oat\generis\model\Context\ContextInterface;
-use oat\generis\model\resource\Repository\PropertyRepository;
-use oat\generis\model\resource\Context\PropertyRepositoryContext;
+use oat\generis\model\GenerisRdf;
 use oat\generis\model\kernel\persistence\smoothsql\search\ComplexSearchService;
+use oat\generis\model\OntologyRdf;
+use oat\generis\model\resource\Context\PropertyRepositoryContext;
+use oat\generis\model\resource\Repository\PropertyRepository;
+use oat\generis\test\IteratorMockTrait;
+use oat\generis\test\TestCase;
+use oat\search\base\QueryBuilderInterface;
+use oat\search\base\QueryInterface;
+use oat\search\base\ResultSetInterface;
+use oat\search\base\SearchGateWayInterface;
+use oat\search\helper\SupportedOperatorHelper;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class PropertyRepositoryTest extends TestCase
 {

@@ -16,11 +16,11 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2014 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
  */
 
 namespace oat\generis\model\data\permission\implementation;
 
+use core_kernel_classes_Resource;
 use oat\generis\model\data\permission\PermissionInterface;
 use oat\oatbox\service\ConfigurableService;
 use oat\oatbox\user\User;
@@ -32,45 +32,46 @@ use oat\oatbox\user\User;
  * does not grant privileges
  *
  * @access public
+ *
  * @author Joel Bout, <joel@taotesting.com>
  */
 class Intersection extends ConfigurableService implements PermissionInterface
 {
+    public function __construct($options = [])
+    {
+        parent::__construct($options);
+    }
     /**
-     *
      * @param PermissionInterface[] $persmissionMdels
      */
     public static function spawn($persmissionMdels)
     {
         return new self(['inner' => $persmissionMdels]);
     }
-    
-    public function __construct($options = [])
-    {
-        parent::__construct($options);
-    }
-    
+
     protected function getInner()
     {
         return $this->getOption('inner');
     }
-    
-    
+
     /**
      * (non-PHPdoc)
+     *
      * @see PermissionInterface::getPermissions()
      */
     public function getPermissions(User $user, array $resourceIds)
     {
-        
         $results = [];
+
         foreach ($this->getInner() as $impl) {
             $results[] = $impl->getPermissions($user, $resourceIds);
         }
-        
+
         $rights = [];
+
         foreach ($resourceIds as $id) {
             $intersect = null;
+
             foreach ($results as $modelResult) {
                 $intersect = is_null($intersect)
                     ? $modelResult[$id]
@@ -78,23 +79,25 @@ class Intersection extends ConfigurableService implements PermissionInterface
             }
             $rights[$id] = array_values($intersect);
         }
-        
+
         return $rights;
     }
-    
+
     /**
      * (non-PHPdoc)
+     *
      * @see PermissionInterface::onResourceCreated()
      */
-    public function onResourceCreated(\core_kernel_classes_Resource $resource)
+    public function onResourceCreated(core_kernel_classes_Resource $resource)
     {
         foreach ($this->getInner() as $impl) {
             $impl->onResourceCreated($resource);
         }
     }
-    
+
     /**
      * (non-PHPdoc)
+     *
      * @see PermissionInterface::getSupportedPermissions()
      */
     public function getSupportedRights()
@@ -102,12 +105,12 @@ class Intersection extends ConfigurableService implements PermissionInterface
         $models = $this->getInner();
         $first = array_pop($models);
         $supported = $first->getSupportedRights();
-        
+
         while (!empty($models)) {
             $model = array_pop($models);
             $supported = array_intersect($supported, $model->getSupportedRights());
         }
-        
+
         return array_values($supported);
     }
 }

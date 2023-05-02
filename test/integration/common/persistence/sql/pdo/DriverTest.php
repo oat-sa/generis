@@ -27,6 +27,7 @@ use oat\generis\test\TestCase;
 
 /**
  * @package oat\generis\test\unit\common\persistence\sql\dbal
+ *
  * @author  Aleh Hutnikau, <hutnikau@1pt.com>
  */
 class DriverTest extends TestCase

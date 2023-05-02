@@ -16,13 +16,11 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2016 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
  */
 
 namespace oat\oatbox\extension;
 
 use oat\oatbox\event\EventManager;
-use oat\oatbox\service\ConfigurableService;
 
 /**
  * New Abstract action containing some helper functions
@@ -31,7 +29,6 @@ use oat\oatbox\service\ConfigurableService;
  */
 abstract class InstallAction extends AbstractAction
 {
-    
     /**
      * Add a new event Listener
      *

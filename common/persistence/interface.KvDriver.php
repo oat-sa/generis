@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -18,9 +19,8 @@
  *
  * @author Lionel Lecaque  <lionel@taotesting.com>
  * @license GPLv2
- * @package generis
-
  *
+ * @package generis
  */
 
 /**
@@ -30,7 +30,6 @@
  */
 interface common_persistence_KvDriver extends common_persistence_Driver
 {
-
     /**
      * Stores a value, implementing time to live and nx is optional
      * Should throw an exception if an option is not supported
@@ -39,6 +38,7 @@ interface common_persistence_KvDriver extends common_persistence_Driver
      * @param string $value
      * @param string $ttl time to live in seconds
      * @param bool $nx Only set the key if it does not already exist
+     *
      * @return bool
      */
     public function set($id, $value, $ttl = null, $nx = false);
@@ -48,14 +48,16 @@ interface common_persistence_KvDriver extends common_persistence_Driver
      * or false if not found
      *
      * @param string $id
+     *
      * @return string
      */
     public function get($id);
-    
+
     /**
      * test whenever or not an entry exists
      *
      * @param string $id
+     *
      * @return boolean
      */
     public function exists($id);
@@ -64,6 +66,7 @@ interface common_persistence_KvDriver extends common_persistence_Driver
      * Remove an  entry from storage
      *
      * @param string $id
+     *
      * @return boolean
      */
     public function del($id);
@@ -72,13 +75,16 @@ interface common_persistence_KvDriver extends common_persistence_Driver
      * Increment value
      *
      * @param string $id
+     *
      * @return boolean
      */
     public function incr($id);
 
     /**
      * Decrement value
+     *
      * @param $id
+     *
      * @return boolean
      */
     public function decr($id);

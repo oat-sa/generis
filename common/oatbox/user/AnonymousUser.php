@@ -16,8 +16,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2017 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
- *
  */
 
 namespace oat\oatbox\user;
@@ -28,25 +26,30 @@ class AnonymousUser implements User
 {
     /**
      * (non-PHPdoc)
+     *
      * @see \oat\oatbox\user\User::getIdentifier()
      */
     public function getIdentifier()
     {
         return null;
     }
-    
+
     /**
      * (non-PHPdoc)
+     *
      * @see \oat\oatbox\user\User::getRoles()
      */
     public function getRoles()
     {
         return [GenerisRdf::INSTANCE_ROLE_ANONYMOUS];
     }
-    
+
     /**
      * (non-PHPdoc)
+     *
      * @see \oat\oatbox\user\User::getPropertyValues()
+     *
+     * @param mixed $property
      */
     public function getPropertyValues($property)
     {

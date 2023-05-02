@@ -18,27 +18,28 @@
  * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
  *               2013-2014 (update and modification) Open Assessment Technologies SA;
- *
  */
 
-use oat\oatbox\extension\exception\ManifestException;
 use common_ext_UpdaterNotFoundException as UpdaterNotFoundException;
+use oat\oatbox\config\ConfigurationService;
+use oat\oatbox\extension\exception\ManifestException;
+use oat\oatbox\extension\exception\ManifestNotFoundException;
+use oat\oatbox\extension\Manifest;
+use oat\oatbox\service\ConfigurableService;
 use oat\oatbox\service\ServiceManagerAwareInterface;
 use oat\oatbox\service\ServiceManagerAwareTrait;
 use oat\oatbox\service\ServiceNotFoundException;
-use oat\oatbox\service\ConfigurableService;
-use oat\oatbox\config\ConfigurationService;
-use oat\oatbox\extension\exception\ManifestNotFoundException;
-use oat\oatbox\extension\Manifest;
 
 /**
  * Short description of class common_ext_Extension
  *
  * @access public
+ *
  * @author lionel.lecaque@tudor.lu
+ *
  * @package generis
+ *
  * @see @license  GNU General Public (GPL) Version 2 http://www.opensource.org/licenses/gpl-2.0.php
-
  */
 class common_ext_Extension implements ServiceManagerAwareInterface
 {
@@ -49,7 +50,7 @@ class common_ext_Extension implements ServiceManagerAwareInterface
      *
      * @var string
      */
-    const MANIFEST_NAME = 'manifest.php';
+    public const MANIFEST_NAME = 'manifest.php';
 
     /**
      * List of extension dependencies
@@ -62,6 +63,7 @@ class common_ext_Extension implements ServiceManagerAwareInterface
      * Short description of attribute id
      *
      * @access private
+     *
      * @var string
      */
     private $id = '';
@@ -77,6 +79,7 @@ class common_ext_Extension implements ServiceManagerAwareInterface
      * Whenever or not an extension has already been loaded
      *
      * @access private
+     *
      * @var boolean
      */
     protected $loaded = false;
@@ -85,6 +88,7 @@ class common_ext_Extension implements ServiceManagerAwareInterface
      * Should not be called directly, please use ExtensionsManager
      *
      * @access public
+     *
      * @author Joel Bout, <joel@taotesting.com>
      *
      * @param string $id
@@ -98,7 +102,9 @@ class common_ext_Extension implements ServiceManagerAwareInterface
      * returns the id of the extension
      *
      * @access public
+     *
      * @author firstname and lastname of author, <author@example.org>
+     *
      * @return string
      */
     public function getId()
@@ -110,7 +116,9 @@ class common_ext_Extension implements ServiceManagerAwareInterface
      * returns all constants of the extension
      *
      * @access public
+     *
      * @author firstname and lastname of author, <author@example.org>
+     *
      * @return array
      */
     public function getConstants()
@@ -121,7 +129,8 @@ class common_ext_Extension implements ServiceManagerAwareInterface
     /**
      * checks if a configuration value exists
      *
-     * @param  string $key
+     * @param string $key
+     *
      * @return boolean
      */
     public function hasConfig($key)
@@ -132,10 +141,12 @@ class common_ext_Extension implements ServiceManagerAwareInterface
     /**
      * sets a configuration value
      *
-     * @param  string $key
-     * @param  string $value
-     * @return bool always returns true for backward compatibility
+     * @param string $key
+     * @param string $value
+     *
      * @throws common_exception_Error On error
+     *
+     * @return bool always returns true for backward compatibility
      */
     public function setConfig($key, $value)
     {
@@ -144,6 +155,7 @@ class common_ext_Extension implements ServiceManagerAwareInterface
         }
         $value->setHeader($this->getConfigHeader($key));
         $this->registerService($this->getId() . '/' . $key, $value);
+
         return true;
     }
 
@@ -151,7 +163,8 @@ class common_ext_Extension implements ServiceManagerAwareInterface
      * retrieves a configuration value
      * returns false if not found
      *
-     * @param  string $key
+     * @param string $key
+     *
      * @return mixed
      */
     public function getConfig($key)
@@ -161,20 +174,23 @@ class common_ext_Extension implements ServiceManagerAwareInterface
         }
 
         try {
-            $config =  $this->getServiceLocator()->get($this->getId() . '/' . $key);
+            $config = $this->getServiceLocator()->get($this->getId() . '/' . $key);
+
             if ($config instanceof ConfigurationService) {
                 $config = $config->getConfig();
             }
         } catch (ServiceNotFoundException $e) {
             $config = false;
         }
+
         return $config;
     }
 
     /**
      * removes a configuration entry
      *
-     * @param  string $key
+     * @param string $key
+     *
      * @return mixed
      */
     public function unsetConfig($key)
@@ -186,7 +202,9 @@ class common_ext_Extension implements ServiceManagerAwareInterface
      * returns the version of the extension
      *
      * @access public
+     *
      * @author firstname and lastname of author, <author@example.org>
+     *
      * @return string
      */
     public function getVersion()
@@ -198,7 +216,9 @@ class common_ext_Extension implements ServiceManagerAwareInterface
      * returns the author of the extension
      *
      * @access public
+     *
      * @author firstname and lastname of author, <author@example.org>
+     *
      * @return string
      */
     public function getAuthor()
@@ -210,7 +230,9 @@ class common_ext_Extension implements ServiceManagerAwareInterface
      * returns the name of the extension
      *
      * @access public
+     *
      * @author firstname and lastname of author, <author@example.org>
+     *
      * @return string
      */
     public function getName()
@@ -222,9 +244,12 @@ class common_ext_Extension implements ServiceManagerAwareInterface
      * returns the base dir of the extension
      *
      * @access public
+     *
      * @author firstname and lastname of author, <author@example.org>
-     * @return string
+     *
      * @throws common_ext_ExtensionException
+     *
+     * @return string
      */
     public function getDir()
     {
@@ -243,6 +268,7 @@ class common_ext_Extension implements ServiceManagerAwareInterface
     public function hasConstant($key)
     {
         $constants = $this->getConstants();
+
         return isset($constants[$key]);
     }
 
@@ -250,15 +276,19 @@ class common_ext_Extension implements ServiceManagerAwareInterface
      * Retrieves a constant from the manifest.php file of the extension.
      *
      * @author Joel Bout, <joel@taotesting.com>
-     * @param  string $key
+     *
+     * @param string $key
+     *
+     * @throws common_exception_Error if the constant cannot be found
+     *
      * @return mixed
-     * @throws common_exception_Error If the constant cannot be found.
      */
     public function getConstant($key)
     {
         $returnValue = null;
 
         $constants = $this->getConstants();
+
         if (isset($constants[$key])) {
             $returnValue = $constants[$key];
         } elseif (defined($key)) {
@@ -276,7 +306,9 @@ class common_ext_Extension implements ServiceManagerAwareInterface
      * by searching the actions directory, not the ontology
      *
      * @access public
+     *
      * @author firstname and lastname of author, <author@example.org>
+     *
      * @return array
      */
     public function getAllModules()
@@ -285,18 +317,23 @@ class common_ext_Extension implements ServiceManagerAwareInterface
 
         // routes
         $namespaces = [];
+
         foreach ($this->getManifest()->getRoutes() as $mapedPath => $ns) {
             $namespaces[] = trim($ns, '\\');
         }
+
         if (!empty($namespaces)) {
             common_Logger::d('Namespace not empty for extension ' . $this->getId());
             $recDir = new RecursiveDirectoryIterator($this->getDir());
             $recIt = new RecursiveIteratorIterator($recDir);
             $regexIt = new RegexIterator($recIt, '/^.+\.php$/i', RecursiveRegexIterator::GET_MATCH);
+
             foreach ($regexIt as $entry) {
                 $info = helpers_PhpTools::getClassInfo($entry[0]);
+
                 if (!empty($info['ns'])) {
                     $ns = trim($info['ns'], '\\');
+
                     if (!empty($info['ns']) && in_array($ns, $namespaces)) {
                         $returnValue[$info['class']] = $ns . '\\' . $info['class'];
                     }
@@ -306,6 +343,7 @@ class common_ext_Extension implements ServiceManagerAwareInterface
         // legacy
         if ($this->hasConstant('DIR_ACTIONS') && file_exists($this->getConstant('DIR_ACTIONS'))) {
             $dir = new DirectoryIterator($this->getConstant('DIR_ACTIONS'));
+
             foreach ($dir as $fileinfo) {
                 if (preg_match('/^class\.[^.]*\.php$/', $fileinfo->getFilename())) {
                     $module = substr($fileinfo->getFilename(), 6, -4);
@@ -317,6 +355,7 @@ class common_ext_Extension implements ServiceManagerAwareInterface
         // validate the classes
         foreach (array_keys($returnValue) as $key) {
             $class = $returnValue[$key];
+
             if (!class_exists($class)) {
                 common_Logger::w($class . ' not found');
                 unset($returnValue[$key]);
@@ -333,8 +372,11 @@ class common_ext_Extension implements ServiceManagerAwareInterface
      * returns a module by ID
      *
      * @access public
+     *
      * @author firstname and lastname of author, <author@example.org>
-     * @param  string $id
+     *
+     * @param string $id
+     *
      * @return Module
      */
     public function getModule($id)
@@ -342,6 +384,7 @@ class common_ext_Extension implements ServiceManagerAwareInterface
         $returnValue = null;
 
         $className = $this->getId() . '_actions_' . $id;
+
         if (class_exists($className)) {
             $returnValue = new $className();
         } else {
@@ -355,7 +398,8 @@ class common_ext_Extension implements ServiceManagerAwareInterface
      * Returns the extension the current extension depends on recursively
      *
      * @access public
-     * @return array Where key is name of extension and value is required version.
+     *
+     * @return array where key is name of extension and value is required version
      */
     public function getDependencies()
     {
@@ -366,19 +410,22 @@ class common_ext_Extension implements ServiceManagerAwareInterface
                 $this->dependencies = array_merge($this->dependencies, $dependence->getDependencies());
             }
         }
+
         return $this->dependencies;
     }
 
     /**
      * Returns the manifest of the extension
      *
-     * @return Manifest
      * @throws ManifestNotFoundException
+     *
+     * @return Manifest
      */
     public function getManifest()
     {
         if (! $this->manifest) {
             $manifestFile = $this->getDir() . self::MANIFEST_NAME;
+
             if (is_file($manifestFile) && is_readable($manifestFile)) {
                 $this->manifest = new Manifest($manifestFile);
             } else {
@@ -386,6 +433,7 @@ class common_ext_Extension implements ServiceManagerAwareInterface
             }
         }
         $this->manifest->setServiceLocator($this->getServiceLocator());
+
         return $this->manifest;
     }
 
@@ -396,6 +444,7 @@ class common_ext_Extension implements ServiceManagerAwareInterface
 
     /**
      * Whenever or not the extension and it's constants have been loaded
+     *
      * @return boolean
      */
     public function isLoaded()
@@ -412,6 +461,7 @@ class common_ext_Extension implements ServiceManagerAwareInterface
         if (!$this->isLoaded()) {
             try {
                 $dependencies = $this->getManifest()->getDependencies();
+
                 foreach ($dependencies as $extId => $extVersion) {
                     $this->getExtensionManager()->getExtensionById($extId);
                 }
@@ -439,6 +489,7 @@ class common_ext_Extension implements ServiceManagerAwareInterface
             $service = new common_ext_ExtensionsManager();
             $this->getServiceLocator()->propagate($service);
         }
+
         return $service;
     }
 
@@ -446,14 +497,17 @@ class common_ext_Extension implements ServiceManagerAwareInterface
      * Get the documentation header for extension config located at key path
      *
      * @param $key
+     *
      * @return null|string
      */
     public function getConfigHeader($key)
     {
         $path = $this->getDir() . 'config/header/' . $key . '.conf.php';
+
         if (is_readable($path) && is_file($path)) {
             return file_get_contents($path);
         }
+
         return null;
     }
 
@@ -465,6 +519,7 @@ class common_ext_Extension implements ServiceManagerAwareInterface
     public function getUpdater(): common_ext_ExtensionUpdater
     {
         $updaterClass = $this->getManifest()->getUpdateHandler();
+
         if ($updaterClass === null) {
             throw new UpdaterNotFoundException('No Updater found for ' . $this->getName());
         } elseif (!class_exists($updaterClass)) {
@@ -473,6 +528,7 @@ class common_ext_Extension implements ServiceManagerAwareInterface
         /** @var common_ext_ExtensionUpdater $updater */
         $updater = new $updaterClass($this);
         $updater->setServiceLocator($this->getServiceLocator());
+
         return $updater;
     }
 }

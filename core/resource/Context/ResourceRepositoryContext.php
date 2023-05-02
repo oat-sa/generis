@@ -22,9 +22,9 @@ declare(strict_types=1);
 
 namespace oat\generis\model\resource\Context;
 
-use InvalidArgumentException;
 use core_kernel_classes_Class;
 use core_kernel_classes_Resource;
+use InvalidArgumentException;
 use oat\generis\model\Context\AbstractContext;
 
 class ResourceRepositoryContext extends AbstractContext

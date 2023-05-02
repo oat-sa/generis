@@ -16,7 +16,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2015 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
  */
 
 use oat\oatbox\user\User;
@@ -24,7 +23,6 @@ use oat\oatbox\user\User;
 /**
  * @author CRP Henri Tudor - TAO Team
  * @license GPLv2
- *
  */
 class common_test_TestUser implements User
 {
@@ -47,9 +45,8 @@ class common_test_TestUser implements User
 
     public function getPropertyValues($property)
     {
-        return isset($this->properties[$property])
-           ? $this->properties[$property]
-           : [];
+        return $this->properties[$property]
+           ?? [];
     }
 
     public function getRoles()

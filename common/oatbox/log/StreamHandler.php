@@ -16,13 +16,14 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2021 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
  */
 
 declare(strict_types=1);
 
 namespace oat\oatbox\log;
 
+use Exception;
+use InvalidArgumentException;
 use Monolog\Handler\StreamHandler as MonologStreamHandler;
 use Monolog\Logger;
 
@@ -56,8 +57,8 @@ class StreamHandler extends MonologStreamHandler
      * @param int|null $filePermission Optional file permissions (default (0644) are only for owner read/write)
      * @param bool $useLocking Try to lock log file before doing any writes
      *
-     * @throws \Exception                If a missing directory is not buildable
-     * @throws \InvalidArgumentException If stream is not a resource or string
+     * @throws Exception If a missing directory is not buildable
+     * @throws InvalidArgumentException If stream is not a resource or string
      */
     public function __construct($defaultStream, int $defaultLevel = Logger::DEBUG, bool $bubble = true, $filePermission = null, bool $useLocking = false)
     {
@@ -68,6 +69,7 @@ class StreamHandler extends MonologStreamHandler
 
     /**
      * @param string $parameter
+     *
      * @return string|null
      */
     private function getScriptParameter(string $parameter): ?string
@@ -80,19 +82,22 @@ class StreamHandler extends MonologStreamHandler
     }
 
     /**
+     * @throws Exception
+     *
      * @return int|null
-     * @throws \Exception
      */
     private function getLogLevelParameter(): ?int
     {
         $logLevelParameter = $this->getScriptParameter(self::PARAM_LOG_LEVEL);
+
         if (!$logLevelParameter) {
             return null;
         }
 
         $errorLevels = Logger::getLevels();
+
         if (!isset($errorLevels[$logLevelParameter])) {
-            throw new \Exception(sprintf('Such log level doesn`t exist. Please, use one of: %s', implode(', ', array_flip($errorLevels))));
+            throw new Exception(sprintf('Such log level doesn`t exist. Please, use one of: %s', implode(', ', array_flip($errorLevels))));
         }
 
         return $errorLevels[$logLevelParameter];

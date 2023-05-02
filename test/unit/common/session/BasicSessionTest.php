@@ -22,23 +22,23 @@ declare(strict_types=1);
 
 namespace oat\generis\test\unit\common\persistence;
 
+use common_session_BasicSession;
 use oat\generis\test\TestCase;
-use oat\oatbox\user\User;
 use oat\oatbox\session\SessionContext;
+use oat\oatbox\user\User;
 
 class BasicSessionTest extends TestCase
 {
-    public function testGetContext() : void
+    public function testGetContext(): void
     {
         $user = $this->prophesize(User::class)->reveal();
         $context1 = $this->prophesize(SessionContext::class)->reveal();
         $context2 = $this->prophesize(SessionContext::class)->reveal();
 
-        $session = new \common_session_BasicSession($user, [$context1]);
+        $session = new common_session_BasicSession($user, [$context1]);
         $this->assertEquals([$context1], $session->getContexts());
 
-        $session = new \common_session_BasicSession($user, [$context1, $context2]);
+        $session = new common_session_BasicSession($user, [$context1, $context2]);
         $this->assertEquals([$context1, $context2], $session->getContexts());
     }
-
 }

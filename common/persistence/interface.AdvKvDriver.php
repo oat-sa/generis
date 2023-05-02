@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -18,9 +19,8 @@
  *
  * @author Patrick Plichart  <patrick@taotesting.com>
  * @license GPLv2
- * @package generis
-
  *
+ * @package generis
  */
 
 /**
@@ -43,8 +43,10 @@ interface common_persistence_AdvKvDriver extends common_persistence_KvDriver
      * Increment value and return the new value, can return negative numbers
      *
      * @param string $key
-     * @return integer
+     *
      * @throws common_exception_InconsistentData on non int value
+     *
+     * @return integer
      */
     public function incr($key);
 
@@ -52,8 +54,10 @@ interface common_persistence_AdvKvDriver extends common_persistence_KvDriver
      * Decrement value and return the new value, can return negative numbers
      *
      * @param $key
-     * @return integer
+     *
      * @throws common_exception_InconsistentData on non int value
+     *
+     * @return integer
      */
     public function decr($key);
 }

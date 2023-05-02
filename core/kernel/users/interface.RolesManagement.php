@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,20 +25,25 @@
  * Short description of class core_kernel_users_RolesManagement
  *
  * @access public
+ *
  * @author Jerome Bogaerts, <jerome@taotesting.com>
+ *
  * @package generis
-
  */
 interface core_kernel_users_RolesManagement
 {
-
     /**
      * Add a role in Generis.
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome@taotesting.com>
-     * @param  string label The label to apply to the newly created Generis Role.
+     *
+     * @param  string label The label to apply to the newly created Generis Role
      * @param  includedRoles The Role(s) to be included in the newly created Generis Role. Can be either a Resource or an array of Resources.
+     * @param mixed $label
+     * @param null|mixed $includedRoles
+     *
      * @return core_kernel_classes_Resource
      */
     public function addRole($label, $includedRoles = null, core_kernel_classes_Class $class = null);
@@ -47,8 +53,11 @@ interface core_kernel_users_RolesManagement
      * will be removed.
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome@taotesting.com>
-     * @param  Resource role The Role to remove.
+     *
+     * @param  Resource role The Role to remove
+     *
      * @return boolean
      */
     public function removeRole(core_kernel_classes_Resource $role);
@@ -57,8 +66,11 @@ interface core_kernel_users_RolesManagement
      * Get an array of the Roles included by a Generis Role.
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome@taotesting.com>
-     * @param  Resource role A Generis Role.
+     *
+     * @param  Resource role A Generis Role
+     *
      * @return array
      */
     public function getIncludedRoles(core_kernel_classes_Resource $role);
@@ -67,27 +79,32 @@ interface core_kernel_users_RolesManagement
      * Make a Role include another Role.
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome@taotesting.com>
-     * @param  core_kernel_classes_Resource role The role that needs to include another role.
-     * @param  core_kernel_classes_Resource roleToInclude The role to be included.
+     *
+     * @param  core_kernel_classes_Resource role The role that needs to include another role
+     * @param  core_kernel_classes_Resource roleToInclude The role to be included
      */
     public function includeRole(core_kernel_classes_Resource $role, core_kernel_classes_Resource $roleToInclude);
-    
+
     /**
      * Uninclude a Role from another Role.
      *
      * @author Jerome Bogaerts <jerome.taotesting.com>
-     * @param core_kernel_classes_Resource role The role from which you want to uninclude a Role.
-     * @param core_kernel_classes_Resource roleToUninclude The Role to uninclude.
+     *
+     * @param core_kernel_classes_Resource role The role from which you want to uninclude a Role
+     * @param core_kernel_classes_Resource roleToUninclude The Role to uninclude
      */
     public function unincludeRole(core_kernel_classes_Resource $role, core_kernel_classes_Resource $roleToUninclude);
-    
+
     /**
      * Return all instances of Roles from the persistent memory of Generis.
      *
      * @access public
+     *
      * @author Jerome Bogaerts
-     * @return array An associative array where keys are Role URIs and values are instances of the core_kernel_classes_Resource class.
+     *
+     * @return array an associative array where keys are Role URIs and values are instances of the core_kernel_classes_Resource class
      */
     public function getAllRoles();
 }

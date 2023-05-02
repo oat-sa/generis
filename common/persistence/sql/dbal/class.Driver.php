@@ -19,7 +19,6 @@
  *
  * @author Lionel Lecaque  <lionel@taotesting.com>
  * @author Jerome Bogaerts, <jerome@taotesting.com>
- *
  */
 
 declare(strict_types=1);
@@ -54,12 +53,15 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
      *
      * @param string $id
      * @param array $params
-     * @return common_persistence_Persistence|common_persistence_SqlPersistence
+     *
      * @throws DBALException
+     *
+     * @return common_persistence_Persistence|common_persistence_SqlPersistence
      */
     public function connect($id, array $params)
     {
         $isMysqlDbal = false;
+
         if (isset($params['connection'])) {
             $connectionParams = $params['connection'];
             $isMysqlDbal = isset($connectionParams['driver']) && $connectionParams['driver'] === 'pdo_mysql';
@@ -81,11 +83,13 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
      * Endless connection
      *
      * @param $connectionParams
+     *
      * @throws DBALException
      */
     protected function persistentConnect($connectionParams, string $sqlClassLogger = null)
     {
         $config = new Configuration();
+
         if ($sqlClassLogger !== null && is_a($sqlClassLogger, SQLLogger::class, true)) {
             $config->setSQLLogger(new $sqlClassLogger());
         }
@@ -95,8 +99,9 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
 
         while (true) {
             try {
-                /** @var Connection connection */
+                /* @var Connection connection */
                 $this->connection = $this->getConnection($connectionParams, $config);
+
                 break;
             } catch (DBALException $e) {
                 $this->connection = null;
@@ -113,10 +118,10 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
     /**
      * @param $params
      * @param $config
-     * @return Connection
      *
      * @throws DBALException
      *
+     * @return Connection
      */
     private function getConnection($params, $config)
     {
@@ -131,6 +136,7 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
         if (!$this->driverManagerClass || !class_exists($this->driverManagerClass)) {
             $this->driverManagerClass = DriverManager::class;
         }
+
         return $this->driverManagerClass;
     }
 
@@ -144,6 +150,7 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
 
     /**
      * (non-PHPdoc)
+     *
      * @see common_persistence_sql_Driver::getPlatForm()
      */
     public function getPlatForm()
@@ -153,6 +160,7 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
 
     /**
      * (non-PHPdoc)
+     *
      * @see common_persistence_sql_Driver::getSchemaManager()
      */
     public function getSchemaManager()
@@ -166,14 +174,15 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
      * @param mixed $statement
      * @param array $params
      * @param array $types
-     * @return integer number of affected row
+     *
      * @throws DBALException
+     *
+     * @return integer number of affected row
      */
     public function exec($statement, $params = [], array $types = [])
     {
         return $this->connection->executeUpdate($statement, $params, $types);
     }
-
 
     /**
      * Query  the statement with provided params
@@ -181,8 +190,10 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
      * @param Statement $statement
      * @param array $params
      * @param array $types
-     * @return ResultStatement
+     *
      * @throws DBALException
+     *
+     * @return ResultStatement
      */
     public function query($statement, $params = [], array $types = [])
     {
@@ -192,9 +203,10 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
     /**
      * Convenience access to PDO::quote.
      *
-     * @param string $parameter The parameter to quote.
-     * @param int $parameter_type A PDO PARAM_XX constant.
-     * @return string The quoted string.
+     * @param string $parameter the parameter to quote
+     * @param int $parameter_type a PDO PARAM_XX constant
+     *
+     * @return string the quoted string
      */
     public function quote($parameter, $parameter_type = PDO::PARAM_STR)
     {
@@ -207,11 +219,12 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
      * column names and values will be encoded
      *
      * @param string $tableName name of the table
-     * @param array $data An associative array containing column-value pairs.
+     * @param array $data an associative array containing column-value pairs
      * @param array $types
-     * @return integer The number of affected rows.
      *
      * @throws DBALException
+     *
+     * @return integer the number of affected rows
      */
     public function insert($tableName, array $data, array $types = [])
     {
@@ -229,7 +242,8 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
      * Convenience access to PDO::lastInsertId.
      *
      * @param string $name
-     * @return string The quoted string.
+     *
+     * @return string the quoted string
      */
     public function lastInsertId($name = null)
     {
@@ -246,6 +260,7 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
 
     /**
      * Returns the name of the connections database
+     *
      * @return string
      */
     public function getDataBase()
@@ -256,12 +271,12 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
     /**
      * Execute a function within a transaction.
      *
-     * @param Closure $func The function to execute in a transactional way.
-     *
-     * @return mixed The value returned by $func
+     * @param Closure $func the function to execute in a transactional way
      *
      * @throws Exception
      * @throws Throwable
+     *
+     * @return mixed The value returned by $func
      */
     public function transactional(Closure $func)
     {
@@ -274,6 +289,7 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
     private function quoteColumnsMap(array $columnsMap): array
     {
         $quotedColumnsMap = [];
+
         foreach ($columnsMap as $column => $associatedValue) {
             $quotedColumnsMap[$this->getPlatForm()->quoteIdentifier($column)] = $associatedValue;
         }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -17,22 +18,22 @@
  * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
  *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- *
  */
 
 /**
  * Short description of class common_configuration_BoundableComponent
  *
  * @abstract
+ *
  * @access public
+ *
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+ *
  * @package generis
-
  */
 abstract class common_configuration_BoundableComponent extends common_configuration_Component
 {
     // --- ASSOCIATIONS ---
-
 
     // --- ATTRIBUTES ---
 
@@ -40,6 +41,7 @@ abstract class common_configuration_BoundableComponent extends common_configurat
      * Short description of attribute min
      *
      * @access private
+     *
      * @var string
      */
     private $min = '';
@@ -48,6 +50,7 @@ abstract class common_configuration_BoundableComponent extends common_configurat
      * Short description of attribute max
      *
      * @access private
+     *
      * @var string
      */
     private $max = '';
@@ -58,16 +61,22 @@ abstract class common_configuration_BoundableComponent extends common_configurat
      * Short description of method __construct
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @param  string min
      * @param  string max
      * @param  string name
      * @param  boolean optional
+     * @param mixed $min
+     * @param mixed $max
+     * @param mixed $name
+     * @param mixed $optional
+     *
      * @return mixed
      */
     public function __construct($min, $max, $name = 'unknown', $optional = false)
     {
-        
         parent::__construct($name, $optional);
         $this->setMin($min);
         $this->setMax($max);
@@ -77,13 +86,16 @@ abstract class common_configuration_BoundableComponent extends common_configurat
      * Short description of method setMin
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @param  string min
+     * @param mixed $min
+     *
      * @return void
      */
     public function setMin($min)
     {
-        
         $this->min = $min;
     }
 
@@ -91,16 +103,16 @@ abstract class common_configuration_BoundableComponent extends common_configurat
      * Short description of method getMin
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @return string
      */
     public function getMin()
     {
         $returnValue = (string) '';
 
-        
         return $this->min;
-        
 
         return (string) $returnValue;
     }
@@ -109,13 +121,16 @@ abstract class common_configuration_BoundableComponent extends common_configurat
      * Short description of method setMax
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @param  string max
+     * @param mixed $max
+     *
      * @return void
      */
     public function setMax($max)
     {
-        
         // Support .x notation.
         if (!empty($max)) {
             $this->max = preg_replace('/x/u', '99999', $max);
@@ -128,16 +143,16 @@ abstract class common_configuration_BoundableComponent extends common_configurat
      * Short description of method getMax
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @return string
      */
     public function getMax()
     {
         $returnValue = (string) '';
 
-        
         return $this->max;
-        
 
         return (string) $returnValue;
     }
@@ -146,8 +161,11 @@ abstract class common_configuration_BoundableComponent extends common_configurat
      * Short description of method getValue
      *
      * @abstract
+     *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @return string
      */
     abstract public function getValue();

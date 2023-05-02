@@ -30,10 +30,9 @@ use Throwable;
 
 class ItemPoolSimpleCacheAdapter extends ConfigurableService implements CacheItemPoolInterface
 {
+    public const OPTION_CACHE_SERVICE = 'cacheService';
     /** @var CacheItemInterface[] */
     private $deferred;
-
-    public const OPTION_CACHE_SERVICE = 'cacheService';
 
     /**
      * @inheritdoc

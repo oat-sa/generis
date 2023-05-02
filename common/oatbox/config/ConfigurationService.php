@@ -16,7 +16,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2017 Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
  */
 
 namespace oat\oatbox\config;
@@ -32,7 +31,7 @@ use oat\oatbox\service\ConfigurableService;
  */
 class ConfigurationService extends ConfigurableService
 {
-    const OPTION_CONFIG = 'config';
+    public const OPTION_CONFIG = 'config';
 
     /**
      * @var string Documentation header

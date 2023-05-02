@@ -16,16 +16,13 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2017 (original work) Open Assessment Technologies SA;
- *
- *
  */
 
-use oat\generis\test\GenerisPhpUnitTestRunner;
 use oat\generis\model\GenerisRdf;
+use oat\generis\test\GenerisPhpUnitTestRunner;
 
 class GenerisIteratorTest extends GenerisPhpUnitTestRunner
 {
-
     /**
      * @var core_kernel_classes_Class
      */
@@ -62,6 +59,7 @@ class GenerisIteratorTest extends GenerisPhpUnitTestRunner
         foreach ($this->topClass->getInstances(true) as $instance) {
             $instance->delete();
         }
+
         foreach ($this->topClass->getSubClasses(true) as $subClass) {
             $subClass->delete();
         }
@@ -72,6 +70,7 @@ class GenerisIteratorTest extends GenerisPhpUnitTestRunner
     public function testClassIterator()
     {
         $expected = [$this->topClass->getUri()];
+
         foreach ($this->topClass->getSubClasses(true) as $resource) {
             $expected[] = $resource->getUri();
         }
@@ -80,6 +79,7 @@ class GenerisIteratorTest extends GenerisPhpUnitTestRunner
         $iterator = new core_kernel_classes_ClassIterator($this->topClass);
 
         $found1 = [];
+
         foreach ($iterator as $resource) {
             $this->assertIsA($resource, 'core_kernel_classes_Class');
             $found1[] = $resource->getUri();
@@ -91,6 +91,7 @@ class GenerisIteratorTest extends GenerisPhpUnitTestRunner
         $iterator = new core_kernel_classes_ClassIterator($this->emptyClass);
 
         $found2 = [];
+
         foreach ($iterator as $instance) {
             $found2[] = $instance->getUri();
         }
@@ -102,6 +103,7 @@ class GenerisIteratorTest extends GenerisPhpUnitTestRunner
     public function testResourceIterator()
     {
         $expected1 = [];
+
         foreach ($this->topClass->getInstances(true) as $resource) {
             $expected1[] = $resource->getUri();
         }
@@ -110,6 +112,7 @@ class GenerisIteratorTest extends GenerisPhpUnitTestRunner
         $iterator = new core_kernel_classes_ResourceIterator($this->topClass);
 
         $found1 = [];
+
         foreach ($iterator as $instance) {
             $this->assertIsA($instance, 'core_kernel_classes_Resource');
             $found1[] = $instance->getUri();
@@ -119,6 +122,7 @@ class GenerisIteratorTest extends GenerisPhpUnitTestRunner
         $this->assertEquals($expected1, $found1);
 
         $found2 = [];
+
         foreach ($iterator as $instance) {
             $found2[] = $instance->getUri();
         }

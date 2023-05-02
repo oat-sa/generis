@@ -21,8 +21,7 @@
  *
  */
 
-
-/**
+/*
  * Generis Configuration
  *
  * @author CRP Henri Tudor - TAO Team - {@link http://www.tao.lu}
@@ -50,7 +49,7 @@ define('DEFAULT_ANONYMOUS_INTERFACE_LANG', '');
 define('DEBUG_MODE', false);
 
 #application state
-/**
+/*
  * @deprecated Use \oat\tao\model\maintenance\Maintenance instead
  */
 define('SYS_READY', true);
@@ -61,7 +60,6 @@ define('TIME_ZONE', 'UTC');
 # Passsword Hash Preferences
 define('PASSWORD_HASH_ALGORITHM', 'sha256');
 define('PASSWORD_HASH_SALT_LENGTH', 10);
-
 
 #if there is a .htaccess with an http auth, used for Curl request or virtual http requests
 define('USE_HTTP_AUTH', false);

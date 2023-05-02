@@ -16,20 +16,24 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2015-2021 (original work) Open Assessment Technologies SA;
- *
  */
 
 namespace oat\oatbox\service;
 
+use common_Exception;
+use common_exception_Error;
+use common_ext_ConfigDriver;
+use common_persistence_KeyValuePersistence;
 use oat\generis\model\DependencyInjection\ContainerBuilder;
 use oat\generis\model\DependencyInjection\ContainerStarter;
 use oat\oatbox\Configurable;
-use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Psr\Container\ContainerInterface;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * The simple placeholder ServiceManager
+ *
  * @author Joel Bout <joel@taotesting.com>
  */
 class ServiceManager implements ServiceLocatorInterface, ContainerInterface
@@ -39,27 +43,10 @@ class ServiceManager implements ServiceLocatorInterface, ContainerInterface
     /** @var ContainerStarter */
     private $containerStarter;
 
-    /**
-     * @return \oat\oatbox\service\ServiceManager
-     * @deprecated Pass service locator instead of relying on static function
-     */
-    public static function getServiceManager()
-    {
-        if (is_null(self::$instance)) {
-            self::$instance = new ServiceManager(\common_ext_ConfigDriver::singleton());
-        }
-        return self::$instance;
-    }
-
-    public static function setServiceManager(ServiceManager $serviceManager)
-    {
-        self::$instance = $serviceManager;
-    }
-
     private $services = [];
 
     /**
-     * @var \common_persistence_KeyValuePersistence
+     * @var common_persistence_KeyValuePersistence
      */
     private $configService;
 
@@ -69,27 +56,63 @@ class ServiceManager implements ServiceLocatorInterface, ContainerInterface
     }
 
     /**
+     * Prevents accidental serialisation of the services
+     *
+     * @return array
+     */
+    public function __sleep()
+    {
+        return [];
+    }
+
+    /**
+     * @return \oat\oatbox\service\ServiceManager
+     *
+     * @deprecated Pass service locator instead of relying on static function
+     */
+    public static function getServiceManager()
+    {
+        if (is_null(self::$instance)) {
+            self::$instance = new ServiceManager(common_ext_ConfigDriver::singleton());
+        }
+
+        return self::$instance;
+    }
+
+    public static function setServiceManager(ServiceManager $serviceManager)
+    {
+        self::$instance = $serviceManager;
+    }
+
+    /**
      * Returns the service configured for the serviceKey
      * or throws a ServiceNotFoundException
      *
      * @param string $serviceKey
-     * @return ConfigurableService
+     *
      * @throws ServiceNotFoundException
+     *
+     * @return ConfigurableService
+     *
      * @see ContainerInterface::get()
      * @deprecated Use $this->getContainer()->get()
      */
     public function get($serviceKey)
     {
         $serviceId = $this->getServiceId($serviceKey);
+
         if (!isset($this->services[$serviceId])) {
             $this->services[$serviceId] = $this->load($serviceId, $serviceKey);
         }
+
         return $this->services[$serviceId];
     }
 
     /**
      * Extract the service id from the provided parameter
+     *
      * @param string $serviceKey
+     *
      * @return string
      */
     private function getServiceId($serviceKey)
@@ -105,12 +128,15 @@ class ServiceManager implements ServiceLocatorInterface, ContainerInterface
      *
      * @param string $serviceId
      * @param string $serviceKey
+     *
      * @throws ServiceNotFoundException
+     *
      * @return ConfigurableService
      */
     private function load($serviceId, $serviceKey)
     {
         $service = $this->getConfig()->get($serviceId);
+
         if ($service === false) {
             $service = $this->tryAutowiring($serviceId, $serviceKey);
         }
@@ -122,6 +148,7 @@ class ServiceManager implements ServiceLocatorInterface, ContainerInterface
         if (is_object($service) && ($service instanceof ServiceLocatorAwareInterface)) {
             $service->setServiceLocator($this);
         }
+
         return $service;
     }
 
@@ -130,7 +157,9 @@ class ServiceManager implements ServiceLocatorInterface, ContainerInterface
      *
      * @param string $serviceId
      * @param string $serviceKey
+     *
      * @throws ServiceNotFoundException
+     *
      * @return ConfigurableService
      */
     private function tryAutowiring($serviceId, $serviceKey)
@@ -138,13 +167,17 @@ class ServiceManager implements ServiceLocatorInterface, ContainerInterface
         if (!class_exists($serviceKey) || !is_subclass_of($serviceKey, ConfigurableService::class)) {
             throw new ServiceNotFoundException($serviceId);
         }
+
         return new $serviceKey();
     }
 
     /**
      * (non-PHPdoc)
+     *
      * @see ContainerInterface::has()
      * @deprecated Use $this->getContainer()->has()
+     *
+     * @param mixed $serviceKey
      */
     public function has($serviceKey)
     {
@@ -152,6 +185,7 @@ class ServiceManager implements ServiceLocatorInterface, ContainerInterface
             return true;
         }
         $parts = explode('/', $serviceKey, 2);
+
         if (count($parts) < 2) {
             return false;
         }
@@ -163,36 +197,44 @@ class ServiceManager implements ServiceLocatorInterface, ContainerInterface
      * Registers a service, overwritting a potentially already
      * existing service.
      *3
+     *
      * @param string $serviceKey
      * @param ConfigurableService $service
-     * @throws \common_Exception
+     *
+     * @throws common_Exception
+     *
      * @deprecated New services must be registered using Dependency Injection Container
      */
     public function register($serviceKey, ConfigurableService $service)
     {
         $parts = explode('/', $serviceKey, 2);
+
         if (count($parts) < 2) {
-            throw new \common_Exception('Invalid servicekey ' . $serviceKey);
+            throw new common_Exception('Invalid servicekey ' . $serviceKey);
         }
         $this->propagate($service);
         $this->services[$serviceKey] = $service;
         $success = $this->getConfig()->set($serviceKey, $service);
+
         if (!$success) {
-            throw new \common_exception_Error('Unable to write ' . $serviceKey);
+            throw new common_exception_Error('Unable to write ' . $serviceKey);
         }
     }
 
     /**
      * @deprecated New services must be registered using Dependency Injection Container
+     *
+     * @param mixed $serviceKey
      */
     public function unregister($serviceKey)
     {
         unset($this->services[$serviceKey]);
+
         return $this->getConfig()->del($serviceKey);
     }
 
     /**
-     * @return \common_persistence_KeyValuePersistence
+     * @return common_persistence_KeyValuePersistence
      */
     protected function getConfig()
     {
@@ -202,7 +244,8 @@ class ServiceManager implements ServiceLocatorInterface, ContainerInterface
     /**
      * Propagate service dependencies
      *
-     * @param  $service
+     * @param $service
+     *
      * @return mixed
      *
      * @deprecated - If class uses ServiceManagerAwareTrait use $this->propagate($service)
@@ -210,19 +253,21 @@ class ServiceManager implements ServiceLocatorInterface, ContainerInterface
      */
     public function propagate($service)
     {
-        if (is_object($service) &&  ($service instanceof ServiceLocatorAwareInterface)) {
+        if (is_object($service) && ($service instanceof ServiceLocatorAwareInterface)) {
             $service->setServiceLocator($this);
         }
+
         return $service;
     }
-
 
     /**
      * Service or sub-service factory
      *
      * @param $className
      * @param array $options
+     *
      * @return mixed
+     *
      * @deprecated New services must be registered using Dependency Injection Container
      */
     public function build($className, array $options = [])
@@ -230,6 +275,7 @@ class ServiceManager implements ServiceLocatorInterface, ContainerInterface
         if (is_a($className, Configurable::class, true)) {
             $service = new $className($options);
             $this->propagate($service);
+
             return $service;
         }
 
@@ -237,19 +283,11 @@ class ServiceManager implements ServiceLocatorInterface, ContainerInterface
     }
 
     /**
-     * Prevents accidental serialisation of the services
-     * @return array
-     */
-    public function __sleep()
-    {
-        return [];
-    }
-
-    /**
      * Dynamically overload a service without persisting it
      *
      * @param $serviceKey
      * @param ConfigurableService $service
+     *
      * @deprecated New services must be registered using Dependency Injection Container
      */
     public function overload($serviceKey, ConfigurableService $service)

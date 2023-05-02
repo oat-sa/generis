@@ -17,32 +17,31 @@
  *
  * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *             2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- *
  */
 
-use oat\generis\model\data\ModelManager;
-use oat\oatbox\service\ServiceFactoryInterface;
-use oat\oatbox\service\ServiceManager;
-use oat\oatbox\event\EventManager;
-use oat\oatbox\service\ConfigurableService;
 use oat\generis\model\data\import\RdfImporter;
 use oat\oatbox\cache\SimpleCache;
+use oat\oatbox\event\EventManager;
 use oat\oatbox\extension\exception\ManifestNotFoundException;
+use oat\oatbox\service\ConfigurableService;
+use oat\oatbox\service\ServiceFactoryInterface;
+use oat\oatbox\service\ServiceManager;
 
 /**
  * Generis installer of extensions
  * Can be extended to add advanced features
  *
  * @access public
+ *
  * @author lionel.lecaque@tudor.lu
+ *
  * @package generis
+ *
  * @see @license  GNU General Public (GPL) Version 2 http://www.opensource.org/licenses/gpl-2.0.php
-
  */
 class common_ext_ExtensionInstaller extends common_ext_ExtensionHandler
 {
     // --- ASSOCIATIONS ---
-
 
     // --- ATTRIBUTES ---
 
@@ -50,9 +49,28 @@ class common_ext_ExtensionInstaller extends common_ext_ExtensionHandler
      * States if local data must be installed or not.
      *
      * @access private
+     *
      * @var boolean
      */
     private $localData = false;
+
+    /**
+     * Instantiate a new ExtensionInstaller for a given Extension.
+     *
+     * @access public
+     *
+     * @author Jerome Bogaerts, <jerome@taotesting.com>
+     *
+     * @param common_ext_Extension $extension The extension to install
+     * @param boolean $localData import local data or not
+     *
+     * @return void
+     */
+    public function __construct(common_ext_Extension $extension, $localData = true)
+    {
+        parent::__construct($extension);
+        $this->setLocalData($localData);
+    }
 
     // --- OPERATIONS ---
 
@@ -60,10 +78,11 @@ class common_ext_ExtensionInstaller extends common_ext_ExtensionHandler
      * install an extension
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome@taotesting.com>
      *
-     * @throws common_ext_ForbiddenActionException When the installable extension is generis.
-     * @throws common_ext_AlreadyInstalledException When the extension is already installed.
+     * @throws common_ext_ForbiddenActionException when the installable extension is generis
+     * @throws common_ext_AlreadyInstalledException when the extension is already installed
      *
      * @return void
      */
@@ -77,6 +96,7 @@ class common_ext_ExtensionInstaller extends common_ext_ExtensionHandler
                 $this->extension->getId()
             );
         }
+
         if (common_ext_ExtensionsManager::singleton()->isInstalled($this->extension->getId())) {
             throw new common_ext_AlreadyInstalledException(
                 'Problem installing extension ' . $this->extension->getId() . ' : Already installed',
@@ -88,7 +108,6 @@ class common_ext_ExtensionInstaller extends common_ext_ExtensionHandler
         $this->log('d', 'Purging cache...');
         $cache = $this->getServiceManager()->get(SimpleCache::SERVICE_ID);
         $cache->clear();
-
 
         // check required extensions, throws exception if failed
         helpers_ExtensionHelper::checkRequiredExtensions($this->getExtension());
@@ -120,22 +139,29 @@ class common_ext_ExtensionInstaller extends common_ext_ExtensionHandler
      * writes the config based on the config.sample
      *
      * @access protected
+     *
      * @author Jerome Bogaerts, <jerome@taotesting.com>
+     *
      * @return void
      */
     protected function installLoadDefaultConfig()
     {
         $defaultsPath = $this->extension->getDir() . 'config/default';
+
         if (is_dir($defaultsPath)) {
             $defaultIterator = new DirectoryIterator($defaultsPath);
+
             foreach ($defaultIterator as $fileinfo) {
                 if (!$fileinfo->isDot() && strpos($fileinfo->getFilename(), '.conf.php') > 0) {
                     $confKey = substr($fileinfo->getFilename(), 0, -strlen('.conf.php'));
+
                     if (! $this->extension->hasConfig($confKey)) {
                         $config = include $fileinfo->getPathname();
+
                         if ($config instanceof ServiceFactoryInterface) {
                             $config = $config($this->getServiceManager());
                         }
+
                         if ($config instanceof ConfigurableService) {
                             $this->getServiceManager()->register($this->extension->getId() . '/' . $confKey, $config);
                         } else {
@@ -153,7 +179,9 @@ class common_ext_ExtensionInstaller extends common_ext_ExtensionHandler
      * specified in the Manifest
      *
      * @access protected
+     *
      * @author Jerome Bogaerts, <jerome@taotesting.com>
+     *
      * @return void
      */
     protected function installOntology()
@@ -168,12 +196,13 @@ class common_ext_ExtensionInstaller extends common_ext_ExtensionHandler
      * Registers the Extension with the extensionManager
      *
      * @access protected
+     *
      * @author Jerome Bogaerts, <jerome@taotesting.com>
+     *
      * @return void
      */
     protected function installRegisterExt()
     {
-
         $this->log('d', 'Registering extension ' . $this->extension->getId());
         common_ext_ExtensionsManager::singleton()->registerExtension($this->extension);
         common_ext_ExtensionsManager::singleton()->setEnabled($this->extension->getId());
@@ -205,15 +234,19 @@ class common_ext_ExtensionInstaller extends common_ext_ExtensionHandler
      * Installs example files and other non essential content
      *
      * @access protected
+     *
      * @author Jerome Bogaerts, <jerome@taotesting.com>
+     *
      * @return void
      */
     protected function installLocalData()
     {
         $localData = $this->extension->getManifest()->getLocalData();
+
         if (isset($localData['php'])) {
             $scripts = $localData['php'];
             $scripts = is_array($scripts) ? $scripts : [$scripts];
+
             foreach ($scripts as $script) {
                 $this->runExtensionScript($script);
             }
@@ -221,27 +254,14 @@ class common_ext_ExtensionInstaller extends common_ext_ExtensionHandler
     }
 
     /**
-     * Instantiate a new ExtensionInstaller for a given Extension.
-     *
-     * @access public
-     * @author Jerome Bogaerts, <jerome@taotesting.com>
-     * @param  common_ext_Extension $extension The extension to install
-     * @param  boolean $localData Import local data or not.
-     * @return void
-     */
-    public function __construct(common_ext_Extension $extension, $localData = true)
-    {
-
-        parent::__construct($extension);
-        $this->setLocalData($localData);
-    }
-
-    /**
      * Sets localData field.
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome@taotesting.com>
-     * @param  boolean $value
+     *
+     * @param boolean $value
+     *
      * @return void
      */
     public function setLocalData($value)
@@ -253,7 +273,9 @@ class common_ext_ExtensionInstaller extends common_ext_ExtensionHandler
      * Retrieve localData field
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome@taotesting.com>
+     *
      * @return boolean
      */
     public function getLocalData()
@@ -275,7 +297,9 @@ class common_ext_ExtensionInstaller extends common_ext_ExtensionHandler
      * Short description of method extendedInstall
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome@taotesting.com>
+     *
      * @return void
      */
     public function extendedInstall()

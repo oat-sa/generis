@@ -16,7 +16,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2017 (original work) Open Assessment Technologies SA;
- *
  */
 
 namespace oat\oatbox\log;
@@ -26,19 +25,19 @@ use Psr\Log\LogLevel;
 class VerboseLoggerFactory
 {
     /**
-     * @var array   The verbose parameters and the connected log levels.
+     * @var array the verbose parameters and the connected log levels
      */
     private static $levels = [
-        '-vvvv'       => LogLevel::DEBUG,
+        '-vvvv' => LogLevel::DEBUG,
         '--verbose 4' => LogLevel::DEBUG,
 
-        '-vvv'        => LogLevel::INFO,
+        '-vvv' => LogLevel::INFO,
         '--verbose 3' => LogLevel::INFO,
 
-        '-vv'         => LogLevel::NOTICE,
+        '-vv' => LogLevel::NOTICE,
         '--verbose 2' => LogLevel::NOTICE,
 
-        '-v'          => LogLevel::ERROR,
+        '-v' => LogLevel::ERROR,
         '--verbose 1' => LogLevel::ERROR,
     ];
 
@@ -52,7 +51,7 @@ class VerboseLoggerFactory
     /**
      * Returns the configured instance of the verbose logger based on the arguments.
      *
-     * @param array $arguments   The cli arguments.
+     * @param array $arguments the cli arguments
      *
      * @return ColoredVerboseLogger|VerboseLogger
      */
@@ -70,11 +69,12 @@ class VerboseLoggerFactory
      *
      * @param array $arguments
      *
-     * @return string   Current log level or as default LogLevel::ERROR
+     * @return string Current log level or as default LogLevel::ERROR
      */
     protected static function getLogLevel(array $arguments)
     {
         $argumentsForSearch = implode(' ', $arguments);
+
         foreach (static::$levels as $argumentPattern => $currentLevel) {
             if (strpos($argumentsForSearch, $argumentPattern) !== false) {
                 return $currentLevel;

@@ -16,17 +16,15 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2017 (original work) Open Assessment Technologies SA;
- *
  */
 
 namespace oat\generis\test\integration\oatbox\extension\script;
 
-use oat\oatbox\extension\script\OptionContainer;
 use oat\generis\test\TestCase;
+use oat\oatbox\extension\script\OptionContainer;
 
 class OptionContainerTest extends TestCase
 {
-
     /**
      * @dataProvider instantiateProvider
      */
@@ -49,106 +47,106 @@ class OptionContainerTest extends TestCase
                 [
                     'myflag' => [
                         'prefix' => 'f',
-                        'flag' => true
-                    ]
+                        'flag' => true,
+                    ],
                 ],
                 [
-                    '-f'
+                    '-f',
                 ],
                 [
-                    'myflag' => true
-                ]
+                    'myflag' => true,
+                ],
             ],
             [
                 // call = myscript
                 [
                     'myflag' => [
                         'prefix' => 'f',
-                        'flag' => true
-                    ]
+                        'flag' => true,
+                    ],
                 ],
                 [
                     // no values given
                 ],
                 [
                     // no expected options
-                ]
+                ],
             ],
             [
                 // call = myscript --flag
                 [
                     'myflag' => [
                         'longPrefix' => 'flag',
-                        'flag' => true
-                    ]
+                        'flag' => true,
+                    ],
                 ],
                 [
-                    '--flag'
+                    '--flag',
                 ],
                 [
-                    'myflag' => true
-                ]
+                    'myflag' => true,
+                ],
             ],
             [
                 // call = myscript -f -v value
                 [
                     'myflag' => [
                         'prefix' => 'f',
-                        'flag' => true
+                        'flag' => true,
                     ],
                     'myValue' => [
-                        'prefix' => 'v'
-                    ]
+                        'prefix' => 'v',
+                    ],
                 ],
                 [
-                    '-f', '-v', 'value'
+                    '-f', '-v', 'value',
                 ],
                 [
                     'myflag' => true,
-                    'myValue' => 'value'
-                ]
+                    'myValue' => 'value',
+                ],
             ],
             [
                 // call = myscript -f --value value
                 [
                     'myflag' => [
                         'prefix' => 'f',
-                        'flag' => true
+                        'flag' => true,
                     ],
                     'myValue' => [
                         'prefix' => 'v',
                         'longPrefix' => 'value',
-                        'required' => true
-                    ]
+                        'required' => true,
+                    ],
                 ],
                 [
-                    '-f', '--value', 'value'
+                    '-f', '--value', 'value',
                 ],
                 [
                     'myflag' => true,
-                    'myValue' => 'value'
-                ]
+                    'myValue' => 'value',
+                ],
             ],
             [
                 // call = myscript -f -v value
                 [
                     'myflag' => [
                         'prefix' => 'f',
-                        'flag' => true
+                        'flag' => true,
                     ],
                     'myValue' => [
                         'prefix' => 'v',
                         'longPrefix' => 'value',
-                        'required' => true
-                    ]
+                        'required' => true,
+                    ],
                 ],
                 [
-                    '-f', '-v', 'value'
+                    '-f', '-v', 'value',
                 ],
                 [
                     'myflag' => true,
-                    'myValue' => 'value'
-                ]
+                    'myValue' => 'value',
+                ],
             ],
         ];
     }

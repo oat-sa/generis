@@ -29,20 +29,25 @@ use oat\oatbox\service\ConfigurableService;
  * UriProvider implementation based on an advanced key value storage
  *
  * @access public
+ *
  * @author Joel Bout, <joel@taotesting.com>
+ *
  * @package generis
  */
 class Bin2HexUriProvider extends ConfigurableService implements UriProvider
 {
-    const OPTION_NAMESPACE = 'namespace';
+    public const OPTION_NAMESPACE = 'namespace';
 
     /**
      * Generates a URI based on a serial stored in the database.
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @return string
+     *
      * @throws UriProviderException
+     *
+     * @return string
      */
     public function provide()
     {

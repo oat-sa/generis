@@ -22,8 +22,8 @@ declare(strict_types=1);
 
 namespace oat\generis\test\unit\common\oatbox\log\logger;
 
-use oat\oatbox\log\logger\AdvancedLogger;
 use oat\generis\test\TestCase;
+use oat\oatbox\log\logger\AdvancedLogger;
 use oat\oatbox\log\logger\extender\ContextExtenderInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;

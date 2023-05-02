@@ -20,26 +20,26 @@
  *               2017 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
 
+use Doctrine\DBAL\DBALException;
 use oat\generis\model\GenerisRdf;
 use oat\generis\model\OntologyRdfs;
 use oat\generis\test\GenerisPhpUnitTestRunner;
-use Doctrine\DBAL\DBALException;
 
 class SqlInjectionTestCase extends GenerisPhpUnitTestRunner
 {
-    
     public function testInject()
     {
         $generisClass = new core_kernel_classes_Class(GenerisRdf::CLASS_GENERIS_RESOURCE);
         $testClass = $generisClass->createSubClass();
+
         try {
             $testInstance = $testClass->createInstanceWithProperties([
-                OntologyRdfs::RDFS_LABEL => '"hi"'
+                OntologyRdfs::RDFS_LABEL => '"hi"',
             ]);
             $testInstance->setPropertiesValues([
-                OntologyRdfs::RDFS_COMMENT => '"hi"'
+                OntologyRdfs::RDFS_COMMENT => '"hi"',
             ]);
-            $this->assertEquals($testInstance->getUniquePropertyValue(new core_kernel_classes_Property(OntologyRdfs::RDFS_LABEL)), "\"hi\"");
+            $this->assertEquals($testInstance->getUniquePropertyValue(new core_kernel_classes_Property(OntologyRdfs::RDFS_LABEL)), '"hi"');
         } catch (DBALException $e) {
             $this->fail('SQL Error: ' . $e->getMessage());
         }

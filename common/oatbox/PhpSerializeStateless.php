@@ -16,8 +16,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2014 (original work) Open Assessment Technologies SA;
- *
- *
  */
 
 namespace oat\oatbox;
@@ -26,14 +24,13 @@ namespace oat\oatbox;
  * Trait to serialize stateless instances
  *
  * @access public
+ *
  * @author joel bout <joel@taotesting.com>
+ *
  * @package generis
  */
 trait PhpSerializeStateless
 {
-    /**
-     *
-     */
     public function __toPhpCode()
     {
         return 'new ' . get_class($this) . '()';

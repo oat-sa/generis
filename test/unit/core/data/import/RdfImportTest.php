@@ -16,15 +16,14 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2020 (original work) Open Assessment Technologies SA;
- *
  */
 
 namespace oat\generis\test\unit\core\data\import;
 
 use core_kernel_classes_Triple;
+use oat\generis\model\data\import\RdfImporter;
 use oat\generis\model\data\Ontology;
 use oat\generis\test\GenerisTestCase;
-use oat\generis\model\data\import\RdfImporter;
 
 class RdfImportTest extends GenerisTestCase
 {
@@ -50,7 +49,7 @@ class RdfImportTest extends GenerisTestCase
         $this->assertEquals(0, $this->getTripleCount($ontology));
         $importer = new RdfImporter();
         $importer->setServiceLocator($ontology->getServiceLocator());
-        $importer->importFile(__DIR__.'/../../../../samples/rdf/generis.rdf');
+        $importer->importFile(__DIR__ . '/../../../../samples/rdf/generis.rdf');
         $this->assertEquals(3, $this->getTripleCount($ontology));
     }
 

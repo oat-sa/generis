@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -17,21 +18,20 @@
  * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
  *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- *
  */
 
 /**
  * Short description of class common_configuration_PHPINIValue
  *
  * @access public
+ *
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+ *
  * @package generis
-
  */
 class common_configuration_PHPINIValue extends common_configuration_Component
 {
     // --- ASSOCIATIONS ---
-
 
     // --- ATTRIBUTES ---
 
@@ -39,6 +39,7 @@ class common_configuration_PHPINIValue extends common_configuration_Component
      * Short description of attribute expectedValue
      *
      * @access private
+     *
      * @var string
      */
     private $expectedValue = '';
@@ -49,15 +50,20 @@ class common_configuration_PHPINIValue extends common_configuration_Component
      * Short description of method __construct
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @param  string expectedValue
      * @param  string name
      * @param  boolean optional
+     * @param mixed $expectedValue
+     * @param mixed $name
+     * @param mixed $optional
+     *
      * @return mixed
      */
     public function __construct($expectedValue, $name = 'unknown', $optional = false)
     {
-        
         parent::__construct($name, $optional);
         $this->setExpectedValue($expectedValue);
     }
@@ -66,16 +72,18 @@ class common_configuration_PHPINIValue extends common_configuration_Component
      * Short description of method check
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @return common_configuration_Report
      */
     public function check()
     {
         $returnValue = null;
 
-        
         $validity = null;
         $name = $this->getName();
+
         if (($value = ini_get($name)) !== false) {
             // The ini value exists for this name.
             if ((($value == '') ? '0' : $value) == $this->getExpectedValue()) {
@@ -92,7 +100,6 @@ class common_configuration_PHPINIValue extends common_configuration_Component
         }
 
         $returnValue = new common_configuration_Report($validity, $message, $this);
-        
 
         return $returnValue;
     }
@@ -101,16 +108,16 @@ class common_configuration_PHPINIValue extends common_configuration_Component
      * Short description of method getExpectedValue
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @return string
      */
     public function getExpectedValue()
     {
         $returnValue = (string) '';
 
-        
         return $this->expectedValue;
-        
 
         return (string) $returnValue;
     }
@@ -119,13 +126,16 @@ class common_configuration_PHPINIValue extends common_configuration_Component
      * Short description of method setExpectedValue
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @param  string expectedValue
+     * @param mixed $expectedValue
+     *
      * @return mixed
      */
     public function setExpectedValue($expectedValue)
     {
-        
         $this->expectedValue = $expectedValue;
     }
 
@@ -133,16 +143,16 @@ class common_configuration_PHPINIValue extends common_configuration_Component
      * Short description of method getValue
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @return string
      */
     public function getValue()
     {
         $returnValue = (string) '';
 
-        
         $returnValue = ini_get($this->getName());
-        
 
         return (string) $returnValue;
     }

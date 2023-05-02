@@ -16,33 +16,32 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2014 (original work) Open Assessment Technologies SA;
- *
- *
  */
 
 namespace oat\generis\model\kernel\persistence\file;
 
-use EasyRdf\Graph;
-use core_kernel_classes_Triple;
-use IteratorAggregate;
 use ArrayIterator;
+use common_exception_Error;
+use core_kernel_classes_Triple;
+use EasyRdf\Graph;
+use IteratorAggregate;
 
 class FileIterator implements IteratorAggregate
 {
     private $triples = [];
 
     /**
-     * @param string      $file
+     * @param string $file
      * @param string|null $forceModelId
      *
-     * @throws \common_exception_Error
+     * @throws common_exception_Error
      */
     public function __construct(string $file, string $forceModelId = null)
     {
         $modelId = is_null($forceModelId) ? FileModel::getModelIdFromXml($file) : $forceModelId;
         $this->load($modelId, $file);
     }
-    
+
     /**
      * @see IteratorAggregate::getIterator()
      */
@@ -50,7 +49,7 @@ class FileIterator implements IteratorAggregate
     {
         return new ArrayIterator($this->triples);
     }
-    
+
     /**
      * load triples from rdf file
      *
@@ -61,7 +60,7 @@ class FileIterator implements IteratorAggregate
     {
         $easyRdf = new Graph();
         $easyRdf->parseFile($file);
-        
+
         foreach ($easyRdf->toRdfPhp() as $subject => $propertiesValues) {
             foreach ($propertiesValues as $predicate => $values) {
                 foreach ($values as $v) {

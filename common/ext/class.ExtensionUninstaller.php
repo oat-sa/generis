@@ -1,4 +1,5 @@
 <?php
+
 use oat\oatbox\cache\SimpleCache;
 
 /**
@@ -18,62 +19,66 @@ use oat\oatbox\cache\SimpleCache;
  *
  * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *             2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- *
  */
 
 /**
  * Uninstall of extensions
  *
  * @access public
+ *
  * @author lionel.lecaque@tudor.lu
+ *
  * @package common
+ *
  * @see @license  GNU General Public (GPL) Version 2 http://www.opensource.org/licenses/gpl-2.0.php
+ *
  * @subpackage ext
  */
 class common_ext_ExtensionUninstaller extends common_ext_ExtensionHandler
 {
-
     /**
      * uninstall an extension
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome@taotesting.com>
+     *
      * @return boolean
      */
     public function uninstall()
     {
-        
         common_Logger::i('Uninstalling ' . $this->extension->getId(), ['UNINSTALL']);
 
         // uninstall possible
         if (is_null($this->extension->getManifest()->getUninstallData())) {
             throw new common_Exception('Problem uninstalling extension ' . $this->extension->getId() . ' : Uninstall not supported');
         }
-        
+
         // installed?
         if (!common_ext_ExtensionsManager::singleton()->isInstalled($this->extension->getId())) {
             throw new common_Exception('Problem uninstalling extension ' . $this->extension->getId() . ' : Not installed');
         }
-        
+
         // check dependcies
         if (helpers_ExtensionHelper::isRequired($this->extension)) {
             throw new common_Exception('Problem uninstalling extension ' . $this->extension->getId() . ' : Still required');
-        };
+        }
 
         common_Logger::d('uninstall script for ' . $this->extension->getId());
         $this->uninstallScripts();
-        
+
         // hook
         $this->extendedUninstall();
-        
+
         common_Logger::d('unregister extension ' . $this->extension->getId());
         $this->unregister();
-        
+
         // we purge the whole cache.
         $cache = $this->getServiceManager()->get(SimpleCache::SERVICE_ID);
         $cache->clear();
-        
+
         common_Logger::i('Uninstalled ' . $this->extension->getId());
+
         return true;
     }
 
@@ -81,7 +86,9 @@ class common_ext_ExtensionUninstaller extends common_ext_ExtensionHandler
      * Unregisters the Extension from the extensionManager
      *
      * @access protected
+     *
      * @author Jerome Bogaerts, <jerome@taotesting.com>
+     *
      * @return void
      */
     protected function unregister()
@@ -94,19 +101,22 @@ class common_ext_ExtensionUninstaller extends common_ext_ExtensionHandler
      * specified in the Manifest
      *
      * @access protected
+     *
      * @author Jerome Bogaerts, <jerome@taotesting.com>
+     *
      * @return void
      */
     protected function uninstallScripts()
     {
         $data = $this->extension->getManifest()->getUninstallData();
+
         if (!is_null($data) && isset($data['php']) && is_array($data['php'])) {
             foreach ($data['php'] as $script) {
                 $this->runExtensionScript($script);
             }
         }
     }
-    
+
     /**
      * Hook to extend the uninstall procedure
      */

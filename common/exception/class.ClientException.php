@@ -17,20 +17,18 @@
  *
  * Copyright (c) 2013 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  *
-*
- *
  * @access public
+ *
  * @author Patrick Plichart
+ *
  * @package generis
-
  */
 abstract class common_exception_ClientException extends common_Exception implements common_exception_UserReadableException
 {
-
     public function __construct($message = null, $code = 0)
     {
         if (! $message) {
-            $message = "Client exception";
+            $message = 'Client exception';
         }
         parent::__construct($message, $code);
     }

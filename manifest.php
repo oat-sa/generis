@@ -20,16 +20,16 @@
 
 declare(strict_types=1);
 
-use oat\generis\persistence\PersistenceServiceProvider;
-use oat\generis\scripts\update\Updater;
-use oat\generis\scripts\install\TaskQueue;
-use oat\generis\scripts\install\RegisterServices;
-use oat\oatbox\log\ServiceProvider\LogServiceProvider;
-use oat\generis\model\resource\ResourceServiceProvider;
-use oat\generis\scripts\install\SetupDefaultKvPersistence;
 use oat\generis\model\DependencyInjection\ContainerServiceProvider;
+use oat\generis\model\resource\ResourceServiceProvider;
+use oat\generis\persistence\PersistenceServiceProvider;
+use oat\generis\scripts\install\RegisterServices;
+use oat\generis\scripts\install\SetupDefaultKvPersistence;
+use oat\generis\scripts\install\TaskQueue;
+use oat\generis\scripts\update\Updater;
+use oat\oatbox\log\ServiceProvider\LogServiceProvider;
 
-/**
+/*
  * @author CRP Henri Tudor - TAO Team - {@link http://www.tao.lu}
  * @license GPLv2 http://www.opensource.org/licenses/gpl-2.0.php
  */

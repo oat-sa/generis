@@ -16,7 +16,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2018 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
  */
 
 namespace oat\generis\Helper;
@@ -25,10 +24,11 @@ class UserHashForEncryption
 {
     /**
      * @param $plainPassword
+     *
      * @return mixed
      */
     public static function hash($plainPassword)
     {
-        return hash_pbkdf2("sha256", $plainPassword, '', 500, 8);
+        return hash_pbkdf2('sha256', $plainPassword, '', 500, 8);
     }
 }

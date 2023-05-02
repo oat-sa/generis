@@ -1,9 +1,9 @@
 <?php
 
 use oat\oatbox\mutex\LockService;
+use oat\oatbox\mutex\NoLockStorage;
 use oat\oatbox\service\ServiceManager;
 use Symfony\Component\Lock\Store\FlockStore;
-use oat\oatbox\mutex\NoLockStorage;
 
 // phpcs:disable
 require __DIR__ . '/../../../bootstrap.php';
@@ -15,7 +15,7 @@ function getInstance($class, $dir): LockService
     $serviceManager = new ServiceManager($config);
     $service = new LockService([
         LockService::OPTION_PERSISTENCE_CLASS => $class,
-        LockService::OPTION_PERSISTENCE_OPTIONS => $dir
+        LockService::OPTION_PERSISTENCE_OPTIONS => $dir,
     ]);
     $service->setServiceLocator($serviceManager);
 
@@ -27,7 +27,7 @@ array_shift($argv);
 $actionId = $argv[0];
 $sleep = (int)$argv[1];
 $implementation = (string)$argv[2];
-$dir = isset($argv[3]) ? $argv[3] : null;
+$dir = $argv[3] ?? null;
 
 if ($implementation === 'FlockStore') {
     $class = FlockStore::class;

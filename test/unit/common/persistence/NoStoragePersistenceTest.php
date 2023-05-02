@@ -16,78 +16,84 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2015 (original work) Open Assessment Technologies SA;
- *
- *
  */
 
 namespace oat\generis\test\unit\common\persistence;
 
-use \common_persistence_NoStorageKvDriver;
+use common_persistence_KeyValuePersistence;
+use common_persistence_NoStorageKvDriver;
 use oat\generis\test\TestCase;
 
 class NoStaragePersistenceTest extends TestCase
 {
-    
     /**
-     *
      * @author Lionel Lecaque, lionel@taotesting.com
-     * @return \common_persistence_KeyValuePersistence
+     *
+     * @return common_persistence_KeyValuePersistence
      */
     public function testConnect()
     {
-
         $driver = new common_persistence_NoStorageKvDriver();
         $persistence = $driver->connect('test', []);
         $this->assertInstanceOf('common_persistence_KeyValuePersistence', $persistence);
+
         return $persistence;
     }
-    
+
     /**
      * @depends testConnect
+     *
      * @author Lionel Lecaque, lionel@taotesting.com
-     * @param \common_persistence_KeyValuePersistence $persistence
+     *
+     * @param common_persistence_KeyValuePersistence $persistence
      */
     public function testSet($persistence)
     {
         $this->assertFalse($persistence->set('fakeKeyName', 'value'));
     }
-    
+
     /**
      * @depends testConnect
+     *
      * @author Lionel Lecaque, lionel@taotesting.com
-     * @param \common_persistence_KeyValuePersistence $persistence
+     *
+     * @param common_persistence_KeyValuePersistence $persistence
      */
     public function testGet($persistence)
     {
         $this->assertFalse($persistence->get('fakeKeyName'));
     }
-    
-    
+
     /**
      * @depends testConnect
+     *
      * @author Lionel Lecaque, lionel@taotesting.com
-     * @param \common_persistence_KeyValuePersistence $persistence
+     *
+     * @param common_persistence_KeyValuePersistence $persistence
      */
     public function testExists($persistence)
     {
         $this->assertFalse($persistence->exists('fakeKeyName'));
     }
-    
+
     /**
      * @depends testConnect
+     *
      * @author Lionel Lecaque, lionel@taotesting.com
-     * @param \common_persistence_KeyValuePersistence $persistence
+     *
+     * @param common_persistence_KeyValuePersistence $persistence
      */
     public function testDel($persistence)
     {
-       
         $this->assertTrue($persistence->del('fakeKeyName'));
     }
-    
+
     /**
      * @depends testConnect
+     *
      * @author Lionel Lecaque, lionel@taotesting.com
-     * @param \common_persistence_KeyValuePersistence $persistence
+     *
+     * @param common_persistence_KeyValuePersistence $persistence
      */
     public function testPurge($persistence)
     {

@@ -16,17 +16,19 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2015 (original work) Open Assessment Technologies SA
- *
  */
 
 namespace oat\generis\model\kernel\persistence\file;
 
+use common_Exception;
+use core_kernel_classes_Triple;
 use oat\generis\model\data\RdfInterface;
 
 /**
  * Implementation of the RDF interface for the file driver
  *
  * @author joel bout <joel@taotesting.com>
+ *
  * @package generis
  */
 class FileRdf implements RdfInterface
@@ -35,48 +37,58 @@ class FileRdf implements RdfInterface
      * @var string
      */
     private $file;
-    
+
     public function __construct($file)
     {
         $this->file = $file;
     }
-    
+
     /**
      * (non-PHPdoc)
+     *
      * @see \oat\generis\model\data\RdfInterface::get()
+     *
+     * @param mixed $subject
+     * @param mixed $predicate
      */
     public function get($subject, $predicate)
     {
-        throw new \common_Exception('Not implemented');
+        throw new common_Exception('Not implemented');
     }
-    
+
     /**
      * (non-PHPdoc)
+     *
      * @see \oat\generis\model\data\RdfInterface::add()
      */
-    public function add(\core_kernel_classes_Triple $triple)
+    public function add(core_kernel_classes_Triple $triple)
     {
-        throw new \common_Exception('Not implemented');
+        throw new common_Exception('Not implemented');
     }
-    
+
     /**
      * (non-PHPdoc)
+     *
      * @see \oat\generis\model\data\RdfInterface::remove()
      */
-    public function remove(\core_kernel_classes_Triple $triple)
+    public function remove(core_kernel_classes_Triple $triple)
     {
-        throw new \common_Exception('Not implemented');
+        throw new common_Exception('Not implemented');
     }
-    
+
     /**
      * (non-PHPdoc)
+     *
      * @see \oat\generis\model\data\RdfInterface::search()
+     *
+     * @param mixed $predicate
+     * @param mixed $object
      */
     public function search($predicate, $object)
     {
-        throw new \common_Exception('Not implemented');
+        throw new common_Exception('Not implemented');
     }
-    
+
     public function getIterator()
     {
         return new FileIterator($this->file);

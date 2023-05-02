@@ -16,21 +16,19 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2017 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
  */
 
 namespace oat\oatbox\task\TaskInterface;
 
 use oat\tao\model\datatable\DatatablePayload;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use oat\tao\model\datatable\DatatableRequest as DatatableRequestInterface;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
 
 /**
  * @deprecated since version 7.10.0, to be removed in 8.0.
  */
 interface TaskPayLoad extends DatatablePayload, ServiceLocatorAwareInterface
 {
-
     public function __construct(TaskPersistenceInterface $persistence, $currentUserId = null, DatatableRequestInterface $request = null);
 
     /**

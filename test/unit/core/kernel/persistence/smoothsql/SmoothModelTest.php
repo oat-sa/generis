@@ -72,7 +72,7 @@ class SmoothModelTest extends GenerisTestCase
                 $this->createResourceWithTriples(
                     [
                         core_kernel_persistence_smoothsql_SmoothModel::DEFAULT_WRITABLE_MODEL,
-                        core_kernel_persistence_smoothsql_SmoothModel::DEFAULT_READ_ONLY_MODEL
+                        core_kernel_persistence_smoothsql_SmoothModel::DEFAULT_READ_ONLY_MODEL,
                     ]
                 )
             )

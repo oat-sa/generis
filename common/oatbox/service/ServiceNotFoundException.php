@@ -16,17 +16,17 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2015 (original work) Open Assessment Technologies SA;
- *
  */
 
 namespace oat\oatbox\service;
 
-use Zend\ServiceManager\Exception\ServiceNotFoundException as ZendException;
 use Psr\Container\NotFoundExceptionInterface;
+use Zend\ServiceManager\Exception\ServiceNotFoundException as ZendException;
 
 /**
  * Exception thrown whenever a service is not defined and cannot be autowired
  * Compatible with the Zend Servicemanager as well as the PSR-11 container
+ *
  * @author Joel Bout <joel@taotesting.com>
  */
 class ServiceNotFoundException extends ZendException implements NotFoundExceptionInterface

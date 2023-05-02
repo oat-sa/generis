@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -18,29 +19,39 @@
  *
  * @author Lionel Lecaque  <lionel@taotesting.com>
  * @license GPLv2
- * @package
-
  *
+ * @package
  */
 class common_persistence_PhpFileDriver implements common_persistence_KvDriver, common_persistence_Purgable
 {
     /**
      * The TTL mode offset in the connection parameters.
      */
-    const OPTION_TTL = 'ttlMode';
+    public const OPTION_TTL = 'ttlMode';
 
     /**
      * The value offset in the record.
      */
-    const ENTRY_VALUE = 'value';
+    public const ENTRY_VALUE = 'value';
 
     /**
      * The expiration timestamp of the record.
      */
-    const ENTRY_EXPIRATION = 'expiresAt';
+    public const ENTRY_EXPIRATION = 'expiresAt';
+
+    /**
+     * Using 3 default levels, so the files get split up into
+     * 16^3 = 4096 induvidual directories
+     *
+     * @var int
+     */
+    public const DEFAULT_LEVELS = 3;
+
+    public const DEFAULT_MASK = 0700;
 
     /**
      * List of characters permited in filename
+     *
      * @var array
      */
     private static $ALLOWED_CHARACTERS = ['A' => '','B' => '','C' => '','D' => '','E' => '','F' => '','G' => '','H' => '','I' => '','J' => '','K' => '','L' => '','M' => '','N' => '','O' => '','P' => '','Q' => '','R' => '','S' => '','T' => '','U' => '','V' => '','W' => '','X' => '','Y' => '','Z' => '','a' => '','b' => '','c' => '','d' => '','e' => '','f' => '','g' => '','h' => '','i' => '','j' => '','k' => '','l' => '','m' => '','n' => '','o' => '','p' => '','q' => '','r' => '','s' => '','t' => '','u' => '','v' => '','w' => '','x' => '','y' => '','z' => '',0 => '',1 => '',2 => '',3 => '',4 => '',5 => '',6 => '',7 => '',8 => '',9 => '','_' => '','-' => ''];
@@ -75,26 +86,19 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
     private $ttlMode;
 
     /**
-     * Using 3 default levels, so the files get split up into
-     * 16^3 = 4096 induvidual directories
-     *
-     * @var int
-     */
-    const DEFAULT_LEVELS = 3;
-
-    const DEFAULT_MASK = 0700;
-
-    /**
      * (non-PHPdoc)
+     *
      * @see common_persistence_Driver::connect()
+     *
+     * @param mixed $id
      */
     public function connect($id, array $params)
     {
         $this->directory = isset($params['dir'])
             ? $params['dir'] . ($params['dir'][strlen($params['dir']) - 1] === DIRECTORY_SEPARATOR ? '' : DIRECTORY_SEPARATOR)
             : FILES_PATH . 'generis' . DIRECTORY_SEPARATOR . $id . DIRECTORY_SEPARATOR;
-        $this->levels = isset($params['levels']) ? $params['levels'] : self::DEFAULT_LEVELS;
-        $this->humanReadable = isset($params['humanReadable']) ? $params['humanReadable'] : false;
+        $this->levels = $params['levels'] ?? self::DEFAULT_LEVELS;
+        $this->humanReadable = $params['humanReadable'] ?? false;
 
         // Sets ttl mode TRUE when the passed ttl mode is true.
         $this->setTtlMode(
@@ -106,7 +110,13 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
 
     /**
      * (non-PHPdoc)
+     *
      * @see common_persistence_KvDriver::set()
+     *
+     * @param mixed $id
+     * @param mixed $value
+     * @param null|mixed $ttl
+     * @param mixed $nx
      *
      * @throws common_exception_NotImplemented
      * @throws \common_exception_Error
@@ -115,7 +125,7 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
     {
         if ($this->isTtlMode()) {
             $value = [
-                static::ENTRY_VALUE      => $value,
+                static::ENTRY_VALUE => $value,
                 static::ENTRY_EXPIRATION => $this->calculateExpiresAt($ttl),
             ];
         } elseif (null !== $ttl) {
@@ -149,11 +159,11 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
      *
      * @param $id
      * @param $value
-     * @param callable $preWriteValueProcessor   The value preprocessor method.
-     *
-     * @return bool
+     * @param callable $preWriteValueProcessor the value preprocessor method
      *
      * @throws \common_exception_Error
+     *
+     * @return bool
      */
     private function writeFile($id, $value, $preWriteValueProcessor = null)
     {
@@ -174,6 +184,7 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
             $success = fwrite($fp, $string);
             @flock($fp, LOCK_UN);
             @fclose($fp);
+
             if ($success) {
                 // OPcache workaround
                 if (function_exists('opcache_invalidate')) {
@@ -184,17 +195,18 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
             }
 
             return $success !== false;
-        } else {
-            common_Logger::w('Could not obtain lock on ' . $filePath);
-
-            return false;
         }
+        common_Logger::w('Could not obtain lock on ' . $filePath);
+
+        return false;
     }
 
     /**
      * Create directory and suppress warning message
+     *
      * @param $path
      * @param int $mode
+     *
      * @return bool
      */
     private function makeDirectory(string $path, int $mode)
@@ -216,17 +228,22 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
 
     /**
      * (non-PHPdoc)
+     *
      * @see common_persistence_KvDriver::get()
+     *
+     * @param mixed $id
      */
     public function get($id)
     {
         $entry = $this->readFile($id);
+
         if ($entry != false && $this->isTtlMode()) {
             $entry = (is_null($entry[static::ENTRY_EXPIRATION]) || $entry[static::ENTRY_EXPIRATION] > $this->getTime())
                 ? $entry[static::ENTRY_VALUE]
                 : false
             ;
         }
+
         return $entry;
     }
 
@@ -260,20 +277,26 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
 
     /**
      * (non-PHPdoc)
+     *
      * @see common_persistence_KvDriver::exists()
+     *
+     * @param mixed $id
      */
     public function exists($id)
     {
         if (!$this->isTtlMode()) {
             return file_exists($this->getPath($id));
-        } else {
-            return $this->get($id) !== false;
         }
+
+        return $this->get($id) !== false;
     }
 
     /**
      * (non-PHPdoc)
+     *
      * @see common_persistence_KvDriver::del()
+     *
+     * @param mixed $id
      */
     public function del($id)
     {
@@ -285,6 +308,7 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
         }
 
         $success = @unlink($filePath);
+
         return $success;
     }
 
@@ -293,9 +317,9 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
      *
      * @param string $id
      *
-     * @return mixed
-     *
      * @throws \common_exception_Error
+     *
+     * @return mixed
      */
     public function incr($id)
     {
@@ -313,12 +337,14 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
     {
         $value = intval($this->get($id));
         $value++;
+
         if ($this->isTtlMode()) {
             $value = [
-                static::ENTRY_VALUE      => $value,
+                static::ENTRY_VALUE => $value,
                 static::ENTRY_EXPIRATION => null,
             ];
         }
+
         return $value;
     }
 
@@ -327,9 +353,9 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
      *
      * @param $id
      *
-     * @return mixed
-     *
      * @throws \common_exception_Error
+     *
+     * @return mixed
      */
     public function decr($id)
     {
@@ -347,12 +373,14 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
     {
         $value = intval($this->get($id));
         $value--;
+
         if ($this->isTtlMode()) {
             $value = [
-                static::ENTRY_VALUE      => $value,
+                static::ENTRY_VALUE => $value,
                 static::ENTRY_EXPIRATION => null,
             ];
         }
+
         return $value;
     }
 
@@ -364,8 +392,9 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
     public function purge()
     {
         if (file_exists($this->directory)) {
-            $files          = $this->getCachedFiles();
+            $files = $this->getCachedFiles();
             $successDeleted = true;
+
             foreach ($files as $file) {
                 $successDeleted &= $this->removeCacheFile($file);
             }
@@ -380,6 +409,7 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
      * Map the provided key to a relativ path
      *
      * @param string $key
+     *
      * @return string
      */
     protected function getPath($key)
@@ -390,6 +420,7 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
             $encoded = hash('md5', $key);
             $path = implode(DIRECTORY_SEPARATOR, str_split(substr($encoded, 0, $this->levels))) . DIRECTORY_SEPARATOR . $encoded;
         }
+
         return  $this->directory . $path . '.php';
     }
 
@@ -398,14 +429,17 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
      * of backwards compatibility
      *
      * @param string $key
+     *
      * @return string
      */
     protected function sanitizeReadableFileName($key)
     {
         $path = '';
+
         foreach (str_split($key) as $char) {
             $path .= isset(self::$ALLOWED_CHARACTERS[$char]) ? $char : base64_encode($char);
         }
+
         return $path;
     }
 
@@ -415,15 +449,15 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
      * @param string $key
      * @param mixed $value
      *
-     * @return string
-     *
      * @throws \common_exception_Error
+     *
+     * @return string
      */
     protected function getContent($key, $value)
     {
         return $this->humanReadable
-            ? "<?php return " . common_Utils::toHumanReadablePhpString($value) . ";" . PHP_EOL
-            : "<?php return " . common_Utils::toPHPVariableString($value) . ";";
+            ? '<?php return ' . common_Utils::toHumanReadablePhpString($value) . ';' . PHP_EOL
+            : '<?php return ' . common_Utils::toPHPVariableString($value) . ';';
     }
 
     /**
@@ -454,11 +488,12 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
         try {
             $files = helpers_File::scandir($this->directory, [
                 'recursive' => true,
-                'only'      => helpers_File::SCAN_FILE,
-                'absolute'  => true,
+                'only' => helpers_File::SCAN_FILE,
+                'absolute' => true,
             ]);
         } catch (common_Exception $exception) {
             \common_Logger::e($exception->getMessage());
+
             return [];
         }
 
@@ -467,6 +502,7 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
 
     /**
      * @param string $filePath
+     *
      * @return bool
      */
     private function removeCacheFile($filePath)
@@ -479,6 +515,7 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
             return helpers_File::remove($filePath);
         } catch (common_exception_Error $exception) {
             \common_Logger::e($exception->getMessage());
+
             return false;
         }
     }

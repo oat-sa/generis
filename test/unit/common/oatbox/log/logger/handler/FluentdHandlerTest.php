@@ -16,14 +16,14 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2021 (original work) Open Assessment Technologies SA;
- *
  */
 
 namespace oat\generis\test\unit\common\oatbox\log\logger\handler;
 
-use oat\oatbox\log\logger\handler\FluentdHandler;
-use oat\generis\test\TestCase;
 use Fluent\Logger\FluentLogger;
+use oat\generis\test\TestCase;
+use oat\oatbox\log\logger\handler\FluentdHandler;
+use TypeError;
 
 class FluentdHandlerTest extends TestCase
 {
@@ -37,13 +37,12 @@ class FluentdHandlerTest extends TestCase
         $handler = new FluentdHandler($logger);
         $handler->handle($logMessage);
 
-        new FluentdHandler(FluentLogger::class, 100, true, ["127.0.0.1", 24224]);
+        new FluentdHandler(FluentLogger::class, 100, true, ['127.0.0.1', 24224]);
     }
 
     public function testConstructThrowsTypeException()
     {
-        $this->expectException(\TypeError::class);
-        new FluentdHandler(FluentLogger::class.'foo');
+        $this->expectException(TypeError::class);
+        new FluentdHandler(FluentLogger::class . 'foo');
     }
-
 }

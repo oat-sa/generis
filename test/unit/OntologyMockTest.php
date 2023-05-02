@@ -16,7 +16,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2018 (original work) Open Assessment Technologies SA;
- *
  */
 
 namespace oat\generis\test\unit;
@@ -25,12 +24,12 @@ use oat\generis\test\GenerisTestCase;
 
 /**
  * @deprecated backward compatibility class for unit tests extending a concrete unit test
- *
  */
 class OntologyMockTest extends GenerisTestCase
 {
     /**
      * this is done for backward compatibility and it was done to prevent the failing of phpunit
+     *
      * @doesNotPerformAssertions
      */
     public function testSampleCase()

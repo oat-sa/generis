@@ -26,14 +26,14 @@ use oat\generis\model\RulesRdf;
  * Short description of class core_kernel_rules_Rule
  *
  * @access public
+ *
  * @author firstname and lastname of author, <author@example.org>
+ *
  * @package generis
-
  */
 class core_kernel_rules_Rule extends core_kernel_classes_Resource
 {
     // --- ASSOCIATIONS ---
-
 
     // --- ATTRIBUTES ---
 
@@ -41,6 +41,7 @@ class core_kernel_rules_Rule extends core_kernel_classes_Resource
      * Short description of attribute expression
      *
      * @access public
+     *
      * @var Expression
      */
     public $expression = null;
@@ -50,18 +51,22 @@ class core_kernel_rules_Rule extends core_kernel_classes_Resource
      * Short description of method getExpression
      *
      * @access public
+     *
      * @author firstname and lastname of author, <author@example.org>
+     *
      * @return core_kernel_rules_Expression
      */
     public function getExpression()
     {
         $returnValue = null;
         common_Logger::i('Evaluating rule ' . $this->getLabel() . '(' . $this->getUri() . ')', ['Generis Rule']);
+
         if (empty($this->expression)) {
             $property = new core_kernel_classes_Property(RulesRdf::PROPERTY_RULE_IF);
             $this->expression = new core_kernel_rules_Expression($this->getUniquePropertyValue($property)->getUri(), __METHOD__);
         }
         $returnValue = $this->expression;
+
         return $returnValue;
     }
 }

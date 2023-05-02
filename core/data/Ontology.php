@@ -16,10 +16,13 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2018 (original work) 2014 Open Assessment Technologies SA
- *
  */
 
 namespace oat\generis\model\data;
+
+use core_kernel_classes_Class;
+use core_kernel_classes_Property;
+use core_kernel_classes_Resource;
 
 /**
  * Interface to manage the instantiating of resources
@@ -28,23 +31,26 @@ namespace oat\generis\model\data;
  */
 interface Ontology extends Model
 {
-    const SERVICE_ID = 'generis/ontology';
+    public const SERVICE_ID = 'generis/ontology';
 
     /**
      * @param string $uri
-     * @return \core_kernel_classes_Resource
+     *
+     * @return core_kernel_classes_Resource
      */
-    function getResource($uri);
+    public function getResource($uri);
 
     /**
      * @param string $uri
-     * @return \core_kernel_classes_Class
+     *
+     * @return core_kernel_classes_Class
      */
-    function getClass($uri);
+    public function getClass($uri);
 
     /**
      * @param string $uri
-     * @return \core_kernel_classes_Property
+     *
+     * @return core_kernel_classes_Property
      */
-    function getProperty($uri);
+    public function getProperty($uri);
 }

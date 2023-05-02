@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -15,7 +16,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2013 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
  */
 
 use oat\oatbox\reporting\RecursiveReportIterator;
@@ -27,7 +27,8 @@ use oat\oatbox\reporting\ReportInterface;
  * then a simple boolean variable denoting the success
  *
  * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
- * @deprecated Please, use oat\oatbox\reporting\Report::class.
+ *
+ * @deprecated please, use oat\oatbox\reporting\Report::class
  */
 class common_report_Report implements ReportInterface
 {
@@ -64,8 +65,8 @@ class common_report_Report implements ReportInterface
      *
      * @param string $type
      * @param string $message
-     * @param null   $data
-     * @param array  $children
+     * @param null $data
+     * @param array $children
      *
      * @throws common_exception_Error
      */
@@ -88,10 +89,11 @@ class common_report_Report implements ReportInterface
      * Covers static helpers by the next template: Report::create<Type>
      *
      * @param string $name
-     * @param array  $arguments
+     * @param array $arguments
+     *
+     * @throws common_exception_Error
      *
      * @return Report
-     * @throws common_exception_Error
      */
     public static function __callStatic(string $name, array $arguments): self
     {
@@ -112,23 +114,31 @@ class common_report_Report implements ReportInterface
      * Covers helpers (methods) by defined templates
      *
      * @param string $name
-     * @param array  $arguments
+     * @param array $arguments
      *
      * @return bool|array
      */
     public function __call(string $name, array $arguments)
     {
-        /** Covers methods by template: get<Type>[e]s */
+        /* Covers methods by template: get<Type>[e]s */
         if (0 === strpos($name, 'get')) {
             return $this->handleGetCalls($name, $arguments);
         }
 
-        /** Covers methods by template: contains<Type> */
+        /* Covers methods by template: contains<Type> */
         if (0 === strpos($name, 'contains')) {
             return $this->handleContainsCalls($name, $arguments);
         }
 
         throw new BadMethodCallException(sprintf('Requested method `%s` is not found or is not allowed in class %s', $name, __CLASS__));
+    }
+
+    /**
+     * User feedback message
+     */
+    public function __toString(): string
+    {
+        return $this->getMessage();
     }
 
     /**
@@ -239,9 +249,9 @@ class common_report_Report implements ReportInterface
      *
      * @param mixed $mixed accepts single values and arrays of Reports and UserReadableExceptions
      *
-     * @return Report
-     *
      * @throws common_exception_Error
+     *
+     * @return Report
      */
     public function add($mixed): self
     {
@@ -282,7 +292,7 @@ class common_report_Report implements ReportInterface
      * Returns all children based on type
      *
      * @param array $types
-     * @param bool  $asFlat
+     * @param bool $asFlat
      *
      * @return array
      */
@@ -312,21 +322,13 @@ class common_report_Report implements ReportInterface
     }
 
     /**
-     * User feedback message
-     */
-    public function __toString(): string
-    {
-        return $this->getMessage();
-    }
-
-    /**
      * Recursively restores report object from json string or array
      *
      * @param string|array $data
      *
-     * @return self|null
-     *
      * @throws common_exception_Error
+     *
+     * @return self|null
      */
     public static function jsonUnserialize($data): ?self
     {
@@ -341,6 +343,7 @@ class common_report_Report implements ReportInterface
         $report = new static($data['type'], $data['message'], $data['data']);
 
         $data['children'] = (!isset($data['children']) || !is_array($data['children'])) ? [] : $data['children'];
+
         foreach ($data['children'] as $child) {
             $report->add(static::jsonUnserialize($child));
         }
@@ -357,7 +360,7 @@ class common_report_Report implements ReportInterface
             'type' => $this->getType(),
             'message' => $this->getMessage(),
             'data' => $this->getData(),
-            'children' => $this->getChildren()
+            'children' => $this->getChildren(),
         ];
     }
 
@@ -369,7 +372,7 @@ class common_report_Report implements ReportInterface
         return array_merge($this->jsonSerialize(), [
             'children' => array_map(static function (self $report) {
                 return $report->toArray();
-            }, $this->children)
+            }, $this->children),
         ]);
     }
 
@@ -377,11 +380,13 @@ class common_report_Report implements ReportInterface
      * Convenience method to create a simple failure report
      *
      * @param string $message
-     * @param mixed  $errors
-     * @param null   $data
+     * @param mixed $errors
+     * @param null $data
+     *
+     * @throws common_exception_Error
      *
      * @return Report
-     * @throws common_exception_Error
+     *
      * @deprecated Please, use `createError` method instead
      */
     public static function createFailure(string $message, array $errors = [], $data = null): self

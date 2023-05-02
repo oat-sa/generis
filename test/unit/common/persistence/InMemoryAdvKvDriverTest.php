@@ -20,18 +20,19 @@
 
 namespace oat\generis\test\unit\common\persistence;
 
+use common_persistence_InMemoryAdvKvDriver;
 use oat\generis\test\TestCase;
 
 class InMemoryAdvKvDriverTest extends TestCase
 {
     /**
-     * @var \common_persistence_InMemoryAdvKvDriver
+     * @var common_persistence_InMemoryAdvKvDriver
      */
     private $driver;
 
     public function setUp(): void
     {
-        $this->driver = new \common_persistence_InMemoryAdvKvDriver();
+        $this->driver = new common_persistence_InMemoryAdvKvDriver();
     }
 
     public function testHgetallReturnsArrayIfNoRecordsFound()

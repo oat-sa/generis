@@ -84,7 +84,6 @@ class ReportTest extends TestCase
             ],
         ];
         $this->assertEquals($expectedArray, $report->toArray());
-
     }
 
     public function testBasicReport(): void
@@ -142,6 +141,7 @@ class ReportTest extends TestCase
         self::assertEquals(Report::TYPE_WARNING, $report->getType());
 
         $array = [];
+
         foreach ($report as $child) {
             $array[] = $child;
         }
@@ -152,6 +152,7 @@ class ReportTest extends TestCase
         self::assertFalse($first->hasChildren());
         self::assertEquals('info31', (string)$first);
         self::assertEquals(Report::TYPE_INFO, $first->getType());
+
         foreach ($first as $child) {
             self::fail('Should not contain children');
         }
@@ -159,6 +160,7 @@ class ReportTest extends TestCase
         self::assertFalse($second->hasChildren());
         self::assertEquals('error31', (string)$second);
         self::assertEquals(Report::TYPE_ERROR, $second->getType());
+
         foreach ($second as $child) {
             self::fail('Should not contain children');
         }
@@ -166,6 +168,7 @@ class ReportTest extends TestCase
         self::assertFalse($third->hasChildren());
         self::assertEquals('warning31', (string)$third);
         self::assertEquals(Report::TYPE_WARNING, $third->getType());
+
         foreach ($third as $child) {
             self::fail('Should not contain children');
         }
@@ -203,6 +206,7 @@ class ReportTest extends TestCase
         self::assertEquals(Report::TYPE_WARNING, $report->getType());
 
         $array = [];
+
         foreach ($report as $child) {
             $array[] = $child;
         }
@@ -212,6 +216,7 @@ class ReportTest extends TestCase
         self::assertTrue($first->hasChildren());
         self::assertEquals('info31', (string)$first);
         self::assertEquals(Report::TYPE_INFO, $first->getType());
+
         foreach ($first as $child) {
             self::assertEquals('success31', (string)$child);
             self::assertEquals(Report::TYPE_SUCCESS, $child->getType());
@@ -220,6 +225,7 @@ class ReportTest extends TestCase
         self::assertFalse($second->hasChildren());
         self::assertEquals('error31', (string)$second);
         self::assertEquals(Report::TYPE_ERROR, $second->getType());
+
         foreach ($second as $child) {
             self::fail('Should not contain children');
         }
@@ -340,12 +346,13 @@ class ReportTest extends TestCase
 
         $filtered = $report->filterChildrenByTypes([
             Report::TYPE_WARNING,
-            Report::TYPE_ERROR
+            Report::TYPE_ERROR,
         ]);
 
         self::assertCount(4, $filtered);
 
         $output = [];
+
         foreach ($filtered as $r) {
             $output[$r->getType()][] = $r->getMessage();
         }
@@ -360,7 +367,7 @@ class ReportTest extends TestCase
             Report::TYPE_ERROR,
             'my data %s',
             [
-                'test'
+                'test',
             ]
         );
 
@@ -384,8 +391,7 @@ class ReportTest extends TestCase
         $report = Report::createInfo('1')
             ->add(
                 Report::createSuccess('2')
-                    ->add(Report::createWarning('3')
-                )
+                    ->add(Report::createWarning('3'))
             );
 
         self::assertEquals('1, 2, 3', $report->getAllMessages());

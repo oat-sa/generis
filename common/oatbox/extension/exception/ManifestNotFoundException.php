@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,22 +17,23 @@
  *
  * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- *
  */
 
 namespace oat\oatbox\extension\exception;
+
+use common_Logger;
 
 /**
  * This exception must be thrown when an Extension Manifest is requested but not found
  *
  * @access public
+ *
  * @package generis
  */
 class ManifestNotFoundException extends ManifestException
 {
-
     public function getSeverity()
     {
-        return \common_Logger::WARNING_LEVEL;
+        return common_Logger::WARNING_LEVEL;
     }
 }

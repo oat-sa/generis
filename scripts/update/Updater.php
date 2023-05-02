@@ -16,16 +16,19 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2014-2017 (original work) Open Assessment Technologies SA;
- *
- *
  */
 
 namespace oat\generis\scripts\update;
 
+use common_cache_Cache;
 use common_Exception;
+use common_exception_InconsistentData;
 use common_exception_NotImplemented;
 use common_ext_ExtensionsManager;
 use common_ext_ExtensionUpdater;
+use common_persistence_Manager;
+use common_persistence_Persistence;
+use common_persistence_sql_SchemaManager;
 use core_kernel_impl_ApiModelOO;
 use core_kernel_persistence_smoothsql_SmoothModel;
 use League\Flysystem\Adapter\Local;
@@ -34,6 +37,7 @@ use oat\generis\model\data\ModelManager;
 use oat\generis\model\data\Ontology;
 use oat\generis\model\fileReference\FileReferenceSerializer;
 use oat\generis\model\fileReference\ResourceFileSerializer;
+use oat\generis\model\kernel\persistence\file\FileIterator;
 use oat\generis\model\kernel\persistence\smoothsql\search\ComplexSearchService;
 use oat\generis\model\kernel\uri\UriProvider;
 use oat\generis\model\user\AuthAdapter;
@@ -59,11 +63,11 @@ use oat\oatbox\task\TaskRunner;
 use oat\oatbox\user\UserLanguageService;
 use oat\taoWorkspace\model\generis\WrapperModel;
 use Psr\Log\LoggerInterface;
-use oat\generis\model\kernel\persistence\file\FileIterator;
 use Traversable;
 
 /**
  * @author Joel Bout <joel@taotesting.com>
+ *
  * @deprecated use migrations instead. See https://github.com/oat-sa/generis/wiki/Tao-Update-Process
  */
 class Updater extends common_ext_ExtensionUpdater
@@ -71,10 +75,11 @@ class Updater extends common_ext_ExtensionUpdater
     /**
      * @param string $initialVersion
      *
-     * @return string $versionUpdatedTo
      * @throws common_Exception
      * @throws \EasyRdf\Exception
      * @throws \oat\oatbox\service\ServiceNotFoundException
+     *
+     * @return string $versionUpdatedTo
      */
     public function update($initialVersion)
     {
@@ -105,8 +110,8 @@ class Updater extends common_ext_ExtensionUpdater
             $this->setVersion('2.20.0');
         }
 
-
         $this->skip('2.20.0', '2.29.1');
+
         if ($this->isVersion('2.29.1')) {
             $this->getServiceManager()->register(FileReferenceSerializer::SERVICE_ID, new ResourceFileSerializer());
             $this->setVersion('2.30.0');
@@ -158,6 +163,7 @@ class Updater extends common_ext_ExtensionUpdater
 
         if ($this->isVersion('3.6.1')) {
             $model = ModelManager::getModel();
+
             if ($model instanceof core_kernel_persistence_smoothsql_SmoothModel) {
                 $model->setOption(
                     core_kernel_persistence_smoothsql_SmoothModel::OPTION_SEARCH_SERVICE,
@@ -171,6 +177,7 @@ class Updater extends common_ext_ExtensionUpdater
         if ($this->isBetween('3.7.0', '3.8.3')) {
             /* @var $modelWrapper WrapperModel */
             $modelWrapper = ModelManager::getModel();
+
             if ($modelWrapper instanceof WrapperModel) {
                 $inner = $modelWrapper->getInnerModel();
                 $inner->setOption(
@@ -220,7 +227,7 @@ class Updater extends common_ext_ExtensionUpdater
 
         $this->skip('3.30.0', '3.34.0');
 
-        /**
+        /*
          * replaced update script 3.34.0 because of potential config loss
          */
         if ($this->isVersion('3.34.0')) {
@@ -247,22 +254,23 @@ class Updater extends common_ext_ExtensionUpdater
                 );
             }
             $this->getServiceManager()->register(Queue::SERVICE_ID, $queue);
-            /**
+            /*
              * skip because you don't need to fix config
              */
             $this->setVersion('3.35.2');
         }
 
-        /**
+        /*
          * you are on a bad version needs to be fixed
          */
         $this->skip('3.35.0', '3.35.1');
 
-        /**
+        /*
          * fix for bad config
          */
         if ($this->isVersion('3.35.1')) {
             $queue = $this->getServiceManager()->get(Queue::SERVICE_ID);
+
             if (get_class($queue) === 'oat\Taskqueue\Persistence\RdsQueue') {
                 $queue->setOptions(
                     [
@@ -280,7 +288,7 @@ class Updater extends common_ext_ExtensionUpdater
         $this->skip('3.35.2', '4.1.4');
 
         if ($this->isVersion('4.1.4')) {
-            /** Rdf synchronization was moved to version 4.4.1 (see below) because OntologyUpdater is in tao extension */
+            /* Rdf synchronization was moved to version 4.4.1 (see below) because OntologyUpdater is in tao extension */
             //            OntologyUpdater::syncModels();
             $this->setVersion('4.2.0');
         }
@@ -318,6 +326,7 @@ class Updater extends common_ext_ExtensionUpdater
             }
 
             $conf = $this->getExtension()->getConfig('log');
+
             if (!$conf instanceof LoggerInterface) {
                 $logger = new LoggerService([
                     LoggerService::LOGGER_OPTION => new TaoLog([
@@ -367,10 +376,11 @@ class Updater extends common_ext_ExtensionUpdater
             $modelConfig = $this->getServiceManager()->get(Ontology::SERVICE_ID)->getConfig();
             $className = $modelConfig['class'];
             $ontologyModel = new $className($modelConfig['config']);
+
             if ($ontologyModel instanceof core_kernel_persistence_smoothsql_SmoothModel) {
                 $ontologyModel->setOption(
-                    \core_kernel_persistence_smoothsql_SmoothModel::OPTION_CACHE_SERVICE,
-                    \common_cache_Cache::SERVICE_ID
+                    core_kernel_persistence_smoothsql_SmoothModel::OPTION_CACHE_SERVICE,
+                    common_cache_Cache::SERVICE_ID
                 );
             }
             $this->getServiceManager()->register(Ontology::SERVICE_ID, $ontologyModel);
@@ -387,10 +397,11 @@ class Updater extends common_ext_ExtensionUpdater
         $this->skip('10.0.0', '10.1.0');
 
         if ($this->isBetween('10.1.0', '11.0.0')) {
-            /** @var \common_persistence_Manager $persistenceManager */
-            $persistenceManager = $this->getServiceManager()->get(\common_persistence_Manager::SERVICE_ID);
+            /** @var common_persistence_Manager $persistenceManager */
+            $persistenceManager = $this->getServiceManager()->get(common_persistence_Manager::SERVICE_ID);
 
             $persistenceManagerConfig = $persistenceManager->getOption('persistences');
+
             foreach ($persistenceManagerConfig as $persistenceId => $persistenceParams) {
                 // wrap pdo drivers in dbal
                 if (strpos($persistenceParams['driver'], 'pdo_') === 0) {
@@ -401,7 +412,7 @@ class Updater extends common_ext_ExtensionUpdater
                 }
             }
             $persistenceManager->setOption('persistences', $persistenceManagerConfig);
-            $this->getServiceManager()->register(\common_persistence_Manager::SERVICE_ID, $persistenceManager);
+            $this->getServiceManager()->register(common_persistence_Manager::SERVICE_ID, $persistenceManager);
 
             $this->setVersion('11.0.0');
         }
@@ -422,7 +433,7 @@ class Updater extends common_ext_ExtensionUpdater
 
         if ($this->isVersion('11.2.1')) {
             $service = new LockService([
-                LockService::OPTION_PERSISTENCE_CLASS => NoLockStorage::class
+                LockService::OPTION_PERSISTENCE_CLASS => NoLockStorage::class,
             ]);
             $this->getServiceManager()->register(LockService::SERVICE_ID, $service);
             $this->setVersion('11.2.2');
@@ -431,15 +442,15 @@ class Updater extends common_ext_ExtensionUpdater
         $this->skip('11.2.2', '11.3.1');
 
         if ($this->isVersion('11.3.1')) {
-            /** @var \common_persistence_Manager $persistenceManager */
-            $persistenceManager = $this->getServiceManager()->get(\common_persistence_Manager::SERVICE_ID);
+            /** @var common_persistence_Manager $persistenceManager */
+            $persistenceManager = $this->getServiceManager()->get(common_persistence_Manager::SERVICE_ID);
             $persistenceManagerConfig = $persistenceManager->getOption('persistences');
 
             foreach ($persistenceManagerConfig as $persistenceId => $persistenceParams) {
                 $persistenceManager->registerPersistence($persistenceId, $persistenceParams);
             }
 
-            $this->getServiceManager()->register(\common_persistence_Manager::SERVICE_ID, $persistenceManager);
+            $this->getServiceManager()->register(common_persistence_Manager::SERVICE_ID, $persistenceManager);
             $this->setVersion('11.3.2');
         }
 
@@ -456,12 +467,13 @@ class Updater extends common_ext_ExtensionUpdater
         if ($this->isBetween('12.1.0', '12.2.0')) {
             $fs = $this->getServiceManager()->get(FileSystemService::SERVICE_ID);
             $adapters = $fs->getOption(FileSystemService::OPTION_ADAPTERS);
+
             if (!isset($adapters['default'])) {
                 if (get_class($fs) == FileSystemService::class) {
                     // override default behavior to ensure an adapter and not a directory is created
                     $adapters['default'] = [
                         'class' => Local::class,
-                        'options' => ['root' => $fs->getOption(FileSystemService::OPTION_FILE_PATH)]
+                        'options' => ['root' => $fs->getOption(FileSystemService::OPTION_FILE_PATH)],
                     ];
                     $fs->setOption(FileSystemService::OPTION_ADAPTERS, $adapters);
                 } else {
@@ -472,14 +484,17 @@ class Updater extends common_ext_ExtensionUpdater
             $this->setVersion('12.2.0');
         }
         $this->skip('12.2.0', '12.4.0');
+
         if ($this->isVersion('12.4.0')) {
             $uriService = $this->getServiceManager()->get(UriProvider::SERVICE_ID);
+
             if ($uriService instanceof ConfigurationService) {
                 $innerService = $uriService->getConfig();
+
                 if ($innerService instanceof UriProvider) {
                     $this->getServiceManager()->register(UriProvider::SERVICE_ID, $innerService);
                 } else {
-                    throw new \common_exception_InconsistentData('Unknown URI Provider found');
+                    throw new common_exception_InconsistentData('Unknown URI Provider found');
                 }
             }
             $this->setVersion('12.4.1');
@@ -487,16 +502,17 @@ class Updater extends common_ext_ExtensionUpdater
         $this->skip('12.4.1', '12.11.0');
 
         if ($this->isVersion('12.11.0')) {
-            /** @var \common_persistence_Persistence $defaultPersistence */
+            /** @var common_persistence_Persistence $defaultPersistence */
             $defaultPersistence = $this->getServiceManager()
                 ->get(PersistenceManager::SERVICE_ID)
                 ->getPersistenceById('default');
-            /** @var \common_persistence_sql_SchemaManager $schemaManager */
+            /** @var common_persistence_sql_SchemaManager $schemaManager */
             $schemaManager = $defaultPersistence->getDriver()->getSchemaManager();
             $schema = $schemaManager->createSchema();
             $fromSchema = clone $schema;
             $schema->dropTable('models');
             $queries = $defaultPersistence->getPlatform()->getMigrateSchemaSql($fromSchema, $schema);
+
             foreach ($queries as $query) {
                 $defaultPersistence->exec($query);
             }
@@ -522,7 +538,7 @@ class Updater extends common_ext_ExtensionUpdater
             /** @var FileSystemService $fs */
             $fs = $this->getServiceManager()->get(FileSystemService::SERVICE_ID);
             $adapters = $fs->getOption(FileSystemService::OPTION_ADAPTERS);
-            $adapters['memory'] = [ 'class' => MemoryAdapter::class, ];
+            $adapters['memory'] = ['class' => MemoryAdapter::class, ];
             $fs->setOption(FileSystemService::OPTION_ADAPTERS, $adapters);
             $this->getServiceManager()->register(FileSystemService::SERVICE_ID, $fs);
 
@@ -563,6 +579,7 @@ class Updater extends common_ext_ExtensionUpdater
     protected function removeDuplicates(Traversable $triples): void
     {
         $rdfModel = $this->getServiceLocator()->get(Ontology::SERVICE_ID)->getRdfInterface();
+
         foreach ($triples as $triple) {
             $rdfModel->remove($triple);
         }

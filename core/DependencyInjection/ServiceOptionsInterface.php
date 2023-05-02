@@ -27,6 +27,8 @@ namespace oat\generis\model\DependencyInjection;
 interface ServiceOptionsInterface
 {
     /**
+     * @param null|mixed $default
+     *
      * @return mixed
      */
     public function get(string $serviceId, string $option, $default = null);

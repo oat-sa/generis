@@ -16,23 +16,25 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2016 (original work) Open Assessment Technologies SA
- *
  */
 
-use Psr\Log\LogLevel;
 use Psr\Log\AbstractLogger;
+use Psr\Log\LogLevel;
 
 /**
  * A wrapper for the old Logger
  *
  * @access public
+ *
  * @author Joel Bout, <joel.bout@tudor.lu>
+ *
  * @package generis
  */
 class common_log_Logger2Psr extends AbstractLogger
 {
     /**
      * A map between the loggers
+     *
      * @var array
      */
     private static $map = [
@@ -47,33 +49,33 @@ class common_log_Logger2Psr extends AbstractLogger
     ];
 
     /**
-     * @var array   The common_logger level - PSR3 log level conversion.
+     * @var array the common_logger level - PSR3 log level conversion
      */
     private static $reverseMap = [
-        common_Logger::TRACE_LEVEL   => LogLevel::DEBUG,
-        't'                          => LogLevel::DEBUG,
+        common_Logger::TRACE_LEVEL => LogLevel::DEBUG,
+        't' => LogLevel::DEBUG,
 
-        common_Logger::DEBUG_LEVEL   => LogLevel::DEBUG,
-        'd'                          => LogLevel::DEBUG,
+        common_Logger::DEBUG_LEVEL => LogLevel::DEBUG,
+        'd' => LogLevel::DEBUG,
 
-        common_Logger::INFO_LEVEL    => LogLevel::INFO,
-        'i'                          => LogLevel::INFO,
+        common_Logger::INFO_LEVEL => LogLevel::INFO,
+        'i' => LogLevel::INFO,
 
         common_Logger::WARNING_LEVEL => LogLevel::WARNING,
-        'w'                          => LogLevel::WARNING,
+        'w' => LogLevel::WARNING,
 
-        common_Logger::ERROR_LEVEL   => LogLevel::ERROR,
-        'e'                          => LogLevel::ERROR,
+        common_Logger::ERROR_LEVEL => LogLevel::ERROR,
+        'e' => LogLevel::ERROR,
 
-        common_Logger::FATAL_LEVEL   => LogLevel::CRITICAL,
-        'f'                          => LogLevel::CRITICAL,
+        common_Logger::FATAL_LEVEL => LogLevel::CRITICAL,
+        'f' => LogLevel::CRITICAL,
     ];
 
     /**
      * @var common_Logger
      */
     private $logger;
-    
+
     public function __construct(common_Logger $logger)
     {
         $this->logger = $logger;
@@ -81,20 +83,24 @@ class common_log_Logger2Psr extends AbstractLogger
 
     /**
      * (non-PHPdoc)
+     *
      * @see \Psr\Log\LoggerInterface::log()
+     *
+     * @param mixed $level
+     * @param mixed $message
      */
     public function log($level, $message, array $context = [])
     {
-        $errorLevel = isset(self::$map[$level]) ? self::$map[$level] : common_Logger::ERROR_LEVEL;
+        $errorLevel = self::$map[$level] ?? common_Logger::ERROR_LEVEL;
         $this->logger->log($errorLevel, $message, $context);
     }
-    
+
     public static function getCommonFromPsrLevel($level)
     {
         if (empty(self::$map[$level])) {
             throw new Exception('Invalid error level in Common level to PSR conversion: ' . $level);
         }
-    
+
         return self::$map[$level];
     }
 
@@ -103,9 +109,9 @@ class common_log_Logger2Psr extends AbstractLogger
      *
      * @param string $level
      *
-     * @return string   The PSR log level.
+     * @throws Exception when invalid level was presented
      *
-     * @throws Exception   When invalid level was presented.
+     * @return string the PSR log level
      */
     public static function getPsrLevelFromCommon($level)
     {

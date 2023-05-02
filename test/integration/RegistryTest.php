@@ -16,7 +16,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2014 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
  */
 
 namespace oat\generis\test\integration;
@@ -27,7 +26,6 @@ use oat\oatbox\BasicRegistry;
 class RegistryTest extends TestCase
 {
     /**
-     *
      * @author Lionel Lecaque, lionel@taotesting.com
      */
     public function setUp(): void
@@ -35,7 +33,6 @@ class RegistryTest extends TestCase
     }
 
     /**
-     *
      * @author Lionel Lecaque, lionel@taotesting.com
      */
     public function testSet()
@@ -63,7 +60,6 @@ class RegistryTest extends TestCase
      */
     public function testRemove()
     {
-
         $data = BasicRegistry::getRegistry()->getMap();
         $this->assertTrue(isset($data['key']));
         BasicRegistry::getRegistry()->remove('key');

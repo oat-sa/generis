@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -15,7 +16,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2002-2020 (original work) 2014 Open Assessment Technologies SA
- *
  */
 
 /**
@@ -100,6 +100,7 @@ class common_persistence_sql_QueryIterator implements Iterator
         if ($this->valid()) {
             $last = $this->key();
             $this->currentResult++;
+
             if (!isset($this->cache[$this->currentResult])) {
                 $this->load($last + 1);
             }
@@ -123,6 +124,7 @@ class common_persistence_sql_QueryIterator implements Iterator
 
         $this->cache = [];
         $pos = $offset;
+
         while ($statement = $result->fetch()) {
             $this->cache[$pos++] = $statement;
         }

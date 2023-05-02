@@ -41,7 +41,7 @@ class CacheItemPoolFactoryTest extends TestCase
     {
         $result = $this->subject->create(
             [
-                CacheItemPoolFactory::CONFIG_PERSISTENCE => 'something'
+                CacheItemPoolFactory::CONFIG_PERSISTENCE => 'something',
             ]
         );
 

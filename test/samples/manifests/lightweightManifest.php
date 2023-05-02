@@ -34,5 +34,5 @@ $taopath = dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'tao' . DIRECTORY_
 return [
     'name' => 'lightweight',
     'description' => 'lightweight testing manifest',
-    'author' => 'TAO Team'
+    'author' => 'TAO Team',
 ];

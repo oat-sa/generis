@@ -16,13 +16,13 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2016 (original work) Open Assessment Technologies SA;
- *
  */
 
 namespace oat\generis\scripts\install;
 
+use common_ext_action_InstallAction;
+use common_report_Report;
 use oat\oatbox\filesystem\FileSystemService;
-use oat\oatbox\service\ServiceManager;
 use oat\oatbox\task\Queue;
 
 /**
@@ -31,21 +31,22 @@ use oat\oatbox\task\Queue;
  * Action to initialize task queue
  *
  * @package oat\generis\scripts\install
+ *
  * @author Aleh Hutnikau, <hutnikau@1pt.com>
  */
-class TaskQueue extends \common_ext_action_InstallAction
+class TaskQueue extends common_ext_action_InstallAction
 {
-
     /**
      * Install action
+     *
+     * @param mixed $params
      */
     public function __invoke($params = [])
     {
-
         $fsm = $this->getServiceManager()->get(FileSystemService::SERVICE_ID);
         $fsm->createFileSystem(Queue::FILE_SYSTEM_ID, Queue::FILE_SYSTEM_ID);
         $this->getServiceManager()->register(FileSystemService::SERVICE_ID, $fsm);
 
-        return new \common_report_Report(\common_report_Report::TYPE_SUCCESS, 'Task queue storage registered.');
+        return new common_report_Report(common_report_Report::TYPE_SUCCESS, 'Task queue storage registered.');
     }
 }

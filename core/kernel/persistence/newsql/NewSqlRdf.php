@@ -29,10 +29,10 @@ use core_kernel_persistence_smoothsql_SmoothRdf;
 use Doctrine\DBAL\ParameterType;
 use Exception;
 use oat\generis\Helper\UuidPrimaryKeyTrait;
-use oat\generis\model\OntologyRdfs;
-use oat\generis\model\OntologyRdf;
-use oat\oatbox\event\EventManager;
 use oat\generis\model\data\event\ResourceCreated;
+use oat\generis\model\OntologyRdf;
+use oat\generis\model\OntologyRdfs;
+use oat\oatbox\event\EventManager;
 
 /**
  * NewSQL rdf interface
@@ -56,7 +56,7 @@ class NewSqlRdf extends core_kernel_persistence_smoothsql_SmoothRdf
                 $triple->object,
                 is_null($triple->lg) ? '' : $triple->lg,
                 $this->getPersistence()->getPlatForm()->getNowExpression(),
-                is_null($triple->author) ? '' : $triple->author
+                is_null($triple->author) ? '' : $triple->author,
             ],
             $this->getTripleParameterTypes()
         );
@@ -73,10 +73,12 @@ class NewSqlRdf extends core_kernel_persistence_smoothsql_SmoothRdf
      * Add id to set of triple values. Put id in first position to match parameter types
      *
      * @param core_kernel_classes_Triple $triple
-     * @return array
+     *
      * @throws Exception
+     *
+     * @return array
      */
-    protected function tripleToValue(core_kernel_classes_Triple $triple) : array
+    protected function tripleToValue(core_kernel_classes_Triple $triple): array
     {
         return ['id' => $this->getUniquePrimaryKey()] + parent::tripleToValue($triple);
     }
@@ -86,7 +88,7 @@ class NewSqlRdf extends core_kernel_persistence_smoothsql_SmoothRdf
      *
      * @return array
      */
-    protected function getTripleParameterTypes() : array
+    protected function getTripleParameterTypes(): array
     {
         return array_merge(
             [

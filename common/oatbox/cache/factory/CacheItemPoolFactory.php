@@ -35,12 +35,12 @@ class CacheItemPoolFactory extends ConfigurableService
     {
         $cacheValue = new KeyValueCache(
             [
-                KeyValueCache::OPTION_PERSISTENCE => $config[self::CONFIG_PERSISTENCE] ?? 'default_kv'
+                KeyValueCache::OPTION_PERSISTENCE => $config[self::CONFIG_PERSISTENCE] ?? 'default_kv',
             ]
         );
         $cache = new ItemPoolSimpleCacheAdapter(
             [
-                ItemPoolSimpleCacheAdapter::OPTION_CACHE_SERVICE => $cacheValue
+                ItemPoolSimpleCacheAdapter::OPTION_CACHE_SERVICE => $cacheValue,
             ]
         );
 

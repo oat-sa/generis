@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,31 +27,29 @@ use oat\generis\test\TestCase;
  * Test class for Collection.
  *
  * @author lionel.lecaque@tudor.lu
+ *
  * @package test
  */
 class CollectionTest extends TestCase
 {
-
     protected $object;
     private $toto;
     private $tata;
 
     /**
      * Setting the collection to test
-     *
      */
     protected function setUp(): void
     {
         $this->object = new common_Collection(new common_Object(__METHOD__));
-        $this->toto =  new core_kernel_classes_Literal('toto', __METHOD__);
-        $this->tata =  new core_kernel_classes_Literal('tata', __METHOD__);
+        $this->toto = new core_kernel_classes_Literal('toto', __METHOD__);
+        $this->tata = new core_kernel_classes_Literal('tata', __METHOD__);
         $this->object->sequence[0] = $this->toto;
         $this->object->sequence[1] = $this->tata;
     }
 
     /**
      * Test common_Collection->add
-     *
      */
     public function testAdd()
     {
@@ -61,7 +60,6 @@ class CollectionTest extends TestCase
 
     /**
      * Test common_Collection->count
-     *
      */
     public function testCount()
     {
@@ -70,7 +68,6 @@ class CollectionTest extends TestCase
 
     /**
      * Test common_Collection->indexOf
-     *
      */
     public function testIndexOf()
     {
@@ -81,7 +78,6 @@ class CollectionTest extends TestCase
 
     /**
      * Test common_Collection->get
-     *
      */
     public function testGet()
     {
@@ -91,7 +87,6 @@ class CollectionTest extends TestCase
 
     /**
      * Test common_Collection->isEmtpy
-     *
      */
     public function testisEmpty()
     {
@@ -103,7 +98,6 @@ class CollectionTest extends TestCase
 
     /**
      * Test common_Collection->remove
-     *
      */
     public function testRemove()
     {
@@ -111,9 +105,9 @@ class CollectionTest extends TestCase
         $this->assertFalse($this->object->indexOf($this->toto) == 0);
     }
 
-     /**
-      * Test common_Collection->union
-      */
+    /**
+     * Test common_Collection->union
+     */
     public function testUnion()
     {
         $collection = new common_Collection(new common_Object('__METHOD__'));
@@ -127,9 +121,9 @@ class CollectionTest extends TestCase
         $this->assertTrue($results->get(2)->literal == 'plop');
     }
 
-     /**
-      * Test common_Collection->intersect
-      */
+    /**
+     * Test common_Collection->intersect
+     */
     public function testIntersect()
     {
         $collection = new common_Collection(new common_Object('__METHOD__'));

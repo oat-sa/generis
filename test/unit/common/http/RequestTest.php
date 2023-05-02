@@ -20,7 +20,7 @@
 
 namespace oat\generis\test\unit\common\http;
 
-use \common_http_Request;
+use common_http_Request;
 use oat\generis\test\TestCase;
 
 /**
@@ -30,32 +30,36 @@ use oat\generis\test\TestCase;
  */
 class RequestTest extends TestCase
 {
-
     /**
      * Test the method getHeaderValue
      *
      * @dataProvider headerProvider
+     *
+     * @param mixed $headers
+     * @param mixed $headerName
+     * @param mixed $expect
      */
     public function testGetHeaderValue($headers, $headerName, $expect)
     {
         $request = new common_http_Request('http://foo.bar', 'POST', [], $headers);
-        $result  = $request->getHeaderValue($headerName);
+        $result = $request->getHeaderValue($headerName);
         $this->assertEquals($expect, $result);
     }
 
     /**
      * Provides data for the getHeaderValue test case
+     *
      * @return array the data
      */
     public function headerProvider()
     {
         return [
-            [ ['Content-Type' => 'application/json' ], 'Content-Type', 'application/json' ],
-            [ ['Content-Type' => 'application/json' ], 'Accept', false ],
-            [ ['Content-Type' => 'application/json' ], 'content-type', 'application/json' ],
-            [ ['ACCEPT' => 'application/json' ], 'Accept', 'application/json' ],
-            [ ['accept' => 'application/json' ], 'Accept', 'application/json' ],
-            [ ['Accept' => 'application/json' ], 'ACCEPT', 'application/json' ],
+            [['Content-Type' => 'application/json'], 'Content-Type', 'application/json'],
+            [['Content-Type' => 'application/json'], 'Accept', false],
+            [['Content-Type' => 'application/json'], 'content-type', 'application/json'],
+            [['ACCEPT' => 'application/json'], 'Accept', 'application/json'],
+            [['accept' => 'application/json'], 'Accept', 'application/json'],
+            [['Accept' => 'application/json'], 'ACCEPT', 'application/json'],
         ];
     }
 }

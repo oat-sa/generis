@@ -16,11 +16,11 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2018-2021 (original work) Open Assessment Technologies SA;
- *
  */
 
 namespace oat\generis\test;
 
+use common_session_AnonymousSession;
 use common_session_Session;
 use core_kernel_persistence_smoothsql_SmoothModel;
 use oat\generis\model\data\Ontology;
@@ -53,6 +53,7 @@ trait OntologyMockTrait
             NewSqlOntology::OPTION_WRITEABLE_MODELS => [2],
             NewSqlOntology::OPTION_NEW_TRIPLE_MODEL => 2,
         ]);
+
         return $this->setupOntology($model);
     }
 
@@ -67,6 +68,7 @@ trait OntologyMockTrait
             core_kernel_persistence_smoothsql_SmoothModel::OPTION_WRITEABLE_MODELS => [2],
             core_kernel_persistence_smoothsql_SmoothModel::OPTION_NEW_TRIPLE_MODEL => 2,
         ]);
+
         return $this->setupOntology($model);
     }
 
@@ -78,7 +80,7 @@ trait OntologyMockTrait
         $eventAggregator = new EventAggregator(['numberOfAggregatedEvents' => 10]);
 
         $persistenceManagerWithSqlMock = $this->getPersistenceManagerWithSqlMock('mockSql');
-        $session = new \common_session_AnonymousSession();
+        $session = new common_session_AnonymousSession();
         $eventManager = new EventManager();
         $serviceLocatorMock = $this->getServiceLocatorMock([
             Ontology::SERVICE_ID => $onto,
@@ -90,7 +92,7 @@ trait OntologyMockTrait
             UriProvider::SERVICE_ID => new Bin2HexUriProvider([Bin2HexUriProvider::OPTION_NAMESPACE => 'http://ontology.mock/bin2hex#']),
             SimpleCache::SERVICE_ID => new NoCache(),
             DriverConfigurationFeeder::SERVICE_ID => new DriverConfigurationFeeder(),
-            EventAggregator::SERVICE_ID => $eventAggregator
+            EventAggregator::SERVICE_ID => $eventAggregator,
         ]);
         $eventAggregator->setServiceLocator($serviceLocatorMock);
         $session->setServiceLocator($serviceLocatorMock);
@@ -100,6 +102,7 @@ trait OntologyMockTrait
 
         // setup schema
         $schemas = $persistenceManagerWithSqlMock->getSqlSchemas();
+
         if ($onto instanceof SchemaProviderInterface) {
             $onto->provideSchema($schemas);
         }
@@ -110,6 +113,7 @@ trait OntologyMockTrait
 
     /**
      * @param string $sqlId
+     *
      * @return PersistenceManager
      */
     protected function getPersistenceManagerWithSqlMock($sqlId)
@@ -122,16 +126,18 @@ trait OntologyMockTrait
                 $sqlId => [
                     'driver' => 'dbal',
                     'connection' => [
-                        'url' => 'sqlite:///:memory:'
-                    ]
-                ]
-            ]
+                        'url' => 'sqlite:///:memory:',
+                    ],
+                ],
+            ],
         ]);
+
         return $pm;
     }
 
     /**
      * @param common_session_Session $session
+     *
      * @return SessionService
      */
     protected function getSessionServiceMock(common_session_Session $session)
@@ -139,11 +145,13 @@ trait OntologyMockTrait
         $prophet = $this->prophesize(SessionService::class);
         $prophet->getCurrentUser()->willReturn($session->getUser());
         $prophet->getCurrentSession()->willReturn($session);
+
         return $prophet->reveal();
     }
 
     /**
      * @param string $lang
+     *
      * @return UserLanguageServiceInterface
      */
     protected function getUserLanguageServiceMock($lang = 'en_US')
@@ -151,6 +159,7 @@ trait OntologyMockTrait
         $prophet = $this->prophesize(UserLanguageServiceInterface::class);
         $prophet->getDefaultLanguage()->willReturn($lang);
         $prophet->getInterfaceLanguage(Argument::any())->willReturn($lang);
+
         return $prophet->reveal();
     }
 }

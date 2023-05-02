@@ -16,7 +16,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2015 (original work) Open Assessment Technologies SA;
- *
  */
 
 use oat\generis\model\kernel\uri\UriProvider;
@@ -26,24 +25,26 @@ use oat\oatbox\service\ServiceManager;
  * Provides backward compatibility to generates a URI
  *
  * @author Joel Bout <joel@taotesting.com>
+ *
  * @deprecated
  */
 class core_kernel_uri_UriService
 {
-    const CONFIG_KEY = 'uriProvider';
-        
+    public const CONFIG_KEY = 'uriProvider';
+
     private static $instance;
-    
+
+    private $uriProvider = null;
+
     public static function singleton()
     {
         if (is_null(self::$instance)) {
             self::$instance = new self();
         }
+
         return self::$instance;
     }
-    
-    private $uriProvider = null;
-    
+
     /**
      * Generate a new URI with the UriProvider in force.
      *
@@ -53,7 +54,7 @@ class core_kernel_uri_UriService
     {
         return (string) $this->getUriProvider()->provide();
     }
-    
+
     /**
      * Set the UriProvider in force.
      *
@@ -64,7 +65,7 @@ class core_kernel_uri_UriService
         $this->uriProvider = $provider;
         ServiceManager::getServiceManager()->register(UriProvider::SERVICE_ID, $provider);
     }
-    
+
     /**
      * Get the UriProvider in force.
      *
@@ -75,6 +76,7 @@ class core_kernel_uri_UriService
         if (is_null($this->uriProvider)) {
             $this->uriProvider = ServiceManager::getServiceManager()->get(UriProvider::SERVICE_ID);
         }
+
         return $this->uriProvider;
     }
 }

@@ -16,7 +16,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2016 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
  */
 
 namespace oat\oatbox\extension;
@@ -30,9 +29,9 @@ use oat\oatbox\event\EventManager;
  */
 abstract class UninstallAction extends AbstractAction
 {
-    
     /**
      * remove event listener
+     *
      * @param mixed $event either an Event object or a string
      * @param Callable $callback
      */
@@ -44,6 +43,7 @@ abstract class UninstallAction extends AbstractAction
     }
     /**
      * remove configurable service
+     *
      * @param string $serviceKey
      */
     public function unregisterService($serviceKey)

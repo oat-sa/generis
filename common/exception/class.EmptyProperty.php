@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,11 +25,12 @@
  * Moved to core_kernel_classes_EmptyProperty
  *
  * @access public
+ *
  * @author Joel Bout, <joel@taotesting.com>
+ *
  * @deprecated
  * @see core_kernel_classes_EmptyProperty
  */
 abstract class common_exception_EmptyProperty extends common_Exception
 {
-
 }

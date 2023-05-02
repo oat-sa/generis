@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -18,8 +19,8 @@
  *
  * @author Patrick Plichart  <patrick@taotesting.com>
  * @license GPLv2
- * @package generis
  *
+ * @package generis
  */
 
 /**
@@ -35,35 +36,39 @@ interface common_persistence_HashTableDriver extends common_persistence_Driver
      *
      * @param string $key
      * @param array $fields
+     *
      * @return boolean
      */
     public function hmSet($key, $fields);
-    
+
     /**
      * Checks whenever a given field exists for a given key
      *
      * @param string $key
      * @param string $field
+     *
      * @return boolean
      */
     public function hExists($key, $field);
-    
+
     /**
      * Sets the value of a field
      *
      * @param string $key
      * @param string $field
      * @param string $value
+     *
      * @return boolean
      */
     public function hSet($key, $field, $value);
-    
+
     /**
      * gets the value of a field
      * return false if not found
      *
      * @param string $key
      * @param string $field
+     *
      * @return string
      */
     public function hGet($key, $field);
@@ -73,15 +78,17 @@ interface common_persistence_HashTableDriver extends common_persistence_Driver
      *
      * @param string $key
      * @param string $field
+     *
      * @return string
      */
     public function hDel($key, $field);
-    
+
     /**
      * Get all fields of the Hashtable
      * return false if not found
      *
      * @param string $key
+     *
      * @return array
      */
     public function hGetAll($key);

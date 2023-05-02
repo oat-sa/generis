@@ -16,8 +16,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2014 (original work) Open Assessment Technologies SA;
- *
- *
  */
 
 namespace oat\oatbox\filesystem;
@@ -45,7 +43,7 @@ abstract class FileSystemHandler implements ServiceLocatorAwareInterface
     protected $prefix;
 
     /**
-     * @var  FileSystem
+     * @var FileSystem
      */
     protected $fileSystem;
 
@@ -59,6 +57,16 @@ abstract class FileSystemHandler implements ServiceLocatorAwareInterface
     {
         $this->fileSystemId = $id;
         $this->prefix = $this->sanitizePath($prefix);
+    }
+
+    public function __sleep()
+    {
+        return array_diff($this->getAllProperties(), self::NOT_SERIALIZABLE_PROPERTIES);
+    }
+
+    public function __wakeup()
+    {
+        $this->setServiceLocator(ServiceManager::getServiceManager());
     }
 
     /**
@@ -120,6 +128,7 @@ abstract class FileSystemHandler implements ServiceLocatorAwareInterface
      *  - trim / or \\
      *
      * @param $path
+     *
      * @return string
      */
     protected function sanitizePath($path)
@@ -130,16 +139,6 @@ abstract class FileSystemHandler implements ServiceLocatorAwareInterface
         $path = trim($path, '/');
 
         return $path;
-    }
-
-    public function __sleep()
-    {
-        return array_diff($this->getAllProperties(), self::NOT_SERIALIZABLE_PROPERTIES);
-    }
-
-    public function __wakeup()
-    {
-        $this->setServiceLocator(ServiceManager::getServiceManager());
     }
 
     private function getAllProperties(): array

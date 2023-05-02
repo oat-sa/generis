@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -17,21 +18,20 @@
  * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
  *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- *
  */
 
 /**
  * Short description of class common_configuration_PHPExtension
  *
  * @access public
+ *
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+ *
  * @package generis
-
  */
 class common_configuration_PHPExtension extends common_configuration_BoundableComponent
 {
     // --- ASSOCIATIONS ---
-
 
     // --- ATTRIBUTES ---
 
@@ -41,23 +41,24 @@ class common_configuration_PHPExtension extends common_configuration_BoundableCo
      * Short description of method check
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @return common_configuration_Report
      */
     public function check()
     {
         $returnValue = null;
 
-        
         $name = $this->getName();
         $min = $this->getMin();
         $max = $this->getMax();
         $validity = null;
         $message = null;
-        
+
         if (extension_loaded($name)) {
             $current = $this->getValue();
-            
+
             if (!empty($min) && !empty($max)) {
                 // Both min and max are specified.
                 if (version_compare($current, $min, '>=') && version_compare($current, $max, '<=')) {
@@ -97,7 +98,6 @@ class common_configuration_PHPExtension extends common_configuration_BoundableCo
         }
 
         $returnValue = new common_configuration_Report($validity, $message, $this);
-        
 
         return $returnValue;
     }
@@ -106,16 +106,16 @@ class common_configuration_PHPExtension extends common_configuration_BoundableCo
      * Short description of method getValue
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @return string
      */
     public function getValue()
     {
         $returnValue = (string) '';
 
-        
         $returnValue = phpversion($this->getName());
-        
 
         return (string) $returnValue;
     }

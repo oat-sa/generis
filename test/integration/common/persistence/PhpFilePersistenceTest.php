@@ -16,16 +16,14 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2015 (original work) Open Assessment Technologies SA;
- *
- *
  */
 
 namespace oat\generis\test\integration\common\persistence;
 
 use common_exception_NotImplemented;
+use common_persistence_Persistence;
+use common_persistence_PhpFileDriver;
 use oat\generis\test\GenerisPhpUnitTestRunner;
-use \common_persistence_Persistence;
-use \common_persistence_PhpFileDriver;
 use org\bovigo\vfs\vfsStream;
 
 class PhpFilePersistenceTest extends GenerisPhpUnitTestRunner
@@ -48,21 +46,23 @@ class PhpFilePersistenceTest extends GenerisPhpUnitTestRunner
         $this->assertInstanceOf('common_persistence_KeyValuePersistence', $driver);
     }
 
-
     public function testConnect()
     {
         $params = [
             'dir' => vfsStream::url('data'),
-            'humanReadable' => true
+            'humanReadable' => true,
         ];
-        $driver  = new common_persistence_PhpFileDriver();
+        $driver = new common_persistence_PhpFileDriver();
         $persistence = $driver->connect('test', $params);
         $this->assertInstanceOf('common_persistence_KeyValuePersistence', $persistence);
+
         return $persistence;
     }
     /**
      * @depends testConnect
+     *
      * @author Lionel Lecaque, lionel@taotesting.com
+     *
      * @param common_persistence_KeyValuePersistence $persistence
      */
     public function testSetException($persistence)
@@ -73,7 +73,9 @@ class PhpFilePersistenceTest extends GenerisPhpUnitTestRunner
 
     /**
      * @depends testConnect
+     *
      * @author Lionel Lecaque, lionel@taotesting.com
+     *
      * @param common_persistence_KeyValuePersistence $persistence
      */
     public function testSet($persistence)
@@ -87,7 +89,9 @@ class PhpFilePersistenceTest extends GenerisPhpUnitTestRunner
 
     /**
      * @depends testConnect
+     *
      * @author Lionel Lecaque, lionel@taotesting.com
+     *
      * @param common_persistence_KeyValuePersistence $persistence
      */
     public function testGet($persistence)
@@ -96,10 +100,11 @@ class PhpFilePersistenceTest extends GenerisPhpUnitTestRunner
         $this->assertEquals('value', $persistence->get('fakeKeyName'));
     }
 
-
     /**
      * @depends testConnect
+     *
      * @author Lionel Lecaque, lionel@taotesting.com
+     *
      * @param common_persistence_KeyValuePersistence $persistence
      */
     public function testExists($persistence)
@@ -111,12 +116,13 @@ class PhpFilePersistenceTest extends GenerisPhpUnitTestRunner
 
     /**
      * @depends testConnect
+     *
      * @author Lionel Lecaque, lionel@taotesting.com
+     *
      * @param common_persistence_KeyValuePersistence $persistence
      */
     public function testDel($persistence)
     {
-
         $this->assertTrue($persistence->set('fakeKeyName', 'value'));
         $this->assertTrue($persistence->exists('fakeKeyName'));
         $this->assertTrue($persistence->del('fakeKeyName'));
@@ -125,7 +131,9 @@ class PhpFilePersistenceTest extends GenerisPhpUnitTestRunner
 
     /**
      * @depends testConnect
+     *
      * @author Lionel Lecaque, lionel@taotesting.com
+     *
      * @param common_persistence_KeyValuePersistence $persistence
      */
     public function testIncr($persistence)
@@ -139,7 +147,9 @@ class PhpFilePersistenceTest extends GenerisPhpUnitTestRunner
 
     /**
      * @depends testConnect
+     *
      * @author Lionel Lecaque, lionel@taotesting.com
+     *
      * @param common_persistence_KeyValuePersistence $persistence
      */
     public function testDecr($persistence)
@@ -153,12 +163,13 @@ class PhpFilePersistenceTest extends GenerisPhpUnitTestRunner
 
     /**
      * @depends testConnect
+     *
      * @author Lionel Lecaque, lionel@taotesting.com
+     *
      * @param common_persistence_KeyValuePersistence $persistence
      */
     public function testPurge($persistence)
     {
-
         $this->assertTrue($persistence->set('fakeKeyName', 'value'));
         $this->assertTrue($persistence->set('fakeKeyName2', 'value'));
         $this->assertTrue($persistence->exists('fakeKeyName'));
@@ -168,7 +179,6 @@ class PhpFilePersistenceTest extends GenerisPhpUnitTestRunner
     }
 
     /**
-     *
      * @author Lionel Lecaque, lionel@taotesting.com
      */
     public function testNotHumanReadable()

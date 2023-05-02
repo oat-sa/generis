@@ -16,7 +16,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2015 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
  */
 
 namespace oat\oatbox\action;
@@ -30,6 +29,8 @@ class ActionResolver extends ConfigurableService
 {
     /**
      * @deprecated please use ActionService
+     *
+     * @param mixed $actionIdentifier
      */
     public function resolve($actionIdentifier)
     {

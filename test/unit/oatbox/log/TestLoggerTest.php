@@ -21,8 +21,8 @@
 namespace oat\generis\test\unit\oatbox\log;
 
 use common_exception_InconsistentData;
-use Psr\Log\LogLevel;
 use oat\generis\test\TestCase;
+use Psr\Log\LogLevel;
 
 /**
  * Test of test logger implementation
@@ -33,8 +33,8 @@ class TestLoggerTest extends TestCase
     {
         $logger = new TestLogger();
 
-        $logger->log(LogLevel::EMERGENCY, 'testEmergency1', ["context1" => "value1", "context2" => "value2"]);
-        $logger->log(LogLevel::EMERGENCY, 'testEmergency2', ["context3" => "value3", "context4" => "value4"]);
+        $logger->log(LogLevel::EMERGENCY, 'testEmergency1', ['context1' => 'value1', 'context2' => 'value2']);
+        $logger->log(LogLevel::EMERGENCY, 'testEmergency2', ['context3' => 'value3', 'context4' => 'value4']);
 
         $entries = $logger->get(LogLevel::EMERGENCY);
         $this->assertEquals(2, count($entries));
@@ -48,9 +48,9 @@ class TestLoggerTest extends TestCase
         $this->assertEquals(0, count($logger->get(LogLevel::WARNING)));
 
         $this->assertEquals('testEmergency1', $entries[0]['message']);
-        $this->assertEquals(["context1" => "value1", "context2" => "value2"], $entries[0]['context']);
+        $this->assertEquals(['context1' => 'value1', 'context2' => 'value2'], $entries[0]['context']);
         $this->assertEquals('testEmergency2', $entries[1]['message']);
-        $this->assertEquals(["context3" => "value3", "context4" => "value4"], $entries[1]['context']);
+        $this->assertEquals(['context3' => 'value3', 'context4' => 'value4'], $entries[1]['context']);
 
         $this->assertTrue($logger->has(LogLevel::EMERGENCY, 'testEmergency1'));
         $this->assertTrue($logger->has(LogLevel::EMERGENCY, 'testEmergency2'));

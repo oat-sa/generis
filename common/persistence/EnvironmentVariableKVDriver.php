@@ -18,7 +18,6 @@
  * Copyright (c) 2020 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  *
  * @license GPLv2
- *
  */
 
 namespace oat\generis\persistence;
@@ -29,7 +28,6 @@ use common_persistence_KvDriver;
 
 class EnvironmentVariableKVDriver implements common_persistence_KvDriver
 {
-
     /**
      * @inheritDoc
      */

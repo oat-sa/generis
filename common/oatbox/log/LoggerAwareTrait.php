@@ -16,14 +16,13 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2016 (original work) Open Assessment Technologies SA
- *
  */
 
 namespace oat\oatbox\log;
 
+use oat\oatbox\service\ServiceManager;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
-use oat\oatbox\service\ServiceManager;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 
 /**
@@ -55,16 +54,18 @@ trait LoggerAwareTrait
         if ($this->logger instanceof LoggerInterface) {
             return $this->logger;
         }
+
         if ($this instanceof ServiceLocatorAwareInterface) {
             $logger = $this->getServiceLocator()->get(LoggerService::SERVICE_ID);
         } else {
             $logger = ServiceManager::getServiceManager()->get(LoggerService::SERVICE_ID);
         }
+
         return ($logger instanceof LoggerInterface) ? $logger : new NullLogger();
     }
 
     // Helpers
-    
+
     /**
      * Logs an emergency
      *
@@ -75,37 +76,37 @@ trait LoggerAwareTrait
     {
         $this->getLogger()->emergency($message, $context);
     }
-    
+
     public function logAlert($message, $context = [])
     {
         $this->getLogger()->alert($message, $context);
     }
-    
+
     public function logCritical($message, $context = [])
     {
         $this->getLogger()->critical($message, $context);
     }
-    
+
     public function logError($message, $context = [])
     {
         $this->getLogger()->error($message, $context);
     }
-    
+
     public function logWarning($message, $context = [])
     {
         $this->getLogger()->warning($message, $context);
     }
-    
+
     public function logNotice($message, $context = [])
     {
         $this->getLogger()->notice($message, $context);
     }
-    
+
     public function logInfo($message, $context = [])
     {
         $this->getLogger()->info($message, $context);
     }
-    
+
     public function logDebug($message, $context = [])
     {
         $this->getLogger()->debug($message, $context);

@@ -17,17 +17,14 @@
  *
  * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- *
  */
 
 error_reporting(E_ALL);
 
-use oat\generis\test\TestCase;
-use Prophecy\Prophet;
 use oat\generis\model\user\AuthAdapter;
+use oat\generis\test\TestCase;
 
 /**
- *
  * /**
  * Test class for Expression.
  */
@@ -47,23 +44,24 @@ class generis_test_UtilsTest extends TestCase
     {
         // normal chars
         $utf = 'ÆýЉϿϫ˲ ˦ˈŒ\'"\\\\';
-        $value = eval("return " . common_Utils::toPHPVariableString($utf) . ";");
+        $value = eval('return ' . common_Utils::toPHPVariableString($utf) . ';');
         $this->assertEquals($utf, $value);
 
         // test binary safe
         $binaryString = $this->buildBinString();
-        $value = eval("return " . common_Utils::toPHPVariableString($binaryString) . ";");
+        $value = eval('return ' . common_Utils::toPHPVariableString($binaryString) . ';');
         $this->assertEquals($binaryString, $value);
 
         $all = '';
+
         for ($i = 0; $i <= 255; $i++) {
             $all .= chr($i);
         }
-        $value = eval("return " . common_Utils::toPHPVariableString($all) . ";");
+        $value = eval('return ' . common_Utils::toPHPVariableString($all) . ';');
         $this->assertEquals($all, $value);
-        
+
         $serialized = serialize(new stdClass());
-        $value = eval("return " . common_Utils::toPHPVariableString($serialized) . ";");
+        $value = eval('return ' . common_Utils::toPHPVariableString($serialized) . ';');
         $this->assertEquals($serialized, $value);
     }
 
@@ -73,14 +71,14 @@ class generis_test_UtilsTest extends TestCase
             'a' => "te\0st \\ ",
             'b' => new AuthAdapter(),
             'c' => [
-                '1', '2', [common_user_auth_Service::singleton()]
+                '1', '2', [common_user_auth_Service::singleton()],
             ],
-            'd' => 'aaaaa' . PHP_EOL . 'bbbbb' . PHP_EOL . 'ccccc'
+            'd' => 'aaaaa' . PHP_EOL . 'bbbbb' . PHP_EOL . 'ccccc',
         ];
-        $value = eval("return " . common_Utils::toPHPVariableString($toSerialize) . ";");
+        $value = eval('return ' . common_Utils::toPHPVariableString($toSerialize) . ';');
         $this->assertEquals($toSerialize, $value);
 
-        $valueNice = eval("return " . common_Utils::toHumanReadablePhpString($toSerialize) . ";");
+        $valueNice = eval('return ' . common_Utils::toHumanReadablePhpString($toSerialize) . ';');
         $this->assertEquals($toSerialize, $valueNice);
     }
 

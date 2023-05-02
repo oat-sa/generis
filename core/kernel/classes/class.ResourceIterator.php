@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -15,8 +16,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2014 (original work) Open Assessment Technologies SA;
- *
- *
  */
 
 /**
@@ -26,10 +25,10 @@
  */
 class core_kernel_classes_ResourceIterator implements \Iterator
 {
-    const CACHE_SIZE = 100;
+    public const CACHE_SIZE = 100;
 
     private $classIterator;
-    
+
     /**
      * Id of the current instance
      *
@@ -43,21 +42,21 @@ class core_kernel_classes_ResourceIterator implements \Iterator
      * @var array
      */
     private $instanceCache = null;
-    
+
     /**
      * Indicator whenever the end of  the current cache is also the end of the current class
      *
      * @var boolean
      */
     private $endOfClass = false;
-    
+
     /**
      * Whenever we already moved the pointer, used to prevent unnecessary rewinds
      *
      * @var boolean
      */
     private $unmoved = true;
-    
+
     /**
      * Constructor of the iterator expecting a class or classes as argument
      *
@@ -67,12 +66,13 @@ class core_kernel_classes_ResourceIterator implements \Iterator
     {
         $this->classIterator = new core_kernel_classes_ClassIterator($classes);
     }
-    
+
     /**
      * (non-PHPdoc)
+     *
      * @see Iterator::rewind()
      */
-    function rewind()
+    public function rewind()
     {
         if (!$this->unmoved) {
             $this->classIterator->rewind();
@@ -82,8 +82,9 @@ class core_kernel_classes_ResourceIterator implements \Iterator
     }
 
     /**
-     * @return core_kernel_classes_Resource|null
      * @throws common_exception_Error
+     *
+     * @return core_kernel_classes_Resource|null
      */
     public function current()
     {
@@ -98,26 +99,30 @@ class core_kernel_classes_ResourceIterator implements \Iterator
 
     /**
      * (non-PHPdoc)
+     *
      * @see Iterator::key()
      */
-    function key()
+    public function key()
     {
         return $this->classIterator->key() . '#' . $this->currentInstance;
     }
-    
+
     /**
      * (non-PHPdoc)
+     *
      * @see Iterator::next()
      */
-    function next()
+    public function next()
     {
         $this->unmoved = false;
+
         if ($this->valid()) {
             $this->currentInstance++;
+
             if (!isset($this->instanceCache[$this->currentInstance])) {
                 // try to load next block (unless we know it's empty)
                 $remainingInstances = !$this->endOfClass && $this->load($this->classIterator->current(), $this->currentInstance);
-                
+
                 // endOfClass or failed loading
                 if (!$remainingInstances) {
                     $this->classIterator->next();
@@ -126,21 +131,23 @@ class core_kernel_classes_ResourceIterator implements \Iterator
             }
         }
     }
-    
+
     /**
      * While there are remaining classes there are instances to load
      *
      * (non-PHPdoc)
+     *
      * @see Iterator::valid()
      */
-    function valid()
+    public function valid()
     {
         if ($this->instanceCache === null) {
             $this->ensureNotEmpty();
         }
+
         return $this->classIterator->valid();
     }
-    
+
     // Helpers
 
     /**
@@ -150,6 +157,7 @@ class core_kernel_classes_ResourceIterator implements \Iterator
     protected function ensureNotEmpty()
     {
         $this->currentInstance = 0;
+
         while ($this->classIterator->valid() && !$this->load($this->classIterator->current(), 0)) {
             $this->classIterator->next();
         }
@@ -160,19 +168,21 @@ class core_kernel_classes_ResourceIterator implements \Iterator
      *
      * @param core_kernel_classes_Class $class
      * @param int $offset
+     *
      * @return boolean
      */
     protected function load(core_kernel_classes_Class $class, $offset)
     {
         $results = $this->loadResources($class, $offset);
         $this->instanceCache = [];
+
         foreach ($results as $resource) {
             $this->instanceCache[$offset] = $resource->getUri();
             $offset++;
         }
-        
+
         $this->endOfClass = count($results) < self::CACHE_SIZE;
-        
+
         return count($results) > 0;
     }
 
@@ -181,6 +191,7 @@ class core_kernel_classes_ResourceIterator implements \Iterator
      *
      * @param core_kernel_classes_Class $class
      * @param integer $offset
+     *
      * @return core_kernel_classes_Resource[]
      */
     protected function loadResources(core_kernel_classes_Class $class, $offset)

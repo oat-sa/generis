@@ -20,19 +20,22 @@
 
 namespace oat\generis\test\unit\common\persistence;
 
+use common_persistence_Driver;
+use common_persistence_InMemoryKvDriver;
+use common_persistence_KeyValuePersistence;
 use oat\generis\test\TestCase;
 
 class KeyValuePersistenceTest extends TestCase
 {
-    /** @var \common_persistence_KeyValuePersistence */
+    /** @var common_persistence_KeyValuePersistence */
     protected $largeValuePersistence;
 
-    /** @var \common_persistence_Driver */
+    /** @var common_persistence_Driver */
     protected $driver;
 
     public function setUp(): void
     {
-        $this->driver = new \common_persistence_InMemoryKvDriver();
+        $this->driver = new common_persistence_InMemoryKvDriver();
 
         /*
          * Php file persistence
@@ -56,12 +59,12 @@ class KeyValuePersistenceTest extends TestCase
         /*
          * In memory persistence
          */
-            $this->largeValuePersistence = new \common_persistence_KeyValuePersistence(
-                [
-                \common_persistence_KeyValuePersistence::MAX_VALUE_SIZE => 100
-                ],
-                $this->driver
-            );
+        $this->largeValuePersistence = new common_persistence_KeyValuePersistence(
+            [
+            common_persistence_KeyValuePersistence::MAX_VALUE_SIZE => 100,
+            ],
+            $this->driver
+        );
     }
 
     public function tearDown(): void
@@ -113,13 +116,12 @@ class KeyValuePersistenceTest extends TestCase
 
     public function testMapMapControl()
     {
-        $this->largeValuePersistence = new \common_persistence_KeyValuePersistence(
+        $this->largeValuePersistence = new common_persistence_KeyValuePersistence(
             [
-                \common_persistence_KeyValuePersistence::MAX_VALUE_SIZE => 100,
-                \common_persistence_KeyValuePersistence::MAP_IDENTIFIER => 'iamamap',
-                \common_persistence_KeyValuePersistence::START_MAP_DELIMITER => 'mapbegin',
-                \common_persistence_KeyValuePersistence::END_MAP_DELIMITER => 'mapend',
-
+                common_persistence_KeyValuePersistence::MAX_VALUE_SIZE => 100,
+                common_persistence_KeyValuePersistence::MAP_IDENTIFIER => 'iamamap',
+                common_persistence_KeyValuePersistence::START_MAP_DELIMITER => 'mapbegin',
+                common_persistence_KeyValuePersistence::END_MAP_DELIMITER => 'mapend',
             ],
             $this->driver
         );

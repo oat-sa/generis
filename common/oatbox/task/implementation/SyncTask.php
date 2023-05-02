@@ -16,14 +16,11 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2016 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
  */
 
 namespace oat\oatbox\task\implementation;
 
 use oat\oatbox\task\AbstractTask;
-use oat\oatbox\action\Action;
-use oat\oatbox\task\Task;
 
 /**
  * Class SyncTask
@@ -31,11 +28,11 @@ use oat\oatbox\task\Task;
  * Basic implementation of `AbstractTask` class
  *
  * @package oat\oatbox\task\implementation
+ *
  * @author Aleh Hutnikau, <huntikau@1pt.com>
  *
  * @deprecated since version 7.10.0, to be removed in 8.0.
  */
 class SyncTask extends AbstractTask
 {
-
 }

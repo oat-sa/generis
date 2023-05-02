@@ -22,9 +22,9 @@ declare(strict_types=1);
 
 namespace oat\generis\model\resource\exception;
 
+use common_exception_UserReadableException;
 use Exception;
 use Throwable;
-use common_exception_UserReadableException;
 
 class ResourceDeletionException extends Exception implements common_exception_UserReadableException
 {

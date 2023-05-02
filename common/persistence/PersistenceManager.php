@@ -22,10 +22,13 @@ declare(strict_types=1);
 
 namespace oat\generis\persistence;
 
-use oat\oatbox\service\ConfigurableService;
-use oat\generis\persistence\sql\SchemaCollection;
+use common_Exception;
+use common_exception_Error;
+use common_persistence_Persistence;
 use common_persistence_SqlPersistence;
+use oat\generis\persistence\sql\SchemaCollection;
 use oat\generis\persistence\sql\SchemaProviderInterface;
+use oat\oatbox\service\ConfigurableService;
 use oat\oatbox\service\ServiceNotFoundException;
 
 /**
@@ -36,7 +39,6 @@ use oat\oatbox\service\ServiceNotFoundException;
  */
 class PersistenceManager extends ConfigurableService
 {
-
     public const SERVICE_ID = 'generis/persistences';
 
     public const OPTION_PERSISTENCES = 'persistences';
@@ -44,6 +46,7 @@ class PersistenceManager extends ConfigurableService
     /**
      * Mapping of drivers to implementations.
      * All SQL drivers except 'dbal' are deprecated
+     *
      * @var array
      */
     private const DRIVER_MAP = [
@@ -56,11 +59,10 @@ class PersistenceManager extends ConfigurableService
         'phpfile' => 'common_persistence_PhpFileDriver',
         'SqlKvWrapper' => 'common_persistence_SqlKvDriver',
         'no_storage' => 'common_persistence_InMemoryKvDriver',
-        'no_storage_adv' => 'common_persistence_InMemoryAdvKvDriver'
+        'no_storage_adv' => 'common_persistence_InMemoryAdvKvDriver',
     ];
 
     /**
-     *
      * @var array
      */
     private $persistences = [];
@@ -69,11 +71,13 @@ class PersistenceManager extends ConfigurableService
      * Returns TRUE if the requested persistence exist, otherwise FALSE.
      *
      * @param string $persistenceId
+     *
      * @return bool
      */
     public function hasPersistence($persistenceId)
     {
         $persistenceList = $this->getOption(static::OPTION_PERSISTENCES);
+
         return isset($persistenceList[$persistenceId]);
     }
 
@@ -89,7 +93,7 @@ class PersistenceManager extends ConfigurableService
         if (strpos($persistenceConf['driver'], 'pdo_') === 0) {
             $persistenceConf = [
                 'driver' => 'dbal',
-                'connection' => $persistenceConf
+                'connection' => $persistenceConf,
             ];
         }
 
@@ -106,36 +110,40 @@ class PersistenceManager extends ConfigurableService
     }
 
     /**
+     * @param mixed $persistenceId
      *
-     * @return \common_persistence_Persistence
+     * @return common_persistence_Persistence
      */
     public function getPersistenceById($persistenceId)
     {
         if (!isset($this->persistences[$persistenceId])) {
             $this->persistences[$persistenceId] = $this->createPersistence($persistenceId);
         }
+
         return $this->persistences[$persistenceId];
     }
 
     /**
-     *
      * @param string $persistenceId
-     * @return \common_persistence_Persistence
-     * @throws \common_Exception
+     *
+     * @throws common_Exception
+     *
+     * @return common_persistence_Persistence
      */
     private function createPersistence($persistenceId)
     {
         $configs = $this->getOption(self::OPTION_PERSISTENCES);
+
         if (!isset($configs[$persistenceId])) {
-            throw new \common_Exception('Persistence Configuration for persistence ' . $persistenceId . ' not found');
+            throw new common_Exception('Persistence Configuration for persistence ' . $persistenceId . ' not found');
         }
         $config = $configs[$persistenceId];
         $driverString = $config['driver'];
 
-        $driverClassName = isset(self::DRIVER_MAP[$driverString]) ? self::DRIVER_MAP[$driverString] : $driverString;
+        $driverClassName = self::DRIVER_MAP[$driverString] ?? $driverString;
 
         if (!class_exists($driverClassName)) {
-            throw new \common_exception_Error(
+            throw new common_exception_Error(
                 'Driver ' . $driverString . ' not found, check your database configuration'
             );
         }
@@ -157,12 +165,15 @@ class PersistenceManager extends ConfigurableService
     public function getSqlSchemas()
     {
         $schemas = new SchemaCollection();
+
         foreach (array_keys($this->getOption(self::OPTION_PERSISTENCES)) as $id) {
             $persistence = $this->getPersistenceById($id);
+
             if ($persistence instanceof common_persistence_SqlPersistence) {
                 $schemas->addSchema($id, $persistence->getSchemaManager()->createSchema());
             }
         }
+
         return $schemas;
     }
 
@@ -172,10 +183,12 @@ class PersistenceManager extends ConfigurableService
     public function applySchemas(SchemaCollection $schemaCollection)
     {
         $this->logInfo('Applying schame changes');
+
         foreach ($schemaCollection as $id => $schema) {
             $persistence = $this->getPersistenceById($id);
             $fromSchema = $schemaCollection->getOriginalSchema($id);
             $queries = $persistence->getPlatForm()->getMigrateSchemaSql($fromSchema, $schema);
+
             foreach ($queries as $query) {
                 $persistence->exec($query);
             }
@@ -184,6 +197,8 @@ class PersistenceManager extends ConfigurableService
 
     /**
      * Add the schema of a single service, if needed
+     *
+     * @param mixed $service
      */
     public function applySchemaProvider($service): void
     {
@@ -199,7 +214,7 @@ class PersistenceManager extends ConfigurableService
 
     private function getDriverConfigFeeder(): ?DriverConfigurationFeeder
     {
-        /**
+        /*
          * This class is directly instantiated directly in some installation process, so the ServiceLocator
          * might not be available, therefore this if is necessary.
          */
@@ -210,7 +225,7 @@ class PersistenceManager extends ConfigurableService
         try {
             return $this->getServiceLocator()->get(DriverConfigurationFeeder::SERVICE_ID);
         } catch (ServiceNotFoundException $exception) {
-            /**
+            /*
              * This is because PersistenceManager is registered in tao-core and while doing the generis update
              * before the update of tao (which had this class in the migrations).
              */

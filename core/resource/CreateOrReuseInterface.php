@@ -16,26 +16,28 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2016 (original work) Open Assessment Technologies SA
- *
  */
 
 namespace oat\generis\model\resource;
 
-/**
- *
- */
+use core_kernel_classes_Resource;
+
 interface CreateOrReuseInterface
 {
     /**
      * return existing resource or create if not exists
+     *
      * @param array $values
-     * @return \core_kernel_classes_Resource
+     *
+     * @return core_kernel_classes_Resource
      */
     public function getResource(array $values);
-    
+
     /**
      * return if resource exists
+     *
      * @param array $values
+     *
      * @return boolean
      */
     public function hasResource(array $values);

@@ -23,10 +23,8 @@ namespace oat\generis\scripts\install;
 use common_persistence_Manager;
 use common_persistence_SqlKvDriver;
 use common_report_Report as Report;
-use Exception;
-use oat\oatbox\extension\InstallAction;
-use oat\generis\persistence\PersistenceManager;
 use oat\generis\persistence\sql\SchemaProviderInterface;
+use oat\oatbox\extension\InstallAction;
 
 class SetupDefaultKvPersistence extends InstallAction
 {
@@ -39,18 +37,20 @@ class SetupDefaultKvPersistence extends InstallAction
 
         /** @var common_persistence_Manager $persistenceManager */
         $persistenceManager = $this->getServiceLocator()->get(common_persistence_Manager::SERVICE_ID);
+
         if ($persistenceManager->hasPersistence('default_kv')) {
             $report->add(Report::createInfo('"default_kv" persistence is already configured.'));
         } else {
             $newPersistenceConfig = [
                 'driver' => common_persistence_SqlKvDriver::class,
-                common_persistence_SqlKvDriver::OPTION_PERSISTENCE_SQL => 'default'
+                common_persistence_SqlKvDriver::OPTION_PERSISTENCE_SQL => 'default',
             ];
             $persistenceManager->registerPersistence('default_kv', $newPersistenceConfig);
             $report->add(Report::createInfo('Setup new "default_kv" persistence.'));
         }
         $schemaCollection = $persistenceManager->getSqlSchemas();
         $kvdriver = $persistenceManager->getPersistenceById('default_kv')->getDriver();
+
         if ($kvdriver instanceof SchemaProviderInterface) {
             $kvdriver->provideSchema($schemaCollection);
         }

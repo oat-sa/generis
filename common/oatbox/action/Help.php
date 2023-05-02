@@ -16,26 +16,27 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2015 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
  */
 
 namespace oat\oatbox\action;
 
-use oat\oatbox\service\ServiceNotFoundException;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
+use common_report_Report;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorAwareTrait;
 
 class Help implements Action, ServiceLocatorAwareInterface
 {
     use ServiceLocatorAwareTrait;
-    
+
     public function __invoke($params)
     {
         $actionResolver = $this->getServiceLocator()->get(ActionService::SERVICE_ID);
-        $report = new \common_report_Report(\common_report_Report::TYPE_INFO, __('Available Actions:'));
+        $report = new common_report_Report(common_report_Report::TYPE_INFO, __('Available Actions:'));
+
         foreach ($actionResolver->getAvailableActions() as $actionClass) {
-            $report->add(new \common_report_Report(\common_report_Report::TYPE_INFO, '  ' . $actionClass));
+            $report->add(new common_report_Report(common_report_Report::TYPE_INFO, '  ' . $actionClass));
         }
+
         return $report;
     }
 }

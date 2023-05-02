@@ -16,7 +16,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2016-2017 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
  */
 
 namespace oat\oatbox\extension;
@@ -29,7 +28,6 @@ use oat\oatbox\service\ServiceManagerAwareTrait;
 
 /**
  * Abstract base for extension actions
- *
  */
 abstract class AbstractAction implements Action, ServiceManagerAwareInterface, TaoLoggerAwareInterface
 {

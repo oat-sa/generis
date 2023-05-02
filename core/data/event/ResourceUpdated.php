@@ -16,33 +16,33 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2017 (original work) Open Assessment Technologies SA;
- *
- *
  */
 
 namespace oat\generis\model\data\event;
 
+use core_kernel_classes_Resource;
 use oat\oatbox\event\Event;
 
 /**
  * Class ResourceUpdated
+ *
  * @package oat\generis\model\data\event
  */
 class ResourceUpdated implements Event
 {
     private $resource;
-    
-    function __construct(\core_kernel_classes_Resource $resource)
+
+    public function __construct(core_kernel_classes_Resource $resource)
     {
         $this->resource = $resource;
     }
-    
-    function getResource()
+
+    public function getResource()
     {
         return $this->resource;
     }
 
-    function getName()
+    public function getName()
     {
         return __CLASS__;
     }

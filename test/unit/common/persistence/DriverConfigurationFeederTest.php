@@ -40,10 +40,10 @@ class DriverConfigurationFeederTest extends TestCase
                     'OAT\\Library\\DBALSpanner\\SpannerDriver' => [
                         'driverOptions' => [
                             'driver-option-auth-pool',
-                            'driver-option-session-pool'
-                        ]
-                    ]
-                ]
+                            'driver-option-session-pool',
+                        ],
+                    ],
+                ],
             ]
         );
         $this->subject->setServiceLocator(
@@ -65,8 +65,8 @@ class DriverConfigurationFeederTest extends TestCase
                         'driverOptions' => [
                             'driver-option-auth-pool' => Logger::class,
                             'driver-option-session-pool' => new stdClass(),
-                        ]
-                    ]
+                        ],
+                    ],
             ]
         );
 
@@ -83,8 +83,8 @@ class DriverConfigurationFeederTest extends TestCase
                         'driverClass' => 'OAT\Library\DBALSpanner\SpannerDriver',
                         'driverOptions' => [
                             'driver-option-auth-pool' => null,
-                        ]
-                    ]
+                        ],
+                    ],
             ]
         );
 
@@ -97,7 +97,7 @@ class DriverConfigurationFeederTest extends TestCase
             'connection' =>
                 [
                     'driverClass' => 'OAT\Library\DBALSpanner\SpannerDriver',
-                ]
+                ],
         ];
 
         $result = $this->subject->feed($config);
@@ -108,7 +108,7 @@ class DriverConfigurationFeederTest extends TestCase
     public function testFeedWithNoDriverClass(): void
     {
         $config = [
-            'connection' => []
+            'connection' => [],
         ];
 
         $result = $this->subject->feed($config);

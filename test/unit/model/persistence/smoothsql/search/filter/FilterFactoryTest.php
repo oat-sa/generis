@@ -26,7 +26,7 @@ class FilterFactoryTest extends TestCase
     public function testBuildFiltersSupportsLegacyWayWithLike()
     {
         $filtersRaw = [
-            'another rdf key' => 'another rdf value'
+            'another rdf key' => 'another rdf value',
         ];
 
         $filters = FilterFactory::buildFilters($filtersRaw, $isLikeOperator = true);
@@ -39,11 +39,10 @@ class FilterFactoryTest extends TestCase
         $this->assertEquals([], $filter->getOrConditionValues());
     }
 
-
     public function testBuildFiltersSupportsLegacyWayWithEquals()
     {
         $filtersRaw = [
-            'another rdf key' => 'another rdf value'
+            'another rdf key' => 'another rdf value',
         ];
 
         $filters = FilterFactory::buildFilters($filtersRaw, $isLikeOperator = false);
@@ -59,7 +58,7 @@ class FilterFactoryTest extends TestCase
     public function testBuildFiltersSupportsLegacyWayWithOrConditions()
     {
         $filtersRaw = [
-            'another rdf key' => ['another rdf value', 'value1', 'value2']
+            'another rdf key' => ['another rdf value', 'value1', 'value2'],
         ];
 
         $filters = FilterFactory::buildFilters($filtersRaw, $isLikeOperatorDefaultForLegacy = false);

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -17,22 +18,22 @@
  * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
  *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- *
  */
 
 /**
  * Short description of class common_configuration_Component
  *
  * @abstract
+ *
  * @access public
+ *
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+ *
  * @package generis
-
  */
 abstract class common_configuration_Component
 {
     // --- ASSOCIATIONS ---
-
 
     // --- ATTRIBUTES ---
 
@@ -40,6 +41,7 @@ abstract class common_configuration_Component
      * Short description of attribute optional
      *
      * @access private
+     *
      * @var boolean
      */
     private $optional = false;
@@ -48,6 +50,7 @@ abstract class common_configuration_Component
      * Short description of attribute name
      *
      * @access private
+     *
      * @var string
      */
     private $name = '';
@@ -58,14 +61,18 @@ abstract class common_configuration_Component
      * Short description of method __construct
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @param  string name
      * @param  boolean optional
+     * @param mixed $name
+     * @param mixed $optional
+     *
      * @return mixed
      */
     public function __construct($name = 'unknown', $optional = false)
     {
-        
         $this->setName($name);
         $this->setOptional($optional);
     }
@@ -74,8 +81,11 @@ abstract class common_configuration_Component
      * Short description of method check
      *
      * @abstract
+     *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @return common_configuration_Report
      */
     abstract public function check();
@@ -84,16 +94,16 @@ abstract class common_configuration_Component
      * Short description of method isOptional
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @return boolean
      */
     public function isOptional()
     {
         $returnValue = (bool) false;
 
-        
         $returnValue = $this->optional;
-        
 
         return (bool) $returnValue;
     }
@@ -102,13 +112,16 @@ abstract class common_configuration_Component
      * Short description of method setOptional
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @param  boolean optional
+     * @param mixed $optional
+     *
      * @return void
      */
     public function setOptional($optional)
     {
-        
         $this->optional = $optional;
     }
 
@@ -116,16 +129,16 @@ abstract class common_configuration_Component
      * Short description of method getName
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @return string
      */
     public function getName()
     {
         $returnValue = (string) '';
 
-        
         $returnValue = $this->name;
-        
 
         return (string) $returnValue;
     }
@@ -134,13 +147,16 @@ abstract class common_configuration_Component
      * Short description of method setName
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @param  string name
+     * @param mixed $name
+     *
      * @return void
      */
     public function setName($name)
     {
-        
         $this->name = $name;
     }
 } /* end of abstract class common_configuration_Component */

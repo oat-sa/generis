@@ -16,12 +16,11 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2017 (original work) Open Assessment Technologies SA;
- *
- *
  */
 
 namespace oat\oatbox\task\TaskInterface;
 
+use common_report_Report;
 use oat\oatbox\task\Task;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 
@@ -34,7 +33,8 @@ interface TaskRunner extends ServiceLocatorAwareInterface
      * @deprecated since version 7.10.0, to be removed in 8.0.
      *
      * @param Task $task
-     * @return \common_report_Report
+     *
+     * @return common_report_Report
      */
     public function run(Task $task);
 }

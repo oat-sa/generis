@@ -16,53 +16,60 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2020 (original work) Open Assessment Technologies SA;
- *
- *
  */
 
 namespace oat\generis\model\data\import;
 
 use common_Exception;
 use core_kernel_classes_Triple;
+use oat\generis\model\data\event\ResourceCreated;
+use oat\generis\model\data\Ontology;
+use oat\generis\model\kernel\persistence\file\FileIterator;
+use oat\generis\model\OntologyAwareTrait;
 use oat\generis\model\OntologyRdf;
 use oat\generis\model\OntologyRdfs;
-use oat\generis\model\data\Ontology;
 use oat\oatbox\event\EventManager;
-use oat\generis\model\data\event\ResourceCreated;
-use oat\generis\model\kernel\persistence\file\FileIterator;
 use oat\oatbox\service\ConfigurableService;
-use oat\generis\model\OntologyAwareTrait;
 
 /**
  * Centralised helper to import RDFS models
  * through the RDF interface
+ *
  * @author Joel Bout <joel@taotesting.com>
  */
 class RdfImporter extends ConfigurableService
 {
     use OntologyAwareTrait;
+
     /**
      * Imports an RDF file into the ontology as readonly model
+     *
      * @param string $filePath
+     *
      * @throws common_Exception
+     *
      * @return boolean
      */
-    public function importFile(string $filePath) {
+    public function importFile(string $filePath)
+    {
         if (!file_exists($filePath) || !is_readable($filePath)) {
             throw new common_Exception("Unable to load ontology : $filePath");
         }
         $this->importTriples(new FileIterator($filePath));
+
         return true;
     }
 
     /**
-     *
      * @param iterable $triples
+     *
      * @return void
      */
-    public function importTriples(iterable $triples) {
+    public function importTriples(iterable $triples)
+    {
         $rdf = $this->getServiceLocator()->get(Ontology::SERVICE_ID)->getRdfInterface();
         $rdf->addTripleCollection($triples);
+
         foreach ($triples as $triple) {
             $this->watchResourceCreated($triple);
         }
@@ -70,6 +77,7 @@ class RdfImporter extends ConfigurableService
 
     /**
      * This will generate a Event if condition is meet
+     *
      * @param core_kernel_classes_Triple $triple
      */
     private function watchResourceCreated(core_kernel_classes_Triple $triple)

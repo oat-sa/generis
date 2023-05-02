@@ -18,7 +18,6 @@
  * Copyright (c) 2007-2010 (original work) Public Research Centre Henri Tudor & University of Luxembourg) (under the project TAO-QUAL);
  *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2017 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT)
- *
  */
 
 use oat\generis\model\RulesRdf;
@@ -27,14 +26,14 @@ use oat\generis\model\RulesRdf;
  * Short description of class core_kernel_rules_Operation
  *
  * @access public
+ *
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+ *
  * @package generis
-
  */
 class core_kernel_rules_Operation extends core_kernel_rules_Term
 {
     // --- ASSOCIATIONS ---
-
 
     // --- ATTRIBUTES ---
 
@@ -42,22 +41,25 @@ class core_kernel_rules_Operation extends core_kernel_rules_Term
      * Short description of attribute firstOperation
      *
      * @access private
+     *
      * @var Term
      */
     private $firstOperation = null;
     /**
-         * Short description of attribute secondOperation
-         *
-         * @access private
-         * @var Term
-         */
+     * Short description of attribute secondOperation
+     *
+     * @access private
+     *
+     * @var Term
+     */
     private $secondOperation = null;
     /**
-         * Short description of attribute arithmeticOperator
-         *
-         * @access private
-         * @var Resource
-         */
+     * Short description of attribute arithmeticOperator
+     *
+     * @access private
+     *
+     * @var Resource
+     */
     private $arithmeticOperator = null;
     // --- OPERATIONS ---
 
@@ -65,18 +67,22 @@ class core_kernel_rules_Operation extends core_kernel_rules_Term
      * Short description of method getFirstOperation
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @return core_kernel_rules_Term
      */
     public function getFirstOperation()
     {
         $returnValue = null;
+
         if (empty($this->firstOperation)) {
             $property = new core_kernel_classes_Property(RulesRdf::PROPERTY_OPERATION_FIRST_OP);
             $resource = $this->getUniquePropertyValue($property);
             $this->firstOperation = new core_kernel_rules_Term($resource->getUri());
         }
         $returnValue = $this->firstOperation;
+
         return $returnValue;
     }
 
@@ -84,18 +90,22 @@ class core_kernel_rules_Operation extends core_kernel_rules_Term
      * Short description of method getSecondOperation
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @return core_kernel_rules_Term
      */
     public function getSecondOperation()
     {
         $returnValue = null;
+
         if (empty($this->secondOperation)) {
             $property = new core_kernel_classes_Property(RulesRdf::PROPERTY_OPERATION_SECOND_OP);
             $resource = $this->getUniquePropertyValue($property);
             $this->secondOperation = new core_kernel_rules_Term($resource->getUri());
         }
         $returnValue = $this->secondOperation;
+
         return $returnValue;
     }
 
@@ -103,17 +113,21 @@ class core_kernel_rules_Operation extends core_kernel_rules_Term
      * Short description of method getOperator
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @return core_kernel_classes_Resource
      */
     public function getOperator()
     {
         $returnValue = null;
+
         if (empty($this->arithmeticOperator)) {
             $property = new core_kernel_classes_Property(RulesRdf::PROPERTY_OPERATION_OPERATOR);
             $this->arithmeticOperator = $this->getUniquePropertyValue($property);
         }
         $returnValue = $this->arithmeticOperator;
+
         return $returnValue;
     }
 
@@ -121,13 +135,16 @@ class core_kernel_rules_Operation extends core_kernel_rules_Term
      * Short description of method evaluate
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @param  array variable
+     * @param mixed $variable
+     *
      * @return mixed
      */
     public function evaluate($variable = [])
     {
-        
         common_Logger::i('Evaluating Operation uri : ' . $this->getUri(), ['Generis Operation']);
         common_Logger::i('Evaluating Operation name : ' . $this->getLabel(), ['Generis Operation']);
         $operator = $this->getOperator();
@@ -135,36 +152,41 @@ class core_kernel_rules_Operation extends core_kernel_rules_Term
         common_Logger::d('Operator name: ' . $operator->getLabel(), ['Generis Operation']);
         $firstPart = $this->getFirstOperation()->evaluate($variable);
         $secondPart = $this->getSecondOperation()->evaluate($variable);
+
         if ($firstPart instanceof core_kernel_classes_ContainerCollection) {
             //if we have more than one result we only take the Literal label
             $nbLiteral = 0;
             $iterator = $firstPart->getIterator();
+
             foreach ($iterator as $first) {
                 if ($first instanceof core_kernel_classes_Literal) {
                     $firstPart = $first;
                     $nbLiteral++;
                 }
             }
+
             if ($nbLiteral != 1) {
                 var_dump($iterator);
+
                 throw new common_Exception('more than one Literal Retreive during  evaluation');
             }
         }
 
-
-          
         if ($secondPart instanceof core_kernel_classes_ContainerCollection) {
             //if we have more than one result we only take the resource label
             $nbLiteral = 0;
             $iterator = $secondPart->getIterator();
+
             foreach ($secondPart->getIterator() as $second) {
                 if ($second instanceof core_kernel_classes_Literal) {
                     $secondPart = $second;
                     $nbLiteral++;
                 }
             }
+
             if ($nbLiteral != 1) {
                 var_dump($iterator);
+
                 throw new common_Exception('more than one Literal Retreive during evaluation');
             }
         }
@@ -173,7 +195,7 @@ class core_kernel_rules_Operation extends core_kernel_rules_Term
         common_Logger::d('Second Part : ' . $secondPart, ['Generis Operation']);
         $returnValue = $this->evaluateRecursiveOperation($firstPart, $secondPart, $operator);
         common_Logger::i('Operation value: ' . $returnValue, ['Generis Operation']);
-       
+
         return $returnValue;
     }
 
@@ -181,52 +203,53 @@ class core_kernel_rules_Operation extends core_kernel_rules_Term
      * Short description of method evaluateRecursiveOperation
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @param  Literal first
      * @param  Literal second
      * @param  Resource operator
+     *
      * @return mixed
      */
     public function evaluateRecursiveOperation(core_kernel_classes_Literal $first, core_kernel_classes_Literal $second, core_kernel_classes_Resource $operator)
     {
-        
-        
         switch ($operator->getUri()) {
             case RulesRdf::INSTANCE_OPERATOR_ADD: {
                 $returnValue = new core_kernel_classes_Literal($first->literal + $second->literal);
-                break;
 
+                break;
             }
             case RulesRdf::INSTANCE_OPERATOR_MINUS: {
                 $returnValue = new core_kernel_classes_Literal($first->literal - $second->literal);
-                break;
 
+                break;
             }
             case RulesRdf::INSTANCE_OPERATOR_MULTIPLY: {
                 $returnValue = new core_kernel_classes_Literal($first->literal * $second->literal);
-                break;
 
+                break;
             }
             case RulesRdf::INSTANCE_OPERATOR_DIVISION: {
                 $returnValue = new core_kernel_classes_Literal($first->literal / $second->literal);
-                break;
 
+                break;
             }
             case RulesRdf::INSTANCE_OPERATOR_CONCAT: {
                 // FIXME Hotfix for the concat operator. Can't find why traling spaces are not
                 // kept intact when using concat.
                 // ex: 'february ' CONCAT '2008' -> 'february2008' instead of 'february 2008'.
                 $returnValue = new core_kernel_classes_Literal($first->literal . ' ' . $second->literal);
+
                 break;
-
             }
-                          
-            default : {
-                throw new common_Exception('problem evaluating operation, operator do not match with operands');
 
+            default: {
+                throw new common_Exception('problem evaluating operation, operator do not match with operands');
             }
         }
         $returnValue->debug = __METHOD__;
+
         return $returnValue;
     }
 }

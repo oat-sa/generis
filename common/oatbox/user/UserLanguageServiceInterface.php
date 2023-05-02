@@ -16,19 +16,18 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2018 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
  */
 
 namespace oat\oatbox\user;
 
 /**
  * Interface UserLanguageServiceInterface
+ *
  * @package oat\oatbox\user
  */
 interface UserLanguageServiceInterface
 {
-
-    const SERVICE_ID = 'generis/UserLanguageService';
+    public const SERVICE_ID = 'generis/UserLanguageService';
 
     /**
      * @return string language code (e.g. 'en-US')
@@ -37,18 +36,21 @@ interface UserLanguageServiceInterface
 
     /**
      * @param User $user
+     *
      * @return string language code (e.g. 'en-US')
      */
     public function getDataLanguage(User $user);
 
     /**
      * @param User $user
+     *
      * @return string language code (e.g. 'en-US')
      */
     public function getInterfaceLanguage(User $user);
 
     /**
      * Whether users data language enabled or not
+     *
      * @return boolean
      */
     public function isDataLanguageEnabled();

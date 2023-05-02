@@ -20,8 +20,12 @@
 
 namespace oat\generis\test\unit\common\persistence;
 
-use oat\generis\test\TestCase;
+use common_Exception;
+use common_exception_InconsistentData;
 use common_persistence_AdvKeyValuePersistence as AdvKeyValuePersistence;
+use common_persistence_InMemoryAdvKvDriver;
+use common_persistence_KeyValuePersistence;
+use oat\generis\test\TestCase;
 
 class AdvKeyValuePersistenceTest extends TestCase
 {
@@ -34,9 +38,9 @@ class AdvKeyValuePersistenceTest extends TestCase
     {
         $this->largeValuePersistence = new AdvKeyValuePersistence(
             [
-                AdvKeyValuePersistence::MAX_VALUE_SIZE => 100
+                AdvKeyValuePersistence::MAX_VALUE_SIZE => 100,
             ],
-            new \common_persistence_InMemoryAdvKvDriver()
+            new common_persistence_InMemoryAdvKvDriver()
         );
     }
 
@@ -50,16 +54,14 @@ class AdvKeyValuePersistenceTest extends TestCase
         return str_repeat('a', 100000);
     }
 
-    /**
-     */
     public function testLargeHmsetSetWithWrongSize()
     {
-        $this->expectException(\common_Exception::class);
+        $this->expectException(common_Exception::class);
         $this->largeValuePersistence = new AdvKeyValuePersistence(
             [
-                AdvKeyValuePersistence::MAX_VALUE_SIZE => 'toto'
+                AdvKeyValuePersistence::MAX_VALUE_SIZE => 'toto',
             ],
-            new \common_persistence_InMemoryAdvKvDriver()
+            new common_persistence_InMemoryAdvKvDriver()
         );
         $this->largeValuePersistence->hSet('test', 'fixture', 'value');
     }
@@ -192,7 +194,7 @@ class AdvKeyValuePersistenceTest extends TestCase
         $this->assertEquals(1, $persist->get('testIncrUnset'));
 
         $this->assertEquals(true, $persist->set('testIncr3', 'a'));
-        $this->expectException(\common_exception_InconsistentData::class);
+        $this->expectException(common_exception_InconsistentData::class);
         $persist->incr('testIncr3');
     }
 
@@ -215,7 +217,7 @@ class AdvKeyValuePersistenceTest extends TestCase
         $this->assertEquals(-1, $persist->get('testDecrUnset'));
 
         $this->assertEquals(true, $persist->set('testDecr3', '-'));
-        $this->expectException(\common_exception_InconsistentData::class);
+        $this->expectException(common_exception_InconsistentData::class);
         $persist->decr('testDecr3');
     }
 
@@ -223,13 +225,12 @@ class AdvKeyValuePersistenceTest extends TestCase
     {
         $this->largeValuePersistence = new AdvKeyValuePersistence(
             [
-                \common_persistence_KeyValuePersistence::MAX_VALUE_SIZE => 100,
-                \common_persistence_KeyValuePersistence::MAP_IDENTIFIER => 'iamamap',
-                \common_persistence_KeyValuePersistence::START_MAP_DELIMITER => 'mapbegin',
-                \common_persistence_KeyValuePersistence::END_MAP_DELIMITER => 'mapend',
-
+                common_persistence_KeyValuePersistence::MAX_VALUE_SIZE => 100,
+                common_persistence_KeyValuePersistence::MAP_IDENTIFIER => 'iamamap',
+                common_persistence_KeyValuePersistence::START_MAP_DELIMITER => 'mapbegin',
+                common_persistence_KeyValuePersistence::END_MAP_DELIMITER => 'mapend',
             ],
-            new \common_persistence_InMemoryAdvKvDriver()
+            new common_persistence_InMemoryAdvKvDriver()
         );
 
         $this->testHgetAllHexists();
@@ -264,7 +265,7 @@ class AdvKeyValuePersistenceTest extends TestCase
                 'start_map_delimiter' => $startMapDelimiter,
                 'end_map_delimiter' => $endMapDelimiter,
             ],
-            new \common_persistence_InMemoryAdvKvDriver()
+            new common_persistence_InMemoryAdvKvDriver()
         );
 
         $this->largeValuePersistence->hSet($key, $field, $value);
@@ -273,7 +274,6 @@ class AdvKeyValuePersistenceTest extends TestCase
         $keyMap = json_decode(substr_replace($keyMap, '', 0, strlen($startMapDelimiter)), true);
         $mappedKye = $startMapDelimiter . $keyMap[0] . $endMapDelimiter;
         self::assertFalse($this->largeValuePersistence->hDel($key, $mappedKye), 'It should not be allowed to delete one part of large value.');
-
 
         $storedValue = $this->largeValuePersistence->hGet($key, $field);
         self::assertSame($value, $storedValue, 'The same value must be returned from persistence.');

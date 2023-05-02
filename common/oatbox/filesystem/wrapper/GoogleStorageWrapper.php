@@ -15,33 +15,33 @@
  *
  * You should have received a copy of the GNU General Public License along with this package.
  * If not, see http://www.gnu.org/licenses/.
- *
  */
 
 namespace oat\oatbox\filesystem\wrapper;
 
-use oat\oatbox\service\ConfigurableService;
+use Google\Cloud\Storage\StorageClient;
 use League\Flysystem\AdapterInterface;
 use oat\oatbox\filesystem\utils\FlyWrapperTrait;
 use oat\oatbox\log\LoggerAwareTrait;
-use Google\Cloud\Storage\StorageClient;
+use oat\oatbox\service\ConfigurableService;
 use Superbalist\Flysystem\GoogleStorage\GoogleStorageAdapter;
 
 /**
  * @deprecated Please install `oat-sa/lib-generis-gcp` and use \oat\Gcp\Gcs\GcsFlyWrapper
+ *
  * @author Joel Bout
  */
 class GoogleStorageWrapper extends ConfigurableService implements AdapterInterface
 {
     use FlyWrapperTrait;
     use LoggerAwareTrait;
-    
-    const OPTION_BUCKET = 'bucket';
 
-    const OPTION_CLIENT_CONFIG = 'clientConfig';
+    public const OPTION_BUCKET = 'bucket';
+
+    public const OPTION_CLIENT_CONFIG = 'clientConfig';
 
     private $adapter;
-    
+
     /**
      * @return StorageClient
      */
@@ -49,7 +49,7 @@ class GoogleStorageWrapper extends ConfigurableService implements AdapterInterfa
     {
         return new StorageClient($this->getOption(self::OPTION_CLIENT_CONFIG));
     }
-    
+
     /**
      * @return AdapterInterface
      */
@@ -61,6 +61,7 @@ class GoogleStorageWrapper extends ConfigurableService implements AdapterInterfa
             $adapter = new GoogleStorageAdapter($client, $bucket);
             $this->adapter = $adapter;
         }
+
         return $this->adapter;
     }
 }

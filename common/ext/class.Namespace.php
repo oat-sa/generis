@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,14 +17,15 @@
  *
  * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- *
  */
 
 /**
  * Short description of class common_ext_Namespace
  *
  * @access  public
+ *
  * @author  Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+ *
  * @package generis
  */
 class common_ext_Namespace
@@ -49,6 +51,8 @@ class common_ext_Namespace
      *
      * @param  string id
      * @param  string uri
+     * @param mixed $id
+     * @param mixed $uri
      */
     public function __construct($id = '', $uri = '')
     {
@@ -57,9 +61,22 @@ class common_ext_Namespace
     }
 
     /**
+     * Magic method, return the Namespace URI
+     *
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getUri();
+    }
+
+    /**
      * Get the identifier of the namespace instance
      *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @return string
      */
     public function getModelId()
@@ -71,21 +88,11 @@ class common_ext_Namespace
      * Get the namespace URI
      *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @return string
      */
     public function getUri()
     {
         return $this->uri;
-    }
-
-    /**
-     * Magic method, return the Namespace URI
-     *
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->getUri();
     }
 }

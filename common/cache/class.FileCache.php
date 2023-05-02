@@ -18,7 +18,6 @@
  * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
  *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2010-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- *
  */
 
 use oat\oatbox\service\ServiceManager;
@@ -27,8 +26,11 @@ use oat\oatbox\service\ServiceManager;
  * Please use KeyValueCache instead
  *
  * @access public
+ *
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+ *
  * @package generis
+ *
  * @deprecated
  */
 class common_cache_FileCache extends common_cache_KeyValueCache

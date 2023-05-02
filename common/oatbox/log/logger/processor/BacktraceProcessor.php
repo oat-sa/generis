@@ -16,7 +16,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2017 (original work) Open Assessment Technologies SA;
- *
  */
 
 namespace oat\oatbox\log\logger\processor;
@@ -37,7 +36,7 @@ class BacktraceProcessor
     /**
      * Trace offset name under the log extra offset.
      */
-    const TRACE_OFFSET = 'trace';
+    public const TRACE_OFFSET = 'trace';
 
     /**
      * @var array
@@ -63,13 +62,13 @@ class BacktraceProcessor
      * BacktraceProcessor constructor.
      *
      * @param string $level
-     * @param bool   $skipLoggerClasses
-     * @param array  $classKeywordsToSkip
+     * @param bool $skipLoggerClasses
+     * @param array $classKeywordsToSkip
      */
     public function __construct($level = LogLevel::DEBUG, $skipLoggerClasses = false, $classKeywordsToSkip = [])
     {
-        $this->level               = $level;
-        $this->skipLoggerClasses   = $skipLoggerClasses;
+        $this->level = $level;
+        $this->skipLoggerClasses = $skipLoggerClasses;
         $this->classKeywordsToSkip = array_merge(
             $this->classKeywordsToSkip,
             $classKeywordsToSkip
@@ -116,18 +115,22 @@ class BacktraceProcessor
 
             if (isset($trace[$key]['args'])) {
                 $vars = [];
+
                 foreach ($trace[$key]['args'] as $k => $v) {
                     switch (gettype($v)) {
                         case 'boolean':
                         case 'integer':
                         case 'double':
                             $vars[$k] = (string)$v;
+
                             break;
                         case 'string':
                             $vars[$k] = strlen($v) > 128 ? 'string(' . strlen($v) . ')' : $v;
+
                             break;
                         case 'class':
                             $vars[$k] = get_class($v);
+
                             break;
                         default:
                             $vars[$k] = gettype($v);
@@ -141,7 +144,7 @@ class BacktraceProcessor
         $record['extra'] = array_merge(
             $record['extra'],
             [
-                static::TRACE_OFFSET => array_values($trace)
+                static::TRACE_OFFSET => array_values($trace),
             ]
         );
 

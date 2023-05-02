@@ -20,25 +20,28 @@
 
 namespace oat\generis\test\unit\common\persistence\sql\dbal;
 
+use common_persistence_sql_dbal_Driver;
+use common_persistence_sql_Platform;
 use oat\generis\test\TestCase;
 
 /**
  * Class DriverTest
+ *
  * @package oat\generis\test\unit\common\persistence\sql\dbal
+ *
  * @author Aleh Hutnikau, <hutnikau@1pt.com>
  */
 class DriverTest extends TestCase
 {
-
     public function testGetPlatForm()
     {
         if (!extension_loaded('pdo_sqlite')) {
             $this->markTestSkipped('Php extension pdo_sqlite is not installed.');
         }
 
-        $driver = new \common_persistence_sql_dbal_Driver();
+        $driver = new common_persistence_sql_dbal_Driver();
         $driver->connect('test_connection', ['connection' => ['url' => 'sqlite:///:memory:']]);
-        $this->assertTrue($driver->getPlatForm() instanceof \common_persistence_sql_Platform);
+        $this->assertTrue($driver->getPlatForm() instanceof common_persistence_sql_Platform);
     }
 
     public function testGetDbalConnection()
@@ -47,7 +50,7 @@ class DriverTest extends TestCase
             $this->markTestSkipped('Php extension pdo_sqlite is not installed.');
         }
 
-        $driver = new \common_persistence_sql_dbal_Driver();
+        $driver = new common_persistence_sql_dbal_Driver();
         $driver->connect('test_connection', ['connection' => ['url' => 'sqlite:///:memory:']]);
         $this->assertTrue($driver->getDbalConnection() instanceof \Doctrine\DBAL\Connection);
     }

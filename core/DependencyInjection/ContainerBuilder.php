@@ -28,6 +28,7 @@ use common_ext_Extension;
 use common_ext_ExtensionsManager;
 use InvalidArgumentException;
 use oat\generis\model\Middleware\MiddlewareExtensionsMapper;
+use oat\oatbox\service\ServiceNotFoundException;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder as SymfonyContainerBuilder;
@@ -35,7 +36,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface as SymfonyContainer
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException as SymfonyServiceNotFoundException;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
-use oat\oatbox\service\ServiceNotFoundException;
 use Symfony\Component\DependencyInjection\Reference;
 use Throwable;
 
@@ -117,7 +117,7 @@ class ContainerBuilder extends SymfonyContainerBuilder
                 $this,
                 new FileLocator(
                     [
-                        $this->cachePath
+                        $this->cachePath,
                     ]
                 )
             );

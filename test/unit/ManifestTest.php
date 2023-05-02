@@ -18,20 +18,18 @@
  * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
  *               2017      (update and modification) Open Assessment Technologies SA;
- *
  */
 
 use oat\generis\test\TestCase;
-use \oat\oatbox\extension\ComposerInfo;
+use oat\oatbox\extension\ComposerInfo;
 use oat\oatbox\extension\Manifest;
 
 class ManifestTest extends TestCase
 {
-
-    const SAMPLES_PATH = '/../../test/samples/manifests/';
-    const MANIFEST_PATH_DOES_NOT_EXIST = 'idonotexist.php';
-    const MANIFEST_PATH_LIGHTWEIGHT = 'lightweightManifest.php';
-    const MANIFEST_PATH_COMPLEX = 'complexManifest.php';
+    public const SAMPLES_PATH = '/../../test/samples/manifests/';
+    public const MANIFEST_PATH_DOES_NOT_EXIST = 'idonotexist.php';
+    public const MANIFEST_PATH_LIGHTWEIGHT = 'lightweightManifest.php';
+    public const MANIFEST_PATH_COMPLEX = 'complexManifest.php';
 
     private function getComposerInfoMock()
     {
@@ -39,7 +37,7 @@ class ManifestTest extends TestCase
 
         $composerInfo->method('extractExtensionDependencies')->willReturn([
               'taoItemBank' => '*',
-              'taoDocuments' => '*'
+              'taoDocuments' => '*',
         ]);
 
         return $composerInfo;
@@ -50,13 +48,14 @@ class ManifestTest extends TestCase
         $extensionsManager = $this->getMockBuilder(\common_ext_ExtensionsManager::class)->getMock();
         $extensionsManager->method('getAvailablePackages')->willReturn([
             'oat-sa/extension-tao-taoItemBank' => 'taoItemBank',
-            'oat-sa/extension-tao-taoDocuments' => 'taoDocuments'
+            'oat-sa/extension-tao-taoDocuments' => 'taoDocuments',
         ]);
         $serviceLocator = $this->getServiceLocatorMock([
             common_cache_Cache::SERVICE_ID => new \common_cache_NoCache(),
-            common_ext_ExtensionsManager::class => $extensionsManager
+            common_ext_ExtensionsManager::class => $extensionsManager,
         ]);
         $currentPath = dirname(__FILE__);
+
         if (!defined('ROOT_PATH')) {
             define('ROOT_PATH', $currentPath . self::SAMPLES_PATH);
         }
@@ -65,7 +64,7 @@ class ManifestTest extends TestCase
         try {
             $manifestPath = $currentPath . self::SAMPLES_PATH . self::MANIFEST_PATH_DOES_NOT_EXIST;
             $manifest = new Manifest($manifestPath, $composerInfo);
-            $this->assertTrue(false, "Trying to load a manifest that does not exist should raise an exception");
+            $this->assertTrue(false, 'Trying to load a manifest that does not exist should raise an exception');
         } catch (Exception $e) {
             $this->assertInstanceOf(oat\oatbox\extension\exception\ManifestNotFoundException::class, $e);
         }
@@ -91,7 +90,7 @@ class ManifestTest extends TestCase
         $this->assertEquals(
             [
             '/extension/path/models/ontology/taofuncacl.rdf',
-            '/extension/path/models/ontology/taoitembank.rdf'
+            '/extension/path/models/ontology/taoitembank.rdf',
             ],
             $manifest->getInstallModelFiles()
         );

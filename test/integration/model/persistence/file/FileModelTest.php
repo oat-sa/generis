@@ -16,20 +16,19 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) (original work) 2015 Open Assessment Technologies SA
- *
  */
 
 namespace oat\generis\test\integration\model\kernel\persistence\file;
 
+use common_Exception;
+use common_exception_NoImplementation;
+use Exception;
 use oat\generis\model\kernel\persistence\file\FileModel;
-use \common_exception_MissingParameter;
 use oat\generis\test\GenerisPhpUnitTestRunner;
 
 class FileModelTest extends GenerisPhpUnitTestRunner
 {
-
     /**
-     *
      * @see PHPUnit_Framework_TestCase::setUp()
      */
     public function setUp(): void
@@ -37,8 +36,8 @@ class FileModelTest extends GenerisPhpUnitTestRunner
     }
 
     /**
-     *
      * @author Lionel Lecaque, lionel@taotesting.com
+     *
      * @return FileModel
      */
     public function testConstruct()
@@ -46,13 +45,14 @@ class FileModelTest extends GenerisPhpUnitTestRunner
         // $this->markTestSkipped('test it');
         try {
             $model = new FileModel([]);
-        } catch (\common_Exception $e) {
+        } catch (common_Exception $e) {
             $this->assertInstanceOf('common_exception_MissingParameter', $e);
         }
         $conf = [
-            'file' => 'default'
+            'file' => 'default',
         ];
         $model = new FileModel($conf);
+
         return $model;
     }
 
@@ -60,11 +60,13 @@ class FileModelTest extends GenerisPhpUnitTestRunner
      * @depends testConstruct
      *
      * @author Lionel Lecaque, lionel@taotesting.com
+     *
+     * @param mixed $model
      */
     public function testGetConfig($model)
     {
         $this->assertEquals([
-            'file' => 'default'
+            'file' => 'default',
         ], $model->getOptions());
     }
 
@@ -72,6 +74,7 @@ class FileModelTest extends GenerisPhpUnitTestRunner
      * @depends testConstruct
      *
      * @author Lionel Lecaque, lionel@taotesting.com
+     *
      * @param array $model
      */
     public function testGetRdfInterface($model)
@@ -83,35 +86,37 @@ class FileModelTest extends GenerisPhpUnitTestRunner
      * @depends testConstruct
      *
      * @author Lionel Lecaque, lionel@taotesting.com
+     *
      * @param array $model
      */
     public function testGetRdfsInterface($model)
     {
-        $this->expectException(\common_exception_NoImplementation::class);
+        $this->expectException(common_exception_NoImplementation::class);
         $model->getRdfsInterface();
     }
 
     /**
-     *
      * @author Lionel Lecaque, lionel@taotesting.com
+     *
      * @return array
      */
     public function modelProvider()
     {
         $dir = $this->getSampleDir();
+
         return [
             [
                 6,
-                $dir . '/rdf/generis.rdf'
+                $dir . '/rdf/generis.rdf',
             ],
             [
                 4,
-                $dir . '/rdf/widget.rdf'
+                $dir . '/rdf/widget.rdf',
             ],
             [
                 100,
-                $dir . '/rdf/nobase.rdf'
-            ]
+                $dir . '/rdf/nobase.rdf',
+            ],
         ];
     }
 
@@ -119,14 +124,18 @@ class FileModelTest extends GenerisPhpUnitTestRunner
      * @dataProvider modelProvider
      *
      * @author Lionel Lecaque, lionel@taotesting.com
+     *
+     * @param mixed $id
+     * @param mixed $file
      */
     public function testGetModelIdFromXml($id, $file)
     {
         try {
             $modelid = FileModel::getModelIdFromXml($file);
             $this->assertEquals($id, $modelid);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->assertInstanceOf('\common_exception_Error', $e);
+
             if ($id == 100) {
                 $this->assertContains('has to be defined with the "xml:base" attribute of the ROOT node', $e->getMessage());
             } else {

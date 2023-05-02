@@ -22,9 +22,9 @@ declare(strict_types=1);
 
 namespace oat\generis\model\data\event;
 
+use core_kernel_classes_Class;
 use JsonSerializable;
 use oat\oatbox\event\Event;
-use core_kernel_classes_Class;
 
 class ClassDeletedEvent implements Event, JsonSerializable
 {

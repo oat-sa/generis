@@ -16,7 +16,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2021 (original work) Open Assessment Technologies SA
- *
  */
 
 declare(strict_types=1);
@@ -33,7 +32,7 @@ class WrappedMasterSlaveConnection extends MasterSlaveConnection
     public function connect($connectionName = null)
     {
         $requestedConnectionChange = ($connectionName !== null);
-        $connectionName            = $connectionName ?: 'slave';
+        $connectionName = $connectionName ?: 'slave';
 
         if ($connectionName !== 'slave' && $connectionName !== 'master') {
             throw new InvalidArgumentException('Invalid option to connect(), only master or slave allowed.');
@@ -49,7 +48,7 @@ class WrappedMasterSlaveConnection extends MasterSlaveConnection
         $forceMasterAsSlave = false;
 
         if ($this->getTransactionNestingLevel() > 0) {
-            $connectionName     = 'master';
+            $connectionName = 'master';
             $forceMasterAsSlave = true;
         }
 
@@ -60,6 +59,7 @@ class WrappedMasterSlaveConnection extends MasterSlaveConnection
                 $this->connections['slave'] = $this->_conn;
             }
             $this->configureLogger($connectionName);
+
             return false;
         }
 
@@ -79,6 +79,7 @@ class WrappedMasterSlaveConnection extends MasterSlaveConnection
             $this->_eventManager->dispatchEvent(Events::postConnect, $eventArgs);
         }
         $this->configureLogger($connectionName);
+
         return true;
     }
 

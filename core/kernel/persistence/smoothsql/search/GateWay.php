@@ -19,8 +19,8 @@
  *
  * @author Christophe GARCIA <christopheg@taotesting.com>
  * @license GPLv2
- * @package generis
  *
+ * @package generis
  */
 
 namespace   oat\generis\model\kernel\persistence\smoothsql\search;
@@ -32,6 +32,7 @@ use oat\oatbox\service\ServiceManager;
 use oat\search\base\exception\SearchGateWayExeption;
 use oat\search\base\QueryBuilderInterface;
 use oat\search\TaoSearchGateWay;
+use PDO;
 
 /**
  * Description of GateWay
@@ -40,33 +41,34 @@ use oat\search\TaoSearchGateWay;
  */
 class GateWay extends TaoSearchGateWay
 {
-    
     /**
-     *
      * @var common_persistence_SqlPersistence
      */
     protected $connector;
     /**
      * parser service or className
+     *
      * @var string
      */
     protected $parserList = [
-        'taoRdf' => 'search.tao.parser'
+        'taoRdf' => 'search.tao.parser',
     ];
     /**
      * driver escaper list
+     *
      * @var array
      */
     protected $driverList = [
-        'taoRdf' => 'search.driver.tao'
+        'taoRdf' => 'search.driver.tao',
     ];
-    
+
     /**
      * resultSet service or className
+     *
      * @var string
      */
     protected $resultSetClassName = '\\oat\\generis\\model\\kernel\\persistence\\smoothsql\\search\\TaoResultSet';
-    
+
     public function __construct()
     {
         $this->connector = ServiceManager::getServiceManager()
@@ -74,18 +76,19 @@ class GateWay extends TaoSearchGateWay
                 ->getPersistenceById('default');
     }
 
-        /**
+    /**
      * try to connect to database. throw an exception
      * if connection failed.
      *
      * @throws SearchGateWayExeption
+     *
      * @return $this
      */
     public function connect()
     {
         return !is_null($this->connector);
     }
-    
+
     /**
      * execute Parsed Query
      *
@@ -95,78 +98,87 @@ class GateWay extends TaoSearchGateWay
     {
         $this->serialyse($Builder);
         $statement = $this->connector->query($this->parsedQuery);
-        $result    = $this->statementToArray($statement);
+        $result = $this->statementToArray($statement);
         $resultSetClass = $this->resultSetClassName;
         $resultSet = new $resultSetClass($result);
         $queryCount = $this->getSerialyser()->setCriteriaList($Builder)->count(true)->serialyse();
         $resultSet->setParent($this)->setCountQuery($queryCount);
+
         return $resultSet;
     }
 
     /**
-     *
      * @param Statement $statement
+     *
      * @return array
      */
     protected function statementToArray(Statement $statement)
     {
         $result = [];
-        while ($row = $statement->fetch(\PDO::FETCH_OBJ)) {
+
+        while ($row = $statement->fetch(PDO::FETCH_OBJ)) {
             $result[] = $row;
         }
+
         return $result;
     }
-    
+
     public function fetchQuery($query)
     {
         $statement = $this->connector->query($query);
-        $result = $statement->fetch(\PDO::FETCH_ASSOC);
+        $result = $statement->fetch(PDO::FETCH_ASSOC);
+
         return $result;
     }
 
     /**
      * return total count result
+     *
      * @param QueryBuilderInterface $Builder
+     *
      * @return integer
      */
     public function count(QueryBuilderInterface $Builder)
     {
         $this->parsedQuery = $this->getSerialyser()->setCriteriaList($Builder)->count(true)->serialyse();
         $statement = $this->connector->query($this->parsedQuery);
-        $result    = $this->statementToArray($statement);
+        $result = $this->statementToArray($statement);
+
         return (int)reset($result)->cpt;
     }
-    
-        
+
     public function getJoiner()
     {
         $joiner = new QueryJoiner();
         $options = $this->getOptions();
         $joiner->setDriverEscaper($this->getDriverEscaper())->setOptions($options);
         $joiner->setParent($this);
+
         return $joiner;
     }
-    
+
     public function join(QueryJoiner $joiner)
     {
-        
         $query = $joiner->execute();
         $statement = $this->connector->query($query);
-        $result    = $this->statementToArray($statement);
+        $result = $this->statementToArray($statement);
         $resultSetClass = $this->resultSetClassName;
         $resultSet = new $resultSetClass($result);
         $queryCount = $joiner->count();
         $resultSet->setParent($this)->setCountQuery($queryCount);
+
         return $resultSet;
     }
 
-        /**
+    /**
      * return parsed query as string
+     *
      * @return $this
      */
     public function printQuery()
     {
         echo $this->parsedQuery;
+
         return $this;
     }
 }

@@ -18,25 +18,23 @@
  * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
  *               2013-2020 (update and modification) Open Assessment Technologies SA;
- *
  */
 
-use oat\generis\persistence\PersistenceManager;
 use oat\generis\model\data\Ontology;
+use oat\generis\persistence\PersistenceManager;
 use oat\generis\persistence\sql\SchemaProviderInterface;
-use oat\oatbox\extension\exception\ManifestNotFoundException;
 use oat\oatbox\cache\SimpleCache;
+use oat\oatbox\extension\exception\ManifestNotFoundException;
 
 /**
  * Custom extension installer for generis
  *
  * @author Joel Bout, <joel.bout@tudor.lu>
- * @package generis
  *
+ * @package generis
  */
 class common_ext_GenerisInstaller extends common_ext_ExtensionInstaller
 {
-
     /**
      * Setup the ontology configuration
      *
@@ -50,14 +48,14 @@ class common_ext_GenerisInstaller extends common_ext_ExtensionInstaller
         if ($this->extension->getId() != 'generis') {
             throw new common_ext_ExtensionException('Tried to install "' . $this->extension->getId() . '" extension using the GenerisInstaller');
         }
- 
+
         $this->installLoadDefaultConfig();
         $this->setupSchema();
         $this->installOntology();
         $this->installRegisterExt();
 
         $this->getServiceManager()->get(SimpleCache::SERVICE_ID)->clear();
-        
+
         $this->log('d', 'Installing custom script for extension ' . $this->extension->getId());
         $this->installCustomScript();
     }
@@ -66,6 +64,7 @@ class common_ext_GenerisInstaller extends common_ext_ExtensionInstaller
     {
         $schemaCollection = $this->getPersistenceManager()->getSqlSchemas();
         $ontology = $this->getServiceManager()->get(Ontology::SERVICE_ID);
+
         if ($ontology instanceof SchemaProviderInterface) {
             $ontology->provideSchema($schemaCollection);
         }

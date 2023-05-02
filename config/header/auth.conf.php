@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * Auth config
  *
  * @author Open Assessment Technologies SA

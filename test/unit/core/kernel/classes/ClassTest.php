@@ -184,12 +184,13 @@ class ClassTest extends GenerisTestCase
         // Passing an associative array allows to specify the number of events triggered.
         if (isset($subClassesLabels[0])) {
             $subClassesLabels = array_combine(
-                $subClassesLabels, 
+                $subClassesLabels,
                 array_fill(0, count($subClassesLabels), 0)
             );
         }
 
         $subClasses = [];
+
         foreach ($subClassesLabels as $label => $expectedEvents) {
             $subClasses[] = $this->createClassWithLabel($label, [], $expectedEvents);
         }

@@ -16,11 +16,11 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2020 (original work) Open Assessment Technologies SA;
- *
  */
 
 namespace oat\generis\test\unit\helpers;
 
+use helpers_File;
 use oat\generis\test\TestCase;
 
 class FileTest extends TestCase
@@ -35,29 +35,14 @@ class FileTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->dir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . "unittest" . mt_rand();
+        $this->dir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'unittest' . mt_rand();
         mkdir($this->dir);
         $this->subDir = $this->dir . 'sub' ;
         mkdir($this->subDir);
-        $this->file1 = $this->dir. DIRECTORY_SEPARATOR . 'test1.txt';
-        touch($this->dir. DIRECTORY_SEPARATOR . 'test1.txt');
-        $this->file2 = $this->subDir. DIRECTORY_SEPARATOR . 'test2.txt';
-        touch($this->subDir. DIRECTORY_SEPARATOR . 'test2.txt');
-    }
-
-    public function testInDirectory()
-    {
-        $this->assertTrue(\helpers_File::isFileInsideDirectory('test1.txt', $this->dir));
-        $this->assertFalse(\helpers_File::isFileInsideDirectory('test2.txt', $this->dir));
-        $this->assertTrue(\helpers_File::isFileInsideDirectory('test1.txt', $this->dir.DIRECTORY_SEPARATOR));
-        $this->assertFalse(\helpers_File::isFileInsideDirectory('sub'.DIRECTORY_SEPARATOR.'test2.txt', $this->dir));
-        $this->assertFalse(\helpers_File::isFileInsideDirectory('sub'.DIRECTORY_SEPARATOR.'test2.txt', $this->dir.DIRECTORY_SEPARATOR));
-
-        $this->assertFalse(\helpers_File::isFileInsideDirectory('test1.txt', $this->subDir));
-        $this->assertFalse(\helpers_File::isFileInsideDirectory('test1.txt', $this->subDir.DIRECTORY_SEPARATOR));
-        $this->assertTrue(\helpers_File::isFileInsideDirectory('test2.txt', $this->subDir));
-        $this->assertFalse(\helpers_File::isFileInsideDirectory('sub'.DIRECTORY_SEPARATOR.'test2.txt', $this->subDir));
-        $this->assertFalse(\helpers_File::isFileInsideDirectory('sub'.DIRECTORY_SEPARATOR.'test2.txt', $this->subDir.DIRECTORY_SEPARATOR));
+        $this->file1 = $this->dir . DIRECTORY_SEPARATOR . 'test1.txt';
+        touch($this->dir . DIRECTORY_SEPARATOR . 'test1.txt');
+        $this->file2 = $this->subDir . DIRECTORY_SEPARATOR . 'test2.txt';
+        touch($this->subDir . DIRECTORY_SEPARATOR . 'test2.txt');
     }
 
     protected function tearDown(): void
@@ -66,5 +51,20 @@ class FileTest extends TestCase
         unlink($this->file2);
         rmdir($this->subDir);
         rmdir($this->dir);
+    }
+
+    public function testInDirectory()
+    {
+        $this->assertTrue(helpers_File::isFileInsideDirectory('test1.txt', $this->dir));
+        $this->assertFalse(helpers_File::isFileInsideDirectory('test2.txt', $this->dir));
+        $this->assertTrue(helpers_File::isFileInsideDirectory('test1.txt', $this->dir . DIRECTORY_SEPARATOR));
+        $this->assertFalse(helpers_File::isFileInsideDirectory('sub' . DIRECTORY_SEPARATOR . 'test2.txt', $this->dir));
+        $this->assertFalse(helpers_File::isFileInsideDirectory('sub' . DIRECTORY_SEPARATOR . 'test2.txt', $this->dir . DIRECTORY_SEPARATOR));
+
+        $this->assertFalse(helpers_File::isFileInsideDirectory('test1.txt', $this->subDir));
+        $this->assertFalse(helpers_File::isFileInsideDirectory('test1.txt', $this->subDir . DIRECTORY_SEPARATOR));
+        $this->assertTrue(helpers_File::isFileInsideDirectory('test2.txt', $this->subDir));
+        $this->assertFalse(helpers_File::isFileInsideDirectory('sub' . DIRECTORY_SEPARATOR . 'test2.txt', $this->subDir));
+        $this->assertFalse(helpers_File::isFileInsideDirectory('sub' . DIRECTORY_SEPARATOR . 'test2.txt', $this->subDir . DIRECTORY_SEPARATOR));
     }
 }

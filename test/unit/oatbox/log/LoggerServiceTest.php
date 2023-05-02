@@ -21,14 +21,14 @@
  */
 namespace oat\generis\test\unit\oatbox\log;
 
-use oat\oatbox\log\LoggerService;
-use oat\oatbox\log\logger\TaoLog;
+use common_Logger;
 use oat\generis\test\TestCase;
+use oat\oatbox\log\logger\TaoLog;
+use oat\oatbox\log\LoggerService;
 
 class LoggerServiceTest extends TestCase
 {
-
-    const RUNS = 1000;
+    public const RUNS = 1000;
 
     protected function setUp(): void
     {
@@ -36,42 +36,42 @@ class LoggerServiceTest extends TestCase
 
     public function testFileAppender()
     {
-        $dfile = tempnam(sys_get_temp_dir(), "logtest");
-        $ifile = tempnam(sys_get_temp_dir(), "logtest");
-        $wfile = tempnam(sys_get_temp_dir(), "logtest");
-        $efile = tempnam(sys_get_temp_dir(), "logtest");
-        $cfile = tempnam(sys_get_temp_dir(), "logtest");
+        $dfile = tempnam(sys_get_temp_dir(), 'logtest');
+        $ifile = tempnam(sys_get_temp_dir(), 'logtest');
+        $wfile = tempnam(sys_get_temp_dir(), 'logtest');
+        $efile = tempnam(sys_get_temp_dir(), 'logtest');
+        $cfile = tempnam(sys_get_temp_dir(), 'logtest');
 
         $logger = new LoggerService([
             'logger' => new TaoLog([
                 'appenders' => [
                     [
-                        'class'         => 'SingleFileAppender',
-                        'threshold'     => \common_Logger::DEBUG_LEVEL,
-                        'file'          => $dfile,
+                        'class' => 'SingleFileAppender',
+                        'threshold' => common_Logger::DEBUG_LEVEL,
+                        'file' => $dfile,
                     ],
                     [
-                        'class'         => 'SingleFileAppender',
-                        'threshold'     => \common_Logger::INFO_LEVEL,
-                        'file'          => $ifile,
+                        'class' => 'SingleFileAppender',
+                        'threshold' => common_Logger::INFO_LEVEL,
+                        'file' => $ifile,
                     ],
                     [
-                        'class'         => 'SingleFileAppender',
-                        'threshold'     => \common_Logger::WARNING_LEVEL,
-                        'file'          => $wfile,
+                        'class' => 'SingleFileAppender',
+                        'threshold' => common_Logger::WARNING_LEVEL,
+                        'file' => $wfile,
                     ],
                     [
-                        'class'         => 'SingleFileAppender',
-                        'threshold'     => \common_Logger::ERROR_LEVEL,
-                        'file'          => $efile,
+                        'class' => 'SingleFileAppender',
+                        'threshold' => common_Logger::ERROR_LEVEL,
+                        'file' => $efile,
                     ],
                     [
-                        'class'         => 'SingleFileAppender',
-                        'threshold'     => \common_Logger::FATAL_LEVEL,
-                        'file'          => $cfile,
+                        'class' => 'SingleFileAppender',
+                        'threshold' => common_Logger::FATAL_LEVEL,
+                        'file' => $cfile,
                     ],
-                ]
-            ])
+                ],
+            ]),
         ]);
 
         $logger->logDebug('message');
@@ -121,20 +121,20 @@ class LoggerServiceTest extends TestCase
 
     public function testLogTags()
     {
-        $dfile = tempnam(sys_get_temp_dir(), "logtest");
+        $dfile = tempnam(sys_get_temp_dir(), 'logtest');
         $this->assertEntriesInFile($dfile, 0);
 
         $logger = new LoggerService([
             'logger' => new TaoLog([
                 'appenders' => [
                     [
-                        'class'         => 'SingleFileAppender',
-                        'threshold'     => \common_Logger::DEBUG_LEVEL,
-                        'file'          => $dfile,
-                        'tags'          => 'CORRECTTAG'
+                        'class' => 'SingleFileAppender',
+                        'threshold' => common_Logger::DEBUG_LEVEL,
+                        'file' => $dfile,
+                        'tags' => 'CORRECTTAG',
                     ],
-                ]
-            ])
+                ],
+            ]),
         ]);
 
         $logger->logDebug('message');

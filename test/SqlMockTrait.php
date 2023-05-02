@@ -22,9 +22,9 @@ declare(strict_types=1);
 
 namespace oat\generis\test;
 
-use Prophecy\Argument;
 use common_persistence_sql_dbal_Driver;
 use oat\generis\persistence\PersistenceManager;
+use Prophecy\Argument;
 
 /**
  * @deprecated Use \oat\generis\test\PersistenceManagerMockTrait.

@@ -19,7 +19,6 @@
  *
  * @author Lionel Lecaque  <lionel@taotesting.com>
  * @author Jerome Bogaerts, <jerome@taotesting.com>
- *
  */
 
 use Doctrine\DBAL\Driver\Statement;
@@ -51,6 +50,7 @@ class common_persistence_SqlPersistence extends common_persistence_Persistence
      * @param string $statement
      * @param array $params
      * @param array $types
+     *
      * @return int number of updated rows
      */
     public function exec($statement, array $params = [], array $types = [])
@@ -64,6 +64,7 @@ class common_persistence_SqlPersistence extends common_persistence_Persistence
      * @param string $tableName
      * @param array $data
      * @param array $types
+     *
      * @return int number of updated rows
      */
     public function insert($tableName, array $data, array $types = [])
@@ -77,6 +78,7 @@ class common_persistence_SqlPersistence extends common_persistence_Persistence
      * @param $tableName
      * @param array $data
      * @param array $types
+     *
      * @return int number of updated rows
      */
     public function insertMultiple($tableName, array $data, array $types = [])
@@ -89,8 +91,10 @@ class common_persistence_SqlPersistence extends common_persistence_Persistence
      *
      * @param string $table
      * @param array $data
-     * @return bool
+     *
      * @throws Exception
+     *
+     * @return bool
      */
     public function updateMultiple($table, array $data)
     {
@@ -103,47 +107,47 @@ class common_persistence_SqlPersistence extends common_persistence_Persistence
      * @param string $statement
      * @param array $params
      * @param array $types
+     *
      * @return Statement
      */
     public function query($statement, $params = [], array $types = [])
     {
         return $this->getDriver()->query($statement, $params, $types);
     }
-    
 
     /**
      * Convenience access to quote.
      *
-     * @param string $parameter The parameter to quote.
-     * @param int $parameter_type A PDO PARAM_XX constant.
-     * @return string The quoted string.
+     * @param string $parameter the parameter to quote
+     * @param int $parameter_type a PDO PARAM_XX constant
+     *
+     * @return string the quoted string
      */
     public function quote($parameter, $parameter_type = PDO::PARAM_STR)
     {
         return $this->getDriver()->quote($parameter, $parameter_type);
     }
-    
-    
+
     /**
      * Convenience access to lastInsertId.
      *
      * @param string $name
-     * @return string The quoted string.
+     *
+     * @return string the quoted string
      */
     public function lastInsertId($name = null)
     {
         return $this->getDriver()->lastInsertId($name);
     }
 
-
     /**
      * Execute a function within a transaction.
      *
-     * @param Closure $func The function to execute in a transactional way.
-     *
-     * @return mixed The value returned by $func
+     * @param Closure $func the function to execute in a transactional way
      *
      * @throws Throwable
+     *
+     * @return mixed The value returned by $func
      */
     public function transactional(Closure $func)
     {

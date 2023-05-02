@@ -16,14 +16,15 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2017 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
  */
 
 namespace oat\oatbox\extension\script;
 
-class ScriptException extends \Exception
+use Exception;
+
+class ScriptException extends Exception
 {
-    public function __construct($message, $code = 0, \Exception $previous = null)
+    public function __construct($message, $code = 0, Exception $previous = null)
     {
         parent::__construct($message, $code, $previous);
     }

@@ -4,6 +4,7 @@ namespace oat\generis\test\integration\common\persistence\sql;
 
 use common_persistence_sql_dbal_Driver;
 use common_persistence_sql_pdo_sqlite_Driver;
+use Exception;
 use oat\generis\test\TestCase;
 
 abstract class UpdateMultipleTestAbstract extends TestCase
@@ -72,7 +73,7 @@ abstract class UpdateMultipleTestAbstract extends TestCase
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function testUpdateMultiple()
     {

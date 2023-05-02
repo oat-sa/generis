@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,21 +24,22 @@
  * Short description of class core_kernel_persistence_PropertyInterface
  *
  * @access public
+ *
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+ *
  * @package generis
-
  */
 interface core_kernel_persistence_PropertyInterface
 {
-
-
-
     /**
      * Short description of method isLgDependent
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @param  Resource resource
+     *
      * @return boolean
      */
     public function isLgDependent(core_kernel_classes_Resource $resource);
@@ -46,8 +48,11 @@ interface core_kernel_persistence_PropertyInterface
      * Short description of method isMultiple
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @param  Resource resource
+     *
      * @return boolean
      */
     public function isMultiple(core_kernel_classes_Resource $resource);
@@ -56,8 +61,11 @@ interface core_kernel_persistence_PropertyInterface
      * Short description of method getRange
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @param  Resource resource
+     *
      * @return core_kernel_classes_Class
      */
     public function getRange(core_kernel_classes_Resource $resource);
@@ -66,9 +74,13 @@ interface core_kernel_persistence_PropertyInterface
      * Short description of method delete
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @param  Resource resource
      * @param  boolean deleteReference
+     * @param mixed $deleteReference
+     *
      * @return boolean
      */
     public function delete(core_kernel_classes_Resource $resource, $deleteReference = false);
@@ -77,9 +89,12 @@ interface core_kernel_persistence_PropertyInterface
      * Short description of method setRange
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @param  Resource resource
      * @param  Class class
+     *
      * @return core_kernel_classes_Class
      */
     public function setRange(core_kernel_classes_Resource $resource, core_kernel_classes_Class $class);
@@ -93,9 +108,13 @@ interface core_kernel_persistence_PropertyInterface
      * Short description of method setMultiple
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @param  Resource resource
      * @param  boolean isMultiple
+     * @param mixed $isMultiple
+     *
      * @return void
      */
     public function setMultiple(core_kernel_classes_Resource $resource, $isMultiple);
@@ -104,9 +123,13 @@ interface core_kernel_persistence_PropertyInterface
      * Short description of method setLgDependent
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @param  Resource resource
      * @param  boolean isLgDependent
+     * @param mixed $isLgDependent
+     *
      * @return void
      */
     public function setLgDependent(core_kernel_classes_Resource $resource, $isLgDependent);

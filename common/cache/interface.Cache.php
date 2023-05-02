@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,6 +23,7 @@
 
 /**
  * basic interface a cache implementation has to implement
+ *
  * @deprecated please use oat\oatbox\cache\SimpleCache
  */
 interface common_cache_Cache
@@ -29,7 +31,7 @@ interface common_cache_Cache
     /**
      * Service manager id.
      */
-    const SERVICE_ID = 'generis/cache';
+    public const SERVICE_ID = 'generis/cache';
 
     // --- OPERATIONS ---
 
@@ -38,11 +40,15 @@ interface common_cache_Cache
      *      * If this is an object and implements Serializable,
      *      * we use the serial provided by the object
      *      * else a serial must be provided
+     *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @param mixed $mixed
      * @param null $serial
      * @param null $ttl
+     *
      * @return mixed
      */
     public function put($mixed, $serial = null, $ttl = null);
@@ -52,10 +58,15 @@ interface common_cache_Cache
      * throws an exception if not found
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @param  string serial
-     * @return common_Serializable
+     * @param mixed $serial
+     *
      * @throws common_cache_NotFoundException
+     *
+     * @return common_Serializable
      */
     public function get($serial);
 
@@ -63,8 +74,12 @@ interface common_cache_Cache
      * test whenever an entry associted to the serial exists
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @param  string serial
+     * @param mixed $serial
+     *
      * @return boolean
      */
     public function has($serial);
@@ -73,8 +88,12 @@ interface common_cache_Cache
      * removes an entry from the cache
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @param  string serial
+     * @param mixed $serial
+     *
      * @return mixed
      */
     public function remove($serial);
@@ -83,7 +102,9 @@ interface common_cache_Cache
      * empties the cache
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @return mixed
      */
     public function purge();

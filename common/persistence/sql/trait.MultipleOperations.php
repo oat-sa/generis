@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -18,8 +19,8 @@
  *
  * @author "Jérôme Bogaerts, <jerome@taotesting.com>"
  * @license GPLv2
- * @package generis
  *
+ * @package generis
  */
 
 trait common_persistence_sql_MultipleOperations
@@ -51,9 +52,9 @@ trait common_persistence_sql_MultipleOperations
             $query .= implode(', ', $valuesQueries);
 
             return $this->exec($query, $allValues, $types);
-        } else {
-            return 0;
         }
+
+        return 0;
     }
 
     /**
@@ -84,8 +85,10 @@ trait common_persistence_sql_MultipleOperations
      *
      * @param string $table
      * @param array $data
-     * @return bool
+     *
      * @throws Exception
+     *
+     * @return bool
      */
     public function updateMultiple($table, array $data)
     {

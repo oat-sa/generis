@@ -20,10 +20,11 @@
 
 namespace oat\oatbox\service;
 
+use common_Exception;
 use oat\oatbox\log\LoggerService;
 use oat\oatbox\log\TaoLoggerAwareInterface;
-use Psr\Log\LoggerAwareInterface;
 use oat\oatbox\service\exception\InvalidServiceManagerException;
+use Psr\Log\LoggerAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 
@@ -34,7 +35,9 @@ use Zend\ServiceManager\ServiceLocatorAwareTrait;
  * It includes tools to register and propagate oat service
  *
  * @package oat\oatbox\service
+ *
  * @author Moyon Camille
+ *
  * @deprecated New services must be registered using Dependency Injection Container
  */
 trait ServiceManagerAwareTrait
@@ -47,19 +50,23 @@ trait ServiceManagerAwareTrait
      * It should be used for service building, register, build, propagate
      * For reading operation please use $this->getServiceLocator() instead
      *
-     * @return ServiceManager
      * @throws InvalidServiceManagerException
+     *
+     * @return ServiceManager
+     *
      * @deprecated New services must be registered using Dependency Injection Container
      */
     public function getServiceManager()
     {
         $serviceManager = $this->getServiceLocator();
+
         if ($serviceManager instanceof ServiceManager) {
             return $serviceManager;
         }
         $msg = is_null($serviceManager)
             ? 'ServiceLocator not initialized for ' . get_class($this)
             : 'Alternate service locator not compatible with getServiceManager() in ' . __CLASS__;
+
         throw new InvalidServiceManagerException($msg);
     }
 
@@ -69,7 +76,9 @@ trait ServiceManagerAwareTrait
      * @param $serviceKey
      * @param ConfigurableService $service
      * @param bool $allowOverride
-     * @throws \common_Exception
+     *
+     * @throws common_Exception
+     *
      * @deprecated New services must be registered using Dependency Injection Container
      */
     public function registerService($serviceKey, ConfigurableService $service, $allowOverride = true)
@@ -83,7 +92,9 @@ trait ServiceManagerAwareTrait
      * Propagate service dependencies
      *
      * @param $service
+     *
      * @return mixed
+     *
      * @deprecated New services must be registered using Dependency Injection Container
      */
     protected function propagate($service)
@@ -96,6 +107,7 @@ trait ServiceManagerAwareTrait
         // Propagate the logger service
         if ($service instanceof LoggerAwareInterface) {
             $logger = null;
+
             if ($this instanceof TaoLoggerAwareInterface) {
                 $logger = $this->getLogger();
             } else {
@@ -103,6 +115,7 @@ trait ServiceManagerAwareTrait
                     $logger = $this->getServiceLocator()->get(LoggerService::SERVICE_ID);
                 }
             }
+
             if (!is_null($logger)) {
                 $service->setLogger($logger);
             }

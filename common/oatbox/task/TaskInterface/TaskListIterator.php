@@ -16,17 +16,15 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2017 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
  */
 
 namespace oat\oatbox\task\TaskInterface;
 
+use Iterator;
+
 /**
  * @deprecated since version 7.10.0, to be removed in 8.0.
  */
-interface TaskListIterator extends \Iterator, \Countable
+interface TaskListIterator extends Iterator, \Countable
 {
-
-
-
 }

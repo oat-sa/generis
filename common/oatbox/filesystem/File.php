@@ -16,16 +16,18 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2016-2020 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
  */
 
 namespace oat\oatbox\filesystem;
 
+use common_Exception;
+use common_Logger;
 use GuzzleHttp\Psr7\Stream;
 use GuzzleHttp\Psr7\StreamWrapper;
+use InvalidArgumentException;
+use League\Flysystem\FileExistsException;
 use League\Flysystem\FileNotFoundException;
 use Psr\Http\Message\StreamInterface;
-use League\Flysystem\FileExistsException;
 use tao_helpers_File;
 
 class File extends FileSystemHandler
@@ -49,8 +51,9 @@ class File extends FileSystemHandler
     {
         try {
             $mimeType = $this->getFileSystem()->getMimetype($this->getPrefix());
-            $suffix =  substr($this->getPrefix(), -4);
-            if ($mimeType === 'text/plain' &&  $suffix === '.css') {
+            $suffix = substr($this->getPrefix(), -4);
+
+            if ($mimeType === 'text/plain' && $suffix === '.css') {
                 $mimeType = 'text/css';
             }
 
@@ -61,6 +64,7 @@ class File extends FileSystemHandler
             return $mimeType;
         } catch (FileNotFoundException $e) {
         }
+
         return false;
     }
 
@@ -83,11 +87,13 @@ class File extends FileSystemHandler
     {
         try {
             $path = $this->getPrefix();
+
             if ($this->getFileSystem()->has($path)) {
                 return $this->getFileSystem()->get($path)->getMetadata();
             }
         } catch (FileNotFoundException $e) {
         }
+
         return false;
     }
 
@@ -98,9 +104,11 @@ class File extends FileSystemHandler
      *
      * @param string|Resource|StreamInterface $mixed
      * @param null $mimeType
-     * @return bool
-     * @throws \common_Exception
+     *
+     * @throws common_Exception
      * @throws FileExistsException
+     *
+     * @return bool
      */
     public function write($mixed, $mimeType = null)
     {
@@ -112,22 +120,25 @@ class File extends FileSystemHandler
             return $this->getFileSystem()->writeStream($this->getPrefix(), $mixed, $config);
         } elseif ($mixed instanceof StreamInterface) {
             if (!$mixed->isReadable()) {
-                throw new \common_Exception('Stream is not readable. Write to filesystem aborted.');
+                throw new common_Exception('Stream is not readable. Write to filesystem aborted.');
             }
+
             if (!$mixed->isSeekable()) {
-                throw new \common_Exception('Stream is not seekable. Write to filesystem aborted.');
+                throw new common_Exception('Stream is not seekable. Write to filesystem aborted.');
             }
             $mixed->rewind();
 
             $resource = StreamWrapper::getResource($mixed);
+
             if (!is_resource($resource)) {
-                throw new \common_Exception('Unable to create resource from the given stream. Write to filesystem aborted.');
+                throw new common_Exception('Unable to create resource from the given stream. Write to filesystem aborted.');
             }
+
             return $this->getFileSystem()->writeStream($this->getPrefix(), $resource, $config);
-        } else {
-            throw new \InvalidArgumentException('Value to be written has to be: string, resource or StreamInterface, ' .
-                '"' . gettype($mixed) . '" given.');
         }
+
+        throw new InvalidArgumentException('Value to be written has to be: string, resource or StreamInterface, ' .
+            '"' . gettype($mixed) . '" given.');
     }
 
     /**
@@ -137,9 +148,11 @@ class File extends FileSystemHandler
      *
      * @param $mixed
      * @param null $mimeType
-     * @return bool
+     *
      * @throws \FileNotFoundException
-     * @throws \common_Exception
+     * @throws common_Exception
+     *
+     * @return bool
      */
     public function update($mixed, $mimeType = null)
     {
@@ -147,7 +160,7 @@ class File extends FileSystemHandler
             throw new \FileNotFoundException('File "' . $this->getPrefix() . '" not found."');
         }
 
-        \common_Logger::i('Writting in ' . $this->getPrefix());
+        common_Logger::i('Writting in ' . $this->getPrefix());
         $config = (is_null($mimeType)) ? [] : ['ContentType' => $mimeType];
 
         if (is_string($mixed)) {
@@ -160,21 +173,24 @@ class File extends FileSystemHandler
 
         if ($mixed instanceof StreamInterface) {
             if (!$mixed->isReadable()) {
-                throw new \common_Exception('Stream is not readable. Write to filesystem aborted.');
+                throw new common_Exception('Stream is not readable. Write to filesystem aborted.');
             }
+
             if (!$mixed->isSeekable()) {
-                throw new \common_Exception('Stream is not seekable. Write to filesystem aborted.');
+                throw new common_Exception('Stream is not seekable. Write to filesystem aborted.');
             }
             $mixed->rewind();
 
             $resource = StreamWrapper::getResource($mixed);
+
             if (!is_resource($resource)) {
-                throw new \common_Exception('Unable to create resource from the given stream. Write to filesystem aborted.');
+                throw new common_Exception('Unable to create resource from the given stream. Write to filesystem aborted.');
             }
+
             return $this->getFileSystem()->updateStream($this->getPrefix(), $resource, $config);
         }
 
-        throw new \InvalidArgumentException('Value to be written has to be: string, resource or StreamInterface');
+        throw new InvalidArgumentException('Value to be written has to be: string, resource or StreamInterface');
     }
 
     /**
@@ -184,12 +200,14 @@ class File extends FileSystemHandler
      *
      * @param string|Resource|StreamInterface $mixed
      * @param null $mimeType
+     *
+     * @throws common_Exception
+     *
      * @return bool
-     * @throws \common_Exception
      */
     public function put($mixed, $mimeType = null)
     {
-        \common_Logger::i('Writting in ' . $this->getPrefix());
+        common_Logger::i('Writting in ' . $this->getPrefix());
         $config = (is_null($mimeType)) ? [] : ['ContentType' => $mimeType];
 
         if (is_string($mixed)) {
@@ -202,21 +220,24 @@ class File extends FileSystemHandler
 
         if ($mixed instanceof StreamInterface) {
             if (!$mixed->isReadable()) {
-                throw new \common_Exception('Stream is not readable. Write to filesystem aborted.');
+                throw new common_Exception('Stream is not readable. Write to filesystem aborted.');
             }
+
             if (!$mixed->isSeekable()) {
-                throw new \common_Exception('Stream is not seekable. Write to filesystem aborted.');
+                throw new common_Exception('Stream is not seekable. Write to filesystem aborted.');
             }
             $mixed->rewind();
 
             $resource = StreamWrapper::getResource($mixed);
+
             if (!is_resource($resource)) {
-                throw new \common_Exception('Unable to create resource from the given stream. Write to filesystem aborted.');
+                throw new common_Exception('Unable to create resource from the given stream. Write to filesystem aborted.');
             }
+
             return $this->getFileSystem()->putStream($this->getPrefix(), $resource, $config);
         }
 
-        throw new \InvalidArgumentException('Value to be written has to be: string, resource or StreamInterface');
+        throw new InvalidArgumentException('Value to be written has to be: string, resource or StreamInterface');
     }
 
     /**
@@ -261,10 +282,12 @@ class File extends FileSystemHandler
 
             if ($this->getFileSystem()->has($path)) {
                 $metadata = $this->getFileSystem()->getMetadata($this->getPrefix());
+
                 return $metadata['type'] === 'file';
             }
         } catch (FileNotFoundException $e) {
         }
+
         return false;
     }
 

@@ -18,7 +18,6 @@
  * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
  *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2010-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- *
  */
 
 use oat\oatbox\service\ConfigurableService;
@@ -27,25 +26,28 @@ use oat\oatbox\service\ConfigurableService;
  * Caches data in a key-value store
  *
  * @access public
+ *
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+ *
  * @package generis
+ *
  * @deprecated Please use oat\oatbox\cache\SimpleCache
  */
 class common_cache_KeyValueCache extends ConfigurableService implements common_cache_Cache
 {
-    const OPTION_PERSISTENCE = 'persistence';
-    
-    
+    public const OPTION_PERSISTENCE = 'persistence';
+
     /**
      * @var common_persistence_KeyValuePersistence
      */
     private $persistence;
-    
+
     protected function getPersistence()
     {
         if (is_null($this->persistence)) {
             $this->persistence = $this->getServiceLocator()->get('generis/persistences')->getPersistenceById($this->getOption(self::OPTION_PERSISTENCE));
         }
+
         return $this->persistence;
     }
 
@@ -54,13 +56,18 @@ class common_cache_KeyValueCache extends ConfigurableService implements common_c
      *      * If this is an object and implements Serializable,
      *      * we use the serial provided by the object
      *      * else a serial must be provided
+     *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @param mixed $mixed
      * @param null $serial
      * @param null $ttl
-     * @return bool
+     *
      * @throws common_exception_Error
+     *
+     * @return bool
      */
     public function put($mixed, $serial = null, $ttl = null)
     {
@@ -78,18 +85,26 @@ class common_cache_KeyValueCache extends ConfigurableService implements common_c
      * gets the entry associted to the serial
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @param  string serial
-     * @return common_Serializable
+     * @param mixed $serial
+     *
      * @throws common_cache_NotFoundException
+     *
+     * @return common_Serializable
      */
     public function get($serial)
     {
         $returnValue = $this->getPersistence()->get($serial);
+
         if ($returnValue === false && !$this->has($serial)) {
             $msg = "No cache entry found for '" . $serial . "'.";
+
             throw new common_cache_NotFoundException($msg);
         }
+
         return $returnValue;
     }
 
@@ -97,8 +112,12 @@ class common_cache_KeyValueCache extends ConfigurableService implements common_c
      * test whenever an entry associated to the serial exists
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @param  string serial
+     * @param mixed $serial
+     *
      * @return boolean
      */
     public function has($serial)
@@ -110,8 +129,12 @@ class common_cache_KeyValueCache extends ConfigurableService implements common_c
      * removes an entry from the cache
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @param  string serial
+     * @param mixed $serial
+     *
      * @return mixed
      */
     public function remove($serial)
@@ -123,7 +146,9 @@ class common_cache_KeyValueCache extends ConfigurableService implements common_c
      * empties the cache
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @return mixed
      */
     public function purge()

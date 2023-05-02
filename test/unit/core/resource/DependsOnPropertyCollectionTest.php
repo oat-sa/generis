@@ -22,9 +22,9 @@ declare(strict_types=1);
 
 namespace oat\generis\test\unit\model\resource;
 
-use oat\generis\test\TestCase;
 use core_kernel_classes_Property;
 use oat\generis\model\resource\DependsOnPropertyCollection;
+use oat\generis\test\TestCase;
 
 class DependsOnPropertyCollectionTest extends TestCase
 {

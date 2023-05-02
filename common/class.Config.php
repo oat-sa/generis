@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -18,15 +19,18 @@
  *
  * @author "Lionel Lecaque, <lionel@taotesting.com>"
  * @license GPLv2
- * @package generis
  *
+ * @package generis
  */
 
 class common_Config
 {
     /**
      * @access
+     *
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
+     *
+     * @param null|mixed $config
      */
     public static function load($config = null)
     {

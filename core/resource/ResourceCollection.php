@@ -20,11 +20,11 @@
 
 namespace oat\generis\model\resource;
 
+use common_persistence_sql_Filter as Filter;
 use common_persistence_SqlPersistence;
 use core_kernel_classes_Class;
 use Countable;
 use Iterator;
-use common_persistence_sql_Filter as Filter;
 use oat\generis\model\OntologyAwareTrait;
 use oat\generis\model\OntologyRdf;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
@@ -39,7 +39,7 @@ class ResourceCollection implements Iterator, Countable
     use ServiceLocatorAwareTrait;
     use OntologyAwareTrait;
 
-    const CACHE_SIZE = 100;
+    public const CACHE_SIZE = 100;
 
     /**
      * @var string[]
@@ -161,11 +161,13 @@ class ResourceCollection implements Iterator, Countable
      * @param string $column
      * @param string $operator
      * @param mixed $value
+     *
      * @return ResourceCollection
      */
     public function addFilter($column, $operator, $value)
     {
         $this->filter->addFilter($column, $operator, $value);
+
         return $this;
     }
 
@@ -173,12 +175,14 @@ class ResourceCollection implements Iterator, Countable
      * Add a type resource filter.
      *
      * @param string $type
+     *
      * @return ResourceCollection
      */
     public function addTypeFilter($type)
     {
         $this->filter->eq('predicate', OntologyRdf::RDF_TYPE)
                      ->eq('object', $type);
+
         return $this;
     }
 
@@ -230,9 +234,11 @@ class ResourceCollection implements Iterator, Countable
         if ($this->endOfClass === false && !isset($this->resources[$this->index])) {
             if ($this->isLimitReached()) {
                 $this->resources = null;
+
                 return false;
             }
             $this->resources = null;
+
             return $this->load();
         }
 
@@ -268,6 +274,7 @@ class ResourceCollection implements Iterator, Countable
 
     /**
      * Check if the end of the current class is reached (no more records available)
+     *
      * @return bool
      */
     public function getEndReached()

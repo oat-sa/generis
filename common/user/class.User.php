@@ -16,31 +16,32 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2017 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
- *
  */
 
 use oat\generis\model\GenerisRdf;
-use oat\oatbox\user\User;
 use oat\oatbox\Refreshable;
+use oat\oatbox\user\User;
 
 /**
  * Abstract User
  *
  * @access public
+ *
  * @author Joel Bout, <joel@taotesting.com>
+ *
  * @package generis
  */
 abstract class common_user_User implements User, Refreshable
 {
     /**
      * Store roles to prevent recalculation in runtime
+     *
      * @var array
      */
     protected $roles = [];
 
     abstract public function getIdentifier();
-    
+
     abstract public function getPropertyValues($property);
 
     abstract public function refresh();
@@ -54,10 +55,12 @@ abstract class common_user_User implements User, Refreshable
     public function getRoles()
     {
         $returnValue = [];
+
         if (! $this->roles) {
             // We use a Depth First Search approach to flatten the Roles Graph.
             foreach ($this->getPropertyValues(GenerisRdf::PROPERTY_USER_ROLES) as $roleUri) {
                 $returnValue[] = $roleUri;
+
                 foreach (core_kernel_users_Service::singleton()->getIncludedRoles(new core_kernel_classes_Resource($roleUri)) as $role) {
                     $returnValue[] = $role->getUri();
                 }
@@ -65,6 +68,7 @@ abstract class common_user_User implements User, Refreshable
             $returnValue = array_unique($returnValue);
             $this->roles = $returnValue;
         }
+
         return $this->roles;
     }
 }

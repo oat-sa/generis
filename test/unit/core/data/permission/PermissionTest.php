@@ -16,23 +16,27 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2020 (original work) Open Assessment Technologies SA;
- *
  */
 
 namespace oat\generis\test\unit\core\data\permission;
 
 use oat\generis\model\data\permission\PermissionHelper;
 use oat\generis\model\data\permission\PermissionInterface;
+use oat\generis\test\TestCase;
 use oat\oatbox\session\SessionService;
 use oat\oatbox\user\User;
-use oat\generis\test\TestCase;
 use Prophecy\Argument;
 
 class PermissionTest extends TestCase
 {
-    const RIGHT = 'testRight';
+    public const RIGHT = 'testRight';
     /**
      * @dataProvider getSamples
+     *
+     * @param mixed $supported
+     * @param mixed $ids
+     * @param mixed $permissions
+     * @param mixed $expected
      */
     public function testFilter($supported, $ids, $permissions, $expected)
     {
@@ -48,7 +52,7 @@ class PermissionTest extends TestCase
         $helper = new PermissionHelper();
         $helper->setServiceLocator($this->getServiceLocatorMock([
             SessionService::SERVICE_ID => $sessionMock->reveal(),
-            PermissionInterface::SERVICE_ID => $permissionMock->reveal()
+            PermissionInterface::SERVICE_ID => $permissionMock->reveal(),
         ]));
         $actual = $helper->filterByPermission($ids, self::RIGHT);
         $this->assertEquals($expected, $actual);
@@ -61,11 +65,11 @@ class PermissionTest extends TestCase
             [[self::RIGHT], ['a', 'b'], [], []],
             [[self::RIGHT], [1,2,3,4,5], [1 => [self::RIGHT]], [1]],
             [[self::RIGHT], [1,2,3,4,5], [2 => [self::RIGHT, 'somethingelse']], [1 => 2]],
-            [[self::RIGHT], [1,2,3,4,5], [2 => [self::RIGHT], 3 =>['somethingelse']], [1 => 2]],
-            [[self::RIGHT], [1,2,3,4,5], [2 => [self::RIGHT], 4 =>[self::RIGHT]], [1 => 2, 3 => 4]],
+            [[self::RIGHT], [1,2,3,4,5], [2 => [self::RIGHT], 3 => ['somethingelse']], [1 => 2]],
+            [[self::RIGHT], [1,2,3,4,5], [2 => [self::RIGHT], 4 => [self::RIGHT]], [1 => 2, 3 => 4]],
             [[self::RIGHT, 'weird'], [1,2,3,4,5], [1 => [self::RIGHT]], [1]],
             [[], [1,2,3,4,5], [], [1,2,3,4,5]],
-            [['weird'], [1,2,3,4,5], [], [1,2,3,4,5]]
+            [['weird'], [1,2,3,4,5], [], [1,2,3,4,5]],
         ];
     }
 }

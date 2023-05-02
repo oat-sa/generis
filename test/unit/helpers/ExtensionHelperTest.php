@@ -16,12 +16,13 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2018 (original work) Open Assessment Technologies SA;
- *
  */
 
 namespace oat\generis\test\unit\helpers;
 
 use common_exception_Error;
+use common_ext_Extension;
+use helpers_ExtensionHelper;
 use oat\generis\test\TestCase;
 
 class ExtensionHelperTest extends TestCase
@@ -31,7 +32,7 @@ class ExtensionHelperTest extends TestCase
         $ext1 = $this->mockExtension('ext1', []);
         $ext2 = $this->mockExtension('ext2', ['ext1']);
         $ext3 = $this->mockExtension('ext3', ['ext2']);
-        $sorted = \helpers_ExtensionHelper::sortByDependencies([$ext2,$ext3,$ext1]);
+        $sorted = helpers_ExtensionHelper::sortByDependencies([$ext2,$ext3,$ext1]);
         $this->assertEquals([$ext1,$ext2,$ext3], array_values($sorted));
     }
 
@@ -41,7 +42,7 @@ class ExtensionHelperTest extends TestCase
         $ext1 = $this->mockExtension('ext1', ['ext2']);
         $ext2 = $this->mockExtension('ext2', ['ext3']);
         $ext3 = $this->mockExtension('ext3', ['ext1']);
-        $sorted = \helpers_ExtensionHelper::sortByDependencies([$ext2,$ext3,$ext1]);
+        $sorted = helpers_ExtensionHelper::sortByDependencies([$ext2,$ext3,$ext1]);
     }
 
     public function testMissingDependencies()
@@ -50,21 +51,24 @@ class ExtensionHelperTest extends TestCase
         $ext1 = $this->mockExtension('ext1', []);
         $ext2 = $this->mockExtension('ext2', ['ext4']);
         $ext3 = $this->mockExtension('ext3', ['ext2','ext4']);
-        $sorted = \helpers_ExtensionHelper::sortByDependencies([$ext2,$ext3,$ext1]);
+        $sorted = helpers_ExtensionHelper::sortByDependencies([$ext2,$ext3,$ext1]);
     }
 
     /**
      * Moch an extension with its dependencies
+     *
      * @param string $id
      * @param array $dependencies
-     * @return \common_ext_Extension::class
+     *
+     * @return common_ext_Extension::class
      */
     protected function mockExtension($id, $dependencies = [])
     {
         $prophet = $this->prophesize();
-        $ext = $this->prophesize(\common_ext_Extension::class);
+        $ext = $this->prophesize(common_ext_Extension::class);
         $ext->getId()->willReturn($id);
         $ext->getDependencies()->willReturn(array_fill_keys($dependencies, '>=0'));
+
         return $ext->reveal();
     }
 }

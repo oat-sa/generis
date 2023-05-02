@@ -16,28 +16,33 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2016 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
  */
 
-use oat\oatbox\service\ServiceManager;
 use oat\oatbox\action\Action;
+use oat\oatbox\service\ServiceManager;
 
 /**
  * Run the cache purger
  *
  * @access public
+ *
  * @package generis
+ *
  * @see @license  GNU General Public (GPL) Version 2 http://www.opensource.org/licenses/gpl-2.0.php
  */
 class common_cache_PurgeCache implements Action
 {
     /**
      * (non-PHPdoc)
+     *
      * @see \oat\oatbox\action\Action::__invoke()
+     *
+     * @param mixed $params
      */
     public function __invoke($params)
     {
         $success = ServiceManager::getServiceManager()->get('generis/cache')->purge();
+
         return $success
             ? new common_report_Report(common_report_Report::TYPE_SUCCESS, 'Purged the filecache')
             : new common_report_Report(common_report_Report::TYPE_ERROR, 'Cache could not be purged')

@@ -16,26 +16,29 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2018 (original work) Open Assessment Technologies SA;
- *
  */
 
 namespace oat\generis\test\unit\oatbox\service;
 
-use oat\oatbox\service\ServiceManager;
-use oat\oatbox\service\ConfigurableService;
+use common_persistence_InMemoryKvDriver;
+use common_persistence_KeyValuePersistence;
 use oat\generis\test\TestCase;
+use oat\oatbox\service\ConfigurableService;
+use oat\oatbox\service\ServiceManager;
 use Psr\Container\NotFoundExceptionInterface;
 
 /**
  * Class ServiceManager
+ *
  * @package oat\generis\test\integration\oatbox\service
+ *
  * @author Aleh Hutnikau, <hutnikau@1pt.com>
  */
 class ServiceManagerTest extends TestCase
 {
     public function testGet()
     {
-        $config = new \common_persistence_KeyValuePersistence([], new \common_persistence_InMemoryKvDriver());
+        $config = new common_persistence_KeyValuePersistence([], new common_persistence_InMemoryKvDriver());
         $serviceManager = new ServiceManager($config);
         $serviceManager->register(TestServiceInterface1::SERVICE_ID, new TestService1());
         $serviceManager->register(TestService2_2::SERVICE_ID, new TestService2_2());
@@ -48,7 +51,7 @@ class ServiceManagerTest extends TestCase
 
     public function testGetAutowire()
     {
-        $config = new \common_persistence_KeyValuePersistence([], new \common_persistence_InMemoryKvDriver());
+        $config = new common_persistence_KeyValuePersistence([], new common_persistence_InMemoryKvDriver());
         $serviceManager = new ServiceManager($config);
         $this->assertTrue($serviceManager->get(TestService3::class) instanceof TestService3);
     }
@@ -56,7 +59,7 @@ class ServiceManagerTest extends TestCase
     public function testWithoutAutowire()
     {
         $this->expectException(NotFoundExceptionInterface::class);
-        $config = new \common_persistence_KeyValuePersistence([], new \common_persistence_InMemoryKvDriver());
+        $config = new common_persistence_KeyValuePersistence([], new common_persistence_InMemoryKvDriver());
         $serviceManager = new ServiceManager($config);
         $serviceManager->get(TestService2::SERVICE_ID);
     }
@@ -64,14 +67,14 @@ class ServiceManagerTest extends TestCase
 
 interface TestServiceInterface1
 {
-    const SERVICE_ID = 'test/TestService1';
+    public const SERVICE_ID = 'test/TestService1';
 }
 class TestService1 extends ConfigurableService implements TestServiceInterface1
 {
 }
 class TestService2 extends ConfigurableService
 {
-    const SERVICE_ID = 'test/TestService2';
+    public const SERVICE_ID = 'test/TestService2';
 }
 class TestService2_2 extends TestService2
 {
@@ -79,5 +82,4 @@ class TestService2_2 extends TestService2
 
 class TestService3 extends ConfigurableService
 {
-
 }

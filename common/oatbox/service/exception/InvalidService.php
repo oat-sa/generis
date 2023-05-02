@@ -16,15 +16,15 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2016 (original work) Open Assessment Technologies SA
- *
  */
 
 namespace oat\oatbox\service\exception;
 
+use common_exception_InconsistentData;
+
 /**
  * @author Christophe GARCIA <christopheg@taotesting.com>
  */
-class InvalidService extends \common_exception_InconsistentData
+class InvalidService extends common_exception_InconsistentData
 {
-    
 }

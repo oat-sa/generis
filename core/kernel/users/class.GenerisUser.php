@@ -16,8 +16,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2017 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
- *
  */
 
 use oat\generis\model\GenerisRdf;
@@ -28,7 +26,9 @@ use oat\generis\model\OntologyRdf;
  * Authentication adapter interface to be implemented by authentication methodes
  *
  * @access public
+ *
  * @author Joel Bout, <joel@taotesting.com>
+ *
  * @package generis
  *
  * phpcs:disable Squiz.Classes.ValidClassName.NotCamelCaps
@@ -87,20 +87,19 @@ class core_kernel_users_GenerisUser extends common_user_User implements UserInte
                 $lang = $this->findLanguage($property);
 
                 return $lang ?: [DEFAULT_ANONYMOUS_INTERFACE_LANG];
-
             case GenerisRdf::PROPERTY_USER_UILG:
                 return $this->findLanguage($property);
-
             default:
                 return $this->getUserResource()->getPropertyValues(new core_kernel_classes_Property($property));
         }
     }
 
     /**
-     * @return array|string[]
      * @throws common_Exception
      * @throws core_kernel_classes_EmptyProperty
      * @throws core_kernel_persistence_Exception
+     *
+     * @return array|string[]
      */
     private function findLanguage(string $propertyURI): array
     {
@@ -122,7 +121,7 @@ class core_kernel_users_GenerisUser extends common_user_User implements UserInte
         return [
            (string) $resource->getUniquePropertyValue(
                new core_kernel_classes_Property(OntologyRdf::RDF_VALUE)
-           )
+           ),
         ];
     }
 
@@ -130,8 +129,9 @@ class core_kernel_users_GenerisUser extends common_user_User implements UserInte
     {
         $this->roles = false;
         $this->cache = [
-            GenerisRdf::PROPERTY_USER_DEFLG => $this->getUncached(GenerisRdf::PROPERTY_USER_DEFLG)
+            GenerisRdf::PROPERTY_USER_DEFLG => $this->getUncached(GenerisRdf::PROPERTY_USER_DEFLG),
         ];
+
         return true;
     }
 }

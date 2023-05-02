@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,23 +17,22 @@
  *
  * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- *
  */
 
 /**
  * Short description of class common_ext_AbstractExtension
  *
  * @abstract
+ *
  * @access public
+ *
  * @author CRP Henri Tudor - TAO Team - {@link http://www.tao.lu}
+ *
  * @package generis
-
  */
 abstract class common_ext_AbstractExtension
 {
-
     // --- ASSOCIATIONS ---
-
 
     // --- ATTRIBUTES ---
 
@@ -42,7 +42,9 @@ abstract class common_ext_AbstractExtension
      * Short description of method getAuthor
      *
      * @access public
+     *
      * @author CRP Henri Tudor - TAO Team - {@link http://www.tao.lu}
+     *
      * @return mixed
      */
     public function getAuthor()
@@ -53,7 +55,9 @@ abstract class common_ext_AbstractExtension
      * Short description of method getName
      *
      * @access public
+     *
      * @author CRP Henri Tudor - TAO Team - {@link http://www.tao.lu}
+     *
      * @return mixed
      */
     public function getName()
@@ -64,7 +68,9 @@ abstract class common_ext_AbstractExtension
      * Short description of method getRequiredExtensions
      *
      * @access public
+     *
      * @author CRP Henri Tudor - TAO Team - {@link http://www.tao.lu}
+     *
      * @return mixed
      */
     public function getRequiredExtensions()
@@ -75,7 +81,9 @@ abstract class common_ext_AbstractExtension
      * Short description of method getVersion
      *
      * @access public
+     *
      * @author CRP Henri Tudor - TAO Team - {@link http://www.tao.lu}
+     *
      * @return mixed
      */
     public function getVersion()

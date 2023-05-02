@@ -29,7 +29,6 @@ use oat\generis\test\GenerisTestCase;
 use oat\search\base\QueryBuilderInterface;
 use oat\search\base\QueryInterface;
 use oat\search\base\ResultSetInterface;
-use oat\search\QueryBuilder;
 use PHPUnit\Framework\MockObject\MockObject;
 
 class ResourceSearchServiceTest extends GenerisTestCase
@@ -48,7 +47,7 @@ class ResourceSearchServiceTest extends GenerisTestCase
         $this->subject->setServiceLocator(
             $this->getServiceLocatorMock(
                 [
-                    ComplexSearchService::SERVICE_ID => $this->complexSearchService
+                    ComplexSearchService::SERVICE_ID => $this->complexSearchService,
                 ]
             )
         );

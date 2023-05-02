@@ -16,7 +16,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2018 (original work) Open Assessment Technologies SA;
- *
  */
 
 namespace oat\oatbox\log\logger\processor;
@@ -33,27 +32,27 @@ abstract class EnvironmentProcessorAbstract
     /**
      * Stack offset name under the log extra offset.
      */
-    const LOG_STACK           = 'stack';
+    public const LOG_STACK = 'stack';
 
     /**
      * Stack identifier offset name under the stack offset.
      */
-    const LOG_STACK_ID        = 'id';
+    public const LOG_STACK_ID = 'id';
 
     /**
      * Stack type offset name under the stack offset.
      */
-    const LOG_STACK_TYPE      = 'type';
+    public const LOG_STACK_TYPE = 'type';
 
     /**
      * Client name offset name under the stack offset.
      */
-    const LOG_STACK_NAME      = 'name';
+    public const LOG_STACK_NAME = 'name';
 
     /**
      * Host type offset name under the stack offset.
      */
-    const LOG_STACK_HOST_TYPE = 'host_type';
+    public const LOG_STACK_HOST_TYPE = 'host_type';
 
     /**
      * @var string
@@ -85,16 +84,15 @@ abstract class EnvironmentProcessorAbstract
         }
 
         // Adds the environment details.
-        $record['extra'][static::LOG_STACK] = isset($record['extra'][static::LOG_STACK])
-            ? $record['extra'][static::LOG_STACK]
-            : []
+        $record['extra'][static::LOG_STACK] = $record['extra'][static::LOG_STACK]
+            ?? []
         ;
         $record['extra'][static::LOG_STACK] = array_merge(
             $record['extra'][static::LOG_STACK],
             [
-                static::LOG_STACK_ID        => $this->getStackId(),
-                static::LOG_STACK_TYPE      => $this->getStackType(),
-                static::LOG_STACK_NAME      => $this->getStackName(),
+                static::LOG_STACK_ID => $this->getStackId(),
+                static::LOG_STACK_TYPE => $this->getStackType(),
+                static::LOG_STACK_NAME => $this->getStackName(),
                 static::LOG_STACK_HOST_TYPE => $this->getStackHostType(),
             ]
         );

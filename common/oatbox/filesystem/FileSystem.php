@@ -16,14 +16,14 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2016 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
  */
 
 namespace oat\oatbox\filesystem;
 
+use common_Exception;
+use League\Flysystem\AdapterInterface;
 use League\Flysystem\FilesystemInterface;
 use oat\oatbox\filesystem\utils\FileSystemWrapperTrait;
-use League\Flysystem\AdapterInterface;
 
 /**
  * Class Filesystem
@@ -52,6 +52,7 @@ class FileSystem implements FilesystemInterface
      *
      * @param $id
      * @param $adapter
+     * @param mixed $prefix
      */
     public function __construct($id, FilesystemInterface $flySystem, $prefix)
     {
@@ -69,8 +70,9 @@ class FileSystem implements FilesystemInterface
     }
 
     /**
+     * @throws common_Exception
+     *
      * @return FilesystemInterface
-     * @throws \common_Exception
      */
     protected function getFileSystem()
     {

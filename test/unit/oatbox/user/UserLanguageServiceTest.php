@@ -16,18 +16,18 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2018-2021 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
  */
 
 namespace oat\generis\test\unit\oatbox\user;
 
-use oat\oatbox\user\UserLanguageService;
-use oat\oatbox\user\User;
 use oat\generis\model\GenerisRdf;
 use oat\generis\test\TestCase;
+use oat\oatbox\user\User;
+use oat\oatbox\user\UserLanguageService;
 
 /**
  * class UserLanguageServiceTest
+ *
  * @package oat\oatbox\user
  */
 class UserLanguageServiceTest extends TestCase
@@ -63,14 +63,14 @@ class UserLanguageServiceTest extends TestCase
                 'expected' => 'nb-NO',
                 'user' => $this->getUser(),
                 'serviceParams' => [
-                    UserLanguageService::OPTION_INTERFACE_LANGUAGE => 'nb-NO'
+                    UserLanguageService::OPTION_INTERFACE_LANGUAGE => 'nb-NO',
                 ],
             ],
             'OPTION_INTERFACE_LANGUAGE=en-US, User UI Language set to fr-FR' => [
                 'expected' => 'fr-FR',
                 'user' => $this->getUser('fr-FR'),
                 'serviceParams' => [
-                    UserLanguageService::OPTION_INTERFACE_LANGUAGE => 'en-US'
+                    UserLanguageService::OPTION_INTERFACE_LANGUAGE => 'en-US',
                 ],
             ],
             'OPTION_DEFAULT_LANGUAGE not set, User UI Language not set' => [
@@ -89,7 +89,7 @@ class UserLanguageServiceTest extends TestCase
     public function testGetDataLanguageWithOptionDisabled()
     {
         $service = $this->getService([
-            UserLanguageService::OPTION_LOCK_DATA_LANGUAGE => false
+            UserLanguageService::OPTION_LOCK_DATA_LANGUAGE => false,
         ]);
 
         $user = $this->getUser();
@@ -101,7 +101,7 @@ class UserLanguageServiceTest extends TestCase
     public function testGetDataLanguageWithOptionEnabled()
     {
         $service = $this->getService([
-            UserLanguageService::OPTION_LOCK_DATA_LANGUAGE => true
+            UserLanguageService::OPTION_LOCK_DATA_LANGUAGE => true,
         ]);
 
         $user = $this->getUser();
@@ -116,12 +116,12 @@ class UserLanguageServiceTest extends TestCase
         $this->assertEquals(true, $service->isDataLanguageEnabled());
 
         $service = $this->getService([
-            UserLanguageService::OPTION_LOCK_DATA_LANGUAGE => false
+            UserLanguageService::OPTION_LOCK_DATA_LANGUAGE => false,
         ]);
         $this->assertEquals(true, $service->isDataLanguageEnabled());
 
         $service = $this->getService([
-            UserLanguageService::OPTION_LOCK_DATA_LANGUAGE => true
+            UserLanguageService::OPTION_LOCK_DATA_LANGUAGE => true,
         ]);
         $this->assertEquals(false, $service->isDataLanguageEnabled());
     }
@@ -129,6 +129,7 @@ class UserLanguageServiceTest extends TestCase
     /**
      * @param string $uiLg
      * @param string $dataLg
+     *
      * @return User
      */
     private function getUser($uiLg = null, $dataLg = null)
@@ -144,6 +145,7 @@ class UserLanguageServiceTest extends TestCase
 
     /**
      * @param array $options
+     *
      * @return UserLanguageService
      */
     private function getService($options = [])

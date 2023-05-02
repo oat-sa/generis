@@ -16,18 +16,21 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2019 (original work) Open Assessment Technologies SA;
- *
- *
  */
 
 namespace oat\oatbox\mutex;
 
+use common_exception_FileReadFailedException;
+use common_exception_InconsistentData;
+use common_exception_NotImplemented;
+use common_persistence_Manager;
+use common_persistence_PhpRedisDriver;
 use oat\oatbox\service\ConfigurableService;
 use Symfony\Component\Lock\Factory;
 use Symfony\Component\Lock\Store\FlockStore;
 use Symfony\Component\Lock\Store\RedisStore;
-use Symfony\Component\Lock\StoreInterface;
 use Symfony\Component\Lock\Store\RetryTillSaveStore;
+use Symfony\Component\Lock\StoreInterface;
 
 /**
  * Class LockService
@@ -36,13 +39,14 @@ use Symfony\Component\Lock\Store\RetryTillSaveStore;
  * See https://symfony.com/doc/current/components/lock.html for more details
  *
  * @package oat\oatbox\mutex
+ *
  * @author Aleh Hutnikau, <hutnikau@1pt.com>
  */
 class LockService extends ConfigurableService
 {
-    const SERVICE_ID = 'generis/LockService';
-    const OPTION_PERSISTENCE_CLASS = 'persistence_class';
-    const OPTION_PERSISTENCE_OPTIONS = 'persistence_options';
+    public const SERVICE_ID = 'generis/LockService';
+    public const OPTION_PERSISTENCE_CLASS = 'persistence_class';
+    public const OPTION_PERSISTENCE_OPTIONS = 'persistence_options';
 
     /** @var Factory */
     private $factory;
@@ -51,24 +55,27 @@ class LockService extends ConfigurableService
     private $store;
 
     /**
+     * @throws common_exception_FileReadFailedException
+     * @throws common_exception_InconsistentData
+     * @throws common_exception_NotImplemented
+     *
      * @return Factory
-     * @throws \common_exception_FileReadFailedException
-     * @throws \common_exception_InconsistentData
-     * @throws \common_exception_NotImplemented
      */
     public function getLockFactory()
     {
         if ($this->factory === null) {
             $this->factory = new Factory(new RetryTillSaveStore($this->getStore()));
         }
+
         return $this->factory;
     }
 
     /**
+     * @throws common_exception_FileReadFailedException
+     * @throws common_exception_InconsistentData
+     * @throws common_exception_NotImplemented
+     *
      * @return StoreInterface
-     * @throws \common_exception_FileReadFailedException
-     * @throws \common_exception_InconsistentData
-     * @throws \common_exception_NotImplemented
      */
     private function getStore()
     {
@@ -79,15 +86,18 @@ class LockService extends ConfigurableService
             switch ($persistenceClass) {
                 case FlockStore::class:
                     $this->store = $this->getFlockStore($persistenceOptions);
+
                     break;
                 case NoLockStorage::class:
                     $this->store = $this->getNoLockStore();
+
                     break;
                 case RedisStore::class:
                     $this->store = $this->getRedisStore($persistenceOptions);
+
                     break;
                 default:
-                    throw new \common_exception_NotImplemented('configured storage is not supported');
+                    throw new common_exception_NotImplemented('configured storage is not supported');
             }
         }
 
@@ -103,30 +113,37 @@ class LockService extends ConfigurableService
 
     /**
      * @param $persistenceId
+     *
+     * @throws common_exception_InconsistentData
+     *
      * @return RedisStore
-     * @throws \common_exception_InconsistentData
      */
     private function getRedisStore($persistenceId)
     {
-        $persistenceManager = $this->getServiceLocator()->get(\common_persistence_Manager::SERVICE_ID);
+        $persistenceManager = $this->getServiceLocator()->get(common_persistence_Manager::SERVICE_ID);
         $persistence = $persistenceManager->getPersistenceById($persistenceId);
-        if (!$persistence->getDriver() instanceof \common_persistence_PhpRedisDriver) {
-            throw new \common_exception_InconsistentData('Not redis persistence id configured for RedisStore');
+
+        if (!$persistence->getDriver() instanceof common_persistence_PhpRedisDriver) {
+            throw new common_exception_InconsistentData('Not redis persistence id configured for RedisStore');
         }
+
         return new RedisStore($persistence->getDriver()->getConnection());
     }
 
     /**
      * @param $filePath
+     *
+     * @throws common_exception_FileReadFailedException
+     *
      * @return FlockStore
-     * @throws \common_exception_FileReadFailedException
      */
     private function getFlockStore($filePath)
     {
         if (is_dir($filePath) && is_writable($filePath)) {
             return new FlockStore($filePath);
         }
-        throw new \common_exception_FileReadFailedException('Lock store path is not writable');
+
+        throw new common_exception_FileReadFailedException('Lock store path is not writable');
     }
 
     /**

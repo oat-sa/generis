@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -17,21 +18,20 @@
  * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
  *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- *
  */
 
 /**
  * Short description of class common_configuration_FileSystemComponent
  *
  * @access public
+ *
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+ *
  * @package generis
-
  */
 class common_configuration_FileSystemComponent extends common_configuration_Component
 {
     // --- ASSOCIATIONS ---
-
 
     // --- ATTRIBUTES ---
 
@@ -39,14 +39,16 @@ class common_configuration_FileSystemComponent extends common_configuration_Comp
      * Whether should be checked recursively (if passed location of directory).
      *
      * @access private
+     *
      * @var boolean
      */
     private $recursive = false;
-    
+
     /**
      * Short description of attribute location
      *
      * @access private
+     *
      * @var string
      */
     private $location = '';
@@ -55,6 +57,7 @@ class common_configuration_FileSystemComponent extends common_configuration_Comp
      * Short description of attribute expectedRights
      *
      * @access private
+     *
      * @var string
      */
     private $expectedRights = '';
@@ -63,6 +66,7 @@ class common_configuration_FileSystemComponent extends common_configuration_Comp
      * Whether must check if is empty (if passed location of directory).
      *
      * @access private
+     *
      * @var boolean
      */
     private $mustCheckIfEmpty = false;
@@ -73,11 +77,20 @@ class common_configuration_FileSystemComponent extends common_configuration_Comp
      * Short description of method __construct
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @param  string location
      * @param  string expectedRights
      * @param  boolean optional
+     * @param mixed $location
+     * @param mixed $expectedRights
+     * @param mixed $optional
+     * @param mixed $recursive
+     * @param mixed $mustCheckIfEmpty
+     *
      * @throws common_configuration_MalformedRightsException
+     *
      * @return mixed
      */
     public function __construct($location, $expectedRights, $optional = false, $recursive = false, $mustCheckIfEmpty = false)
@@ -94,7 +107,9 @@ class common_configuration_FileSystemComponent extends common_configuration_Comp
      * Short description of method getLocation
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @return string
      */
     public function getLocation()
@@ -108,33 +123,42 @@ class common_configuration_FileSystemComponent extends common_configuration_Comp
      * Short description of method setLocation
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @param  string location
+     * @param mixed $location
+     *
      * @return void
      */
     public function setLocation($location)
     {
         $this->location = $location;
     }
-    
+
     /**
      * Set $this->recursive value
      *
      * @access public
+     *
      * @author Aleh Hutnikau, <hutnikau@1pt.com>
+     *
      * @param boolean $recursive
+     *
      * @return void
      */
     public function setRecursive($recursive)
     {
         $this->recursive = $recursive;
     }
-    
+
     /**
      * Get $this->recursive value
      *
      * @access public
+     *
      * @author Aleh Hutnikau, <hutnikau@1pt.com>
+     *
      * @return boolean
      */
     public function getRecursive()
@@ -146,8 +170,11 @@ class common_configuration_FileSystemComponent extends common_configuration_Comp
      * Set $this->mustCheckIfEmpty value
      *
      * @access public
+     *
      * @author Jonathan VUiLLEMIN, <jonathan@taotesting.com>
+     *
      * @param boolean $mustCheckIfEmpty
+     *
      * @return void
      */
     public function setMustCheckIfEmpty($mustCheckIfEmpty)
@@ -159,7 +186,9 @@ class common_configuration_FileSystemComponent extends common_configuration_Comp
      * Get $this->mustCheckIfEmpty value
      *
      * @access public
+     *
      * @author Jonathan VUiLLEMIN, <jonathan@taotesting.com>
+     *
      * @return boolean
      */
     public function getMustCheckIfEmpty()
@@ -171,7 +200,9 @@ class common_configuration_FileSystemComponent extends common_configuration_Comp
      * Short description of method exists
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @return boolean
      */
     public function exists()
@@ -185,7 +216,9 @@ class common_configuration_FileSystemComponent extends common_configuration_Comp
      * Short description of method getExpectedRights
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @return string
      */
     public function getExpectedRights()
@@ -199,17 +232,20 @@ class common_configuration_FileSystemComponent extends common_configuration_Comp
      * Short description of method setExpectedRights
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @param  string expectedRights
+     * @param mixed $expectedRights
+     *
      * @return void
      */
     public function setExpectedRights($expectedRights)
     {
-        
         if (!empty($expectedRights) && preg_match('/^r*w*x*$/', $expectedRights) !== 0) {
             $this->expectedRights = $expectedRights;
         } else {
-            throw new common_configuration_MalformedRightsException("Malformed rights. Expected format is r|rw|rwx.");
+            throw new common_configuration_MalformedRightsException('Malformed rights. Expected format is r|rw|rwx.');
         }
     }
 
@@ -217,7 +253,9 @@ class common_configuration_FileSystemComponent extends common_configuration_Comp
      * Short description of method check
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @return common_configuration_Report
      */
     public function check()
@@ -227,56 +265,55 @@ class common_configuration_FileSystemComponent extends common_configuration_Comp
         $expectedRights = $this->getExpectedRights();
         $location = $this->getLocation();
         $name = $this->getName();
-        
+
         if (!$this->exists()) {
             return new common_configuration_Report(
                 common_configuration_Report::UNKNOWN,
                 "File system component '${name}' could not be found in '${location}'.",
                 $this
             );
-        } else {
-            if (strpos($expectedRights, 'r') !== false && !$this->isReadable($location)) {
-                return new common_configuration_Report(
-                    common_configuration_Report::INVALID,
-                    "File system component '${name}' in '${location} is not readable.",
-                    $this
-                );
-            }
-            
-            if (strpos($expectedRights, 'w') !== false && !$this->isWritable($location)) {
-                return new common_configuration_Report(
-                    common_configuration_Report::INVALID,
-                    "File system component '${name}' in '${location} is not writable.",
-                    $this
-                );
-            }
+        }
 
-            if (strpos($expectedRights, 'x') !== false && !$this->isExecutable($location)) {
-                return new common_configuration_Report(
-                    common_configuration_Report::INVALID,
-                    "File system component '${name}' in '${location} is not executable.",
-                    $this
-                );
-            }
-
-            if ($this->getMustCheckIfEmpty()) {
-                if (!$this->isEmptyDirectory($location)) {
-                    return new common_configuration_Report(
-                        common_configuration_Report::INVALID,
-                        "File system component '${name}' in '${location} is not empty.",
-                        $this
-                    );
-                }
-            }
-            
+        if (strpos($expectedRights, 'r') !== false && !$this->isReadable($location)) {
             return new common_configuration_Report(
-                common_configuration_Report::VALID,
-                "File system component '${name}' in '${location} is compliant with expected rights (${expectedRights}).'",
+                common_configuration_Report::INVALID,
+                "File system component '${name}' in '${location} is not readable.",
                 $this
             );
         }
 
+        if (strpos($expectedRights, 'w') !== false && !$this->isWritable($location)) {
+            return new common_configuration_Report(
+                common_configuration_Report::INVALID,
+                "File system component '${name}' in '${location} is not writable.",
+                $this
+            );
+        }
 
+        if (strpos($expectedRights, 'x') !== false && !$this->isExecutable($location)) {
+            return new common_configuration_Report(
+                common_configuration_Report::INVALID,
+                "File system component '${name}' in '${location} is not executable.",
+                $this
+            );
+        }
+
+        if ($this->getMustCheckIfEmpty()) {
+            if (!$this->isEmptyDirectory($location)) {
+                return new common_configuration_Report(
+                    common_configuration_Report::INVALID,
+                    "File system component '${name}' in '${location} is not empty.",
+                    $this
+                );
+            }
+        }
+
+        return new common_configuration_Report(
+            common_configuration_Report::VALID,
+            "File system component '${name}' in '${location} is compliant with expected rights (${expectedRights}).'",
+            $this
+        );
+        
         return $returnValue;
     }
 
@@ -304,9 +341,11 @@ class common_configuration_FileSystemComponent extends common_configuration_Comp
 
             try {
                 $method = 'is' . $rule;
+
                 foreach ($iterator as $file) {
                     if (!$file->$method()) {
                         $returnValue = false;
+
                         break;
                     }
                 }
@@ -322,8 +361,11 @@ class common_configuration_FileSystemComponent extends common_configuration_Comp
      * If file is readable.
      *
      * @access public
+     *
      * @author Aleh Hutnikau, <hutnikau@1pt.com>
+     *
      * @param string $location File location
+     *
      * @return boolean
      */
     public function isReadable($location = null)
@@ -335,8 +377,11 @@ class common_configuration_FileSystemComponent extends common_configuration_Comp
      * If file is writable.
      *
      * @access public
+     *
      * @author Aleh Hutnikau, <hutnikau@1pt.com>
+     *
      * @param string $location File location
+     *
      * @return boolean
      */
     public function isWritable($location = null)
@@ -348,8 +393,11 @@ class common_configuration_FileSystemComponent extends common_configuration_Comp
      * If file is executable.
      *
      * @access public
+     *
      * @author Aleh Hutnikau, <hutnikau@1pt.com>
+     *
      * @param string $location File location
+     *
      * @return boolean
      */
     public function isExecutable($location = null)
@@ -361,8 +409,11 @@ class common_configuration_FileSystemComponent extends common_configuration_Comp
      * If directory is empty.
      *
      * @access public
+     *
      * @author Jonathan VUILLEMIN <jonathan@taotesting.com>
+     *
      * @param string $location location
+     *
      * @return boolean
      */
     public function isEmptyDirectory($location = null)

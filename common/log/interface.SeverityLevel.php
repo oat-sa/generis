@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -17,27 +18,28 @@
  * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
  *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- *
  */
 
 /**
  * Short description of class common_log_SeverityLevel
  *
  * @access public
+ *
  * @author Joel Bout, <joel.bout@tudor.lu>
+ *
  * @package generis
  */
 interface common_log_SeverityLevel
 {
-
-
     // --- OPERATIONS ---
 
     /**
      * Short description of method getSeverity
      *
      * @access public
+     *
      * @author Joel Bout, <joel.bout@tudor.lu>
+     *
      * @return int
      */
     public function getSeverity();

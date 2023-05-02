@@ -19,8 +19,8 @@
  *
  * @author "Lionel Lecaque, <lionel@taotesting.com>"
  * @license GPLv2
- * @package generis
  *
+ * @package generis
  */
 
 use core_kernel_persistence_smoothsql_SmoothModel as SmoothModel;
@@ -46,9 +46,9 @@ class core_kernel_api_ModelFactory
         } else {
             $modelDefinition->parse($data);
         }
-        
+
         $data = $modelDefinition->serialise(Format::getFormat('php'));
-        
+
         foreach ($data as $subjectUri => $propertiesValues) {
             foreach ($propertiesValues as $prop => $values) {
                 foreach ($values as $k => $v) {
@@ -56,14 +56,15 @@ class core_kernel_api_ModelFactory
                 }
             }
         }
-        
+
         return true;
     }
-    
+
     /**
      * Adds a statement to the ontology if it does not exist yet
      *
      * @author "Joel Bout, <joel@taotesting.com>"
+     *
      * @param int $modelId
      * @param string $subject
      * @param string $predicate
@@ -76,7 +77,7 @@ class core_kernel_api_ModelFactory
             'SELECT count(*) FROM statements WHERE modelid = ? AND subject = ? AND predicate = ? AND object = ? AND l_language = ?',
             [$modelId, $subject, $predicate, $object, (is_null($lang)) ? '' : $lang]
         );
-        
+
         if (intval($result->fetchColumn()) === 0) {
             $dbWrapper = core_kernel_classes_DbWrapper::singleton();
             $date = $dbWrapper->getPlatForm()->getNowExpression();
@@ -84,13 +85,13 @@ class core_kernel_api_ModelFactory
             $dbWrapper->insert(
                 'statements',
                 [
-                    'modelid' =>  $modelId,
+                    'modelid' => $modelId,
                     'subject' => $subject,
                     'predicate' => $predicate,
                     'object' => $object,
                     'l_language' => is_null($lang) ? '' : $lang,
                     'author' => 'http://www.tao.lu/Ontologies/TAO.rdf#installator',
-                    'epoch' => $date
+                    'epoch' => $date,
                 ]
             );
         }

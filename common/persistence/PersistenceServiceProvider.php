@@ -49,12 +49,12 @@ class PersistenceServiceProvider implements ContainerServiceProviderInterface
             ->factory(
                 [
                     service(PersistenceManager::SERVICE_ID),
-                    'getPersistenceById'
+                    'getPersistenceById',
                 ]
             )
             ->args(
                 [
-                    'default'
+                    'default',
                 ]
             )
             ->public();
@@ -63,7 +63,7 @@ class PersistenceServiceProvider implements ContainerServiceProviderInterface
             ->factory(
                 [
                     service(self::DEFAULT_SQL_PERSISTENCE),
-                    'getPlatForm'
+                    'getPlatForm',
                 ]
             );
 
@@ -71,7 +71,7 @@ class PersistenceServiceProvider implements ContainerServiceProviderInterface
             ->factory(
                 [
                     service(self::DEFAULT_SQL_PLATFORM),
-                    'getQueryBuilder'
+                    'getQueryBuilder',
                 ]
             )->share(false);
     }

@@ -21,14 +21,14 @@
  *               2017-2021 (update and modification) Open Assessment Technologies SA.
  */
 
-use oat\generis\model\OntologyRdf;
-use oat\oatbox\event\EventManager;
-use oat\oatbox\event\EventManagerAwareTrait;
 use oat\generis\model\data\event\ResourceCreated;
-use oat\generis\model\resource\ResourceCollection;
-use oat\generis\model\resource\Repository\ClassRepository;
+use oat\generis\model\OntologyRdf;
 use oat\generis\model\resource\Context\ResourceRepositoryContext;
 use oat\generis\model\resource\Contract\ResourceRepositoryInterface;
+use oat\generis\model\resource\Repository\ClassRepository;
+use oat\generis\model\resource\ResourceCollection;
+use oat\oatbox\event\EventManager;
+use oat\oatbox\event\EventManagerAwareTrait;
 
 /**
  * The class of rdfs:classes. It implements basic tests like isSubClassOf(Class
@@ -45,7 +45,25 @@ class core_kernel_classes_Class extends core_kernel_classes_Resource
     use EventManagerAwareTrait;
 
     /**
+     * Short description of method __construct
      *
+     * @access public
+     *
+     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
+     * @param string uri
+     * @param string debug
+     * @param mixed $uri
+     * @param mixed $debug
+     *
+     * @throws common_exception_Error
+     */
+    public function __construct($uri, $debug = '')
+    {
+        parent::__construct($uri, $debug);
+    }
+
+    /**
      * @return core_kernel_persistence_ClassInterface
      */
     protected function getImplementation()
@@ -53,15 +71,19 @@ class core_kernel_classes_Class extends core_kernel_classes_Resource
         return $this->getModel()->getRdfsInterface()->getClassImplementation();
     }
 
-
     /**
      * returns the collection of direct subClasses (see getIndirectSubClassesOf
      * a complete list of subclasses)
      *
      * @access public
+     *
      * @author patrick.plichart@tudor.lu
+     *
      * @param  boolean recursive
+     * @param mixed $recursive
+     *
      * @return \core_kernel_classes_Class[]
+     *
      * @see http://www.w3.org/TR/rdf-schema/
      */
     public function getSubClasses($recursive = false)
@@ -73,8 +95,11 @@ class core_kernel_classes_Class extends core_kernel_classes_Resource
      * returns true if this is a rdfs:subClassOf $parentClass
      *
      * @access public
+     *
      * @author patrick.plichart@tudor.lu
+     *
      * @param  \core_kernel_classes_Class parentClass
+     *
      * @return boolean
      */
     public function isSubClassOf(core_kernel_classes_Class $parentClass)
@@ -86,8 +111,12 @@ class core_kernel_classes_Class extends core_kernel_classes_Resource
      * returns all parent classes as a collection
      *
      * @access public
+     *
      * @author patrick.plichart@tudor.lu
+     *
      * @param  boolean recursive
+     * @param mixed $recursive
+     *
      * @return \core_kernel_classes_Class[]
      */
     public function getParentClasses($recursive = false)
@@ -101,8 +130,12 @@ class core_kernel_classes_Class extends core_kernel_classes_Resource
      * to the top one to retrieve tall its properties.
      *
      * @access public
+     *
      * @author patrick.plichart@tudor.lu
-     * @param  boolean recursive Recursive Properties retrieval accross the Class hierarchy.
+     *
+     * @param  boolean recursive Recursive Properties retrieval accross the Class hierarchy
+     * @param mixed $recursive
+     *
      * @return \core_kernel_classes_Property[]
      */
     public function getProperties($recursive = false)
@@ -114,9 +147,14 @@ class core_kernel_classes_Class extends core_kernel_classes_Resource
      * return direct instances of this class as a collection
      *
      * @access public
+     *
      * @author patrick.plichart@tudor.lu
+     *
      * @param  boolean recursive
      * @param  array params
+     * @param mixed $recursive
+     * @param mixed $params
+     *
      * @return \core_kernel_classes_Resource[]
      */
     public function getInstances($recursive = false, $params = [])
@@ -129,6 +167,7 @@ class core_kernel_classes_Class extends core_kernel_classes_Resource
      *
      * @param  boolean recursive
      * @param  array params
+     *
      * @return ResourceCollection
      */
     public function getInstanceCollection()
@@ -141,9 +180,13 @@ class core_kernel_classes_Class extends core_kernel_classes_Resource
      * which simply link the previously created ressource with this class
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @param  \core_kernel_classes_Resource instance
+     *
      * @return core_kernel_classes_Resource
+     *
      * @deprecated
      */
     public function setInstance(core_kernel_classes_Resource $instance)
@@ -156,8 +199,11 @@ class core_kernel_classes_Class extends core_kernel_classes_Resource
      * Class otherwise it returns false
      *
      * @access public
+     *
      * @author patrick.plichart@tudor.lu
+     *
      * @param  \core_kernel_classes_Class iClass
+     *
      * @return boolean
      */
     public function setSubClassOf(core_kernel_classes_Class $iClass)
@@ -170,9 +216,13 @@ class core_kernel_classes_Class extends core_kernel_classes_Resource
      * the method returns false
      *
      * @access public
+     *
      * @author patrick.plichart@tudor.lu
+     *
      * @param  \core_kernel_classes_Property property
+     *
      * @return boolean
+     *
      * @deprecated
      */
     public function setProperty(core_kernel_classes_Property $property)
@@ -181,29 +231,20 @@ class core_kernel_classes_Class extends core_kernel_classes_Resource
     }
 
     /**
-     * Short description of method __construct
-     *
-     * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param string uri
-     * @param string debug
-     * @throws common_exception_Error
-     */
-    public function __construct($uri, $debug = '')
-    {
-        parent::__construct($uri, $debug);
-    }
-
-
-    /**
      * Should not be called by application code, please use
      * core_kernel_classes_ResourceFactory::create() instead
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @param  string label
      * @param  string comment
      * @param  string uri
+     * @param mixed $label
+     * @param mixed $comment
+     * @param mixed $uri
+     *
      * @return \core_kernel_classes_Resource
      */
     public function createInstance($label = '', $comment = '', $uri = '')
@@ -211,6 +252,7 @@ class core_kernel_classes_Class extends core_kernel_classes_Resource
         $returnValue = $this->getImplementation()->createInstance($this, $label, $comment, $uri);
         $eventManager = $this->getServiceManager()->get(EventManager::SERVICE_ID);
         $eventManager->trigger(new ResourceCreated($returnValue));
+
         return $returnValue;
     }
 
@@ -218,17 +260,24 @@ class core_kernel_classes_Class extends core_kernel_classes_Resource
      * Short description of method createSubClass
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @param  string label
      * @param  string comment
      * @param  string uri
+     * @param mixed $label
+     * @param mixed $comment
+     * @param mixed $uri
+     *
      * @return core_kernel_classes_Class
      */
-    public function createSubClass($label = '', $comment = '', $uri = "")
+    public function createSubClass($label = '', $comment = '', $uri = '')
     {
         $returnValue = $this->getImplementation()->createSubClass($this, $label, $comment, $uri);
         $eventManager = $this->getServiceManager()->get(EventManager::SERVICE_ID);
         $eventManager->trigger(new ResourceCreated($returnValue));
+
         return $returnValue;
     }
 
@@ -236,11 +285,14 @@ class core_kernel_classes_Class extends core_kernel_classes_Resource
      * Retrieves a direct subclass by label.
      *
      * @param  string label
+     * @param mixed $label
+     *
      * @return core_kernel_classes_Class|null
      */
     public function retrieveSubClassByLabel($label)
     {
         $subClasses = $this->getSubClasses();
+
         foreach ($subClasses as $subclass) {
             if ($subclass->getLabel() === $label) {
                 return $subclass;
@@ -254,6 +306,8 @@ class core_kernel_classes_Class extends core_kernel_classes_Resource
      * Retrieves a direct subclass by label or creates it if not existent.
      *
      * @param  string label
+     * @param mixed $label
+     *
      * @return core_kernel_classes_Class
      */
     public function retrieveOrCreateSubClassByLabel($label)
@@ -264,14 +318,15 @@ class core_kernel_classes_Class extends core_kernel_classes_Resource
     /**
      * Creates a path of subclasses from an array of labels, URIs and comments.
      *
-     * @param  array $labels indexed array of labels ordered from root to leaf class
+     * @param array $labels indexed array of labels ordered from root to leaf class
+     *
      * @return core_kernel_classes_Class The last class created
      */
     public function createSubClassPathByLabel(array $labels)
     {
         $currentClass = $this;
 
-        foreach($labels as $label) {
+        foreach ($labels as $label) {
             $currentClass = $currentClass->retrieveOrCreateSubClassByLabel($label);
         }
 
@@ -282,10 +337,16 @@ class core_kernel_classes_Class extends core_kernel_classes_Resource
      * Short description of method createProperty
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @param  string label
      * @param  string comment
      * @param  boolean isLgDependent
+     * @param mixed $label
+     * @param mixed $comment
+     * @param mixed $isLgDependent
+     *
      * @return core_kernel_classes_Property
      */
     public function createProperty($label = '', $comment = '', $isLgDependent = false)
@@ -297,12 +358,14 @@ class core_kernel_classes_Class extends core_kernel_classes_Resource
      * Retrieve available methods on class
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @return array
      */
     public function getMethodes()
     {
-        return [ 'instanciate' => true , 'addSubclass' => true , 'addPropery' => true];
+        return ['instanciate' => true , 'addSubclass' => true , 'addPropery' => true];
     }
 
     /**
@@ -319,9 +382,14 @@ class core_kernel_classes_Class extends core_kernel_classes_Resource
      * orderdir     : direction of order (default: 'ASC')
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @param  array propertyFilters
      * @param  array options
+     * @param mixed $propertyFilters
+     * @param mixed $options
+     *
      * @return \core_kernel_classes_Resource[]
      */
     public function searchInstances($propertyFilters = [], $options = [])
@@ -333,9 +401,14 @@ class core_kernel_classes_Class extends core_kernel_classes_Resource
      * Short description of method countInstances
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @param  array propertyFilters
      * @param  array options
+     * @param mixed $propertyFilters
+     * @param mixed $options
+     *
      * @return integer
      */
     public function countInstances($propertyFilters = [], $options = [])
@@ -348,10 +421,15 @@ class core_kernel_classes_Class extends core_kernel_classes_Resource
      * The instances can be filtered.
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @param  core_kernel_classes_Property property
      * @param  array propertyFilters
      * @param  array options
+     * @param mixed $propertyFilters
+     * @param mixed $options
+     *
      * @return \core_kernel_classes_Resource[]
      */
     public function getInstancesPropertyValues(core_kernel_classes_Property $property, $propertyFilters = [], $options = [])
@@ -363,8 +441,11 @@ class core_kernel_classes_Class extends core_kernel_classes_Resource
      * Unset the domain of the property related to the class
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @param  core_kernel_classes_Property property
+     *
      * @deprecated
      */
     public function unsetProperty(core_kernel_classes_Property $property)
@@ -379,9 +460,14 @@ class core_kernel_classes_Class extends core_kernel_classes_Resource
      * Creates a new instance using the properties provided.
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @param  array properties May contain additional types
+     * @param mixed $properties
+     *
      * @return core_kernel_classes_Resource
+     *
      * @see core_kernel_classes_ResourceFactory
      */
     public function createInstanceWithProperties($properties)
@@ -390,10 +476,13 @@ class core_kernel_classes_Class extends core_kernel_classes_Resource
         // remove the additional types, because they might be implemented differently
 
         $additionalTypes = [];
+
         if (isset($properties[OntologyRdf::RDF_TYPE])) {
             $types = is_array($properties[OntologyRdf::RDF_TYPE]) ? $properties[OntologyRdf::RDF_TYPE] : [$properties[OntologyRdf::RDF_TYPE]];
+
             foreach ($types as $type) {
                 $uri = is_object($type) ? $type->getUri() : $type;
+
                 if ($uri != $this->getUri()) {
                     $additionalTypes[] = $this->getClass($uri);
                 }
@@ -402,11 +491,13 @@ class core_kernel_classes_Class extends core_kernel_classes_Resource
         }
         // create the instance
         $returnValue = $this->getImplementation()->createInstanceWithProperties($this, $properties);
+
         foreach ($additionalTypes as $type) {
             $returnValue->setType($type);
         }
         $eventManager = $this->getServiceManager()->get(EventManager::CONFIG_ID);
         $eventManager->trigger(new ResourceCreated($returnValue));
+
         return $returnValue;
     }
 
@@ -414,9 +505,14 @@ class core_kernel_classes_Class extends core_kernel_classes_Resource
      * Delete instances of a Class from the database.
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  array resources An array of core_kernel_classes_Resource or URIs.
-     * @param  boolean deleteReference If set to true, references about the resources will also be deleted from the database.
+     *
+     * @param  array resources An array of core_kernel_classes_Resource or URIs
+     * @param  boolean deleteReference If set to true, references about the resources will also be deleted from the database
+     * @param mixed $resources
+     * @param mixed $deleteReference
+     *
      * @return boolean
      */
     public function deleteInstances($resources, $deleteReference = false)
@@ -430,6 +526,7 @@ class core_kernel_classes_Class extends core_kernel_classes_Resource
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      *
      * @param  bool deleteReference
+     * @param mixed $deleteReference
      *
      * @return bool
      */
@@ -457,7 +554,9 @@ class core_kernel_classes_Class extends core_kernel_classes_Resource
      * class because it inherits itself.
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @return boolean
      */
     public function exists()

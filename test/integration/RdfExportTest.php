@@ -31,7 +31,6 @@ class RdfExportTest extends GenerisPhpUnitTestRunner
         $result = $dbWrapper->query('SELECT count(*) as count FROM (SELECT DISTINCT subject, predicate, object, l_language FROM statements) as supercount')->fetch();
         $triples = $result['count'];
 
-
         $xml = core_kernel_api_ModelExporter::exportModels(
             ModelManager::getModel()->getReadableModels()
         );
@@ -41,6 +40,7 @@ class RdfExportTest extends GenerisPhpUnitTestRunner
 
         $count = 0;
         $descriptions = $doc->getElementsByTagNameNS('http://www.w3.org/1999/02/22-rdf-syntax-ns#', 'Description');
+
         foreach ($descriptions as $description) {
             foreach ($description->childNodes as $child) {
                 if ($child instanceof DOMElement) {

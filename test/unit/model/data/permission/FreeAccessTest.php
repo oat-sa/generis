@@ -16,14 +16,14 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) (original work) 2015 Open Assessment Technologies SA
- *
  */
 
 namespace oat\generis\test\unit\model\data\permission;
 
+use common_Utils;
 use oat\generis\model\data\permission\implementation\FreeAccess;
-use oat\oatbox\user\User;
 use oat\generis\test\TestCase;
+use oat\oatbox\user\User;
 
 class FreeAccessTest extends TestCase
 {
@@ -61,7 +61,7 @@ class FreeAccessTest extends TestCase
 
     public function testPhpSerialize()
     {
-        $phpCode = \common_Utils::toPHPVariableString(new FreeAccess());
+        $phpCode = common_Utils::toPHPVariableString(new FreeAccess());
         $restoredModel = eval('return ' . $phpCode . ';');
 
         $this->assertInstanceOf('oat\generis\model\data\permission\PermissionInterface', $restoredModel);

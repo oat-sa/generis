@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,9 +25,10 @@
  * Short description of class common_log_Dispatcher
  *
  * @access public
+ *
  * @author Joel Bout, <joel.bout@tudor.lu>
+ *
  * @package generis
-
  */
 class common_log_Dispatcher implements common_log_Appender
 {
@@ -35,14 +37,15 @@ class common_log_Dispatcher implements common_log_Appender
      *
      * @var string
      */
-    const CONFIG_ID = 'log';
-    
+    public const CONFIG_ID = 'log';
+
     // --- ATTRIBUTES ---
 
     /**
      * Short description of attribute appenders
      *
      * @access private
+     *
      * @var array
      */
     private $appenders = [];
@@ -51,6 +54,7 @@ class common_log_Dispatcher implements common_log_Appender
      * Short description of attribute minLevel
      *
      * @access private
+     *
      * @var int
      */
     private $minLevel = null;
@@ -59,9 +63,29 @@ class common_log_Dispatcher implements common_log_Appender
      * Short description of attribute instance
      *
      * @access private
+     *
      * @var Dispatcher
      */
     private static $instance = null;
+
+    /**
+     * Short description of method __construct
+     *
+     * @access private
+     *
+     * @author Joel Bout, <joel.bout@tudor.lu>
+     *
+     * @param null|mixed $config
+     *
+     * @return mixed
+     */
+    public function __construct($config = null)
+    {
+        if (is_null($config) || !is_array($config)) {
+            $config = [];
+        }
+        $this->init($config);
+    }
 
     // --- OPERATIONS ---
 
@@ -69,8 +93,11 @@ class common_log_Dispatcher implements common_log_Appender
      * Short description of method log
      *
      * @access public
+     *
      * @author Joel Bout, <joel.bout@tudor.lu>
+     *
      * @param  Item item
+     *
      * @return mixed
      */
     public function log(common_log_Item $item)
@@ -84,16 +111,16 @@ class common_log_Dispatcher implements common_log_Appender
      * Short description of method getLogThreshold
      *
      * @access public
+     *
      * @author Joel Bout, <joel.bout@tudor.lu>
+     *
      * @return int
      */
     public function getLogThreshold()
     {
         $returnValue = (int) 0;
 
-        
         $returnValue = $this->minLevel;
-        
 
         return (int) $returnValue;
     }
@@ -102,8 +129,12 @@ class common_log_Dispatcher implements common_log_Appender
      * Short description of method init
      *
      * @access public
+     *
      * @author Joel Bout, <joel.bout@tudor.lu>
+     *
      * @param  array configuration
+     * @param mixed $configuration
+     *
      * @return boolean
      */
     public function init($configuration)
@@ -112,14 +143,18 @@ class common_log_Dispatcher implements common_log_Appender
 
         $this->appenders = [];
         $this->minLevel = null;
+
         foreach ($configuration as $appenderConfig) {
             if (isset($appenderConfig['class'])) {
                 $classname = $appenderConfig['class'];
+
                 if (!class_exists($classname)) {
                     $classname = 'common_log_' . $classname;
                 }
+
                 if (class_exists($classname) && is_subclass_of($classname, 'common_log_Appender')) {
                     $appender = new $classname();
+
                     if (!is_null($appender) && $appender->init($appenderConfig)) {
                         $this->addAppender($appender);
                     }
@@ -127,7 +162,6 @@ class common_log_Dispatcher implements common_log_Appender
             }
         }
         $returnValue = (count($this->appenders) > 0);
-        
 
         return (bool) $returnValue;
     }
@@ -136,50 +170,38 @@ class common_log_Dispatcher implements common_log_Appender
      * Short description of method singleton
      *
      * @access public
+     *
      * @author Joel Bout, <joel.bout@tudor.lu>
+     *
      * @return common_log_Dispatcher
      */
     public static function singleton()
     {
         $returnValue = null;
 
-        
         if (is_null(self::$instance)) {
             self::$instance = new common_log_Dispatcher();
         }
         $returnValue = self::$instance;
-        
 
         return $returnValue;
-    }
-
-    /**
-     * Short description of method __construct
-     *
-     * @access private
-     * @author Joel Bout, <joel.bout@tudor.lu>
-     * @return mixed
-     */
-    public function __construct($config = null)
-    {
-        if (is_null($config) || !is_array($config)) {
-            $config = [];
-        }
-        $this->init($config);
     }
 
     /**
      * Short description of method addAppender
      *
      * @access public
+     *
      * @author Joel Bout, <joel.bout@tudor.lu>
+     *
      * @param  Appender appender
+     *
      * @return mixed
      */
     public function addAppender(common_log_Appender $appender)
     {
-        
         $this->appenders[] = $appender;
+
         if (is_null($this->minLevel) || $this->minLevel > $appender->getLogThreshold()) {
             $this->minLevel = $appender->getLogThreshold();
         }

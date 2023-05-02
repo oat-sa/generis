@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,10 +21,10 @@
  *               2017 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
 
-use oat\generis\model\OntologyRdf;
-use oat\generis\model\OntologyRdfs;
 use Doctrine\DBAL\DBALException;
 use oat\generis\model\data\import\RdfImporter;
+use oat\generis\model\OntologyRdf;
+use oat\generis\model\OntologyRdfs;
 use oat\oatbox\log\LoggerAwareTrait;
 use oat\oatbox\service\ServiceManager;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -41,9 +42,10 @@ error_reporting(E_ALL);
  * (last revised $Date: 2008-04-19 08:22:08 +0200 (Sat, 19 Apr 2008) $)
  *
  * @access public
+ *
  * @author firstname and lastname of author, <author@example.org>
+ *
  * @package generis
-
  */
 class core_kernel_impl_ApiModelOO extends core_kernel_impl_Api implements core_kernel_api_ApiModel
 {
@@ -51,13 +53,13 @@ class core_kernel_impl_ApiModelOO extends core_kernel_impl_Api implements core_k
 
     // --- ASSOCIATIONS ---
 
-
     // --- ATTRIBUTES ---
 
     /**
      * Short description of attribute instance
      *
      * @access private
+     *
      * @var self
      */
     private static $instance = null;
@@ -68,33 +70,53 @@ class core_kernel_impl_ApiModelOO extends core_kernel_impl_Api implements core_k
     /** @var int */
     private $customNamespacesCounter = 0;
 
-    // --- OPERATIONS ---
+    /**
+     * Short description of method __construct
+     *
+     * @access private
+     *
+     * @author firstname and lastname of author, <author@example.org>
+     *
+     * @return void
+     */
+    private function __construct()
+    {
+    }
 
+    // --- OPERATIONS ---
 
     /**
      * import xml rdf files into the knowledge base
      *
      * @access public
+     *
      * @author firstname and lastname of author, <author@example.org>
+     *
      * @param  string targetNameSpace
      * @param  string fileLocation
+     * @param mixed $targetNameSpace
+     * @param mixed $fileLocation
+     *
      * @return boolean
      */
     public function importXmlRdf($targetNameSpace, $fileLocation)
     {
         $importer = $this->getServiceLocator()->get(RdfImporter::class);
+
         return $importer->importFile($fileLocation);
     }
-
-
 
     /**
      * returns an xml rdf serialization for uriResource with all meta dat found
      * inferenced from te knowlege base about this resource
      *
      * @access public
+     *
      * @author firstname and lastname of author, <author@example.org>
+     *
      * @param  string uriResource
+     * @param mixed $uriResource
+     *
      * @return string
      */
     public function getResourceDescriptionXML($uriResource)
@@ -116,10 +138,11 @@ class core_kernel_impl_ApiModelOO extends core_kernel_impl_Api implements core_k
             $description->setAttribute('rdf:about', $uriResource);
 
             $result = $dbWrapper->query('SELECT * FROM "statements" WHERE "subject" = ' . $subject);
+
             while ($row = $result->fetch()) {
-                $predicate  = trim($row['predicate']);
-                $object     = trim($row['object']);
-                $lang       = trim($row['l_language']);
+                $predicate = trim($row['predicate']);
+                $object = trim($row['object']);
+                $lang = trim($row['l_language']);
 
                 if (strpos($predicate, '#') === false) {
                     continue;
@@ -128,10 +151,11 @@ class core_kernel_impl_ApiModelOO extends core_kernel_impl_Api implements core_k
                 [$namespace, $property] = explode('#', $predicate, 2);
 
                 $namespaceId = $this->addCustomNamespace($root, $namespace);
-                $nodeName    = "$namespaceId:$property";
+                $nodeName = "$namespaceId:$property";
 
                 try {
                     $node = $dom->createElement($nodeName);
+
                     if (!empty($lang)) {
                         $node->setAttribute('xml:lang', $lang);
                     }
@@ -139,10 +163,10 @@ class core_kernel_impl_ApiModelOO extends core_kernel_impl_Api implements core_k
                     if (preg_match("/^http:\/\/(.*)#[a-zA-Z1-9]*/", $object)) {
                         $node->setAttribute('rdf:resource', $object);
                     } elseif (!empty($object)) {
-
                         /**
                          * Replace the CDATA section inside XML fields by a replacement tag:
                          * <![CDATA[ ]]> to <CDATA></CDATA>
+                         *
                          * @todo check if this behavior is the right
                          */
                         $object = str_replace(['<![CDATA[', ']]>'], ['<CDATA>', '</CDATA>'], $object);
@@ -168,7 +192,9 @@ class core_kernel_impl_ApiModelOO extends core_kernel_impl_Api implements core_k
      * returns metaclasses tat are not subclasses of other metaclasses
      *
      * @access public
+     *
      * @author patrick.plichart@tudor.lu
+     *
      * @return core_kernel_classes_ContainerCollection
      */
     public function getMetaClasses()
@@ -176,10 +202,10 @@ class core_kernel_impl_ApiModelOO extends core_kernel_impl_Api implements core_k
         $returnValue = $this->createClassCollection(__METHOD__);
 
         $classClass = new core_kernel_classes_Class(OntologyRdfs::RDFS_CLASS);
+
         foreach ($classClass->getSubClasses(true) as $subClass) {
             $returnValue->add($subClass);
         }
-
 
         return $returnValue;
     }
@@ -188,26 +214,26 @@ class core_kernel_impl_ApiModelOO extends core_kernel_impl_Api implements core_k
      * returns classes that are not subclasses of other classes
      *
      * @access public
+     *
      * @author patrick.plichart@tudor.lu
+     *
      * @return core_kernel_classes_ContainerCollection
      */
     public function getRootClasses()
     {
         $returnValue = $this->createClassCollection(__METHOD__);
 
-        $query =  'SELECT DISTINCT subject FROM statements WHERE (predicate = ? AND object = ?) 
+        $query = 'SELECT DISTINCT subject FROM statements WHERE (predicate = ? AND object = ?) 
         			AND subject NOT IN (SELECT subject FROM statements WHERE predicate = ?)';
         $result = core_kernel_classes_DbWrapper::singleton()->query($query, [
             OntologyRdf::RDF_TYPE,
             OntologyRdfs::RDFS_CLASS,
-            OntologyRdfs::RDFS_SUBCLASSOF
+            OntologyRdfs::RDFS_SUBCLASSOF,
         ]);
 
         while ($row = $result->fetch()) {
             $returnValue->add(new core_kernel_classes_Class($row['subject']));
         }
-
-
 
         return $returnValue;
     }
@@ -216,21 +242,27 @@ class core_kernel_impl_ApiModelOO extends core_kernel_impl_Api implements core_k
      * add a new statment to the knowledge base
      *
      * @access public
+     *
      * @author patrick.plichart@tudor.lu
+     *
      * @param  string subject
      * @param  string predicate
      * @param  string object
      * @param  string language
+     * @param mixed $subject
+     * @param mixed $predicate
+     * @param mixed $object
+     * @param mixed $language
+     *
      * @return boolean
      */
     public function setStatement($subject, $predicate, $object, $language)
     {
         $returnValue = (bool) false;
 
-
-        $dbWrapper  = core_kernel_classes_DbWrapper::singleton();
-        $platform   = $dbWrapper->getPlatForm();
-        $localNs    = common_ext_NamespaceManager::singleton()->getLocalNamespace();
+        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
+        $platform = $dbWrapper->getPlatForm();
+        $localNs = common_ext_NamespaceManager::singleton()->getLocalNamespace();
         $query = 'INSERT INTO statements (modelid,subject,predicate,object,l_language,author,epoch)
         			VALUES  (?, ?, ?, ?, ?, ? , ?);';
 
@@ -242,16 +274,13 @@ class core_kernel_impl_ApiModelOO extends core_kernel_impl_Api implements core_k
                 $object,
                 $language,
                 common_session_SessionManager::getSession()->getUserUri(),
-                $platform->getNowExpression()
-
+                $platform->getNowExpression(),
             ]);
         } catch (DBALException $e) {
             if ($e->getCode() !== '00000') {
                 throw new common_Exception("Unable to setStatement (SPO) {$subject}, {$predicate}, {$object} : " . $e->getMessage());
             }
         }
-
-
 
         return (bool) $returnValue;
     }
@@ -260,25 +289,25 @@ class core_kernel_impl_ApiModelOO extends core_kernel_impl_Api implements core_k
      * Short description of method getAllClasses
      *
      * @access public
+     *
      * @author firstname and lastname of author, <author@example.org>
+     *
      * @return core_kernel_classes_ContainerCollection
      */
     public function getAllClasses()
     {
         $returnValue = $this->createClassCollection(__METHOD__);
 
-        $query =  'SELECT DISTINCT subject FROM statements WHERE (predicate = ? AND object = ?) OR predicate = ?';
+        $query = 'SELECT DISTINCT subject FROM statements WHERE (predicate = ? AND object = ?) OR predicate = ?';
         $result = core_kernel_classes_DbWrapper::singleton()->query($query, [
             OntologyRdf::RDF_TYPE,
             OntologyRdfs::RDFS_CLASS,
-            OntologyRdfs::RDFS_SUBCLASSOF
+            OntologyRdfs::RDFS_SUBCLASSOF,
         ]);
 
         while ($row = $result->fetch()) {
             $returnValue->add(new core_kernel_classes_Class($row['subject']));
         }
-
-
 
         return $returnValue;
     }
@@ -287,20 +316,26 @@ class core_kernel_impl_ApiModelOO extends core_kernel_impl_Api implements core_k
      * Short description of method getSubject
      *
      * @access public
+     *
      * @author firstname and lastname of author, <author@example.org>
+     *
      * @param  string predicate
      * @param  string object
+     * @param mixed $predicate
+     * @param mixed $object
+     *
      * @return core_kernel_classes_ContainerCollection
      */
     public function getSubject($predicate, $object)
     {
-        $sqlQuery = "SELECT subject FROM statements WHERE predicate = ? AND object= ? ";
+        $sqlQuery = 'SELECT subject FROM statements WHERE predicate = ? AND object= ? ';
         $dbWrapper = core_kernel_classes_DbWrapper::singleton();
         $sqlResult = $dbWrapper->query($sqlQuery, [
             $predicate,
-            $object
+            $object,
         ]);
         $returnValue = new core_kernel_classes_ContainerCollection(new common_Object());
+
         while ($row = $sqlResult->fetch()) {
             $container = new core_kernel_classes_Resource($row['subject'], __METHOD__);
             $container->debug = __METHOD__ ;
@@ -314,16 +349,23 @@ class core_kernel_impl_ApiModelOO extends core_kernel_impl_Api implements core_k
      * Short description of method removeStatement
      *
      * @access public
+     *
      * @author firstname and lastname of author, <author@example.org>
+     *
      * @param  string subject
      * @param  string predicate
      * @param  string object
      * @param  string language
+     * @param mixed $subject
+     * @param mixed $predicate
+     * @param mixed $object
+     * @param mixed $language
+     *
      * @return boolean
      */
     public function removeStatement($subject, $predicate, $object, $language)
     {
-        $dbWrapper  = core_kernel_classes_DbWrapper::singleton();
+        $dbWrapper = core_kernel_classes_DbWrapper::singleton();
 
         $query = "DELETE FROM statements WHERE subject = ?
         			AND predicate = ? AND object = ?
@@ -333,7 +375,7 @@ class core_kernel_impl_ApiModelOO extends core_kernel_impl_Api implements core_k
             $subject,
             $predicate,
             $object,
-            $language
+            $language,
         ]);
 
         return (bool) $returnValue;
@@ -343,22 +385,29 @@ class core_kernel_impl_ApiModelOO extends core_kernel_impl_Api implements core_k
      * Short description of method getObject
      *
      * @access public
+     *
      * @author firstname and lastname of author, <author@example.org>
+     *
      * @param  string subject
      * @param  string predicate
+     * @param mixed $subject
+     * @param mixed $predicate
+     *
      * @return core_kernel_classes_ContainerCollection
      */
     public function getObject($subject, $predicate)
     {
-        $sqlQuery = "SELECT object FROM statements WHERE subject = ? AND predicate = ?";
+        $sqlQuery = 'SELECT object FROM statements WHERE subject = ? AND predicate = ?';
         $dbWrapper = core_kernel_classes_DbWrapper::singleton();
         $sqlResult = $dbWrapper->query($sqlQuery, [
             $subject,
-            $predicate
+            $predicate,
         ]);
         $returnValue = new core_kernel_classes_ContainerCollection(new common_Object());
+
         while ($row = $sqlResult->fetch()) {
             $value = $row['object'];
+
             if (!common_Utils::isUri($value)) {
                 $container = new core_kernel_classes_Literal($value);
             } else {
@@ -368,7 +417,6 @@ class core_kernel_impl_ApiModelOO extends core_kernel_impl_Api implements core_k
             $returnValue->add($container);
         }
 
-
         return $returnValue;
     }
 
@@ -376,7 +424,9 @@ class core_kernel_impl_ApiModelOO extends core_kernel_impl_Api implements core_k
      * Short description of method singleton
      *
      * @access public
+     *
      * @author firstname and lastname of author, <author@example.org>
+     *
      * @return core_kernel_impl_ApiModelOO
      */
     public static function singleton()
@@ -387,17 +437,6 @@ class core_kernel_impl_ApiModelOO extends core_kernel_impl_Api implements core_k
         }
 
         return self::$instance;
-    }
-
-    /**
-     * Short description of method __construct
-     *
-     * @access private
-     * @author firstname and lastname of author, <author@example.org>
-     * @return void
-     */
-    private function __construct()
-    {
     }
 
     /**
@@ -417,7 +456,7 @@ class core_kernel_impl_ApiModelOO extends core_kernel_impl_Api implements core_k
     {
         $this->namespaces = [
             'http://www.w3.org/1999/02/22-rdf-syntax-ns' => 'rdf',
-            'http://www.w3.org/2000/01/rdf-schema'       => 'rdfs',
+            'http://www.w3.org/2000/01/rdf-schema' => 'rdfs',
         ];
 
         foreach ($this->namespaces as $namespace => $namespaceId) {

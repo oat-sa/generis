@@ -16,17 +16,19 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2018 (original work) Open Assessment Technologies SA
- *
  */
 
 namespace oat\oatbox\log\logger;
 
+use common_configuration_ComponentFactoryException;
 use Monolog\Formatter\FormatterInterface;
 use Monolog\Handler\HandlerInterface;
 use Monolog\Logger;
 use oat\oatbox\service\ConfigurableService;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LoggerTrait;
+use ReflectionClass;
+use ReflectionException;
 
 /**
  * Class TaoMonolog
@@ -41,16 +43,17 @@ class TaoMonolog extends ConfigurableService implements LoggerInterface
 {
     use LoggerTrait;
 
-    const HANDLERS_OPTION = 'handlers';
+    public const HANDLERS_OPTION = 'handlers';
 
-    /** @var Logger null  */
+    /** @var Logger null */
     protected $logger = null;
 
     /**
      * @param mixed $level
      * @param string $message
      * @param array $context
-     * @throws \common_configuration_ComponentFactoryException
+     *
+     * @throws common_configuration_ComponentFactoryException
      */
     public function log($level, $message, array $context = [])
     {
@@ -62,8 +65,9 @@ class TaoMonolog extends ConfigurableService implements LoggerInterface
     }
 
     /**
+     * @throws common_configuration_ComponentFactoryException
+     *
      * @return Logger
-     * @throws \common_configuration_ComponentFactoryException
      */
     protected function buildLogger()
     {
@@ -77,8 +81,9 @@ class TaoMonolog extends ConfigurableService implements LoggerInterface
 
         if ($this->hasOption('processors')) {
             $processorsOptions = $this->getOption('processors');
+
             if (!is_array($processorsOptions)) {
-                throw new \common_configuration_ComponentFactoryException('Handler processors options as to be formatted as array');
+                throw new common_configuration_ComponentFactoryException('Handler processors options as to be formatted as array');
             }
 
             foreach ($processorsOptions as $processorsOption) {
@@ -91,20 +96,23 @@ class TaoMonolog extends ConfigurableService implements LoggerInterface
 
     /**
      * @param array $options
+     *
+     * @throws common_configuration_ComponentFactoryException
+     *
      * @return HandlerInterface
-     * @throws \common_configuration_ComponentFactoryException
      */
     protected function buildHandler(array $options)
     {
         if (!isset($options['class'])) {
-            throw new \common_configuration_ComponentFactoryException('Handler options has to contain a class attribute.');
+            throw new common_configuration_ComponentFactoryException('Handler options has to contain a class attribute.');
         }
 
         if (!is_a($options['class'], HandlerInterface::class, true)) {
-            throw new \common_configuration_ComponentFactoryException('Handler class option has to be a HandlerInterface.');
+            throw new common_configuration_ComponentFactoryException('Handler class option has to be a HandlerInterface.');
         }
 
         $handlerOptions = [];
+
         if (isset($options['options'])) {
             $handlerOptions = is_array($options['options']) ? $options['options'] : [$options['options']];
         }
@@ -113,8 +121,9 @@ class TaoMonolog extends ConfigurableService implements LoggerInterface
 
         if (isset($options['processors'])) {
             $processorsOptions = $options['processors'];
+
             if (!is_array($processorsOptions)) {
-                throw new \common_configuration_ComponentFactoryException('Handler processors options as to be formatted as array');
+                throw new common_configuration_ComponentFactoryException('Handler processors options as to be formatted as array');
             }
 
             foreach ($processorsOptions as $processorsOption) {
@@ -131,70 +140,80 @@ class TaoMonolog extends ConfigurableService implements LoggerInterface
 
     /**
      * @param $options
+     *
+     * @throws common_configuration_ComponentFactoryException
+     *
      * @return callable
-     * @throws \common_configuration_ComponentFactoryException
      */
     protected function buildProcessor($options)
     {
         if (is_object($options)) {
             return $options;
-        } else {
-            if (!isset($options['class'])) {
-                throw new \common_configuration_ComponentFactoryException('Processor options has to contain a class attribute.');
-            }
-
-            $processorOptions = [];
-            if (isset($options['options'])) {
-                $processorOptions = is_array($options['options']) ? $options['options'] : [$options['options']];
-            }
-
-            return $this->buildObject($options['class'], $processorOptions);
         }
+
+        if (!isset($options['class'])) {
+            throw new common_configuration_ComponentFactoryException('Processor options has to contain a class attribute.');
+        }
+
+        $processorOptions = [];
+
+        if (isset($options['options'])) {
+            $processorOptions = is_array($options['options']) ? $options['options'] : [$options['options']];
+        }
+
+        return $this->buildObject($options['class'], $processorOptions);
     }
 
     /**
      * @param $options
+     *
+     * @throws common_configuration_ComponentFactoryException
+     *
      * @return FormatterInterface
-     * @throws \common_configuration_ComponentFactoryException
      */
     protected function buildFormatter($options)
     {
         if (is_object($options)) {
             if (!is_a($options, FormatterInterface::class)) {
-                throw new \common_configuration_ComponentFactoryException('Formatter has to be a FormatterInterface.');
+                throw new common_configuration_ComponentFactoryException('Formatter has to be a FormatterInterface.');
             }
+
             return $options;
-        } else {
-            if (!isset($options['class'])) {
-                throw new \common_configuration_ComponentFactoryException('Formatter options has to contain a class attribute.');
-            }
-
-            if (!is_a($options['class'], FormatterInterface::class, true)) {
-                throw new \common_configuration_ComponentFactoryException('Formatter class option has to be a FormatterInterface.');
-            }
-
-            $formatterOptions = [];
-            if (isset($options['options'])) {
-                $formatterOptions = is_array($options['options']) ? $options['options'] : [$options['options']];
-            }
-
-            return $this->buildObject($options['class'], $formatterOptions);
         }
+
+        if (!isset($options['class'])) {
+            throw new common_configuration_ComponentFactoryException('Formatter options has to contain a class attribute.');
+        }
+
+        if (!is_a($options['class'], FormatterInterface::class, true)) {
+            throw new common_configuration_ComponentFactoryException('Formatter class option has to be a FormatterInterface.');
+        }
+
+        $formatterOptions = [];
+
+        if (isset($options['options'])) {
+            $formatterOptions = is_array($options['options']) ? $options['options'] : [$options['options']];
+        }
+
+        return $this->buildObject($options['class'], $formatterOptions);
     }
 
     /**
      * @param $className
      * @param array $args
+     *
+     * @throws common_configuration_ComponentFactoryException
+     *
      * @return object
-     * @throws \common_configuration_ComponentFactoryException
      */
     protected function buildObject($className, array $args)
     {
         try {
-            $class = new \ReflectionClass($className);
+            $class = new ReflectionClass($className);
+
             return $class->newInstanceArgs($args);
-        } catch (\ReflectionException $e) {
-            throw new \common_configuration_ComponentFactoryException('Unable to create object for logger', 0, $e);
+        } catch (ReflectionException $e) {
+            throw new common_configuration_ComponentFactoryException('Unable to create object for logger', 0, $e);
         }
     }
 }

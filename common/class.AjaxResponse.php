@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -17,9 +18,7 @@
  * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
  *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- *
  */
-
 
 /**
  * Generis Object Oriented API - common/class.AjaxResponse.php
@@ -27,14 +26,14 @@
  * Short description of class common_AjaxResponse
  *
  * @access public
+ *
  * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+ *
  * @package generis
-
  */
 class common_AjaxResponse
 {
     // --- ASSOCIATIONS ---
-
 
     // --- ATTRIBUTES ---
 
@@ -44,30 +43,29 @@ class common_AjaxResponse
      * constructor
      *
      * @access public
-     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
-     * @param  array $options
      *
+     * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     *
+     * @param array $options
      */
     public function __construct(array $options = [])
     {
+        $success = $options['success'] ?? true;
+        $type = $options['type'] ?? 'json';
+        $data = $options['data'] ?? null;
+        $message = $options['message'] ?? '';
 
-        
-        $success    = isset($options['success'])    ? $options['success']    : true;
-        $type       = isset($options['type'])       ? $options['type']       : 'json';
-        $data       = isset($options['data'])       ? $options['data']       : null;
-        $message    = isset($options['message'])    ? $options['message']    : '';
-        
         //position the header of the response
         $context = Context::getInstance();
         $context->getResponse()->setContentHeader('application/json');
         //set the response object
         $response = [
-            'success'           => $success
-            , 'type'            => $type
-            , 'message'         => $message
-            , 'data'            => $data
+            'success' => $success
+            , 'type' => $type
+            , 'message' => $message
+            , 'data' => $data,
         ];
-        
+
         //write the response
         echo json_encode($response);
     }

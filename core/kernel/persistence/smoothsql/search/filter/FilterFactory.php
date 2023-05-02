@@ -7,6 +7,7 @@ class FilterFactory
     /**
      * @param array $filters
      * @param bool $isLikeOperator
+     *
      * @return Filter[]
      */
     public static function buildFilters(array $filters, $isLikeOperator)
@@ -16,11 +17,11 @@ class FilterFactory
         foreach ($filters as $keyFilter => $filterValue) {
             if (!$filterValue instanceof Filter) {
                 $firstValue = $filterValue;
-                $orConditionValues  = [];
+                $orConditionValues = [];
 
                 if (is_array($filterValue)) {
                     $firstValue = array_shift($filterValue);
-                    $orConditionValues  = $filterValue;
+                    $orConditionValues = $filterValue;
                 }
 
                 $operator = ($isLikeOperator) ? FilterOperator::createLike() : FilterOperator::createEqual();

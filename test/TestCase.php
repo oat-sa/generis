@@ -22,11 +22,11 @@ declare(strict_types=1);
 
 namespace oat\generis\test;
 
+use oat\oatbox\service\ServiceManager;
+use PHPUnit\Framework\TestCase as UnitTestCase;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Container\ContainerInterface;
-use oat\oatbox\service\ServiceManager;
-use PHPUnit\Framework\TestCase as UnitTestCase;
 
 /**
  * @deprecated Use \PHPUnit\Framework\TestCase instead.
@@ -85,6 +85,8 @@ abstract class TestCase extends UnitTestCase
     /**
      * @deprecated Use PHPUnit mocks instead.
      *             Since PHPUnit does all the work, we no longer have to use Prophecy to reduce dependencies.
+     *
+     * @param null|mixed $classOrInterface
      */
     protected function prophesize($classOrInterface = null): ObjectProphecy
     {

@@ -19,11 +19,11 @@
  *
  * @author Lionel Lecaque  <lionel@taotesting.com>
  * @license GPLv2
- * @package generis
  *
+ * @package generis
  */
 
-use \oat\generis\Helper\UuidPrimaryKeyTrait;
+use oat\generis\Helper\UuidPrimaryKeyTrait;
 
 abstract class common_persistence_Persistence
 {
@@ -43,21 +43,13 @@ abstract class common_persistence_Persistence
      */
     private $params = [];
 
-    public static function getPersistence($driverId)
-    {
-        $returnValue = common_persistence_Manager::getPersistence($driverId);
-        $class = get_called_class();
-        if (!$returnValue instanceof $class) {
-            common_Logger::w('Got a ', get_class($returnValue) . ' instead of ' . $class);
-        }
-        return $returnValue;
-    }
-
     /**
      * Constructor
      *
      * @access public
+     *
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
+     *
      * @param array $params
      * @param common_persistence_driver $driver
      */
@@ -67,11 +59,25 @@ abstract class common_persistence_Persistence
         $this->setDriver($driver);
     }
 
+    public static function getPersistence($driverId)
+    {
+        $returnValue = common_persistence_Manager::getPersistence($driverId);
+        $class = get_called_class();
+
+        if (!$returnValue instanceof $class) {
+            common_Logger::w('Got a ', get_class($returnValue) . ' instead of ' . $class);
+        }
+
+        return $returnValue;
+    }
+
     /**
      * Retrieve persistence's driver
      *
      * @access public
+     *
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
+     *
      * @return common_persistence_driver
      */
     public function getDriver()
@@ -83,7 +89,9 @@ abstract class common_persistence_Persistence
      * Set the persistence
      *
      * @access protected
+     *
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
+     *
      * @param common_persistence_Driver $driver
      */
     protected function setDriver(common_persistence_Driver $driver)
@@ -95,7 +103,9 @@ abstract class common_persistence_Persistence
      * Retrieve persistence's parameters
      *
      * @access protected
+     *
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
+     *
      * @return array:
      */
     protected function getParams()
@@ -107,7 +117,9 @@ abstract class common_persistence_Persistence
      * set persistence's parameters
      *
      * @access protected
+     *
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
+     *
      * @param array $params
      */
     protected function setParams($params)

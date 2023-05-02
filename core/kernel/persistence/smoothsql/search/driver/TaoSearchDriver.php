@@ -8,6 +8,7 @@
 
 namespace  oat\generis\model\kernel\persistence\smoothsql\search\driver;
 
+use common_persistence_Manager;
 use common_persistence_SqlPersistence;
 use oat\oatbox\service\ServiceManager;
 use oat\search\base\Query\EscaperAbstract;
@@ -19,7 +20,6 @@ use oat\search\base\Query\EscaperAbstract;
  */
 class TaoSearchDriver extends EscaperAbstract
 {
-    
     /**
      * @var common_persistence_SqlPersistence
      */
@@ -28,12 +28,14 @@ class TaoSearchDriver extends EscaperAbstract
     public function __construct()
     {
         $this->persistence = ServiceManager::getServiceManager()
-                ->get(\common_persistence_Manager::SERVICE_ID)
+                ->get(common_persistence_Manager::SERVICE_ID)
                 ->getPersistenceById('default');
     }
-    
+
     /**
      * @inherit
+     *
+     * @param mixed $stringValue
      */
     public function dbCommand($stringValue)
     {
@@ -41,12 +43,14 @@ class TaoSearchDriver extends EscaperAbstract
     }
     /**
      * @inherit
+     *
+     * @param mixed $stringValue
      */
     public function escape($stringValue)
     {
         return $stringValue;
     }
-    
+
     /**
      * return quoted empty string
      */
@@ -54,67 +58,75 @@ class TaoSearchDriver extends EscaperAbstract
     {
         return $this->quote('');
     }
-    
+
     /**
      * @inherit
+     *
+     * @param mixed $stringValue
      */
     public function quote($stringValue)
     {
         return $this->persistence->quote($stringValue);
     }
-    
+
     /**
      * @inherit
+     *
+     * @param mixed $stringValue
      */
     public function reserved($stringValue)
     {
         return $this->persistence->getPlatForm()->quoteIdentifier($stringValue);
     }
-    
+
     /**
      * @inherit
      */
     public function random()
     {
         $random = [
-            'mysql'      => 'RAND()',
+            'mysql' => 'RAND()',
             'postgresql' => 'random()',
-            'mssql'      => 'NEWID()',
+            'mssql' => 'NEWID()',
             ];
         $name = $this->persistence->getPlatForm()->getName();
+
         return $random[$name];
     }
-    
+
     public function groupAggregation($variable, $separator)
     {
-        
         $group = [
-            'mysql'      => 'GROUP_CONCAT',
+            'mysql' => 'GROUP_CONCAT',
             'postgresql' => 'string_agg',
         ];
-        
+
         $name = $this->persistence->getPlatForm()->getName();
+
         return $group[$name] . '(' . $variable . ',' . $this->escape($this->quote($separator)) . ')';
     }
 
     /**
      * return case insensitive like operator
+     *
      * @return string
      */
     public function like()
     {
         $like = [
-            'mysql'      => 'LIKE',
+            'mysql' => 'LIKE',
             'postgresql' => 'ILIKE',
-            'gcp-spanner' => 'LIKE'
+            'gcp-spanner' => 'LIKE',
         ];
 
         $name = $this->persistence->getPlatForm()->getName();
+
         return $like[$name];
     }
 
     /**
      * return case insensitive like operator
+     *
      * @return string
      */
     public function notLike()

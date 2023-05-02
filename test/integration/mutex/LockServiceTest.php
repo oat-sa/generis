@@ -16,28 +16,30 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2019 (original work) Open Assessment Technologies SA;
- *
- *
  */
 
 namespace oat\generis\test\integration\mutex;
 
 use oat\generis\test\TestCase;
 use oat\oatbox\mutex\LockService;
-use oat\oatbox\service\ServiceManager;
 use oat\oatbox\mutex\NoLockStorage;
+use oat\oatbox\service\ServiceManager;
+use ReflectionClass;
+use ReflectionException;
 
 /**
  * Class LockServiceTest
+ *
  * @package oat\generis\test\integration\mutex
+ *
  * @author Aleh Hutnikau, <hutnikau@1pt.com>
  */
 class LockServiceTest extends TestCase
 {
-
     public function testLock()
     {
         $service = $this->getInstance();
+
         if ($this->isNoLockConfigured($service)) {
             $this->markTestSkipped('No lock storage configured for lock service. Skip integration test.');
         }
@@ -60,6 +62,7 @@ class LockServiceTest extends TestCase
     public function testLockTimeout()
     {
         $service = $this->getInstance();
+
         if ($this->isNoLockConfigured($service)) {
             $this->markTestSkipped('No lock storage configured for lock service. Skip integration test.');
         }
@@ -104,12 +107,15 @@ class LockServiceTest extends TestCase
 
     /**
      * @param $service
+     *
+     * @throws ReflectionException
+     *
      * @return bool
-     * @throws \ReflectionException
      */
     private function isNoLockConfigured($service)
     {
-        $reflectionClass = new \ReflectionClass($service->getOption($service::OPTION_PERSISTENCE_CLASS));
+        $reflectionClass = new ReflectionClass($service->getOption($service::OPTION_PERSISTENCE_CLASS));
+
         return $reflectionClass->getName() === NoLockStorage::class;
     }
 }

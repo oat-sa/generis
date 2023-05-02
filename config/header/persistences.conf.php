@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * The persistence configuration contains a list of persistences
  * identified by name.
  *

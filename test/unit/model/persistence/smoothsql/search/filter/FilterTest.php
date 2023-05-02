@@ -16,7 +16,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) (original work) 2017 Open Assessment Technologies SA
- *
  */
 
 namespace oat\generis\test\integration\model\persistence\smoothsql\search\filter;

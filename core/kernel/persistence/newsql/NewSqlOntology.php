@@ -32,6 +32,7 @@ class NewSqlOntology extends core_kernel_persistence_smoothsql_SmoothModel
 {
     /**
      * {@inheritDoc}
+     *
      * @see core_kernel_persistence_smoothsql_SmoothModel::getRdfInterface()
      */
     public function getRdfInterface()
@@ -41,27 +42,28 @@ class NewSqlOntology extends core_kernel_persistence_smoothsql_SmoothModel
 
     /**
      * {@inheritDoc}
+     *
      * @see core_kernel_persistence_smoothsql_SmoothModel::provideSchema()
      */
     public function provideSchema(SchemaCollection $schemaCollection)
     {
         $schema = $schemaCollection->getSchema($this->getOption(self::OPTION_PERSISTENCE));
-        $table = $schema->createTable("statements");
-        $table->addColumn("id", "string", ["notnull" => true]);
+        $table = $schema->createTable('statements');
+        $table->addColumn('id', 'string', ['notnull' => true]);
 
-        $table->addColumn("modelid", "integer", ["notnull" => true, "default" => 0]);
-        $table->addColumn("subject", "string", ["length" => 255, "default" => null]);
-        $table->addColumn("predicate", "string", ["length" => 255, "default" => null]);
-        $table->addColumn("object", "text", ["default" => null, "notnull" => false]);
+        $table->addColumn('modelid', 'integer', ['notnull' => true, 'default' => 0]);
+        $table->addColumn('subject', 'string', ['length' => 255, 'default' => null]);
+        $table->addColumn('predicate', 'string', ['length' => 255, 'default' => null]);
+        $table->addColumn('object', 'text', ['default' => null, 'notnull' => false]);
 
-        $table->addColumn("l_language", "string", ["length" => 255, "default" => null, "notnull" => false]);
+        $table->addColumn('l_language', 'string', ['length' => 255, 'default' => null, 'notnull' => false]);
 
-        $table->addColumn("author", "string", ["length" => 255, "default" => null, "notnull" => false]);
-        $table->setPrimaryKey(["id"]);
+        $table->addColumn('author', 'string', ['length' => 255, 'default' => null, 'notnull' => false]);
+        $table->setPrimaryKey(['id']);
         $table->addOption('engine', 'MyISAM');
-        $table->addColumn("epoch", "string", ["notnull" => null]);
+        $table->addColumn('epoch', 'string', ['notnull' => null]);
 
-        $table->addIndex(["subject", "predicate"], "k_sp", [], ['lengths' => [164, 164]]);
-        $table->addIndex(["predicate", "object"], "k_po", [], ['lengths' => [164, 164]]);
+        $table->addIndex(['subject', 'predicate'], 'k_sp', [], ['lengths' => [164, 164]]);
+        $table->addIndex(['predicate', 'object'], 'k_po', [], ['lengths' => [164, 164]]);
     }
 }

@@ -22,12 +22,12 @@ namespace oat\generis\scripts\tools\FileSerializerMigration;
 
 use core_kernel_classes_Property;
 use core_kernel_classes_Resource;
-use oat\generis\model\resource\ResourceCollection;
 use oat\generis\model\fileReference\FileSerializerException;
 use oat\generis\model\fileReference\ResourceFileSerializer;
 use oat\generis\model\fileReference\UrlFileSerializer;
 use oat\generis\model\GenerisRdf;
 use oat\generis\model\OntologyAwareTrait;
+use oat\generis\model\resource\ResourceCollection;
 use oat\oatbox\filesystem\Directory;
 use oat\oatbox\filesystem\File;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
@@ -44,7 +44,7 @@ class MigrationHelper implements ServiceLocatorAwareInterface
     /**
      * Amount of resources processed in one batch
      */
-    const BATCH_LIMIT = 100;
+    public const BATCH_LIMIT = 100;
 
     /**
      * @var UrlFileSerializer
@@ -67,7 +67,7 @@ class MigrationHelper implements ServiceLocatorAwareInterface
     public $migrationInformation = [
         'old_resource_count' => 0,
         'old_resource_migration_count' => 0,
-        'migrated_count' => 0
+        'migrated_count' => 0,
     ];
 
     /**
@@ -98,8 +98,9 @@ class MigrationHelper implements ServiceLocatorAwareInterface
     /**
      * Get the file resources and migrate them.
      *
-     * @return void
      * @throws FileSerializerException
+     *
+     * @return void
      */
     public function migrateFiles()
     {
@@ -107,12 +108,16 @@ class MigrationHelper implements ServiceLocatorAwareInterface
 
         foreach ($fileResources as $fileResourceData) {
             $resourceUri = $fileResourceData['fileResource']->getUri();
+
             if (!isset($fileResourceData['property'])) {
                 $this->failedResources[$resourceUri][] = 'Unable to find property';
+
                 continue;
             }
+
             if (!isset($fileResourceData['subject'])) {
                 $this->failedResources[$resourceUri][] = 'Unable to find subject';
+
                 continue;
             }
 
@@ -131,8 +136,10 @@ class MigrationHelper implements ServiceLocatorAwareInterface
      * @param core_kernel_classes_Resource $fileResource
      * @param core_kernel_classes_Property $property
      * @param core_kernel_classes_Resource $subject
-     * @return void
+     *
      * @throws FileSerializerException
+     *
+     * @return void
      */
     public function migrateResource(core_kernel_classes_Resource $fileResource, core_kernel_classes_Property $property, core_kernel_classes_Resource $subject)
     {
@@ -180,12 +187,14 @@ class MigrationHelper implements ServiceLocatorAwareInterface
     private function getFileResourceData()
     {
         $mappedResourceData = [];
+
         if ($this->fileResourceCollection === null) {
             $this->fileResourceCollection = $this->getClass(GenerisRdf::CLASS_GENERIS_FILE)->getInstanceCollection();
             $this->fileResourceCollection->useLimit();
         }
 
         $fileResourceUris = [];
+
         foreach ($this->fileResourceCollection as $fileResource) {
             $fileResourceUris[] = $fileResource['subject'];
         }

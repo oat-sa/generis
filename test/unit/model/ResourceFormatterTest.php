@@ -21,54 +21,62 @@
 namespace oat\generis\test\unit\model;
 
 use common_exception_NoContent;
-use \core_kernel_classes_ResourceFormatter;
+use core_kernel_classes_Literal;
+use core_kernel_classes_Resource;
+use core_kernel_classes_ResourceFormatter;
+use core_kernel_classes_Triple;
+use Exception;
 use oat\generis\model\GenerisRdf;
 use oat\generis\test\TestCase;
 
 class ResourceFormatterTest extends TestCase
 {
     /**
-     *
      * @author Lionel Lecaque, lionel@taotesting.com
+     *
      * @param string $uri
      */
     private function createPropertyProphecy($uri)
     {
         $propertyProphecy = $this->createResourceProphecy($uri);
         $propertyProphecy->__toString()->willReturn($uri);
+
         return $propertyProphecy;
     }
 
     /**
-     *
      * @author Lionel Lecaque, lionel@taotesting.com
+     *
      * @param string $uri
      */
     private function createResourceProphecy($uri)
     {
         $resourceProphecy = $this->prophesize('core_kernel_classes_Resource');
         $resourceProphecy->getUri()->willReturn($uri);
+
         return $resourceProphecy;
     }
 
     /**
-     *
      * @author Lionel Lecaque, lionel@taotesting.com
+     *
      * @param string $uri
      */
     private function createClassProphecy($uri)
     {
         $classProphecy = $this->prophesize('core_kernel_classes_Class');
         $classProphecy->getUri()->willReturn($uri);
+
         return $classProphecy;
     }
 
     /**
-     *
      * Create a mock to test formater result
      *
      * @author Lionel Lecaque, lionel@taotesting.com
+     *
      * @param string $withNoValue
+     *
      * @return Prophecy/Double
      */
     private function createResourceDescription($withNoValue = false)
@@ -81,7 +89,7 @@ class ResourceFormatterTest extends TestCase
         $typeProphecy->getProperties(true)->willReturn(
             [
                 $propertyProphecy->reveal(),
-                $propertyProphecy2->reveal()
+                $propertyProphecy2->reveal(),
             ]
         );
 
@@ -94,56 +102,57 @@ class ResourceFormatterTest extends TestCase
         $typeProphecy2->getProperties(true)->willReturn(
             [
                 $prop1,
-                $prop2
+                $prop2,
             ]
         );
         $resourceDescProphecy->getTypes()->willReturn(
             [
                 $typeProphecy->reveal(),
-                $typeProphecy2->reveal()
+                $typeProphecy2->reveal(),
             ]
         );
+
         if ($withNoValue) {
             $resourceDescProphecy->getPropertiesValues(
                 [
-                    "#propertyUri" => $prop1,
-                    "#propertyUri2" => $prop2
+                    '#propertyUri' => $prop1,
+                    '#propertyUri2' => $prop2,
                 ]
             )->willReturn([]);
         } else {
             $resourceDescProphecy->getPropertiesValues([
-                "#propertyUri" => $prop1,
-                "#propertyUri2" => $prop2
+                '#propertyUri' => $prop1,
+                '#propertyUri2' => $prop2,
             ])->willReturn([
                 '#propertyUri' => [
-                    new \core_kernel_classes_Literal('value1'),
-                    new \core_kernel_classes_Literal('value2')
+                    new core_kernel_classes_Literal('value1'),
+                    new core_kernel_classes_Literal('value2'),
                 ],
                 '#propertyUri2' => [
-                    new \core_kernel_classes_Resource(GenerisRdf::GENERIS_BOOLEAN)
-                ]
+                    new core_kernel_classes_Resource(GenerisRdf::GENERIS_BOOLEAN),
+                ],
             ]);
         }
+
         return $resourceDescProphecy->reveal();
     }
 
     /**
-     *
      * @author Lionel Lecaque, lionel@taotesting.com
      */
     public function testGetResourceDescriptionNoContent()
     {
         $formatter = new core_kernel_classes_ResourceFormatter();
+
         try {
             $result = $formatter->getResourceDescription($this->createResourceDescription(true));
             $this->fail('common_exception_NoContent should have been raised');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->assertInstanceOf('common_exception_NoContent', $e);
         }
     }
 
     /**
-     *
      * @author Lionel Lecaque, lionel@taotesting.com
      */
     public function testGetResourceDesciptionFromDef()
@@ -193,20 +202,22 @@ class ResourceFormatterTest extends TestCase
     }
 
     /**
-     *
      * @author Lionel Lecaque, lionel@taotesting.com
+     *
      * @return array
      */
     private function generateTriple()
     {
         $returnValue = [];
+
         for ($i = 0; $i < 3; $i++) {
-            $triple = new \core_kernel_classes_Triple();
+            $triple = new core_kernel_classes_Triple();
             $triple->subject = '#subject' . $i;
             $triple->predicate = '#predicate' . $i;
             $triple->object = $i == 0 ? GenerisRdf::GENERIS_BOOLEAN : 'object' . $i;
             $returnValue[] = $triple;
         }
+
         return $returnValue;
     }
 
@@ -230,7 +241,7 @@ class ResourceFormatterTest extends TestCase
         $this->assertInstanceOf('stdClass', $result->properties[0]);
         $this->assertSame('#predicate0', $result->properties[0]->predicateUri);
         $this->assertIsArray($result->properties[0]->values);
-        $this->assertCount(1,$result->properties[0]->values);
+        $this->assertCount(1, $result->properties[0]->values);
 
         $this->assertInstanceOf('stdClass', $result->properties[0]->values[0]);
         $this->assertSame('resource', $result->properties[0]->values[0]->valueType);
@@ -240,7 +251,7 @@ class ResourceFormatterTest extends TestCase
             $this->assertInstanceOf('stdClass', $result->properties[$i]);
             $this->assertSame('#predicate' . $i, $result->properties[$i]->predicateUri);
             $this->assertIsArray($result->properties[$i]->values);
-            $this->assertCount(1,$result->properties[$i]->values);
+            $this->assertCount(1, $result->properties[$i]->values);
 
             $this->assertInstanceOf('stdClass', $result->properties[$i]->values[0]);
             $this->assertSame('literal', $result->properties[$i]->values[0]->valueType);

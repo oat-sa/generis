@@ -22,14 +22,15 @@ class helpers_PasswordHash
     /**
      * @param $password
      *
-     * @return string
      * @throws PasswordConstraintsException
+     *
+     * @return string
      */
     public function encrypt($password)
     {
-
         if (PasswordConstraintsService::singleton()->validate($password)) {
             $salt = helpers_Random::generateString($this->getSaltLength());
+
             return $salt . hash($this->getAlgorithm(), $salt . $password);
         }
 
@@ -45,6 +46,7 @@ class helpers_PasswordHash
     {
         $salt = substr($hash, 0, $this->getSaltLength());
         $hashed = substr($hash, $this->getSaltLength());
+
         return hash($this->getAlgorithm(), $salt . $password) === $hashed;
     }
 
@@ -52,7 +54,7 @@ class helpers_PasswordHash
     {
         return $this->algorithm;
     }
-    
+
     protected function getSaltLength()
     {
         return $this->saltLength;

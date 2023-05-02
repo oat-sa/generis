@@ -16,18 +16,17 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2015 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
  */
 
 use oat\oatbox\extension\InstallAction;
 
 /**
  * Abstract action containing some helper functions
- * @author bout
- * @deprecated since version 3.2.0 please use oat\oatbox\extension\Installer instead
  *
+ * @author bout
+ *
+ * @deprecated since version 3.2.0 please use oat\oatbox\extension\Installer instead
  */
 abstract class common_ext_action_InstallAction extends InstallAction
 {
-  
 }

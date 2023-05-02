@@ -25,11 +25,9 @@ use oat\generis\test\GenerisPhpUnitTestRunner;
 
 class UserServiceTestCase extends GenerisPhpUnitTestRunner
 {
-
-    const TESTCASE_USER_LOGIN = 'testcase_user';
+    public const TESTCASE_USER_LOGIN = 'testcase_user';
 
     /**
-     *
      * @var core_kernel_users_Service
      */
     protected $service;
@@ -188,6 +186,7 @@ class UserServiceTestCase extends GenerisPhpUnitTestRunner
 
         // single role.
         $role1 = $this->service->addRole('ADDUSERROLE 1');
+
         if ($this->service->loginExists('user-fixture-1')) {
             $this->service->getOneUser('user-fixture-1')->delete();
         }
@@ -251,6 +250,7 @@ class UserServiceTestCase extends GenerisPhpUnitTestRunner
         $prefix = LOCAL_NAMESPACE . '#';
 
         $subRole2 = new core_kernel_classes_Resource($prefix . 'subRole2');
+
         if ($this->service->loginExists('user')) {
             $this->service->getOneUser('user')->delete();
         }
@@ -288,7 +288,7 @@ class UserServiceTestCase extends GenerisPhpUnitTestRunner
             $subRole1,
             $subRole11,
             $subRole12,
-            $subRole13
+            $subRole13,
         ];
 
         $this->assertTrue($baseRole->exists());
@@ -298,7 +298,7 @@ class UserServiceTestCase extends GenerisPhpUnitTestRunner
         $this->assertTrue($this->service->userHasRoles($user, $baseRole));
         $this->assertFalse($this->service->userHasRoles($user, [
             $baseRole,
-            $subRole1
+            $subRole1,
         ]));
         $user->delete();
 
@@ -308,12 +308,12 @@ class UserServiceTestCase extends GenerisPhpUnitTestRunner
         $this->assertFalse($this->service->userHasRoles($user, $subRole2));
         $this->assertTrue($this->service->userHasRoles($user, [
             $baseRole,
-            $subRole1
+            $subRole1,
         ]));
         $this->assertFalse($this->service->userHasRoles($user, [
             $baseRole,
             $subRole1,
-            $subRole2
+            $subRole2,
         ]));
         $user->delete();
 
@@ -509,7 +509,7 @@ class UserServiceTestCase extends GenerisPhpUnitTestRunner
             $prefix . 'subRole3',
             $prefix . 'subRole11',
             $prefix . 'subRole12',
-            $prefix . 'subRole13'
+            $prefix . 'subRole13',
         ];
 
         foreach ($roleUris as $ru) {

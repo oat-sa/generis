@@ -27,7 +27,6 @@ use oat\oatbox\service\ConfigurableService;
  */
 class common_cache_NoCache extends ConfigurableService implements common_cache_Cache
 {
-
     public function has($key)
     {
         return false;
@@ -47,7 +46,7 @@ class common_cache_NoCache extends ConfigurableService implements common_cache_C
     {
         return true;
     }
-    
+
     public function get($serial)
     {
         throw new common_cache_NotFoundException();

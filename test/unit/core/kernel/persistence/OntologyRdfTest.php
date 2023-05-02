@@ -16,7 +16,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2020 (original work) Open Assessment Technologies SA;
- *
  */
 
 namespace oat\generis\test\unit\core\kernel\persistence;
@@ -48,7 +47,6 @@ class OntologyRdfTest extends GenerisTestCase
         $this->assertEquals(0, $this->getTripleCount($ontology));
     }
 
-
     /**
      * @dataProvider getOntologies
      */
@@ -59,7 +57,7 @@ class OntologyRdfTest extends GenerisTestCase
         $ontology->getRdfInterface()->add($triple1);
         $this->assertEquals(1, $this->getTripleCount($ontology));
         $triples = $ontology->getRdfInterface();
-        /** @var core_kernel_classes_Triple $currentResource */
+        /* @var core_kernel_classes_Triple $currentResource */
         foreach ($triples as $testTriple) {
             $this->assertEquals($triple1->subject, $testTriple->subject);
             $this->assertEquals($triple1->predicate, $testTriple->predicate);
@@ -86,7 +84,6 @@ class OntologyRdfTest extends GenerisTestCase
 
         $this->assertEquals(3, $this->getTripleCount($ontology));
     }
-
 
     /**
      * @dataProvider getOntologies

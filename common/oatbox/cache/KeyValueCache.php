@@ -16,30 +16,31 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2020 (original work) Open Assessment Technologies SA
- *
  */
 
 namespace oat\oatbox\cache;
 
-use oat\oatbox\service\ConfigurableService;
-use common_persistence_KeyValuePersistence;
-use oat\generis\persistence\PersistenceManager;
 use common_exception_NotImplemented;
+use common_persistence_KeyValuePersistence;
 use DateInterval;
 use DateTimeImmutable;
+use oat\generis\persistence\PersistenceManager;
+use oat\oatbox\service\ConfigurableService;
 
 /**
  * Caches data in a key-value store
  *
  * @access public
+ *
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+ *
  * @package generis
  */
 class KeyValueCache extends ConfigurableService implements SimpleCache
 {
     use MultipleCacheTrait;
 
-    const OPTION_PERSISTENCE = 'persistence';
+    public const OPTION_PERSISTENCE = 'persistence';
 
     /** @var common_persistence_KeyValuePersistence */
     private $persistence;
@@ -49,6 +50,7 @@ class KeyValueCache extends ConfigurableService implements SimpleCache
         if ($ttl instanceof DateInterval) {
             $ttl = $this->dateIntervalToSeconds($ttl);
         }
+
         return $this->getPersistence()->set($key, $value, $ttl);
     }
 
@@ -82,8 +84,9 @@ class KeyValueCache extends ConfigurableService implements SimpleCache
 
     protected function dateIntervalToSeconds(DateInterval $dateInterval): int
     {
-        $reference = new DateTimeImmutable;
+        $reference = new DateTimeImmutable();
         $endTime = $reference->add($dateInterval);
+
         return $endTime->getTimestamp() - $reference->getTimestamp();
     }
 
@@ -95,6 +98,7 @@ class KeyValueCache extends ConfigurableService implements SimpleCache
         if (is_null($this->persistence)) {
             $this->persistence = $this->getServiceLocator()->get(PersistenceManager::SERVICE_ID)->getPersistenceById($this->getOption(self::OPTION_PERSISTENCE));
         }
+
         return $this->persistence;
     }
 }

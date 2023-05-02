@@ -13,7 +13,7 @@ class UpdateMultipleTest extends UpdateMultipleTestAbstract
     public function setUpDriver()
     {
         if ($this->driver === null) {
-            $driver = new \common_persistence_sql_pdo_sqlite_Driver();
+            $driver = new common_persistence_sql_pdo_sqlite_Driver();
             $driver->connect('test_connection', [
                 'driver' => 'pdo_sqlite',
                 'user' => null,

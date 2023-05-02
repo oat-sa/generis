@@ -16,11 +16,11 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2017 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
  */
 
 namespace oat\generis\model\data\permission\implementation;
 
+use core_kernel_classes_Resource;
 use oat\generis\model\data\permission\PermissionInterface;
 use oat\oatbox\service\ConfigurableService;
 use oat\oatbox\user\User;
@@ -29,23 +29,25 @@ use oat\oatbox\user\User;
  * Implementation to get permissions only from implementations that support the rights
  *
  * @access public
+ *
  * @author Antoine Robin, <antoine@taotesting.com>
  */
 class IntersectionUnionSupported extends ConfigurableService implements PermissionInterface
 {
-
-
     /**
      * @param PermissionInterface $service
+     *
      * @return $this
      */
     public function add(PermissionInterface $service)
     {
         $registered = false;
         $options = $this->getOption('inner');
+
         foreach ($options as $impl) {
             if ($impl == $service) {
                 $registered = true;
+
                 break;
             }
         }
@@ -64,21 +66,22 @@ class IntersectionUnionSupported extends ConfigurableService implements Permissi
     protected function getInner()
     {
         $results = [];
+
         foreach ($this->getOption('inner') as $impl) {
             $impl->setServiceLocator($this->getServiceLocator());
             $results[] = $impl;
         }
+
         return $results;
     }
-    
-    
+
     /**
      * (non-PHPdoc)
+     *
      * @see PermissionInterface::getPermissions()
      */
     public function getPermissions(User $user, array $resourceIds)
     {
-
         $results = [];
         $allRights = $this->getSupportedRights();
 
@@ -87,6 +90,7 @@ class IntersectionUnionSupported extends ConfigurableService implements Permissi
             $notSupported = array_diff($allRights, $impl->getSupportedRights());
             $resourceRights = $impl->getPermissions($user, $resourceIds);
             $resourcesRights = [];
+
             foreach ($resourceRights as $uri => $resourceRight) {
                 $resourcesRights[$uri] = array_merge($notSupported, $resourceRight);
             }
@@ -94,8 +98,10 @@ class IntersectionUnionSupported extends ConfigurableService implements Permissi
         }
 
         $rights = [];
+
         foreach ($resourceIds as $id) {
             $intersect = null;
+
             foreach ($results as $modelResult) {
                 $intersect = is_null($intersect)
                     ? $modelResult[$id]
@@ -103,23 +109,25 @@ class IntersectionUnionSupported extends ConfigurableService implements Permissi
             }
             $rights[$id] = array_values($intersect);
         }
-        
+
         return $rights;
     }
-    
+
     /**
      * (non-PHPdoc)
+     *
      * @see PermissionInterface::onResourceCreated()
      */
-    public function onResourceCreated(\core_kernel_classes_Resource $resource)
+    public function onResourceCreated(core_kernel_classes_Resource $resource)
     {
         foreach ($this->getInner() as $impl) {
             $impl->onResourceCreated($resource);
         }
     }
-    
+
     /**
      * (non-PHPdoc)
+     *
      * @see PermissionInterface::getSupportedPermissions()
      */
     public function getSupportedRights()
@@ -127,6 +135,7 @@ class IntersectionUnionSupported extends ConfigurableService implements Permissi
         $models = $this->getInner();
         $first = array_pop($models);
         $supported = $first->getSupportedRights();
+
         while (!empty($models)) {
             $model = array_pop($models);
             $supported = array_merge($supported, $model->getSupportedRights());

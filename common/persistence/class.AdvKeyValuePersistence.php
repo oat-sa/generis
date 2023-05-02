@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,9 +20,8 @@
  * @author Patrick Plichart <patrick@taotesting.com>
  * @author Camille Moyon  <camille@taotesting.com>
  * @license GPLv2
- * @package generis
-
  *
+ * @package generis
  */
 class common_persistence_AdvKeyValuePersistence extends common_persistence_KeyValuePersistence
 {
@@ -31,6 +31,7 @@ class common_persistence_AdvKeyValuePersistence extends common_persistence_KeyVa
      *
      * @param $key
      * @param $fields
+     *
      * @return bool
      */
     public function hmSet($key, $fields)
@@ -56,6 +57,7 @@ class common_persistence_AdvKeyValuePersistence extends common_persistence_KeyVa
      *
      * @param $key
      * @param $field
+     *
      * @return bool
      */
     public function hExists($key, $field)
@@ -63,6 +65,7 @@ class common_persistence_AdvKeyValuePersistence extends common_persistence_KeyVa
         if ($this->isMappedKey($key) || $this->isMappedKey($field)) {
             return false;
         }
+
         return (bool) $this->getDriver()->hExists($key, $field);
     }
 
@@ -74,8 +77,10 @@ class common_persistence_AdvKeyValuePersistence extends common_persistence_KeyVa
      * @param $key
      * @param $field
      * @param $value
-     * @return mixed
+     *
      * @throws common_Exception If the the size is misconfigured
+     *
+     * @return mixed
      */
     public function hSet($key, $field, $value)
     {
@@ -87,6 +92,7 @@ class common_persistence_AdvKeyValuePersistence extends common_persistence_KeyVa
             $value = $this->setLargeValue($this->getMappedKey($key, $field), $value, 0, false);
         }
         $oldValue = $this->getDriver()->hGet($key, $field);
+
         if ($this->isSplit($oldValue)) {
             $this->deleteMappedKey($field, $oldValue);
         }
@@ -101,6 +107,7 @@ class common_persistence_AdvKeyValuePersistence extends common_persistence_KeyVa
      *
      * @param $key
      * @param $field
+     *
      * @return bool|mixed|string
      */
     public function hGet($key, $field)
@@ -111,11 +118,13 @@ class common_persistence_AdvKeyValuePersistence extends common_persistence_KeyVa
             }
         }
         $value = $this->getDriver()->hGet($key, $field);
+
         if ($this->hasMaxSize()) {
             if ($this->isSplit($value)) {
-                $value =  $this->join($this->getMappedKey($key, $field), $value);
+                $value = $this->join($this->getMappedKey($key, $field), $value);
             }
         }
+
         return $value;
     }
 
@@ -124,6 +133,7 @@ class common_persistence_AdvKeyValuePersistence extends common_persistence_KeyVa
      * If one of values is a map, join related values
      *
      * @param $key
+     *
      * @return array
      */
     public function hGetAll($key)
@@ -150,11 +160,11 @@ class common_persistence_AdvKeyValuePersistence extends common_persistence_KeyVa
      *
      * @param string $key
      * @param string $field
+     *
      * @return bool
      */
     public function hDel($key, $field): bool
     {
-
         if (!$this->hasMaxSize()) {
             return $this->getDriver()->hDel($key, $field);
         }
@@ -165,6 +175,7 @@ class common_persistence_AdvKeyValuePersistence extends common_persistence_KeyVa
 
         $success = true;
         $value = $this->getDriver()->hGet($key, $field);
+
         if ($this->isSplit($value)) {
             $success = $success && $this->deleteMappedKey($key, $value);
         }
@@ -181,6 +192,7 @@ class common_persistence_AdvKeyValuePersistence extends common_persistence_KeyVa
      *              under the assumption that the key names in the database and the given pattern have limited length.
      *
      * @param $pattern
+     *
      * @return array
      */
     public function keys($pattern)
@@ -194,6 +206,7 @@ class common_persistence_AdvKeyValuePersistence extends common_persistence_KeyVa
                 }
             }
         }
+
         return $keys;
     }
 
@@ -201,28 +214,30 @@ class common_persistence_AdvKeyValuePersistence extends common_persistence_KeyVa
      * Delete a key. If key is split, all associated mapped key are deleted too
      *
      * @param $key
+     *
      * @return bool
      */
     public function del($key)
     {
         if ($this->isMappedKey($key)) {
             return false;
-        } else {
-            $success = true;
-            if ($this->hasMaxSize()) {
-                $fields = $this->getDriver()->hGetAll($key);
-                if (!empty($fields)) {
-                    foreach ($fields as $subKey => $value) {
-                        if ($this->isSplit($value)) {
-                            $success = $success && $this->deleteMappedKey($subKey, $value);
-                        }
+        }
+        $success = true;
+
+        if ($this->hasMaxSize()) {
+            $fields = $this->getDriver()->hGetAll($key);
+
+            if (!empty($fields)) {
+                foreach ($fields as $subKey => $value) {
+                    if ($this->isSplit($value)) {
+                        $success = $success && $this->deleteMappedKey($subKey, $value);
                     }
                 }
-                $success = $success && $this->deleteMappedKey($key);
             }
-
-            return $success && $this->getDriver()->del($key);
+            $success = $success && $this->deleteMappedKey($key);
         }
+
+        return $success && $this->getDriver()->del($key);
     }
 
     /**
@@ -230,6 +245,7 @@ class common_persistence_AdvKeyValuePersistence extends common_persistence_KeyVa
      *
      * @param $key
      * @param $field
+     *
      * @return string
      */
     protected function getMappedKey($key, $field)

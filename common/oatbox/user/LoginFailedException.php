@@ -16,14 +16,12 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2020 (original work) Open Assessment Technologies;
- *
- *
  */
 
 namespace oat\oatbox\user;
 
-use common_user_auth_AuthFailedException;
 use common_exception_UserReadableException;
+use common_user_auth_AuthFailedException;
 
 /**
  * Exception indicating that all authentication attempts failed
@@ -33,23 +31,25 @@ use common_exception_UserReadableException;
 class LoginFailedException extends common_user_auth_AuthFailedException
 {
     private $exceptions;
-    
+
     public function __construct(array $exceptions)
     {
         $this->exceptions = $exceptions;
     }
-    
+
     /**
      * (non-PHPdoc)
+     *
      * @see common_exception_UserReadableException::getUserMessage()
      */
     public function getUserMessage()
     {
         if (count($this->exceptions) == 1) {
             $e = reset($this->exceptions);
+
             return $e->getUserMessage();
-        } else {
-            return __('Invalid login or password. Please try again.');
         }
+
+        return __('Invalid login or password. Please try again.');
     }
 }

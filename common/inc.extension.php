@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -17,10 +18,9 @@
  * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
  *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- *
  */
 
-/**
+/*
  * Generis Object Oriented API - common\inc.extension.php
  *
  * This file is part of Generis Object Oriented API.
@@ -44,7 +44,7 @@ require_once  dirname(__FILE__) . '/class.Config.php';
 common_Config::load();
 
 //set the time zone
-if (function_exists("date_default_timezone_set") && defined('TIME_ZONE')) {
+if (function_exists('date_default_timezone_set') && defined('TIME_ZONE')) {
     date_default_timezone_set(TIME_ZONE);
 }
 

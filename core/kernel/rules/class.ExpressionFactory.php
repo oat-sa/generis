@@ -18,7 +18,6 @@
  * Copyright (c) 2007-2010 (original work) Public Research Centre Henri Tudor & University of Luxembourg) (under the project TAO-QUAL);
  *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2017 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
  */
 
 use oat\generis\model\RulesRdf;
@@ -27,14 +26,14 @@ use oat\generis\model\RulesRdf;
  * Short description of class core_kernel_rules_ExpressionFactory
  *
  * @access public
+ *
  * @author firstname and lastname of author, <author@example.org>
+ *
  * @package generis
-
  */
 class core_kernel_rules_ExpressionFactory
 {
     // --- ASSOCIATIONS ---
-
 
     // --- ATTRIBUTES ---
 
@@ -44,15 +43,20 @@ class core_kernel_rules_ExpressionFactory
      * Short description of method createTerminalExpression
      *
      * @access public
+     *
      * @author firstname and lastname of author, <author@example.org>
+     *
      * @param  Term term
+     *
      * @return core_kernel_rules_Expression
      */
     public static function createTerminalExpression(core_kernel_rules_Term $term)
     {
         $returnValue = null;
+
         if ($term == null) {
             var_dump($term);
+
             throw new common_Exception('paramaters could not be null');
         }
         $expressionClass = new core_kernel_classes_Class(RulesRdf::CLASS_URI_EXPRESSION, __METHOD__);
@@ -63,6 +67,7 @@ class core_kernel_rules_ExpressionFactory
         $returnValue = new core_kernel_rules_Expression($expressionInst->getUri());
         $returnValue->setPropertyValue($terminalExpressionProperty, $term->getUri());
         $returnValue->debug = __METHOD__;
+
         return $returnValue;
     }
 
@@ -70,17 +75,22 @@ class core_kernel_rules_ExpressionFactory
      * Short description of method createRecursiveExpression
      *
      * @access public
+     *
      * @author firstname and lastname of author, <author@example.org>
+     *
      * @param  Expression exp1
      * @param  Expression exp2
      * @param  Resource operator
+     *
      * @return core_kernel_rules_Expression
      */
     public static function createRecursiveExpression(core_kernel_rules_Expression $exp1, core_kernel_rules_Expression $exp2, core_kernel_classes_Resource $operator)
     {
         $returnValue = null;
-        if ($exp1 == null || $exp2 == null  || $operator == null) {
+
+        if ($exp1 == null || $exp2 == null || $operator == null) {
             var_dump($exp1, $exp2, $operator);
+
             throw new common_Exception('paramaters could not be null');
         }
 
@@ -98,7 +108,6 @@ class core_kernel_rules_ExpressionFactory
         $returnValue->setPropertyValue($firstExpressionProperty, $exp1->getUri());
         $returnValue->setPropertyValue($secondExpressionProperty, $exp2->getUri());
         $returnValue->setPropertyValue($logicalOperatorProperty, $operator->getUri());
-       
 
         return $returnValue;
     }

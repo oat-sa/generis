@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -15,16 +16,13 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2014 (original work) Open Assessment Technologies SA;
- *
- *
  */
- 
- /**
+
+/**
  * A utility class handling php language related tasks
  */
 class helpers_PhpTools
 {
-    
     /**
      * Returns an array that contains namespace and name of the class defined in the file
      *
@@ -32,6 +30,8 @@ class helpers_PhpTools
      * by user http://stackoverflow.com/users/492901/netcoder
      *
      * @param string file to anaylse
+     * @param mixed $file
+     *
      * @return array
      */
     public static function getClassInfo($file)
@@ -39,6 +39,7 @@ class helpers_PhpTools
         $buffer = file_get_contents($file);
         $tokens = @token_get_all($buffer);
         $class = $namespace = $buffer = '';
+
         for ($i = 0; $i < count($tokens); $i++) {
             if ($tokens[$i][0] === T_NAMESPACE) {
                 for ($j = $i + 1; $j < count($tokens); $j++) {
@@ -55,18 +56,20 @@ class helpers_PhpTools
                     if ($tokens[$j] === '{') {
                         if (!isset($tokens[$i + 2][1])) {
                             error_log($file . ' does not contain a valid class definition');
-                            break(2);
-                        } else {
-                            $class = $tokens[$i + 2][1];
+
                             break(2);
                         }
+                        $class = $tokens[$i + 2][1];
+
+                        break(2);
                     }
                 }
             }
         }
+
         return [
             'ns' => $namespace,
-            'class' => $class
+            'class' => $class,
         ];
     }
 }

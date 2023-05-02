@@ -87,7 +87,7 @@ class ContainerCache
             $this->getDumper()->dump(
                 [
                     'class' => $this->cachedContainerClassName,
-                    'base_class' => BaseContainer::class
+                    'base_class' => BaseContainer::class,
                 ]
             ),
             $this->builder->getResources()

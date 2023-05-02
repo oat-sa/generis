@@ -23,29 +23,30 @@
 
 namespace oat\generis\model\kernel\uri;
 
-use oat\oatbox\service\ConfigurableService;
-use oat\generis\persistence\PersistenceManager;
 use common_persistence_SqlPersistence;
+use oat\generis\persistence\PersistenceManager;
+use oat\oatbox\service\ConfigurableService;
 
 /**
  * UriProvider implementation based on PHP microtime and rand().
  *
  * @access public
+ *
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+ *
  * @package generis
-
  */
 class MicrotimeRandUriProvider extends ConfigurableService implements UriProvider
 {
-    const OPTION_PERSISTENCE = 'persistence';
-    
-    const OPTION_NAMESPACE = 'namespace';
+    public const OPTION_PERSISTENCE = 'persistence';
+
+    public const OPTION_NAMESPACE = 'namespace';
     // --- ASSOCIATIONS ---
-    
+
     // --- ATTRIBUTES ---
-    
+
     // --- OPERATIONS ---
-    
+
     /**
      * @return common_persistence_SqlPersistence
      */
@@ -53,28 +54,31 @@ class MicrotimeRandUriProvider extends ConfigurableService implements UriProvide
     {
         return $this->getServiceLocator()->get(PersistenceManager::SERVICE_ID)->getPersistenceById($this->getOption(self::OPTION_PERSISTENCE));
     }
-    
+
     /**
      * Generates a URI based on the value of PHP microtime() and rand().
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @return string
      */
     public function provide()
     {
-        
         $uriExist = false;
+
         do {
-            list($usec, $sec) = explode(" ", microtime());
-            $uri = $this->getOption(self::OPTION_NAMESPACE) . 'i' . (str_replace(".", "", $sec . "" . $usec)) . rand(0, 1000);
+            list($usec, $sec) = explode(' ', microtime());
+            $uri = $this->getOption(self::OPTION_NAMESPACE) . 'i' . (str_replace('.', '', $sec . '' . $usec)) . rand(0, 1000);
             $sqlResult = $this->getPersistence()->query("SELECT COUNT(subject) AS num FROM statements WHERE subject = '" . $uri . "'");
+
             if ($row = $sqlResult->fetch()) {
                 $uriExist = $row['num'] > 0;
                 $sqlResult->closeCursor();
             }
         } while ($uriExist);
-        
+
         return (string) $uri;
     }
 }

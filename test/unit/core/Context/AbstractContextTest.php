@@ -23,8 +23,8 @@ declare(strict_types=1);
 namespace oat\generis\test\unit\core\Context;
 
 use InvalidArgumentException;
-use oat\generis\test\TestCase;
 use oat\generis\model\Context\AbstractContext;
+use oat\generis\test\TestCase;
 
 class AbstractContextTest extends TestCase
 {
@@ -39,7 +39,7 @@ class AbstractContextTest extends TestCase
             self::PARAM_TEST => ['value'],
         ];
 
-        $this->sut = new class ($contextData) extends AbstractContext {
+        $this->sut = new class($contextData) extends AbstractContext {
             protected function getSupportedParameters(): array
             {
                 return [

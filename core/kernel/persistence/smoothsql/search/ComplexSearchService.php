@@ -19,13 +19,17 @@
  *
  * @author Christophe GARCIA <christopheg@taotesting.com>
  * @license GPLv2
- * @package generis
  *
+ * @package generis
  */
 
 namespace   oat\generis\model\kernel\persistence\smoothsql\search;
 
+use common_exception_Error;
+use core_kernel_classes_Class;
+use core_kernel_classes_Resource;
 use core_kernel_persistence_smoothsql_SmoothModel;
+use oat\generis\model\data\Model;
 use oat\generis\model\kernel\persistence\smoothsql\search\filter\FilterFactory;
 use oat\oatbox\service\ConfigurableService;
 use oat\search\base\QueryBuilderInterface;
@@ -33,8 +37,6 @@ use oat\search\base\QueryInterface;
 use oat\search\base\SearchGateWayInterface;
 use Zend\ServiceManager\Config;
 use Zend\ServiceManager\ServiceManager;
-use oat\generis\model\data\ModelManager;
-use oat\generis\model\data\Model;
 
 /**
  * Complexe search service
@@ -43,18 +45,19 @@ use oat\generis\model\data\Model;
  */
 class ComplexSearchService extends ConfigurableService
 {
-    
-    const SERVICE_ID = 'generis/complexSearch';
-    
-    const SERVICE_SEARCH_ID = 'search.tao.gateway';
+    public const SERVICE_ID = 'generis/complexSearch';
+
+    public const SERVICE_SEARCH_ID = 'search.tao.gateway';
 
     /**
      * internal service locator
+     *
      * @var \Zend\ServiceManager\ServiceLocatorInterface
      */
     protected $services;
     /**
      * search gateway
+     *
      * @var SearchGateWayInterface
      */
     protected $gateway;
@@ -66,6 +69,7 @@ class ComplexSearchService extends ConfigurableService
 
     /**
      * Returns the internal service manager
+     *
      * @return \Zend\ServiceManager\ServiceLocatorInterface
      */
     protected function getZendServiceManager()
@@ -73,30 +77,34 @@ class ComplexSearchService extends ConfigurableService
         if (is_null($this->services)) {
             $options = $this->getOptions();
             $options['services']['search.options']['model'] = $this->model;
-            $config         = new Config($options);
-            $this->services =  new ServiceManager($config);
+            $config = new Config($options);
+            $this->services = new ServiceManager($config);
         }
+
         return $this->services;
     }
 
     /**
      * determine which operator may be used
+     *
      * @param boolean $like
+     *
      * @return string
      */
     protected function getOperator($like)
     {
         $operator = 'equals';
-        
+
         if ($like) {
             $operator = 'contains';
         }
-        
+
         return $operator;
     }
 
     /**
      * Set the model the search should apply to
+     *
      * @param Model $model
      */
     public function setModel(Model $model)
@@ -106,6 +114,7 @@ class ComplexSearchService extends ConfigurableService
 
     /**
      * return search gateway
+     *
      * @return SearchGateWayInterface
      */
     public function getGateway()
@@ -115,10 +124,12 @@ class ComplexSearchService extends ConfigurableService
                 ->setServiceLocator($this->getZendServiceManager())
                 ->init();
         }
+
         return $this->gateway;
     }
     /**
      * return a new query builder
+     *
      * @return \oat\search\QueryBuilder
      */
     public function query()
@@ -128,16 +139,18 @@ class ComplexSearchService extends ConfigurableService
 
     /**
      * return a preset query builder with types
+     *
      * @param QueryBuilderInterface $query
      * @param string $class_uri
      * @param boolean $recursive
+     *
+     * @throws common_exception_Error
+     *
      * @return QueryInterface
-     * @throws \common_exception_Error
      */
     public function searchType(QueryBuilderInterface $query, $class_uri, $recursive = false)
     {
-
-        $Class    = new \core_kernel_classes_Class($class_uri);
+        $Class = new core_kernel_classes_Class($class_uri);
         $rdftypes = [];
 
         if ($recursive === true) {
@@ -147,19 +160,21 @@ class ComplexSearchService extends ConfigurableService
         }
 
         $rdftypes[] = $class_uri;
-        
+
         $criteria = $query->newQuery()
                 ->add('http://www.w3.org/1999/02/22-rdf-syntax-ns#type')
                 ->in($rdftypes);
-        
+
         return $criteria;
     }
-    
+
     /**
      * set gateway language options
+     *
      * @param QueryBuilderInterface $query
      * @param string $userLanguage
      * @param string $defaultLanguage
+     *
      * @return $this
      */
     public function setLanguage(QueryBuilderInterface $query, $userLanguage = '', $defaultLanguage = null)
@@ -168,37 +183,44 @@ class ComplexSearchService extends ConfigurableService
             $defaultLanguage = DEFAULT_LANG;
         }
         $options = $this->getGateway()->getOptions();
+
         if (!empty($userLanguage)) {
             $options['language'] = $userLanguage;
         }
         $options['defaultLanguage'] = $defaultLanguage;
-        
+
         $this->getGateway()->setOptions($options);
-        
+
         return $query->newQuery();
     }
-    
+
     protected function parseValue($rawValue)
     {
         $result = [];
+
         if (!is_array($rawValue)) {
             $rawValue = [$rawValue];
         }
+
         foreach ($rawValue as $value) {
-            if ($value instanceof \core_kernel_classes_Resource) {
+            if ($value instanceof core_kernel_classes_Resource) {
                 $result[] = $value->getUri();
             } else {
                 $result[] = preg_replace('/^\*$/', '', $value);
             }
         }
+
         return count($result) === 1 ? $result[0] : $result;
     }
-    
+
     /**
      * verify if value is valid
+     *
      * @param string $value
-     * @return boolean
+     *
      * @throws exception\InvalidValueException
+     *
+     * @return boolean
      */
     protected function validValue($value)
     {
@@ -212,6 +234,7 @@ class ComplexSearchService extends ConfigurableService
     /**
      * serialyse a query for searchInstance
      * use for legacy search
+     *
      * @param core_kernel_persistence_smoothsql_SmoothModel $model
      * @param array $classUri
      * @param array $propertyFilters
@@ -222,26 +245,28 @@ class ComplexSearchService extends ConfigurableService
      * @param integer $limit
      * @param string $order
      * @param string $orderDir
+     *
      * @return string
      */
     public function getQuery(core_kernel_persistence_smoothsql_SmoothModel $model, $classUri, array $propertyFilters, $and = true, $isLikeOperator = true, $lang = '', $offset = 0, $limit = 0, $order = '', $orderDir = 'ASC')
     {
         $query = $this->getGateway()->query()->setLimit($limit)->setOffset($offset);
-        
+
         if (!empty($order)) {
             $query->sort([$order => strtolower($orderDir)]);
         }
-        
+
         $this->setLanguage($query, $lang);
 
         $criteria = $query->newQuery()
                 ->add('http://www.w3.org/1999/02/22-rdf-syntax-ns#type')
                 ->in($classUri);
-        
+
         $query->setCriteria($criteria);
-        $count     = 0;
+        $count = 0;
         $propertyFilters = FilterFactory::buildFilters($propertyFilters, $isLikeOperator);
         $maxLength = count($propertyFilters);
+
         foreach ($propertyFilters as $filter) {
             $this->validValue($filter->getValue());
 
@@ -254,6 +279,7 @@ class ComplexSearchService extends ConfigurableService
             }
 
             $count++;
+
             if ($and === false && $maxLength > $count) {
                 $criteria = $query->newQuery()
                     ->add('http://www.w3.org/1999/02/22-rdf-syntax-ns#type')

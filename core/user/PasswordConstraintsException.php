@@ -16,12 +16,14 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2015 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
+ *
  * @author Mikhail Kamarouski, <kamarouski@1pt.com>
  */
 
 namespace oat\generis\model\user;
 
-class PasswordConstraintsException extends \common_exception_Error
-{
+use common_exception_Error;
 
+class PasswordConstraintsException extends common_exception_Error
+{
 }

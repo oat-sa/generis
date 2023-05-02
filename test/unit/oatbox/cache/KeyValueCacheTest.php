@@ -16,19 +16,19 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2020 (original work) Open Assessment Technologies SA;
- *
  */
 
 namespace oat\generis\test\unit\config;
 
-use oat\generis\test\TestCase;
-use oat\oatbox\cache\KeyValueCache;
 use oat\generis\persistence\PersistenceManager;
 use oat\generis\test\KeyValueMockTrait;
+use oat\generis\test\TestCase;
+use oat\oatbox\cache\KeyValueCache;
 
 class KeyValueCacheTest extends TestCase
 {
     use KeyValueMockTrait;
+
     /**
      * @var KeyValueCache
      */
@@ -41,7 +41,7 @@ class KeyValueCacheTest extends TestCase
     {
         $this->cache = new KeyValueCache([KeyValueCache::OPTION_PERSISTENCE => 'unittest']);
         $serviceLocator = $this->getServiceLocatorMock([
-            PersistenceManager::SERVICE_ID => $this->getKeyValueMock('unittest')
+            PersistenceManager::SERVICE_ID => $this->getKeyValueMock('unittest'),
         ]);
         $this->cache->setServiceLocator($serviceLocator);
     }

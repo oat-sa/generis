@@ -16,10 +16,11 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2014 (original work) Open Assessment Technologies SA;
- *
  */
 
 namespace oat\oatbox\config;
+
+use common_exception_InconsistentData;
 
 /**
  * Configurable base class
@@ -37,80 +38,95 @@ trait ConfigSets
      * @param string $key
      * @param string $field
      * @param mixed $value
-     * @throws \common_exception_InconsistentData
+     *
+     * @throws common_exception_InconsistentData
+     *
      * @return boolean success
      */
     public function hashSet($key, $field, $value)
     {
         $option = $this->getHashOption($key);
         $option[$field] = $value;
+
         return $this->setOption($key, $option);
     }
-    
+
     /**
      * Removes a specific field of an option
      *
      * @param string $key
      * @param string $field
-     * @throws \common_exception_InconsistentData
+     *
+     * @throws common_exception_InconsistentData
+     *
      * @return boolean
      */
     public function hashRemove($key, $field)
     {
         $option = $this->getHashOption($key);
+
         if (!isset($option[$field])) {
             return false;
-        } else {
-            unset($option[$field]);
-            return $this->setOption($key, $option);
         }
+        unset($option[$field]);
+
+        return $this->setOption($key, $option);
     }
-    
+
     /**
      * Returns a specific field of an option
      *
      * @param string $key
-     * @throws \common_exception_InconsistentData
      * @param string $field
+     *
+     * @throws common_exception_InconsistentData
+     *
      * @return mixed
      */
     public function hashGet($key, $field)
     {
         $option = $this->getHashOption($key);
-        return isset($option[$field]) ? $option[$field] : null;
+
+        return $option[$field] ?? null;
     }
 
     /**
-     * @param string        $name
-     * @param mixed|null    $default
+     * @param string $name
+     * @param mixed|null $default
+     *
      * @return mixed
      */
     abstract public function getOption($name, $default = null);
 
     /**
-         * @param string $name
-         * @return boolean
-         */
+     * @param string $name
+     *
+     * @return boolean
+     */
     abstract public function hasOption($name);
     /**
-         * @param string $name
-         * @param mixed $value
-         */
+     * @param string $name
+     * @param mixed $value
+     */
     abstract public function setOption($name, $value);
 
     /**
      * Retroieve an option and ensure it is an array
      *
      * @param string $key
-     * @throws \common_exception_InconsistentData
+     *
+     * @throws common_exception_InconsistentData
+     *
      * @return array
      */
     private function getHashOption($key)
     {
         $option = $this->hasOption($key) ? $this->getOption($key) : [];
+
         if (!is_array($option)) {
-            throw new \common_exception_InconsistentData($key . ' is not an array');
+            throw new common_exception_InconsistentData($key . ' is not an array');
         }
+
         return $option;
     }
 }

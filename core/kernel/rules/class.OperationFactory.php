@@ -18,8 +18,6 @@
  * Copyright (c) 2007-2010 (original work) Public Research Centre Henri Tudor & University of Luxembourg) (under the project TAO-QUAL);
  *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2017 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
- *
  */
 
 use oat\generis\model\RulesRdf;
@@ -28,14 +26,14 @@ use oat\generis\model\RulesRdf;
  * Short description of class core_kernel_rules_OperationFactory
  *
  * @access public
+ *
  * @author firstname and lastname of author, <author@example.org>
+ *
  * @package generis
-
  */
 class core_kernel_rules_OperationFactory
 {
     // --- ASSOCIATIONS ---
-
 
     // --- ATTRIBUTES ---
 
@@ -45,10 +43,13 @@ class core_kernel_rules_OperationFactory
      * Short description of method createOperation
      *
      * @access public
+     *
      * @author firstname and lastname of author, <author@example.org>
+     *
      * @param  Term term1
      * @param  Term term2
      * @param  Resource operator
+     *
      * @return core_kernel_rules_Operation
      */
     public static function createOperation(core_kernel_rules_Term $term1, core_kernel_rules_Term $term2, core_kernel_classes_Resource $operator)
@@ -66,6 +67,7 @@ class core_kernel_rules_OperationFactory
         $returnValue->setPropertyValue($operatorProperty, $operator->getUri());
         $returnValue->setPropertyValue($firstOperand, $term1->getUri());
         $returnValue->setPropertyValue($secondOperand, $term2->getUri());
+
         return $returnValue;
     }
 }

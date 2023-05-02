@@ -4,19 +4,19 @@ namespace oat\generis\model\kernel\persistence\smoothsql\search\filter;
 
 class Filter
 {
-    /** @var  string */
+    /** @var string */
     protected $key;
 
-    /** @var  string */
+    /** @var string */
     protected $value;
 
-    /** @var  FilterOperator */
+    /** @var FilterOperator */
     protected $operator;
 
-    /** @var  array */
+    /** @var array */
     protected $inValues;
 
-    /** @var  array */
+    /** @var array */
     protected $orConditionValues;
 
     /**
@@ -24,6 +24,7 @@ class Filter
      * @param string $value
      * @param FilterOperator $operator
      * @param array $orConditionValues
+     *
      * @internal param array $inOrConditionValues
      */
     public function __construct($key, $value, FilterOperator $operator, array $orConditionValues = [])

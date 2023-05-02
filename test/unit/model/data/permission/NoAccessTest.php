@@ -16,14 +16,13 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) (original work) 2015 Open Assessment Technologies SA
- *
  */
 
 namespace oat\generis\test\unit\model\data\permission;
 
 use oat\generis\model\data\permission\implementation\NoAccess;
-use oat\oatbox\user\User;
 use oat\generis\test\TestCase;
+use oat\oatbox\user\User;
 
 class NoAccessTest extends TestCase
 {

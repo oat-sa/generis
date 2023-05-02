@@ -16,7 +16,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2017 (original work) Open Assessment Technologies SA
- *
  */
 
 namespace oat\oatbox\log;
@@ -30,9 +29,9 @@ class LoggerService extends ConfigurableService implements LoggerInterface
 {
     use LoggerTrait;
 
-    const SERVICE_ID = 'generis/log';
+    public const SERVICE_ID = 'generis/log';
 
-    const LOGGER_OPTION = 'logger';
+    public const LOGGER_OPTION = 'logger';
 
     /** @var LoggerInterface */
     protected $logger;
@@ -42,6 +41,7 @@ class LoggerService extends ConfigurableService implements LoggerInterface
      * Previous and new logger are encapsulated into a LoggerAggregator
      *
      * @param LoggerInterface $logger
+     *
      * @return LoggerAggregator|LoggerInterface
      */
     public function addLogger(LoggerInterface $logger)
@@ -50,6 +50,7 @@ class LoggerService extends ConfigurableService implements LoggerInterface
             $logger = new LoggerAggregator([$logger, $this->logger]);
         }
         $this->logger = $logger;
+
         return $logger;
     }
 
@@ -63,6 +64,7 @@ class LoggerService extends ConfigurableService implements LoggerInterface
         if (!$this->isLoggerLoaded()) {
             $this->loadLogger();
         }
+
         return $this->logger;
     }
 
@@ -88,14 +90,17 @@ class LoggerService extends ConfigurableService implements LoggerInterface
     protected function loadLogger()
     {
         $logger = null;
+
         if ($this->hasOption(self::LOGGER_OPTION)) {
             $loggerOptions = $this->getOption(self::LOGGER_OPTION);
+
             if (is_object($loggerOptions)) {
                 if (is_a($loggerOptions, LoggerInterface::class)) {
                     $logger = $loggerOptions;
                 }
             } elseif (is_array($loggerOptions) && isset($loggerOptions['class'])) {
                 $classname = $loggerOptions['class'];
+
                 if (is_a($classname, LoggerInterface::class, true)) {
                     if (isset($loggerOptions['options'])) {
                         $logger = new $classname($loggerOptions['options']);

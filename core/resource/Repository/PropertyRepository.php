@@ -23,13 +23,13 @@ declare(strict_types=1);
 namespace oat\generis\model\resource\Repository;
 
 use BadMethodCallException;
-use oat\generis\model\GenerisRdf;
-use oat\generis\model\OntologyRdf;
-use oat\search\helper\SupportedOperatorHelper;
 use oat\generis\model\Context\ContextInterface;
+use oat\generis\model\GenerisRdf;
+use oat\generis\model\kernel\persistence\smoothsql\search\ComplexSearchService;
+use oat\generis\model\OntologyRdf;
 use oat\generis\model\resource\Context\PropertyRepositoryContext;
 use oat\generis\model\resource\Contract\ResourceRepositoryInterface;
-use oat\generis\model\kernel\persistence\smoothsql\search\ComplexSearchService;
+use oat\search\helper\SupportedOperatorHelper;
 
 class PropertyRepository implements ResourceRepositoryInterface
 {

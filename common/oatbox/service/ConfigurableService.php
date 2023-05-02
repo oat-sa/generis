@@ -32,6 +32,7 @@ use Zend\ServiceManager\ServiceLocatorAwareInterface;
  * https://github.com/basdenooijer/solarium/blob/master/library/Solarium/Core/Configurable.php
  *
  * @author Joel Bout <joel@taotesting.com>
+ *
  * @deprecated New services must be registered using Dependency Injection Container
  */
 abstract class ConfigurableService extends Configurable implements ServiceLocatorAwareInterface
@@ -41,7 +42,7 @@ abstract class ConfigurableService extends Configurable implements ServiceLocato
     /** @var string Documentation header */
     protected $header = null;
 
-    /** @var object[]  */
+    /** @var object[] */
     private $subServices = [];
 
     /**
@@ -61,9 +62,12 @@ abstract class ConfigurableService extends Configurable implements ServiceLocato
      *
      * @param $id
      * @param string $interface
-     * @return mixed
+     *
      * @throws InvalidService
      * @throws InvalidServiceManagerException
+     *
+     * @return mixed
+     *
      * @deprecated New services must be registered using Dependency Injection Container
      */
     public function getSubService($id, $interface = null)
@@ -71,6 +75,7 @@ abstract class ConfigurableService extends Configurable implements ServiceLocato
         if (! isset($this->subServices[$id])) {
             if ($this->hasOption($id)) {
                 $service = $this->buildService($this->getOption($id), $interface);
+
                 if ($service) {
                     $this->subServices[$id] = $service;
                 } else {
@@ -80,6 +85,7 @@ abstract class ConfigurableService extends Configurable implements ServiceLocato
                 throw new ServiceNotFoundException($id);
             }
         }
+
         return $this->subServices[$id];
     }
 
@@ -87,6 +93,7 @@ abstract class ConfigurableService extends Configurable implements ServiceLocato
      * Set the documentation header uses into config file
      *
      * @param $header
+     *
      * @deprecated New services must be registered using Dependency Injection Container
      */
     public function setHeader($header)
@@ -98,21 +105,23 @@ abstract class ConfigurableService extends Configurable implements ServiceLocato
      * Return the documentation header
      *
      * @return string
+     *
      * @deprecated New services must be registered using Dependency Injection Container
      */
     public function getHeader()
     {
         if (is_null($this->header)) {
             return $this->getDefaultHeader();
-        } else {
-            return $this->header;
         }
+
+        return $this->header;
     }
 
     /**
      * Get the documentation header
      *
      * @return string
+     *
      * @deprecated New services must be registered using Dependency Injection Container
      */
     protected function getDefaultHeader()
@@ -128,9 +137,12 @@ abstract class ConfigurableService extends Configurable implements ServiceLocato
      *
      * @param $serviceDefinition
      * @param string $interfaceName
-     * @return mixed
+     *
      * @throws InvalidService
      * @throws InvalidServiceManagerException
+     *
+     * @return mixed
+     *
      * @deprecated New services must be registered using Dependency Injection Container
      */
     protected function buildService($serviceDefinition, $interfaceName = null)
@@ -138,18 +150,20 @@ abstract class ConfigurableService extends Configurable implements ServiceLocato
         if ($serviceDefinition instanceof ConfigurableService) {
             if (is_null($interfaceName) || is_a($serviceDefinition, $interfaceName)) {
                 $this->propagate($serviceDefinition);
+
                 return $serviceDefinition;
-            } else {
-                throw new InvalidService('Service must implements ' . $interfaceName);
             }
+
+            throw new InvalidService('Service must implements ' . $interfaceName);
         } elseif (is_array($serviceDefinition) && isset($serviceDefinition['class'])) {
             $classname = $serviceDefinition['class'];
-            $options = isset($serviceDefinition['options']) ? $serviceDefinition['options'] : [];
+            $options = $serviceDefinition['options'] ?? [];
+
             if (is_null($interfaceName) || is_a($classname, $interfaceName, true)) {
                 return $this->getServiceManager()->build($classname, $options);
-            } else {
-                throw new InvalidService('Service must implements ' . $interfaceName);
             }
+
+            throw new InvalidService('Service must implements ' . $interfaceName);
         } else {
             throw new InvalidService();
         }

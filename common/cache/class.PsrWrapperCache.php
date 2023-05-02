@@ -16,32 +16,36 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2020 (original work) Open Assessment Technologies SA
- *
  */
 
+use oat\oatbox\cache\SimpleCache;
 use oat\oatbox\service\ConfigurableService;
 use Psr\SimpleCache\CacheInterface;
-use oat\oatbox\cache\SimpleCache;
 
 /**
  * Wrap the PSR simple cache implementation into the legacy interface
+ *
  * @deprecated Please use oat\oatbox\cache\SimpleCache
  */
 class common_cache_PsrWrapperCache extends ConfigurableService implements common_cache_Cache
 {
-
     /**
      * puts "something" into the cache,
      *      * If this is an object and implements Serializable,
      *      * we use the serial provided by the object
      *      * else a serial must be provided
+     *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @param mixed $mixed
      * @param null $serial
      * @param null $ttl
-     * @return bool
+     *
      * @throws common_exception_Error
+     *
+     * @return bool
      */
     public function put($mixed, $serial = null, $ttl = null)
     {
@@ -59,18 +63,26 @@ class common_cache_PsrWrapperCache extends ConfigurableService implements common
      * gets the entry associted to the serial
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @param  string serial
-     * @return common_Serializable
+     * @param mixed $serial
+     *
      * @throws common_cache_NotFoundException
+     *
+     * @return common_Serializable
      */
     public function get($serial)
     {
         $returnValue = $this->getPsrSimpleCache()->get($serial, false);
+
         if ($returnValue === false && !$this->getPsrSimpleCache()->has($serial)) {
             $msg = "No cache entry found for '" . $serial . "'.";
+
             throw new common_cache_NotFoundException($msg);
         }
+
         return $returnValue;
     }
 
@@ -78,8 +90,12 @@ class common_cache_PsrWrapperCache extends ConfigurableService implements common
      * test whenever an entry associated to the serial exists
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @param  string serial
+     * @param mixed $serial
+     *
      * @return boolean
      */
     public function has($serial)
@@ -91,8 +107,12 @@ class common_cache_PsrWrapperCache extends ConfigurableService implements common
      * removes an entry from the cache
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @param  string serial
+     * @param mixed $serial
+     *
      * @return mixed
      */
     public function remove($serial)
@@ -104,7 +124,9 @@ class common_cache_PsrWrapperCache extends ConfigurableService implements common
      * empties the cache
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @return mixed
      */
     public function purge()
@@ -112,7 +134,7 @@ class common_cache_PsrWrapperCache extends ConfigurableService implements common
         return $this->getPsrSimpleCache()->clear();
     }
 
-    protected function getPsrSimpleCache() : CacheInterface
+    protected function getPsrSimpleCache(): CacheInterface
     {
         return $this->getServiceLocator()->get(SimpleCache::SERVICE_ID);
     }

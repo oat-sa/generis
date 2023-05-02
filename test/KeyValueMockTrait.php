@@ -16,13 +16,14 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2020 (original work) Open Assessment Technologies SA;
- *
  */
 
 namespace oat\generis\test;
 
-use Prophecy\Argument;
+use common_persistence_InMemoryKvDriver;
+use common_persistence_KeyValuePersistence;
 use oat\generis\persistence\PersistenceManager;
+use Prophecy\Argument;
 
 trait KeyValueMockTrait
 {
@@ -30,15 +31,17 @@ trait KeyValueMockTrait
      * Returns a keyvalue persistence on top of a SQL memory mock
      *
      * @param string $key identifier of the persistence
+     *
      * @return PersistenceManager
      */
     public function getKeyValueMock($key)
     {
-        $driver = new \common_persistence_InMemoryKvDriver();
-        $persistence = new \common_persistence_KeyValuePersistence([],$driver);
+        $driver = new common_persistence_InMemoryKvDriver();
+        $persistence = new common_persistence_KeyValuePersistence([], $driver);
         $pmProphecy = $this->prophesize(PersistenceManager::class);
         $pmProphecy->setServiceLocator(Argument::any())->willReturn(null);
         $pmProphecy->getPersistenceById($key)->willReturn($persistence);
+
         return $pmProphecy->reveal();
     }
 }

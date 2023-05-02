@@ -20,6 +20,8 @@
 
 namespace oat\generis\scripts\update;
 
+use common_Exception;
+use common_persistence_KeyValuePersistence;
 use common_persistence_Manager;
 use common_persistence_SqlKvDriver;
 use common_report_Report as Report;
@@ -43,6 +45,7 @@ class RegisterDefaultKvPersistence extends InstallAction
         try {
             /** @var common_persistence_Manager $persistenceManager */
             $persistenceManager = $this->getServiceLocator()->get(common_persistence_Manager::SERVICE_ID);
+
             if ($persistenceManager->hasPersistence('default_kv')) {
                 $this->report->add(Report::createInfo('"default_kv" persistence is already configured.'));
             } else {
@@ -58,7 +61,7 @@ class RegisterDefaultKvPersistence extends InstallAction
     }
 
     /**
-     * @throws \common_Exception
+     * @throws common_Exception
      */
     private function setupDefaultKvPersistence()
     {
@@ -72,7 +75,7 @@ class RegisterDefaultKvPersistence extends InstallAction
         // By default if there is no KV persistence on the server fall back to RDS KV implementation
         $newPersistenceConfig = [
             'driver' => common_persistence_SqlKvDriver::class,
-            common_persistence_SqlKvDriver::OPTION_PERSISTENCE_SQL => 'default'
+            common_persistence_SqlKvDriver::OPTION_PERSISTENCE_SQL => 'default',
         ];
 
         foreach ($persistenceCandidates as $persistenceId) {
@@ -93,14 +96,17 @@ class RegisterDefaultKvPersistence extends InstallAction
      * Check if persistence config can be used as "default_kv" persistence
      *
      * @param string $persistenceId
-     * @return bool
+     *
      * @throws \oat\oatbox\service\exception\InvalidServiceManagerException
+     *
+     * @return bool
      */
     private function canUsePersistence($persistenceId)
     {
         /** @var common_persistence_Manager $persistenceManager */
         $persistenceManager = $this->getServiceManager()->get(common_persistence_Manager::SERVICE_ID);
         $persistencesConfig = $persistenceManager->getOption('persistences');
+
         if (
             !$persistenceManager->hasPersistence($persistenceId)
             || $persistencesConfig[$persistenceId]['driver'] == 'phpfile'
@@ -109,7 +115,8 @@ class RegisterDefaultKvPersistence extends InstallAction
         }
 
         $persistence = $persistenceManager->getPersistenceById($persistenceId);
-        if (!$persistence instanceof \common_persistence_KeyValuePersistence) {
+
+        if (!$persistence instanceof common_persistence_KeyValuePersistence) {
             return false;
         }
 

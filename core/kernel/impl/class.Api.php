@@ -28,14 +28,14 @@ use oat\tao\model\TaoOntology;
  * this class may not read this attribute otherwise in php 5.2
  *
  * @access public
+ *
  * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+ *
  * @package generis
-
  */
 class core_kernel_impl_Api implements core_kernel_api_Api
 {
     // --- ASSOCIATIONS ---
-
 
     // --- ATTRIBUTES ---
 
@@ -45,24 +45,29 @@ class core_kernel_impl_Api implements core_kernel_api_Api
      * Short description of method logIn
      *
      * @access public
+     *
      * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     *
      * @param  string login
      * @param  string password
      * @param  string module
      * @param  boolean role
+     * @param mixed $login
+     * @param mixed $password
+     * @param mixed $module
+     * @param mixed $role
+     *
      * @return boolean
      */
     public function logIn($login, $password, $module, $role)
     {
         $returnValue = (bool) false;
 
-        
         if ($role === true) {
             $role = new core_kernel_classes_Resource(TaoOntology::PROPERTY_INSTANCE_ROLE_GLOBALMANAGER);
         }
-       
+
         core_kernel_users_Service::singleton()->login($login, $password, $role);
-        
 
         return (bool) $returnValue;
     }
@@ -71,16 +76,16 @@ class core_kernel_impl_Api implements core_kernel_api_Api
      * Short description of method logOut
      *
      * @access public
+     *
      * @author Bertrand Chevrier, <bertrand.chevrier@tudor.lu>
+     *
      * @return boolean
      */
     public function logOut()
     {
         $returnValue = (bool) false;
 
-        
         core_kernel_users_Service::singleton()->logout();
-        
 
         return (bool) $returnValue;
     }

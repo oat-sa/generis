@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * The Uri Provider configuration contains the service to be used
  * to generate unique URI for newly created resources
  *

@@ -16,7 +16,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2016 Open Assessment Technologies SA
- *
  */
 
 use oat\oatbox\event\Event;
@@ -30,18 +29,18 @@ class common_ext_event_ExtensionInstalled implements Event
      * @var \common_ext_Extension
      */
     private $extension;
-    
-    function __construct(\common_ext_Extension $extension)
+
+    public function __construct(common_ext_Extension $extension)
     {
         $this->extension = $extension;
     }
-    
-    function getExtension()
+
+    public function getExtension()
     {
         return $this->extension;
     }
 
-    function getName()
+    public function getName()
     {
         return __CLASS__;
     }

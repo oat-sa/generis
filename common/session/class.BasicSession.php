@@ -16,10 +16,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2017-2021 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
  */
 
-/**
+/*
  * Represents a Session on Generis.
  *
  * @access private
@@ -30,13 +29,13 @@
 
 use oat\generis\model\GenerisRdf;
 use oat\generis\model\OntologyRdfs;
-use oat\oatbox\user\User;
 use oat\oatbox\Refreshable;
+use oat\oatbox\session\SessionContext;
+use oat\oatbox\user\User;
+use oat\oatbox\user\UserLanguageServiceInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
-use oat\oatbox\user\UserLanguageServiceInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use oat\oatbox\session\SessionContext;
 
 class common_session_BasicSession implements common_session_Session, ServiceLocatorAwareInterface
 {
@@ -62,32 +61,35 @@ class common_session_BasicSession implements common_session_Session, ServiceLoca
         $this->user = $user;
         $this->contexts = $contexts;
     }
-    
+
     public function getUser()
     {
         return $this->user;
     }
-    
+
     /**
      * {@inheritDoc}
+     *
      * @see common_session_Session::getUserUri()
      */
     public function getUserUri()
     {
         return $this->user->getIdentifier();
     }
-    
+
     /**
      * @param string $property
+     *
      * @return mixed
      */
     public function getUserPropertyValues($property)
     {
         return $this->user->getPropertyValues($property);
     }
-    
+
     /**
      * (non-PHPdoc)
+     *
      * @see common_session_Session::getUserLabel()
      */
     public function getUserLabel()
@@ -98,21 +100,26 @@ class common_session_BasicSession implements common_session_Session, ServiceLoca
         $last = $this->user->getPropertyValues(GenerisRdf::PROPERTY_USER_LASTNAME);
         $label .= empty($last) ? '' : ' ' . current($last);
         $label = trim($label);
+
         if (empty($label)) {
             $login = $this->user->getPropertyValues(GenerisRdf::PROPERTY_USER_LOGIN);
+
             if (!empty($login)) {
                 $label = current($login);
             }
         }
+
         if (empty($label)) {
             $rdflabel = $this->user->getPropertyValues(OntologyRdfs::RDFS_LABEL);
-            $label =  empty($rdflabel) ? __('user') : current($rdflabel);
+            $label = empty($rdflabel) ? __('user') : current($rdflabel);
         }
+
         return $label;
     }
-    
+
     /**
      * {@inheritDoc}
+     *
      * @see common_session_Session::getUserRoles()
      */
     public function getUserRoles()
@@ -122,10 +129,12 @@ class common_session_BasicSession implements common_session_Session, ServiceLoca
         foreach ($this->user->getPropertyValues(GenerisRdf::PROPERTY_USER_ROLES) as $roleUri) {
             $returnValue[$roleUri] = $roleUri;
             $role = new core_kernel_classes_Resource($roleUri);
+
             foreach (core_kernel_users_Service::singleton()->getIncludedRoles($role) as $incRole) {
                 $returnValue[$incRole->getUri()] = $incRole->getUri();
             }
         }
+
         return $returnValue;
     }
 
@@ -157,18 +166,20 @@ class common_session_BasicSession implements common_session_Session, ServiceLoca
 
         return $userLanguageService->getInterfaceLanguage($this->getUser());
     }
-    
+
     /**
      * (non-PHPdoc)
+     *
      * @see common_session_Session::getTimeZone()
      */
     public function getTimeZone()
     {
         $tzs = $this->user->getPropertyValues(GenerisRdf::PROPERTY_USER_TIMEZONE);
         $tz = empty($tzs) ? '' : (string)current($tzs);
+
         return empty($tz) ? TIME_ZONE : $tz;
     }
-    
+
     public function refresh()
     {
         if ($this->user instanceof Refreshable) {
@@ -178,6 +189,7 @@ class common_session_BasicSession implements common_session_Session, ServiceLoca
 
     /**
      * {@inheritDoc}
+     *
      * @see \Zend\ServiceManager\ServiceLocatorAwareInterface::setServiceLocator()
      * propagate to user
      */
@@ -186,16 +198,20 @@ class common_session_BasicSession implements common_session_Session, ServiceLoca
         if ($this->user instanceof ServiceLocatorAwareInterface) {
             $this->user->setServiceLocator($serviceLocator);
         }
+
         return $this->setOriginalServiceLocator($serviceLocator);
     }
 
     public function getContexts(string $class = null): array
     {
         $contexts = $this->contexts;
+
         if ($class != null) {
-            $contexts = array_filter($contexts, function($element) use ($class) {return $element instanceof $class;});
+            $contexts = array_filter($contexts, function ($element) use ($class) {
+                return $element instanceof $class;
+            });
         }
+
         return $contexts;
     }
-
 }

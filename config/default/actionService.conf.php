@@ -19,8 +19,8 @@
  *
  * @author Bout Joel, <joel@taotesting.com>
  * @license GPLv2
- * @package generis
  *
+ * @package generis
  */
 
 use oat\oatbox\action\ActionService;

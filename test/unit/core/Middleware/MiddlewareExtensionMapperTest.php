@@ -45,7 +45,7 @@ class MiddlewareExtensionMapperTest extends TestCase
     {
         $map = $this->subject->map(
             [
-                $this->createExtension([MiddlewareConfigMock::class])
+                $this->createExtension([MiddlewareConfigMock::class]),
             ]
         );
 
@@ -56,7 +56,7 @@ class MiddlewareExtensionMapperTest extends TestCase
                 '/^(.*)\/foo\/bar$/',
                 '/^(.*)\/foo\/bar\/[0-9]{0,}$/',
                 '/^(DELETE)\/foo\/bar$/',
-                '/^(DELETE)\/foo\/bar\/[0-9]{0,}$/'
+                '/^(DELETE)\/foo\/bar\/[0-9]{0,}$/',
             ],
             array_keys($map)
         );
@@ -149,7 +149,6 @@ class MiddlewareConfigMock implements MiddlewareConfigInterface
                 ->andHttpMethod('DELETE')
                 ->andRoute('/foo/bar')
                 ->andRoute('/foo/bar/[0-9]{0,}'),
-
         ];
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,19 +25,19 @@
  * An Exception containing a human-readable message for the end-user.
  *
  * @access public
+ *
  * @author Joel Bout, <joel@taotesting.com>
+ *
  * @package generis
-
  */
 interface common_exception_UserReadableException
 {
-    
     /**
      * Get the human-readable message for the end-user. It is supposed
      * to be translated and does not contain any confidential information
      * about the system and its sensitive data.
      *
-     * @return string A human-readable message.
+     * @return string a human-readable message
      */
     public function getUserMessage();
 }

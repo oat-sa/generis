@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -17,21 +18,20 @@
  * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
  *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- *
  */
 
 /**
  * This exception depicts an error while accessing the FileSystem.
  *
  * @access public
+ *
  * @author Jerome Bogaerts, <jerome@taotesting.com>
+ *
  * @package generis
-
  */
 class common_exception_FileSystemError extends common_exception_Error
 {
     // --- ASSOCIATIONS ---
-
 
     // --- ATTRIBUTES ---
 

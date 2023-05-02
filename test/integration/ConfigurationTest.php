@@ -22,12 +22,12 @@
 
 namespace oat\generis\test\integration;
 
+use common_ext_ExtensionsManager;
 use oat\generis\test\GenerisPhpUnitTestRunner;
 
 class ConfigurationTest extends GenerisPhpUnitTestRunner
 {
-
-    const TESTKEY = 'config_test_key';
+    public const TESTKEY = 'config_test_key';
 
     /**
      * A version of php that we can be sure will not be present on the system
@@ -35,7 +35,7 @@ class ConfigurationTest extends GenerisPhpUnitTestRunner
      *
      * @var int
      */
-    const UNSUPPORTED_PHP_MAJOR_VERSION = 9;
+    public const UNSUPPORTED_PHP_MAJOR_VERSION = 9;
 
     protected function setUp(): void
     {
@@ -44,7 +44,7 @@ class ConfigurationTest extends GenerisPhpUnitTestRunner
 
     public function testUserConfig()
     {
-        $generis = \common_ext_ExtensionsManager::singleton()->getExtensionById('generis');
+        $generis = common_ext_ExtensionsManager::singleton()->getExtensionById('generis');
 
         $this->assertFalse($generis->getConfig(self::TESTKEY));
 

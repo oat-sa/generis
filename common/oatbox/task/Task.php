@@ -16,7 +16,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2014 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
  */
 
 namespace oat\oatbox\task;
@@ -26,15 +25,15 @@ namespace oat\oatbox\task;
  */
 interface Task
 {
-    const STATUS_CREATED  = 'created';
-    const STATUS_STARTED  = 'started';
-    const STATUS_RUNNING  = 'running';
-    const STATUS_FINISHED = 'finished';
-    const STATUS_ARCHIVED = 'archived';
+    public const STATUS_CREATED = 'created';
+    public const STATUS_STARTED = 'started';
+    public const STATUS_RUNNING = 'running';
+    public const STATUS_FINISHED = 'finished';
+    public const STATUS_ARCHIVED = 'archived';
 
-    const TASK_CLASS = 'http://www.tao.lu/Ontologies/generis.rdf#TaskQueueTask';
-    const PROPERTY_LINKED_RESOURCE = 'http://www.tao.lu/Ontologies/generis.rdf#LinkedResource';
-    const PROPERTY_REPORT = 'http://www.tao.lu/Ontologies/generis.rdf#Report';
+    public const TASK_CLASS = 'http://www.tao.lu/Ontologies/generis.rdf#TaskQueueTask';
+    public const PROPERTY_LINKED_RESOURCE = 'http://www.tao.lu/Ontologies/generis.rdf#LinkedResource';
+    public const PROPERTY_REPORT = 'http://www.tao.lu/Ontologies/generis.rdf#Report';
 
     /**
      * @deprecated since version 7.10.0, to be removed in 8.0.
@@ -43,6 +42,8 @@ interface Task
 
     /**
      * @deprecated since version 7.10.0, to be removed in 8.0.
+     *
+     * @param mixed $type
      */
     public function setType($type);
 
@@ -53,6 +54,8 @@ interface Task
 
     /**
      * @deprecated since version 7.10.0, to be removed in 8.0.
+     *
+     * @param mixed $label
      */
     public function setLabel($label);
 
@@ -63,6 +66,8 @@ interface Task
 
     /**
      * @deprecated since version 7.10.0, to be removed in 8.0.
+     *
+     * @param mixed $creationDate
      */
     public function setCreationDate($creationDate);
 
@@ -73,6 +78,8 @@ interface Task
 
     /**
      * @deprecated since version 7.10.0, to be removed in 8.0.
+     *
+     * @param mixed $status
      */
     public function setStatus($status);
 
@@ -83,6 +90,8 @@ interface Task
 
     /**
      * @deprecated since version 7.10.0, to be removed in 8.0.
+     *
+     * @param mixed $owner
      */
     public function setOwner($owner);
 
@@ -93,6 +102,8 @@ interface Task
 
     /**
      * @deprecated since version 7.10.0, to be removed in 8.0.
+     *
+     * @param mixed $id
      */
     public function setId($id);
 
@@ -103,6 +114,8 @@ interface Task
 
     /**
      * @deprecated since version 7.10.0, to be removed in 8.0.
+     *
+     * @param mixed $invocable
      */
     public function setInvocable($invocable);
 
@@ -123,6 +136,8 @@ interface Task
 
     /**
      * @deprecated since version 7.10.0, to be removed in 8.0.
+     *
+     * @param mixed $report
      */
     public function setReport($report);
 

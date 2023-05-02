@@ -16,7 +16,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2020 (original work) Open Assessment Technologies SA
- *
  */
 
 namespace oat\oatbox\cache;
@@ -27,7 +26,9 @@ use oat\oatbox\service\ConfigurableService;
  * Caches data in a key-value store
  *
  * @access public
+ *
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+ *
  * @package generis
  */
 class NoCache extends ConfigurableService implements SimpleCache

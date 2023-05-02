@@ -16,20 +16,24 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2015 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
  */
 
 namespace oat\oatbox\install;
 
+use common_Exception;
+use common_exception_Error;
+use common_exception_MissingParameter;
+use common_ext_ExtensionsManager;
+use common_report_Report as Report;
+use helpers_File;
+use League\Flysystem\Memory\MemoryAdapter;
+use oat\oatbox\filesystem\FileSystemService;
 use oat\oatbox\service\ConfigurableService;
 use oat\oatbox\service\exception\InvalidService;
 use oat\oatbox\service\exception\InvalidServiceManagerException;
 use oat\oatbox\service\ServiceConfigDriver;
 use oat\oatbox\service\ServiceManager;
-use oat\oatbox\filesystem\FileSystemService;
 use oat\oatbox\service\ServiceNotFoundException;
-use common_report_Report as Report;
-use League\Flysystem\Memory\MemoryAdapter;
 
 /**
  * A service to install oatbox functionality
@@ -40,7 +44,6 @@ use League\Flysystem\Memory\MemoryAdapter;
  */
 class Installer extends ConfigurableService
 {
-
     /**
      * run the install
      */
@@ -59,22 +62,24 @@ class Installer extends ConfigurableService
      * Setup the service manager with configuration driver associated to config path
      *
      * @param $configPath
-     * @return ServiceManager
-     * @throws \common_exception_Error
+     *
+     * @throws common_exception_Error
      * @throws InvalidServiceManagerException
+     *
+     * @return ServiceManager
      */
     public function setupServiceManager($configPath)
     {
         try {
             $this->getServiceManager();
         } catch (InvalidServiceManagerException $e) {
-            if (! \helpers_File::emptyDirectory($configPath, true)) {
-                throw new \common_exception_Error('Unable to empty ' . $configPath . ' folder.');
+            if (! helpers_File::emptyDirectory($configPath, true)) {
+                throw new common_exception_Error('Unable to empty ' . $configPath . ' folder.');
             }
             $driver = new ServiceConfigDriver();
             $configService = $driver->connect('config', [
                 'dir' => $configPath,
-                'humanReadable' => true
+                'humanReadable' => true,
             ]);
             $this->setServiceLocator(new ServiceManager($configService));
         }
@@ -87,7 +92,7 @@ class Installer extends ConfigurableService
      *
      * @throws InvalidService If installed filesystem is not a FileSystemService
      * @throws InvalidServiceManagerException
-     * @throws \common_Exception
+     * @throws common_Exception
      */
     protected function installFilesystem()
     {
@@ -102,13 +107,13 @@ class Installer extends ConfigurableService
                     'default' => [
                         'class' => 'Local',
                         'options' => [
-                            'root' => $this->getOption('file_path')
-                        ]
+                            'root' => $this->getOption('file_path'),
+                        ],
                     ],
                     'memory' => [
-                        'class' => MemoryAdapter::class
-                    ]
-                ]
+                        'class' => MemoryAdapter::class,
+                    ],
+                ],
             ]);
             $this->getServiceManager()->register(FileSystemService::SERVICE_ID, $fileSystemService);
         }
@@ -116,21 +121,22 @@ class Installer extends ConfigurableService
 
     public function setupExtensionManager(): void
     {
-        $this->getServiceManager()->register(\common_ext_ExtensionsManager::SERVICE_ID, new \common_ext_ExtensionsManager());
+        $this->getServiceManager()->register(common_ext_ExtensionsManager::SERVICE_ID, new common_ext_ExtensionsManager());
     }
 
     /**
      * Validate require option e.q. file_path & root_path
      *
-     * @throws \common_exception_MissingParameter
+     * @throws common_exception_MissingParameter
      */
     protected function validateOptions()
     {
         if (!$this->hasOption('root_path') || empty($this->getOption('root_path'))) {
-            throw new \common_exception_MissingParameter('root_path', __CLASS__);
+            throw new common_exception_MissingParameter('root_path', __CLASS__);
         }
+
         if (!$this->hasOption('file_path') || empty($this->getOption('file_path'))) {
-            throw new \common_exception_MissingParameter('file_path', __CLASS__);
+            throw new common_exception_MissingParameter('file_path', __CLASS__);
         }
     }
 
@@ -144,6 +150,7 @@ class Installer extends ConfigurableService
         if ($this->hasOption('config_path') && ! empty($this->getOption('config_path'))) {
             return $this->getOption('config_path');
         }
+
         return rtrim($this->getOption('root_path'), '/\\') . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR;
     }
 }

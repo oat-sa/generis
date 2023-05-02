@@ -16,7 +16,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2020 (original work) Open Assessment Technologies SA
- *
  */
 
 namespace oat\oatbox\cache;
@@ -25,37 +24,43 @@ namespace oat\oatbox\cache;
  * Caches data in a key-value store
  *
  * @access public
+ *
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+ *
  * @package generis
  */
 trait MultipleCacheTrait
 {
-
     public function deleteMultiple($keys)
     {
         $success = true;
+
         foreach ($keys as $key) {
             $success = $this->delete($key) && $success;
         }
+
         return $success;
     }
 
     public function getMultiple($keys, $default = null)
     {
         $values = [];
+
         foreach ($keys as $key) {
             $values[$key] = $this->get($key, $default);
         }
+
         return $values;
     }
 
     public function setMultiple($values, $ttl = null)
     {
         $success = true;
+
         foreach ($values as $key => $value) {
             $success = $this->set($key, $value, $ttl) && $success;
         }
+
         return $success;
     }
-
 }

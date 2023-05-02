@@ -22,6 +22,7 @@ declare(strict_types=1);
 
 namespace oat\generis\persistence\sql\dbal\MasterSlaveConnection;
 
+use common_Logger;
 use Doctrine\DBAL\Logging\SQLLogger;
 
 class MasterSlaveSqlLogger implements SQLLogger
@@ -30,6 +31,12 @@ class MasterSlaveSqlLogger implements SQLLogger
     private static $write = 0;
 
     private $label;
+
+    public function __destruct()
+    {
+        common_Logger::d(sprintf('[READ] - %s', self::$read));
+        common_Logger::d(sprintf('[WRITE] - %s', self::$write));
+    }
 
     public function setLabel($label): void
     {
@@ -50,7 +57,7 @@ class MasterSlaveSqlLogger implements SQLLogger
         }
 
         if ($target !== $this->label) {
-            \common_Logger::e(
+            common_Logger::e(
                 sprintf(
                     '[ERROR] %s [%s] %s',
                     debug_backtrace()[1]['function'],
@@ -59,7 +66,7 @@ class MasterSlaveSqlLogger implements SQLLogger
                 )
             );
         } else {
-            \common_Logger::i(
+            common_Logger::i(
                 sprintf(
                     '[INFO] %s [%s] %s...',
                     debug_backtrace()[1]['function'],
@@ -68,12 +75,6 @@ class MasterSlaveSqlLogger implements SQLLogger
                 )
             );
         }
-    }
-
-    public function __destruct()
-    {
-        \common_Logger::d(sprintf('[READ] - %s', self::$read));
-        \common_Logger::d(sprintf('[WRITE] - %s', self::$write));
     }
 
     /**

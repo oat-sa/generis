@@ -16,11 +16,11 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2014 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
  */
 
 namespace oat\generis\model\data\permission\implementation;
 
+use core_kernel_classes_Resource;
 use oat\generis\model\data\permission\PermissionInterface;
 use oat\oatbox\service\ConfigurableService;
 use oat\oatbox\user\User;
@@ -32,37 +32,38 @@ use oat\oatbox\user\User;
  * does not grant privileges
  *
  * @access public
+ *
  * @author Joel Bout, <joel@taotesting.com>
  */
 class NoAccess extends ConfigurableService implements PermissionInterface
 {
-    /**
-     *
-     */
     public function __construct()
     {
     }
-    
+
     /**
      * (non-PHPdoc)
+     *
      * @see PermissionInterface::getPermissions()
      */
     public function getPermissions(User $user, array $resourceIds)
     {
         return array_fill_keys($resourceIds, []);
     }
-    
+
     /**
      * (non-PHPdoc)
+     *
      * @see PermissionInterface::onResourceCreated()
      */
-    public function onResourceCreated(\core_kernel_classes_Resource $resource)
+    public function onResourceCreated(core_kernel_classes_Resource $resource)
     {
         // do nothing
     }
-    
+
     /**
      * (non-PHPdoc)
+     *
      * @see PermissionInterface::getSupportedRights()
      */
     public function getSupportedRights()

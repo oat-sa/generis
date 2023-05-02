@@ -21,24 +21,25 @@
  */
 namespace oat\generis\test;
 
-use \common_session_SessionManager;
-use \common_test_TestUserSession;
-use \common_ext_ExtensionsManager;
-use \common_ext_ExtensionInstaller;
-use \common_ext_ExtensionUninstaller;
-use \common_persistence_Manager;
 use common_Config;
+use common_ext_ExtensionInstaller;
+use common_ext_ExtensionsManager;
+use common_ext_ExtensionUninstaller;
+use common_Logger;
+use common_persistence_Manager;
+use common_session_SessionManager;
+use common_test_TestUserSession;
 
 /**
  * @author CRP Henri Tudor - TAO Team
  * @license GPLv2
+ *
  * @deprecated it uses constants
  */
 
 abstract class GenerisPhpUnitTestRunner extends TestCase
 {
     /**
-     *
      * @var boolean
      */
     private static $connected = false;
@@ -57,20 +58,23 @@ abstract class GenerisPhpUnitTestRunner extends TestCase
 
     /**
      * Create a new temporary file
+     *
      * @param string $pContent
+     * @param null|mixed $name
+     *
      * @return string
      */
     public function createFile($pContent = '', $name = null)
     {
         if (is_null($name)) {
-            $tmpfname = tempnam(sys_get_temp_dir(), "tst");
+            $tmpfname = tempnam(sys_get_temp_dir(), 'tst');
         } else {
             $tmpfname = sys_get_temp_dir() . DIRECTORY_SEPARATOR . $name;
         }
         $this->files[] = $tmpfname;
 
         if (!empty($pContent)) {
-            $handle = fopen($tmpfname, "w");
+            $handle = fopen($tmpfname, 'w');
             fwrite($handle, $pContent);
             fclose($handle);
         }
@@ -85,11 +89,15 @@ abstract class GenerisPhpUnitTestRunner extends TestCase
 
     /**
      * Cleanup of files
+     *
      * @see SimpleTestCase::after()
+     *
+     * @param mixed $method
      */
     public function after($method)
     {
         parent::after($method);
+
         foreach ($this->files as $file) {
             @unlink($file);
         }
@@ -113,10 +121,11 @@ abstract class GenerisPhpUnitTestRunner extends TestCase
     }
 
     /**
-     *
      * @author Lionel Lecaque, lionel@taotesting.com
+     *
      * @param string $var
      * @param string $className
+     *
      * @deprecated use assertInstanceOf instead
      */
     public function assertIsA($var, $className)
@@ -147,9 +156,10 @@ abstract class GenerisPhpUnitTestRunner extends TestCase
         $ext = common_ext_ExtensionsManager::singleton()->getExtensionById('generis') ;
         $this->config = $ext->getConfig(common_persistence_Manager::SERVICE_ID);
         $conf = $this->config;
+
         if (isset($conf['cache']) && isset($conf['cache']['driver'])) {
             $conf['cache']['driver'] = 'no_storage';
-            \common_Logger::i('Set cache on NO STORAGE');
+            common_Logger::i('Set cache on NO STORAGE');
 
             $ext->setConfig(_common_persistence_Manager::SERVICE_ID, $conf);
         }
@@ -157,14 +167,16 @@ abstract class GenerisPhpUnitTestRunner extends TestCase
 
     protected function restoreCache()
     {
-        \common_Logger::i('Restore cache persistence');
+        common_Logger::i('Restore cache persistence');
         $ext = common_ext_ExtensionsManager::singleton()->getExtensionById('generis') ;
         $ext->setConfig(common_persistence_Manager::SERVICE_ID, $this->config);
     }
 
     /**
      * Returns the test session if available
+     *
      * @throws common_exception_Error
+     *
      * @return common_test_TestUserSession
      */
     public static function getTestSession()
@@ -173,9 +185,11 @@ abstract class GenerisPhpUnitTestRunner extends TestCase
             throw new common_exception_Error('Trying to retrieve TestSession without initialising it first via initTest()');
         }
         $session = common_session_SessionManager::getSession();
+
         if (!$session instanceof common_test_TestUserSession) {
             throw new common_exception_Error('current session is no longer a common_test_TestUserSession');
         }
+
         return $session;
     }
 

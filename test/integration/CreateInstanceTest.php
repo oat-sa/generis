@@ -28,9 +28,9 @@ use oat\generis\test\GenerisPhpUnitTestRunner;
  * Test class for Class.
  *
  * @author lionel.lecaque@tudor.lu
+ *
  * @package test
  */
-
 
 class CreateInstanceTest extends GenerisPhpUnitTestRunner
 {
@@ -38,7 +38,6 @@ class CreateInstanceTest extends GenerisPhpUnitTestRunner
 
     protected function setUp(): void
     {
-
         GenerisPhpUnitTestRunner::initTest();
         $classres = core_kernel_classes_ResourceFactory::create(new core_kernel_classes_Class(OntologyRdfs::RDFS_CLASS), 'TestClass');
         $this->class = new core_kernel_classes_Class($classres->getUri());
@@ -75,20 +74,19 @@ class CreateInstanceTest extends GenerisPhpUnitTestRunner
 
     public function testCreateInstanceWithProperties()
     {
-
         // simple case, without params
 
-        $class          = $this->class;
-        $litproperty    = new core_kernel_classes_Property(core_kernel_classes_ResourceFactory::create(new core_kernel_classes_Class(OntologyRdf::RDF_PROPERTY))->getUri());
-        $property       = new core_kernel_classes_Property(core_kernel_classes_ResourceFactory::create(new core_kernel_classes_Class(OntologyRdf::RDF_PROPERTY))->getUri());
+        $class = $this->class;
+        $litproperty = new core_kernel_classes_Property(core_kernel_classes_ResourceFactory::create(new core_kernel_classes_Class(OntologyRdf::RDF_PROPERTY))->getUri());
+        $property = new core_kernel_classes_Property(core_kernel_classes_ResourceFactory::create(new core_kernel_classes_Class(OntologyRdf::RDF_PROPERTY))->getUri());
 
         $instance = $class->createInstanceWithProperties([]);
         $this->assertTrue($instance->hasType($class));
 
         // simple literal properties
         $instance1 = $class->createInstanceWithProperties([
-            OntologyRdfs::RDFS_LABEL        => 'testlabel',
-            OntologyRdfs::RDFS_COMMENT  => 'testcomment'
+            OntologyRdfs::RDFS_LABEL => 'testlabel',
+            OntologyRdfs::RDFS_COMMENT => 'testcomment',
         ]);
 
         $this->assertTrue($instance1->hasType($class));
@@ -97,8 +95,8 @@ class CreateInstanceTest extends GenerisPhpUnitTestRunner
 
         // multiple literal properties
         $instance2 = $class->createInstanceWithProperties([
-            OntologyRdfs::RDFS_LABEL                => 'testlabel',
-            $litproperty->getUri()  => ['testlit1', 'testlit2']
+            OntologyRdfs::RDFS_LABEL => 'testlabel',
+            $litproperty->getUri() => ['testlit1', 'testlit2'],
         ]);
         $this->assertTrue($instance2->hasType($class));
         $this->assertEquals($instance2->getLabel(), 'testlabel');
@@ -109,9 +107,9 @@ class CreateInstanceTest extends GenerisPhpUnitTestRunner
         // single ressource properties
         $propInst = core_kernel_classes_ResourceFactory::create($class);
         $instance3 = $class->createInstanceWithProperties([
-            OntologyRdfs::RDFS_LABEL            => 'testlabel',
-            OntologyRdfs::RDFS_COMMENT      => 'testcomment',
-            $property->getUri() => $propInst
+            OntologyRdfs::RDFS_LABEL => 'testlabel',
+            OntologyRdfs::RDFS_COMMENT => 'testcomment',
+            $property->getUri() => $propInst,
         ]);
         $this->assertTrue($instance3->hasType($class));
         $this->assertEquals($instance3->getLabel(), 'testlabel');
@@ -121,9 +119,9 @@ class CreateInstanceTest extends GenerisPhpUnitTestRunner
         // multiple ressource properties
         $propInst2 = core_kernel_classes_ResourceFactory::create($class);
         $instance4 = $class->createInstanceWithProperties([
-            OntologyRdfs::RDFS_LABEL            => 'testlabel',
-            OntologyRdfs::RDFS_COMMENT      => 'testcomment',
-            $property->getUri() => [$propInst, $propInst2]
+            OntologyRdfs::RDFS_LABEL => 'testlabel',
+            OntologyRdfs::RDFS_COMMENT => 'testcomment',
+            $property->getUri() => [$propInst, $propInst2],
         ]);
         $this->assertTrue($instance4->hasType($class));
         $this->assertEquals($instance4->getLabel(), 'testlabel');
@@ -142,10 +140,9 @@ class CreateInstanceTest extends GenerisPhpUnitTestRunner
 
         // 2 classes (by ressource)
         $instance5 = $class->createInstanceWithProperties([
-            OntologyRdfs::RDFS_LABEL            => 'testlabel5',
-            OntologyRdf::RDF_TYPE           => $classres
+            OntologyRdfs::RDFS_LABEL => 'testlabel5',
+            OntologyRdf::RDF_TYPE => $classres,
         ]);
-
 
         $this->assertTrue($instance5->hasType($class));
         $this->assertTrue($instance5->hasType($class3));
@@ -153,8 +150,8 @@ class CreateInstanceTest extends GenerisPhpUnitTestRunner
 
         // 3 classes (by uri + class)
         $instance6 = $class->createInstanceWithProperties([
-            OntologyRdfs::RDFS_LABEL            => 'testlabel6',
-            OntologyRdf::RDF_TYPE           => [$class2, $class3->getUri()]
+            OntologyRdfs::RDFS_LABEL => 'testlabel6',
+            OntologyRdf::RDF_TYPE => [$class2, $class3->getUri()],
         ]);
         $this->assertTrue($instance6->hasType($class));
         $this->assertTrue($instance6->hasType($class2));

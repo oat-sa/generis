@@ -24,8 +24,8 @@ namespace oat\generis\migrations;
 
 use Doctrine\DBAL\Schema\Schema;
 use oat\oatbox\reporting\Report;
-use oat\tao\scripts\update\OntologyUpdater;
 use oat\tao\scripts\tools\migrations\AbstractMigration;
+use oat\tao\scripts\update\OntologyUpdater;
 
 final class Version202201010708595959_generis extends AbstractMigration
 {

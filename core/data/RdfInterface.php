@@ -16,13 +16,12 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2014 (original work) Open Assessment Technologies SA;
- *
- *
  */
 
 namespace oat\generis\model\data;
 
 use core_kernel_classes_Triple;
+use IteratorAggregate;
 use Traversable;
 
 /**
@@ -30,26 +29,27 @@ use Traversable;
  * This is an experimental interface that has not been implemented yet
  *
  * @author Joel Bout, <joel@taotesting.com>
+ *
  * @package generis
-
  */
-interface RdfInterface extends \IteratorAggregate
+interface RdfInterface extends IteratorAggregate
 {
     /**
      * Returns an array of the triples with the given subject, predicate
      *
      * @param string $subject
      * @param string $predicate
+     *
      * @return array
      */
     public function get($subject, $predicate);
-    
+
     /**
      * Adds a triple to the model
      *
-     * @param \core_kernel_classes_Triple $triple
+     * @param core_kernel_classes_Triple $triple
      */
-    public function add(\core_kernel_classes_Triple $triple);
+    public function add(core_kernel_classes_Triple $triple);
 
     /**
      * Adds a triples to the model
@@ -61,15 +61,16 @@ interface RdfInterface extends \IteratorAggregate
     /**
      * Removes the triple
      *
-     * @param \core_kernel_classes_Triple $triple
+     * @param core_kernel_classes_Triple $triple
      */
-    public function remove(\core_kernel_classes_Triple $triple);
-    
+    public function remove(core_kernel_classes_Triple $triple);
+
     /**
      * Returns an array of the triples with the given predicate, object
      *
      * @param string $predicate
      * @param string $object
+     *
      * @return array
      */
     public function search($predicate, $object);

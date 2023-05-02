@@ -22,17 +22,17 @@ declare(strict_types=1);
 
 namespace oat\generis\model\resource\Repository;
 
-use RuntimeException;
 use BadMethodCallException;
-use InvalidArgumentException;
 use core_kernel_classes_Class;
-use oat\oatbox\event\EventManager;
-use oat\generis\model\data\Ontology;
 use core_kernel_persistence_ClassInterface;
+use InvalidArgumentException;
 use oat\generis\model\Context\ContextInterface;
 use oat\generis\model\data\event\ClassDeletedEvent;
+use oat\generis\model\data\Ontology;
 use oat\generis\model\resource\Context\ResourceRepositoryContext;
 use oat\generis\model\resource\Contract\ResourceRepositoryInterface;
+use oat\oatbox\event\EventManager;
+use RuntimeException;
 
 class ClassRepository implements ResourceRepositoryInterface
 {

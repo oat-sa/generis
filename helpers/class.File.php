@@ -19,7 +19,6 @@
  *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
  *               2013      (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
  */
 
 /**
@@ -28,19 +27,21 @@
  * Utilities on files
  *
  * @access public
+ *
  * @author Lionel Lecaque, <lionel@taotesting.com>
+ *
  * @package generis
-
  */
 class helpers_File
 {
-    const SCAN_FILE = 1;
-    const SCAN_DIRECTORY = 2;
+    public const SCAN_FILE = 1;
+    public const SCAN_DIRECTORY = 2;
 
     // --- ATTRIBUTES ---
 
     /**
      * matches [A-Za-z] | - | _
+     *
      * @var array
      */
     private static $ALLOWED_CHARACTERS = ['A' => '','B' => '','C' => '','D' => '','E' => '','F' => '','G' => '','H' => '','I' => '','J' => '','K' => '','L' => '','M' => '','N' => '','O' => '','P' => '','Q' => '','R' => '','S' => '','T' => '','U' => '','V' => '','W' => '','X' => '','Y' => '','Z' => '','a' => '','b' => '','c' => '','d' => '','e' => '','f' => '','g' => '','h' => '','i' => '','j' => '','k' => '','l' => '','m' => '','n' => '','o' => '','p' => '','q' => '','r' => '','s' => '','t' => '','u' => '','v' => '','w' => '','x' => '','y' => '','z' => '',0 => '',1 => '',2 => '',3 => '',4 => '',5 => '',6 => '',7 => '',8 => '',9 => '','_' => '','-' => ''];
@@ -49,7 +50,9 @@ class helpers_File
      * Directory Mode
      *
      * @access public
+     *
      * @deprecated use helpers_File::SCAN_DIRECTORY
+     *
      * @var int
      */
     public static $DIR = 2;
@@ -58,7 +61,9 @@ class helpers_File
      * File Mode
      *
      * @access public
+     *
      * @deprecated use helpers_File::SCAN_FILE
+     *
      * @var int
      */
     public static $FILE = 1;
@@ -70,9 +75,14 @@ class helpers_File
      * to the file/directory 'to'
      *
      * @access public
+     *
      * @author Lionel Lecaque, <lionel@taotesting.com>
+     *
      * @param string from
      * @param string to
+     * @param mixed $from
+     * @param mixed $to
+     *
      * @return string
      */
     public static function getRelPath($from, $to)
@@ -87,6 +97,7 @@ class helpers_File
             array_shift($arrFrom);
             array_shift($arrTo);
         }
+
         foreach ($arrFrom as $dir) {
             $returnValue .= '..' . DIRECTORY_SEPARATOR;
         }
@@ -98,8 +109,9 @@ class helpers_File
     /**
      * Helps prevent 'path traversal' attacks
      *
-     * @param string $filename  path to file relative to $directory
+     * @param string $filename path to file relative to $directory
      * @param string $directory absolute path to directory
+     *
      * @return bool
      */
     public static function isFileInsideDirectory($filename, $directory)
@@ -110,17 +122,20 @@ class helpers_File
     /**
      * Helps prevent 'path traversal' attacks
      *
-     * @param string $filename  absolute path to file
+     * @param string $filename absolute path to file
      * @param string $directory absolute path to directory
+     *
      * @return bool
      */
     public static function isAbsoluteFileInsideDirectory($filename, $directory)
     {
         $canonicalDirectory = realpath($directory);
+
         if (false === $canonicalDirectory) {
             return false;
         }
         $canonicalFilename = realpath($filename);
+
         if (false === $canonicalFilename) {
             return false;
         }
@@ -132,8 +147,12 @@ class helpers_File
      * deletes a file or a direcstory recursively
      *
      * @access public
+     *
      * @author Lionel Lecaque, <lionel@taotesting.com>
+     *
      * @param string path
+     * @param mixed $path
+     *
      * @return boolean
      */
     public static function remove($path)
@@ -147,9 +166,10 @@ class helpers_File
              * //It seems to raise problemes on windows, depending on the php version the resource handler is not freed with DirectoryIterator preventing from further deletions // $iterator = new DirectoryIterator($path); foreach ($iterator as $fileinfo) { if (!$fileinfo->isDot()) { } }
              */
             $handle = opendir($path);
+
             if ($handle !== false) {
                 while (false !== ($entry = readdir($handle))) {
-                    if ($entry != "." && $entry != "..") {
+                    if ($entry != '.' && $entry != '..') {
                         self::remove($path . DIRECTORY_SEPARATOR . $entry);
                     }
                 }
@@ -171,14 +191,16 @@ class helpers_File
      *
      * @param string $path
      * @param boolean $ignoreSystemFiles
+     *
      * @return boolean
      */
     public static function emptyDirectory($path, $ignoreSystemFiles = false)
     {
         $success = true;
         $handle = opendir($path);
+
         while (false !== ($entry = readdir($handle))) {
-            if ($entry != "." && $entry != "..") {
+            if ($entry != '.' && $entry != '..') {
                 if ($entry[0] === '.' && $ignoreSystemFiles === true) {
                     continue;
                 }
@@ -187,6 +209,7 @@ class helpers_File
             }
         }
         closedir($handle);
+
         return $success;
     }
 
@@ -194,11 +217,18 @@ class helpers_File
      * Copy a file from source to destination, may be done recursively and may ignore system files
      *
      * @access public
+     *
      * @author Lionel Lecaque, <lionel@taotesting.com>
+     *
      * @param string source
      * @param string destination
      * @param boolean recursive
      * @param boolean ignoreSystemFiles
+     * @param mixed $source
+     * @param mixed $destination
+     * @param mixed $recursive
+     * @param mixed $ignoreSystemFiles
+     *
      * @return boolean
      */
     public static function copy($source, $destination, $recursive = true, $ignoreSystemFiles = true)
@@ -209,9 +239,9 @@ class helpers_File
 
         $returnValue = (bool) false;
 
-
         // Check for System File
         $basename = basename($source);
+
         if ($basename[0] === '.' && $ignoreSystemFiles === true) {
             return false;
         }
@@ -225,6 +255,7 @@ class helpers_File
         if (is_file($source)) {
             // get path info of destination.
             $destInfo = pathinfo($destination);
+
             if (isset($destInfo['dirname']) && ! is_dir($destInfo['dirname'])) {
                 if (! mkdir($destInfo['dirname'], 0777, true)) {
                     return false;
@@ -243,6 +274,7 @@ class helpers_File
 
             // Loop through the folder
             $dir = dir($source);
+
             while (false !== $entry = $dir->read()) {
                 // Skip pointers
                 if ($entry === '.' || $entry === '..') {
@@ -255,11 +287,11 @@ class helpers_File
 
             // Clean up
             $dir->close();
+
             return true;
-        } else {
-            return false;
         }
 
+        return false;
 
         return (bool) $returnValue;
     }
@@ -274,23 +306,30 @@ class helpers_File
      * * 'absolute' -> boolean (returns absolute path or file name)
      *
      * @access public
+     *
      * @author Lionel Lecaque, <lionel@taotesting.com>
+     *
      * @param string path
      * @param array options
-     * @return array An array of paths.
+     * @param mixed $path
+     * @param mixed $options
+     *
+     * @return array an array of paths
      */
     public static function scandir($path, $options = [])
     {
         $returnValue = [];
 
-        $recursive = isset($options['recursive']) ? $options['recursive'] : false;
-        $only = isset($options['only']) ? $options['only'] : null;
-        $absolute = isset($options['absolute']) ? $options['absolute'] : false;
+        $recursive = $options['recursive'] ?? false;
+        $only = $options['only'] ?? null;
+        $absolute = $options['absolute'] ?? false;
 
         if (is_dir($path)) {
             $iterator = new DirectoryIterator($path);
+
             foreach ($iterator as $fileinfo) {
                 $fileName = $fileinfo->getFilename();
+
                 if ($absolute === true) {
                     $fileName = $fileinfo->getPathname();
                 }
@@ -314,7 +353,7 @@ class helpers_File
                 }
             }
         } else {
-            throw new common_Exception("An error occured : The function (" . __METHOD__ . ") of the class (" . __CLASS__ . ") is expecting a directory path as first parameter : " . $path);
+            throw new common_Exception('An error occured : The function (' . __METHOD__ . ') of the class (' . __CLASS__ . ') is expecting a directory path as first parameter : ' . $path);
         }
 
         return (array) $returnValue;
@@ -322,23 +361,26 @@ class helpers_File
 
     /**
      * Convert url to path
+     *
      * @param string $path
+     *
      * @return string
      */
     public static function urlToPath($path)
     {
         $path = parse_url($path);
+
         return $path === null ? null : str_replace('/', DIRECTORY_SEPARATOR, $path['path']);
     }
-
 
     /**
      * An alternative way to resolve the real path of a path. The resulting
      * path might point to something non-existant on the file system contrary to
      * PHP's realpath function.
      *
-     * @param string $path The original path.
-     * @return string The resolved path.
+     * @param string $path the original path
+     *
+     * @return string the resolved path
      */
     public static function truePath($path)
     {
@@ -352,13 +394,15 @@ class helpers_File
             $path = getcwd() . DIRECTORY_SEPARATOR . $path;
         }
         // resolve path parts (single dot, double dot and double delimiters)
-        $path      = str_replace([ '/', '\\' ], DIRECTORY_SEPARATOR, $path);
-        $parts     = array_filter(explode(DIRECTORY_SEPARATOR, $path), 'strlen');
+        $path = str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $path);
+        $parts = array_filter(explode(DIRECTORY_SEPARATOR, $path), 'strlen');
         $absolutes = [];
+
         foreach ($parts as $part) {
             if ('.' == $part) {
                 continue;
             }
+
             if ('..' == $part) {
                 array_pop($absolutes);
             } else {
@@ -368,6 +412,7 @@ class helpers_File
         $path = implode(DIRECTORY_SEPARATOR, $absolutes);
         // put initial separator that could have been lost
         $path = !$unipath ? '/' . $path : $path;
+
         return $path;
     }
 
@@ -376,14 +421,18 @@ class helpers_File
      * to prevent collisions
      *
      * @param string $key
+     * @param mixed $string
+     *
      * @return string
      */
     public static function sanitizeInjectively($string)
     {
         $sanitized = '';
+
         foreach (str_split($string) as $char) {
             $sanitized .= isset(self::$ALLOWED_CHARACTERS[$char]) ? $char : '=' . base64_encode($char);
         }
+
         return $sanitized;
     }
 
@@ -395,7 +444,8 @@ class helpers_File
      *
      * @param string $path
      * @param string|array $types Types to look for with no dot. e.g. 'php', 'js', ...
-     * @param boolean $recursive Whether or not scan the directory recursively.
+     * @param boolean $recursive whether or not scan the directory recursively
+     *
      * @return boolean
      */
     public static function containsFileType($path, $types = [], $recursive = true)
@@ -427,8 +477,11 @@ class helpers_File
      * Create a unique file name on basis of the original one.
      *
      * @access private
+     *
      * @author Jerome Bogaerts, <jerome@taotesting.com>
-     * @param  string $originalName
+     *
+     * @param string $originalName
+     *
      * @return string
      */
     public static function createFileName($originalName)
@@ -436,6 +489,7 @@ class helpers_File
         $returnValue = uniqid(hash('crc32', $originalName));
 
         $ext = @pathinfo($originalName, PATHINFO_EXTENSION);
+
         if (!empty($ext)) {
             $returnValue .= '.' . $ext;
         }
@@ -445,12 +499,13 @@ class helpers_File
 
     /**
      * @param string $type
+     *
      * @return boolean
      */
     public static function isZipMimeType($type)
     {
         return in_array($type, [
-            'application/zip', 'application/x-zip', 'application/x-zip-compressed', 'application/octet-stream'
+            'application/zip', 'application/x-zip', 'application/x-zip-compressed', 'application/octet-stream',
         ]);
     }
 }

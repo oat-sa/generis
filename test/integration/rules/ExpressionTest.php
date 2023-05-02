@@ -2,7 +2,7 @@
 
 use oat\generis\model\RulesRdf;
 
-/**
+/*
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
@@ -27,7 +27,6 @@ use oat\generis\test\TestCase;
 
 class ExpressionTest extends TestCase
 {
-
     public function testEvaluate()
     {
         $constantResource1 = core_kernel_rules_TermFactory::createConst('test1');
@@ -49,7 +48,6 @@ class ExpressionTest extends TestCase
         $terminalExpression14 = core_kernel_rules_ExpressionFactory::createTerminalExpression($constantResource14);
         $terminalExpression12 = core_kernel_rules_ExpressionFactory::createTerminalExpression($constantResource12);
         $terminalExpression12b = core_kernel_rules_ExpressionFactory::createTerminalExpression($constantResource12b);
-
 
         // test1 == test2
         $equalsOperator = new core_kernel_classes_Resource(RulesRdf::INSTANCE_EQUALS_OPERATOR_URI);
@@ -105,7 +103,6 @@ class ExpressionTest extends TestCase
         $this->assertTrue($finalExpression->evaluate());
         $finalExpression->delete();
 
-
         // 14 < 12
         $infOperator = new core_kernel_classes_Resource(RulesRdf::INSTANCE_INF_OPERATOR_URI);
         $finalExpression = core_kernel_rules_ExpressionFactory::createRecursiveExpression($terminalExpression14, $terminalExpression12, $infOperator);
@@ -147,7 +144,6 @@ class ExpressionTest extends TestCase
         //falseExpression2 =>  14 < 12
         $falseExpression2 = core_kernel_rules_ExpressionFactory::createRecursiveExpression($terminalExpression14, $terminalExpression12, $infOperator);
 
-
         // 12 < 14 AND test1 == test2
         $andOperator = new core_kernel_classes_Resource(RulesRdf::INSTANCE_AND_OPERATOR);
         $finalExpression = core_kernel_rules_ExpressionFactory::createRecursiveExpression($trueExpression, $falseExpression, $andOperator);
@@ -179,7 +175,6 @@ class ExpressionTest extends TestCase
         $finalExpression = core_kernel_rules_ExpressionFactory::createRecursiveExpression($falseExpression, $falseExpression2, $orOperator);
         $this->assertFalse($finalExpression->evaluate());
         $finalExpression->delete();
-
 
         // (test1 == test2 OR 14 < 12) AND (12 < 14 OR test1 == test2)
         $finalExpression1 = core_kernel_rules_ExpressionFactory::createRecursiveExpression($falseExpression, $falseExpression2, $orOperator);

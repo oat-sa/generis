@@ -16,29 +16,35 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2016 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
  */
 
 namespace oat\oatbox\filesystem;
 
+use ArrayIterator;
+use common_Exception;
+use common_exception_FileSystemError;
+use IteratorAggregate;
 use League\Flysystem\FileExistsException;
+use tao_models_classes_FileNotFoundException;
 
-class Directory extends FileSystemHandler implements \IteratorAggregate
+class Directory extends FileSystemHandler implements IteratorAggregate
 {
-    const ITERATOR_RECURSIVE = '1';
-    const ITERATOR_FILE      = '2';
-    const ITERATOR_DIRECTORY = '4';
+    public const ITERATOR_RECURSIVE = '1';
+    public const ITERATOR_FILE = '2';
+    public const ITERATOR_DIRECTORY = '4';
 
     /**
      * Get a subDirectory of $this (existing or not)
      *
      * @param $path
+     *
      * @return Directory
      */
     public function getDirectory($path)
     {
         $subDirectory = new self($this->getFileSystemId(), $this->getFullPath($path));
         $subDirectory->setServiceLocator($this->getServiceLocator());
+
         return $subDirectory;
     }
 
@@ -46,19 +52,21 @@ class Directory extends FileSystemHandler implements \IteratorAggregate
      * Get file located into $this->directory (existing or not)
      *
      * @param $path
+     *
      * @return File
      */
     public function getFile($path)
     {
         $file = new File($this->getFileSystemId(), $this->getFullPath($path));
         $file->setServiceLocator($this->getServiceLocator());
+
         return $file;
     }
 
     /**
      * Method constraints by IteratorAggregator, wrapper to getFlyIterator
      *
-     * @return \ArrayIterator
+     * @return ArrayIterator
      */
     public function getIterator()
     {
@@ -71,7 +79,8 @@ class Directory extends FileSystemHandler implements \IteratorAggregate
      * By default iterator is not recursive and includes directories & files
      *
      * @param null $flags
-     * @return \ArrayIterator
+     *
+     * @return ArrayIterator
      */
     public function getFlyIterator($flags = null)
     {
@@ -88,6 +97,7 @@ class Directory extends FileSystemHandler implements \IteratorAggregate
 
         if (!empty($contents)) {
             $dirPath = $this->getFileSystem()->get($this->getPrefix())->getPath();
+
             foreach ($contents as $content) {
                 if ($withDirectories && $content['type'] == 'dir') {
                     $iterator[] = $this->getDirectory(str_replace($dirPath, '', $content['path']));
@@ -99,21 +109,23 @@ class Directory extends FileSystemHandler implements \IteratorAggregate
             }
         }
 
-        return new \ArrayIterator($iterator);
+        return new ArrayIterator($iterator);
     }
 
     /**
      * Get relative path from $this directory to given content
      *
      * @param Directory|File $content
+     *
+     * @throws common_Exception
+     * @throws tao_models_classes_FileNotFoundException
+     *
      * @return mixed
-     * @throws \common_Exception
-     * @throws \tao_models_classes_FileNotFoundException
      */
     public function getRelPath($content)
     {
         if (! $content instanceof File && ! $content instanceof Directory) {
-            throw new \common_Exception('Content for ' . __FUNCTION__ . ' has to be a file or directory object. ' .
+            throw new common_Exception('Content for ' . __FUNCTION__ . ' has to be a file or directory object. ' .
                 is_object($content) ? get_class($content) : gettype($content) . ' given.');
         }
 
@@ -144,6 +156,7 @@ class Directory extends FileSystemHandler implements \IteratorAggregate
      * Return a sanitized full path from main directory
      *
      * @param $path
+     *
      * @return string
      */
     protected function getFullPath($path)
@@ -157,8 +170,10 @@ class Directory extends FileSystemHandler implements \IteratorAggregate
      * Rename directory into $path
      *
      * @param $path
+     *
+     * @throws common_exception_FileSystemError
+     *
      * @return bool
-     * @throws \common_exception_FileSystemError
      */
     public function rename($path)
     {
@@ -167,13 +182,15 @@ class Directory extends FileSystemHandler implements \IteratorAggregate
         // implementation is then needed.
 
         $contents = $this->getFileSystem()->listContents($this->getPrefix(), true);
-        $fileSystemId = $this->getFileSystemId().'/';
+        $fileSystemId = $this->getFileSystemId() . '/';
         // Filter files only.
         $filePaths = [];
+
         foreach ($contents as $content) {
             if ($content['type'] === 'file') {
                 $contentPath = $content['path'];
-                if(strpos($contentPath, $fileSystemId) === 0) {
+
+                if (strpos($contentPath, $fileSystemId) === 0) {
                     $contentPath = substr($contentPath, strlen($fileSystemId));
                 }
 
@@ -186,15 +203,15 @@ class Directory extends FileSystemHandler implements \IteratorAggregate
         foreach ($filePaths as $renaming) {
             try {
                 if ($this->getFileSystem()->rename($renaming['source'], $renaming['destination']) === false) {
-                    throw new \common_exception_FileSystemError("Unable to rename '" . $renaming['source'] . "' into '".$renaming['destination']."'.");
+                    throw new common_exception_FileSystemError("Unable to rename '" . $renaming['source'] . "' into '" . $renaming['destination'] . "'.");
                 }
             } catch (FileExistsException $e) {
-                throw new \common_exception_FileSystemError("Unable to rename '" . $renaming['source'] . "' into '".$renaming['destination']."'. File already exists.");
+                throw new common_exception_FileSystemError("Unable to rename '" . $renaming['source'] . "' into '" . $renaming['destination'] . "'. File already exists.");
             }
         }
 
         if (!$this->deleteSelf()) {
-            throw new \common_exception_FileSystemError("Could not finalize renaming of '" . $this->getPrefix() . "' into '${path}'.");
+            throw new common_exception_FileSystemError("Could not finalize renaming of '" . $this->getPrefix() . "' into '${path}'.");
         }
 
         return true;

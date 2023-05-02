@@ -18,17 +18,17 @@ declare(strict_types=1);
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) (original work) 2015-2020 Open Assessment Technologies SA
- *
  */
 
 namespace oat\generis\test\unit\model\persistence\smoothsql;
 
 use common_Exception;
-use \core_kernel_persistence_smoothsql_SmoothRdf;
+use core_kernel_classes_Triple;
+use core_kernel_persistence_smoothsql_SmoothRdf;
 use Doctrine\DBAL\ParameterType;
+use oat\generis\test\TestCase;
 use Prophecy\Argument;
 use Prophecy\Prophet;
-use oat\generis\test\TestCase;
 
 class SmoothRdfTest extends TestCase
 {
@@ -67,7 +67,6 @@ class SmoothRdfTest extends TestCase
     }
 
     /**
-     *
      * @author Lionel Lecaque, lionel@taotesting.com
      */
     public function testAdd()
@@ -77,9 +76,9 @@ class SmoothRdfTest extends TestCase
 
         $persistence = $this->prophesize('\common_persistence_SqlPersistence');
         $persistence->getPlatForm()->willReturn($platform->reveal());
-        $query = "INSERT INTO statements ( modelId, subject, predicate, object, l_language, epoch, author) VALUES ( ? , ? , ? , ? , ? , ?, ?);";
+        $query = 'INSERT INTO statements ( modelId, subject, predicate, object, l_language, epoch, author) VALUES ( ? , ? , ? , ? , ? , ?, ?);';
 
-        $triple = new \core_kernel_classes_Triple();
+        $triple = new core_kernel_classes_Triple();
         $triple->modelid = 22;
         $triple->subject = 'subjectUri';
         $triple->predicate = 'predicateUri';
@@ -94,7 +93,7 @@ class SmoothRdfTest extends TestCase
                 'objectUri',
                 '',
                 'now',
-                ''
+                '',
             ],
             $this->getExpectedTripleParameterTypes()
         )->shouldBeCalled()->willReturn(true);
@@ -108,7 +107,6 @@ class SmoothRdfTest extends TestCase
     }
 
     /**
-     *
      * @author Lionel Lecaque, lionel@taotesting.com
      */
     public function testAddWithAuthor()
@@ -118,9 +116,9 @@ class SmoothRdfTest extends TestCase
 
         $persistence = $this->prophesize('\common_persistence_SqlPersistence');
         $persistence->getPlatForm()->willReturn($platform->reveal());
-        $query = "INSERT INTO statements ( modelId, subject, predicate, object, l_language, epoch, author) VALUES ( ? , ? , ? , ? , ? , ?, ?);";
+        $query = 'INSERT INTO statements ( modelId, subject, predicate, object, l_language, epoch, author) VALUES ( ? , ? , ? , ? , ? , ?, ?);';
 
-        $triple = new \core_kernel_classes_Triple();
+        $triple = new core_kernel_classes_Triple();
         $triple->modelid = 22;
         $triple->subject = 'subjectUri';
         $triple->predicate = 'predicateUri';
@@ -136,7 +134,7 @@ class SmoothRdfTest extends TestCase
                 'objectUri',
                 '',
                 'now',
-                'JohnDoe'
+                'JohnDoe',
             ],
             $this->getExpectedTripleParameterTypes()
         )->shouldBeCalled()->willReturn(true);
@@ -150,16 +148,15 @@ class SmoothRdfTest extends TestCase
     }
 
     /**
-     *
      * @author Lionel Lecaque, lionel@taotesting.com
      */
     public function testRemove()
     {
         $prophet = new Prophet();
         $persistence = $prophet->prophesize('\common_persistence_SqlPersistence');
-        $query = "DELETE FROM statements WHERE subject = ? AND predicate = ? AND object = ? AND l_language = ?;";
+        $query = 'DELETE FROM statements WHERE subject = ? AND predicate = ? AND object = ? AND l_language = ?;';
 
-        $triple = new \core_kernel_classes_Triple();
+        $triple = new core_kernel_classes_Triple();
         $triple->modelid = 22;
         $triple->subject = 'subjectUri';
         $triple->predicate = 'predicateUri';
@@ -169,12 +166,11 @@ class SmoothRdfTest extends TestCase
             'subjectUri',
             'predicateUri',
             'objectUri',
-            ''
+            '',
         ])->shouldBeCalled()->willReturn(true);
 
         $model = $prophet->prophesize('\core_kernel_persistence_smoothsql_SmoothModel');
         $model->getPersistence()->willReturn($persistence->reveal());
-
 
         $rdf = new core_kernel_persistence_smoothsql_SmoothRdf($model->reveal());
 
@@ -191,14 +187,14 @@ class SmoothRdfTest extends TestCase
 
         $table = 'statements';
 
-        $triple1 = new \core_kernel_classes_Triple();
+        $triple1 = new core_kernel_classes_Triple();
         $triple1->modelid = 11;
         $triple1->subject = 'subjectUri1';
         $triple1->predicate = 'predicateUri1';
         $triple1->object = 'objectUri1';
         $triple1->author = '';
 
-        $triple2 = new \core_kernel_classes_Triple();
+        $triple2 = new core_kernel_classes_Triple();
         $triple2->modelid = 22;
         $triple2->subject = 'subjectUri2';
         $triple2->predicate = 'predicateUri2';
@@ -228,7 +224,7 @@ class SmoothRdfTest extends TestCase
                 'l_language' => '',
                 'author' => 'JohnDoe2',
                 'epoch' => 'now',
-            ]
+            ],
         ];
 
         $persistence->insertMultiple(

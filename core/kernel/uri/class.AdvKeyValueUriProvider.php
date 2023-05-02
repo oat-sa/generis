@@ -18,27 +18,28 @@
  * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
  *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- *
  */
 
-use oat\oatbox\service\ConfigurableService;
 use oat\generis\model\kernel\uri\UriProvider;
 use oat\generis\model\kernel\uri\UriProviderException;
+use oat\oatbox\service\ConfigurableService;
 
 /**
  * UriProvider implementation based on an advanced key value storage
  *
  * @access public
+ *
  * @author Joel Bout, <joel@taotesting.com>
+ *
  * @package generis
  */
 class core_kernel_uri_AdvKeyValueUriProvider extends ConfigurableService implements UriProvider
 {
-    const OPTION_PERSISTENCE = 'persistence';
-    const OPTION_NAMESPACE = 'namespace';
-    
-    const PERSISTENCE_KEY = 'generis_uriProvider';
-    
+    public const OPTION_PERSISTENCE = 'persistence';
+    public const OPTION_NAMESPACE = 'namespace';
+
+    public const PERSISTENCE_KEY = 'generis_uriProvider';
+
     /**
      * @return common_persistence_AdvKeyValuePersistence
      */
@@ -46,20 +47,23 @@ class core_kernel_uri_AdvKeyValueUriProvider extends ConfigurableService impleme
     {
         return common_persistence_AdvKeyValuePersistence::getPersistence($this->getOption(self::OPTION_PERSISTENCE));
     }
-    
+
     /**
      * Generates a URI based on a serial stored in the database.
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @return string
+     *
      * @throws UriProviderException
+     *
+     * @return string
      */
     public function provide()
     {
         $nextId = $this->getPersistence()->incr(self::PERSISTENCE_KEY);
-        list($usec, $sec) = explode(" ", microtime());
-        $uri = $this->getOption(self::OPTION_NAMESPACE) . 'i' . (str_replace(".", "", $sec . "" . $usec)) . $nextId;
+        list($usec, $sec) = explode(' ', microtime());
+        $uri = $this->getOption(self::OPTION_NAMESPACE) . 'i' . (str_replace('.', '', $sec . '' . $usec)) . $nextId;
 
         return $uri;
     }

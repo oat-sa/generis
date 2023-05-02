@@ -17,14 +17,12 @@
  *
  * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- *
  */
 
+use oat\oatbox\cache\SimpleCache;
+use oat\oatbox\extension\ComposerInfo;
 use oat\oatbox\service\ConfigurableService;
 use oat\oatbox\service\ServiceManager;
-use oat\oatbox\extension\exception\ManifestException;
-use oat\oatbox\extension\ComposerInfo;
-use oat\oatbox\cache\SimpleCache;
 
 /**
  * The ExtensionsManager class is dedicated to Extensions Management. It provides
@@ -33,18 +31,21 @@ use oat\oatbox\cache\SimpleCache;
  * obtain a reference on a particular test case.
  *
  * @access public
+ *
  * @authorlionel@taotesting.com
+ *
  * @package generis
+ *
  * @see @license  GNU General Public (GPL) Version 2 http://www.opensource.org/licenses/gpl-2.0.php
  */
 class common_ext_ExtensionsManager extends ConfigurableService
 {
-    const EXTENSIONS_CONFIG_KEY = 'installation';
+    public const EXTENSIONS_CONFIG_KEY = 'installation';
 
-    const SERVICE_ID = 'generis/extensionManager';
+    public const SERVICE_ID = 'generis/extensionManager';
 
     public static $RESERVED_WORDS = [
-        'config', 'data', 'vendor', 'tests'
+        'config', 'data', 'vendor', 'tests',
     ];
 
     /**
@@ -52,18 +53,21 @@ class common_ext_ExtensionsManager extends ConfigurableService
      * references on common_ext_Extension class instances.
      *
      * @access private
+     *
      * @var array
      */
     private $extensions = [];
 
     /**
-     * @deprecated Use ServiceManager::get(\common_ext_ExtensionsManager::SERVICE_ID) instead
+     * @deprecated use ServiceManager::get(\common_ext_ExtensionsManager::SERVICE_ID) instead
      *
      * Obtain a reference on a unique common_ext_ExtensionsManager
-     * class instance.
+     * class instance
      *
      * @access public
+     *
      * @author Joel Bout, <joel@taotesting.com>
+     *
      * @return common_ext_ExtensionsManager
      */
     public static function singleton()
@@ -73,11 +77,13 @@ class common_ext_ExtensionsManager extends ConfigurableService
 
     /**
      * Get list of ids of installed extensions
+     *
      * @return mixed
      */
     public function getInstalledExtensionsIds()
     {
         $installData = $this->getExtensionById('generis')->getConfig(self::EXTENSIONS_CONFIG_KEY);
+
         return is_array($installData) ? array_keys($installData) : [];
     }
 
@@ -86,15 +92,19 @@ class common_ext_ExtensionsManager extends ConfigurableService
      * returns an array of common_ext_Extension.
      *
      * @access public
+     *
      * @author Joel Bout, <joel@taotesting.com>
+     *
      * @return array
      */
     public function getInstalledExtensions()
     {
         $returnValue = [];
+
         foreach ($this->getInstalledExtensionsIds() as $extId) {
             $returnValue[$extId] = $this->getExtensionById($extId);
         }
+
         return $returnValue;
     }
 
@@ -102,6 +112,7 @@ class common_ext_ExtensionsManager extends ConfigurableService
      * Load all extensions that have to be loaded
      *
      * @access public
+     *
      * @author Joel Bout, <joel@taotesting.com>
      */
     public function loadExtensions()
@@ -122,16 +133,20 @@ class common_ext_ExtensionsManager extends ConfigurableService
      * This method returns an array of common_ext_Extension.
      *
      * @access public
+     *
      * @author Joel Bout, <joel@taotesting.com>
+     *
      * @return array
      */
     public function getAvailableExtensions()
     {
         $returnValue = [];
         $dir = new DirectoryIterator(ROOT_PATH);
+
         foreach ($dir as $fileinfo) {
             if ($fileinfo->isDir() && !$fileinfo->isDot() && substr($fileinfo->getBasename(), 0, 1) != '.') {
                 $extId = $fileinfo->getBasename();
+
                 if (!in_array($extId, self::$RESERVED_WORDS) && !$this->isInstalled($extId)) {
                     try {
                         $ext = $this->getExtensionById($extId);
@@ -150,7 +165,9 @@ class common_ext_ExtensionsManager extends ConfigurableService
      * Short description of method getModelsToLoad
      *
      * @access public
+     *
      * @author Joel Bout, <joel@taotesting.com>
+     *
      * @return array
      */
     public function getModelsToLoad()
@@ -170,16 +187,21 @@ class common_ext_ExtensionsManager extends ConfigurableService
      * loaded using common_ext_Extension::load.
      *
      * @access public
+     *
      * @author Joel Bout, <joel@taotesting.com>
-     * @param  string $id The id of the extension.
-     * @return common_ext_Extension A common_ext_Extension instance or null if it does not exist.
-     * @throws common_ext_ExtensionException If the provided id is empty.
+     *
+     * @param string $id the id of the extension
+     *
+     * @throws common_ext_ExtensionException if the provided id is empty
+     *
+     * @return common_ext_Extension a common_ext_Extension instance or null if it does not exist
      */
     public function getExtensionById($id)
     {
         if (! is_string($id) || strlen($id) == 0) {
             throw new common_ext_ExtensionException('No id specified for getExtensionById()');
         }
+
         if (! isset($this->extensions[$id])) {
             $extension = new common_ext_Extension($id);
             $this->propagate($extension);
@@ -196,37 +218,44 @@ class common_ext_ExtensionsManager extends ConfigurableService
     public function isEnabled($extensionId)
     {
         $exts = $this->getExtensionById('generis')->getConfig(self::EXTENSIONS_CONFIG_KEY);
-        return isset($exts[$extensionId]['enabled']) ? $exts[$extensionId]['enabled'] : false;
+
+        return $exts[$extensionId]['enabled'] ?? false;
     }
 
     public function isInstalled($extensionId)
     {
         $exts = $this->getExtensionById('generis')->getConfig(self::EXTENSIONS_CONFIG_KEY);
+
         return isset($exts[$extensionId]);
     }
 
     public function getInstalledVersion($extensionId)
     {
         $exts = $this->getExtensionById('generis')->getConfig(self::EXTENSIONS_CONFIG_KEY);
+
         return isset($exts[$extensionId]) ? $exts[$extensionId]['installed'] : null;
     }
 
     public function setEnabled($extensionId, $enabled = true)
     {
         $exts = $this->getExtensionById('generis')->getConfig(self::EXTENSIONS_CONFIG_KEY);
+
         if (!isset($exts[$extensionId])) {
             throw new common_exception_Error('Extension ' . $extensionId . ' unkown, cannot enable/disable');
         }
         $exts[$extensionId]['enabled'] = (bool) $enabled;
+
         return $this->getExtensionById('generis')->setConfig(self::EXTENSIONS_CONFIG_KEY, $exts);
     }
-    
+
     /**
      * Get the set of currently enabled extensions. This method
      * returns an array of common_ext_Extension.
      *
      * @access public
+     *
      * @author Joel Bout, <joel@taotesting.com>
+     *
      * @return array
      */
     public function getEnabledExtensions()
@@ -234,31 +263,36 @@ class common_ext_ExtensionsManager extends ConfigurableService
         $returnValue = [];
 
         $enabled = $this->getExtensionById('generis')->getConfig(self::EXTENSIONS_CONFIG_KEY);
+
         foreach ($this->getInstalledExtensions() as $ext) {
             if (isset($enabled[$ext->getId()]) && $enabled[$ext->getId()]['enabled']) {
                 $returnValue[$ext->getId()] = $ext;
             }
         }
-    
+
         return (array) $returnValue;
     }
-    
+
     /**
      * Add the end of an installation register the new extension
      *
      * @access public
+     *
      * @author Joel Bout, <joel@taotesting.com>
+     *
      * @param common_ext_Extension $extension
+     *
      * @return boolean
      */
     public function registerExtension(common_ext_Extension $extension)
     {
         $entry = [
             'installed' => $extension->getManifest()->getVersion(),
-            'enabled' => false
+            'enabled' => false,
         ];
         $extensions = $this->getExtensionById('generis')->getConfig(self::EXTENSIONS_CONFIG_KEY);
         $extensions[$extension->getId()] = $entry;
+
         return $this->getExtensionById('generis')->setConfig(self::EXTENSIONS_CONFIG_KEY, $extensions);
     }
 
@@ -266,8 +300,11 @@ class common_ext_ExtensionsManager extends ConfigurableService
      * Add the end of an uninstallation unregister the extension
      *
      * @access public
+     *
      * @author Joel Bout, <joel@taotesting.com>
+     *
      * @param common_ext_Extension $extension
+     *
      * @return boolean
      */
     public function unregisterExtension(common_ext_Extension $extension)
@@ -287,6 +324,7 @@ class common_ext_ExtensionsManager extends ConfigurableService
     /**
      * Call a service to retrieve a map array of all available extensions
      * with extension package id as a key and extension id as a value
+     *
      * @return array
      */
     public function getAvailablePackages()
@@ -298,7 +336,8 @@ class common_ext_ExtensionsManager extends ConfigurableService
         }
         /** @var SimpleCache $cache */
         $cache = $this->getServiceManager()->get(SimpleCache::SERVICE_ID);
-        $key = static::class.'_'.__METHOD__;
+        $key = static::class . '_' . __METHOD__;
+
         if (!$cache->has($key)) {
             $cache->set($key, $composer->getAvailableTaoExtensions());
         }

@@ -16,7 +16,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2017 (original work) Open Assessment Technologies SA;
- *
  */
 
 namespace oat\generis\model;
@@ -25,12 +24,12 @@ interface WidgetRdf
 {
     public const NAMESPACE = 'http://www.tao.lu/datatypes/WidgetDefinitions.rdf';
 
-    public const CLASS_URI_WIDGET                        = self::NAMESPACE . '#WidgetClass';
-    public const PROPERTY_WIDGET                         = self::NAMESPACE . '#widget';
-    public const PROPERTY_WIDGET_CONSTRAINT_TYPE         = self::NAMESPACE . '#rangeConstraintTypes';
-    public const PROPERTY_WIDGET_ID                      = self::NAMESPACE . '#identifier';
-    public const CLASS_URI_WIDGET_RENDERER               = self::NAMESPACE . '#WidgetRenderer';
-    public const PROPERTY_WIDGET_RENDERER_WIDGET         = self::NAMESPACE . '#renderedWidget';
-    public const PROPERTY_WIDGET_RENDERER_MODE           = self::NAMESPACE . '#renderMode';
+    public const CLASS_URI_WIDGET = self::NAMESPACE . '#WidgetClass';
+    public const PROPERTY_WIDGET = self::NAMESPACE . '#widget';
+    public const PROPERTY_WIDGET_CONSTRAINT_TYPE = self::NAMESPACE . '#rangeConstraintTypes';
+    public const PROPERTY_WIDGET_ID = self::NAMESPACE . '#identifier';
+    public const CLASS_URI_WIDGET_RENDERER = self::NAMESPACE . '#WidgetRenderer';
+    public const PROPERTY_WIDGET_RENDERER_WIDGET = self::NAMESPACE . '#renderedWidget';
+    public const PROPERTY_WIDGET_RENDERER_MODE = self::NAMESPACE . '#renderMode';
     public const PROPERTY_WIDGET_RENDERER_IMPLEMENTATION = self::NAMESPACE . '#implementation';
 }

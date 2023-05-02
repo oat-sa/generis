@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,18 +25,20 @@
  * Short description of class common_exception_Error
  *
  * @access public
+ *
  * @author Joel Bout, <joel.bout@tudor.lu>
+ *
  * @package generis
-
  */
 class common_exception_Error extends common_Exception implements common_log_SeverityLevel
 {
-
     /**
      * Get the severity of the error.
      *
      * @access public
+     *
      * @author Joel Bout, <joel.bout@tudor.lu>
+     *
      * @return int
      */
     public function getSeverity()

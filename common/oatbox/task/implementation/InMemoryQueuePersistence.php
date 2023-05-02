@@ -16,11 +16,11 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2017 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
  */
 
 namespace oat\oatbox\task\implementation;
 
+use common_report_Report;
 use oat\oatbox\task\Task;
 use oat\oatbox\task\TaskInterface\TaskPersistenceInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
@@ -42,6 +42,7 @@ class InMemoryQueuePersistence implements TaskPersistenceInterface
         if (array_key_exists($taskId, $this->taskList)) {
             return $this->taskList[$taskId];
         }
+
         return null;
     }
 
@@ -50,14 +51,14 @@ class InMemoryQueuePersistence implements TaskPersistenceInterface
         $taskId = (microtime(true) * 10000) . rand(100000, 999999);
         $task->setId($taskId);
         $this->taskList[$taskId] = $task;
+
         return $task;
     }
 
     public function search(array $filterTask, $rows = null, $page = null, $sortBy = null, $sortOrder = null)
     {
-
         $taskList = array_filter($this->taskList, function ($elem) use ($filterTask) {
-            /**
+            /*
              * @var $elem Task
              */
 
@@ -93,20 +94,26 @@ class InMemoryQueuePersistence implements TaskPersistenceInterface
     public function update($taskId, $status)
     {
         $task = $this->get($taskId);
+
         if (!is_null($task)) {
             $task->setStatus($status);
+
             return true;
         }
+
         return false;
     }
 
-    public function setReport($taskId, \common_report_Report $report)
+    public function setReport($taskId, common_report_Report $report)
     {
         $task = $this->get($taskId);
+
         if (!is_null($task)) {
             $task->setReport($report);
+
             return true;
         }
+
         return false;
     }
 
@@ -114,7 +121,6 @@ class InMemoryQueuePersistence implements TaskPersistenceInterface
     {
         return count($this->search($params));
     }
-
 
     public function getAll()
     {

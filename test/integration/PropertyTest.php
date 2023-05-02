@@ -22,25 +22,22 @@
 
 namespace oat\generis\test\integration;
 
+use core_kernel_classes_Class;
+use core_kernel_classes_ContainerCollection;
+use core_kernel_classes_Property;
+use core_kernel_classes_Resource;
 use oat\generis\model\GenerisRdf;
 use oat\generis\model\OntologyRdf;
 use oat\generis\model\WidgetRdf;
 use oat\generis\test\GenerisPhpUnitTestRunner;
-use \core_kernel_classes_ContainerCollection;
-use \core_kernel_classes_Class;
-use \core_kernel_classes_Resource;
-use \core_kernel_classes_Property;
 
 class PropertyTest extends GenerisPhpUnitTestRunner
 {
-
     /**
-     *
      * @var core_kernel_classes_Property
      */
     protected $object;
     /**
-     *
      * @author Lionel Lecaque, lionel@taotesting.com
      */
     public function setUp(): void
@@ -49,7 +46,6 @@ class PropertyTest extends GenerisPhpUnitTestRunner
         $this->object = new core_kernel_classes_Property(WidgetRdf::PROPERTY_WIDGET);
     }
     /**
-     *
      * @author Lionel Lecaque, lionel@taotesting.com
      */
     public function testGetDomain()
@@ -63,7 +59,6 @@ class PropertyTest extends GenerisPhpUnitTestRunner
     }
 
     /**
-     *
      * @author Lionel Lecaque, lionel@taotesting.com
      */
     public function testSetDomain()
@@ -89,7 +84,6 @@ class PropertyTest extends GenerisPhpUnitTestRunner
         $prop->delete(true);
     }
     /**
-     *
      * @author Lionel Lecaque, lionel@taotesting.com
      */
     public function testGetRange()
@@ -101,7 +95,6 @@ class PropertyTest extends GenerisPhpUnitTestRunner
         $this->assertEquals($range->getComment(), 'The class of all possible widgets');
     }
     /**
-     *
      * @author Lionel Lecaque, lionel@taotesting.com
      */
     public function testGetWidget()
@@ -113,7 +106,6 @@ class PropertyTest extends GenerisPhpUnitTestRunner
         $this->assertEquals($widget->getComment(), 'In drop down menu, one may select 1 to N options');
     }
     /**
-     *
      * @author Lionel Lecaque, lionel@taotesting.com
      */
     public function testSetMultiple()
@@ -130,7 +122,6 @@ class PropertyTest extends GenerisPhpUnitTestRunner
         $prop->delete(true);
     }
     /**
-     *
      * @author Lionel Lecaque, lionel@taotesting.com
      */
     public function testIsMultiple()
@@ -147,12 +138,10 @@ class PropertyTest extends GenerisPhpUnitTestRunner
         $prop->delete(true);
     }
     /**
-     *
      * @author Lionel Lecaque, lionel@taotesting.com
      */
     public function testDelete()
     {
-
         $class = new core_kernel_classes_Class(GenerisRdf::GENERIS_BOOLEAN, __METHOD__);
 
         $prop = $class->createProperty('test', 'test');

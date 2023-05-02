@@ -16,7 +16,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2014 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
  */
 
 namespace oat\oatbox\user\auth;
@@ -27,7 +26,9 @@ use common_user_auth_Adapter;
  * Authentication adapter interface for login/password based authentication adapters
  *
  * @access public
+ *
  * @author Joel Bout, <joel@taotesting.com>
+ *
  * @package generis
  */
 interface LoginAdapter extends common_user_auth_Adapter
@@ -38,7 +39,7 @@ interface LoginAdapter extends common_user_auth_Adapter
      * @param array $configuration
      */
     public function setOptions(array $options);
-    
+
     /**
      * Adapter must be able to store the login and password of the potential user
      *

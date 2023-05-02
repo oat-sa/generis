@@ -16,16 +16,16 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2013 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
  */
 
 /**
  * Represents a Session that keeps it's state in the php session variable
  *
  * @access private
+ *
  * @author Joel Bout, <joel@taotesting.com>
+ *
  * @package generis
-
  */
 interface common_session_StatefulSession extends common_session_Session
 {

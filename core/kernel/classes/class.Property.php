@@ -18,29 +18,28 @@
  * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
  *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- *
  */
 
 declare(strict_types=1);
 
-use oat\generis\model\WidgetRdf;
 use oat\generis\model\GenerisRdf;
 use oat\generis\model\OntologyRdfs;
 use oat\generis\model\resource\DependsOnPropertyCollection;
+use oat\generis\model\WidgetRdf;
 
 /**
  * uriProperty must be a valid property otherwis return false, add this as a
  * of uriProperty
  *
  * @access public
+ *
  * @author patrick.plichart@tudor.lu
+ *
  * @package generis
-
  */
 class core_kernel_classes_Property extends core_kernel_classes_Resource
 {
     // --- ASSOCIATIONS ---
-
 
     // --- ATTRIBUTES ---
 
@@ -48,6 +47,7 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
      * The property domain defines the classes the property is attached to.
      *
      * @access public
+     *
      * @var ContainerCollection
      */
     public $domain = null;
@@ -57,6 +57,7 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
      * or a literal value if the range is the Literal class
      *
      * @access public
+     *
      * @var core_kernel_classes_Class
      */
     public $range = null;
@@ -69,6 +70,7 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
      * to be retrieved even if in cache, when no widget is set for the property.
      *
      * @access public
+     *
      * @var core_kernel_classes_Property
      */
     public $widget = false;
@@ -77,15 +79,16 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
      * Short description of attribute lgDependent
      *
      * @access public
+     *
      * @var boolean
      */
     public $lgDependent = false;
-
 
     /**
      * Short description of attribute multiple
      *
      * @access public
+     *
      * @var boolean
      */
     public $multiple = false;
@@ -93,23 +96,18 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
     /** @var DependsOnPropertyCollection */
     private $dependsOnPropertyCollection;
 
-    // --- OPERATIONS ---
-    /**
-     * @return core_kernel_persistence_PropertyInterface
-     */
-    private function getImplementation()
-    {
-        return $this->getModel()->getRdfsInterface()->getPropertyImplementation();
-    }
-
-
     /**
      * constructor
      *
      * @access public
+     *
      * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     *
      * @param  string uri
      * @param  string debug
+     * @param mixed $uri
+     * @param mixed $debug
+     *
      * @return void
      */
     public function __construct($uri, $debug = '')
@@ -120,8 +118,16 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
         $this->multiple = null;
     }
 
+    // --- OPERATIONS ---
     /**
-     *
+     * @return core_kernel_persistence_PropertyInterface
+     */
+    private function getImplementation()
+    {
+        return $this->getModel()->getRdfsInterface()->getPropertyImplementation();
+    }
+
+    /**
      * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      */
     public function feed()
@@ -136,21 +142,24 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
      * return classes that are described by this property
      *
      * @access public
+     *
      * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     *
      * @return core_kernel_classes_ContainerCollection
      */
     public function getDomain()
     {
         $returnValue = null;
+
         if (is_null($this->domain)) {
             $this->domain = new core_kernel_classes_ContainerCollection(new common_Object(__METHOD__));
             $domainValues = $this->getPropertyValues($this->getProperty(OntologyRdfs::RDFS_DOMAIN));
+
             foreach ($domainValues as $domainValue) {
                 $this->domain->add($this->getClass($domainValue));
             }
         }
         $returnValue = $this->domain;
-
 
         return $returnValue;
     }
@@ -177,8 +186,11 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
      * Short description of method setDomain
      *
      * @access public
+     *
      * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     *
      * @param  Class class
+     *
      * @return boolean
      */
     public function setDomain(core_kernel_classes_Class $class)
@@ -189,17 +201,21 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
             foreach ($this->getDomain()->getIterator() as $domainClass) {
                 if ($class->equals($domainClass)) {
                     $returnValue = true;
+
                     break;
                 }
             }
+
             if (!$returnValue) {
                 $this->setPropertyValue($this->getProperty(OntologyRdfs::RDFS_DOMAIN), $class->getUri());
+
                 if (!is_null($this->domain)) {
                     $this->domain->add($class);
                 }
                 $returnValue = true;
             }
         }
+
         return (bool) $returnValue;
     }
 
@@ -207,7 +223,9 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
      * Short description of method getRange
      *
      * @access public
+     *
      * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     *
      * @return core_kernel_classes_ContainerCollection
      */
     public function getRange()
@@ -224,6 +242,7 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
             $this->range = $returnValue;
         }
         $returnValue = $this->range;
+
         return $returnValue;
     }
 
@@ -231,17 +250,22 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
      * Short description of method setRange
      *
      * @access public
+     *
      * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     *
      * @param  Class class
+     *
      * @return boolean
      */
     public function setRange(core_kernel_classes_Class $class)
     {
         $returnValue = (bool) false;
         $returnValue = $this->getImplementation()->setRange($this, $class);
+
         if ($returnValue) {
             $this->range = $class;
         }
+
         return (bool) $returnValue;
     }
 
@@ -295,7 +319,8 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
      * @author Cédric Alfonsi <cedric.alfonsi@tudor.lu>
      * @author Antoine Delamarre <antoine.delamarre@vesperiagroup.com>
      * @author Jérôme Bogaerts <jerome@taotesting.com>
-     * @return core_kernel_classes_Property The Property object corresponding to the widget of this Property.
+     *
+     * @return core_kernel_classes_Property the Property object corresponding to the widget of this Property
      */
     public function getWidget()
     {
@@ -310,14 +335,17 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
      * Is the property translatable?
      *
      * @access public
+     *
      * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     *
      * @return boolean
      */
     public function isLgDependent()
     {
         if (is_null($this->lgDependent)) {
-            $this->lgDependent  = $this->getImplementation()->isLgDependent($this);
+            $this->lgDependent = $this->getImplementation()->isLgDependent($this);
         }
+
         return (bool) $this->lgDependent;
     }
 
@@ -325,8 +353,12 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
      * Set mannually if a property can be translated
      *
      * @access public
+     *
      * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     *
      * @param  boolean isLgDependent
+     * @param mixed $isLgDependent
+     *
      * @return mixed
      */
     public function setLgDependent($isLgDependent)
@@ -339,7 +371,9 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
      * Check if a property can have multiple values.
      *
      * @access public
+     *
      * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     *
      * @return boolean
      */
     public function isMultiple()
@@ -359,6 +393,7 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
         }
 
         $returnValue = $this->multiple;
+
         return (bool) $returnValue;
     }
 
@@ -367,13 +402,16 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
      * Usefull on just created property.
      *
      * @access public
+     *
      * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     *
      * @param  boolean isMultiple
+     * @param mixed $isMultiple
+     *
      * @return mixed
      */
     public function setMultiple($isMultiple)
     {
-
         $this->getImplementation()->setMultiple($this, $isMultiple);
         $this->multiple = $isMultiple;
     }
@@ -382,14 +420,19 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
      * Short description of method delete
      *
      * @access public
+     *
      * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     *
      * @param  boolean deleteReference
+     * @param mixed $deleteReference
+     *
      * @return boolean
      */
     public function delete($deleteReference = false)
     {
         $returnValue = (bool) false;
         $returnValue = $this->getImplementation()->delete($this, $deleteReference);
+
         return (bool) $returnValue;
     }
 }

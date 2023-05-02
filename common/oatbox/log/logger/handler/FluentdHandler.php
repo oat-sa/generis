@@ -16,7 +16,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2018 (original work) Open Assessment Technologies SA;
- *
  */
 
 namespace oat\oatbox\log\logger\handler;
@@ -24,6 +23,7 @@ namespace oat\oatbox\log\logger\handler;
 use Fluent\Logger\FluentLogger;
 use Monolog\Handler\AbstractProcessingHandler;
 use Monolog\Logger;
+use TypeError;
 
 /**
  * Based on https://github.com/yegortokmakov/monolog-fluentd
@@ -39,17 +39,18 @@ class FluentdHandler extends AbstractProcessingHandler
      * Initialize Handler
      *
      * @param FluentLogger|string $logger
-     * @param int          $level
-     * @param bool         $bubble
-     * @param array        $options
+     * @param int $level
+     * @param bool $bubble
+     * @param array $options
      */
     public function __construct($logger = null, $level = Logger::DEBUG, $bubble = true, $options = [])
     {
         parent::__construct($level, $bubble);
 
         if (!is_a($logger, FluentLogger::class, true)) {
-            throw new \TypeError('Logger must be an instance of FluentLogger type');
+            throw new TypeError('Logger must be an instance of FluentLogger type');
         }
+
         if (is_string($logger)) {
             $logger = new $logger(...$options);
         }

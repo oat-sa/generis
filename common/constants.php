@@ -21,7 +21,7 @@
  *               2017 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
 
-/**
+/*
  * Generis Object Oriented API - common\constants.php
  *
  * This file is part of Generis Object Oriented API.
@@ -32,7 +32,7 @@
  * @license GPLv2  http://www.opensource.org/licenses/gpl-2.0.php
  */
 
-/**
+/*
  * @deprecated
  */
 #RDF
@@ -161,7 +161,7 @@ define('INSTANCE_EMPTY_TERM_URI', RULES_NS . '#Empty');
 define('INSTANCE_TERM_IS_NULL', RULES_NS . '#IsNull');
 
 //not used
-define('PERSISTENCE_SMOOTH', "smoothsql");
-define('PERSISTENCE_HARD', "hardsql");
-define('PERSISTENCE_VIRTUOSO', "virtuoso");
-define('PERSISTENCE_SUBSCRIPTION', "subscription");
+define('PERSISTENCE_SMOOTH', 'smoothsql');
+define('PERSISTENCE_HARD', 'hardsql');
+define('PERSISTENCE_VIRTUOSO', 'virtuoso');
+define('PERSISTENCE_SUBSCRIPTION', 'subscription');

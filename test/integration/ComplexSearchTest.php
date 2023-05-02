@@ -25,7 +25,6 @@ use oat\oatbox\service\ServiceManager;
 
 class ComplexSearchTest extends GenerisPhpUnitTestRunner
 {
-
     private $search;
 
     protected function setUp(): void
@@ -48,6 +47,7 @@ class ComplexSearchTest extends GenerisPhpUnitTestRunner
         // Initial call
         $result = $result = $this->search->getGateway()->search($queryBuilder);
         $pickup = [];
+
         foreach ($result as $r) {
             $pickup[] = $r->getUri();
         }
@@ -56,6 +56,7 @@ class ComplexSearchTest extends GenerisPhpUnitTestRunner
             // Leave when result different from initial one.
             $result = $result = $this->search->getGateway()->search($queryBuilder);
             $newPickup = [];
+
             foreach ($result as $r) {
                 $newPickup[] = $r->getUri();
             }

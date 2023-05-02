@@ -16,16 +16,17 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2017 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
  */
 
 namespace oat\oatbox\task\TaskInterface;
 
+use common_report_Report;
 use oat\oatbox\task\Task;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 
 /**
  * Interface TaskPersistenceInterface
+ *
  * @package oat\oatbox\task\TaskInterface
  *
  * @deprecated since version 7.10.0, to be removed in 8.0. Use \oat\tao\model\taskQueue\QueueDispatcher instead.
@@ -34,7 +35,9 @@ interface TaskPersistenceInterface extends ServiceLocatorAwareInterface
 {
     /**
      * @deprecated since version 7.10.0, to be removed in 8.0.
+     *
      * @param $taskId
+     *
      * @return Task
      */
     public function get($taskId);
@@ -43,6 +46,7 @@ interface TaskPersistenceInterface extends ServiceLocatorAwareInterface
      * @deprecated since version 7.10.0, to be removed in 8.0.
      *
      * @param Task $task
+     *
      * @return boolean
      */
     public function add(Task $task);
@@ -55,6 +59,7 @@ interface TaskPersistenceInterface extends ServiceLocatorAwareInterface
      * @param null $page
      * @param null $sortBy
      * @param null $sortOrder
+     *
      * @return array
      */
     public function search(array $filterTask, $rows = null, $page = null, $sortBy = null, $sortOrder = null);
@@ -63,6 +68,7 @@ interface TaskPersistenceInterface extends ServiceLocatorAwareInterface
      * @deprecated since version 7.10.0, to be removed in 8.0.
      *
      * @param $taskId
+     *
      * @return boolean
      */
     public function has($taskId);
@@ -72,6 +78,7 @@ interface TaskPersistenceInterface extends ServiceLocatorAwareInterface
      *
      * @param $taskId
      * @param $status
+     *
      * @return boolean
      */
     public function update($taskId, $status);
@@ -80,15 +87,17 @@ interface TaskPersistenceInterface extends ServiceLocatorAwareInterface
      * @deprecated since version 7.10.0, to be removed in 8.0.
      *
      * @param $taskId
-     * @param \common_report_Report $report
+     * @param common_report_Report $report
+     *
      * @return boolean
      */
-    public function setReport($taskId, \common_report_Report $report);
+    public function setReport($taskId, common_report_Report $report);
 
     /**
      * @deprecated since version 7.10.0, to be removed in 8.0.
      *
      * @param array $params
+     *
      * @return int
      */
     public function count(array $params);

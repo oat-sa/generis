@@ -24,8 +24,8 @@ namespace oat\generis\scripts\tools\FileSerializerMigration;
 
 use common_Exception;
 use common_exception_Error;
-use common_report_Report as Report;
 use common_report_Report;
+use common_report_Report as Report;
 use oat\generis\model\fileReference\FileReferenceSerializer;
 use oat\generis\model\fileReference\UrlFileSerializer;
 use oat\oatbox\extension\script\ScriptAction;
@@ -38,18 +38,18 @@ use oat\oatbox\service\exception\InvalidServiceManagerException;
  */
 class Migrate extends ScriptAction
 {
-    const MIGRATION_REPORT_LINES = [
+    public const MIGRATION_REPORT_LINES = [
         'migration_success' => [
             'dry' => '%s old references will be migrated into %s new file serializer references.',
-            'wet' => 'Successfully migrated %s old references to %s new file serializer references.'
+            'wet' => 'Successfully migrated %s old references to %s new file serializer references.',
         ],
         'migration_errors' => [
             'dry' => '%s resources will fail to migrate. Please verify the following resources:',
-            'wet' => 'Unable to migrate %s resources. Please verify the following resources:'
+            'wet' => 'Unable to migrate %s resources. Please verify the following resources:',
         ],
         'serializer_update_success' => [
             'dry' => 'FileReferenceSerializer service will be updated to use UrlFileSerializer service.',
-            'wet' => 'Successfully updated FileReferenceSerializer service to use UrlFileSerializer service.'
+            'wet' => 'Successfully updated FileReferenceSerializer service to use UrlFileSerializer service.',
         ],
     ];
 
@@ -66,10 +66,11 @@ class Migrate extends ScriptAction
     /**
      * Run the script.
      *
-     * @return common_report_Report
      * @throws InvalidServiceManagerException
      * @throws common_Exception
      * @throws common_exception_Error
+     *
+     * @return common_report_Report
      */
     protected function run()
     {
@@ -116,7 +117,7 @@ class Migrate extends ScriptAction
         return [
             'prefix' => 'h',
             'longPrefix' => 'help',
-            'description' => 'Prints this help dialog'
+            'description' => 'Prints this help dialog',
         ];
     }
 
@@ -130,8 +131,8 @@ class Migrate extends ScriptAction
                 'flag' => true,
                 'prefix' => 'w',
                 'longPrefix' => 'wet-run',
-                'description' => 'Add this flag to migrate the references, as opposed to just listing them (dry/wet run)'
-            ]
+                'description' => 'Add this flag to migrate the references, as opposed to just listing them (dry/wet run)',
+            ],
         ];
     }
 
@@ -185,12 +186,14 @@ class Migrate extends ScriptAction
     /**
      * Update the FileReferenceSerializer service to use the UrlFileSerializer.
      *
-     * @return bool
      * @throws common_Exception
+     *
+     * @return bool
      */
     public function updateFileSerializer()
     {
         $updated = false;
+
         if ($this->fileSerializerNeedsUpdate()) {
             if ($this->isWetRun()) {
                 $this->getServiceManager()->register(FileReferenceSerializer::SERVICE_ID, new UrlFileSerializer());
@@ -210,6 +213,7 @@ class Migrate extends ScriptAction
     {
         $needsUpdate = true;
         $currentFileReferenceSerializer = $this->getServiceLocator()->get(FileReferenceSerializer::SERVICE_ID);
+
         if ($currentFileReferenceSerializer instanceof UrlFileSerializer) {
             $needsUpdate = false;
         }
@@ -236,6 +240,7 @@ class Migrate extends ScriptAction
      * Retrieve key used to differentiate between reporting for the wet and dry run.
      *
      * @see self::MIGRATION_REPORT_LINES
+     *
      * @return string
      */
     private function getMigrationReportKey()

@@ -19,8 +19,8 @@
  *
  * @author "Lionel Lecaque, <lionel@taotesting.com>"
  * @license GPLv2
- * @package generis
  *
+ * @package generis
  */
 
 use Doctrine\DBAL\Connection;
@@ -29,25 +29,24 @@ use Doctrine\DBAL\Schema\Schema;
 
 class common_persistence_sql_Platform
 {
-    
-    const TRANSACTION_PLATFORM_DEFAULT = 0;
-    
-    const TRANSACTION_READ_UNCOMMITTED = Connection::TRANSACTION_READ_UNCOMMITTED;
-    
-    const TRANSACTION_READ_COMMITTED = Connection::TRANSACTION_READ_COMMITTED;
-    
-    const TRANSACTION_REPEATABLE_READ = Connection::TRANSACTION_REPEATABLE_READ;
-    
-    const TRANSACTION_SERIALIZABLE = Connection::TRANSACTION_SERIALIZABLE;
-    
+    public const TRANSACTION_PLATFORM_DEFAULT = 0;
+
+    public const TRANSACTION_READ_UNCOMMITTED = Connection::TRANSACTION_READ_UNCOMMITTED;
+
+    public const TRANSACTION_READ_COMMITTED = Connection::TRANSACTION_READ_COMMITTED;
+
+    public const TRANSACTION_REPEATABLE_READ = Connection::TRANSACTION_REPEATABLE_READ;
+
+    public const TRANSACTION_SERIALIZABLE = Connection::TRANSACTION_SERIALIZABLE;
+
     protected $dbalPlatform;
 
     /** @var \Doctrine\DBAL\Connection */
     protected $dbalConnection;
 
-    
     /**
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
+     *
      * @param $dbalConnection \Doctrine\DBAL\Connection
      */
     public function __construct($dbalConnection)
@@ -70,10 +69,13 @@ class common_persistence_sql_Platform
      * mySQL and postgres.
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome@taotesting.com>
-     * @param  string $statement The statement to limit
-     * @param  int $limit Limit lower bound.
-     * @param  int $offset Limit upper bound.
+     *
+     * @param string $statement The statement to limit
+     * @param int $limit limit lower bound
+     * @param int $offset limit upper bound
+     *
      * @return string
      */
     public function limitStatement($statement, $limit, $offset = 0)
@@ -84,16 +86,17 @@ class common_persistence_sql_Platform
      *  Dbal Text type  returnedf stream in oracle this method handle others DBMS
      *
      *  @param string $text
+     *
      *  @return string
      */
     public function getPhpTextValue($text)
     {
         return $text;
     }
-    
+
     /**
-     *
      * @author Lionel Lecaque, lionel@taotesting.com
+     *
      * @return string
      */
     public function getObjectTypeCondition()
@@ -101,17 +104,16 @@ class common_persistence_sql_Platform
         return 'object ';
     }
     /**
-     *
      * @return string
      */
     public function getNullString()
     {
         return "''";
     }
-    
+
     /**
-     *
      * @param string $columnName
+     *
      * @return string
      */
     public function isNullCondition($columnName)
@@ -121,7 +123,9 @@ class common_persistence_sql_Platform
 
     /**
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
+     *
      * @param string $parameter
+     *
      * @return string
      */
     public function quoteIdentifier($parameter)
@@ -131,7 +135,9 @@ class common_persistence_sql_Platform
 
     /**
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
+     *
      * @param Schema $schema
+     *
      * @return array
      */
     public function schemaToSql($schema)
@@ -141,7 +147,9 @@ class common_persistence_sql_Platform
 
     /**
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
+     *
      * @param Schema $schema
+     *
      * @return array
      */
     public function toDropSql($schema)
@@ -151,8 +159,10 @@ class common_persistence_sql_Platform
 
     /**
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
+     *
      * @param Schema $fromSchema
      * @param Schema $toSchema
+     *
      * @return array
      */
     public function getMigrateSchemaSql($fromSchema, $toSchema)
@@ -168,14 +178,17 @@ class common_persistence_sql_Platform
      *
      * @param Schema $fromSchema
      * @param Schema $toSchema
-     * @return int
+     *
      * @throws DBALException
+     *
+     * @return int
      */
     public function migrateSchema(Schema $fromSchema, Schema $toSchema): int
     {
         $queryCount = 0;
 
         $queries = $this->getMigrateSchemaSql($fromSchema, $toSchema);
+
         foreach ($queries as $query) {
             $this->dbalConnection->exec($query);
             $queryCount++;
@@ -183,7 +196,7 @@ class common_persistence_sql_Platform
 
         return $queryCount;
     }
-    
+
     /**
      * Return driver name mysql, postgresql, oracle, mssql
      *
@@ -196,6 +209,7 @@ class common_persistence_sql_Platform
 
     /**
      * @author Lionel Lecaque, lionel@taotesting.com
+     *
      * @return string
      */
     public function getNowExpression()
@@ -208,11 +222,13 @@ class common_persistence_sql_Platform
         // correct format to be inserted in db.
 
         $datetime = new \DateTime('now', new \DateTimeZone('UTC'));
+
         return $datetime->format($this->getDateTimeFormatString());
     }
 
     /**
      * Returns platform specific date formatting with timezone to store datetime field.
+     *
      * @return string
      */
     public function getDateTimeFormatString()
@@ -222,6 +238,7 @@ class common_persistence_sql_Platform
 
     /**
      * Returns platform specific date formatting with timezone to store datetime field.
+     *
      * @return string
      */
     public function getDateTimeTzFormatString()
@@ -230,14 +247,15 @@ class common_persistence_sql_Platform
     }
 
     /**
-     *
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
+     *
      * @param string $functionName
+     *
      * @return string
      */
     public function getSqlFunction($functionName)
     {
-        return "SELECT " . $functionName . '(?)';
+        return 'SELECT ' . $functionName . '(?)';
     }
 
     /**
@@ -247,6 +265,7 @@ class common_persistence_sql_Platform
      *
      * @see https://dev.mysql.com/doc/refman/5.7/en/innodb-locking-reads.html
      * @see https://www.postgresql.org/docs/9.0/static/sql-select.html#SQL-FOR-UPDATE-SHARE
+     *
      * @return string
      */
     public function getWriteLockSQL()
@@ -276,7 +295,7 @@ class common_persistence_sql_Platform
     {
         $this->dbalConnection->beginTransaction();
     }
-    
+
     /**
      * Sets the transaction isolation level for the current connection.
      *
@@ -292,7 +311,7 @@ class common_persistence_sql_Platform
      * or in error handly, the developer sets back the initial transaction
      * level that was in force prior the call to beginTransaction().
      *
-     * @param integer $level The level to set.
+     * @param integer $level the level to set
      *
      * @return integer
      */
@@ -301,24 +320,24 @@ class common_persistence_sql_Platform
         if ($level === self::TRANSACTION_PLATFORM_DEFAULT) {
             $level = $this->dbalPlatform->getDefaultTransactionIsolationLevel();
         }
-        
+
         $this->dbalConnection->setTransactionIsolation($level);
     }
-    
+
     /**
      * Gets the currently active transaction isolation level for the current sesson.
      *
-     * @return integer The current transaction isolation level for the current session.
+     * @return integer the current transaction isolation level for the current session
      */
     public function getTransactionIsolation()
     {
         return $this->dbalConnection->getTransactionIsolation();
     }
-    
+
     /**
      * Checks whether or not a transaction is currently active.
      *
-     * @return boolean true if a transaction is currently active for the current session, otherwise false.
+     * @return boolean true if a transaction is currently active for the current session, otherwise false
      */
     public function isTransactionActive()
     {
@@ -328,7 +347,7 @@ class common_persistence_sql_Platform
     /**
      * Cancels any database changes done during the current transaction.
      *
-     * @throws \Doctrine\DBAL\ConnectionException If the rollback operation failed.
+     * @throws \Doctrine\DBAL\ConnectionException if the rollback operation failed
      */
     public function rollBack()
     {
@@ -338,10 +357,11 @@ class common_persistence_sql_Platform
     /**
      * Commits the current transaction.
      *
-     * @return void
-     * @throws \Doctrine\DBAL\ConnectionException If the commit failed due to no active transaction or because the transaction was marked for rollback only.
+     * @throws \Doctrine\DBAL\ConnectionException if the commit failed due to no active transaction or because the transaction was marked for rollback only
      * @throws DBALException
-     * @throws common_persistence_sql_SerializationException In case of SerializationFailure (SQLSTATE 40001).
+     * @throws common_persistence_sql_SerializationException in case of SerializationFailure (SQLSTATE 40001)
+     *
+     * @return void
      */
     public function commit()
     {
@@ -353,17 +373,16 @@ class common_persistence_sql_Platform
             if (($code = $e->getCode()) == '40001') {
                 // Serialization failure (SQLSTATE 40001 for at least mysql, pgsql, sqlsrv).
                 throw new common_persistence_sql_SerializationException(
-                    "SQL Transaction Serialization Failure. See previous exception(s) for more information.",
+                    'SQL Transaction Serialization Failure. See previous exception(s) for more information.',
                     intval($code),
                     $e
                 );
-            } else {
-                // Another kind of error. Re-throw!
-                throw $e;
             }
+            // Another kind of error. Re-throw!
+            throw $e;
         }
     }
-    
+
     public function getTruncateTableSql($tableName)
     {
         return $this->dbalPlatform->getTruncateTableSql($tableName);

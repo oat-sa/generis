@@ -22,11 +22,22 @@
 
 namespace oat\generis\test\unit;
 
+use common_configuration_ComponentCollection;
+use common_configuration_ComponentFactory;
+use common_configuration_ComponentFactoryException;
+use common_configuration_CyclicDependencyException;
+use common_configuration_FileSystemComponent;
+use common_configuration_MalformedRightsException;
+use common_configuration_Mock;
+use common_configuration_PHPExtension;
+use common_configuration_PHPINIValue;
+use common_configuration_PHPRuntime;
+use common_configuration_Report;
 use oat\generis\test\TestCase;
 
 class ConfigurationTest extends TestCase
 {
-    const TESTKEY = 'config_test_key';
+    public const TESTKEY = 'config_test_key';
 
     /**
      * A version of php that we can be sure will not be present on the system
@@ -34,7 +45,7 @@ class ConfigurationTest extends TestCase
      *
      * @var int
      */
-    const UNSUPPORTED_PHP_MAJOR_VERSION = 9;
+    public const UNSUPPORTED_PHP_MAJOR_VERSION = 9;
 
     public function testPhPConstant()
     {
@@ -44,7 +55,7 @@ class ConfigurationTest extends TestCase
     public function testPHPIniValues()
     {
         // core tests.
-        $ini = new \common_configuration_PHPINIValue('text/html', 'default_mimetype');
+        $ini = new common_configuration_PHPINIValue('text/html', 'default_mimetype');
         $this->assertEquals($ini->getName(), 'default_mimetype');
         $this->assertEquals($ini->isOptional(), false);
         $this->assertEquals($ini->getExpectedValue(), 'text/html');
@@ -61,26 +72,26 @@ class ConfigurationTest extends TestCase
         $oldIniValue = ini_get($ini->getName());
         ini_set($ini->getName(), 'text/html');
         $report = $ini->check();
-        $this->assertEquals($report->getStatus(), \common_configuration_Report::VALID);
+        $this->assertEquals($report->getStatus(), common_configuration_Report::VALID);
         $this->assertEquals($report->getStatusAsString(), 'valid');
 
         ini_set($ini->getName(), 'text/xml');
         $report = $ini->check();
-        $this->assertEquals($report->getStatus(), \common_configuration_Report::INVALID);
+        $this->assertEquals($report->getStatus(), common_configuration_Report::INVALID);
         $this->assertEquals($report->getStatusAsString(), 'invalid');
 
         $ini->setName('foobar');
         $report = $ini->check();
-        $this->assertEquals($report->getStatus(), \common_configuration_Report::UNKNOWN);
+        $this->assertEquals($report->getStatus(), common_configuration_Report::UNKNOWN);
         $this->assertEquals($report->getStatusAsString(), 'unknown');
 
         ini_set($ini->getName(), $oldIniValue);
     }
 
-    function testPHPRuntime()
+    public function testPHPRuntime()
     {
         // Core tests.
-        $php = new \common_configuration_PHPRuntime('5.3', '5.4');
+        $php = new common_configuration_PHPRuntime('5.3', '5.4');
         $this->assertEquals($php->getName(), 'tao.configuration.phpruntime'); //automatically set
         $this->assertEquals($php->getMin(), '5.3');
         $this->assertEquals($php->getMax(), '5.4');
@@ -99,40 +110,40 @@ class ConfigurationTest extends TestCase
         $this->assertTrue($php->isOptional());
 
         // max & min test.
-        $php = new \common_configuration_PHPRuntime('7.4', '8.1.x');
+        $php = new common_configuration_PHPRuntime('7.4', '8.1.x');
         $report = $php->check();
 
-        $this->assertEquals($report->getStatus(), \common_configuration_Report::VALID);
+        $this->assertEquals($report->getStatus(), common_configuration_Report::VALID);
 
         $php->setMin(self::UNSUPPORTED_PHP_MAJOR_VERSION . '.5');
         $php->setMax(self::UNSUPPORTED_PHP_MAJOR_VERSION . '.5.6.3');
         $report = $php->check();
-        $this->assertEquals($report->getStatus(), \common_configuration_Report::INVALID);
+        $this->assertEquals($report->getStatus(), common_configuration_Report::INVALID);
 
         // min test.
-        $php = new \common_configuration_PHPRuntime('5.3', null);
+        $php = new common_configuration_PHPRuntime('5.3', null);
         $report = $php->check();
-        $this->assertEquals($report->getStatus(), \common_configuration_Report::VALID);
+        $this->assertEquals($report->getStatus(), common_configuration_Report::VALID);
 
         $php->setMin(self::UNSUPPORTED_PHP_MAJOR_VERSION . '.5.3');
         $report = $php->check();
-        $this->assertEquals($report->getStatus(), \common_configuration_Report::INVALID);
+        $this->assertEquals($report->getStatus(), common_configuration_Report::INVALID);
 
         // max test.
-        $php = new \common_configuration_PHPRuntime(null, self::UNSUPPORTED_PHP_MAJOR_VERSION . '.5');
+        $php = new common_configuration_PHPRuntime(null, self::UNSUPPORTED_PHP_MAJOR_VERSION . '.5');
         $report = $php->check();
-        $this->assertEquals($report->getStatus(), \common_configuration_Report::VALID);
+        $this->assertEquals($report->getStatus(), common_configuration_Report::VALID);
 
         $php->setMax('5.2');
         $this->assertEquals($php->getMax(), '5.2');
         $report = $php->check();
-        $this->assertEquals($report->getStatus(), \common_configuration_Report::INVALID);
+        $this->assertEquals($report->getStatus(), common_configuration_Report::INVALID);
 
         $php->setMax('5.3.x');
         $this->assertEquals($php->getMax(), '5.3.99999');
     }
 
-    function testPHPExtension()
+    public function testPHPExtension()
     {
         // Testing PHPExtension existence and version is quite hard to do. Indeed,
         // it depends what the installed extensions are on the computers running the tests.
@@ -141,7 +152,7 @@ class ConfigurationTest extends TestCase
         // --disable-dom directive.
 
         // core tests.
-        $ext = new \common_configuration_PHPExtension(null, null, 'dom');
+        $ext = new common_configuration_PHPExtension(null, null, 'dom');
         $this->assertEquals($ext->getMin(), null);
         $this->assertEquals($ext->getMax(), null);
         $this->assertEquals($ext->getName(), 'dom');
@@ -161,50 +172,50 @@ class ConfigurationTest extends TestCase
         // We consider that if there is no version information but the extension
         // is loaded, the report is always valid even if min and/or max version(s)
         // are specified.
-        $ext = new \common_configuration_PHPExtension(null, null, 'json');
+        $ext = new common_configuration_PHPExtension(null, null, 'json');
         $report = $ext->check();
-        $this->assertEquals($report->getStatus(), \common_configuration_Report::VALID);
+        $this->assertEquals($report->getStatus(), common_configuration_Report::VALID);
 
         $ext->setMin('1.0');
         $report = $ext->check();
-        $this->assertEquals($report->getStatus(), \common_configuration_Report::VALID);
+        $this->assertEquals($report->getStatus(), common_configuration_Report::VALID);
 
         $ext->setMax('8.2');
         $report = $ext->check();
-        $this->assertEquals($report->getStatus(), \common_configuration_Report::VALID);
+        $this->assertEquals($report->getStatus(), common_configuration_Report::VALID);
 
         $ext->setMin(null);
         $report = $ext->check();
-        $this->assertEquals($report->getStatus(), \common_configuration_Report::VALID);
+        $this->assertEquals($report->getStatus(), common_configuration_Report::VALID);
 
         // test with the dom extension that has version information.
-        $ext = new \common_configuration_PHPExtension('19851127', '20090601', 'dom');
+        $ext = new common_configuration_PHPExtension('19851127', '20090601', 'dom');
         $report = $ext->check();
-        $this->assertEquals($report->getStatus(), \common_configuration_Report::VALID);
+        $this->assertEquals($report->getStatus(), common_configuration_Report::VALID);
 
         $ext->setMin('20050112');
         $report = $ext->check();
-        $this->assertEquals($report->getStatus(), \common_configuration_Report::INVALID);
+        $this->assertEquals($report->getStatus(), common_configuration_Report::INVALID);
 
         $ext->setMin(null);
         $ext->setMax('20020423');
         $report = $ext->check();
-        $this->assertEquals($report->getStatus(), \common_configuration_Report::INVALID);
+        $this->assertEquals($report->getStatus(), common_configuration_Report::INVALID);
 
         $ext->setMin('20010731');
         $ext->setMax(null);
         $report = $ext->check();
-        $this->assertEquals($report->getStatus(), \common_configuration_Report::VALID);
+        $this->assertEquals($report->getStatus(), common_configuration_Report::VALID);
 
         // Unexisting extension.
-        $ext = new \common_configuration_PHPExtension('1.0', '1.4', 'foobar');
+        $ext = new common_configuration_PHPExtension('1.0', '1.4', 'foobar');
         $report = $ext->check();
-        $this->assertEquals($report->getStatus(), \common_configuration_Report::UNKNOWN);
+        $this->assertEquals($report->getStatus(), common_configuration_Report::UNKNOWN);
     }
 
     public function testFileSystemComponent()
     {
-        $f = new \common_configuration_FileSystemComponent(__FILE__, 'r');
+        $f = new common_configuration_FileSystemComponent(__FILE__, 'r');
         $this->assertEquals($f->getLocation(), __FILE__);
         $this->assertEquals($f->getExpectedRights(), 'r');
         $this->assertEquals($f->getName(), 'tao.configuration.filesystem'); // automatically set.
@@ -217,7 +228,7 @@ class ConfigurationTest extends TestCase
         try {
             $f->setExpectedRights('rw');
             $this->pass();
-        } catch (\common_configuration_MalformedRightsException $e) {
+        } catch (common_configuration_MalformedRightsException $e) {
             $this->fail();
         }
     }
@@ -225,10 +236,10 @@ class ConfigurationTest extends TestCase
     public function testSimpleComponentCollection()
     {
         // Non acyclic simple test.
-        $collection = new \common_configuration_ComponentCollection();
-        $componentA = new \common_configuration_Mock(\common_configuration_Report::VALID, 'componentA');
-        $componentB = new \common_configuration_Mock(\common_configuration_Report::VALID, 'componentB');
-        $componentC = new \common_configuration_Mock(\common_configuration_Report::VALID, 'componentC');
+        $collection = new common_configuration_ComponentCollection();
+        $componentA = new common_configuration_Mock(common_configuration_Report::VALID, 'componentA');
+        $componentB = new common_configuration_Mock(common_configuration_Report::VALID, 'componentB');
+        $componentC = new common_configuration_Mock(common_configuration_Report::VALID, 'componentC');
 
         $collection->addComponent($componentA);
         $collection->addComponent($componentB);
@@ -256,7 +267,7 @@ class ConfigurationTest extends TestCase
             $this->assertEquals(count($reports), 3);
 
             // Now change some reports validity.
-            $componentA->setExpectedStatus(\common_configuration_Report::INVALID);
+            $componentA->setExpectedStatus(common_configuration_Report::INVALID);
 
             $reports = $collection->check();
             $this->assertTrue(true); // Acyclic graph, no CyclicDependencyException thrown.
@@ -265,7 +276,7 @@ class ConfigurationTest extends TestCase
             $this->assertEquals($collection->getUncheckedComponents(), [$componentB, $componentC]);
 
             // Add an additional independant component.
-            $componentD = new \common_configuration_Mock(\common_configuration_Report::VALID, 'componentD');
+            $componentD = new common_configuration_Mock(common_configuration_Report::VALID, 'componentD');
             $collection->addComponent($componentD);
             $reports = $collection->check();
             $this->assertTrue(true); // Acyclic graph, no CyclicDependencyException thrown.
@@ -274,7 +285,7 @@ class ConfigurationTest extends TestCase
             $this->assertEquals($collection->getUncheckedComponents(), [$componentB, $componentC]);
 
             // Make the whole components valid again.
-            $componentA->setExpectedStatus(\common_configuration_Report::VALID);
+            $componentA->setExpectedStatus(common_configuration_Report::VALID);
             $reports = $collection->check();
             $this->assertTrue(true); // Acyclic graph, no CyclicDependencyException thrown.
             $this->assertEquals(count($reports), 4);
@@ -286,7 +297,7 @@ class ConfigurationTest extends TestCase
                 $collection->addDependency($componentA, $componentB);
                 $collection->check();
                 $this->assertTrue(false, 'The graph should be cyclic.');
-            } catch (\common_configuration_CyclicDependencyException $e) {
+            } catch (common_configuration_CyclicDependencyException $e) {
                 $this->assertTrue(true);
                 $this->assertEquals($collection->getReports(), []);
                 $this->assertEquals($collection->getCheckedComponents(), []);
@@ -303,98 +314,98 @@ class ConfigurationTest extends TestCase
                 $this->assertEquals($collection->getCheckedComponents(), []);
                 $this->assertEquals($collection->getUncheckedComponents(), []);
             }
-        } catch (\common_configuration_CyclicDependencyException $e) {
+        } catch (common_configuration_CyclicDependencyException $e) {
             $this->assertTrue(false, 'The graph dependency formed by the ComponentCollection must be acyclic.');
         }
     }
 
     public function testComponentFactory()
     {
-        $component = \common_configuration_ComponentFactory::buildPHPRuntime('5.0', '8.1.x', true);
-        $this->assertInstanceOf(\common_configuration_PHPRuntime::class, $component);
+        $component = common_configuration_ComponentFactory::buildPHPRuntime('5.0', '8.1.x', true);
+        $this->assertInstanceOf(common_configuration_PHPRuntime::class, $component);
         $this->assertEquals($component->getMin(), '5.0');
         // 5.5.x will be replaced internally
         //$this->assertEquals($component->getMax(), '5.5.x');
         $this->assertTrue($component->isOptional());
         $report = $component->check();
-        $this->assertInstanceOf(\common_configuration_Report::class, $report);
-        $this->assertEquals($report->getStatus(), \common_configuration_Report::VALID);
+        $this->assertInstanceOf(common_configuration_Report::class, $report);
+        $this->assertEquals($report->getStatus(), common_configuration_Report::VALID);
 
-        $component = \common_configuration_ComponentFactory::buildPHPExtension('spl');
-        $this->assertInstanceOf(\common_configuration_PHPExtension::class, $component);
+        $component = common_configuration_ComponentFactory::buildPHPExtension('spl');
+        $this->assertInstanceOf(common_configuration_PHPExtension::class, $component);
         $this->assertNull($component->getMin());
         $this->assertNull($component->getMax());
         $this->assertEquals($component->getName(), 'spl');
         $this->assertFalse($component->isOptional());
         $report = $component->check();
-        $this->assertInstanceOf(\common_configuration_Report::class, $report);
-        $this->assertEquals($report->getStatus(), \common_configuration_Report::VALID);
+        $this->assertInstanceOf(common_configuration_Report::class, $report);
+        $this->assertEquals($report->getStatus(), common_configuration_Report::VALID);
 
-        $component = \common_configuration_ComponentFactory::buildPHPExtension('spl', null, null, true);
-        $this->assertInstanceOf(\common_configuration_PHPExtension::class, $component);
+        $component = common_configuration_ComponentFactory::buildPHPExtension('spl', null, null, true);
+        $this->assertInstanceOf(common_configuration_PHPExtension::class, $component);
         $this->assertEquals($component->getName(), 'spl');
         $this->assertTrue($component->isOptional());
         $report = $component->check();
-        $this->assertInstanceOf(\common_configuration_Report::class, $report);
-        $this->assertEquals($report->getStatus(), \common_configuration_Report::VALID);
+        $this->assertInstanceOf(common_configuration_Report::class, $report);
+        $this->assertEquals($report->getStatus(), common_configuration_Report::VALID);
 
-        $component = \common_configuration_ComponentFactory::buildPHPINIValue('magic_quotes_gpc', '0');
-        $this->assertInstanceOf(\common_configuration_PHPINIValue::class, $component);
+        $component = common_configuration_ComponentFactory::buildPHPINIValue('magic_quotes_gpc', '0');
+        $this->assertInstanceOf(common_configuration_PHPINIValue::class, $component);
         $this->assertEquals($component->getName(), 'magic_quotes_gpc');
         $this->assertFalse($component->isOptional());
 
         $location = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'ConfigurationTest.php';
-        $component = \common_configuration_ComponentFactory::buildFileSystemComponent($location, 'r');
-        $this->assertInstanceOf(\common_configuration_FileSystemComponent::class, $component);
+        $component = common_configuration_ComponentFactory::buildFileSystemComponent($location, 'r');
+        $this->assertInstanceOf(common_configuration_FileSystemComponent::class, $component);
         $this->assertFalse($component->isOptional());
         $this->assertEquals($component->getLocation(), $location);
         $this->assertEquals($component->getExpectedRights(), 'r');
         $report = $component->check();
-        $this->assertInstanceOf(\common_configuration_Report::class, $report);
-        $this->assertEquals($report->getStatus(), \common_configuration_Report::VALID);
+        $this->assertInstanceOf(common_configuration_Report::class, $report);
+        $this->assertEquals($report->getStatus(), common_configuration_Report::VALID);
 
         $array = ['type' => 'PHPRuntime', 'value' => ['min' => '5.0', 'max' => '8.1.x', 'optional' => true]];
-        $component = \common_configuration_ComponentFactory::buildFromArray($array);
-        $this->assertInstanceOf(\common_configuration_PHPRuntime::class, $component);
+        $component = common_configuration_ComponentFactory::buildFromArray($array);
+        $this->assertInstanceOf(common_configuration_PHPRuntime::class, $component);
         $this->assertEquals($component->getMin(), '5.0');
         // 5.5.x will be replaced internally
         // $this->assertEquals($component->getMax(), '5.5');
         $this->assertTrue($component->isOptional());
         $report = $component->check();
-        $this->assertInstanceOf(\common_configuration_Report::class, $report);
-        $this->assertEquals($report->getStatus(), \common_configuration_Report::VALID);
+        $this->assertInstanceOf(common_configuration_Report::class, $report);
+        $this->assertEquals($report->getStatus(), common_configuration_Report::VALID);
 
         $array = ['type' => 'PHPExtension', 'value' => ['name' => 'spl']];
-        $component = \common_configuration_ComponentFactory::buildFromArray($array);
-        $this->assertInstanceOf(\common_configuration_PHPExtension::class, $component);
+        $component = common_configuration_ComponentFactory::buildFromArray($array);
+        $this->assertInstanceOf(common_configuration_PHPExtension::class, $component);
         $this->assertEquals($component->getName(), 'spl');
         $this->assertFalse($component->isOptional());
         $report = $component->check();
-        $this->assertInstanceOf(\common_configuration_Report::class, $report);
-        $this->assertEquals($report->getStatus(), \common_configuration_Report::VALID);
+        $this->assertInstanceOf(common_configuration_Report::class, $report);
+        $this->assertEquals($report->getStatus(), common_configuration_Report::VALID);
 
         // 'Check' before the Component type is accepted.
         $array = ['type' => 'CheckPHPINIValue', 'value' => ['name' => 'magic_quotes_gpc', 'value' => '0']];
-        $component = \common_configuration_ComponentFactory::buildFromArray($array);
-        $this->assertInstanceOf(\common_configuration_PHPINIValue::class, $component);
+        $component = common_configuration_ComponentFactory::buildFromArray($array);
+        $this->assertInstanceOf(common_configuration_PHPINIValue::class, $component);
         $this->assertEquals($component->getName(), 'magic_quotes_gpc');
         $this->assertFalse($component->isOptional());
 
         $array = ['type' => 'FileSystemComponent', 'value' => ['location' => $location, 'rights' => 'r']];
-        $component = \common_configuration_ComponentFactory::buildFromArray($array);
-        $this->assertInstanceOf(\common_configuration_FileSystemComponent::class, $component);
+        $component = common_configuration_ComponentFactory::buildFromArray($array);
+        $this->assertInstanceOf(common_configuration_FileSystemComponent::class, $component);
         $this->assertFalse($component->isOptional());
         $this->assertEquals($component->getLocation(), $location);
         $this->assertEquals($component->getExpectedRights(), 'r');
         $report = $component->check();
-        $this->assertInstanceOf(\common_configuration_Report::class, $report);
-        $this->assertEquals($report->getStatus(), \common_configuration_Report::VALID);
+        $this->assertInstanceOf(common_configuration_Report::class, $report);
+        $this->assertEquals($report->getStatus(), common_configuration_Report::VALID);
 
         try {
             $array = ['type' => 'PHPINIValue', 'value' => []];
-            $component = \common_configuration_ComponentFactory::buildFromArray($array);
+            $component = common_configuration_ComponentFactory::buildFromArray($array);
             $this->assertTrue(false, 'An exception should be raised because of missing attributes.');
-        } catch (\common_configuration_ComponentFactoryException $e) {
+        } catch (common_configuration_ComponentFactoryException $e) {
             $this->assertTrue(true);
         }
     }

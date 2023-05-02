@@ -16,15 +16,13 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2016 (original work) Open Assessment Technologies SA
- *
  */
 
 namespace oat\oatbox\log;
 
-use oat\oatbox\Configurable;
+use common_Exception;
 use oat\oatbox\service\ConfigurableService;
 use Psr\Log\LoggerInterface;
-use Psr\Log\AbstractLogger;
 use Psr\Log\LoggerTrait;
 
 /**
@@ -45,7 +43,8 @@ class LoggerAggregator extends ConfigurableService implements LoggerInterface
      * Instantiate the aggregator.
      *
      * @param LoggerInterface[] $options
-     * @throws \common_Exception If one of logger isnot a Psr3 logger
+     *
+     * @throws common_Exception If one of logger isnot a Psr3 logger
      */
     public function __construct($options = [])
     {
@@ -53,16 +52,20 @@ class LoggerAggregator extends ConfigurableService implements LoggerInterface
 
         foreach ($this->getOptions() as $logger) {
             if (!$logger instanceof LoggerInterface) {
-                throw new \common_Exception('Non PSR-3 compatible logger ' . get_class($logger) . ' added to ' . __CLASS__);
+                throw new common_Exception('Non PSR-3 compatible logger ' . get_class($logger) . ' added to ' . __CLASS__);
             }
         }
 
         $this->loggers = $this->getOptions();
     }
-    
+
     /**
      * (non-PHPdoc)
+     *
      * @see \Psr\Log\LoggerInterface::log()
+     *
+     * @param mixed $level
+     * @param mixed $message
      */
     public function log($level, $message, array $context = [])
     {

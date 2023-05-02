@@ -16,12 +16,13 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2018 (original work) Open Assessment Technologies SA;
- *
  */
 
 namespace oat\oatbox\log\logger\formatter;
 
+use ErrorException;
 use Monolog\Formatter\FormatterInterface;
+use RuntimeException;
 
 /**
  * Json log formatter.
@@ -30,23 +31,22 @@ use Monolog\Formatter\FormatterInterface;
  */
 class CloudWatchJsonFormatter implements FormatterInterface
 {
-
     /**
      * Used datetime format.
      */
-    const DATETIME_FORMAT = 'd/m/Y:H:i:s O';
+    public const DATETIME_FORMAT = 'd/m/Y:H:i:s O';
 
     /**
      * @inheritdoc
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function format(array $record)
     {
         $jsonString = json_encode($this->getOutputRecord($record));
 
         if ($jsonString === false) {
-            throw new \RuntimeException('Error happened during the log format process! ' . json_last_error_msg());
+            throw new RuntimeException('Error happened during the log format process! ' . json_last_error_msg());
         }
 
         return $jsonString . PHP_EOL;
@@ -55,7 +55,7 @@ class CloudWatchJsonFormatter implements FormatterInterface
     /**
      * @inheritdoc
      *
-     * @throws \ErrorException
+     * @throws ErrorException
      */
     public function formatBatch(array $records)
     {
@@ -82,16 +82,19 @@ class CloudWatchJsonFormatter implements FormatterInterface
             'message' => $record['message'],
             'tag' => $record['context'],
         ];
-        
+
         if (isset($record['extra']['stack']['host_type'])) {
             $output['host_type'] = $record['extra']['stack']['host_type'];
         }
+
         if (isset($record['extra']['stack']['id'])) {
             $output['instance_id'] = $record['extra']['stack']['id'];
         }
+
         if (isset($record['extra']['trace'])) {
             $output['trace'] = $record['extra']['trace'];
         }
+
         if (isset($record['user_id'])) {
             $output['user_id'] = $record['user_id'];
         }

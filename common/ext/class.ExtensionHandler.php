@@ -1,7 +1,7 @@
 <?php
 
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use oat\oatbox\service\ServiceManager;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
 
 /**
  * This program is free software; you can redistribute it and/or
@@ -20,18 +20,20 @@ use oat\oatbox\service\ServiceManager;
  *
  * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- *
  */
 
 /**
  * EXtension Wrapper
  *
  * @abstract
+ *
  * @access public
+ *
  * @author lionel.lecaque@tudor.lu
+ *
  * @package generis
+ *
  * @see @license  GNU General Public (GPL) Version 2 http://www.opensource.org/licenses/gpl-2.0.php
-
  */
 abstract class common_ext_ExtensionHandler
 {
@@ -43,19 +45,20 @@ abstract class common_ext_ExtensionHandler
      */
     public $extension = null;
 
-
     /**
      * Initialise the extension handler
      *
      * @access public
+     *
      * @author Joel Bout, <joel.bout@tudor.lu>
-     * @param  common_ext_Extension $extension
+     *
+     * @param common_ext_Extension $extension
      */
     public function __construct(common_ext_Extension $extension)
     {
         $this->extension = $extension;
     }
-    
+
     /**
      * @return common_ext_Extension
      */
@@ -63,17 +66,19 @@ abstract class common_ext_ExtensionHandler
     {
         return $this->extension;
     }
-    
+
     /**
      * Run Extension Script
      *
      * @param string $script
      * @param array $arguments (optional)
+     *
      * @throws common_ext_InstallationException
      */
     protected function runExtensionScript($script, array $arguments = [])
     {
         $this->log('d', 'Running custom extension script ' . $script . ' for extension ' . $this->getExtension()->getId());
+
         if (file_exists($script)) {
             require_once $script;
         } elseif (class_exists($script) && is_subclass_of($script, \oat\oatbox\action\Action::class)) {
@@ -103,14 +108,14 @@ abstract class common_ext_ExtensionHandler
      * @see common_Logger class
      *
      * @param string $logLevel
-     * <ul>
-     *   <li>'w' - warning</li>
-     *   <li>'t' - trace</li>
-     *   <li>'d' - debug</li>
-     *   <li>'i' - info</li>
-     *   <li>'e' - error</li>
-     *   <li>'f' - fatal</li>
-     * </ul>
+     *                         <ul>
+     *                         <li>'w' - warning</li>
+     *                         <li>'t' - trace</li>
+     *                         <li>'d' - debug</li>
+     *                         <li>'i' - info</li>
+     *                         <li>'e' - error</li>
+     *                         <li>'f' - fatal</li>
+     *                         </ul>
      * @param string $message
      * @param array $tags
      */
@@ -122,6 +127,7 @@ abstract class common_ext_ExtensionHandler
                 $message
             );
         }
+
         if (method_exists('common_Logger', $logLevel)) {
             call_user_func('common_Logger::' . $logLevel, $message, $tags);
         }

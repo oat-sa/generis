@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -17,14 +18,15 @@
  * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
  *               2013 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
  */
 
 /**
  * Enables you to manage the module namespaces
  *
  * @access public
+ *
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+ *
  * @package generis
  *
  * @deprecated
@@ -35,7 +37,9 @@ class common_ext_NamespaceManager
      * Private constructor to force the use of the singleton
      *
      * @access private
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @return mixed
      */
     private function __construct()
@@ -46,7 +50,9 @@ class common_ext_NamespaceManager
      * Main entry point to retrieve the NamespaceManager instance
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @return common_ext_NamespaceManager
      */
     public static function singleton()
@@ -58,7 +64,9 @@ class common_ext_NamespaceManager
      * Get the list of all module's namespaces
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @return array
      */
     public function getAllNamespaces()
@@ -70,7 +78,9 @@ class common_ext_NamespaceManager
      * Conveniance method to retrieve the local Namespace
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @return common_ext_Namespace
      */
     public function getLocalNamespace()
@@ -85,8 +95,11 @@ class common_ext_NamespaceManager
      * Get a namesapce identified by the modelId or modelUri
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  $modelid
+     *
+     * @param $modelid
+     *
      * @return common_ext_Namespace
      */
     public function getNamespace($modelid)
@@ -98,7 +111,9 @@ class common_ext_NamespaceManager
      * Reset the current NamespaceManager instance.
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+     *
      * @return void
      */
     public function reset()

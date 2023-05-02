@@ -33,7 +33,6 @@ class common_persistence_sql_UpdateMultiple
         $this->dbalConnection = $dbalConnection;
     }
 
-
     /**
      * @example
      *  'table_name'
@@ -62,14 +61,17 @@ class common_persistence_sql_UpdateMultiple
      *
      * @param string $table
      * @param array $data
-     * @return bool
+     *
      * @throws Exception
+     *
+     * @return bool
      */
     public function updateMultiple($table, array $data)
     {
         list($query, $params) = $this->buildQuery($table, $data);
 
         $stmt = $this->dbalConnection->prepare($query);
+
         foreach ($params as $param => $value) {
             $stmt->bindValue($param, $value);
         }
@@ -80,8 +82,10 @@ class common_persistence_sql_UpdateMultiple
     /**
      * @param $table
      * @param array $data
-     * @return array|bool
+     *
      * @throws Exception
+     *
+     * @return array|bool
      */
     public function buildQuery($table, array $data)
     {
@@ -90,8 +94,8 @@ class common_persistence_sql_UpdateMultiple
         }
 
         $prepareQueryData = [];
-        $allColumns       = [];
-        $params           = [];
+        $allColumns = [];
+        $params = [];
 
         foreach ($data as $row) {
             $this->assertValidRow($row);
@@ -101,12 +105,13 @@ class common_persistence_sql_UpdateMultiple
             foreach ($updateValues as $updateColumn => $updateValue) {
                 $prepareQueryData[$updateColumn][] = [
                     'value' => $updateValue,
-                    'conditions' => $this->extractWhensConditions($conditions)
+                    'conditions' => $this->extractWhensConditions($conditions),
                 ];
             }
         }
 
         $queryColumns = [];
+
         foreach ($prepareQueryData as $column => $queryData) {
             $queryColumnUpdate = " $column = ( CASE ";
 
@@ -119,14 +124,14 @@ class common_persistence_sql_UpdateMultiple
                     $conditionColumn = $condition['conditionColumn'];
                     $conditionValue = $condition['conditionValue'];
 
-                    $key = ':' . $index . '_' . $column . '_'  . $indexCondition . '_' . $conditionColumn . '_conditionvalue';
+                    $key = ':' . $index . '_' . $column . '_' . $indexCondition . '_' . $conditionColumn . '_conditionvalue';
                     $conditionsString[] = " $conditionColumn = $key ";
                     $allColumns[$conditionColumn][] = $conditionValue;
                     $params[$key] = $conditionValue;
                 }
 
                 $key = ':' . $index . '_' . $column . '_updatedvalue';
-                $queryColumnUpdate .= " WHEN " . implode(' AND ', $conditionsString) . " THEN $key";
+                $queryColumnUpdate .= ' WHEN ' . implode(' AND ', $conditionsString) . " THEN $key";
                 $params[$key] = $updateValue;
             }
 
@@ -140,6 +145,7 @@ class common_persistence_sql_UpdateMultiple
         foreach ($allColumns as $columnWhere => $columnWhereValues) {
             $uniqueColumnValues = array_unique($columnWhereValues);
             $placeHolders = [];
+
             foreach ($uniqueColumnValues as $index => $value) {
                 $key = ':in_condition_' . $columnWhere . '_' . $index;
                 $placeHolders[] = $key;
@@ -156,6 +162,7 @@ class common_persistence_sql_UpdateMultiple
 
     /**
      * @param $row
+     *
      * @throws Exception
      */
     private function assertValidRow(array $row)
@@ -167,11 +174,13 @@ class common_persistence_sql_UpdateMultiple
 
     /**
      * @param $conditions
+     *
      * @return array
      */
     private function extractWhensConditions($conditions)
     {
         $whens = [];
+
         foreach ($conditions as $conditionColumn => $conditionValue) {
             $whens[] = ['conditionColumn' => $conditionColumn, 'conditionValue' => $conditionValue];
         }

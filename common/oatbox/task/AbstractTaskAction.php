@@ -16,14 +16,14 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2017 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
  */
 
 namespace oat\oatbox\task;
 
+use core_kernel_classes_Class;
 use oat\generis\model\fileReference\ResourceFileSerializer;
-use oat\oatbox\filesystem\FileSystemService;
 use oat\oatbox\extension\AbstractAction;
+use oat\oatbox\filesystem\FileSystemService;
 
 /**
  * abstract base for extension actions
@@ -34,14 +34,14 @@ use oat\oatbox\extension\AbstractAction;
  */
 abstract class AbstractTaskAction extends AbstractAction
 {
-
-    const FILE_DIR = 'taskQueue';
+    public const FILE_DIR = 'taskQueue';
 
     /**
      * Save and serialize file into task queue filesystem.
      *
      * @param string $path file path
      * @param string $name file name
+     *
      * @return string file reference uri
      */
     protected function saveFile($path, $name)
@@ -59,6 +59,7 @@ abstract class AbstractTaskAction extends AbstractAction
         fclose($stream);
 
         $file = $dir->getFile($filename);
+
         return $this->getFileReferenceSerializer()->serialize($file);
     }
 
@@ -66,20 +67,24 @@ abstract class AbstractTaskAction extends AbstractAction
      * Create a new unique filename based on an existing filename
      *
      * @param string $fileName
+     *
      * @return string
      */
     protected function getUniqueFilename($fileName)
     {
         $value = uniqid(md5($fileName));
         $ext = pathinfo($fileName, PATHINFO_EXTENSION);
+
         if (!empty($ext)) {
             $value .= '.' . $ext;
         }
+
         return static::FILE_DIR . '/' . $value;
     }
 
     /**
      * Get serializer to persist filesystem object
+     *
      * @return ResourceFileSerializer
      */
     protected function getFileReferenceSerializer()
@@ -88,10 +93,10 @@ abstract class AbstractTaskAction extends AbstractAction
     }
 
     /**
-     * @return \core_kernel_classes_Class
+     * @return core_kernel_classes_Class
      */
     protected static function getTaskClass()
     {
-        return new \core_kernel_classes_Class(Task::TASK_CLASS);
+        return new core_kernel_classes_Class(Task::TASK_CLASS);
     }
 }

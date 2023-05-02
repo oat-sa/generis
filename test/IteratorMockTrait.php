@@ -22,8 +22,8 @@ declare(strict_types=1);
 
 namespace oat\generis\test;
 
-use stdClass;
 use PHPUnit\Framework\MockObject\MockObject;
+use stdClass;
 
 trait IteratorMockTrait
 {

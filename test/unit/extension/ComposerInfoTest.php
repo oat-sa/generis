@@ -18,28 +18,26 @@ declare(strict_types=1);
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2020 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
  */
 
 namespace oat\generis\test\unit\extension;
 
 use oat\generis\test\TestCase;
 use oat\oatbox\extension\ComposerInfo;
-use oat\oatbox\extension\exception\ManifestException;
 
 /**
  * Class ComposerInfoTest
+ *
  * @package oat\oatbox\extension
  */
 class ComposerInfoTest extends TestCase
 {
-
     public function testGetAvailableTaoExtensions()
     {
         $instance = new ComposerInfo($this->getSamplesDir());
         $this->assertEquals([
             'oat-sa/extension-tao-foobar' => 'taoFooBar',
-            'oat-sa/extension-tao-taoItemBank' => 'taoItemBank'
+            'oat-sa/extension-tao-taoItemBank' => 'taoItemBank',
         ], $instance->getAvailableTaoExtensions());
     }
 
@@ -57,14 +55,11 @@ class ComposerInfoTest extends TestCase
 
     private function getSamplesDir()
     {
-        return realpath(__DIR__.DIRECTORY_SEPARATOR.
-            '..'.DIRECTORY_SEPARATOR.
-            '..'.DIRECTORY_SEPARATOR.
-            'samples'.
-            DIRECTORY_SEPARATOR.
-            'manifests'
-        );
+        return realpath(__DIR__ . DIRECTORY_SEPARATOR .
+            '..' . DIRECTORY_SEPARATOR .
+            '..' . DIRECTORY_SEPARATOR .
+            'samples' .
+            DIRECTORY_SEPARATOR .
+            'manifests');
     }
-
-
 }

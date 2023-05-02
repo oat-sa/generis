@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,28 +26,30 @@
  * This can lead to complications in hardmode
  *
  * @access public
+ *
  * @author Joel Bout, <joel@taotesting.com>
+ *
  * @package generis
-
  */
 class common_exception_UnknownNamespace extends common_Exception
 {
-
     private $namespace;
-    
+
     /**
      * custom constructor
      *
      * @access public
+     *
      * @param  string namespace
+     * @param mixed $namespace
      */
     public function __construct($namespace)
     {
         $this->namespace = $namespace;
-        
+
         parent::__construct('Unkown namespace "' . $namespace . '"');
     }
-    
+
     /**
      * Returns the namespace that was not found
      *

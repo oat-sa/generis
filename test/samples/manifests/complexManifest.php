@@ -32,33 +32,33 @@ return [
     'author' => 'TAO Team',
     'models' => [
         'http://www.tao.lu/Ontologies/taoFuncACL.rdf',
-        'http://www.tao.lu/Ontologies/taoItemBank.rdf'
+        'http://www.tao.lu/Ontologies/taoItemBank.rdf',
     ],
     'install' => [
         'rdf' => [
             '/extension/path/models/ontology/taofuncacl.rdf',
-            '/extension/path/models/ontology/taoitembank.rdf'
+            '/extension/path/models/ontology/taoitembank.rdf',
         ],
         'checks' => [
             ['type' => 'CheckPHPRuntime', 'value' => ['id' => 'php_runtime', 'min' => '5.3', 'max' => '5.3.18']],
             ['type' => 'CheckPHPExtension', 'value' => ['id' => 'ext_pdo', 'name' => 'PDO']],
             ['type' => 'CheckPHPExtension', 'value' => ['id' => 'ext_svn','name' => 'svn', 'optional' => true]],
             ['type' => 'CheckPHPExtension', 'value' => ['id' => 'ext_suhosin','name' => 'suhosin', 'optional' => true]],
-            ['type' => 'CheckPHPINIValue', 'value' => ['id' => 'ini_register_globals', 'name' => 'register_globals', 'value' => "0"]],
+            ['type' => 'CheckPHPINIValue', 'value' => ['id' => 'ini_register_globals', 'name' => 'register_globals', 'value' => '0']],
             ['type' => 'CheckFileSystemComponent', 'value' => ['id' => 'fs_root','location' => '.', 'rights' => 'rw', 'name' => 'fs_root']],
-        ]
+        ],
     ],
      'constants' => [
          // web services
          'WS_ENDPOINT_TWITTER' => 'http://twitter.com/statuses/',
-         'WS_ENDPOINT_FACEBOOK' => 'http://api.facebook.com/restserver.php'
+         'WS_ENDPOINT_FACEBOOK' => 'http://api.facebook.com/restserver.php',
      ],
      'optimizableClasses' => [
         'http://www.linkeddata.org/ontologies/data.rdf#myClass1',
-        'http://www.linkeddata.org/ontologies/data.rdf#myClass2'
+        'http://www.linkeddata.org/ontologies/data.rdf#myClass2',
      ],
      'optimizableProperties' => [
         'http://www.linkeddata.org/ontologies/props.rdf#myProp1',
-        'http://www.linkeddata.org/ontologies/props.rdf#myProp2'
-     ]
+        'http://www.linkeddata.org/ontologies/props.rdf#myProp2',
+     ],
 ];

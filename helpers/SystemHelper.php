@@ -16,7 +16,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2018 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
  */
 
 namespace oat\generis\Helper;
@@ -26,13 +25,13 @@ class SystemHelper
     /**
      * Returns the maximum size for fileuploads in bytes.
      *
-     * @return int The upload file limit.
+     * @return int the upload file limit
      */
     public static function getFileUploadLimit()
     {
         $limits = [
             self::toBytes(ini_get('upload_max_filesize')),
-            self::toBytes(ini_get('post_max_size'))
+            self::toBytes(ini_get('post_max_size')),
         ];
 
         if (ini_get('memory_limit') !== '-1') {
@@ -42,9 +41,9 @@ class SystemHelper
         return min($limits);
     }
 
-
     /**
      * Returns whenever or not Tao is installed on windows
+     *
      * @return boolean
      */
     public static function isWindows()
@@ -71,7 +70,7 @@ class SystemHelper
      * * 'WIN32'
      * * 'Windows'
      *
-     * @return string The operating system that runs the script.
+     * @return string the operating system that runs the script
      */
     public static function getOperatingSystem()
     {
@@ -83,24 +82,30 @@ class SystemHelper
     /**
      * Get the size in bytes of a PHP variable given as a string.
      *
-     * @param  string $phpSyntax The PHP syntax to describe the variable.
-     * @return int The size in bytes.
+     * @param string $phpSyntax the PHP syntax to describe the variable
+     *
+     * @return int the size in bytes
      */
     private static function toBytes($phpSyntax)
     {
         $val = trim($phpSyntax);
         $last = strtolower($val[strlen($val) - 1]);
+
         if (!is_numeric($last)) {
             $val = substr($val, 0, -1);
+
             switch ($last) {
                 case 'g':
                     $val *= 1024;
+                    // no break
                 case 'm':
                     $val *= 1024;
+                    // no break
                 case 'k':
                     $val *= 1024;
             }
         }
+
         return (int)$val;
     }
 }

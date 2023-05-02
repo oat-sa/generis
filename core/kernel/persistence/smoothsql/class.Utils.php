@@ -38,35 +38,41 @@ class core_kernel_persistence_smoothsql_Utils
     /**
      * Sort a given $dataset by language.
      *
-     * @param mixed dataset A PDO dataset.
-     * @param string langColname The name of the column corresponding to the language of results.
-     * @return array An array representing the sorted $dataset.
+     * @param mixed dataset A PDO dataset
+     * @param string langColname The name of the column corresponding to the language of results
+     * @param mixed $persistence
+     * @param mixed $dataset
+     * @param mixed $langColname
+     * @param mixed $selectedLanguage
+     * @param mixed $defaultLanguage
+     *
+     * @return array an array representing the sorted $dataset
      */
     public static function sortByLanguage($persistence, $dataset, $langColname, $selectedLanguage, $defaultLanguage)
     {
         $returnValue = [];
-        
+
         $fallbackLanguage = '';
-                          
+
         $sortedResults = [
             $selectedLanguage => [],
             $defaultLanguage => [],
-            $fallbackLanguage => []
+            $fallbackLanguage => [],
         ];
 
         foreach ($dataset as $row) {
             $sortedResults[$row[$langColname]][] = [
                 'value' => $persistence->getPlatForm()->getPhpTextValue($row['object']),
-                'language' => $row[$langColname]
+                'language' => $row[$langColname],
             ];
         }
-        
+
         $returnValue = array_merge(
             $sortedResults[$selectedLanguage],
             (count($sortedResults) > 2) ? $sortedResults[$defaultLanguage] : [],
             $sortedResults[$fallbackLanguage]
         );
-        
+
         return $returnValue;
     }
 
@@ -74,6 +80,8 @@ class core_kernel_persistence_smoothsql_Utils
      * Get the first language encountered in the $values associative array.
      *
      * @param  array values
+     * @param mixed $values
+     *
      * @return array
      */
     public static function getFirstLanguage($values)
@@ -82,7 +90,7 @@ class core_kernel_persistence_smoothsql_Utils
 
         if (count($values) > 0) {
             $previousLanguage = $values[0]['language'];
-        
+
             foreach ($values as $value) {
                 if ($value['language'] == $previousLanguage) {
                     $returnValue[] = $value['value'];
@@ -100,15 +108,20 @@ class core_kernel_persistence_smoothsql_Utils
      *
      * @param mixed dataset
      * @param string langColname
+     * @param mixed $dataset
+     * @param mixed $langColname
+     * @param mixed $selectedLanguage
+     * @param mixed $defaultLanguage
+     *
      * @return array
      */
     public static function filterByLanguage(common_persistence_SqlPersistence $persistence, $dataset, $langColname, $selectedLanguage, $defaultLanguage)
     {
         $returnValue = [];
-        
+
         $result = self::sortByLanguage($persistence, $dataset, $langColname, $selectedLanguage, $defaultLanguage);
         $returnValue = self::getFirstLanguage($result);
-        
+
         return $returnValue;
     }
 
@@ -116,8 +129,12 @@ class core_kernel_persistence_smoothsql_Utils
      * Short description of method identifyFirstLanguage
      *
      * @access public
+     *
      * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
+     *
      * @param  array values
+     * @param mixed $values
+     *
      * @return string
      */
     public static function identifyFirstLanguage($values)
@@ -127,14 +144,14 @@ class core_kernel_persistence_smoothsql_Utils
         if (count($values) > 0) {
             $previousLanguage = $values[0]['language'];
             $returnValue = $previousLanguage;
-            
+
             foreach ($values as $value) {
                 if ($value['language'] == $previousLanguage) {
                     continue;
-                } else {
-                    $returnValue = $previousLanguage;
-                    break;
                 }
+                $returnValue = $previousLanguage;
+
+                break;
             }
         }
 
@@ -144,19 +161,22 @@ class core_kernel_persistence_smoothsql_Utils
     /**
      * Build a SQL search pattern on basis of a pattern and a comparison mode.
      *
-     * @param  tring pattern A value to compare.
+     * @param  tring pattern A value to compare
      * @param  boolean like The manner to compare values. If set to true, the LIKE SQL operator will be used. If set to false, the = (equal) SQL operator will be used.
+     * @param mixed $pattern
+     * @param mixed $like
+     *
      * @return string
      */
     public static function buildSearchPattern(common_persistence_SqlPersistence $persistence, $pattern, $like = true)
     {
         $returnValue = '';
-        
+
         // Take care of RDFS Literals!
         if ($pattern instanceof core_kernel_classes_Literal) {
             $pattern = $pattern->__toString();
         }
-        
+
         switch (gettype($pattern)) {
             case 'object':
                 if ($pattern instanceof core_kernel_classes_Resource) {
@@ -164,20 +184,23 @@ class core_kernel_persistence_smoothsql_Utils
                 } else {
                     common_Logger::w('non ressource as search parameter: ' . get_class($pattern), ['GENERIS']);
                 }
+
                 break;
-            
+
             default:
                 $patternToken = $pattern;
                 $wildcard = mb_strpos($patternToken, '*', 0, 'UTF-8') !== false;
                 $object = trim(str_replace('*', '%', $patternToken));
-                
+
                 if ($like) {
-                    if (!$wildcard && !preg_match("/^%/", $object)) {
-                        $object = "%" . $object;
+                    if (!$wildcard && !preg_match('/^%/', $object)) {
+                        $object = '%' . $object;
                     }
-                    if (!$wildcard && !preg_match("/%$/", $object)) {
-                        $object = $object . "%";
+
+                    if (!$wildcard && !preg_match('/%$/', $object)) {
+                        $object = $object . '%';
                     }
+
                     if (!$wildcard && $object === '%') {
                         $object = '%%';
                     }
@@ -185,79 +208,80 @@ class core_kernel_persistence_smoothsql_Utils
                 } else {
                     $returnValue .= '= ' . $persistence->quote($patternToken);
                 }
+
                 break;
         }
-        
+
         return $returnValue;
     }
-    
+
     public static function buildPropertyQuery(core_kernel_persistence_smoothsql_SmoothModel $model, $propertyUri, $values, $like, $lang = '')
     {
         $persistence = $model->getPersistence();
-        
+
         // Deal with predicate...
         $predicate = $persistence->quote($propertyUri);
-        
+
         // Deal with values...
         if (is_array($values) === false) {
             $values = [$values];
         }
-        
+
         $valuePatterns = [];
+
         foreach ($values as $val) {
             $pattern = $like ? 'LOWER(object) ' : 'object ';
             $valuePatterns[] = $pattern . self::buildSearchPattern($persistence, $val, $like);
         }
-        
+
         $sqlValues = implode(' OR ', $valuePatterns);
-        
+
         // Deal with language...
         $sqlLang = '';
+
         if (empty($lang) === false) {
             $sqlLang = ' AND (' . self::buildLanguagePattern($persistence, $lang) . ')';
         }
-        
+
         $query = "SELECT DISTINCT subject FROM statements WHERE (predicate = ${predicate}) AND (${sqlValues}${sqlLang})"
             . ' AND modelid IN (' . implode(',', $model->getReadableModels()) . ')';
-        
+
         return $query;
     }
-    
+
     public static function buildLanguagePattern(common_persistence_SqlPersistence $persistence, $lang = '')
     {
         $languagePattern = '';
-        
+
         if (empty($lang) === false) {
             $sqlEmpty = $persistence->quote('');
             $sqlLang = $persistence->quote($lang);
             $languagePattern = "l_language = ${sqlEmpty} OR l_language = ${sqlLang}";
         }
-        
+
         return $languagePattern;
     }
-    
+
     public static function buildUnionQuery($propertyQueries)
     {
-        
         if (count($propertyQueries) === 0) {
             return false;
         } elseif (count($propertyQueries) === 1) {
             return $propertyQueries[0];
-        } else {
-            // Add parenthesis.
-            $finalPropertyQueries = [];
-            foreach ($propertyQueries as $query) {
-                $finalPropertyQueries[] = "(${query})";
-            }
-            
-            return implode(' UNION ALL ', $finalPropertyQueries);
         }
+        // Add parenthesis.
+        $finalPropertyQueries = [];
+
+        foreach ($propertyQueries as $query) {
+            $finalPropertyQueries[] = "(${query})";
+        }
+
+        return implode(' UNION ALL ', $finalPropertyQueries);
     }
-    
+
     public static function buildFilterQuery(core_kernel_persistence_smoothsql_SmoothModel $model, $classUri, array $propertyFilters, $and = true, $like = true, $lang = '', $offset = 0, $limit = 0, $order = '', $orderDir = 'ASC')
     {
-
-        $orderDir =  self::sanitizeOrderDirection($orderDir);
+        $orderDir = self::sanitizeOrderDirection($orderDir);
 
         $persistence = $model->getPersistence();
 
@@ -265,8 +289,9 @@ class core_kernel_persistence_smoothsql_Utils
         if (is_array($classUri) === false) {
             $classUri = [$classUri];
         }
-        
+
         $propertyQueries = [self::buildPropertyQuery($model, OntologyRdf::RDF_TYPE, $classUri, false)];
+
         foreach ($propertyFilters as $propertyUri => $filterValues) {
             // no support of Filter object passed in the $propertyFilters array.
             if ($filterValues instanceof Filter) {
@@ -274,9 +299,9 @@ class core_kernel_persistence_smoothsql_Utils
             }
             $propertyQueries[] = self::buildPropertyQuery($model, $propertyUri, $filterValues, $like, $lang);
         }
-        
+
         $unionQuery = self::buildUnionQuery($propertyQueries);
-        
+
         if (($propCount = count($propertyFilters)) === 0) {
             $query = self::buildPropertyQuery($model, OntologyRdf::RDF_TYPE, $classUri, false, $lang);
         } else {
@@ -287,34 +312,35 @@ class core_kernel_persistence_smoothsql_Utils
         // Order...
         if (!empty($order)) {
             $orderPredicate = $persistence->quote($order);
-            
+
             $sqlLang = '';
+
             if (!empty($lang)) {
                 $sqlEmptyLang = $persistence->quote('');
                 $sqlRequestedLang = $persistence->quote($lang);
                 $sqlLang = " AND (l_language = ${sqlEmptyLang} OR l_language = ${sqlRequestedLang})";
             }
-            
+
             $orderQueryId = $persistence->getPlatForm()->quoteIdentifier('orderq');
             $orderQuerySubject = $orderQueryId . '.' . $persistence->getPlatForm()->quoteIdentifier('subject');
             $orderQueryObject = $orderQueryId . '.' . $persistence->getPlatForm()->quoteIdentifier('object');
-            
+
             $sqlOrderFilter = "mainq.subject = ${orderQuerySubject} AND predicate = ${orderPredicate}${sqlLang}";
-            
+
             $query = "SELECT mainq.subject, ${orderQueryObject} FROM (${query}) AS mainq LEFT JOIN ";
             $query .= "statements AS ${orderQueryId} ON (${sqlOrderFilter}) ORDER BY ${orderQueryObject} ${orderDir}";
         }
-        
+
         // Limit...
         if ($limit > 0) {
             $query = $persistence->getPlatForm()->limitStatement($query, $limit, $offset);
         }
-        
+
         // Suffix order...
         if (empty($order) === false) {
             $query = "SELECT subject FROM (${query}) as rootq";
         }
-        
+
         return $query;
     }
 }

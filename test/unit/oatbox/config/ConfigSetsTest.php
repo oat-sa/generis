@@ -16,24 +16,24 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2017 (original work) Open Assessment Technologies SA;
- *
  */
 
 namespace oat\generis\test\unit\config;
 
 use common_exception_InconsistentData;
-use oat\oatbox\service\ConfigurableService;
-use oat\oatbox\config\ConfigSets;
 use oat\generis\test\TestCase;
+use oat\oatbox\config\ConfigSets;
+use oat\oatbox\service\ConfigurableService;
 
 /**
  * Class ConfigSetsTest
+ *
  * @package oat\generis\test\config
+ *
  * @author Aleh Hutnikau, <hutnikau@1pt.com>
  */
 class ConfigSetsTest extends TestCase
 {
-
     /**
      * @var ConfigSets
      */
@@ -53,7 +53,7 @@ class ConfigSetsTest extends TestCase
                 'listener_1_name' => 'listener_1',
                 'listener_2_name' => 'listener_2',
             ],
-            'key' => 'val'
+            'key' => 'val',
         ]);
     }
 
@@ -91,6 +91,7 @@ class ConfigSetsTest extends TestCase
 
 /**
  * Class ConfigurableTestSample
+ *
  * @package oat\generis\test\config
  */
 class ConfigurableTestSample extends ConfigurableService

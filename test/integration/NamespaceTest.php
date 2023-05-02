@@ -18,10 +18,9 @@
  * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
  *               2017      (update and modification) Open Assessment Technologies SA;
- *
  */
 
-/**
+/*
  * Test of the common_ext_Namespace and common_ext_NamesapceManager
  *
  * @author Bertrand Chevrier <bertrand.chevrier@tudor.lu>
@@ -33,7 +32,6 @@ use oat\generis\test\TestCase;
 
 class NamespaceTest extends TestCase
 {
-
     public function setUp(): void
     {
     }

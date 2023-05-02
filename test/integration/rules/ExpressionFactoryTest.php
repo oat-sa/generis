@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,15 +25,8 @@ error_reporting(E_ALL);
 use oat\generis\model\RulesRdf;
 use oat\generis\test\GenerisPhpUnitTestRunner;
 
-/**
- *
- */
 class ExpressionFactoryTestCase extends GenerisPhpUnitTestRunner
 {
-
-    /**
-     *
-     */
     public function testCreateTerminalExpression()
     {
         $constantResource = core_kernel_rules_TermFactory::createConst('test1');
@@ -46,12 +40,8 @@ class ExpressionFactoryTestCase extends GenerisPhpUnitTestRunner
         $terminalExpression->delete();
     }
 
-    /**
-     *
-     */
     public function testCreateRecursiveExpression()
     {
-
         $constantResource1 = core_kernel_rules_TermFactory::createConst('test1');
         $constantResource2 = core_kernel_rules_TermFactory::createConst('test2');
 
