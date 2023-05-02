@@ -35,6 +35,8 @@ use oat\oatbox\service\ServiceManager;
  * @package generis
  *
  * @deprecated
+ *
+ * phpcs:disable Squiz.Classes.ValidClassName
  */
 class common_cache_FileCache extends common_cache_KeyValueCache
 {
