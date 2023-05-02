@@ -39,7 +39,7 @@ class AbstractContextTest extends TestCase
             self::PARAM_TEST => ['value'],
         ];
 
-        $this->sut = new class($contextData) extends AbstractContext {
+        $this->sut = new class ($contextData) extends AbstractContext {
             protected function getSupportedParameters(): array
             {
                 return [

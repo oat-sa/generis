@@ -118,8 +118,13 @@ class core_kernel_persistence_smoothsql_Utils
      *
      * @return array
      */
-    public static function filterByLanguage(common_persistence_SqlPersistence $persistence, $dataset, $langColname, $selectedLanguage, $defaultLanguage)
-    {
+    public static function filterByLanguage(
+        common_persistence_SqlPersistence $persistence,
+        $dataset,
+        $langColname,
+        $selectedLanguage,
+        $defaultLanguage
+    ) {
         $returnValue = [];
 
         $result = self::sortByLanguage($persistence, $dataset, $langColname, $selectedLanguage, $defaultLanguage);
@@ -164,8 +169,9 @@ class core_kernel_persistence_smoothsql_Utils
     /**
      * Build a SQL search pattern on basis of a pattern and a comparison mode.
      *
-     * @param  tring pattern A value to compare
-     * @param  boolean like The manner to compare values. If set to true, the LIKE SQL operator will be used. If set to false, the = (equal) SQL operator will be used.
+     * @param tring pattern A value to compare
+     * @param boolean like The manner to compare values. If set to true, the LIKE SQL operator will be used.
+     *                If set to false, the = (equal) SQL operator will be used.
      * @param mixed $pattern
      * @param mixed $like
      *
@@ -189,7 +195,6 @@ class core_kernel_persistence_smoothsql_Utils
                 }
 
                 break;
-
             default:
                 $patternToken = $pattern;
                 $wildcard = mb_strpos($patternToken, '*', 0, 'UTF-8') !== false;
@@ -218,8 +223,13 @@ class core_kernel_persistence_smoothsql_Utils
         return $returnValue;
     }
 
-    public static function buildPropertyQuery(core_kernel_persistence_smoothsql_SmoothModel $model, $propertyUri, $values, $like, $lang = '')
-    {
+    public static function buildPropertyQuery(
+        core_kernel_persistence_smoothsql_SmoothModel $model,
+        $propertyUri,
+        $values,
+        $like,
+        $lang = ''
+    ) {
         $persistence = $model->getPersistence();
 
         // Deal with predicate...
@@ -282,8 +292,18 @@ class core_kernel_persistence_smoothsql_Utils
         return implode(' UNION ALL ', $finalPropertyQueries);
     }
 
-    public static function buildFilterQuery(core_kernel_persistence_smoothsql_SmoothModel $model, $classUri, array $propertyFilters, $and = true, $like = true, $lang = '', $offset = 0, $limit = 0, $order = '', $orderDir = 'ASC')
-    {
+    public static function buildFilterQuery(
+        core_kernel_persistence_smoothsql_SmoothModel $model,
+        $classUri,
+        array $propertyFilters,
+        $and = true,
+        $like = true,
+        $lang = '',
+        $offset = 0,
+        $limit = 0,
+        $order = '',
+        $orderDir = 'ASC'
+    ) {
         $orderDir = self::sanitizeOrderDirection($orderDir);
 
         $persistence = $model->getPersistence();

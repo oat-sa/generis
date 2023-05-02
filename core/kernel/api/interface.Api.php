@@ -68,4 +68,4 @@ interface core_kernel_api_Api
      * @return boolean
      */
     public function logOut();
-} /* end of interface core_kernel_api_Api */
+}

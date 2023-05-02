@@ -21,6 +21,7 @@
  *                         (under the project TAO-SUSTAIN & TAO-DEV);
  *
  */
+
 namespace oat\generis\test\unit\oatbox\log;
 
 use common_Logger;

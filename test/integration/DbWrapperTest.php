@@ -15,11 +15,13 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
- *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
+ * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung
+ *                         (under the project TAO-TRANSFER);
+ *               2009-2012 (update and modification) Public Research Centre Henri Tudor
+ *                         (under the project TAO-SUSTAIN & TAO-DEV);
  *               2013      (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
  */
+
 use oat\generis\test\GenerisPhpUnitTestRunner;
 
 /**
@@ -36,14 +38,15 @@ class DbWrapperTest extends GenerisPhpUnitTestRunner
         GenerisPhpUnitTestRunner::initTest();
         $dbWrapper = core_kernel_classes_DbWrapper::singleton();
         //TODO need to connect to a dbWrapper a function createTable that currently not exists
-        $dbWrapper->exec('
-                CREATE TABLE "dbTestCase" (
-                    "id" INT,
-                    "uri" VARCHAR(255) NOT NULL,
-                    "coluMn1" VARCHAR(255) )');
+        $dbWrapper->exec(
+            'CREATE TABLE "dbTestCase" ("id" INT, "uri" VARCHAR(255) NOT NULL, "coluMn1" VARCHAR(255) )'
+        );
 
         for ($i = 0; $i < 4; $i++) {
-            $dbWrapper->exec('INSERT INTO  "dbTestCase" (id,uri,"coluMn1") VALUES (?,?,?) ;', [$i,'http://uri' . $i,'value' . $i]);
+            $dbWrapper->exec(
+                'INSERT INTO "dbTestCase" (id, uri, "coluMn1") VALUES (?, ?, ?) ;',
+                [$i, 'http://uri' . $i, 'value' . $i]
+            );
         }
     }
 
@@ -60,7 +63,10 @@ class DbWrapperTest extends GenerisPhpUnitTestRunner
         $rowCount = $dbWrapper->getRowCount('dbTestCase');
         $this->assertTrue(is_int($rowCount));
         $this->assertTrue($rowCount == 4);
-        $dbWrapper->exec('INSERT INTO "dbTestCase" (id,uri,"coluMn1") VALUES (?,?,?) ;', ['12','http://uri','value']);
+        $dbWrapper->exec(
+            'INSERT INTO "dbTestCase" (id, uri, "coluMn1") VALUES (?, ?, ?);',
+            ['12', 'http://uri', 'value']
+        );
         $rowCount = $dbWrapper->getRowCount('dbTestCase');
         $this->assertTrue(is_int($rowCount));
         $this->assertTrue($rowCount == 5);
@@ -75,7 +81,10 @@ class DbWrapperTest extends GenerisPhpUnitTestRunner
 
         foreach ($columns as $col) {
             if ($col instanceof Doctrine\DBAL\Schema\Column) {
-                $this->assertTrue(in_array($col->getName(), $possibleValues), $col->getName() . ' is not a correct value');
+                $this->assertTrue(
+                    in_array($col->getName(), $possibleValues),
+                    $col->getName() . ' is not a correct value'
+                );
             } else {
                 //legacy mode
                 $this->assertTrue(in_array($col, $possibleValues));
@@ -139,7 +148,10 @@ class DbWrapperTest extends GenerisPhpUnitTestRunner
         $indexes = $dbWrapper->getSchemaManager()->getTableIndexes('dbtestcase2');
 
         foreach ($indexes as $index) {
-            $this->assertTrue(in_array($index->getName(), ['idx_content','dbtestcase2_pkey','PRIMARY']), $index->getName() . 'is missing');
+            $this->assertTrue(
+                in_array($index->getName(), ['idx_content','dbtestcase2_pkey','PRIMARY']),
+                $index->getName() . 'is missing'
+            );
         }
 
         $dbWrapper->exec('DROP TABLE dbtestcase2');

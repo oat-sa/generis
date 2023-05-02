@@ -16,9 +16,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2017 (original work) Open Assessment Technologies S.A.
- *
  */
 
+use oat\generis\model\kernel\persistence\smoothsql\search\ComplexSearchService;
 use oat\generis\model\OntologyRdfs;
 use oat\generis\test\GenerisPhpUnitTestRunner;
 use oat\oatbox\service\ServiceManager;
@@ -34,7 +34,7 @@ class ComplexSearchTest extends GenerisPhpUnitTestRunner
         $this->object = new core_kernel_classes_Class(OntologyRdfs::RDFS_RESOURCE);
         $this->object->debug = __METHOD__;
 
-        $this->search = ServiceManager::getServiceManager()->get(\oat\generis\model\kernel\persistence\smoothsql\search\ComplexSearchService::SERVICE_ID);
+        $this->search = ServiceManager::getServiceManager()->get(ComplexSearchService::SERVICE_ID);
     }
 
     public function testRandomized()

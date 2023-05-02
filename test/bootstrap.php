@@ -25,6 +25,7 @@
 
 $extensionRoot = realpath(__DIR__ . '/../');
 
+// phpcs:disable
 function generisInstalledAsExtension(string $extensionRoot)
 {
     return is_dir($extensionRoot . '/../vendor') && is_dir($extensionRoot . '/../generis');
@@ -34,6 +35,7 @@ function generisInstalledAsRootPackage(string $extensionRoot)
 {
     return is_dir($extensionRoot . '/vendor');
 }
+// phpcs:enable
 
 if (generisInstalledAsExtension($extensionRoot)) {
     define('ROOT_PATH', realpath(__DIR__ . '/../../'));

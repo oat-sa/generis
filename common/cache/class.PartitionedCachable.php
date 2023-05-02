@@ -111,7 +111,13 @@ abstract class common_cache_PartitionedCachable implements common_Serializable
                     }
 
                     if ($containsNonSerializable && $containsSerializable) {
-                        throw new common_exception_Error('Serializable ' . $this->getSerial() . ' mixed serializable and non serializable values in property ' . $propertyName);
+                        throw new common_exception_Error(
+                            sprintf(
+                                'Serializable %s mixed serializable and non serializable values in property %s',
+                                $this->getSerial(),
+                                $propertyName
+                            )
+                        );
                     }
                 } else {
                     if (is_object($value) && $value instanceof self) {
@@ -189,7 +195,7 @@ abstract class common_cache_PartitionedCachable implements common_Serializable
      *
      * @return mixed
      */
-    public function _remove()
+    public function remove()
     {
         //usefull only when persistance is enabled
         if (!is_null($this->getCache())) {
@@ -288,4 +294,4 @@ abstract class common_cache_PartitionedCachable implements common_Serializable
      * @return common_cache_Cache
      */
     abstract public function getCache();
-} /* end of abstract class common_cache_PartitionedCachable */
+}

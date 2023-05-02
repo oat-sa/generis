@@ -24,7 +24,9 @@
  *
  */
 
+// phpcs:disable
 error_reporting(E_ALL);
+// phpcs:enable
 
 /**
  * Simple utility class that allow you to wrap the database connector.
@@ -463,9 +465,11 @@ class core_kernel_classes_DbWrapper
      *
      * @author Jerome Bogaerts, <jerome@taotesting.com>
      *
-     * @param  string indexName The name of the index to create
-     * @param  string tableName A table name
-     * @param  array columns An associative array that represents the columns on which the index applies. The keys of the array are the name of the columns, the values are the length of the data to index in the column. If there is no length limitation, set the value of the array cell to null.
+     * @param string indexName The name of the index to create
+     * @param string tableName A table name
+     * @param array columns An associative array that represents the columns on which the index applies. The keys of
+     *              the array are the name of the columns, the values are the length of the data to index in the column.
+     *              If there is no length limitation, set the value of the array cell to null.
      * @param mixed $indexName
      * @param mixed $tableName
      * @param mixed $columns

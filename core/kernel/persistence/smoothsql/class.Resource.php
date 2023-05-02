@@ -121,8 +121,11 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
      *
      * @author Joel Bout, <joel.bout@tudor.lu>
      */
-    public function getPropertyValues(core_kernel_classes_Resource $resource, core_kernel_classes_Property $property, $options = [])
-    {
+    public function getPropertyValues(
+        core_kernel_classes_Resource $resource,
+        core_kernel_classes_Property $property,
+        $options = []
+    ) {
         $returnValue = [];
 
         $one = isset($options['one']) && $options['one'] == true ? true : false;
@@ -169,8 +172,15 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
                     $returnValue[] = $this->getPersistence()->getPlatForm()->getPhpTextValue($row['object']);
                 }
             } else {
-                // Filter result by language and return one set of values (User language in top priority, default language in second and the fallback language (null) in third)
-                $returnValue = core_kernel_persistence_smoothsql_Utils::filterByLanguage($this->getPersistence(), $result->fetchAll(), 'l_language', $lang, $default);
+                // Filter result by language and return one set of values (User language in top priority, default
+                // language in second and the fallback language (null) in third)
+                $returnValue = core_kernel_persistence_smoothsql_Utils::filterByLanguage(
+                    $this->getPersistence(),
+                    $result->fetchAll(),
+                    'l_language',
+                    $lang,
+                    $default
+                );
             }
         }
 
@@ -192,8 +202,11 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
      *
      * @author Joel Bout, <joel.bout@tudor.lu>
      */
-    public function getPropertyValuesByLg(core_kernel_classes_Resource $resource, core_kernel_classes_Property $property, $lg)
-    {
+    public function getPropertyValuesByLg(
+        core_kernel_classes_Resource $resource,
+        core_kernel_classes_Property $property,
+        $lg
+    ) {
         $options = ['lg' => $lg];
 
         $returnValue = new core_kernel_classes_ContainerCollection($resource);
@@ -219,8 +232,12 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
      *
      * @author Joel Bout, <joel.bout@tudor.lu>
      */
-    public function setPropertyValue(core_kernel_classes_Resource $resource, core_kernel_classes_Property $property, $object, $lg = null)
-    {
+    public function setPropertyValue(
+        core_kernel_classes_Resource $resource,
+        core_kernel_classes_Property $property,
+        $object,
+        $lg = null
+    ) {
         $object = $object instanceof core_kernel_classes_Resource ? $object->getUri() : (string) $object;
 
         if ($property->isLgDependent()) {
@@ -292,8 +309,12 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
      *
      * @author Joel Bout, <joel.bout@tudor.lu>
      */
-    public function setPropertyValueByLg(core_kernel_classes_Resource $resource, core_kernel_classes_Property $property, $value, $lg)
-    {
+    public function setPropertyValueByLg(
+        core_kernel_classes_Resource $resource,
+        core_kernel_classes_Property $property,
+        $value,
+        $lg
+    ) {
         $triple = core_kernel_classes_Triple::createTriple(
             $this->getNewTripleModelId(),
             $resource->getUri(),
@@ -319,8 +340,11 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
      *
      * @author Joel Bout, <joel.bout@tudor.lu>
      */
-    public function removePropertyValues(core_kernel_classes_Resource $resource, core_kernel_classes_Property $property, $options = [])
-    {
+    public function removePropertyValues(
+        core_kernel_classes_Resource $resource,
+        core_kernel_classes_Property $property,
+        $options = []
+    ) {
         // Optional params
         $pattern = isset($options['pattern']) && !is_null($options['pattern']) ? $options['pattern'] : null;
         $like = isset($options['like']) && $options['like'] == true ? true : false;
@@ -333,7 +357,11 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
 
         if (is_string($pattern)) {
             if (!is_null($pattern)) {
-                $searchPattern = core_kernel_persistence_smoothsql_Utils::buildSearchPattern($this->getPersistence(), $pattern, $like);
+                $searchPattern = core_kernel_persistence_smoothsql_Utils::buildSearchPattern(
+                    $this->getPersistence(),
+                    $pattern,
+                    $like
+                );
                 $conditions[] = '( ' . $objectType . ' ' . $searchPattern . ' )';
             }
         } elseif (is_array($pattern)) {
@@ -341,7 +369,11 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
                 $multiCondition = '( ';
 
                 foreach ($pattern as $i => $patternToken) {
-                    $searchPattern = core_kernel_persistence_smoothsql_Utils::buildSearchPattern($this->getPersistence(), $patternToken, $like);
+                    $searchPattern = core_kernel_persistence_smoothsql_Utils::buildSearchPattern(
+                        $this->getPersistence(),
+                        $patternToken,
+                        $like
+                    );
 
                     if ($i > 0) {
                         $multiCondition .= ' OR ';
@@ -396,8 +428,12 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
      *
      * @author Joel Bout, <joel.bout@tudor.lu>
      */
-    public function removePropertyValueByLg(core_kernel_classes_Resource $resource, core_kernel_classes_Property $property, $lg, $options = [])
-    {
+    public function removePropertyValueByLg(
+        core_kernel_classes_Resource $resource,
+        core_kernel_classes_Property $property,
+        $lg,
+        $options = []
+    ) {
         $sqlQuery = 'DELETE FROM statements WHERE subject = ? and predicate = ? and l_language = ?';
         //be sure the property we try to remove is included in an updatable model
         $sqlQuery .= ' AND ' . $this->getModelWriteSqlCondition();
@@ -429,7 +465,8 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
     public function getRdfTriples(core_kernel_classes_Resource $resource)
     {
         // TODO: refactor this to use a triple store abstraction
-        $query = 'SELECT * FROM statements WHERE subject = ? AND ' . $this->getModelReadSqlCondition() . ' ORDER BY predicate';
+        $query = 'SELECT * FROM statements WHERE subject = ? AND ' . $this->getModelReadSqlCondition()
+            . ' ORDER BY predicate';
         $result = $this->getPersistence()->query($query, [$resource->getUri()]);
 
         $returnValue = new core_kernel_classes_ContainerCollection(new common_Object(__METHOD__));
@@ -553,7 +590,9 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
         if (!$returnValue) {
             $returnValue = false;
         } elseif ($deleteReference) {
-            $sqlQuery = 'DELETE FROM statements WHERE ' . $this->getPersistence()->getPlatForm()->getObjectTypeCondition() . ' = ? AND ' . $this->getModelWriteSqlCondition();
+            $sqlQuery = 'DELETE FROM statements WHERE '
+                . $this->getPersistence()->getPlatForm()->getObjectTypeCondition() . ' = ? AND '
+                . $this->getModelWriteSqlCondition();
             $return = $this->getPersistence()->exec($sqlQuery, [$resource->getUri()]);
 
             if ($return !== false) {
@@ -656,8 +695,8 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
      */
     public function removeType(core_kernel_classes_Resource $resource, core_kernel_classes_Class $class)
     {
-        $query = 'DELETE FROM statements 
-		    		WHERE subject = ? AND predicate = ? AND ' . $this->getPersistence()->getPlatForm()->getObjectTypeCondition() . ' = ?';
+        $query = 'DELETE FROM statements WHERE subject = ? AND predicate = ? AND '
+            . $this->getPersistence()->getPlatForm()->getObjectTypeCondition() . ' = ?';
 
         //be sure the property we try to remove is included in an updatable model
         $query .= ' AND ' . $this->getModelWriteSqlCondition();

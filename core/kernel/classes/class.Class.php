@@ -435,9 +435,17 @@ class core_kernel_classes_Class extends core_kernel_classes_Resource
      *
      * @return \core_kernel_classes_Resource[]
      */
-    public function getInstancesPropertyValues(core_kernel_classes_Property $property, $propertyFilters = [], $options = [])
-    {
-        return (array) $this->getImplementation()->getInstancesPropertyValues($this, $property, $propertyFilters, $options);
+    public function getInstancesPropertyValues(
+        core_kernel_classes_Property $property,
+        $propertyFilters = [],
+        $options = []
+    ) {
+        return (array) $this->getImplementation()->getInstancesPropertyValues(
+            $this,
+            $property,
+            $propertyFilters,
+            $options
+        );
     }
 
     /**
@@ -481,7 +489,9 @@ class core_kernel_classes_Class extends core_kernel_classes_Resource
         $additionalTypes = [];
 
         if (isset($properties[OntologyRdf::RDF_TYPE])) {
-            $types = is_array($properties[OntologyRdf::RDF_TYPE]) ? $properties[OntologyRdf::RDF_TYPE] : [$properties[OntologyRdf::RDF_TYPE]];
+            $types = is_array($properties[OntologyRdf::RDF_TYPE])
+                ? $properties[OntologyRdf::RDF_TYPE]
+                : [$properties[OntologyRdf::RDF_TYPE]];
 
             foreach ($types as $type) {
                 $uri = is_object($type) ? $type->getUri() : $type;
@@ -512,7 +522,8 @@ class core_kernel_classes_Class extends core_kernel_classes_Resource
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      *
      * @param  array resources An array of core_kernel_classes_Resource or URIs
-     * @param  boolean deleteReference If set to true, references about the resources will also be deleted from the database
+     * @param  boolean deleteReference If set to true, references about the resources will also be deleted from the
+     *                 database
      * @param mixed $resources
      * @param mixed $deleteReference
      *

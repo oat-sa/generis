@@ -60,7 +60,11 @@ interface core_kernel_persistence_ResourceInterface
      *
      * @return array
      */
-    public function getPropertyValues(core_kernel_classes_Resource $resource, core_kernel_classes_Property $property, $options = []);
+    public function getPropertyValues(
+        core_kernel_classes_Resource $resource,
+        core_kernel_classes_Property $property,
+        $options = []
+    );
 
     /**
      * Short description of method getPropertyValuesByLg
@@ -76,7 +80,11 @@ interface core_kernel_persistence_ResourceInterface
      *
      * @return core_kernel_classes_ContainerCollection
      */
-    public function getPropertyValuesByLg(core_kernel_classes_Resource $resource, core_kernel_classes_Property $property, $lg);
+    public function getPropertyValuesByLg(
+        core_kernel_classes_Resource $resource,
+        core_kernel_classes_Property $property,
+        $lg
+    );
 
     /**
      * Short description of method setPropertyValue
@@ -94,7 +102,12 @@ interface core_kernel_persistence_ResourceInterface
      *
      * @return boolean
      */
-    public function setPropertyValue(core_kernel_classes_Resource $resource, core_kernel_classes_Property $property, $object, $lg = null);
+    public function setPropertyValue(
+        core_kernel_classes_Resource $resource,
+        core_kernel_classes_Property $property,
+        $object,
+        $lg = null
+    );
 
     /**
      * Short description of method setPropertiesValues
@@ -127,7 +140,12 @@ interface core_kernel_persistence_ResourceInterface
      *
      * @return boolean
      */
-    public function setPropertyValueByLg(core_kernel_classes_Resource $resource, core_kernel_classes_Property $property, $value, $lg);
+    public function setPropertyValueByLg(
+        core_kernel_classes_Resource $resource,
+        core_kernel_classes_Property $property,
+        $value,
+        $lg
+    );
 
     /**
      * Short description of method removePropertyValues
@@ -143,7 +161,11 @@ interface core_kernel_persistence_ResourceInterface
      *
      * @return boolean
      */
-    public function removePropertyValues(core_kernel_classes_Resource $resource, core_kernel_classes_Property $property, $options = []);
+    public function removePropertyValues(
+        core_kernel_classes_Resource $resource,
+        core_kernel_classes_Property $property,
+        $options = []
+    );
 
     /**
      * Short description of method removePropertyValueByLg
@@ -161,7 +183,12 @@ interface core_kernel_persistence_ResourceInterface
      *
      * @return boolean
      */
-    public function removePropertyValueByLg(core_kernel_classes_Resource $resource, core_kernel_classes_Property $property, $lg, $options = []);
+    public function removePropertyValueByLg(
+        core_kernel_classes_Resource $resource,
+        core_kernel_classes_Property $property,
+        $lg,
+        $options = []
+    );
 
     /**
      * Short description of method getRdfTriples

@@ -75,7 +75,6 @@ class RdfWrapper implements \oat\generis\model\data\RdfInterface
                 return $this->rdfsInterface->getResourceImplementation()->setType($resource, $class);
 
                 break;
-
             case OntologyRdfs::RDFS_RANGE:
                 $resource = new core_kernel_classes_Property($triple->subject);
                 $class = new core_kernel_classes_Class($triple->object);
@@ -83,7 +82,6 @@ class RdfWrapper implements \oat\generis\model\data\RdfInterface
                 return $this->rdfsInterface->getPropertyImplementation()->setRange($resource, $class);
 
                 break;
-
             case GenerisRdf::PROPERTY_MULTIPLE:
                 $resource = new core_kernel_classes_Property($triple->subject);
                 $value = $triple->object == GenerisRdf::GENERIS_TRUE;
@@ -91,7 +89,6 @@ class RdfWrapper implements \oat\generis\model\data\RdfInterface
                 return $this->rdfsInterface->getPropertyImplementation()->setMultiple($resource, $value);
 
                 break;
-
             case GenerisRdf::PROPERTY_IS_LG_DEPENDENT:
                 $resource = new core_kernel_classes_Property($triple->subject);
                 $value = $triple->object == GenerisRdf::GENERIS_TRUE;
@@ -99,17 +96,25 @@ class RdfWrapper implements \oat\generis\model\data\RdfInterface
                 return $this->rdfsInterface->getPropertyImplementation()->setLgDependent($resource, $value);
 
                 break;
-
             case OntologyRdfs::RDFS_DOMAIN:
             default:
                 $resource = new core_kernel_classes_Resource($triple->subject);
                 $property = new core_kernel_classes_Property($triple->predicate);
 
                 if (empty($triple->lg)) {
-                    return $this->rdfsInterface->getResourceImplementation()->setPropertyValue($resource, $property, $triple->object);
+                    return $this->rdfsInterface->getResourceImplementation()->setPropertyValue(
+                        $resource,
+                        $property,
+                        $triple->object
+                    );
                 }
 
-                return $this->rdfsInterface->getResourceImplementation()->setPropertyValueByLg($resource, $property, $triple->object, $triple->lg);
+                return $this->rdfsInterface->getResourceImplementation()->setPropertyValueByLg(
+                    $resource,
+                    $property,
+                    $triple->object,
+                    $triple->lg
+                );
         }
     }
 

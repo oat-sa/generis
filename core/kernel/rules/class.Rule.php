@@ -65,7 +65,10 @@ class core_kernel_rules_Rule extends core_kernel_classes_Resource
 
         if (empty($this->expression)) {
             $property = new core_kernel_classes_Property(RulesRdf::PROPERTY_RULE_IF);
-            $this->expression = new core_kernel_rules_Expression($this->getUniquePropertyValue($property)->getUri(), __METHOD__);
+            $this->expression = new core_kernel_rules_Expression(
+                $this->getUniquePropertyValue($property)->getUri(),
+                __METHOD__
+            );
         }
         $returnValue = $this->expression;
 

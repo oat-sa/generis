@@ -188,17 +188,14 @@ class OptionContainer
                     $casted = @intval($value);
 
                     break;
-
                 case 'float':
                     $casted = @floatval($value);
 
                     break;
-
                 case 'string':
                     $casted = @strval($value);
 
                     break;
-
                 case 'boolean':
                 case 'bool':
                     $casted = @boolval($value);

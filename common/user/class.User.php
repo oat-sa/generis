@@ -60,8 +60,11 @@ abstract class common_user_User implements User, Refreshable
             // We use a Depth First Search approach to flatten the Roles Graph.
             foreach ($this->getPropertyValues(GenerisRdf::PROPERTY_USER_ROLES) as $roleUri) {
                 $returnValue[] = $roleUri;
+                $includedRoles = core_kernel_users_Service::singleton()->getIncludedRoles(
+                    new core_kernel_classes_Resource($roleUri)
+                );
 
-                foreach (core_kernel_users_Service::singleton()->getIncludedRoles(new core_kernel_classes_Resource($roleUri)) as $role) {
+                foreach ($includedRoles as $role) {
                     $returnValue[] = $role->getUri();
                 }
             }

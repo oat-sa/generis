@@ -37,7 +37,7 @@ class ExtensionTest extends TestCase
     public function testGetUpdater()
     {
         $dir = __DIR__ . DIRECTORY_SEPARATOR . 'samples' . DIRECTORY_SEPARATOR;
-        $ext = new class('foo', $dir) extends Extension {
+        $ext = new class ('foo', $dir) extends Extension {
             private $dir;
             public function __construct($id, $dir)
             {

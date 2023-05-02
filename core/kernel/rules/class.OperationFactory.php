@@ -54,8 +54,11 @@ class core_kernel_rules_OperationFactory
      *
      * @return core_kernel_rules_Operation
      */
-    public static function createOperation(core_kernel_rules_Term $term1, core_kernel_rules_Term $term2, core_kernel_classes_Resource $operator)
-    {
+    public static function createOperation(
+        core_kernel_rules_Term $term1,
+        core_kernel_rules_Term $term2,
+        core_kernel_classes_Resource $operator
+    ) {
         $returnValue = null;
         $operationClass = new core_kernel_classes_Class(RulesRdf::CLASS_OPERATION, __METHOD__);
         $label = 'Def Operation Label ' . $term1->getLabel() . ' ' . $operator->getLabel() . ' ' . $term2->getLabel();

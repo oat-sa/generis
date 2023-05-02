@@ -56,23 +56,42 @@ class IntersectionTest extends TestCase
         $permissionModel3->getPermissions($this->user, ['res1'])->willReturn(['res1' => ['rightC']]);
 
         // res2
-        $permissionModel1->getPermissions($this->user, ['res1', 'res2'])->willReturn(['res1' => ['rightA', 'rightC'], 'res2' => []]);
-        $permissionModel2->getPermissions($this->user, ['res1', 'res2'])->willReturn(['res1' => ['rightC'], 'res2' => []]);
-        $permissionModel3->getPermissions($this->user, ['res1', 'res2'])->willReturn(['res1' => ['rightC', 'rightD'], 'res2' => []]);
+        $permissionModel1
+            ->getPermissions($this->user, ['res1', 'res2'])
+            ->willReturn(['res1' => ['rightA', 'rightC'], 'res2' => []]);
+        $permissionModel2
+            ->getPermissions($this->user, ['res1', 'res2'])
+            ->willReturn(['res1' => ['rightC'], 'res2' => []]);
+        $permissionModel3
+            ->getPermissions($this->user, ['res1', 'res2'])
+            ->willReturn(['res1' => ['rightC', 'rightD'], 'res2' => []]);
 
-        return Intersection::spawn([$permissionModel1->reveal(), $permissionModel2->reveal(), $permissionModel3->reveal()]);
+        return Intersection::spawn([
+            $permissionModel1->reveal(),
+            $permissionModel2->reveal(),
+            $permissionModel3->reveal(),
+        ]);
     }
 
     public function testConstruct()
     {
-        $this->assertInstanceOf('oat\generis\model\data\permission\PermissionInterface', $this->createIntersection());
+        $this->assertInstanceOf(
+            'oat\generis\model\data\permission\PermissionInterface',
+            $this->createIntersection()
+        );
     }
 
     public function testGetPermissions()
     {
         $model = $this->createIntersection();
         $this->assertEquals(['res1' => []], $model->getPermissions($this->user, ['res1']));
-        $this->assertEquals(['res1' => ['rightC'], 'res2' => []], $model->getPermissions($this->user, ['res1', 'res2']));
+        $this->assertEquals(
+            [
+                'res1' => ['rightC'],
+                'res2' => [],
+            ],
+            $model->getPermissions($this->user, ['res1', 'res2'])
+        );
     }
 
     public function testGetSupportedRights()

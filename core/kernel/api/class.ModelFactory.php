@@ -73,8 +73,9 @@ class core_kernel_api_ModelFactory
      */
     private function addStatement($modelId, $subject, $predicate, $object, $lang = null)
     {
+        $wheres = 'modelid = ? AND subject = ? AND predicate = ? AND object = ? AND l_language = ?';
         $result = core_kernel_classes_DbWrapper::singleton()->query(
-            'SELECT count(*) FROM statements WHERE modelid = ? AND subject = ? AND predicate = ? AND object = ? AND l_language = ?',
+            'SELECT count(*) FROM statements WHERE ' . $wheres,
             [$modelId, $subject, $predicate, $object, (is_null($lang)) ? '' : $lang]
         );
 

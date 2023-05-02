@@ -61,36 +61,30 @@ class core_kernel_rules_Term extends core_kernel_classes_Resource
         common_Logger::d('Term s type : ' . $termType->getUri(), ['Generis Term']);
 
         switch ($termType->getUri()) {
-            case RulesRdf::CLASS_TERM : {
+            case RulesRdf::CLASS_TERM:
                 throw new common_Exception('Forbidden Type of Term');
 
                 break;
-            }
-            case RulesRdf::CLASS_TERM_SUJET_PREDICATE_X : {
+            case RulesRdf::CLASS_TERM_SUJET_PREDICATE_X:
                 $returnValue = $this->evaluateSPX($variable);
 
                 break;
-            }
-            case RulesRdf::CLASS_URI_TERM_X_PREDICATE_OBJECT : {
+            case RulesRdf::CLASS_URI_TERM_X_PREDICATE_OBJECT:
                 $returnValue = $this->evaluateXPO();
 
                 break;
-            }
-            case RulesRdf::CLASS_URI_CONSTRUCTED_SET : {
+            case RulesRdf::CLASS_URI_CONSTRUCTED_SET:
                 $returnValue = $this->evaluateSet();
 
                 break;
-            }
-            case RulesRdf::CLASS_TERM_CONST : {
+            case RulesRdf::CLASS_TERM_CONST:
                 $returnValue = $this->evaluateConst();
 
                 break;
-            }
-            case RulesRdf::CLASS_OPERATION : {
+            case RulesRdf::CLASS_OPERATION:
                 $returnValue = $this->evaluateOperation($variable);
 
                 break;
-            }
             default:
                 throw new common_Exception('problem evaluating Term');
         }
@@ -111,8 +105,11 @@ class core_kernel_rules_Term extends core_kernel_classes_Resource
      *
      * @return core_kernel_classes_ContainerCollection
      */
-    public function evalutateSetOperation(core_kernel_classes_Resource $setOperator, common_Collection $actualSet, core_kernel_classes_ContainerCollection $newSet)
-    {
+    public function evalutateSetOperation(
+        core_kernel_classes_Resource $setOperator,
+        common_Collection $actualSet,
+        core_kernel_classes_ContainerCollection $newSet
+    ) {
         $returnValue = null;
 
         if ($setOperator->getUri() == RulesRdf::INSTANCE_OPERATOR_UNION) {
@@ -152,20 +149,16 @@ class core_kernel_rules_Term extends core_kernel_classes_Resource
             }
 
             try {
-                $propertyInstance = $this->getUniquePropertyValue(new core_kernel_classes_Property(RulesRdf::PROPERTY_TERM_SPX_PREDICATE));
+                $propertyInstance = $this->getUniquePropertyValue(
+                    new core_kernel_classes_Property(RulesRdf::PROPERTY_TERM_SPX_PREDICATE)
+                );
             } catch (common_Exception $e) {
                 echo $e;
                 var_dump($this);
 
                 die('unable to get property value in Term');
             }
-            //          if(array_key_exists($propertyInstance->getUri(),$variable)) {
-            //                $logger->debug('Variable uri : ' .  $propertyInstance->getUri() . ' found' , __FILE__, __LINE__);
-            //                $logger->debug('Variable name : ' .  $propertyInstance->getLabel() . ' found' , __FILE__, __LINE__);
-            //             $propertyInstance = new core_kernel_classes_Resource($variable[$resource->getUri()]);
-            //                $logger->debug('Variable repaced uri : ' .  $propertyInstance->getUri() , __FILE__, __LINE__);
-            //               $logger->debug('Variable repaced name : ' .  $propertyInstance->getLabel() , __FILE__, __LINE__);
-            //            }
+
             $property = new core_kernel_classes_Property($propertyInstance->getUri());
             common_Logger::d('Property uri ' . $property->getUri(), ['Generis Term evaluateSPX']);
             common_Logger::d('Property name ' . $property->getLabel(), ['Generis Term evaluateSPX']);

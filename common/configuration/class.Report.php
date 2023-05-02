@@ -165,12 +165,10 @@ class common_configuration_Report
                 $returnValue = 'invalid';
 
                 break;
-
             case self::UNKNOWN:
                 $returnValue = 'unknown';
 
                 break;
-
             case self::VALID:
                 $returnValue = 'valid';
 

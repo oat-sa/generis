@@ -214,13 +214,12 @@ class common_http_Request
         }
 
         switch ($this->getMethod()) {
-            case 'HEAD':{
+            case 'HEAD':
                 curl_setopt($curlHandler, CURLOPT_NOBODY, true);
                 curl_setopt($curlHandler, CURLOPT_HEADER, true);
 
                 break;
-            }
-            case 'POST':{
+            case 'POST':
                 curl_setopt($curlHandler, CURLOPT_POST, 1);
 
                 if (is_array($this->params) and (count($this->params) > 0)) {
@@ -237,14 +236,11 @@ class common_http_Request
                 //analyse if there is a body or structured postfields
 
                 break;
-            }
-            case 'PUT':{
+            case 'PUT':
                 break;
-            }
-            case 'GET':{
+            case 'GET':
                 //curl_setopt($curlHandler,CURLOPT_HTTPGET, true);
                 break;
-            }
         }
 
         curl_setopt($curlHandler, CURLOPT_RETURNTRANSFER, 1);

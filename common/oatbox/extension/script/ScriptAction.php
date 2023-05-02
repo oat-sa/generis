@@ -206,7 +206,6 @@ abstract class ScriptAction extends AbstractAction
                 $string = ($value === true) ? 'true' : 'false';
 
                 break;
-
             case 'integer':
             case 'double':
                 $string = $value;

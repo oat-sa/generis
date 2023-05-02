@@ -43,14 +43,13 @@ class LockServiceTest extends TestCase
         if ($this->isNoLockConfigured($service)) {
             $this->markTestSkipped('No lock storage configured for lock service. Skip integration test.');
         }
-        $actionId1 = 'action_1';
-        $actionId2 = 'action_2';
+
         $sleep = 3;
         $time = time();
-        $pipe1 = popen('php ' . __DIR__ . DIRECTORY_SEPARATOR . 'test_action.php ' . $actionId1 . ' ' . $sleep . ' 0', 'w');
-        $pipe2 = popen('php ' . __DIR__ . DIRECTORY_SEPARATOR . 'test_action.php ' . $actionId1 . ' ' . $sleep . ' 0', 'w');
-        $pipe3 = popen('php ' . __DIR__ . DIRECTORY_SEPARATOR . 'test_action.php ' . $actionId1 . ' ' . $sleep . ' 0', 'w');
-        $pipe4 = popen('php ' . __DIR__ . DIRECTORY_SEPARATOR . 'test_action.php ' . $actionId2 . ' ' . $sleep . ' 0', 'w');
+        $pipe1 = popen('php ' . __DIR__ . DIRECTORY_SEPARATOR . 'test_action.php action_1 ' . $sleep . ' 0', 'w');
+        $pipe2 = popen('php ' . __DIR__ . DIRECTORY_SEPARATOR . 'test_action.php action_1 ' . $sleep . ' 0', 'w');
+        $pipe3 = popen('php ' . __DIR__ . DIRECTORY_SEPARATOR . 'test_action.php action_1 ' . $sleep . ' 0', 'w');
+        $pipe4 = popen('php ' . __DIR__ . DIRECTORY_SEPARATOR . 'test_action.php action_2 ' . $sleep . ' 0', 'w');
         pclose($pipe1);
         pclose($pipe2);
         pclose($pipe3);
@@ -70,8 +69,14 @@ class LockServiceTest extends TestCase
         $sleep = 5;
         $timeout = 2;
         $time = time();
-        $pipe1 = popen('php ' . __DIR__ . DIRECTORY_SEPARATOR . 'test_action.php ' . $actionId1 . ' ' . $sleep . ' ' . $timeout, 'w');
-        $pipe2 = popen('php ' . __DIR__ . DIRECTORY_SEPARATOR . 'test_action.php ' . $actionId1 . ' ' . $sleep . ' ' . $timeout, 'w');
+        $pipe1 = popen(
+            'php ' . __DIR__ . DIRECTORY_SEPARATOR . 'test_action.php action_1 ' . $sleep . ' ' . $timeout,
+            'w'
+        );
+        $pipe2 = popen(
+            'php ' . __DIR__ . DIRECTORY_SEPARATOR . 'test_action.php action_1 ' . $sleep . ' ' . $timeout,
+            'w'
+        );
         pclose($pipe1);
         pclose($pipe2);
 

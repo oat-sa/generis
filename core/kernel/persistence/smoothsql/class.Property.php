@@ -38,7 +38,8 @@ use oat\generis\model\OntologyRdfs;
  *
  * @package generis
  */
-class core_kernel_persistence_smoothsql_Property extends core_kernel_persistence_smoothsql_Resource implements core_kernel_persistence_PropertyInterface
+class core_kernel_persistence_smoothsql_Property extends core_kernel_persistence_smoothsql_Resource implements
+    core_kernel_persistence_PropertyInterface
 {
     // --- ASSOCIATIONS ---
 
@@ -96,7 +97,13 @@ class core_kernel_persistence_smoothsql_Property extends core_kernel_persistence
     {
         $returnValue = (bool) false;
 
-        throw new core_kernel_persistence_ProhibitedFunctionException('not implemented => The function (' . __METHOD__ . ') is not available in this persistence implementation (' . __CLASS__ . ')');
+        throw new core_kernel_persistence_ProhibitedFunctionException(
+            sprintf(
+                'not implemented => The function (%s) is not available in this persistence implementation (%s)',
+                __METHOD__,
+                __CLASS__
+            )
+        );
 
         return (bool) $returnValue;
     }
@@ -116,7 +123,13 @@ class core_kernel_persistence_smoothsql_Property extends core_kernel_persistence
     {
         $returnValue = null;
 
-        throw new core_kernel_persistence_ProhibitedFunctionException('not implemented => The function (' . __METHOD__ . ') is not available in this persistence implementation (' . __CLASS__ . ')');
+        throw new core_kernel_persistence_ProhibitedFunctionException(
+            sprintf(
+                'not implemented => The function (%s) is not available in this persistence implementation (%s)',
+                __METHOD__,
+                __CLASS__
+            )
+        );
 
         return $returnValue;
     }

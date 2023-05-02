@@ -43,7 +43,8 @@ interface core_kernel_users_RolesManagement
      * @author Jerome Bogaerts, <jerome@taotesting.com>
      *
      * @param  string label The label to apply to the newly created Generis Role
-     * @param  includedRoles The Role(s) to be included in the newly created Generis Role. Can be either a Resource or an array of Resources.
+     * @param  includedRoles The Role(s) to be included in the newly created Generis Role. Can be either a Resource or
+     *                       an array of Resources.
      * @param mixed $label
      * @param null|mixed $includedRoles
      *
@@ -107,7 +108,8 @@ interface core_kernel_users_RolesManagement
      *
      * @author Jerome Bogaerts
      *
-     * @return array an associative array where keys are Role URIs and values are instances of the core_kernel_classes_Resource class
+     * @return array an associative array where keys are Role URIs and values are instances of the
+     *               core_kernel_classes_Resource class
      */
     public function getAllRoles();
 }

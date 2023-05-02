@@ -75,4 +75,4 @@ interface common_log_Appender
      * @return boolean
      */
     public function init($configuration);
-} /* end of interface common_log_Appender */
+}

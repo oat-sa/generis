@@ -15,8 +15,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
- *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
+ * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung
+ *                         (under the project TAO-TRANSFER);
+ *               2009-2012 (update and modification) Public Research Centre Henri Tudor
+ *                         (under the project TAO-SUSTAIN & TAO-DEV);
  *
  */
 
@@ -49,7 +51,11 @@ class ConfigurationTest extends TestCase
 
     public function testPhPConstant()
     {
-        $this->assertNotEquals(PHP_MAJOR_VERSION, self::UNSUPPORTED_PHP_MAJOR_VERSION, 'Current php major version equals our assummed unsupported php version');
+        $this->assertNotEquals(
+            PHP_MAJOR_VERSION,
+            self::UNSUPPORTED_PHP_MAJOR_VERSION,
+            'Current php major version equals our assummed unsupported php version'
+        );
     }
 
     public function testPHPIniValues()
@@ -276,7 +282,10 @@ class ConfigurationTest extends TestCase
             $this->assertEquals($collection->getUncheckedComponents(), [$componentB, $componentC]);
 
             // Add an additional independant component.
-            $componentD = new common_configuration_Mock(common_configuration_Report::VALID, 'componentD');
+            $componentD = new common_configuration_Mock(
+                common_configuration_Report::VALID,
+                'componentD'
+            );
             $collection->addComponent($componentD);
             $reports = $collection->check();
             $this->assertTrue(true); // Acyclic graph, no CyclicDependencyException thrown.
@@ -289,7 +298,10 @@ class ConfigurationTest extends TestCase
             $reports = $collection->check();
             $this->assertTrue(true); // Acyclic graph, no CyclicDependencyException thrown.
             $this->assertEquals(count($reports), 4);
-            $this->assertEquals($collection->getCheckedComponents(), [$componentA, $componentB, $componentC, $componentD]);
+            $this->assertEquals(
+                $collection->getCheckedComponents(),
+                [$componentA, $componentB, $componentC, $componentD]
+            );
             $this->assertEquals($collection->getUncheckedComponents(), []);
 
             try {
@@ -301,7 +313,10 @@ class ConfigurationTest extends TestCase
                 $this->assertTrue(true);
                 $this->assertEquals($collection->getReports(), []);
                 $this->assertEquals($collection->getCheckedComponents(), []);
-                $this->assertEquals($collection->getUncheckedComponents(), [$componentA, $componentB, $componentC, $componentD]);
+                $this->assertEquals(
+                    $collection->getUncheckedComponents(),
+                    [$componentA, $componentB, $componentC, $componentD]
+                );
 
                 // Finally, we test a ComponentCollection reset.
                 $collection->reset();

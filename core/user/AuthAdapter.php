@@ -100,7 +100,9 @@ class AuthAdapter extends Configurable implements LoginAdapter
     {
         if ($this->hasOption(self::OPTION_PATTERN)) {
             if (preg_match($this->getOption(self::OPTION_PATTERN), $this->username) === 0) {
-                throw new core_kernel_users_InvalidLoginException("Invalid pattern for user '" . $this->username . "'.");
+                throw new core_kernel_users_InvalidLoginException(
+                    "Invalid pattern for user '" . $this->username . "'."
+                );
             }
         }
 
@@ -111,7 +113,9 @@ class AuthAdapter extends Configurable implements LoginAdapter
 
         if (count($users) > 1) {
             // Multiple users matching
-            throw new common_exception_InconsistentData("Multiple Users found with the same login '" . $this->username . "'.");
+            throw new common_exception_InconsistentData(
+                "Multiple Users found with the same login '" . $this->username . "'."
+            );
         }
 
         if (empty($users)) {
@@ -123,18 +127,24 @@ class AuthAdapter extends Configurable implements LoginAdapter
                 throw new core_kernel_users_InvalidLoginException('Unknown user "' . $this->username . '"');
             }
             // should never happen, added for integrity
-            throw new core_kernel_users_InvalidLoginException('Inexisting user did not fail password check, this should not happen');
+            throw new core_kernel_users_InvalidLoginException(
+                'Inexisting user did not fail password check, this should not happen'
+            );
         }
 
         $userResource = current($users);
-        $hash = $userResource->getUniquePropertyValue(new core_kernel_classes_Property(GenerisRdf::PROPERTY_USER_PASSWORD));
+        $hash = $userResource->getUniquePropertyValue(
+            new core_kernel_classes_Property(GenerisRdf::PROPERTY_USER_PASSWORD)
+        );
 
         if (!core_kernel_users_Service::getPasswordHash()->verify($this->password, $hash)) {
-            throw new core_kernel_users_InvalidLoginException('Invalid password for user "' . $this->username . '"');
+            throw new core_kernel_users_InvalidLoginException(
+                'Invalid password for user "' . $this->username . '"'
+            );
         }
 
         if ($this->hasOption(self::OPTION_USERFACTORY)) {
-            $userFactory = ServiceManager::getServiceManager()->get($this->getOption(self::OPTION_USERFACTORY)) ;
+            $userFactory = ServiceManager::getServiceManager()->get($this->getOption(self::OPTION_USERFACTORY));
 
             if ($userFactory instanceof UserFactoryServiceInterface) {
                 return $userFactory->createUser($userResource, UserHashForEncryption::hash($this->password));

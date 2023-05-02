@@ -109,8 +109,13 @@ class core_kernel_classes_ClassFactory
      *
      * @return core_kernel_classes_Property
      */
-    public static function createProperty(core_kernel_classes_Class $clazz, $label = '', $comment = '', $isLgDependent = false, $uri = '')
-    {
+    public static function createProperty(
+        core_kernel_classes_Class $clazz,
+        $label = '',
+        $comment = '',
+        $isLgDependent = false,
+        $uri = ''
+    ) {
         $returnValue = null;
         $property = new core_kernel_classes_Class(OntologyRdf::RDF_PROPERTY);
         $propertyInstance = self::createInstance($property, $label, $comment, $uri);
@@ -172,7 +177,9 @@ class core_kernel_classes_ClassFactory
             if (common_Utils::isUri($uri)) {
                 $returnValue = $uri;
             } else {
-                throw new common_Exception("Could not create new Resource, malformed URI provided: '" . $uri . "'.");
+                throw new common_Exception(
+                    "Could not create new Resource, malformed URI provided: '" . $uri . "'."
+                );
             }
         } else {
             $returnValue = common_Utils::getNewUri();

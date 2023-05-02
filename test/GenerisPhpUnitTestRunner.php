@@ -15,13 +15,16 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
- *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- *
+ * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung
+ *                                         (under the project TAO-TRANSFER);
+ *               2009-2012 (update and modification) Public Research Centre Henri Tudor
+ *                                         (under the project TAO-SUSTAIN & TAO-DEV);
  */
+
 namespace oat\generis\test;
 
 use common_Config;
+use common_exception_Error;
 use common_ext_ExtensionInstaller;
 use common_ext_ExtensionsManager;
 use common_ext_ExtensionUninstaller;
@@ -161,7 +164,7 @@ abstract class GenerisPhpUnitTestRunner extends TestCase
             $conf['cache']['driver'] = 'no_storage';
             common_Logger::i('Set cache on NO STORAGE');
 
-            $ext->setConfig(_common_persistence_Manager::SERVICE_ID, $conf);
+            $ext->setConfig(common_persistence_Manager::SERVICE_ID, $conf);
         }
     }
 
@@ -182,7 +185,9 @@ abstract class GenerisPhpUnitTestRunner extends TestCase
     public static function getTestSession()
     {
         if (!self::$connected) {
-            throw new common_exception_Error('Trying to retrieve TestSession without initialising it first via initTest()');
+            throw new common_exception_Error(
+                'Trying to retrieve TestSession without initialising it first via initTest()'
+            );
         }
         $session = common_session_SessionManager::getSession();
 

@@ -20,6 +20,7 @@
 
 namespace oat\generis\model;
 
+// phpcs:disable Generic.Files.LineLength
 interface GenerisRdf
 {
     public const GENERIS_NS = 'http://www.tao.lu/Ontologies/generis.rdf';

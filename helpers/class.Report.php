@@ -45,17 +45,14 @@ class helpers_Report
                 $color = '0;32'; // green
 
                 break;
-
             case ReportInterface::TYPE_WARNING:
                 $color = '1;33'; // yellow
 
                 break;
-
             case ReportInterface::TYPE_ERROR:
                 $color = '1;31'; // red
 
                 break;
-
             default:
                 $color = '0;37'; // light grey
         }

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,6 +18,8 @@ declare(strict_types=1);
  * Copyright (c) (original work) 2020 Open Assessment Technologies SA
  */
 
+declare(strict_types=1);
+
 namespace oat\generis\test\unit\model\persistence\newsql;
 
 use common_persistence_sql_Platform;
@@ -35,7 +35,8 @@ class NewSqlRdfTest extends TestCase
 {
     public function testAdd()
     {
-        $query = 'INSERT INTO statements ( id, modelId, subject, predicate, object, l_language, epoch, author) VALUES ( ?, ? , ? , ? , ? , ? , ?, ?);';
+        $query = 'INSERT INTO statements (id, modelId, subject, predicate, object, l_language, epoch, author) VALUES '
+            . '(?, ?, ?, ?, ?, ?, ?, ?);';
 
         $triple = new core_kernel_classes_Triple();
         $triple->modelid = 22;

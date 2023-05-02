@@ -32,7 +32,9 @@ use oat\oatbox\log\LoggerAwareTrait;
 use oat\oatbox\service\ServiceManager;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
+// phpcs:disable
 error_reporting(E_ALL);
+// phpcs:enable
 
 /**
  * Generis Object Oriented API - core\kernel\impl\class.ApiModelOO.php
@@ -281,7 +283,9 @@ class core_kernel_impl_ApiModelOO extends core_kernel_impl_Api implements core_k
             ]);
         } catch (DBALException $e) {
             if ($e->getCode() !== '00000') {
-                throw new common_Exception("Unable to setStatement (SPO) {$subject}, {$predicate}, {$object} : " . $e->getMessage());
+                throw new common_Exception(
+                    "Unable to setStatement (SPO) {$subject}, {$predicate}, {$object} : " . $e->getMessage()
+                );
             }
         }
 

@@ -30,7 +30,8 @@ class FileTest extends TestCase
 
     public function setUp(): void
     {
-        $this->rootDir = uniqid(sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'test-file-inside-directory', true) . DIRECTORY_SEPARATOR;
+        $uniqId = uniqid(sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'test-file-inside-directory', true);
+        $this->rootDir = $uniqId . DIRECTORY_SEPARATOR;
         mkdir($this->rootDir);
 
         mkdir($this->rootDir . 'directoryname');
@@ -67,6 +68,12 @@ class FileTest extends TestCase
      */
     public function testIsFileInsideDirectory($filename, $directoryName, bool $isInside)
     {
-        $this->assertEquals(helpers_File::isFileInsideDirectory($filename, $this->rootDir . $directoryName), $isInside);
+        $this->assertEquals(
+            helpers_File::isFileInsideDirectory(
+                $filename,
+                $this->rootDir . $directoryName
+            ),
+            $isInside
+        );
     }
 }

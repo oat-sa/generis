@@ -15,8 +15,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
- *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
+ * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung
+ *                         (under the project TAO-TRANSFER);
+ *               2009-2012 (update and modification) Public Research Centre Henri Tudor
+ *                         (under the project TAO-SUSTAIN & TAO-DEV);
  *               2017      (update and modification) Open Assessment Technologies SA;
  */
 
@@ -64,7 +66,10 @@ class ManifestTest extends TestCase
         try {
             $manifestPath = $currentPath . self::SAMPLES_PATH . self::MANIFEST_PATH_DOES_NOT_EXIST;
             $manifest = new Manifest($manifestPath, $composerInfo);
-            $this->assertTrue(false, 'Trying to load a manifest that does not exist should raise an exception');
+            $this->assertTrue(
+                false,
+                'Trying to load a manifest that does not exist should raise an exception'
+            );
         } catch (Exception $e) {
             $this->assertInstanceOf(oat\oatbox\extension\exception\ManifestNotFoundException::class, $e);
         }
@@ -94,6 +99,12 @@ class ManifestTest extends TestCase
             ],
             $manifest->getInstallModelFiles()
         );
-        $this->assertEquals(['WS_ENDPOINT_TWITTER' => 'http://twitter.com/statuses/', 'WS_ENDPOINT_FACEBOOK' => 'http://api.facebook.com/restserver.php'], $manifest->getConstants());
+        $this->assertEquals(
+            [
+                'WS_ENDPOINT_TWITTER' => 'http://twitter.com/statuses/',
+                'WS_ENDPOINT_FACEBOOK' => 'http://api.facebook.com/restserver.php',
+            ],
+            $manifest->getConstants()
+        );
     }
 }

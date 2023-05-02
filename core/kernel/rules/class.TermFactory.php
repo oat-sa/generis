@@ -57,8 +57,14 @@ class core_kernel_rules_TermFactory
         $returnValue = null;
         $termConstClass = new core_kernel_classes_Class(RulesRdf::CLASS_TERM_CONST, __METHOD__);
         $termValueProperty = new core_kernel_classes_Property(RulesRdf::PROPERTY_TERM_VALUE, __METHOD__);
-        $logicalOperatorProperty = new core_kernel_classes_Property(RulesRdf::PROPERTY_HASLOGICALOPERATOR, __METHOD__);
-        $terminalExpressionProperty = new core_kernel_classes_Property(RulesRdf::PROPERTY_TERMINAL_EXPRESSION, __METHOD__);
+        $logicalOperatorProperty = new core_kernel_classes_Property(
+            RulesRdf::PROPERTY_HASLOGICALOPERATOR,
+            __METHOD__
+        );
+        $terminalExpressionProperty = new core_kernel_classes_Property(
+            RulesRdf::PROPERTY_TERMINAL_EXPRESSION,
+            __METHOD__
+        );
         $label = 'Def Term Constant Label : ' . $constant;
         $comment = 'Def Term Constant Comment : ' . $constant;
         $constantResource = core_kernel_classes_ResourceFactory::create($termConstClass, $label, $comment);

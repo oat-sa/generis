@@ -46,7 +46,7 @@ class core_kernel_classes_ClassIterator implements \Iterator
         $classes = is_array($classes) ? $classes : [$classes];
 
         foreach ($classes as $class) {
-            $this->todoClasses[] = (is_object($class) && $class instanceof core_kernel_classes_Class) ? $class->getUri() : $class;
+            $this->todoClasses[] = ($class instanceof core_kernel_classes_Class) ? $class->getUri() : $class;
         }
         $this->rewind();
     }
@@ -97,7 +97,10 @@ class core_kernel_classes_ClassIterator implements \Iterator
             $class = new \core_kernel_classes_Class($newUri);
 
             foreach ($class->getSubClasses(false) as $subClass) {
-                if (!in_array($subClass->getUri(), $this->classes) && !in_array($subClass->getUri(), $this->todoClasses)) {
+                if (
+                    !in_array($subClass->getUri(), $this->classes)
+                    && !in_array($subClass->getUri(), $this->todoClasses)
+                ) {
                     $this->todoClasses[] = $subClass->getUri();
                 }
             }

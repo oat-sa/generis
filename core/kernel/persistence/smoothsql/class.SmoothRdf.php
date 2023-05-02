@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,6 +17,8 @@ declare(strict_types=1);
  *
  * Copyright (c) 2017-2020 (original work) Open Assessment Technologies SA
  */
+
+declare(strict_types=1);
 
 use Doctrine\DBAL\ParameterType;
 use oat\generis\model\data\Ontology;
@@ -87,8 +87,8 @@ class core_kernel_persistence_smoothsql_SmoothRdf implements RdfInterface
      */
     public function add(core_kernel_classes_Triple $triple)
     {
-        $query = 'INSERT INTO statements ( modelId, subject, predicate, object, l_language, epoch, author) '
-            . 'VALUES ( ? , ? , ? , ? , ? , ?, ?);';
+        $query = 'INSERT INTO statements (modelId, subject, predicate, object, l_language, epoch, author) '
+            . 'VALUES (?, ?, ?, ?, ?, ?, ?);';
 
         return $this->getPersistence()->exec(
             $query,
@@ -153,7 +153,15 @@ class core_kernel_persistence_smoothsql_SmoothRdf implements RdfInterface
     {
         $query = 'DELETE FROM statements WHERE subject = ? AND predicate = ? AND object = ? AND l_language = ?;';
 
-        return $this->getPersistence()->exec($query, [$triple->subject, $triple->predicate, $triple->object, is_null($triple->lg) ? '' : $triple->lg]);
+        return $this->getPersistence()->exec(
+            $query,
+            [
+                $triple->subject,
+                $triple->predicate,
+                $triple->object,
+                is_null($triple->lg) ? '' : $triple->lg,
+            ]
+        );
     }
 
     /**

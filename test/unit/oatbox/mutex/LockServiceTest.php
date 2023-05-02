@@ -44,15 +44,25 @@ class LockServiceTest extends TestCase
     {
         $dir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'generis_unittest_' . mt_rand() . DIRECTORY_SEPARATOR;
         mkdir($dir);
-        $actionId1 = 'action_1';
-        $actionId2 = 'action_2';
         $sleep = 3;
         $this->getInstance(FlockStore::class, $dir);
         $time = time();
-        $pipe1 = popen('php ' . __DIR__ . DIRECTORY_SEPARATOR . 'test_action.php ' . $actionId1 . ' ' . $sleep . ' FlockStore ' . $dir, 'w');
-        $pipe2 = popen('php ' . __DIR__ . DIRECTORY_SEPARATOR . 'test_action.php ' . $actionId1 . ' ' . $sleep . ' FlockStore ' . $dir, 'w');
-        $pipe3 = popen('php ' . __DIR__ . DIRECTORY_SEPARATOR . 'test_action.php ' . $actionId1 . ' ' . $sleep . ' FlockStore ' . $dir, 'w');
-        $pipe4 = popen('php ' . __DIR__ . DIRECTORY_SEPARATOR . 'test_action.php ' . $actionId2 . ' ' . $sleep . ' FlockStore ' . $dir, 'w');
+        $pipe1 = popen(
+            'php ' . __DIR__ . DIRECTORY_SEPARATOR . 'test_action.php action_1 ' . $sleep . ' FlockStore ' . $dir,
+            'w'
+        );
+        $pipe2 = popen(
+            'php ' . __DIR__ . DIRECTORY_SEPARATOR . 'test_action.php action_1 ' . $sleep . ' FlockStore ' . $dir,
+            'w'
+        );
+        $pipe3 = popen(
+            'php ' . __DIR__ . DIRECTORY_SEPARATOR . 'test_action.php action_1 ' . $sleep . ' FlockStore ' . $dir,
+            'w'
+        );
+        $pipe4 = popen(
+            'php ' . __DIR__ . DIRECTORY_SEPARATOR . 'test_action.php action_2 ' . $sleep . ' FlockStore ' . $dir,
+            'w'
+        );
         pclose($pipe1);
         pclose($pipe2);
         pclose($pipe3);
@@ -64,13 +74,21 @@ class LockServiceTest extends TestCase
 
     public function testNoLock()
     {
-        $actionId1 = 'action_1';
         $sleep = 3;
         $this->getInstance(NoLockStorage::class);
         $time = time();
-        $pipe1 = popen('php ' . __DIR__ . DIRECTORY_SEPARATOR . 'test_action.php ' . $actionId1 . ' ' . $sleep . ' NoLockStorage', 'w');
-        $pipe2 = popen('php ' . __DIR__ . DIRECTORY_SEPARATOR . 'test_action.php ' . $actionId1 . ' ' . $sleep . ' NoLockStorage', 'w');
-        $pipe3 = popen('php ' . __DIR__ . DIRECTORY_SEPARATOR . 'test_action.php ' . $actionId1 . ' ' . $sleep . ' NoLockStorage', 'w');
+        $pipe1 = popen(
+            'php ' . __DIR__ . DIRECTORY_SEPARATOR . 'test_action.php action_1 ' . $sleep . ' NoLockStorage',
+            'w'
+        );
+        $pipe2 = popen(
+            'php ' . __DIR__ . DIRECTORY_SEPARATOR . 'test_action.php action_1 ' . $sleep . ' NoLockStorage',
+            'w'
+        );
+        $pipe3 = popen(
+            'php ' . __DIR__ . DIRECTORY_SEPARATOR . 'test_action.php action_1 ' . $sleep . ' NoLockStorage',
+            'w'
+        );
         pclose($pipe1);
         pclose($pipe2);
         pclose($pipe3);

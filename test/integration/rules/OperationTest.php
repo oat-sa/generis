@@ -22,7 +22,9 @@
  *               2017 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
 
+// phpcs:disable
 error_reporting(E_ALL);
+// phpcs:enable
 
 use oat\generis\model\RulesRdf;
 use oat\generis\test\GenerisPhpUnitTestRunner;

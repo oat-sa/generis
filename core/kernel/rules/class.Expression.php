@@ -178,7 +178,9 @@ class core_kernel_rules_Expression extends core_kernel_classes_Resource
 
         if (empty($this->firstExpression)) {
             $property = new core_kernel_classes_Property(RulesRdf::PROPERTY_FIRST_EXPRESSION);
-            $this->firstExpression = new core_kernel_rules_Expression($this->getUniquePropertyValue($property)->getUri());
+            $this->firstExpression = new core_kernel_rules_Expression(
+                $this->getUniquePropertyValue($property)->getUri()
+            );
         }
         $returnValue = $this->firstExpression;
 
@@ -200,7 +202,9 @@ class core_kernel_rules_Expression extends core_kernel_classes_Resource
 
         if (empty($this->secondExpression)) {
             $property = new core_kernel_classes_Property(RulesRdf::PROPERTY_SECOND_EXPRESSION);
-            $this->secondExpression = new core_kernel_rules_Expression($this->getUniquePropertyValue($property)->getUri());
+            $this->secondExpression = new core_kernel_rules_Expression(
+                $this->getUniquePropertyValue($property)->getUri()
+            );
         }
         $returnValue = $this->secondExpression;
 
@@ -250,13 +254,11 @@ class core_kernel_rules_Expression extends core_kernel_classes_Resource
             ) {
                 common_Logger::d('Both Part are Container', ['Generis Expression']);
                 $returnValue = $this->operatorEval($firstPart, $secondPart);
-            }
-
-            //both are vector
-            elseif (
+            } elseif (
                 $firstPart instanceof core_kernel_classes_ContainerCollection
-                    && $secondPart instanceof core_kernel_classes_ContainerCollection
+                && $secondPart instanceof core_kernel_classes_ContainerCollection
             ) {
+                //both are vector
                 $returnValue = false;
 
                 foreach ($firstPart->getIterator() as $subLeftPart) {
@@ -275,16 +277,18 @@ class core_kernel_rules_Expression extends core_kernel_classes_Resource
             //die("the evaluation is ". $returnValue);
 
             //throw new common_Exception('not implemented yet', __FILE__,__LINE__);
-            }
-            // first is a vector second is a value
-            elseif (
-                ($firstPart instanceof core_kernel_classes_ContainerCollection)
-                    && ($secondPart instanceof core_kernel_classes_Container)
+            } elseif (
+                $firstPart instanceof core_kernel_classes_ContainerCollection
+                && $secondPart instanceof core_kernel_classes_Container
             ) {
+                // first is a vector second is a value
                 $tempResult = false;
 
                 foreach ($firstPart->getIterator() as $container) {
-                    common_Logger::d('FirstPart Part is ContainerCollection Second is Container', ['Generis Expression']);
+                    common_Logger::d(
+                        'FirstPart Part is ContainerCollection Second is Container',
+                        ['Generis Expression']
+                    );
                     //TODO For now consider that if only  one value of the table return true,
 
                     //TODO exist unique need to be added
@@ -301,41 +305,39 @@ class core_kernel_rules_Expression extends core_kernel_classes_Resource
                     }
                 }
                 $returnValue = $tempResult;
-            }
-            // first is a value second is a vector
-            elseif (
-                ($firstPart instanceof core_kernel_classes_Container)
-                    && ($secondPart instanceof core_kernel_classes_ContainerCollection)
+            } elseif (
+                $firstPart instanceof core_kernel_classes_Container
+                && $secondPart instanceof core_kernel_classes_ContainerCollection
             ) {
+                // first is a value second is a vector
                 foreach ($secondPart->getIterator() as $container) {
-                    common_Logger::d('FirstPart Part Container is  Second is ContainerCollection', ['Generis Expression']);
+                    common_Logger::d(
+                        'FirstPart Part Container is  Second is ContainerCollection',
+                        ['Generis Expression']
+                    );
 
                     //TODO For now consider that all value of the table need to be equal to return true, ,
                     //TODO exist unique need to be added
                     $tempResult = $tempResult && $this->operatorEval($firstPart, $container);
                 }
                 $returnValue = $tempResult;
-            }
-            //case we compare boolean
-            else {
+            } else {
+                //case we compare boolean
                 common_Logger::d('Both part are boolean', ['Generis Expression']);
 
                 switch ($this->getLogicalOperator()->getUri()) {
-                    case RulesRdf::INSTANCE_OR_OPERATOR: {
+                    case RulesRdf::INSTANCE_OR_OPERATOR:
                         $returnValue = $firstPart || $secondPart ;
 
                         break;
-                    }
-                    case RulesRdf::INSTANCE_AND_OPERATOR: {
+                    case RulesRdf::INSTANCE_AND_OPERATOR:
                         $returnValue = $firstPart && $secondPart ;
 
                         break;
-                    }
-                    default: {
+                    default:
                         var_dump($this);
 
                         throw new common_Exception('Expression ' . $this->getLabel() . ' do not have knowm operator');
-                    }
                 }
             }
         } else {
@@ -517,43 +519,34 @@ class core_kernel_rules_Expression extends core_kernel_classes_Resource
         common_Logger::d('Operator : ' . $this->getLogicalOperator()->getLabel(), ['Generis Expression']);
 
         switch ($this->getLogicalOperator()->getUri()) {
-            case RulesRdf::INSTANCE_EQUALS_OPERATOR_URI : {
+            case RulesRdf::INSTANCE_EQUALS_OPERATOR_URI:
                 $returnValue = $this->evalEquals($firstPart, $secondPart);
 
                 break;
-            }
-            case RulesRdf::INSTANCE_DIFFERENT_OPERATOR_URI : {
+            case RulesRdf::INSTANCE_DIFFERENT_OPERATOR_URI:
                 $returnValue = $this->evalDifferent($firstPart, $secondPart);
 
                 break;
-            }
-
-            case RulesRdf::INSTANCE_SUP_EQ_OPERATOR_URI : {
+            case RulesRdf::INSTANCE_SUP_EQ_OPERATOR_URI:
                 $returnValue = $this->evalSupEquals($firstPart, $secondPart);
 
                 break;
-            }
-            case RulesRdf::INSTANCE_INF_EQ_OPERATOR_URI : {
+            case RulesRdf::INSTANCE_INF_EQ_OPERATOR_URI:
                 $returnValue = $this->evalInfEquals($firstPart, $secondPart);
 
                 break;
-            }
-            case RulesRdf::INSTANCE_SUP_OPERATOR_URI : {
+            case RulesRdf::INSTANCE_SUP_OPERATOR_URI:
                 $returnValue = $this->evalSup($firstPart, $secondPart);
 
                 break;
-            }
-            case RulesRdf::INSTANCE_INF_OPERATOR_URI : {
+            case RulesRdf::INSTANCE_INF_OPERATOR_URI:
                 $returnValue = $this->evalInf($firstPart, $secondPart);
 
                 break;
-            }
-
-            default: {
+            default:
                 var_dump($this);
 
                 throw new common_Exception('Expression ' . $this->getLabel() . ' do not have knowm operator');
-            }
         }
 
         $logValue = $returnValue ? ' TRUE ' : ' FALSE ';

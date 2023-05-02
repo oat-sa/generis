@@ -324,7 +324,6 @@ class common_configuration_ComponentFactory
                                 $returnValue = self::buildPHPRuntime($values['min'], $max, $optional);
 
                                 break;
-
                             case 'PHPINIValue':
                                 if (empty($values['name'])) {
                                     $msg = "Mandatory attribute 'name' is missing.";
@@ -341,7 +340,6 @@ class common_configuration_ComponentFactory
                                 $returnValue = self::buildPHPINIValue($values['name'], $values['value'], $optional);
 
                                 break;
-
                             case 'PHPExtension':
                                 if (empty($values['name'])) {
                                     $msg = "Mandatory attribute 'name' is missing.";
@@ -364,7 +362,6 @@ class common_configuration_ComponentFactory
                                 $returnValue = self::buildPHPExtension($values['name'], $min, $max, $optional);
 
                                 break;
-
                             case 'PHPDatabaseDriver':
                                 if (empty($values['name'])) {
                                     $msg = "Mandatory attribute 'name' is missing.";
@@ -375,7 +372,6 @@ class common_configuration_ComponentFactory
                                 $returnValue = self::buildPHPDatabaseDriver($values['name'], $optional);
 
                                 break;
-
                             case 'FileSystemComponent':
                                 if (empty($values['location'])) {
                                     $msg = "Mandatory attribute 'location' is missing.";
@@ -392,7 +388,6 @@ class common_configuration_ComponentFactory
                                 $returnValue = self::buildFileSystemComponent($values['location'], $values['rights'], $optional);
 
                                 break;
-
                             case 'Custom':
                                 if (empty($values['name'])) {
                                     $msg = "Mandatory attribute 'name' is missing.";
@@ -409,7 +404,6 @@ class common_configuration_ComponentFactory
                                 $returnValue = self::buildCustom($values['name'], $extension, $optional);
 
                                 break;
-
                             case 'Mock':
                                 $status = common_configuration_Report::VALID;
 

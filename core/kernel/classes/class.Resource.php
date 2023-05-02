@@ -108,11 +108,19 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
     public function __construct($uri, $debug = '')
     {
         if (empty($uri)) {
-            throw new common_exception_Error('cannot construct the resource because the uri cannot be empty, debug: ' . $debug);
+            throw new common_exception_Error(
+                'cannot construct the resource because the uri cannot be empty, debug: ' . $debug
+            );
         }
 
         if (!is_string($uri) && !$uri instanceof self) {
-            throw new common_exception_Error('could not create resource from ' . (is_object($uri) ? get_class($uri) : gettype($uri)) . ' debug: ' . $debug);
+            throw new common_exception_Error(
+                sprintf(
+                    'could not create resource from %s debug: %s',
+                    is_object($uri) ? get_class($uri) : gettype($uri),
+                    $debug
+                )
+            );
         }
         $this->uriResource = $uri instanceof self ? $uri->getUri() : $uri;
     }
@@ -126,7 +134,9 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
      */
     public function __clone()
     {
-        throw new common_exception_DeprecatedApiMethod('Use duplicated instead, because clone resource could not share same uri that original');
+        throw new common_exception_DeprecatedApiMethod(
+            'Use duplicated instead, because clone resource could not share same uri that original'
+        );
     }
 
     /**
@@ -232,7 +242,8 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
      *
      * @author Joel Bout <joel@taotesting.com>
      *
-     * @return core_kernel_classes_Class[] an associative array where keys are class URIs and values are core_kernel_classes_Class objects
+     * @return core_kernel_classes_Class[] an associative array where keys are class URIs and values are
+     *                                     core_kernel_classes_Class objects
      */
     public function getTypes()
     {
@@ -340,7 +351,8 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
      *
      * @author Joel Bout, <joel.bout@tudor.lu>
      *
-     * @param  Property property uriProperty is string and may be short in the case of a locally defined property (module namespace), or long uri
+     * @param  Property property uriProperty is string and may be short in the case of a locally defined property
+     *                  (module namespace), or long uri
      * @param  array options
      * @param mixed $options
      *
@@ -428,7 +440,9 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
         $returnValue = null;
 
         if ($last) {
-            throw new core_kernel_persistence_Exception('parameter \'last\' for getOnePropertyValue no longer supported');
+            throw new core_kernel_persistence_Exception(
+                'parameter \'last\' for getOnePropertyValue no longer supported'
+            );
         }
 
         $options = [
@@ -725,7 +739,8 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
      *
      * @author patrick.plichart@tudor.lu
      *
-     * @param  bool deleteReference set deleteReference to true when you need that all reference to this resource are removed
+     * @param  bool deleteReference set deleteReference to true when you need that all reference to this resource are
+     *              removed
      * @param mixed $deleteReference
      *
      * @return bool

@@ -137,7 +137,10 @@ class FileModelTest extends GenerisPhpUnitTestRunner
             $this->assertInstanceOf('\common_exception_Error', $e);
 
             if ($id == 100) {
-                $this->assertContains('has to be defined with the "xml:base" attribute of the ROOT node', $e->getMessage());
+                $this->assertContains(
+                    'has to be defined with the "xml:base" attribute of the ROOT node',
+                    $e->getMessage()
+                );
             } else {
                 $this->fail('unexpected error');
             }

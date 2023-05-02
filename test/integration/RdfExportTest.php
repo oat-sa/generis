@@ -15,8 +15,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
- *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
+ * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung
+ *                         (under the project TAO-TRANSFER);
+ *               2009-2012 (update and modification) Public Research Centre Henri Tudor
+ *                         (under the project TAO-SUSTAIN & TAO-DEV);
  *               2012-2014 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
 
@@ -28,7 +30,12 @@ class RdfExportTest extends GenerisPhpUnitTestRunner
     public function testFullExport()
     {
         $dbWrapper = core_kernel_classes_DbWrapper::singleton();
-        $result = $dbWrapper->query('SELECT count(*) as count FROM (SELECT DISTINCT subject, predicate, object, l_language FROM statements) as supercount')->fetch();
+        $result = $dbWrapper
+            ->query(
+                'SELECT count(*) as count FROM (SELECT DISTINCT subject, predicate, object, l_language FROM '
+                    . 'statements) as supercount'
+            )
+            ->fetch();
         $triples = $result['count'];
 
         $xml = core_kernel_api_ModelExporter::exportModels(

@@ -121,7 +121,8 @@ class core_kernel_classes_ResourceIterator implements \Iterator
 
             if (!isset($this->instanceCache[$this->currentInstance])) {
                 // try to load next block (unless we know it's empty)
-                $remainingInstances = !$this->endOfClass && $this->load($this->classIterator->current(), $this->currentInstance);
+                $remainingInstances = !$this->endOfClass
+                    && $this->load($this->classIterator->current(), $this->currentInstance);
 
                 // endOfClass or failed loading
                 if (!$remainingInstances) {

@@ -34,7 +34,9 @@ use oat\oatbox\service\ConfigurableService;
  *
  * @package generis
  */
-class core_kernel_persistence_smoothsql_SmoothModel extends ConfigurableService implements Ontology, SchemaProviderInterface
+class core_kernel_persistence_smoothsql_SmoothModel extends ConfigurableService implements
+    Ontology,
+    SchemaProviderInterface
 {
     public const OPTION_PERSISTENCE = 'persistence';
     public const OPTION_READABLE_MODELS = 'readable';
@@ -194,7 +196,9 @@ class core_kernel_persistence_smoothsql_SmoothModel extends ConfigurableService 
         $model = ModelManager::getModel();
 
         if (!$model instanceof self) {
-            throw new common_exception_Error(__FUNCTION__ . ' called on ' . get_class($model) . ' model implementation');
+            throw new common_exception_Error(
+                __FUNCTION__ . ' called on ' . get_class($model) . ' model implementation'
+            );
         }
 
         return $model->getReadableModels();
@@ -212,7 +216,9 @@ class core_kernel_persistence_smoothsql_SmoothModel extends ConfigurableService 
         $model = ModelManager::getModel();
 
         if (!$model instanceof self) {
-            throw new common_exception_Error(__FUNCTION__ . ' called on ' . get_class($model) . ' model implementation');
+            throw new common_exception_Error(
+                __FUNCTION__ . ' called on ' . get_class($model) . ' model implementation'
+            );
         }
 
         return $model->getWritableModels();

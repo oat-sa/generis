@@ -89,7 +89,9 @@ trait OntologyMockTrait
             SessionService::SERVICE_ID => $this->getSessionServiceMock($session),
             EventManager::SERVICE_ID => $eventManager,
             LoggerService::SERVICE_ID => $this->prophesize(LoggerInterface::class)->reveal(),
-            UriProvider::SERVICE_ID => new Bin2HexUriProvider([Bin2HexUriProvider::OPTION_NAMESPACE => 'http://ontology.mock/bin2hex#']),
+            UriProvider::SERVICE_ID => new Bin2HexUriProvider([
+                Bin2HexUriProvider::OPTION_NAMESPACE => 'http://ontology.mock/bin2hex#',
+            ]),
             SimpleCache::SERVICE_ID => new NoCache(),
             DriverConfigurationFeeder::SERVICE_ID => new DriverConfigurationFeeder(),
             EventAggregator::SERVICE_ID => $eventAggregator,

@@ -55,7 +55,9 @@ class MicrotimeRandUriProvider extends ConfigurableService implements UriProvide
      */
     public function getPersistence()
     {
-        return $this->getServiceLocator()->get(PersistenceManager::SERVICE_ID)->getPersistenceById($this->getOption(self::OPTION_PERSISTENCE));
+        return $this->getServiceLocator()->get(PersistenceManager::SERVICE_ID)->getPersistenceById(
+            $this->getOption(self::OPTION_PERSISTENCE)
+        );
     }
 
     /**
@@ -73,8 +75,11 @@ class MicrotimeRandUriProvider extends ConfigurableService implements UriProvide
 
         do {
             list($usec, $sec) = explode(' ', microtime());
-            $uri = $this->getOption(self::OPTION_NAMESPACE) . 'i' . (str_replace('.', '', $sec . '' . $usec)) . rand(0, 1000);
-            $sqlResult = $this->getPersistence()->query("SELECT COUNT(subject) AS num FROM statements WHERE subject = '" . $uri . "'");
+            $uri = $this->getOption(self::OPTION_NAMESPACE) . 'i'
+                . (str_replace('.', '', $sec . '' . $usec)) . rand(0, 1000);
+            $sqlResult = $this->getPersistence()->query(
+                "SELECT COUNT(subject) AS num FROM statements WHERE subject = '" . $uri . "'"
+            );
 
             if ($row = $sqlResult->fetch()) {
                 $uriExist = $row['num'] > 0;
