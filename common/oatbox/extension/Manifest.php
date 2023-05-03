@@ -90,12 +90,16 @@ class Manifest implements ServiceLocatorAwareInterface
     {
         // the file exists, we can refer to the $filePath.
         if (!is_readable($filePath)) {
-            throw new ManifestNotFoundException("The Extension Manifest file located at '${filePath}' could not be read.");
+            throw new ManifestNotFoundException(
+                "The Extension Manifest file located at '${filePath}' could not be read."
+            );
         }
         $this->manifest = require($filePath);
         // mandatory
         if (empty($this->manifest['name'])) {
-            throw new exception\MalformedManifestException("The 'name' component is mandatory in manifest located at '{$this->filePath}'.");
+            throw new exception\MalformedManifestException(
+                "The 'name' component is mandatory in manifest located at '{$this->filePath}'."
+            );
         }
         $this->composerInfo = $composerInfo;
         $this->filePath = $filePath;
@@ -221,7 +225,9 @@ class Manifest implements ServiceLocatorAwareInterface
         $result = [];
 
         if (isset($this->manifest['install']['php'])) {
-            $result = is_array($this->manifest['install']['php']) ? $this->manifest['install']['php'] : [$this->manifest['install']['php']];
+            $result = is_array($this->manifest['install']['php'])
+                ? $this->manifest['install']['php']
+                : [$this->manifest['install']['php']];
         }
 
         return $result;
@@ -343,7 +349,12 @@ class Manifest implements ServiceLocatorAwareInterface
     {
         // the file exists, we can refer to the $filePath.
         if (!is_readable($file)) {
-            throw new ManifestNotFoundException(sprintf('The Extension Manifest file located at %s could not be read.', $file));
+            throw new ManifestNotFoundException(
+                sprintf(
+                    'The Extension Manifest file located at %s could not be read.',
+                    $file
+                )
+            );
         }
 
         $manifest = require($file);

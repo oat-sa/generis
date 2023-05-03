@@ -100,7 +100,18 @@ class TaoLog extends ConfigurableService implements LoggerInterface
             $message = (string) $message;
         }
         $level = common_log_Logger2Psr::getCommonFromPsrLevel($level);
-        $this->getDispatcher()->log(new common_log_Item($message, $level, time(), $stack, $context, $requestURI, $errorFile, $errorLine));
+        $this->getDispatcher()->log(
+            new common_log_Item(
+                $message,
+                $level,
+                time(),
+                $stack,
+                $context,
+                $requestURI,
+                $errorFile,
+                $errorLine
+            )
+        );
     }
 
     /**

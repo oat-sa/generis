@@ -131,14 +131,17 @@ class File extends FileSystemHandler
             $resource = StreamWrapper::getResource($mixed);
 
             if (!is_resource($resource)) {
-                throw new common_Exception('Unable to create resource from the given stream. Write to filesystem aborted.');
+                throw new common_Exception(
+                    'Unable to create resource from the given stream. Write to filesystem aborted.'
+                );
             }
 
             return $this->getFileSystem()->writeStream($this->getPrefix(), $resource, $config);
         }
 
-        throw new InvalidArgumentException('Value to be written has to be: string, resource or StreamInterface, ' .
-            '"' . gettype($mixed) . '" given.');
+        throw new InvalidArgumentException(
+            'Value to be written has to be: string, resource or StreamInterface, ' . '"' . gettype($mixed) . '" given.'
+        );
     }
 
     /**
@@ -184,7 +187,9 @@ class File extends FileSystemHandler
             $resource = StreamWrapper::getResource($mixed);
 
             if (!is_resource($resource)) {
-                throw new common_Exception('Unable to create resource from the given stream. Write to filesystem aborted.');
+                throw new common_Exception(
+                    'Unable to create resource from the given stream. Write to filesystem aborted.'
+                );
             }
 
             return $this->getFileSystem()->updateStream($this->getPrefix(), $resource, $config);
@@ -231,7 +236,9 @@ class File extends FileSystemHandler
             $resource = StreamWrapper::getResource($mixed);
 
             if (!is_resource($resource)) {
-                throw new common_Exception('Unable to create resource from the given stream. Write to filesystem aborted.');
+                throw new common_Exception(
+                    'Unable to create resource from the given stream. Write to filesystem aborted.'
+                );
             }
 
             return $this->getFileSystem()->putStream($this->getPrefix(), $resource, $config);

@@ -33,12 +33,14 @@ interface Queue extends IteratorAggregate
     public const CONFIG_ID = 'generis/taskqueue';
 
     /**
-     * @deprecated since version 7.10.0, to be removed in 8.0. Use \oat\tao\model\taskQueue\QueueDispatcherInterface::SERVICE_ID instead.
+     * @deprecated since version 7.10.0, to be removed in 8.0. Use
+     *             \oat\tao\model\taskQueue\QueueDispatcherInterface::SERVICE_ID instead.
      */
     public const SERVICE_ID = 'generis/taskqueue';
 
     /**
-     * @deprecated since version 7.10.0, to be removed in 8.0. Use \oat\tao\model\taskQueue\QueueDispatcherInterface::FILE_SYSTEM_ID instead.
+     * @deprecated since version 7.10.0, to be removed in 8.0. Use
+     *             \oat\tao\model\taskQueue\QueueDispatcherInterface::FILE_SYSTEM_ID instead.
      */
     public const FILE_SYSTEM_ID = 'taskQueueStorage';
 
@@ -47,7 +49,8 @@ interface Queue extends IteratorAggregate
      * @param $parameters
      * @param $label
      * @param $task
-     * @param boolean $repeatedly whether task created repeatedly (for example when execution of task was failed and task puts to the queue again)
+     * @param boolean $repeatedly whether task created repeatedly (for example when execution of task was failed and
+     *                            task puts to the queue again)
      *
      * @return mixed
      *

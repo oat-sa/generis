@@ -45,4 +45,4 @@ interface common_Serializable
      * @return string
      */
     public function getSerial();
-} /* end of interface common_Serializable */
+}

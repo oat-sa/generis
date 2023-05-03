@@ -67,7 +67,9 @@ class common_persistence_SqlKvDriver implements common_persistence_KvDriver, Sch
         }
 
         $this->sqlPersistenceId = $params[self::OPTION_PERSISTENCE_SQL];
-        $this->sqlPersistence = common_persistence_SqlPersistence::getPersistence($params[self::OPTION_PERSISTENCE_SQL]);
+        $this->sqlPersistence = common_persistence_SqlPersistence::getPersistence(
+            $params[self::OPTION_PERSISTENCE_SQL]
+        );
         $this->garbageCollection = $params['gc'] ?? self::DEFAULT_GC_PROBABILITY;
 
         return new common_persistence_KeyValuePersistence($params, $this);
@@ -113,13 +115,25 @@ class common_persistence_SqlKvDriver implements common_persistence_KvDriver, Sch
                     WHEN MATHED THEN UPDATE SET kv_value = :data WHERE kv_id = :id';
             } else {
                 $statement = 'UPDATE kv_store SET kv_value = :data , kv_time = :time WHERE kv_id = :id';
-                $returnValue = $this->sqlPersistence->exec($statement, $params, ['data' => ParameterType::STRING, 'time' => ParameterType::INTEGER, 'id' => ParameterType::STRING]);
+                $returnValue = $this->sqlPersistence->exec(
+                    $statement,
+                    $params,
+                    [
+                        'data' => ParameterType::STRING,
+                        'time' => ParameterType::INTEGER,
+                        'id' => ParameterType::STRING,
+                    ]
+                );
 
                 if (0 === $returnValue) {
                     $returnValue = $this->sqlPersistence->insert(
                         'kv_store',
                         ['kv_id' => $id, 'kv_time' => $expire, 'kv_value' => $encoded],
-                        ['kv_id' => ParameterType::STRING, 'kv_time' => ParameterType::INTEGER, 'kv_value' => ParameterType::STRING]
+                        [
+                            'kv_id' => ParameterType::STRING,
+                            'kv_time' => ParameterType::INTEGER,
+                            'kv_value' => ParameterType::STRING,
+                        ]
                     );
                 }
             }
@@ -128,7 +142,9 @@ class common_persistence_SqlKvDriver implements common_persistence_KvDriver, Sch
                 $this->gc();
             }
         } catch (Exception $e) {
-            throw new common_Exception('Unable to write the key value storage table in the database ' . $e->getMessage());
+            throw new common_Exception(
+                'Unable to write the key value storage table in the database ' . $e->getMessage()
+            );
         }
 
         return (bool)$returnValue;
@@ -203,7 +219,9 @@ class common_persistence_SqlKvDriver implements common_persistence_KvDriver, Sch
 
             return (bool)$sessionValue;
         } catch (Exception $e) {
-            throw new common_Exception('Unable to write the key value table in the database ' . $e->getMessage());
+            throw new common_Exception(
+                'Unable to write the key value table in the database ' . $e->getMessage()
+            );
         }
 
         return false;
@@ -224,7 +242,8 @@ class common_persistence_SqlKvDriver implements common_persistence_KvDriver, Sch
 
                 break;
             case 'gcp-spanner':
-                $statement = 'UPDATE kv_store SET kv_value = CAST(CAST(kv_value as INT64) + 1 as string) WHERE kv_id = :id';
+                $statement = 'UPDATE kv_store SET kv_value = CAST(CAST(kv_value as INT64) + 1 as string) '
+                    . 'WHERE kv_id = :id';
 
                 break;
             default:
@@ -250,7 +269,8 @@ class common_persistence_SqlKvDriver implements common_persistence_KvDriver, Sch
 
                 break;
             case 'gcp-spanner':
-                $statement = 'UPDATE kv_store SET kv_value = CAST(CAST(kv_value as INT64) - 1 as string) WHERE kv_id = :id';
+                $statement = 'UPDATE kv_store SET kv_value = CAST(CAST(kv_value as INT64) - 1 as string) '
+                    . 'WHERE kv_id = :id';
 
                 break;
             default:

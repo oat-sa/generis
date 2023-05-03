@@ -48,7 +48,9 @@ class common_ext_GenerisInstaller extends common_ext_ExtensionInstaller
     public function install()
     {
         if ($this->extension->getId() != 'generis') {
-            throw new common_ext_ExtensionException('Tried to install "' . $this->extension->getId() . '" extension using the GenerisInstaller');
+            throw new common_ext_ExtensionException(
+                'Tried to install "' . $this->extension->getId() . '" extension using the GenerisInstaller'
+            );
         }
 
         $this->installLoadDefaultConfig();

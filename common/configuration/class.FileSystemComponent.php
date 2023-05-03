@@ -96,8 +96,13 @@ class common_configuration_FileSystemComponent extends common_configuration_Comp
      *
      * @return mixed
      */
-    public function __construct($location, $expectedRights, $optional = false, $recursive = false, $mustCheckIfEmpty = false)
-    {
+    public function __construct(
+        $location,
+        $expectedRights,
+        $optional = false,
+        $recursive = false,
+        $mustCheckIfEmpty = false
+    ) {
         parent::__construct('tao.configuration.filesystem', $optional);
 
         $this->setExpectedRights($expectedRights);
@@ -340,7 +345,12 @@ class common_configuration_FileSystemComponent extends common_configuration_Comp
             $funcName = 'is_' . strtolower($rule);
             $returnValue = $funcName($location);
         } else {
-            $iterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($location, \RecursiveDirectoryIterator::SKIP_DOTS));
+            $iterator = new \RecursiveIteratorIterator(
+                new \RecursiveDirectoryIterator(
+                    $location,
+                    \RecursiveDirectoryIterator::SKIP_DOTS
+                )
+            );
 
             try {
                 $method = 'is' . $rule;

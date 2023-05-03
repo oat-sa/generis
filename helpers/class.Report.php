@@ -38,8 +38,11 @@ class helpers_Report
      *
      * @return string the shell output of $report
      */
-    public static function renderToCommandLine(ReportInterface $report, $useColor = self::AUTOSENSE, $intend = 0): string
-    {
+    public static function renderToCommandLine(
+        ReportInterface $report,
+        $useColor = self::AUTOSENSE,
+        $intend = 0
+    ): string {
         switch ($report->getType()) {
             case ReportInterface::TYPE_SUCCESS:
                 $color = '0;32'; // green

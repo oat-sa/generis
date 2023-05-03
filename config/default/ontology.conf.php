@@ -2,6 +2,7 @@
 
 use oat\generis\model\kernel\persistence\smoothsql\search\ComplexSearchService;
 
+//phpcs:disable
 return new core_kernel_persistence_smoothsql_SmoothModel([
     core_kernel_persistence_smoothsql_SmoothModel::OPTION_PERSISTENCE => 'default',
     core_kernel_persistence_smoothsql_SmoothModel::OPTION_READABLE_MODELS => [
@@ -14,3 +15,4 @@ return new core_kernel_persistence_smoothsql_SmoothModel([
     core_kernel_persistence_smoothsql_SmoothModel::OPTION_NEW_TRIPLE_MODEL => core_kernel_persistence_smoothsql_SmoothModel::DEFAULT_WRITABLE_MODEL,
     core_kernel_persistence_smoothsql_SmoothModel::OPTION_SEARCH_SERVICE => ComplexSearchService::SERVICE_ID,
 ]);
+// phpcs:enable

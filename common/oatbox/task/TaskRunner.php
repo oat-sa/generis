@@ -30,7 +30,8 @@ use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 
 /**
- * @deprecated since version 7.10.0, to be removed in 8.0. Use any implementation of \oat\tao\model\taskQueue\Worker\WorkerInterface instead.
+ * @deprecated since version 7.10.0, to be removed in 8.0. Use any implementation of
+ *             \oat\tao\model\taskQueue\Worker\WorkerInterface instead.
  */
 class TaskRunner implements TaskRunnerInterface
 {

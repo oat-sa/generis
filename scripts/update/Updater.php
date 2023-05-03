@@ -39,6 +39,9 @@ use oat\generis\model\fileReference\FileReferenceSerializer;
 use oat\generis\model\fileReference\ResourceFileSerializer;
 use oat\generis\model\kernel\persistence\file\FileIterator;
 use oat\generis\model\kernel\persistence\smoothsql\search\ComplexSearchService;
+use oat\generis\model\kernel\persistence\smoothsql\search\driver\TaoSearchDriver;
+use oat\generis\model\kernel\persistence\smoothsql\search\GateWay;
+use oat\generis\model\kernel\persistence\smoothsql\search\TaoResultSet;
 use oat\generis\model\kernel\uri\UriProvider;
 use oat\generis\model\user\AuthAdapter;
 use oat\generis\model\user\UserFactoryService;
@@ -135,13 +138,13 @@ class Updater extends common_ext_ExtensionUpdater
                         'search.query.criterion' => '\\oat\\search\\QueryCriterion',
                         'search.driver.postgres' => '\\oat\\search\\DbSql\\Driver\\PostgreSQL',
                         'search.driver.mysql' => '\\oat\\search\\DbSql\\Driver\\MySQL',
-                        'search.driver.tao' => '\\oat\\generis\\model\\kernel\\persistence\\smoothsql\\search\\driver\\TaoSearchDriver',
+                        'search.driver.tao' => TaoSearchDriver::class,
                         'search.tao.serialyser' => '\\oat\\search\\DbSql\\TaoRdf\\UnionQuerySerialyser',
                         'search.factory.query' => '\\oat\\search\\factory\\QueryFactory',
                         'search.factory.builder' => '\\oat\\search\\factory\\QueryBuilderFactory',
                         'search.factory.criterion' => '\\oat\\search\\factory\\QueryCriterionFactory',
-                        'search.tao.gateway' => '\\oat\\generis\\model\\kernel\\persistence\\smoothsql\\search\\GateWay',
-                        'search.tao.result' => '\\oat\\generis\\model\\kernel\\persistence\\smoothsql\\search\\TaoResultSet',
+                        'search.tao.gateway' => GateWay::class,
+                        'search.tao.result' => TaoResultSet::class,
                     ],
                     'abstract_factories' => [
                         '\\oat\\search\\Command\\OperatorAbstractfactory',

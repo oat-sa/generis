@@ -207,4 +207,6 @@ class common_legacy_LegacyAutoLoader
     }
 }
 
+// phpcs:disable PSR1.Files.SideEffects
 common_legacy_LegacyAutoLoader::register();
+// phpcs:enable PSR1.Files.SideEffects

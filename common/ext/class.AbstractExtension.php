@@ -91,4 +91,4 @@ abstract class common_ext_AbstractExtension
     public function getVersion()
     {
     }
-} /* end of abstract class common_ext_AbstractExtension */
+}

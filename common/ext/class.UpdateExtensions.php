@@ -78,7 +78,9 @@ class common_ext_UpdateExtensions implements Action, ServiceLocatorAwareInterfac
 
                 break;
             } catch (Exception $e) {
-                $this->logError('Exception during update of ' . $ext->getId() . ': ' . get_class($e) . ' "' . $e->getMessage() . '"');
+                $this->logError(
+                    'Exception during update of ' . $ext->getId() . ': ' . get_class($e) . ' "' . $e->getMessage() . '"'
+                );
                 $report->setType(Report::TYPE_ERROR);
                 $report->setMessage('Update failed');
                 $report->add(new Report(Report::TYPE_ERROR, 'Exception during update of ' . $ext->getId() . '.'));
@@ -110,7 +112,10 @@ class common_ext_UpdateExtensions implements Action, ServiceLocatorAwareInterfac
         $codeVersion = $ext->getVersion();
 
         if ($installed !== $codeVersion) {
-            $report = new Report(Report::TYPE_INFO, $ext->getName() . ' requires update from ' . $installed . ' to ' . $codeVersion);
+            $report = new Report(
+                Report::TYPE_INFO,
+                $ext->getName() . ' requires update from ' . $installed . ' to ' . $codeVersion
+            );
 
             try {
                 $updater = $ext->getUpdater();
@@ -160,7 +165,9 @@ class common_ext_UpdateExtensions implements Action, ServiceLocatorAwareInterfac
 
     protected function getMissingExtensions()
     {
-        $missingId = \helpers_ExtensionHelper::getMissingExtensionIds($this->getExtensionManager()->getInstalledExtensions());
+        $missingId = \helpers_ExtensionHelper::getMissingExtensionIds(
+            $this->getExtensionManager()->getInstalledExtensions()
+        );
 
         $missingExt = [];
 

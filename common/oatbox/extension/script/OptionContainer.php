@@ -143,7 +143,10 @@ class OptionContainer
                         } else {
                             // Edge case. Option found, but it is the last value of the $value array.
                             if ($required) {
-                                throw new MissingOptionException("No value given for required argument '${optionName}'.", $optionName);
+                                throw new MissingOptionException(
+                                    "No value given for required argument '${optionName}'.",
+                                    $optionName
+                                );
                             } elseif (isset($optionParams['defaultValue'])) {
                                 $returnValue[$optionName] = self::cast($optionParams['defaultValue'], $castTo);
                             }

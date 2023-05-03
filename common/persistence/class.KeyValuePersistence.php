@@ -238,8 +238,15 @@ class common_persistence_KeyValuePersistence extends common_persistence_Persiste
      *
      * @return mixed
      */
-    protected function setLargeValue($key, $value, $level = 0, $flush = true, $toTransform = true, $ttl = null, $nx = false)
-    {
+    protected function setLargeValue(
+        $key,
+        $value,
+        $level = 0,
+        $flush = true,
+        $toTransform = true,
+        $ttl = null,
+        $nx = false
+    ) {
         if (!$this->isLarge($value)) {
             if ($flush) {
                 $this->set($key, $value, $ttl, $nx);

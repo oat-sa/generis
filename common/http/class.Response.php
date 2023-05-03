@@ -30,7 +30,10 @@
 class common_http_Response
 {
     public $httpCode;
-    public $headerOut; //CURLINFO_HEADER_OUT The request string sent. For this to work, add the CURLINFO_HEADER_OUT option to the handle by calling curl_setopt()
-    public $effectiveUrl; // Last effective URL
+    // CURLINFO_HEADER_OUT The request string sent. For this to work, add the CURLINFO_HEADER_OUT option to the handle
+    // by calling curl_setopt()
+    public $headerOut;
+    // Last effective URL
+    public $effectiveUrl;
     public $responseData;
 }

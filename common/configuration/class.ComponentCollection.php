@@ -245,7 +245,11 @@ class common_configuration_ComponentCollection
                 array_push($traversed, $node); // mark the node as 'traversed'.
 
                 if ($status == common_configuration_Report::VALID) {
-                    $stack = self::pushTransitionsOnStack($stack, $this->getTransitions($node)); // put all transitions from the node to stack.
+                    // put all transitions from the node to stack.
+                    $stack = self::pushTransitionsOnStack(
+                        $stack,
+                        $this->getTransitions($node)
+                    );
 
                     while (count($stack) > 0) {
                         $transition = array_pop($stack);
@@ -266,7 +270,9 @@ class common_configuration_ComponentCollection
 
                 $returnValue = $this->getReports();
             } else {
-                throw new common_configuration_CyclicDependencyException('The dependency graph is cyclic. Please review your dependencies.');
+                throw new common_configuration_CyclicDependencyException(
+                    'The dependency graph is cyclic. Please review your dependencies.'
+                );
             }
         }
 

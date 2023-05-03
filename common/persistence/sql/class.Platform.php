@@ -357,7 +357,8 @@ class common_persistence_sql_Platform
     /**
      * Commits the current transaction.
      *
-     * @throws \Doctrine\DBAL\ConnectionException if the commit failed due to no active transaction or because the transaction was marked for rollback only
+     * @throws \Doctrine\DBAL\ConnectionException if the commit failed due to no active transaction or because the
+     *                                            transaction was marked for rollback only
      * @throws DBALException
      * @throws common_persistence_sql_SerializationException in case of SerializationFailure (SQLSTATE 40001)
      *

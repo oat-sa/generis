@@ -120,4 +120,4 @@ abstract class common_cache_SingletonCache
 
         return $returnValue;
     }
-} /* end of abstract class common_cache_SingletonCache */
+}

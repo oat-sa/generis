@@ -47,7 +47,8 @@ class ServiceConfigDriver extends common_persistence_PhpFileDriver implements Co
         if (! $value instanceof ConfigurableService) {
             return null;
         }
-        $content = $value->getHeader() . PHP_EOL . 'return ' . common_Utils::toHumanReadablePhpString($value) . ';' . PHP_EOL;
+        $content = $value->getHeader() . PHP_EOL . 'return ' . common_Utils::toHumanReadablePhpString($value)
+            . ';' . PHP_EOL;
 
         return $content;
     }

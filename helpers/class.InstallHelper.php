@@ -93,7 +93,8 @@ class helpers_InstallHelper
 
                 foreach ($missing as $extID) {
                     static::log('d', 'Extension ' . $extID . ' is required but missing, added to install list');
-                    $toInstall = [$extID => common_ext_ExtensionsManager::singleton()->getExtensionById($extID)] + $toInstall;
+                    $extensionById = common_ext_ExtensionsManager::singleton()->getExtensionById($extID);
+                    $toInstall = [$extID => $extensionById] + $toInstall;
                     $modified = true;
                 }
             }

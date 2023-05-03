@@ -159,7 +159,13 @@ abstract class common_ext_ExtensionUpdater extends common_ext_ExtensionHandler i
             } else {
                 $namespace = substr($class_name, 0, $split);
                 $class = substr($class_name, $split + 1);
-                eval('namespace ' . $namespace . '; ' . 'class ' . $class . ' extends \\oat\\oatbox\\service\\ConfigurableService {}');
+                eval(
+                    sprintf(
+                        'namespace %s; class %s extends \\oat\\oatbox\\service\\ConfigurableService {}',
+                        $namespace,
+                        $class
+                    )
+                );
             }
         };
         $serviceManager = $this->getServiceManager();

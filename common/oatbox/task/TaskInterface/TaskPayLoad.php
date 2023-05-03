@@ -29,7 +29,11 @@ use Zend\ServiceManager\ServiceLocatorAwareInterface;
  */
 interface TaskPayLoad extends DatatablePayload, ServiceLocatorAwareInterface
 {
-    public function __construct(TaskPersistenceInterface $persistence, $currentUserId = null, DatatableRequestInterface $request = null);
+    public function __construct(
+        TaskPersistenceInterface $persistence,
+        $currentUserId = null,
+        DatatableRequestInterface $request = null
+    );
 
     /**
      * @deprecated since version 7.10.0, to be removed in 8.0.

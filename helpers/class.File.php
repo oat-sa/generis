@@ -47,7 +47,72 @@ class helpers_File
      *
      * @var array
      */
-    private static $ALLOWED_CHARACTERS = ['A' => '','B' => '','C' => '','D' => '','E' => '','F' => '','G' => '','H' => '','I' => '','J' => '','K' => '','L' => '','M' => '','N' => '','O' => '','P' => '','Q' => '','R' => '','S' => '','T' => '','U' => '','V' => '','W' => '','X' => '','Y' => '','Z' => '','a' => '','b' => '','c' => '','d' => '','e' => '','f' => '','g' => '','h' => '','i' => '','j' => '','k' => '','l' => '','m' => '','n' => '','o' => '','p' => '','q' => '','r' => '','s' => '','t' => '','u' => '','v' => '','w' => '','x' => '','y' => '','z' => '',0 => '',1 => '',2 => '',3 => '',4 => '',5 => '',6 => '',7 => '',8 => '',9 => '','_' => '','-' => ''];
+    private static $ALLOWED_CHARACTERS = [
+        'A' => '',
+        'B' => '',
+        'C' => '',
+        'D' => '',
+        'E' => '',
+        'F' => '',
+        'G' => '',
+        'H' => '',
+        'I' => '',
+        'J' => '',
+        'K' => '',
+        'L' => '',
+        'M' => '',
+        'N' => '',
+        'O' => '',
+        'P' => '',
+        'Q' => '',
+        'R' => '',
+        'S' => '',
+        'T' => '',
+        'U' => '',
+        'V' => '',
+        'W' => '',
+        'X' => '',
+        'Y' => '',
+        'Z' => '',
+        'a' => '',
+        'b' => '',
+        'c' => '',
+        'd' => '',
+        'e' => '',
+        'f' => '',
+        'g' => '',
+        'h' => '',
+        'i' => '',
+        'j' => '',
+        'k' => '',
+        'l' => '',
+        'm' => '',
+        'n' => '',
+        'o' => '',
+        'p' => '',
+        'q' => '',
+        'r' => '',
+        's' => '',
+        't' => '',
+        'u' => '',
+        'v' => '',
+        'w' => '',
+        'x' => '',
+        'y' => '',
+        'z' => '',
+        0 => '',
+        1 => '',
+        2 => '',
+        3 => '',
+        4 => '',
+        5 => '',
+        6 => '',
+        7 => '',
+        8 => '',
+        9 => '',
+        '_' => '',
+        '-' => '',
+    ];
 
     /**
      * Directory Mode
@@ -166,7 +231,9 @@ class helpers_File
             $returnValue = unlink($path);
         } elseif (is_dir($path)) {
             /*
-             * //It seems to raise problemes on windows, depending on the php version the resource handler is not freed with DirectoryIterator preventing from further deletions // $iterator = new DirectoryIterator($path); foreach ($iterator as $fileinfo) { if (!$fileinfo->isDot()) { } }
+             * It seems to raise problemes on windows, depending on the php version the resource handler is not freed
+             * with DirectoryIterator preventing from further deletions // $iterator = new DirectoryIterator($path);
+             * foreach ($iterator as $fileinfo) { if (!$fileinfo->isDot()) { } }
              */
             $handle = opendir($path);
 
@@ -183,7 +250,9 @@ class helpers_File
 
             $returnValue = rmdir($path);
         } else {
-            throw new common_exception_Error('"' . $path . '" cannot be removed since it\'s neither a file nor directory');
+            throw new common_exception_Error(
+                '"' . $path . '" cannot be removed since it\'s neither a file nor directory'
+            );
         }
 
         return (bool) $returnValue;
@@ -351,12 +420,23 @@ class helpers_File
                     }
 
                     if ($fileinfo->isDir() && $recursive) {
-                        $returnValue = array_merge($returnValue, self::scandir(realpath($fileinfo->getPathname()), $options));
+                        $returnValue = array_merge(
+                            $returnValue,
+                            self::scandir(realpath($fileinfo->getPathname()), $options)
+                        );
                     }
                 }
             }
         } else {
-            throw new common_Exception('An error occured : The function (' . __METHOD__ . ') of the class (' . __CLASS__ . ') is expecting a directory path as first parameter : ' . $path);
+            throw new common_Exception(
+                sprintf(
+                    'An error occured : The function (%s) of the class (%s) is expecting a directory path as '
+                        . 'first parameter : %s',
+                    __METHOD__,
+                    __CLASS__,
+                    $path
+                )
+            );
         }
 
         return (array) $returnValue;

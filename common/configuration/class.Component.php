@@ -162,4 +162,4 @@ abstract class common_configuration_Component
     {
         $this->name = $name;
     }
-} /* end of abstract class common_configuration_Component */
+}

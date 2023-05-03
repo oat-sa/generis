@@ -53,17 +53,23 @@ class common_ext_ExtensionUninstaller extends common_ext_ExtensionHandler
 
         // uninstall possible
         if (is_null($this->extension->getManifest()->getUninstallData())) {
-            throw new common_Exception('Problem uninstalling extension ' . $this->extension->getId() . ' : Uninstall not supported');
+            throw new common_Exception(
+                'Problem uninstalling extension ' . $this->extension->getId() . ' : Uninstall not supported'
+            );
         }
 
         // installed?
         if (!common_ext_ExtensionsManager::singleton()->isInstalled($this->extension->getId())) {
-            throw new common_Exception('Problem uninstalling extension ' . $this->extension->getId() . ' : Not installed');
+            throw new common_Exception(
+                'Problem uninstalling extension ' . $this->extension->getId() . ' : Not installed'
+            );
         }
 
         // check dependcies
         if (helpers_ExtensionHelper::isRequired($this->extension)) {
-            throw new common_Exception('Problem uninstalling extension ' . $this->extension->getId() . ' : Still required');
+            throw new common_Exception(
+                'Problem uninstalling extension ' . $this->extension->getId() . ' : Still required'
+            );
         }
 
         common_Logger::d('uninstall script for ' . $this->extension->getId());

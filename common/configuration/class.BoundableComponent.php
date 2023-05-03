@@ -172,4 +172,4 @@ abstract class common_configuration_BoundableComponent extends common_configurat
      * @return string
      */
     abstract public function getValue();
-} /* end of abstract class common_configuration_BoundableComponent */
+}

@@ -52,12 +52,15 @@ abstract class common_persistence_Persistence
      *
      * @param array $params
      * @param common_persistence_driver $driver
+     *
+     * phpcs:disable PEAR.Functions.ValidDefaultValue
      */
     public function __construct($params = [], common_persistence_driver $driver)
     {
         $this->setParams($params);
         $this->setDriver($driver);
     }
+    // phpcs:enable PEAR.Functions.ValidDefaultValue
 
     public static function getPersistence($driverId)
     {

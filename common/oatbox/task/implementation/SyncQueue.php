@@ -61,7 +61,8 @@ class SyncQueue extends AbstractQueue
      * @param \oat\oatbox\action\Action|string $action action instance, classname or callback function
      * @param array $parameters parameters to be passed to the action
      * @param boolean $recall Parameter which indicates that task has been created repeatedly after fail of previous.
-     *                        For current implementation in means that the second call will not be executed to avoid loop.
+     *                        For current implementation in means that the second call will not be executed to avoid
+     *                        loop.
      * @param null|string $label
      * @param null|string $type
      *
@@ -111,11 +112,16 @@ class SyncQueue extends AbstractQueue
         $report = $task->getReport();
 
         if (!empty($report)) {
-            //serialize only two first report levels because sometimes serialized report is huge and it does not fit into `k_po` index of statemetns table.
+            // serialize only two first report levels because sometimes serialized report is huge and it does not fit
+            // into `k_po` index of statemetns table.
             $serializableReport = new Report($report->getType(), $report->getMessage(), $report->getData());
 
             foreach ($report as $subReport) {
-                $serializableSubReport = new Report($subReport->getType(), $subReport->getMessage(), $subReport->getData());
+                $serializableSubReport = new Report(
+                    $subReport->getType(),
+                    $subReport->getMessage(),
+                    $subReport->getData()
+                );
                 $serializableReport->add($serializableSubReport);
             }
             $taskResource->setPropertyValue(

@@ -106,4 +106,4 @@ abstract class common_uri_AbstractUriProvider implements common_uri_UriProvider
     {
         $this->driver = strtolower($driver);
     }
-} /* end of abstract class common_uri_AbstractUriProvider */
+}
