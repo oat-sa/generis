@@ -67,14 +67,10 @@ abstract class common_configuration_BoundableComponent extends common_configurat
      *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      *
-     * @param  string min
-     * @param  string max
-     * @param  string name
-     * @param  boolean optional
-     * @param mixed $min
-     * @param mixed $max
-     * @param mixed $name
-     * @param mixed $optional
+     * @param string $min
+     * @param string $max
+     * @param string $name
+     * @param boolean $optional
      *
      * @return mixed
      */
@@ -92,8 +88,7 @@ abstract class common_configuration_BoundableComponent extends common_configurat
      *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      *
-     * @param  string min
-     * @param mixed $min
+     * @param string $min
      *
      * @return void
      */
@@ -127,8 +122,7 @@ abstract class common_configuration_BoundableComponent extends common_configurat
      *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      *
-     * @param  string max
-     * @param mixed $max
+     * @param string $max
      *
      * @return void
      */

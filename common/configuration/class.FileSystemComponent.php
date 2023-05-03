@@ -83,14 +83,11 @@ class common_configuration_FileSystemComponent extends common_configuration_Comp
      *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      *
-     * @param  string location
-     * @param  string expectedRights
-     * @param  boolean optional
-     * @param mixed $location
-     * @param mixed $expectedRights
-     * @param mixed $optional
-     * @param mixed $recursive
-     * @param mixed $mustCheckIfEmpty
+     * @param string $location
+     * @param string $expectedRights
+     * @param boolean $optional
+     * @param boolean $recursive
+     * @param boolean $mustCheckIfEmpty
      *
      * @throws common_configuration_MalformedRightsException
      *
@@ -243,8 +240,7 @@ class common_configuration_FileSystemComponent extends common_configuration_Comp
      *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      *
-     * @param  string expectedRights
-     * @param mixed $expectedRights
+     * @param string $expectedRights
      *
      * @return void
      */

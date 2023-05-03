@@ -63,10 +63,10 @@ class common_AjaxResponse
         $context->getResponse()->setContentHeader('application/json');
         //set the response object
         $response = [
-            'success' => $success
-            , 'type' => $type
-            , 'message' => $message
-            , 'data' => $data,
+            'success' => $success,
+            'type' => $type,
+            'message' => $message,
+            'data' => $data,
         ];
 
         //write the response

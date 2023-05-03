@@ -532,8 +532,7 @@ class common_configuration_ComponentCollection
      *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      *
-     * @param  array dependencies
-     * @param mixed $dependencies
+     * @param array $dependencies
      *
      * @return void
      */
@@ -567,8 +566,7 @@ class common_configuration_ComponentCollection
      *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      *
-     * @param  array reports
-     * @param mixed $reports
+     * @param array $reports
      *
      * @return mixed
      */

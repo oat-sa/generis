@@ -67,10 +67,8 @@ abstract class common_configuration_Component
      *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      *
-     * @param  string name
-     * @param  boolean optional
-     * @param mixed $name
-     * @param mixed $optional
+     * @param string $name
+     * @param boolean $optional
      *
      * @return mixed
      */
