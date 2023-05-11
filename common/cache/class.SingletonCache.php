@@ -113,4 +113,4 @@ abstract class common_cache_SingletonCache
     private function __construct()
     {
     }
-} /* end of abstract class common_cache_SingletonCache */
+}

@@ -40,4 +40,4 @@ interface common_log_SeverityLevel
      * @return int
      */
     public function getSeverity();
-} /* end of interface common_log_SeverityLevel */
+}

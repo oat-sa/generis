@@ -29,7 +29,9 @@ use oat\oatbox\log\LoggerAwareTrait;
 use oat\oatbox\service\ServiceManager;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
+// phpcs:disable PSR1.Files.SideEffects
 error_reporting(E_ALL);
+// phpcs:enable PSR1.Files.SideEffects
 
 /**
  * Generis Object Oriented API - core\kernel\impl\class.ApiModelOO.php

@@ -1,7 +1,5 @@
 <?php
 
-use oat\generis\model\RulesRdf;
-
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,6 +22,7 @@ use oat\generis\model\RulesRdf;
  */
 
 use oat\generis\test\TestCase;
+use oat\generis\model\RulesRdf;
 
 class ExpressionTest extends TestCase
 {

@@ -20,6 +20,8 @@
  * @license    GPLv2
  * @package    package_name
  * @subpackage
+ *
+ * phpcs:disable PSR1.Files.SideEffects
  */
 
 $extensionRoot = realpath(__DIR__ . '/../');

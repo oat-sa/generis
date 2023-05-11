@@ -179,4 +179,4 @@ to test the pasword entered
          * @return core_kernel_classes_Resource
         */
     public function getDefaultRole();
-} /* end of interface core_kernel_users_UsersManagement */
+}

@@ -173,6 +173,8 @@ abstract class common_cache_PartitionedCachable implements common_Serializable
      * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @return mixed
+     *
+     * phpcs:disable PSR2.Methods.MethodDeclaration
      */
     public function _remove()
     {
@@ -183,6 +185,7 @@ abstract class common_cache_PartitionedCachable implements common_Serializable
             $this->getCache()->remove($this->getSerial());
         }
     }
+    // phpcs:enable PSR2.Methods.MethodDeclaration
 
     /**
      * Short description of method getSuccessors
@@ -263,4 +266,4 @@ abstract class common_cache_PartitionedCachable implements common_Serializable
      * @return common_cache_Cache
      */
     abstract public function getCache();
-} /* end of abstract class common_cache_PartitionedCachable */
+}

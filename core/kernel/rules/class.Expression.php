@@ -216,12 +216,10 @@ class core_kernel_rules_Expression extends core_kernel_classes_Resource
             ) {
                 common_Logger::d('Both Part are Container', ['Generis Expression']);
                 $returnValue = $this->operatorEval($firstPart, $secondPart);
-            }
-
-            //both are vector
-            elseif (
+            } elseif (
+                //both are vector
                 $firstPart instanceof core_kernel_classes_ContainerCollection
-                    && $secondPart instanceof core_kernel_classes_ContainerCollection
+                && $secondPart instanceof core_kernel_classes_ContainerCollection
             ) {
                 $returnValue = false;
                 foreach ($firstPart->getIterator() as $subLeftPart) {
@@ -240,11 +238,10 @@ class core_kernel_rules_Expression extends core_kernel_classes_Resource
             //die("the evaluation is ". $returnValue);
 
             //throw new common_Exception('not implemented yet', __FILE__,__LINE__);
-            }
-            // first is a vector second is a value
-            elseif (
-                ($firstPart instanceof core_kernel_classes_ContainerCollection)
-                    && ($secondPart instanceof core_kernel_classes_Container)
+            } elseif (
+                // first is a vector second is a value
+                $firstPart instanceof core_kernel_classes_ContainerCollection
+                && $secondPart instanceof core_kernel_classes_Container
             ) {
                 $tempResult = false;
                 foreach ($firstPart->getIterator() as $container) {
@@ -265,11 +262,10 @@ class core_kernel_rules_Expression extends core_kernel_classes_Resource
                     }
                 }
                 $returnValue = $tempResult;
-            }
-            // first is a value second is a vector
-            elseif (
-                ($firstPart instanceof core_kernel_classes_Container)
-                    && ($secondPart instanceof core_kernel_classes_ContainerCollection)
+            } elseif (
+                // first is a value second is a vector
+                $firstPart instanceof core_kernel_classes_Container
+                && $secondPart instanceof core_kernel_classes_ContainerCollection
             ) {
                 foreach ($secondPart->getIterator() as $container) {
                     common_Logger::d('FirstPart Part Container is  Second is ContainerCollection', ['Generis Expression']);
@@ -279,9 +275,7 @@ class core_kernel_rules_Expression extends core_kernel_classes_Resource
                     $tempResult = $tempResult && $this->operatorEval($firstPart, $container);
                 }
                 $returnValue = $tempResult;
-            }
-            //case we compare boolean
-            else {
+            } else { //case we compare boolean
                 common_Logger::d('Both part are boolean', ['Generis Expression']);
 
                 switch ($this->getLogicalOperator()->getUri()) {

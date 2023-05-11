@@ -19,7 +19,10 @@
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
  *
  */
+
+// phpcs:disable PSR1.Files.SideEffects
 error_reporting(E_ALL);
+// phpcs:enable PSR1.Files.SideEffects
 
 use oat\generis\test\TestCase;
 
