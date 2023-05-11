@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -67,7 +68,7 @@ abstract class common_configuration_BoundableComponent extends common_configurat
      */
     public function __construct($min, $max, $name = 'unknown', $optional = false)
     {
-        
+
         parent::__construct($name, $optional);
         $this->setMin($min);
         $this->setMax($max);
@@ -83,7 +84,7 @@ abstract class common_configuration_BoundableComponent extends common_configurat
      */
     public function setMin($min)
     {
-        
+
         $this->min = $min;
     }
 
@@ -98,9 +99,9 @@ abstract class common_configuration_BoundableComponent extends common_configurat
     {
         $returnValue = (string) '';
 
-        
+
         return $this->min;
-        
+
 
         return (string) $returnValue;
     }
@@ -115,7 +116,7 @@ abstract class common_configuration_BoundableComponent extends common_configurat
      */
     public function setMax($max)
     {
-        
+
         // Support .x notation.
         if (!empty($max)) {
             $this->max = preg_replace('/x/u', '99999', $max);
@@ -135,9 +136,9 @@ abstract class common_configuration_BoundableComponent extends common_configurat
     {
         $returnValue = (string) '';
 
-        
+
         return $this->max;
-        
+
 
         return (string) $returnValue;
     }

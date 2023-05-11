@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,7 +26,6 @@
  */
 class common_exception_NotAcceptable extends common_exception_BadRequest
 {
-
     public function getUserMessage()
     {
         return __("The requested content encoding cannot be satisfied");

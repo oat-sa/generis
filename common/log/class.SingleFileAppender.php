@@ -35,7 +35,6 @@
  */
 class common_log_SingleFileAppender extends common_log_BaseAppender
 {
-
     /**
      * Name of file with log entries
      *

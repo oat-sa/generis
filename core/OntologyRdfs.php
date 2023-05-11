@@ -23,15 +23,15 @@ namespace oat\generis\model;
 
 interface OntologyRdfs
 {
-    const RDFS_COMMENT = 'http://www.w3.org/2000/01/rdf-schema#comment';
-    const RDFS_LABEL = 'http://www.w3.org/2000/01/rdf-schema#label';
-    const RDFS_LITERAL = 'http://www.w3.org/2000/01/rdf-schema#Literal';
-    const RDFS_SEEALSO = 'http://www.w3.org/2000/01/rdf-schema#seeAlso';
-    const RDFS_DATATYPE = 'http://www.w3.org/2000/01/rdf-schema#Datatype';
-    const RDFS_CLASS = 'http://www.w3.org/2000/01/rdf-schema#Class';
-    const RDFS_SUBCLASSOF = 'http://www.w3.org/2000/01/rdf-schema#subClassOf';
-    const RDFS_DOMAIN = 'http://www.w3.org/2000/01/rdf-schema#domain';
-    const RDFS_RESOURCE = 'http://www.w3.org/2000/01/rdf-schema#Resource';
-    const RDFS_RANGE = 'http://www.w3.org/2000/01/rdf-schema#range';
-    const RDFS_SUBPROPERTYOF = 'http://www.w3.org/2000/01/rdf-schema#subPropertyOf';
+    public const RDFS_COMMENT = 'http://www.w3.org/2000/01/rdf-schema#comment';
+    public const RDFS_LABEL = 'http://www.w3.org/2000/01/rdf-schema#label';
+    public const RDFS_LITERAL = 'http://www.w3.org/2000/01/rdf-schema#Literal';
+    public const RDFS_SEEALSO = 'http://www.w3.org/2000/01/rdf-schema#seeAlso';
+    public const RDFS_DATATYPE = 'http://www.w3.org/2000/01/rdf-schema#Datatype';
+    public const RDFS_CLASS = 'http://www.w3.org/2000/01/rdf-schema#Class';
+    public const RDFS_SUBCLASSOF = 'http://www.w3.org/2000/01/rdf-schema#subClassOf';
+    public const RDFS_DOMAIN = 'http://www.w3.org/2000/01/rdf-schema#domain';
+    public const RDFS_RESOURCE = 'http://www.w3.org/2000/01/rdf-schema#Resource';
+    public const RDFS_RANGE = 'http://www.w3.org/2000/01/rdf-schema#range';
+    public const RDFS_SUBPROPERTYOF = 'http://www.w3.org/2000/01/rdf-schema#subPropertyOf';
 }

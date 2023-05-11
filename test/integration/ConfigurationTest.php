@@ -26,8 +26,7 @@ use oat\generis\test\GenerisPhpUnitTestRunner;
 
 class ConfigurationTest extends GenerisPhpUnitTestRunner
 {
-
-    const TESTKEY = 'config_test_key';
+    public const TESTKEY = 'config_test_key';
 
     /**
      * A version of php that we can be sure will not be present on the system
@@ -35,7 +34,7 @@ class ConfigurationTest extends GenerisPhpUnitTestRunner
      *
      * @var int
      */
-    const UNSUPPORTED_PHP_MAJOR_VERSION = 9;
+    public const UNSUPPORTED_PHP_MAJOR_VERSION = 9;
 
     protected function setUp(): void
     {

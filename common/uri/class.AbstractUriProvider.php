@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -61,9 +62,9 @@ abstract class common_uri_AbstractUriProvider implements common_uri_UriProvider
     {
         $returnValue = (string) '';
 
-        
+
         $returnValue = $this->driver;
-        
+
 
         return (string) $returnValue;
     }
@@ -78,7 +79,7 @@ abstract class common_uri_AbstractUriProvider implements common_uri_UriProvider
      */
     public function setDriver($driver)
     {
-        
+
         $this->driver = strtolower($driver);
     }
 
@@ -92,7 +93,7 @@ abstract class common_uri_AbstractUriProvider implements common_uri_UriProvider
      */
     public function __construct($driver)
     {
-        
+
         $this->setDriver($driver);
     }
 } /* end of abstract class common_uri_AbstractUriProvider */

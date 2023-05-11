@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -59,7 +60,7 @@ class common_configuration_Mock extends common_configuration_Component
      */
     public function __construct($expectedStatus, $name)
     {
-        
+
         $this->setExpectedStatus($expectedStatus);
         $this->setName($name);
     }
@@ -73,7 +74,7 @@ class common_configuration_Mock extends common_configuration_Component
      */
     public function check()
     {
-        
+
         $message = 'Mock configuration report.';
         $report = new common_configuration_Report($this->getExpectedStatus(), $message, $this);
         return $report;
@@ -91,9 +92,9 @@ class common_configuration_Mock extends common_configuration_Component
     {
         $returnValue = (int) 0;
 
-        
+
         $returnValue = $this->expectedStatus;
-        
+
 
         return (int) $returnValue;
     }
@@ -108,7 +109,7 @@ class common_configuration_Mock extends common_configuration_Component
      */
     public function setExpectedStatus($expectedStatus)
     {
-        
+
         $this->expectedStatus = $expectedStatus;
     }
 }

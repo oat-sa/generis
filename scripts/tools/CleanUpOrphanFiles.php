@@ -166,7 +166,7 @@ class CleanUpOrphanFiles extends ScriptAction
      */
     private function markForRemoval(core_kernel_classes_Resource $resource)
     {
-            $this->markedTobeRemoved[] = $resource;
+        $this->markedTobeRemoved[] = $resource;
     }
 
     /**

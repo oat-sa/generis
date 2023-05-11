@@ -35,8 +35,6 @@ use oat\oatbox\mutex\NoLockStorage;
  */
 class LockServiceTest extends TestCase
 {
-
-
     public function testLock()
     {
         $dir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . "generis_unittest_" . mt_rand() . DIRECTORY_SEPARATOR;

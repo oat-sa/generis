@@ -25,9 +25,9 @@ use League\Flysystem\FileExistsException;
 
 class Directory extends FileSystemHandler implements \IteratorAggregate
 {
-    const ITERATOR_RECURSIVE = '1';
-    const ITERATOR_FILE      = '2';
-    const ITERATOR_DIRECTORY = '4';
+    public const ITERATOR_RECURSIVE = '1';
+    public const ITERATOR_FILE      = '2';
+    public const ITERATOR_DIRECTORY = '4';
 
     /**
      * Get a subDirectory of $this (existing or not)
@@ -167,13 +167,13 @@ class Directory extends FileSystemHandler implements \IteratorAggregate
         // implementation is then needed.
 
         $contents = $this->getFileSystem()->listContents($this->getPrefix(), true);
-        $fileSystemId = $this->getFileSystemId().'/';
+        $fileSystemId = $this->getFileSystemId() . '/';
         // Filter files only.
         $filePaths = [];
         foreach ($contents as $content) {
             if ($content['type'] === 'file') {
                 $contentPath = $content['path'];
-                if(strpos($contentPath, $fileSystemId) === 0) {
+                if (strpos($contentPath, $fileSystemId) === 0) {
                     $contentPath = substr($contentPath, strlen($fileSystemId));
                 }
 
@@ -186,10 +186,10 @@ class Directory extends FileSystemHandler implements \IteratorAggregate
         foreach ($filePaths as $renaming) {
             try {
                 if ($this->getFileSystem()->rename($renaming['source'], $renaming['destination']) === false) {
-                    throw new \common_exception_FileSystemError("Unable to rename '" . $renaming['source'] . "' into '".$renaming['destination']."'.");
+                    throw new \common_exception_FileSystemError("Unable to rename '" . $renaming['source'] . "' into '" . $renaming['destination'] . "'.");
                 }
             } catch (FileExistsException $e) {
-                throw new \common_exception_FileSystemError("Unable to rename '" . $renaming['source'] . "' into '".$renaming['destination']."'. File already exists.");
+                throw new \common_exception_FileSystemError("Unable to rename '" . $renaming['source'] . "' into '" . $renaming['destination'] . "'. File already exists.");
             }
         }
 

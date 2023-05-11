@@ -26,7 +26,6 @@ use oat\generis\test\TestCase;
 
 class SystemHelperTest extends TestCase
 {
-
     /**
      * @dataProvider sizeProvider
      */

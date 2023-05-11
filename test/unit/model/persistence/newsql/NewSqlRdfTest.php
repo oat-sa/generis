@@ -54,9 +54,8 @@ class NewSqlRdfTest extends TestCase
         $persistence = $this->getPersistenceProphecy();
         $persistence->exec(
             $query,
-            Argument::that(function($value) use ($expected) {
-               return array_slice($value, 1) == $expected && is_string($value[0]);
-
+            Argument::that(function ($value) use ($expected) {
+                return array_slice($value, 1) == $expected && is_string($value[0]);
             }),
             $this->getExpectedTripleParameterTypes()
         )->shouldBeCalled()->willReturn(true);
@@ -111,7 +110,7 @@ class NewSqlRdfTest extends TestCase
         $persistence = $this->getPersistenceProphecy();
         $persistence->insertMultiple(
             Argument::exact($table),
-            Argument::that(function($value) use ($expectedValue) {
+            Argument::that(function ($value) use ($expectedValue) {
                 return array_slice($value[0], 1) == $expectedValue[0] && is_string($value[0]['id'])
                     && array_slice($value[1], 1) == $expectedValue[1] && is_string($value[1]['id']);
             }),
@@ -137,7 +136,8 @@ class NewSqlRdfTest extends TestCase
         $model = $this->prophesize(NewSqlOntology::class);
         $model->getPersistence()->willReturn($persistence);
 
-        return new NewSqlRdf($model->reveal());;
+        return new NewSqlRdf($model->reveal());
+        ;
     }
 
     protected function getExpectedTripleParameterTypes()

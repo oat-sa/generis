@@ -52,7 +52,7 @@ class common_session_php_KeyValueSessionHandler extends ConfigurableService impl
      */
     public function open($savePath, $sessionName)
     {
-           return true;
+        return true;
     }
 
     /**

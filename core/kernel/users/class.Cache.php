@@ -45,7 +45,7 @@ class core_kernel_users_Cache
      * @access public
      * @var string
      */
-    const SERIAL_PREFIX_INCLUDED_ROLES = 'roles-ir';
+    public const SERIAL_PREFIX_INCLUDED_ROLES = 'roles-ir';
     // --- OPERATIONS ---
 
     /**
@@ -101,7 +101,7 @@ class core_kernel_users_Cache
         foreach ($includedRoles as $resource) {
             $toCache[] = $resource->getUri();
         }
-        
+
         $serial = self::buildIncludedRolesSerial($role);
         /** @var SimpleCache $cache */
         $cache = ServiceManager::getServiceManager()->get(SimpleCache::SERVICE_ID);
@@ -114,7 +114,7 @@ class core_kernel_users_Cache
             $msg .= $e->getMessage();
             throw new core_kernel_users_CacheException($msg);
         }
-        
+
 
         return (bool) $returnValue;
     }

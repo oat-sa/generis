@@ -41,9 +41,9 @@ class FileSerializerMigrationHelperTest extends GenerisTestCase
 {
     use FileSystemMockTrait;
 
-    const PARENT_RESOURCE_URI = 'http://www.tao.lu/Ontologies/generis.rdf#UnitTest';
-    const PROPERTY_URI = 'http://www.tao.lu/Ontologies/generis.rdf#TestFile';
-    const SAMPLE_FILE = 'fileMigrationUnitTest.txt';
+    public const PARENT_RESOURCE_URI = 'http://www.tao.lu/Ontologies/generis.rdf#UnitTest';
+    public const PROPERTY_URI = 'http://www.tao.lu/Ontologies/generis.rdf#TestFile';
+    public const SAMPLE_FILE = 'fileMigrationUnitTest.txt';
 
     /**
      * @var MigrationHelper

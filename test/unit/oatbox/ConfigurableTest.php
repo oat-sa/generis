@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -124,5 +125,6 @@ class ConfigurableTest extends TestCase
 /**
  * Configurable class implementation for test.
  */
-class ConfigurableImplementation extends Configurable {}
-
+class ConfigurableImplementation extends Configurable
+{
+}

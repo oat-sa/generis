@@ -24,7 +24,7 @@ namespace oat\oatbox\task\implementation;
 use oat\oatbox\task\AbstractQueue;
 use oat\oatbox\task\Task;
 use oat\oatbox\task\TaskRunner;
-use \common_report_Report as Report;
+use common_report_Report as Report;
 
 /**
  * Class SyncQueue
@@ -45,7 +45,6 @@ use \common_report_Report as Report;
  */
 class SyncQueue extends AbstractQueue
 {
-
     /**
      * @var TaskRunner
      */

@@ -56,13 +56,13 @@ class core_kernel_impl_Api implements core_kernel_api_Api
     {
         $returnValue = (bool) false;
 
-        
+
         if ($role === true) {
             $role = new core_kernel_classes_Resource(TaoOntology::PROPERTY_INSTANCE_ROLE_GLOBALMANAGER);
         }
-       
+
         core_kernel_users_Service::singleton()->login($login, $password, $role);
-        
+
 
         return (bool) $returnValue;
     }
@@ -78,9 +78,9 @@ class core_kernel_impl_Api implements core_kernel_api_Api
     {
         $returnValue = (bool) false;
 
-        
+
         core_kernel_users_Service::singleton()->logout();
-        
+
 
         return (bool) $returnValue;
     }

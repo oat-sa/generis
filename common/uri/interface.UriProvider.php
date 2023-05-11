@@ -35,5 +35,4 @@ use oat\generis\model\kernel\uri\UriProvider;
  */
 interface common_uri_UriProvider extends UriProvider
 {
-
 }

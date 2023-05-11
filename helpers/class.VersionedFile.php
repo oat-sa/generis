@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,8 +49,8 @@ class helpers_VersionedFile
     {
         $returnValue = (bool) false;
 
-        
-        
+
+
 
         return (bool) $returnValue;
     }
@@ -67,8 +68,8 @@ class helpers_VersionedFile
     {
         $returnValue = (bool) false;
 
-        
-        
+
+
         if (is_file($path)) {
             if (preg_match('/^\//', $path)) {
                 $returnValue = @unlink($path);
@@ -86,8 +87,8 @@ class helpers_VersionedFile
                 $returnValue = @rmdir($path);
             }
         }
-                        
-        
+
+
 
         return (bool) $returnValue;
     }
@@ -107,8 +108,8 @@ class helpers_VersionedFile
     {
         $returnValue = (bool) false;
 
-        
-        
+
+
         if (file_exists($source)) {
             if (is_dir($source) && $recursive) {
                 foreach (scandir($source) as $file) {
@@ -130,8 +131,8 @@ class helpers_VersionedFile
                 }
             }
         }
-        
-        
+
+
 
         return (bool) $returnValue;
     }

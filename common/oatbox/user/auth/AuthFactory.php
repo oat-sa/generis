@@ -32,8 +32,8 @@ use common_ext_ExtensionsManager;
  */
 class AuthFactory
 {
-    const CONFIG_KEY = 'auth';
-    
+    public const CONFIG_KEY = 'auth';
+
     public static function createAdapters()
     {
         $adapters = [];

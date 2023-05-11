@@ -34,7 +34,6 @@ use oat\oatbox\mutex\NoLockStorage;
  */
 class LockServiceTest extends TestCase
 {
-
     public function testLock()
     {
         $service = $this->getInstance();

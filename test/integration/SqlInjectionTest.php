@@ -27,7 +27,6 @@ use Doctrine\DBAL\DBALException;
 
 class SqlInjectionTestCase extends GenerisPhpUnitTestRunner
 {
-    
     public function testInject()
     {
         $generisClass = new core_kernel_classes_Class(GenerisRdf::CLASS_GENERIS_RESOURCE);

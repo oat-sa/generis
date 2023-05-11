@@ -24,14 +24,13 @@
 namespace oat\generis\test\integration\model\persistence\smoothsql;
 
 use oat\generis\test\GenerisPhpUnitTestRunner;
-use \core_kernel_classes_Resource;
-use \core_kernel_classes_Literal;
-use \core_kernel_persistence_smoothsql_Utils;
+use core_kernel_classes_Resource;
+use core_kernel_classes_Literal;
+use core_kernel_persistence_smoothsql_Utils;
 use oat\generis\model\data\ModelManager;
 
 class SmootsqlUtilsTest extends GenerisPhpUnitTestRunner
 {
-
     /**
      * SmootsqlUtilsTest constructor.
      * @param null $name
@@ -59,7 +58,7 @@ class SmootsqlUtilsTest extends GenerisPhpUnitTestRunner
     {
         $this->assertSame($expected, core_kernel_persistence_smoothsql_Utils::buildSearchPattern($this->getModel()->getPersistence(), $pattern, $like));
     }
-    
+
     public function buildSearchPatternProvider()
     {
         return [
@@ -79,7 +78,7 @@ class SmootsqlUtilsTest extends GenerisPhpUnitTestRunner
             [new core_kernel_classes_Resource('http://www.13.com/ontology#toto'), true, '= ' . $this->quote('http://www.13.com/ontology#toto')],
         ];
     }
-    
+
     /**
      * @dataProvider buildPropertyQueryProvider
      *
@@ -95,7 +94,7 @@ class SmootsqlUtilsTest extends GenerisPhpUnitTestRunner
         $this->assertSame($expected, $queryWithoutModelRestrictions);
         $this->assertSame(' AND modelid IN (', substr($query, strlen($expected), strlen(' AND modelid IN (')));
     }
-    
+
     public function buildPropertyQueryProvider()
     {
         return [
@@ -126,7 +125,7 @@ class SmootsqlUtilsTest extends GenerisPhpUnitTestRunner
             ],
         ];
     }
-    
+
     /**
      * @dataProvider buildUnionQueryProvider
      *
@@ -137,7 +136,7 @@ class SmootsqlUtilsTest extends GenerisPhpUnitTestRunner
     {
         $this->assertSame($expected, core_kernel_persistence_smoothsql_Utils::buildUnionQuery($queries));
     }
-    
+
     public function buildUnionQueryProvider()
     {
         return [
@@ -157,7 +156,7 @@ class SmootsqlUtilsTest extends GenerisPhpUnitTestRunner
             [[], false]
         ];
     }
-    
+
     public function buildFilterQueryProvider()
     {
         return [
@@ -187,7 +186,7 @@ class SmootsqlUtilsTest extends GenerisPhpUnitTestRunner
             ]
         ];
     }
-    
+
     /**
      * @return \core_kernel_persistence_smoothsql_SmoothModel
      */
@@ -195,7 +194,7 @@ class SmootsqlUtilsTest extends GenerisPhpUnitTestRunner
     {
         return ModelManager::getModel();
     }
-    
+
     /**
      * @param string $string
      * @return string

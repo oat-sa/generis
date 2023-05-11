@@ -58,11 +58,11 @@ class core_kernel_classes_ResourceFactory
         if (!empty($label)) {
             $propertiesValues[OntologyRdfs::RDFS_LABEL] = $label;
         }
-        
+
         if (!empty($comment)) {
             $propertiesValues[OntologyRdfs::RDFS_COMMENT] = $comment;
         }
-        
+
         $returnValue = $type->createInstanceWithProperties($propertiesValues);
         return $returnValue;
     }

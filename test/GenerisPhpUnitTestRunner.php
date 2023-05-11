@@ -19,14 +19,15 @@
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
  *
  */
+
 namespace oat\generis\test;
 
-use \common_session_SessionManager;
-use \common_test_TestUserSession;
-use \common_ext_ExtensionsManager;
-use \common_ext_ExtensionInstaller;
-use \common_ext_ExtensionUninstaller;
-use \common_persistence_Manager;
+use common_session_SessionManager;
+use common_test_TestUserSession;
+use common_ext_ExtensionsManager;
+use common_ext_ExtensionInstaller;
+use common_ext_ExtensionUninstaller;
+use common_persistence_Manager;
 use common_Config;
 
 /**

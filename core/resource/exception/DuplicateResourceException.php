@@ -26,15 +26,14 @@ namespace oat\generis\model\resource\exception;
  */
 class DuplicateResourceException extends \common_Exception
 {
-    
     public function __construct($type, array $values)
     {
         $message = 'Resource ' . $type . ' already duplicate for ';
-        
+
         foreach ($values as $key => $value) {
             $message .= $key . ' = ' . $value . ' ';
         }
-        
+
         parent::__construct($message);
     }
 }

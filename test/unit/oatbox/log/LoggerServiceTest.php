@@ -19,6 +19,7 @@
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
  *
  */
+
 namespace oat\generis\test\unit\oatbox\log;
 
 use oat\oatbox\log\LoggerService;
@@ -27,8 +28,7 @@ use oat\generis\test\TestCase;
 
 class LoggerServiceTest extends TestCase
 {
-
-    const RUNS = 1000;
+    public const RUNS = 1000;
 
     protected function setUp(): void
     {

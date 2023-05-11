@@ -33,7 +33,6 @@ use oat\generis\test\TestCase;
 
 class NamespaceTest extends TestCase
 {
-
     public function setUp(): void
     {
     }

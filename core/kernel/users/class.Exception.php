@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,7 +42,7 @@ class core_kernel_users_Exception extends common_Exception
      * @access public
      * @var int
      */
-    const BAD_PASSWORD = 0;
+    public const BAD_PASSWORD = 0;
 
     /**
      * Short description of attribute BAD_LOGIN
@@ -49,7 +50,7 @@ class core_kernel_users_Exception extends common_Exception
      * @access public
      * @var int
      */
-    const BAD_LOGIN = 1;
+    public const BAD_LOGIN = 1;
 
     /**
      * Short description of attribute BAD_ROLE
@@ -57,7 +58,7 @@ class core_kernel_users_Exception extends common_Exception
      * @access public
      * @var int
      */
-    const BAD_ROLE = 2;
+    public const BAD_ROLE = 2;
 
     /**
      * Short description of attribute LOGIN_EXITS
@@ -65,7 +66,7 @@ class core_kernel_users_Exception extends common_Exception
      * @access public
      * @var int
      */
-    const LOGIN_EXITS = 3;
+    public const LOGIN_EXITS = 3;
 
     // --- OPERATIONS ---
 }

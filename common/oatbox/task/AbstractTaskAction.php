@@ -34,8 +34,7 @@ use oat\oatbox\extension\AbstractAction;
  */
 abstract class AbstractTaskAction extends AbstractAction
 {
-
-    const FILE_DIR = 'taskQueue';
+    public const FILE_DIR = 'taskQueue';
 
     /**
      * Save and serialize file into task queue filesystem.

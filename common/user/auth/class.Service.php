@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,7 +29,6 @@
  */
 class common_user_auth_Service
 {
-
     /**
      *
      * @access private
@@ -50,7 +50,7 @@ class common_user_auth_Service
         }
         return self::$instance;
     }
-    
+
     /**
      * The constructor is private to implement the Singleton Design Pattern.
      *
@@ -111,7 +111,7 @@ class common_user_auth_Service
     {
         return !common_session_SessionManager::isAnonymous();
     }
-    
+
     /**
      * Logout the current user. The session will be entirely reset.
      *
@@ -123,7 +123,7 @@ class common_user_auth_Service
     {
         return \common_session_SessionManager::endSession();
     }
-    
+
     /**
      * Short description of method startSession
      *

@@ -34,8 +34,8 @@
  */
 class helpers_File
 {
-    const SCAN_FILE = 1;
-    const SCAN_DIRECTORY = 2;
+    public const SCAN_FILE = 1;
+    public const SCAN_DIRECTORY = 2;
 
     // --- ATTRIBUTES ---
 

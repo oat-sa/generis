@@ -31,7 +31,6 @@ use oat\generis\test\GenerisPhpUnitTestRunner;
  */
 class DbWrapperTest extends GenerisPhpUnitTestRunner
 {
-
     protected function setUp(): void
     {
         GenerisPhpUnitTestRunner::initTest();

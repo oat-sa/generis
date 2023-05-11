@@ -29,7 +29,6 @@ use common_persistence_KvDriver;
 
 class EnvironmentVariableKVDriver implements common_persistence_KvDriver
 {
-
     /**
      * @inheritDoc
      */

@@ -42,7 +42,7 @@ class FileIterator implements IteratorAggregate
         $modelId = is_null($forceModelId) ? FileModel::getModelIdFromXml($file) : $forceModelId;
         $this->load($modelId, $file);
     }
-    
+
     /**
      * @see IteratorAggregate::getIterator()
      */
@@ -50,7 +50,7 @@ class FileIterator implements IteratorAggregate
     {
         return new ArrayIterator($this->triples);
     }
-    
+
     /**
      * load triples from rdf file
      *
@@ -61,7 +61,7 @@ class FileIterator implements IteratorAggregate
     {
         $easyRdf = new Graph();
         $easyRdf->parseFile($file);
-        
+
         foreach ($easyRdf->toRdfPhp() as $subject => $propertiesValues) {
             foreach ($propertiesValues as $predicate => $values) {
                 foreach ($values as $v) {

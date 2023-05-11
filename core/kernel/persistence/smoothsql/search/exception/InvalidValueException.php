@@ -15,7 +15,6 @@ namespace oat\generis\model\kernel\persistence\smoothsql\search\exception;
  */
 class InvalidValueException extends \InvalidArgumentException implements \common_exception_UserReadableException
 {
-    
     /**
      * Get the human-readable message for the end-user. It is supposed
      * to be translated and does not contain any confidential information

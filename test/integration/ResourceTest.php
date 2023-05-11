@@ -27,18 +27,17 @@ use common_exception_Error;
 use oat\generis\model\GenerisRdf;
 use oat\generis\model\OntologyRdfs;
 use oat\generis\test\GenerisPhpUnitTestRunner;
-use \core_kernel_classes_Class;
-use \core_kernel_classes_Resource;
-use \core_kernel_classes_Property;
-use \core_kernel_impl_ApiModelOO;
-use \common_Utils;
-use \core_kernel_classes_Literal;
-use \common_Collection;
-use \core_kernel_classes_Triple;
+use core_kernel_classes_Class;
+use core_kernel_classes_Resource;
+use core_kernel_classes_Property;
+use core_kernel_impl_ApiModelOO;
+use common_Utils;
+use core_kernel_classes_Literal;
+use common_Collection;
+use core_kernel_classes_Triple;
 
 class ResourceTest extends GenerisPhpUnitTestRunner
 {
-
     protected $object;
 
     public function setUp(): void
@@ -52,7 +51,7 @@ class ResourceTest extends GenerisPhpUnitTestRunner
         $this->clazz = $clazz->createSubClass($clazz);
     }
 
-    function tearDown(): void
+    public function tearDown(): void
     {
         $this->clazz->delete();
     }
@@ -304,11 +303,11 @@ class ResourceTest extends GenerisPhpUnitTestRunner
         $instance = $class->createInstance('a label', 'a comment');
         $this->assertIsA($instance, 'core_kernel_classes_Resource');
 
-            $instance->setPropertiesValues([
-            OntologyRdfs::RDFS_SEEALSO  => "&plop n'\"; plop'\' plop",
-            OntologyRdfs::RDFS_LABEL        => ['new label', 'another label', 'yet a last one'],
-            OntologyRdfs::RDFS_COMMENT  => 'new comment'
-            ]);
+        $instance->setPropertiesValues([
+        OntologyRdfs::RDFS_SEEALSO  => "&plop n'\"; plop'\' plop",
+        OntologyRdfs::RDFS_LABEL        => ['new label', 'another label', 'yet a last one'],
+        OntologyRdfs::RDFS_COMMENT  => 'new comment'
+        ]);
 
         $seeAlso = $instance->getOnePropertyValue(new core_kernel_classes_Property(OntologyRdfs::RDFS_SEEALSO));
         $this->assertNotNull($seeAlso);

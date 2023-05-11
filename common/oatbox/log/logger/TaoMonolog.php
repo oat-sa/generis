@@ -41,7 +41,7 @@ class TaoMonolog extends ConfigurableService implements LoggerInterface
 {
     use LoggerTrait;
 
-    const HANDLERS_OPTION = 'handlers';
+    public const HANDLERS_OPTION = 'handlers';
 
     /** @var Logger null  */
     protected $logger = null;

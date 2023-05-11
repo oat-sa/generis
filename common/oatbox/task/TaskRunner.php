@@ -20,11 +20,11 @@
  */
 
 namespace oat\oatbox\task;
- 
+
 use oat\oatbox\action\ActionService;
 use oat\oatbox\task\TaskInterface\TaskQueue;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use \oat\oatbox\task\TaskInterface\TaskRunner as TaskRunnerInterface;
+use oat\oatbox\task\TaskInterface\TaskRunner as TaskRunnerInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use common_report_Report as Report;
 

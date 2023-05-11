@@ -58,15 +58,15 @@ class core_kernel_classes_ClassFactory
         $newUri = (!empty($uri)) ? self::checkProvidedUri($uri) : common_Utils::getNewUri();
         $newResource = new core_kernel_classes_Class($newUri);
         $propertiesValues = [OntologyRdf::RDF_TYPE => $clazz->getUri()];
-     
+
         if (!empty($label)) {
             $propertiesValues[OntologyRdfs::RDFS_LABEL] = $label;
         }
-     
+
         if (!empty($comment)) {
             $propertiesValues[OntologyRdfs::RDFS_COMMENT] = $comment;
         }
-       
+
         $check = $newResource->setPropertiesValues($propertiesValues);
         if ($check) {
             $returnValue = $newResource;
@@ -75,7 +75,7 @@ class core_kernel_classes_ClassFactory
             throw new common_Exception($msg);
             common_Logger::e($msg);
         }
-        
+
 
         return $returnValue;
     }
@@ -104,7 +104,7 @@ class core_kernel_classes_ClassFactory
             $returnValue->setLgDependent($isLgDependent);
         }
 
-        
+
 
         return $returnValue;
     }
@@ -150,7 +150,7 @@ class core_kernel_classes_ClassFactory
         } else {
             $returnValue = common_Utils::getNewUri();
         }
-        
+
 
         return (string) $returnValue;
     }

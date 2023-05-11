@@ -26,7 +26,6 @@ use oat\generis\model\data\ModelManager;
 
 class core_kernel_api_ModelExporter
 {
-
     /**
      * Export the entire ontology
      *

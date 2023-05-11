@@ -34,7 +34,7 @@ use oat\oatbox\service\ConfigurableService;
  */
 class Bin2HexUriProvider extends ConfigurableService implements UriProvider
 {
-    const OPTION_NAMESPACE = 'namespace';
+    public const OPTION_NAMESPACE = 'namespace';
 
     /**
      * Generates a URI based on a serial stored in the database.

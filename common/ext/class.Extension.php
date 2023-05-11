@@ -49,7 +49,7 @@ class common_ext_Extension implements ServiceManagerAwareInterface
      *
      * @var string
      */
-    const MANIFEST_NAME = 'manifest.php';
+    public const MANIFEST_NAME = 'manifest.php';
 
     /**
      * List of extension dependencies

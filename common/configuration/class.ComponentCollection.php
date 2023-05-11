@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -98,9 +99,9 @@ class common_configuration_ComponentCollection
      */
     public function addComponent(common_configuration_Component $component)
     {
-        
+
         $components = $this->getComponents();
-        
+
         // Search for a similar...
         foreach ($components as $c) {
             if ($c === $component) {
@@ -108,7 +109,7 @@ class common_configuration_ComponentCollection
                 return;
             }
         }
-        
+
         // Not stored yet.
         $components[] = $component;
         $this->setComponents($components);
@@ -125,9 +126,9 @@ class common_configuration_ComponentCollection
      */
     public function addDependency(common_configuration_Component $component, common_configuration_Component $dependency)
     {
-        
+
         $dependencies = $this->getDependencies();
-        
+
         $found = false;
         foreach ($dependencies as $dep) {
             if ($dependency === $dep['component'] && $component === $dep['isDependencyOf']) {
@@ -135,7 +136,7 @@ class common_configuration_ComponentCollection
                 break;
             }
         }
-        
+
         if (false == $found) {
             $dependencies[] = ['component' => $dependency, 'isDependencyOf' => $component];
             $this->setDependencies($dependencies);
@@ -151,7 +152,7 @@ class common_configuration_ComponentCollection
      */
     public function reset()
     {
-        
+
         $this->setComponents([]);
         $this->setDependencies([]);
         $this->setCheckedComponents([]);
@@ -169,15 +170,15 @@ class common_configuration_ComponentCollection
     {
         $returnValue = [];
 
-        
+
         // Reset what should be reset for another check on the same instance.
         $this->setCheckedComponents([]);
         $this->setReports([]);
-        
+
         $components = $this->getComponents();
         $dependencies = $this->getDependencies();
         $traversed = [];
-        
+
         // Any node that has no incoming edge and is not
         // the root mock should be bound to it.
         foreach ($components as $c) {
@@ -189,50 +190,50 @@ class common_configuration_ComponentCollection
                     break;
                 }
             }
-            
+
             // No incoming edge.
             if ($found === false && $c !== $this->getRootComponent()) {
                 $this->addDependency($c, $this->getRootComponent());
             }
         }
-        
+
         if (count($components) > 0) {
             if (true == $this->isAcyclic()) {
                 // We go for a Depth First Search in the graph.
                 $stack = [];
                 $node = $components[0];
-                
+
                 // Do something with my node.
                 $status = $this->checkComponent($node);
                 array_push($traversed, $node); // mark the node as 'traversed'.
-                
+
                 if ($status == common_configuration_Report::VALID) {
                     $stack = self::pushTransitionsOnStack($stack, $this->getTransitions($node)); // put all transitions from the node to stack.
-                    
+
                     while (count($stack) > 0) {
                         $transition = array_pop($stack);
                         $node = $transition['isDependencyOf'];
-                        
+
                         // If not already traversed, do something with my node.
                         if (false == in_array($node, $traversed)) {
                             // Do something with my node.
                             $status = $this->checkComponent($node);
                             array_push($traversed, $node);
-                            
+
                             if ($status == common_configuration_Report::VALID) {
                                 $stack = self::pushTransitionsOnStack($stack, $this->getTransitions($node));
                             }
                         }
                     }
                 }
-                
+
                 $returnValue = $this->getReports();
             } else {
                 throw new common_configuration_CyclicDependencyException("The dependency graph is cyclic. Please review your dependencies.");
             }
         }
-        
-        
+
+
 
         return (array) $returnValue;
     }
@@ -248,24 +249,24 @@ class common_configuration_ComponentCollection
     {
         $returnValue = (bool) false;
 
-        
-        
+
+
         // To detect if the dependency graph is acyclic or not,
         // we first perform a usual Topological Sorting algorithm.
         // If at the end of the algorith, we still have edges,
         // the graph is cyclic !
-        
-        
+
+
         $l = []; // Empty list where elements are sorted.
         $q = []; // Set of nodes with no incoming edges.
-        
+
         $components = $this->getComponents();
         $dependencies = $this->getDependencies(); // used as a copy !
-        
+
         // Set q with nodes with no incoming edges.
         foreach ($components as $c) {
             $incomingEdges = false;
-            
+
             foreach ($dependencies as $d) {
                 if ($c === $d['isDependencyOf']) {
                     // $c has incoming edges thus we reject it.
@@ -273,38 +274,38 @@ class common_configuration_ComponentCollection
                     break;
                 }
             }
-            
+
             if ($incomingEdges == false) {
                 array_push($q, $c);
             }
         }
-        
+
         while (count($q) > 0) {
             $n = array_pop($q);
             array_push($l, $n);
-            
+
             foreach ($components as $m) {
                 // edge from n to m ?
                 foreach ($dependencies as $k => $dep) {
                     if ($dep['component'] === $n && $dep['isDependencyOf'] === $m) {
                         unset($dependencies[$k]);
-                        
+
                         // other incoming edges for m ?
                         foreach ($dependencies as $dep) {
                             if ($dep['isDependencyOf'] === $m) {
                                 break 2;
                             }
                         }
-                        
+
                         // no incoming edges from m !
                         array_push($q, $m);
                     }
                 }
             }
         }
-        
+
         $returnValue = count($dependencies) == 0;
-        
+
 
         return (bool) $returnValue;
     }
@@ -321,14 +322,14 @@ class common_configuration_ComponentCollection
     {
         $returnValue = [];
 
-        
+
         $dependencies = $this->dependencies;
         foreach ($dependencies as $d) {
             if ($d['component'] === $component) {
                 array_push($returnValue, $d);
             }
         }
-        
+
 
         return (array) $returnValue;
     }
@@ -344,7 +345,7 @@ class common_configuration_ComponentCollection
     {
         $returnValue = [];
 
-        
+
         // Sort the checked components to make them ordered in the same
         // way the related components where added.
         $components = $this->getComponents();
@@ -356,10 +357,10 @@ class common_configuration_ComponentCollection
                 }
             }
         }
-        
-        
+
+
         $returnValue = $checkedComponents;
-        
+
 
         return (array) $returnValue;
     }
@@ -375,14 +376,14 @@ class common_configuration_ComponentCollection
     {
         $returnValue = [];
 
-        
+
         $rootMock = $this->getRootComponent();
         foreach ($this->getComponents() as $c) {
             if (false === in_array($c, $this->getCheckedComponents()) && $c !== $rootMock) {
                 array_push($returnValue, $c);
             }
         }
-        
+
         // Sort the checked components to make them ordered in the same
         // way the related components where added.
         $components = $this->getComponents();
@@ -394,9 +395,9 @@ class common_configuration_ComponentCollection
                 }
             }
         }
-        
+
         $returnValue = $uncheckedComponents;
-        
+
 
         return (array) $returnValue;
     }
@@ -414,13 +415,13 @@ class common_configuration_ComponentCollection
     {
         $returnValue = [];
 
-        
+
         foreach ($transitions as $t) {
             array_push($stack, $t);
         }
-        
+
         $returnValue = $stack;
-        
+
 
         return (array) $returnValue;
     }
@@ -435,7 +436,7 @@ class common_configuration_ComponentCollection
      */
     public function setComponents($components)
     {
-        
+
         $this->components = $components;
     }
 
@@ -450,9 +451,9 @@ class common_configuration_ComponentCollection
     {
         $returnValue = [];
 
-        
+
         $returnValue = $this->components;
-        
+
 
         return (array) $returnValue;
     }
@@ -467,7 +468,7 @@ class common_configuration_ComponentCollection
      */
     private function setCheckedComponents($checkedComponents)
     {
-        
+
         $this->checkedComponents = $checkedComponents;
     }
 
@@ -481,7 +482,7 @@ class common_configuration_ComponentCollection
      */
     private function setDependencies($dependencies)
     {
-        
+
         $this->dependencies = $dependencies;
     }
 
@@ -496,9 +497,9 @@ class common_configuration_ComponentCollection
     {
         $returnValue = [];
 
-        
+
         $returnValue = $this->dependencies;
-        
+
 
         return (array) $returnValue;
     }
@@ -513,7 +514,7 @@ class common_configuration_ComponentCollection
      */
     private function setReports($reports)
     {
-        
+
         $this->reports = $reports;
     }
 
@@ -528,7 +529,7 @@ class common_configuration_ComponentCollection
     {
         $returnValue = [];
 
-        
+
         if (count($this->reports) == 0) {
             return $returnValue;
         } else {
@@ -544,9 +545,9 @@ class common_configuration_ComponentCollection
                 }
             }
         }
-        
+
         $returnValue = $reports;
-        
+
 
         return (array) $returnValue;
     }
@@ -561,7 +562,7 @@ class common_configuration_ComponentCollection
      */
     private function addReport(common_configuration_Report $report)
     {
-        
+
         array_push($this->reports, $report);
     }
 
@@ -575,7 +576,7 @@ class common_configuration_ComponentCollection
      */
     private function componentChecked(common_configuration_Component $component)
     {
-        
+
         if ($component !== $this->getRootComponent()) {
             array_push($this->checkedComponents, $component);
         }
@@ -593,17 +594,17 @@ class common_configuration_ComponentCollection
     {
         $returnValue = (int) 0;
 
-        
+
         $report = $component->check(); // Check the node.
         $this->componentChecked($component); // Mark the node as 'checked'.
-        
+
         // Store the report if not silenced.
         if (false == $this->isSilent($component)) {
             $this->addReport($report); // Store the report.
         }
-        
+
         $returnValue = $report->getStatus();
-        
+
 
         return (int) $returnValue;
     }
@@ -619,9 +620,9 @@ class common_configuration_ComponentCollection
     {
         $returnValue = [];
 
-        
+
         $returnValue = $this->silentComponents;
-        
+
 
         return (array) $returnValue;
     }
@@ -636,7 +637,7 @@ class common_configuration_ComponentCollection
      */
     private function setSilentComponents($silentComponents)
     {
-        
+
         $this->silentComponents = $silentComponents;
     }
 
@@ -650,14 +651,14 @@ class common_configuration_ComponentCollection
      */
     public function silent(common_configuration_Component $component)
     {
-        
+
         $silentComponents = $this->getSilentComponents();
         foreach ($silentComponents as $silent) {
             if ($silent === $component) {
                 return;
             }
         }
-        
+
         $silentComponents[] = $component;
         $this->setSilentComponents($silentComponents);
     }
@@ -672,15 +673,15 @@ class common_configuration_ComponentCollection
      */
     public function noisy(common_configuration_Component $component)
     {
-        
+
         $silentComponents = $this->getSilentComponents();
-        
+
         foreach ($silentComponents as $k => $silent) {
             if ($silent === $component) {
                 unset($silentComponents[$k]);
             }
         }
-        
+
         $this->setSilentComponents($silentComponents);
     }
 
@@ -696,9 +697,9 @@ class common_configuration_ComponentCollection
     {
         $returnValue = (bool) false;
 
-        
+
         $returnValue = in_array($component, $this->getSilentComponents());
-        
+
 
         return (bool) $returnValue;
     }
@@ -715,9 +716,9 @@ class common_configuration_ComponentCollection
     {
         $returnValue = (bool) false;
 
-        
+
         $returnValue = !in_array($component, $this->getSilentComponents());
-        
+
 
         return (bool) $returnValue;
     }
@@ -731,8 +732,8 @@ class common_configuration_ComponentCollection
      */
     public function __construct()
     {
-        
-        
+
+
         // A mock root check on which any added component has a dependence. The goal
         // of this is to make sure that components will not stay alone with no
         // incoming edges in the dependency graph, making them unreachable.
@@ -751,7 +752,7 @@ class common_configuration_ComponentCollection
      */
     private function setRootComponent(common_configuration_Component $component)
     {
-        
+
         $this->rootComponent = $component;
         $components = $this->getComponents();
         $components[] = $component;
@@ -770,9 +771,9 @@ class common_configuration_ComponentCollection
     {
         $returnValue = null;
 
-        
+
         $returnValue = $this->rootComponent;
-        
+
 
         return $returnValue;
     }

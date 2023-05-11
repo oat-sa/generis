@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -99,7 +100,7 @@ class helpers_InstallHelper
         }
         return $installed;
     }
-    
+
     protected static function install($extension, $installData)
     {
         $importLocalData = (isset($installData['import_local']) && $installData['import_local'] == true);
@@ -110,7 +111,7 @@ class helpers_InstallHelper
         helpers_TimeOutHelper::reset();
         ;
     }
-    
+
     protected static function getInstaller($extension, $importLocalData)
     {
         $instance = new \common_ext_ExtensionInstaller($extension, $importLocalData);
@@ -148,5 +149,4 @@ class helpers_InstallHelper
             call_user_func('common_Logger::' . $logLevel, $message, $tags);
         }
     }
-
 }

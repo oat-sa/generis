@@ -30,7 +30,6 @@ use oat\tao\model\datatable\DatatableRequest as DatatableRequestInterface;
  */
 interface TaskPayLoad extends DatatablePayload, ServiceLocatorAwareInterface
 {
-
     public function __construct(TaskPersistenceInterface $persistence, $currentUserId = null, DatatableRequestInterface $request = null);
 
     /**

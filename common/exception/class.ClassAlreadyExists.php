@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,7 +25,6 @@
  */
 class common_exception_ClassAlreadyExists extends common_Exception
 {
-
     /** @var  \core_kernel_classes_Class */
     private $class;
 

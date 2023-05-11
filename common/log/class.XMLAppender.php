@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -58,14 +59,14 @@ class common_log_XMLAppender extends common_log_BaseAppender
     {
         $returnValue = (bool) false;
 
-        
+
         if (isset($configuration['file'])) {
             $this->filename = $configuration['file'];
             $returnValue = parent::init($configuration);
         } else {
             $returnValue = false;
         }
-        
+
 
         return (bool) $returnValue;
     }
@@ -80,7 +81,7 @@ class common_log_XMLAppender extends common_log_BaseAppender
      */
     public function doLog(common_log_Item $item)
     {
-        
+
         $doc = new DOMDocument();
         $doc->preserveWhiteSpace = false;
         $doc->formatOutput = true;
@@ -96,32 +97,32 @@ class common_log_XMLAppender extends common_log_BaseAppender
             $doc->createCDATASection($item->getDescription())
         );
         $event_element->appendChild($message);
-        
+
         $file = $doc->createElement("file");
         $file->appendChild(
             $doc->createCDATASection($item->getCallerFile())
         );
         $event_element->appendChild($file);
-        
+
         $line = $doc->createElement("line");
         $line->appendChild(
             $doc->createCDATASection($item->getCallerLine())
         );
         $event_element->appendChild($line);
-        
+
         $datetime = $doc->createElement("datetime");
         $datetime->appendChild(
             $doc->createCDATASection($item->getDateTime())
         );
         $event_element->appendChild($datetime);
-        
+
         $severity = $doc->createElement("severity");
         $severity->appendChild(
             $doc->createCDATASection($item->getSeverity())
         );
         $event_element->appendChild($severity);
 
-        
+
         $doc->documentElement->appendChild($event_element);
         @$doc->save($this->filename);
     }

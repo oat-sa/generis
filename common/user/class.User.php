@@ -40,7 +40,7 @@ abstract class common_user_User implements User, Refreshable
     protected $roles = [];
 
     abstract public function getIdentifier();
-    
+
     abstract public function getPropertyValues($property);
 
     abstract public function refresh();

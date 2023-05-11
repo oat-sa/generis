@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,10 +49,10 @@ class common_configuration_PHPDatabaseDriver extends common_configuration_PHPExt
     {
         $returnValue = null;
 
-        
+
         $report = parent::check();
         $name = $this->getName();
-        
+
         if ($report->getStatus() == common_configuration_Report::VALID) {
             $report->setMessage("Database Driver '${name}' is available.");
         } else {
@@ -59,7 +60,7 @@ class common_configuration_PHPDatabaseDriver extends common_configuration_PHPExt
         }
 
         $returnValue = $report;
-        
+
 
         return $returnValue;
     }

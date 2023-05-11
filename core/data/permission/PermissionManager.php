@@ -36,8 +36,8 @@ use oat\oatbox\service\ServiceNotFoundException;
  */
 class PermissionManager
 {
-    const CONFIG_KEY = 'permissions';
-    
+    public const CONFIG_KEY = 'permissions';
+
     /**
      * @return PermissionInterface
      * @deprecated
@@ -59,7 +59,7 @@ class PermissionManager
     {
         return ServiceManager::getServiceManager()->register(PermissionInterface::SERVICE_ID, $model);
     }
-    
+
     public static function catchEvent(Event $event)
     {
         if ($event instanceof ResourceCreated) {

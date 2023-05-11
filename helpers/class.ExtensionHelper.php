@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,7 +27,6 @@ use oat\oatbox\extension\exception\ManifestNotFoundException;
 
 class helpers_ExtensionHelper
 {
-
     /**
      * Based on a list of extensions we generate an array of missing extensions
      *
@@ -49,7 +49,7 @@ class helpers_ExtensionHelper
         }
         return $missing;
     }
-    
+
     /**
      * Sorts a list of extensions by dependencies,
      * starting with independent extensions
@@ -83,7 +83,7 @@ class helpers_ExtensionHelper
                 }
             }
         }
-        
+
         $returnValue = [];
         foreach ($sorted as $id) {
             foreach ($extensions as $ext) {
@@ -94,7 +94,7 @@ class helpers_ExtensionHelper
         }
         return $returnValue;
     }
-    
+
     public static function sortById($extensions)
     {
         usort($extensions, function ($a, $b) {
@@ -102,7 +102,7 @@ class helpers_ExtensionHelper
         });
         return $extensions;
     }
-    
+
     /**
      * Whenever or not the extension is required by other installed extensions
      *
@@ -120,7 +120,7 @@ class helpers_ExtensionHelper
         }
         return false;
     }
-    
+
     /**
      * Whenever or not the extension is required to be enabled
      * by other enabled extensions

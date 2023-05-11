@@ -73,7 +73,7 @@ class common_log_Logger2Psr extends AbstractLogger
      * @var common_Logger
      */
     private $logger;
-    
+
     public function __construct(common_Logger $logger)
     {
         $this->logger = $logger;
@@ -88,13 +88,13 @@ class common_log_Logger2Psr extends AbstractLogger
         $errorLevel = isset(self::$map[$level]) ? self::$map[$level] : common_Logger::ERROR_LEVEL;
         $this->logger->log($errorLevel, $message, $context);
     }
-    
+
     public static function getCommonFromPsrLevel($level)
     {
         if (empty(self::$map[$level])) {
             throw new Exception('Invalid error level in Common level to PSR conversion: ' . $level);
         }
-    
+
         return self::$map[$level];
     }
 

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,8 +36,8 @@ class common_log_Dispatcher implements common_log_Appender
      *
      * @var string
      */
-    const CONFIG_ID = 'log';
-    
+    public const CONFIG_ID = 'log';
+
     // --- ATTRIBUTES ---
 
     /**
@@ -91,9 +92,9 @@ class common_log_Dispatcher implements common_log_Appender
     {
         $returnValue = (int) 0;
 
-        
+
         $returnValue = $this->minLevel;
-        
+
 
         return (int) $returnValue;
     }
@@ -127,7 +128,7 @@ class common_log_Dispatcher implements common_log_Appender
             }
         }
         $returnValue = (count($this->appenders) > 0);
-        
+
 
         return (bool) $returnValue;
     }
@@ -143,12 +144,12 @@ class common_log_Dispatcher implements common_log_Appender
     {
         $returnValue = null;
 
-        
+
         if (is_null(self::$instance)) {
             self::$instance = new common_log_Dispatcher();
         }
         $returnValue = self::$instance;
-        
+
 
         return $returnValue;
     }
@@ -178,7 +179,7 @@ class common_log_Dispatcher implements common_log_Appender
      */
     public function addAppender(common_log_Appender $appender)
     {
-        
+
         $this->appenders[] = $appender;
         if (is_null($this->minLevel) || $this->minLevel > $appender->getLogThreshold()) {
             $this->minLevel = $appender->getLogThreshold();

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -18,13 +19,12 @@
  *
  *
  */
- 
- /**
- * A utility class handling php language related tasks
- */
+
+/**
+* A utility class handling php language related tasks
+*/
 class helpers_PhpTools
 {
-    
     /**
      * Returns an array that contains namespace and name of the class defined in the file
      *

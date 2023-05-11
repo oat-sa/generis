@@ -59,7 +59,7 @@ class LoggerAggregator extends ConfigurableService implements LoggerInterface
 
         $this->loggers = $this->getOptions();
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see \Psr\Log\LoggerInterface::log()

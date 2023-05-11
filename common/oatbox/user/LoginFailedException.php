@@ -33,12 +33,12 @@ use common_exception_UserReadableException;
 class LoginFailedException extends common_user_auth_AuthFailedException
 {
     private $exceptions;
-    
+
     public function __construct(array $exceptions)
     {
         $this->exceptions = $exceptions;
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see common_exception_UserReadableException::getUserMessage()

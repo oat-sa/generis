@@ -27,7 +27,6 @@ namespace oat\oatbox\validator;
  */
 abstract class AbstractFormValidator
 {
-    
     /**
      * configuration of validation
      * @var array
@@ -60,7 +59,7 @@ abstract class AbstractFormValidator
         }
         return $this;
     }
-    
+
     /**
      * add an error message
      * @param type $field
@@ -76,7 +75,7 @@ abstract class AbstractFormValidator
         }
         return $this;
     }
-    
+
     /**
      * execute all validation for a field
      * @param string $field
@@ -106,7 +105,7 @@ abstract class AbstractFormValidator
     {
         return $validator->evaluate($value);
     }
-    
+
     /**
      * return all errors
      * @return array

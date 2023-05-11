@@ -31,7 +31,7 @@ use oat\oatbox\service\ServiceManager;
  */
 class PasswordConstraintsService
 {
-    static public function singleton()
+    public static function singleton()
     {
         return ServiceManager::getServiceManager()->get(\oat\tao\model\password\PasswordConstraintsService::SERVICE_ID);
     }

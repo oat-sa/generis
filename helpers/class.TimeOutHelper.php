@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,14 +25,13 @@
  */
 class helpers_TimeOutHelper
 {
-    
-    const LONG = 200;
-    const MEDIUM = 100;
-    const SHORT = 30;
-    const NO_TIMEOUT = 0;
-   
-        
-    
+    public const LONG = 200;
+    public const MEDIUM = 100;
+    public const SHORT = 30;
+    public const NO_TIMEOUT = 0;
+
+
+
     public static function setTimeOutLimit($value = self::LONG)
     {
         $configValue = ini_get('max_execution_time');
@@ -41,7 +41,7 @@ class helpers_TimeOutHelper
             set_time_limit(self::NO_TIMEOUT);
         }
     }
-    
+
     public static function reset()
     {
         set_time_limit(ini_get('max_execution_time'));

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -57,7 +58,7 @@ class common_configuration_PHPINIValue extends common_configuration_Component
      */
     public function __construct($expectedValue, $name = 'unknown', $optional = false)
     {
-        
+
         parent::__construct($name, $optional);
         $this->setExpectedValue($expectedValue);
     }
@@ -73,7 +74,7 @@ class common_configuration_PHPINIValue extends common_configuration_Component
     {
         $returnValue = null;
 
-        
+
         $validity = null;
         $name = $this->getName();
         if (($value = ini_get($name)) !== false) {
@@ -92,7 +93,7 @@ class common_configuration_PHPINIValue extends common_configuration_Component
         }
 
         $returnValue = new common_configuration_Report($validity, $message, $this);
-        
+
 
         return $returnValue;
     }
@@ -108,9 +109,9 @@ class common_configuration_PHPINIValue extends common_configuration_Component
     {
         $returnValue = (string) '';
 
-        
+
         return $this->expectedValue;
-        
+
 
         return (string) $returnValue;
     }
@@ -125,7 +126,7 @@ class common_configuration_PHPINIValue extends common_configuration_Component
      */
     public function setExpectedValue($expectedValue)
     {
-        
+
         $this->expectedValue = $expectedValue;
     }
 
@@ -140,9 +141,9 @@ class common_configuration_PHPINIValue extends common_configuration_Component
     {
         $returnValue = (string) '';
 
-        
+
         $returnValue = ini_get($this->getName());
-        
+
 
         return (string) $returnValue;
     }

@@ -22,12 +22,11 @@
 namespace oat\generis\test\integration\model\kernel\persistence\file;
 
 use oat\generis\model\kernel\persistence\file\FileModel;
-use \common_exception_MissingParameter;
+use common_exception_MissingParameter;
 use oat\generis\test\GenerisPhpUnitTestRunner;
 
 class FileModelTest extends GenerisPhpUnitTestRunner
 {
-
     /**
      *
      * @see PHPUnit_Framework_TestCase::setUp()

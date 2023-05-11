@@ -40,7 +40,6 @@ use League\Flysystem\Memory\MemoryAdapter;
  */
 class Installer extends ConfigurableService
 {
-
     /**
      * run the install
      */

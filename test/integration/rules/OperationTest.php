@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,8 +27,6 @@ use oat\generis\test\GenerisPhpUnitTestRunner;
 
 class OperationTest extends GenerisPhpUnitTestRunner
 {
-
-
     public function setUp(): void
     {
         GenerisPhpUnitTestRunner::initTest();

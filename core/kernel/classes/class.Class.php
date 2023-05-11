@@ -271,7 +271,7 @@ class core_kernel_classes_Class extends core_kernel_classes_Resource
     {
         $currentClass = $this;
 
-        foreach($labels as $label) {
+        foreach ($labels as $label) {
             $currentClass = $currentClass->retrieveOrCreateSubClassByLabel($label);
         }
 

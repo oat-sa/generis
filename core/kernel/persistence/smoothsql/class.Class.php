@@ -93,19 +93,19 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
     public function isSubClassOf(core_kernel_classes_Class $resource, core_kernel_classes_Class $parentClass)
     {
         $returnValue = false;
-        
+
         $query = 'SELECT object FROM statements WHERE subject = ? AND predicate = ? AND ' . $this->getPersistence()->getPlatForm()->getObjectTypeCondition() . ' = ?';
         $result = $this->getPersistence()->query($query, [
             $resource->getUri(),
             OntologyRdfs::RDFS_SUBCLASSOF,
             $parentClass->getUri()
         ]);
-        
+
         while ($row = $result->fetch()) {
             $returnValue =  true;
             break;
         }
-        
+
         if (!$returnValue) {
             $parentSubClasses = $parentClass->getSubClasses(true);
             foreach ($parentSubClasses as $subClass) {
@@ -115,7 +115,7 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
                 }
             }
         }
-        
+
         return $returnValue;
     }
 
@@ -126,14 +126,14 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
     public function getParentClasses(core_kernel_classes_Class $resource, $recursive = false)
     {
         $returnValue = [];
-        
+
         $sqlQuery = 'SELECT object FROM statements WHERE subject = ?  AND predicate = ?';
 
         $sqlResult = $this->getPersistence()->query($sqlQuery, [$resource->getUri(), OntologyRdfs::RDFS_SUBCLASSOF]);
 
         while ($row = $sqlResult->fetch()) {
             $parentClass = $this->getModel()->getClass($row['object']);
-            
+
             $returnValue[$parentClass->getUri()] = $parentClass ;
             if ($recursive == true && $parentClass->getUri() != OntologyRdfs::RDFS_CLASS && $parentClass->getUri() != OntologyRdfs::RDFS_RESOURCE) {
                 if ($parentClass->getUri() == GenerisRdf::CLASS_GENERIS_RESOURCE) {
@@ -155,18 +155,18 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
     public function getProperties(core_kernel_classes_Class $resource, $recursive = false)
     {
         $returnValue = [];
-        
+
         $sqlQuery = 'SELECT subject FROM statements WHERE predicate = ?  AND ' . $this->getPersistence()->getPlatForm()->getObjectTypeCondition() . ' = ?';
         $sqlResult = $this->getPersistence()->query($sqlQuery, [
             OntologyRdfs::RDFS_DOMAIN,
             $resource->getUri()
         ]);
-        
+
         while ($row = $sqlResult->fetch()) {
             $property = $this->getModel()->getProperty($row['subject']);
             $returnValue[$property->getUri()] = $property;
         }
-        
+
         if ($recursive == true) {
             $parentClasses = $this->getParentClasses($resource, true);
             foreach ($parentClasses as $parent) {
@@ -175,7 +175,7 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
                 }
             }
         }
-        
+
         return $returnValue;
     }
 
@@ -186,17 +186,17 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
     public function getInstances(core_kernel_classes_Class $resource, $recursive = false, $params = [])
     {
         $returnValue = [];
-        
+
         $params = array_merge($params, ['like' => false, 'recursive' => $recursive]);
-        
+
         $query = $this->getFilteredQuery($resource, [], $params);
         $result = $this->getPersistence()->query($query);
-        
+
         while ($row = $result->fetch()) {
             $foundInstancesUri = $row['subject'];
             $returnValue[$foundInstancesUri] = $this->getModel()->getResource($foundInstancesUri);
         }
-        
+
         return $returnValue;
     }
 
@@ -261,10 +261,10 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
         if ($uri == '') {
             $subject = $this->getServiceLocator()->get(UriProvider::SERVICE_ID)->provide();
         } elseif ($uri[0] == '#') { //$uri should start with # and be well formed
-                $modelUri = common_ext_NamespaceManager::singleton()->getLocalNamespace()->getUri();
-                $subject = rtrim($modelUri, '#') . $uri;
+            $modelUri = common_ext_NamespaceManager::singleton()->getLocalNamespace()->getUri();
+            $subject = rtrim($modelUri, '#') . $uri;
         } else {
-                $subject = $uri;
+            $subject = $uri;
         }
 
         $returnValue = $this->getModel()->getResource($subject);
@@ -304,7 +304,7 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
         if (!empty($comment)) {
             $properties[OntologyRdfs::RDFS_COMMENT] = $comment;
         }
-            
+
         $returnValue->setPropertiesValues($properties);
         return $returnValue;
     }
@@ -349,20 +349,20 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
     public function searchInstances(core_kernel_classes_Class $resource, $propertyFilters = [], $options = [])
     {
         $returnValue = [];
-        
+
         // Avoid a 'like' search on OntologyRdf::RDF_TYPE!
         if (count($propertyFilters) === 0) {
             $options = array_merge($options, ['like' => false]);
         }
-        
+
         $query = $this->getFilteredQuery($resource, $propertyFilters, $options);
         $result = $this->getPersistence()->query($query);
-        
+
         while ($row = $result->fetch()) {
             $foundInstancesUri = $row['subject'];
             $returnValue[$foundInstancesUri] = $this->getModel()->getResource($foundInstancesUri);
         }
-        
+
         return $returnValue;
     }
 
@@ -375,15 +375,15 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
         if (isset($options['offset'])) {
             unset($options['offset']);
         }
-        
+
         if (isset($options['limit'])) {
             unset($options['limit']);
         }
-        
+
         if (isset($options['order'])) {
             unset($options['order']);
         }
-        
+
         $query = 'SELECT count(subject) FROM (' . $this->getFilteredQuery($resource, $propertyFilters, $options) . ') as countq';
         return (int)$this->getPersistence()->query($query)->fetchColumn();
     }
@@ -395,28 +395,28 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
     public function getInstancesPropertyValues(core_kernel_classes_Class $resource, core_kernel_classes_Property $property, $propertyFilters = [], $options = [])
     {
         $returnValue = [];
-        
+
         $distinct = isset($options['distinct']) ? $options['distinct'] : false;
-        
+
         if (count($propertyFilters) === 0) {
             $options = array_merge($options, ['like' => false]);
         }
-        
+
         $filteredQuery = $this->getFilteredQuery($resource, $propertyFilters, $options);
-        
+
         // Get all the available property values in the subset of instances
         $query = 'SELECT';
         if ($distinct) {
             $query .= ' DISTINCT';
         }
-        
+
         $query .= " object FROM (SELECT overq.subject, valuesq.object FROM (${filteredQuery}) as overq JOIN statements AS valuesq ON (overq.subject = valuesq.subject AND valuesq.predicate = ?)) AS overrootq";
-        
+
         $sqlResult = $this->getPersistence()->query($query, [$property->getUri()]);
         while ($row = $sqlResult->fetch()) {
             $returnValue[] = common_Utils::toResource($row['object']);
         }
-        
+
         return (array) $returnValue;
     }
 
@@ -444,11 +444,11 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
         if (isset($properties[OntologyRdf::RDF_TYPE])) {
             throw new core_kernel_persistence_Exception('Additional types in createInstanceWithProperties not permited');
         }
-        
+
         $properties[OntologyRdf::RDF_TYPE] = $type;
         $returnValue = $this->getModel()->getResource($this->getServiceLocator()->get(UriProvider::SERVICE_ID)->provide());
         $returnValue->setPropertiesValues($properties);
-        
+
         return $returnValue;
     }
 
@@ -462,21 +462,21 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
 
         $class = $this->getModel()->getClass($resource->getUri());
         $uris = [];
-        
+
         foreach ($resources as $r) {
             $uri = (($r instanceof core_kernel_classes_Resource) ? $r->getUri() : $r);
             $uris[] = $this->getPersistence()->quote($uri);
         }
-        
+
         if ($class->exists()) {
             $inValues = implode(',', $uris);
             $query = 'DELETE FROM statements WHERE subject IN (' . $inValues . ')';
-            
+
             if (true === $deleteReference) {
                 $params[] = $resource->getUri();
                 $query .= ' OR object IN (' . $inValues . ')';
             }
-            
+
             try {
                 // Even if now rows are affected, we consider the resources
                 // as deleted.
@@ -500,14 +500,14 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
     public function getFilteredQuery(core_kernel_classes_Class $resource, $propertyFilters = [], $options = [])
     {
         $rdftypes = [];
-        
+
         // Check recursivity...
         if (isset($options['recursive']) && $options['recursive']) {
             foreach ($this->getSubClasses($resource, $options['recursive']) as $subClass) {
                 $rdftypes[] = $subClass->getUri();
             }
         }
-    
+
         // Check additional classes...
         if (isset($options['additionalClasses'])) {
             foreach ($options['additionalClasses'] as $aC) {
@@ -515,7 +515,7 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
                 $rdftypes = array_unique($rdftypes);
             }
         }
-        
+
         // Add the class type of the given class
         if (!in_array($resource->getUri(), $rdftypes)) {
             $rdftypes[] = $resource->getUri();

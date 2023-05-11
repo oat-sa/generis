@@ -28,7 +28,7 @@ use oat\oatbox\session\SessionContext;
 
 class BasicSessionTest extends TestCase
 {
-    public function testGetContext() : void
+    public function testGetContext(): void
     {
         $user = $this->prophesize(User::class)->reveal();
         $context1 = $this->prophesize(SessionContext::class)->reveal();
@@ -40,5 +40,4 @@ class BasicSessionTest extends TestCase
         $session = new \common_session_BasicSession($user, [$context1, $context2]);
         $this->assertEquals([$context1, $context2], $session->getContexts());
     }
-
 }

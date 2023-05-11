@@ -61,7 +61,7 @@ class generis_test_UtilsTest extends TestCase
         }
         $value = eval("return " . common_Utils::toPHPVariableString($all) . ";");
         $this->assertEquals($all, $value);
-        
+
         $serialized = serialize(new stdClass());
         $value = eval("return " . common_Utils::toPHPVariableString($serialized) . ";");
         $this->assertEquals($serialized, $value);

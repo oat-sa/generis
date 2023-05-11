@@ -26,14 +26,13 @@ use oat\generis\model\GenerisRdf;
 use oat\generis\model\OntologyRdf;
 use oat\generis\model\WidgetRdf;
 use oat\generis\test\GenerisPhpUnitTestRunner;
-use \core_kernel_classes_ContainerCollection;
-use \core_kernel_classes_Class;
-use \core_kernel_classes_Resource;
-use \core_kernel_classes_Property;
+use core_kernel_classes_ContainerCollection;
+use core_kernel_classes_Class;
+use core_kernel_classes_Resource;
+use core_kernel_classes_Property;
 
 class PropertyTest extends GenerisPhpUnitTestRunner
 {
-
     /**
      *
      * @var core_kernel_classes_Property

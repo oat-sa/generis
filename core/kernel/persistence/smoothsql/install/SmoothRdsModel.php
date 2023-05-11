@@ -28,7 +28,6 @@ use Doctrine\DBAL\Schema\Schema;
  */
 class SmoothRdsModel
 {
-
     /**
      *
      * @param Schema $schema
@@ -36,12 +35,12 @@ class SmoothRdsModel
      */
     public static function addSmoothTables(Schema $schema)
     {
-         $table = $schema->createTable("statements");
+        $table = $schema->createTable("statements");
         $table->addColumn("modelid", "integer", ["notnull" => true,"default" => 0]);
         $table->addColumn("subject", "string", ["length" => 255,"default" => null]);
         $table->addColumn("predicate", "string", ["length" => 255,"default" => null]);
         $table->addColumn("object", "text", ["default" => null,"notnull" => false]);
-            
+
         $table->addColumn("l_language", "string", ["length" => 255,"default" => null,"notnull" => false]);
         $table->addColumn("id", "integer", ["notnull" => true,"autoincrement" => true]);
         $table->addColumn("author", "string", ["length" => 255,"default" => null,"notnull" => false]);

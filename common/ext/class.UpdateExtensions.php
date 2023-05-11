@@ -19,7 +19,7 @@
  *
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use oat\oatbox\action\Action;
 use oat\oatbox\log\LoggerAwareTrait;
@@ -28,6 +28,7 @@ use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Psr\Log\LoggerAwareInterface;
 use oat\oatbox\cache\SimpleCache;
+
 /**
  * Run the extension updater
  *
@@ -163,5 +164,4 @@ class common_ext_UpdateExtensions implements Action, ServiceLocatorAwareInterfac
     {
         return $this->getServiceLocator()->get(common_ext_ExtensionsManager::SERVICE_ID);
     }
-
 }

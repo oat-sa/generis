@@ -50,7 +50,7 @@ abstract class AbstractRegistry extends ConfigurableService
      * @return common_ext_Extension
      */
     abstract protected function getExtension();
-    
+
     /**
      *
      * config file in which the data will be stored
@@ -133,8 +133,8 @@ abstract class AbstractRegistry extends ConfigurableService
     {
         return array_key_exists($id, $this->getMap());
     }
-    
-    
+
+
     /**
      *
      * Retrieve the given element from the array in config

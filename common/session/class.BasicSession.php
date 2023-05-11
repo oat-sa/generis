@@ -62,12 +62,12 @@ class common_session_BasicSession implements common_session_Session, ServiceLoca
         $this->user = $user;
         $this->contexts = $contexts;
     }
-    
+
     public function getUser()
     {
         return $this->user;
     }
-    
+
     /**
      * {@inheritDoc}
      * @see common_session_Session::getUserUri()
@@ -76,7 +76,7 @@ class common_session_BasicSession implements common_session_Session, ServiceLoca
     {
         return $this->user->getIdentifier();
     }
-    
+
     /**
      * @param string $property
      * @return mixed
@@ -85,7 +85,7 @@ class common_session_BasicSession implements common_session_Session, ServiceLoca
     {
         return $this->user->getPropertyValues($property);
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see common_session_Session::getUserLabel()
@@ -110,7 +110,7 @@ class common_session_BasicSession implements common_session_Session, ServiceLoca
         }
         return $label;
     }
-    
+
     /**
      * {@inheritDoc}
      * @see common_session_Session::getUserRoles()
@@ -157,7 +157,7 @@ class common_session_BasicSession implements common_session_Session, ServiceLoca
 
         return $userLanguageService->getInterfaceLanguage($this->getUser());
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see common_session_Session::getTimeZone()
@@ -168,7 +168,7 @@ class common_session_BasicSession implements common_session_Session, ServiceLoca
         $tz = empty($tzs) ? '' : (string)current($tzs);
         return empty($tz) ? TIME_ZONE : $tz;
     }
-    
+
     public function refresh()
     {
         if ($this->user instanceof Refreshable) {
@@ -193,9 +193,10 @@ class common_session_BasicSession implements common_session_Session, ServiceLoca
     {
         $contexts = $this->contexts;
         if ($class != null) {
-            $contexts = array_filter($contexts, function($element) use ($class) {return $element instanceof $class;});
+            $contexts = array_filter($contexts, function ($element) use ($class) {
+                return $element instanceof $class;
+            });
         }
         return $contexts;
     }
-
 }

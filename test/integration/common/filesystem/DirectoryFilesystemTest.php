@@ -134,5 +134,4 @@ class DirectoryFilesystemTest extends GenerisTestCase
 
         return $this->fileSystemService;
     }
-
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -51,7 +52,7 @@ class common_exception_InvalidArgumentType extends common_exception_Error
      */
     public function __construct($class = null, $function = 0, $position = 0, $expectedType = '', $object = null)
     {
-        
+
         $object = is_object($object) ? get_class($object) : gettype($object);
         $message = 'Argument ' . $position . ' passed to ' . $class . '::' . $function . '() must be an ' . $expectedType . ', ' . $object . ' given';
         parent::__construct($message);

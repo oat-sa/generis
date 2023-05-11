@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -142,7 +143,7 @@ class Manifest implements ServiceLocatorAwareInterface
      * @return string
      * @throws ManifestException
      */
-    public function getVersion():string
+    public function getVersion(): string
     {
         if ($this->version === null) {
             $packageId = $this->getComposerInfo()->getPackageId();

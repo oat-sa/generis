@@ -36,7 +36,6 @@ use oat\oatbox\cache\SimpleCache;
  */
 class common_ext_GenerisInstaller extends common_ext_ExtensionInstaller
 {
-
     /**
      * Setup the ontology configuration
      *
@@ -50,14 +49,14 @@ class common_ext_GenerisInstaller extends common_ext_ExtensionInstaller
         if ($this->extension->getId() != 'generis') {
             throw new common_ext_ExtensionException('Tried to install "' . $this->extension->getId() . '" extension using the GenerisInstaller');
         }
- 
+
         $this->installLoadDefaultConfig();
         $this->setupSchema();
         $this->installOntology();
         $this->installRegisterExt();
 
         $this->getServiceManager()->get(SimpleCache::SERVICE_ID)->clear();
-        
+
         $this->log('d', 'Installing custom script for extension ' . $this->extension->getId());
         $this->installCustomScript();
     }

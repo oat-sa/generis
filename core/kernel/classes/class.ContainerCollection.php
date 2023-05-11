@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -47,7 +48,7 @@ class core_kernel_classes_ContainerCollection extends common_Collection
      */
     public function add(common_Object $element)
     {
-        
+
         parent::add($element);
     }
 
@@ -64,10 +65,10 @@ class core_kernel_classes_ContainerCollection extends common_Collection
     {
         $returnValue = null;
 
-        
+
         $returnValue = new core_kernel_classes_ContainerCollection($this);
         $returnValue->sequence = array_merge($this->sequence, $collection->sequence);
-        
+
 
         return $returnValue;
     }
@@ -84,10 +85,10 @@ class core_kernel_classes_ContainerCollection extends common_Collection
     {
         $returnValue = null;
 
-        
-         $returnValue = new core_kernel_classes_ContainerCollection(new common_Object(__METHOD__));
-         $returnValue->sequence = array_uintersect($this->sequence, $collection->sequence, 'core_kernel_classes_ContainerComparator::compare');
-        
+
+        $returnValue = new core_kernel_classes_ContainerCollection(new common_Object(__METHOD__));
+        $returnValue->sequence = array_uintersect($this->sequence, $collection->sequence, 'core_kernel_classes_ContainerComparator::compare');
+
 
         return $returnValue;
     }
@@ -104,7 +105,7 @@ class core_kernel_classes_ContainerCollection extends common_Collection
     {
         $returnValue = null;
 
-        
+
         $returnValue = -1;
         foreach ($this->sequence as $index => $_resource) {
             if ($_resource instanceof  core_kernel_classes_Resource) {
@@ -113,7 +114,7 @@ class core_kernel_classes_ContainerCollection extends common_Collection
                 }
             }
         }
-        
+
 
         return $returnValue;
     }
@@ -129,9 +130,9 @@ class core_kernel_classes_ContainerCollection extends common_Collection
     {
         $returnValue = (string) '';
 
-        
+
         $returnValue = 'Collection containning ' . $this->count() . ' elements' ;
-        
+
 
         return (string) $returnValue;
     }

@@ -23,7 +23,7 @@
  *
  */
 
-use \oat\generis\Helper\UuidPrimaryKeyTrait;
+use oat\generis\Helper\UuidPrimaryKeyTrait;
 
 abstract class common_persistence_Persistence
 {

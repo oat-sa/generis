@@ -33,14 +33,14 @@ use oat\oatbox\service\ConfigurableService;
  */
 class common_cache_KeyValueCache extends ConfigurableService implements common_cache_Cache
 {
-    const OPTION_PERSISTENCE = 'persistence';
-    
-    
+    public const OPTION_PERSISTENCE = 'persistence';
+
+
     /**
      * @var common_persistence_KeyValuePersistence
      */
     private $persistence;
-    
+
     protected function getPersistence()
     {
         if (is_null($this->persistence)) {

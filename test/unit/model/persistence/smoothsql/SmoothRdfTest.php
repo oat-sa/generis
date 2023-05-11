@@ -24,7 +24,7 @@ declare(strict_types=1);
 namespace oat\generis\test\unit\model\persistence\smoothsql;
 
 use common_Exception;
-use \core_kernel_persistence_smoothsql_SmoothRdf;
+use core_kernel_persistence_smoothsql_SmoothRdf;
 use Doctrine\DBAL\ParameterType;
 use Prophecy\Argument;
 use Prophecy\Prophet;

@@ -30,5 +30,4 @@ namespace oat\oatbox\service\exception;
  */
 class InvalidServiceManagerException extends \common_Exception
 {
-
 }

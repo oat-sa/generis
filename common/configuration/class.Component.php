@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -65,7 +66,7 @@ abstract class common_configuration_Component
      */
     public function __construct($name = 'unknown', $optional = false)
     {
-        
+
         $this->setName($name);
         $this->setOptional($optional);
     }
@@ -91,9 +92,9 @@ abstract class common_configuration_Component
     {
         $returnValue = (bool) false;
 
-        
+
         $returnValue = $this->optional;
-        
+
 
         return (bool) $returnValue;
     }
@@ -108,7 +109,7 @@ abstract class common_configuration_Component
      */
     public function setOptional($optional)
     {
-        
+
         $this->optional = $optional;
     }
 
@@ -123,9 +124,9 @@ abstract class common_configuration_Component
     {
         $returnValue = (string) '';
 
-        
+
         $returnValue = $this->name;
-        
+
 
         return (string) $returnValue;
     }
@@ -140,7 +141,7 @@ abstract class common_configuration_Component
      */
     public function setName($name)
     {
-        
+
         $this->name = $name;
     }
 } /* end of abstract class common_configuration_Component */

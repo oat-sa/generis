@@ -34,7 +34,7 @@ namespace oat\generis\model\kernel\uri;
  */
 interface UriProvider
 {
-    const SERVICE_ID = 'generis/uriProvider';
+    public const SERVICE_ID = 'generis/uriProvider';
 
     /**
      * Provides a URI.

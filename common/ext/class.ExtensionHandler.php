@@ -55,7 +55,7 @@ abstract class common_ext_ExtensionHandler
     {
         $this->extension = $extension;
     }
-    
+
     /**
      * @return common_ext_Extension
      */
@@ -63,7 +63,7 @@ abstract class common_ext_ExtensionHandler
     {
         return $this->extension;
     }
-    
+
     /**
      * Run Extension Script
      *

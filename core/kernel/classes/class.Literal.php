@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -55,7 +56,7 @@ class core_kernel_classes_Literal extends core_kernel_classes_Container
      */
     public function __construct($literal, $debug = '')
     {
-        
+
         $this->literal = strval($literal);
     }
 
@@ -70,9 +71,9 @@ class core_kernel_classes_Literal extends core_kernel_classes_Container
     {
         $returnValue = (string) '';
 
-        
+
         $returnValue = $this->literal;
-        
+
 
         return (string) $returnValue;
     }

@@ -37,10 +37,9 @@ class core_kernel_users_Service implements
     core_kernel_users_UsersManagement,
     core_kernel_users_RolesManagement
 {
-    
-    const LEGACY_ALGORITHM = 'md5';
-    const LEGACY_SALT_LENGTH = 0;
-    
+    public const LEGACY_ALGORITHM = 'md5';
+    public const LEGACY_SALT_LENGTH = 0;
+
     /**
      *
      * @access private
@@ -83,7 +82,7 @@ class core_kernel_users_Service implements
             [GenerisRdf::PROPERTY_USER_LOGIN => $login],
             ['like' => false, 'recursive' => true]
         );
-        
+
         if (count($users) > 0) {
             $returnValue = true;
         }
@@ -110,7 +109,7 @@ class core_kernel_users_Service implements
             throw new core_kernel_users_Exception("Login '${login}' already in use.", core_kernel_users_Exception::LOGIN_EXITS);
         } else {
             $role = (empty($role)) ? new core_kernel_classes_Resource(GenerisRdf::INSTANCE_ROLE_GENERIS) : $role;
-            
+
             $userClass = (!empty($class)) ? $class : new core_kernel_classes_Class(GenerisRdf::CLASS_GENERIS_USER);
             $returnValue = $userClass->createInstanceWithProperties([
                 OntologyRdfs::RDFS_LABEL => "User ${login}",
@@ -119,7 +118,7 @@ class core_kernel_users_Service implements
                 GenerisRdf::PROPERTY_USER_PASSWORD => $this->userAdditionPasswordEncryption($login, $password),
                 GenerisRdf::PROPERTY_USER_ROLES => $role
             ]);
-            
+
             if (empty($returnValue)) {
                 throw new core_kernel_users_Exception("Unable to create user with login = '${login}'.");
             }
@@ -163,12 +162,12 @@ class core_kernel_users_Service implements
         if (empty($class)) {
             $class = new core_kernel_classes_Class(GenerisRdf::CLASS_GENERIS_USER);
         }
-        
+
         $users = $class->searchInstances(
             [GenerisRdf::PROPERTY_USER_LOGIN => $login],
             ['like' => false, 'recursive' => true]
         );
-        
+
         if (count($users) == 1) {
             $returnValue = current($users);
         } elseif (count($users) > 1) {
@@ -207,7 +206,7 @@ class core_kernel_users_Service implements
         if (!is_string($password)) {
             throw new core_kernel_users_Exception('The password must be of "string" type, got ' . gettype($password));
         }
-        
+
         $hash = $user->getUniquePropertyValue(new core_kernel_classes_Property(GenerisRdf::PROPERTY_USER_PASSWORD));
         $returnValue = core_kernel_users_Service::getPasswordHash()->verify($password, $hash);
 
@@ -227,7 +226,7 @@ class core_kernel_users_Service implements
         if (!is_string($password)) {
             throw new core_kernel_users_Exception('The password must be of "string" type, got ' . gettype($password));
         }
-        
+
         $user->editPropertyValues(new core_kernel_classes_Property(GenerisRdf::PROPERTY_USER_PASSWORD), core_kernel_users_Service::getPasswordHash()->encrypt($password));
     }
 
@@ -245,14 +244,14 @@ class core_kernel_users_Service implements
         // We use a Depth First Search approach to flatten the Roles Graph.
         $rolesProperty = new core_kernel_classes_Property(GenerisRdf::PROPERTY_USER_ROLES);
         $rootRoles = $user->getPropertyValuesCollection($rolesProperty);
-        
+
         foreach ($rootRoles->getIterator() as $r) {
             $returnValue[$r->getUri()] = $r;
             $returnValue = array_merge($returnValue, $this->getIncludedRoles($r));
         }
-        
+
         $returnValue = array_unique($returnValue);
-        
+
         return (array) $returnValue;
     }
 
@@ -272,14 +271,14 @@ class core_kernel_users_Service implements
         if (empty($roles)) {
             throw new InvalidArgumentException('The $roles parameter must not be empty.');
         }
-        
+
         $roles = (is_array($roles)) ? $roles : [$roles];
         $searchRoles = [];
         foreach ($roles as $r) {
             $searchRoles[] = ($r instanceof core_kernel_classes_Resource) ? $r->getUri() : $r;
         }
         unset($roles);
-        
+
         if (common_session_SessionManager::getSession()->getUserUri() == $user->getUri()) {
             foreach (common_session_SessionManager::getSession()->getUserRoles() as $role) {
                 if (in_array($role, $searchRoles)) {
@@ -292,10 +291,10 @@ class core_kernel_users_Service implements
             common_Logger::w('Roles of non current user (' . $user->getUri() . ') checked, trying fallback to local ontology');
             $userRoles = array_keys($this->getUserRoles($user));
             $identicalRoles = array_intersect($searchRoles, $userRoles);
-            
+
             $returnValue = (count($identicalRoles) === count($searchRoles));
         }
-        
+
         return (bool) $returnValue;
     }
 
@@ -362,15 +361,15 @@ class core_kernel_users_Service implements
 
         $includedRoles = is_array($includedRoles) ? $includedRoles : [$includedRoles];
         $includedRoles = empty($includedRoles[0]) ? [] : $includedRoles;
-        
+
         $classRole =  (empty($class)) ? new core_kernel_classes_Class(GenerisRdf::CLASS_ROLE) : $class;
         $includesRoleProperty = new core_kernel_classes_Property(GenerisRdf::PROPERTY_ROLE_INCLUDESROLE);
         $role = $classRole->createInstance($label, "${label} Role");
-        
+
         foreach ($includedRoles as $ir) {
             $role->setPropertyValue($includesRoleProperty, $ir);
         }
-        
+
         $returnValue = $role;
 
         return $returnValue;
@@ -388,11 +387,11 @@ class core_kernel_users_Service implements
     public function removeRole(core_kernel_classes_Resource $role)
     {
         $returnValue = (bool) false;
-        
+
         if (GENERIS_CACHE_USERS_ROLES == true && core_kernel_users_Cache::areIncludedRolesInCache($role)) {
             if ($role->delete(true) == true) { // delete references.
                 $returnValue = core_kernel_users_Cache::removeIncludedRoles($role);
-                
+
                 // We also need to remove all included roles cache that contain
                 // the role we just deleted.
                 foreach ($this->getAllRoles() as $r) {
@@ -436,14 +435,14 @@ class core_kernel_users_Service implements
             $visitedRoles = [];
             $s = []; // vertex stack.
             array_push($s, $role); // begin with $role as the first vertex.
-            
+
             while (!empty($s)) {
                 $u = array_pop($s);
-    
+
                 if (false === in_array($u->getUri(), $visitedRoles, true)) {
                     $visitedRoles[] = $u->getUri();
                     $returnValue[$u->getUri()] = $u;
-                    
+
                     $ar = $u->getPropertyValuesCollection($includesRoleProperty);
                     foreach ($ar->getIterator() as $w) {
                         if (false === in_array($w->getUri(), $visitedRoles, true)) { // not visited
@@ -452,10 +451,10 @@ class core_kernel_users_Service implements
                     }
                 }
             }
-            
+
             // remove the root vertex which is actually the role we are testing.
             unset($returnValue[$role->getUri()]);
-            
+
             if (GENERIS_CACHE_USERS_ROLES === true) {
                 try {
                     core_kernel_users_Cache::cacheIncludedRoles($role, $returnValue);
@@ -519,17 +518,17 @@ class core_kernel_users_Service implements
     public function includeRole(core_kernel_classes_Resource $role, core_kernel_classes_Resource $roleToInclude)
     {
         $includesRoleProperty = new core_kernel_classes_Property(GenerisRdf::PROPERTY_ROLE_INCLUDESROLE);
-        
+
         // Clean to avoid double entries...
         $role->removePropertyValues($includesRoleProperty, ['like' => false, 'pattern' => $roleToInclude->getUri()]);
-        
+
         // Include the Role.
         $role->setPropertyValue($includesRoleProperty, $roleToInclude->getUri());
-        
+
         // Reset cache.
         core_kernel_users_Cache::removeIncludedRoles($role);
     }
-    
+
     /**
      * Uninclude a Role from antother Role.
      *
@@ -546,12 +545,12 @@ class core_kernel_users_Service implements
         // invalidate cache for the role.
         if (GENERIS_CACHE_USERS_ROLES == true) {
             core_kernel_users_Cache::removeIncludedRoles($role);
-            
+
             // For each roles that have $role for included role,
             // remove the cache entry.
             foreach ($this->getAllRoles() as $r) {
                 $includedRoles = $this->getIncludedRoles($r);
-                
+
                 if (array_key_exists($role->getUri(), $includedRoles)) {
                     core_kernel_users_Cache::removeIncludedRoles($r);
                 }
@@ -627,7 +626,7 @@ class core_kernel_users_Service implements
         $roleClass = new core_kernel_classes_Class(GenerisRdf::CLASS_ROLE);
         return $roleClass->getInstances(true);
     }
-    
+
     /**
      * Trigger user encrypition at user insertion time.
      *

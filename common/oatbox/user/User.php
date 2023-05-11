@@ -30,7 +30,7 @@ interface User
      * @return string
      */
     public function getIdentifier();
-    
+
     /**
      * Extends the users explizit roles with the implizit rules
      * of the local system
@@ -38,7 +38,7 @@ interface User
      * @return array the identifiers of the roles:
     */
     public function getRoles();
-    
+
     /**
      * Retrieve custom attributes of a user
      *

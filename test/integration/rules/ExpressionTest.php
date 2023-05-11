@@ -27,7 +27,6 @@ use oat\generis\test\TestCase;
 
 class ExpressionTest extends TestCase
 {
-
     public function testEvaluate()
     {
         $constantResource1 = core_kernel_rules_TermFactory::createConst('test1');

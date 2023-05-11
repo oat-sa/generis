@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,7 +31,6 @@
  */
 interface common_exception_UserReadableException
 {
-    
     /**
      * Get the human-readable message for the end-user. It is supposed
      * to be translated and does not contain any confidential information

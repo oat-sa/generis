@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,7 +20,7 @@
  *
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use oat\oatbox\service\ServiceManagerAwareTrait;
 use oat\oatbox\service\ServiceManagerAwareInterface;
@@ -36,7 +37,6 @@ use common_report_Report as Report;
  */
 abstract class common_ext_ExtensionUpdater extends common_ext_ExtensionHandler implements ServiceManagerAwareInterface
 {
-
     use ServiceManagerAwareTrait;
 
     /** @var Report[] */
@@ -68,7 +68,7 @@ abstract class common_ext_ExtensionUpdater extends common_ext_ExtensionHandler i
     {
         common_ext_ExtensionsManager::singleton()->updateVersion($this->getExtension(), $version);
     }
-    
+
     /**
      * Test if $version is the current version
      *
@@ -80,7 +80,7 @@ abstract class common_ext_ExtensionUpdater extends common_ext_ExtensionHandler i
         $extensionsManager = $this->getServiceManager()->get(common_ext_ExtensionsManager::SERVICE_ID);
         return $version == $extensionsManager->getInstalledVersion($this->getExtension()->getId());
     }
-    
+
     /**
      * Please use "skip" instead of inBetween.
      *
@@ -93,7 +93,7 @@ abstract class common_ext_ExtensionUpdater extends common_ext_ExtensionHandler i
         $current = common_ext_ExtensionsManager::singleton()->getInstalledVersion($this->getExtension()->getId());
         return version_compare($minVersion, $current, '<=') && version_compare($current, $maxVersion, '<=');
     }
-    
+
     /**
      * Skip from version FROM to version TO without additional required actions
      *
@@ -138,7 +138,7 @@ abstract class common_ext_ExtensionUpdater extends common_ext_ExtensionHandler i
          * @param string $class_name
          */
         $missingClasses = [];
-        
+
         $fallbackAutoload = function ($class_name) use (&$missingClasses) {
             $missingClasses[] = $class_name;
             $split = strrpos($class_name, '\\');
@@ -154,7 +154,7 @@ abstract class common_ext_ExtensionUpdater extends common_ext_ExtensionHandler i
         spl_autoload_register($fallbackAutoload);
         $service = $serviceManager->get($configId);
         spl_autoload_unregister($fallbackAutoload);
-        
+
         return $service;
     }
 }

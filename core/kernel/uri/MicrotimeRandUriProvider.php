@@ -37,15 +37,15 @@ use common_persistence_SqlPersistence;
  */
 class MicrotimeRandUriProvider extends ConfigurableService implements UriProvider
 {
-    const OPTION_PERSISTENCE = 'persistence';
-    
-    const OPTION_NAMESPACE = 'namespace';
+    public const OPTION_PERSISTENCE = 'persistence';
+
+    public const OPTION_NAMESPACE = 'namespace';
     // --- ASSOCIATIONS ---
-    
+
     // --- ATTRIBUTES ---
-    
+
     // --- OPERATIONS ---
-    
+
     /**
      * @return common_persistence_SqlPersistence
      */
@@ -53,7 +53,7 @@ class MicrotimeRandUriProvider extends ConfigurableService implements UriProvide
     {
         return $this->getServiceLocator()->get(PersistenceManager::SERVICE_ID)->getPersistenceById($this->getOption(self::OPTION_PERSISTENCE));
     }
-    
+
     /**
      * Generates a URI based on the value of PHP microtime() and rand().
      *
@@ -63,7 +63,7 @@ class MicrotimeRandUriProvider extends ConfigurableService implements UriProvide
      */
     public function provide()
     {
-        
+
         $uriExist = false;
         do {
             list($usec, $sec) = explode(" ", microtime());
@@ -74,7 +74,7 @@ class MicrotimeRandUriProvider extends ConfigurableService implements UriProvide
                 $sqlResult->closeCursor();
             }
         } while ($uriExist);
-        
+
         return (string) $uri;
     }
 }

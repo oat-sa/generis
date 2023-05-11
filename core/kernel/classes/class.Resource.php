@@ -214,10 +214,11 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
             $label =  $this->getOnePropertyValue($this->getProperty(OntologyRdfs::RDFS_LABEL));
             $this->label = is_null($label)
                 ? ''
-                : ($label instanceof core_kernel_classes_Resource
+                : (
+                    $label instanceof core_kernel_classes_Resource
                     ? $label->getUri()
                     : (string)$label
-                   )
+                )
             ;
         }
 

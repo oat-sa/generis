@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,7 +49,7 @@ class common_exception_IsAjaxAction extends common_Exception
      */
     public function __construct($method = "")
     {
-        
+
         $message = 'The following service (' . $method . ') is an Ajax service';
         parent::__construct($message);
     }

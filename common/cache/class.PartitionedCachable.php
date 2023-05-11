@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -65,12 +66,12 @@ abstract class common_cache_PartitionedCachable implements common_Serializable
     {
         $returnValue = (string) '';
 
-        
+
         if (empty($this->serial)) {
             $this->serial = $this->buildSerial();
         }
         $returnValue = $this->serial;
-        
+
 
         return (string) $returnValue;
     }
@@ -84,7 +85,7 @@ abstract class common_cache_PartitionedCachable implements common_Serializable
      */
     public function __construct()
     {
-        
+
         if (!is_null($this->getCache())) {
             $this->getCache()->put($this);
         }
@@ -101,7 +102,7 @@ abstract class common_cache_PartitionedCachable implements common_Serializable
     {
         $returnValue = [];
 
-        
+
         $this->serializedProperties = [];
         $reflection = new ReflectionClass($this);
         foreach ($reflection->getProperties() as $property) {
@@ -137,7 +138,7 @@ abstract class common_cache_PartitionedCachable implements common_Serializable
                 }
             }
         }
-        
+
 
         return (array) $returnValue;
     }
@@ -151,7 +152,7 @@ abstract class common_cache_PartitionedCachable implements common_Serializable
      */
     public function __wakeup()
     {
-        
+
         foreach ($this->serializedProperties as $key => $value) {
             if (is_array($value)) {
                 $restored = [];
@@ -175,7 +176,7 @@ abstract class common_cache_PartitionedCachable implements common_Serializable
      */
     public function _remove()
     {
-        
+
         //usefull only when persistance is enabled
         if (!is_null($this->getCache())) {
             //clean session
@@ -194,7 +195,7 @@ abstract class common_cache_PartitionedCachable implements common_Serializable
     {
         $returnValue = [];
 
-        
+
         $reflection = new ReflectionClass($this);
         foreach ($reflection->getProperties() as $property) {
             if (!$property->isStatic() && !$property->isPrivate()) {
@@ -203,15 +204,15 @@ abstract class common_cache_PartitionedCachable implements common_Serializable
                 if (is_array($value)) {
                     foreach ($value as $key => $subvalue) {
                         if (is_object($subvalue) && $subvalue instanceof self) {
-                                $returnValue[] = $subvalue;
+                            $returnValue[] = $subvalue;
                         }
                     }
                 } elseif (is_object($value) && $value instanceof self) {
-                        $returnValue[] = $value;
+                    $returnValue[] = $value;
                 }
             }
         }
-        
+
 
         return (array) $returnValue;
     }
@@ -228,7 +229,7 @@ abstract class common_cache_PartitionedCachable implements common_Serializable
     {
         $returnValue = [];
 
-        
+
         foreach ($this->getCache()->getAll() as $serial => $instance) {
             if (
                 ($classFilter == null || $instance instanceof $classFilter)
@@ -238,7 +239,7 @@ abstract class common_cache_PartitionedCachable implements common_Serializable
                 break;
             }
         }
-        
+
 
         return (array) $returnValue;
     }

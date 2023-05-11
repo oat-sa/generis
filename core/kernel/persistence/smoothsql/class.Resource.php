@@ -37,7 +37,6 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  */
 class core_kernel_persistence_smoothsql_Resource implements core_kernel_persistence_ResourceInterface
 {
-
     /**
      * @var core_kernel_persistence_smoothsql_SmoothModel
      */

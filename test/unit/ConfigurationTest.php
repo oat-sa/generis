@@ -26,7 +26,7 @@ use oat\generis\test\TestCase;
 
 class ConfigurationTest extends TestCase
 {
-    const TESTKEY = 'config_test_key';
+    public const TESTKEY = 'config_test_key';
 
     /**
      * A version of php that we can be sure will not be present on the system
@@ -34,7 +34,7 @@ class ConfigurationTest extends TestCase
      *
      * @var int
      */
-    const UNSUPPORTED_PHP_MAJOR_VERSION = 9;
+    public const UNSUPPORTED_PHP_MAJOR_VERSION = 9;
 
     public function testPhPConstant()
     {
@@ -77,7 +77,7 @@ class ConfigurationTest extends TestCase
         ini_set($ini->getName(), $oldIniValue);
     }
 
-    function testPHPRuntime()
+    public function testPHPRuntime()
     {
         // Core tests.
         $php = new \common_configuration_PHPRuntime('5.3', '5.4');
@@ -132,7 +132,7 @@ class ConfigurationTest extends TestCase
         $this->assertEquals($php->getMax(), '5.3.99999');
     }
 
-    function testPHPExtension()
+    public function testPHPExtension()
     {
         // Testing PHPExtension existence and version is quite hard to do. Indeed,
         // it depends what the installed extensions are on the computers running the tests.

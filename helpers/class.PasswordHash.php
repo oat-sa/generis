@@ -52,7 +52,7 @@ class helpers_PasswordHash
     {
         return $this->algorithm;
     }
-    
+
     protected function getSaltLength()
     {
         return $this->saltLength;

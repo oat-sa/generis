@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,17 +28,17 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
     /**
      * The TTL mode offset in the connection parameters.
      */
-    const OPTION_TTL = 'ttlMode';
+    public const OPTION_TTL = 'ttlMode';
 
     /**
      * The value offset in the record.
      */
-    const ENTRY_VALUE = 'value';
+    public const ENTRY_VALUE = 'value';
 
     /**
      * The expiration timestamp of the record.
      */
-    const ENTRY_EXPIRATION = 'expiresAt';
+    public const ENTRY_EXPIRATION = 'expiresAt';
 
     /**
      * List of characters permited in filename
@@ -80,9 +81,9 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
      *
      * @var int
      */
-    const DEFAULT_LEVELS = 3;
+    public const DEFAULT_LEVELS = 3;
 
-    const DEFAULT_MASK = 0700;
+    public const DEFAULT_MASK = 0700;
 
     /**
      * (non-PHPdoc)

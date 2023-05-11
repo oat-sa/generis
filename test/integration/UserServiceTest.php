@@ -25,8 +25,7 @@ use oat\generis\test\GenerisPhpUnitTestRunner;
 
 class UserServiceTestCase extends GenerisPhpUnitTestRunner
 {
-
-    const TESTCASE_USER_LOGIN = 'testcase_user';
+    public const TESTCASE_USER_LOGIN = 'testcase_user';
 
     /**
      *

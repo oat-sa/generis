@@ -26,5 +26,4 @@ namespace oat\oatbox\service\exception;
  */
 class InvalidService extends \common_exception_InconsistentData
 {
-    
 }

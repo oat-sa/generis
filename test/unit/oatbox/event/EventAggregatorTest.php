@@ -61,7 +61,7 @@ class EventAggregatorTest extends TestCase
             ->method('trigger');
         $this->mockDebugLogger('Triggering 2 aggregated events');
 
-        $eventAggregator = new EventAggregator(['numberOfAggregatedEvents'=>2]);
+        $eventAggregator = new EventAggregator(['numberOfAggregatedEvents' => 2]);
         $eventAggregator->setServiceLocator($this->serviceLocator);
 
         $eventAggregator->put('event1', new GenericEvent('wwwww'));
@@ -73,7 +73,7 @@ class EventAggregatorTest extends TestCase
             ->method('trigger');
         $this->mockDebugLogger('Triggering 1 aggregated events');
 
-        $eventAggregator = new EventAggregator(['numberOfAggregatedEvents'=>2]);
+        $eventAggregator = new EventAggregator(['numberOfAggregatedEvents' => 2]);
         $eventAggregator->setServiceLocator($this->serviceLocator);
 
         $eventAggregator->put('event1', new GenericEvent('wwwww'));
@@ -87,7 +87,7 @@ class EventAggregatorTest extends TestCase
             ->method('trigger');
         $this->logger->expects($this->never())->method('info');
 
-        $eventAggregator = new EventAggregator(['numberOfAggregatedEvents'=>4]);
+        $eventAggregator = new EventAggregator(['numberOfAggregatedEvents' => 4]);
         $eventAggregator->setServiceLocator($this->serviceLocator);
 
         $eventAggregator->put('event1', new GenericEvent('wwwww'));
@@ -100,7 +100,7 @@ class EventAggregatorTest extends TestCase
 
         $this->logger->expects($this->never())->method('info');
 
-        $eventAggregator = new EventAggregator(['numberOfAggregatedEvents'=>4]);
+        $eventAggregator = new EventAggregator(['numberOfAggregatedEvents' => 4]);
         $eventAggregator->setServiceLocator($this->serviceLocator);
         $eventAggregator->triggerAggregatedEvents();
     }
@@ -111,7 +111,7 @@ class EventAggregatorTest extends TestCase
             ->method('trigger');
         $this->mockDebugLogger('Triggering 1 aggregated events');
 
-        $eventAggregator = new EventAggregator(['numberOfAggregatedEvents'=>3]);
+        $eventAggregator = new EventAggregator(['numberOfAggregatedEvents' => 3]);
         $eventAggregator->setServiceLocator($this->serviceLocator);
 
         $eventAggregator->put('event1', new GenericEvent('wwwww'));

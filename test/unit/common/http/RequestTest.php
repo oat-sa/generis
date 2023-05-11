@@ -20,7 +20,7 @@
 
 namespace oat\generis\test\unit\common\http;
 
-use \common_http_Request;
+use common_http_Request;
 use oat\generis\test\TestCase;
 
 /**
@@ -30,7 +30,6 @@ use oat\generis\test\TestCase;
  */
 class RequestTest extends TestCase
 {
-
     /**
      * Test the method getHeaderValue
      *

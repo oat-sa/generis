@@ -67,7 +67,7 @@ class common_Utils
         }
         return (bool) $returnValue;
     }
-    
+
     public static function toResource($value)
     {
         if (is_array($value)) {
@@ -158,7 +158,7 @@ class common_Utils
 
         return (string) $returnValue;
     }
-    
+
     /**
      * Same as toPHPVariableString except the sting
      * is easier for humans to read
@@ -193,7 +193,7 @@ class common_Utils
             $lines = explode(PHP_EOL, self::toPHPVariableString($value));
             $returnValue = implode(PHP_EOL . str_repeat('    ', $indentation), $lines);
         }
-        
+
         return (string) $returnValue;
     }
 }

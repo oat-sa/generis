@@ -33,7 +33,6 @@ use oat\oatbox\extension\exception\ManifestException;
  */
 class ComposerInfoTest extends TestCase
 {
-
     public function testGetAvailableTaoExtensions()
     {
         $instance = new ComposerInfo($this->getSamplesDir());
@@ -57,14 +56,13 @@ class ComposerInfoTest extends TestCase
 
     private function getSamplesDir()
     {
-        return realpath(__DIR__.DIRECTORY_SEPARATOR.
-            '..'.DIRECTORY_SEPARATOR.
-            '..'.DIRECTORY_SEPARATOR.
-            'samples'.
-            DIRECTORY_SEPARATOR.
+        return realpath(
+            __DIR__ . DIRECTORY_SEPARATOR .
+            '..' . DIRECTORY_SEPARATOR .
+            '..' . DIRECTORY_SEPARATOR .
+            'samples' .
+            DIRECTORY_SEPARATOR .
             'manifests'
         );
     }
-
-
 }

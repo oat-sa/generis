@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,7 +33,6 @@
  */
 class common_ext_ExtensionException extends common_Exception implements common_log_SeverityLevel
 {
-
     // --- ASSOCIATIONS ---
 
 
@@ -58,7 +58,7 @@ class common_ext_ExtensionException extends common_Exception implements common_l
      */
     public function setExtensionId($extensionId)
     {
-        
+
         $this->extensionId = $extensionId;
     }
 
@@ -73,9 +73,9 @@ class common_ext_ExtensionException extends common_Exception implements common_l
     {
         $returnValue = (string) '';
 
-        
+
         $returnValue = $this->extensionId;
-        
+
 
         return (string) $returnValue;
     }
@@ -91,11 +91,11 @@ class common_ext_ExtensionException extends common_Exception implements common_l
      */
     public function __construct($message, $extensionId = 'unknown')
     {
-        
+
         parent::__construct($message);
         $this->setExtensionId($extensionId);
     }
-    
+
     /**
      * Get the severity of the error.
      *

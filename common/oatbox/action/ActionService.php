@@ -27,10 +27,10 @@ use common_ext_ExtensionsManager;
 
 class ActionService extends ConfigurableService
 {
-    const SERVICE_ID = 'generis/actionService';
-    
-    static $blackList = ['\\oatbox\\composer\\ExtensionInstaller','\\oatbox\\composer\\ExtensionInstallerPlugin'];
-    
+    public const SERVICE_ID = 'generis/actionService';
+
+    public static $blackList = ['\\oatbox\\composer\\ExtensionInstaller','\\oatbox\\composer\\ExtensionInstallerPlugin'];
+
     /**
      *
      * @param string $actionIdentifier
@@ -49,7 +49,7 @@ class ActionService extends ConfigurableService
         }
         return $action;
     }
-    
+
     public function getAvailableActions()
     {
         $actions = $this->getCache()->get(__FUNCTION__);
@@ -63,12 +63,12 @@ class ActionService extends ConfigurableService
         }
         return $actions;
     }
-    
+
     protected function getCache(): SimpleCache
     {
         return $this->getServiceLocator()->get(SimpleCache::SERVICE_ID);
     }
-    
+
     protected function getActionsInDirectory($dir)
     {
         $classNames = [];

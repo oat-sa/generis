@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,13 +49,13 @@ class common_configuration_PHPRuntime extends common_configuration_BoundableComp
     {
         $returnValue = null;
 
-        
+
         $validity = null;
         $message = null;
         $min = $this->getMin();
         $max = $this->getMax();
         $current = $this->getValue();
-        
+
         if (!empty($min) && !empty($max)) {
             // min & max are specifed.
             if (version_compare($current, $min, '>=') && version_compare($current, $max, '<=')) {
@@ -81,9 +82,9 @@ class common_configuration_PHPRuntime extends common_configuration_BoundableComp
                 $message = "PHP Version (${current}) is greater than ${max}.";
             }
         }
-        
+
         $returnValue = new common_configuration_Report($validity, $message, $this);
-        
+
 
         return $returnValue;
     }
@@ -99,9 +100,9 @@ class common_configuration_PHPRuntime extends common_configuration_BoundableComp
     {
         $returnValue = (string) '';
 
-        
+
         $returnValue = phpversion();
-        
+
 
         return (string) $returnValue;
     }
@@ -118,7 +119,7 @@ class common_configuration_PHPRuntime extends common_configuration_BoundableComp
      */
     public function __construct($min, $max, $optional = false)
     {
-        
+
         parent::__construct($min, $max, 'tao.configuration.phpruntime', $optional);
     }
 }

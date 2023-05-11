@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,7 +30,7 @@ interface common_cache_Cache
     /**
      * Service manager id.
      */
-    const SERVICE_ID = 'generis/cache';
+    public const SERVICE_ID = 'generis/cache';
 
     // --- OPERATIONS ---
 

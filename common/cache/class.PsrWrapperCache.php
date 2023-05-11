@@ -29,7 +29,6 @@ use oat\oatbox\cache\SimpleCache;
  */
 class common_cache_PsrWrapperCache extends ConfigurableService implements common_cache_Cache
 {
-
     /**
      * puts "something" into the cache,
      *      * If this is an object and implements Serializable,
@@ -112,7 +111,7 @@ class common_cache_PsrWrapperCache extends ConfigurableService implements common
         return $this->getPsrSimpleCache()->clear();
     }
 
-    protected function getPsrSimpleCache() : CacheInterface
+    protected function getPsrSimpleCache(): CacheInterface
     {
         return $this->getServiceLocator()->get(SimpleCache::SERVICE_ID);
     }

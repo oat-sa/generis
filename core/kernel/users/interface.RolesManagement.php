@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,7 +31,6 @@
  */
 interface core_kernel_users_RolesManagement
 {
-
     /**
      * Add a role in Generis.
      *
@@ -72,7 +72,7 @@ interface core_kernel_users_RolesManagement
      * @param  core_kernel_classes_Resource roleToInclude The role to be included.
      */
     public function includeRole(core_kernel_classes_Resource $role, core_kernel_classes_Resource $roleToInclude);
-    
+
     /**
      * Uninclude a Role from another Role.
      *
@@ -81,7 +81,7 @@ interface core_kernel_users_RolesManagement
      * @param core_kernel_classes_Resource roleToUninclude The Role to uninclude.
      */
     public function unincludeRole(core_kernel_classes_Resource $role, core_kernel_classes_Resource $roleToUninclude);
-    
+
     /**
      * Return all instances of Roles from the persistent memory of Generis.
      *

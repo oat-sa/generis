@@ -39,7 +39,7 @@ class KeyValueCache extends ConfigurableService implements SimpleCache
 {
     use MultipleCacheTrait;
 
-    const OPTION_PERSISTENCE = 'persistence';
+    public const OPTION_PERSISTENCE = 'persistence';
 
     /** @var common_persistence_KeyValuePersistence */
     private $persistence;
@@ -82,7 +82,7 @@ class KeyValueCache extends ConfigurableService implements SimpleCache
 
     protected function dateIntervalToSeconds(DateInterval $dateInterval): int
     {
-        $reference = new DateTimeImmutable;
+        $reference = new DateTimeImmutable();
         $endTime = $reference->add($dateInterval);
         return $endTime->getTimestamp() - $reference->getTimestamp();
     }

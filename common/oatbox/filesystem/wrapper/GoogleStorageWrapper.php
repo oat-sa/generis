@@ -35,13 +35,13 @@ class GoogleStorageWrapper extends ConfigurableService implements AdapterInterfa
 {
     use FlyWrapperTrait;
     use LoggerAwareTrait;
-    
-    const OPTION_BUCKET = 'bucket';
 
-    const OPTION_CLIENT_CONFIG = 'clientConfig';
+    public const OPTION_BUCKET = 'bucket';
+
+    public const OPTION_CLIENT_CONFIG = 'clientConfig';
 
     private $adapter;
-    
+
     /**
      * @return StorageClient
      */
@@ -49,7 +49,7 @@ class GoogleStorageWrapper extends ConfigurableService implements AdapterInterfa
     {
         return new StorageClient($this->getOption(self::OPTION_CLIENT_CONFIG));
     }
-    
+
     /**
      * @return AdapterInterface
      */

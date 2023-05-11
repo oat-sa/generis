@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,9 +32,8 @@
  */
 class common_exception_UnknownNamespace extends common_Exception
 {
-
     private $namespace;
-    
+
     /**
      * custom constructor
      *
@@ -43,10 +43,10 @@ class common_exception_UnknownNamespace extends common_Exception
     public function __construct($namespace)
     {
         $this->namespace = $namespace;
-        
+
         parent::__construct('Unkown namespace "' . $namespace . '"');
     }
-    
+
     /**
      * Returns the namespace that was not found
      *

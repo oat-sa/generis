@@ -43,7 +43,7 @@ class MiddlewareExtensionsMapper
                     continue;
                 }
 
-                $middlewareConfigs = (new $map)();
+                $middlewareConfigs = (new $map())();
 
                 /** @var MiddlewareMapInterface $middlewareConfig */
                 foreach ($middlewareConfigs as $middlewareConfig) {

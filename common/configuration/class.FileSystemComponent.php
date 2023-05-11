@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,7 +43,7 @@ class common_configuration_FileSystemComponent extends common_configuration_Comp
      * @var boolean
      */
     private $recursive = false;
-    
+
     /**
      * Short description of attribute location
      *
@@ -116,7 +117,7 @@ class common_configuration_FileSystemComponent extends common_configuration_Comp
     {
         $this->location = $location;
     }
-    
+
     /**
      * Set $this->recursive value
      *
@@ -129,7 +130,7 @@ class common_configuration_FileSystemComponent extends common_configuration_Comp
     {
         $this->recursive = $recursive;
     }
-    
+
     /**
      * Get $this->recursive value
      *
@@ -205,7 +206,7 @@ class common_configuration_FileSystemComponent extends common_configuration_Comp
      */
     public function setExpectedRights($expectedRights)
     {
-        
+
         if (!empty($expectedRights) && preg_match('/^r*w*x*$/', $expectedRights) !== 0) {
             $this->expectedRights = $expectedRights;
         } else {
@@ -227,7 +228,7 @@ class common_configuration_FileSystemComponent extends common_configuration_Comp
         $expectedRights = $this->getExpectedRights();
         $location = $this->getLocation();
         $name = $this->getName();
-        
+
         if (!$this->exists()) {
             return new common_configuration_Report(
                 common_configuration_Report::UNKNOWN,
@@ -242,7 +243,7 @@ class common_configuration_FileSystemComponent extends common_configuration_Comp
                     $this
                 );
             }
-            
+
             if (strpos($expectedRights, 'w') !== false && !$this->isWritable($location)) {
                 return new common_configuration_Report(
                     common_configuration_Report::INVALID,
@@ -268,7 +269,7 @@ class common_configuration_FileSystemComponent extends common_configuration_Comp
                     );
                 }
             }
-            
+
             return new common_configuration_Report(
                 common_configuration_Report::VALID,
                 "File system component '${name}' in '${location} is compliant with expected rights (${expectedRights}).'",

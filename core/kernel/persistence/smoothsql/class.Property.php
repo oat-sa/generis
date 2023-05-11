@@ -166,7 +166,7 @@ class core_kernel_persistence_smoothsql_Property extends core_kernel_persistence
     {
 
         $multipleProperty = new core_kernel_classes_Property(GenerisRdf::PROPERTY_MULTIPLE);
-        $value = ((bool)$isMultiple) ?  GenerisRdf::GENERIS_TRUE : GenerisRdf::GENERIS_FALSE ;
+        $value = ((bool)$isMultiple) ? GenerisRdf::GENERIS_TRUE : GenerisRdf::GENERIS_FALSE ;
         $this->removePropertyValues($resource, $multipleProperty);
         $this->setPropertyValue($resource, $multipleProperty, $value);
     }
@@ -184,7 +184,7 @@ class core_kernel_persistence_smoothsql_Property extends core_kernel_persistence
     {
 
         $lgDependentProperty = new core_kernel_classes_Property(GenerisRdf::PROPERTY_IS_LG_DEPENDENT, __METHOD__);
-        $value = ((bool)$isLgDependent) ?  GenerisRdf::GENERIS_TRUE : GenerisRdf::GENERIS_FALSE ;
+        $value = ((bool)$isLgDependent) ? GenerisRdf::GENERIS_TRUE : GenerisRdf::GENERIS_FALSE ;
         $this->removePropertyValues($resource, $lgDependentProperty);
         $this->setPropertyValue($resource, $lgDependentProperty, $value);
     }

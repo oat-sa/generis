@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -50,7 +51,7 @@ class core_kernel_classes_ContainerComparator
     {
         $returnValue = (int) 0;
 
-        
+
         if ($o1 instanceof core_kernel_classes_Literal && $o2 instanceof core_kernel_classes_Literal) {
             $returnValue = strcasecmp($o1->literal, $o2->literal);
         } elseif ($o1 instanceof core_kernel_classes_Resource && $o2 instanceof core_kernel_classes_Resource) {
@@ -58,7 +59,7 @@ class core_kernel_classes_ContainerComparator
         } else {
             throw new common_Exception('try to compared not implemented type');
         }
-        
+
 
         return (int) $returnValue;
     }

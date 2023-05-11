@@ -38,7 +38,7 @@ use oat\oatbox\service\exception\InvalidServiceManagerException;
  */
 class Migrate extends ScriptAction
 {
-    const MIGRATION_REPORT_LINES = [
+    public const MIGRATION_REPORT_LINES = [
         'migration_success' => [
             'dry' => '%s old references will be migrated into %s new file serializer references.',
             'wet' => 'Successfully migrated %s old references to %s new file serializer references.'

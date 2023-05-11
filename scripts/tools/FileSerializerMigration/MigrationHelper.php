@@ -44,7 +44,7 @@ class MigrationHelper implements ServiceLocatorAwareInterface
     /**
      * Amount of resources processed in one batch
      */
-    const BATCH_LIMIT = 100;
+    public const BATCH_LIMIT = 100;
 
     /**
      * @var UrlFileSerializer

@@ -34,15 +34,15 @@ use oat\generis\model\kernel\uri\UriProviderException;
  */
 class core_kernel_uri_DatabaseSerialUriProvider extends ConfigurableService implements UriProvider
 {
-    const OPTION_PERSISTENCE = 'persistence';
-    
-    const OPTION_NAMESPACE = 'namespace';
+    public const OPTION_PERSISTENCE = 'persistence';
+
+    public const OPTION_NAMESPACE = 'namespace';
     // --- ASSOCIATIONS ---
-        
+
     // --- ATTRIBUTES ---
-        
+
     // --- OPERATIONS ---
-    
+
     /**
      * @return common_persistence_SqlPersistence
      */
@@ -50,7 +50,7 @@ class core_kernel_uri_DatabaseSerialUriProvider extends ConfigurableService impl
     {
         return common_persistence_SqlPersistence::getPersistence($this->getOption(self::OPTION_PERSISTENCE));
     }
-    
+
     /**
      * Generates a URI based on a serial stored in the database.
      *
@@ -66,10 +66,10 @@ class core_kernel_uri_DatabaseSerialUriProvider extends ConfigurableService impl
             $sth = $this->getPersistence()->query($this->getPersistence()->getPlatForm()->getSqlFunction("generis_sequence_uri_provider"), [
                     $this->getOption(self::OPTION_NAMESPACE)
             ]);
-       
+
             if ($sth !== false) {
                 $row = $sth->fetch();
-                
+
                 $returnValue = current($row);
                 $sth->closeCursor();
             } else {

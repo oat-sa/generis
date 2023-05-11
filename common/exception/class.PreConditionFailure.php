@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -50,7 +51,6 @@
  */
 class common_exception_PreConditionFailure extends common_exception_ClientException
 {
-  
     public function getUserMessage()
     {
         return __("One of the precondition for this type of request was not satisfied");

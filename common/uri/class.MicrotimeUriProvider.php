@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,7 +49,7 @@ class common_uri_MicrotimeUriProvider implements common_uri_UriProvider
     {
         $returnValue = (string) '';
 
-        
+
         $modelUri = common_ext_NamespaceManager::singleton()->getLocalNamespace()->getUri();
         $dbWrapper = core_kernel_classes_DbWrapper::singleton();
         $uriExist = false;
@@ -56,19 +57,19 @@ class common_uri_MicrotimeUriProvider implements common_uri_UriProvider
             list($usec, $sec) = explode(" ", microtime());
             $uri = $modelUri . 'i' . (str_replace(".", "", $sec . "" . $usec));
             $sqlResult = $dbWrapper->query("SELECT COUNT(subject) AS num FROM statements WHERE subject = '" . $uri . "'");
-            
+
             if ($row = $sqlResult->fetch()) {
                 $found = (int)$row['num'];
                 if ($found > 0) {
                     $uriExist = true;
                 }
-                
+
                 $sqlResult->closeCursor();
             }
         } while ($uriExist);
-        
+
         $returnValue = $uri;
-        
+
 
         return (string) $returnValue;
     }

@@ -1,4 +1,5 @@
 <?php
+
 use oat\oatbox\cache\SimpleCache;
 
 /**
@@ -32,7 +33,6 @@ use oat\oatbox\cache\SimpleCache;
  */
 class common_ext_ExtensionUninstaller extends common_ext_ExtensionHandler
 {
-
     /**
      * uninstall an extension
      *
@@ -42,19 +42,19 @@ class common_ext_ExtensionUninstaller extends common_ext_ExtensionHandler
      */
     public function uninstall()
     {
-        
+
         common_Logger::i('Uninstalling ' . $this->extension->getId(), ['UNINSTALL']);
 
         // uninstall possible
         if (is_null($this->extension->getManifest()->getUninstallData())) {
             throw new common_Exception('Problem uninstalling extension ' . $this->extension->getId() . ' : Uninstall not supported');
         }
-        
+
         // installed?
         if (!common_ext_ExtensionsManager::singleton()->isInstalled($this->extension->getId())) {
             throw new common_Exception('Problem uninstalling extension ' . $this->extension->getId() . ' : Not installed');
         }
-        
+
         // check dependcies
         if (helpers_ExtensionHelper::isRequired($this->extension)) {
             throw new common_Exception('Problem uninstalling extension ' . $this->extension->getId() . ' : Still required');
@@ -62,17 +62,17 @@ class common_ext_ExtensionUninstaller extends common_ext_ExtensionHandler
 
         common_Logger::d('uninstall script for ' . $this->extension->getId());
         $this->uninstallScripts();
-        
+
         // hook
         $this->extendedUninstall();
-        
+
         common_Logger::d('unregister extension ' . $this->extension->getId());
         $this->unregister();
-        
+
         // we purge the whole cache.
         $cache = $this->getServiceManager()->get(SimpleCache::SERVICE_ID);
         $cache->clear();
-        
+
         common_Logger::i('Uninstalled ' . $this->extension->getId());
         return true;
     }
@@ -106,7 +106,7 @@ class common_ext_ExtensionUninstaller extends common_ext_ExtensionHandler
             }
         }
     }
-    
+
     /**
      * Hook to extend the uninstall procedure
      */

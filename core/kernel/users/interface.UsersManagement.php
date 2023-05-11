@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,8 +31,6 @@
  */
 interface core_kernel_users_UsersManagement
 {
-
-
     // --- OPERATIONS ---
 
     /**
@@ -159,7 +158,7 @@ to test the pasword entered
      * @return void
      */
     public function unnatachRole(core_kernel_classes_Resource $user, core_kernel_classes_Resource $role);
-    
+
     /**
      * Returns an array of Roles (as Resources) where keys are their URIs. The
      * roles represent which kind of Roles are accepted to be identified against

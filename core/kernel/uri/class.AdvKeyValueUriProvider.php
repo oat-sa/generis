@@ -34,11 +34,11 @@ use oat\generis\model\kernel\uri\UriProviderException;
  */
 class core_kernel_uri_AdvKeyValueUriProvider extends ConfigurableService implements UriProvider
 {
-    const OPTION_PERSISTENCE = 'persistence';
-    const OPTION_NAMESPACE = 'namespace';
-    
-    const PERSISTENCE_KEY = 'generis_uriProvider';
-    
+    public const OPTION_PERSISTENCE = 'persistence';
+    public const OPTION_NAMESPACE = 'namespace';
+
+    public const PERSISTENCE_KEY = 'generis_uriProvider';
+
     /**
      * @return common_persistence_AdvKeyValuePersistence
      */
@@ -46,7 +46,7 @@ class core_kernel_uri_AdvKeyValueUriProvider extends ConfigurableService impleme
     {
         return common_persistence_AdvKeyValuePersistence::getPersistence($this->getOption(self::OPTION_PERSISTENCE));
     }
-    
+
     /**
      * Generates a URI based on a serial stored in the database.
      *

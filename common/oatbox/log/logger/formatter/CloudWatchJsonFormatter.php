@@ -30,11 +30,10 @@ use Monolog\Formatter\FormatterInterface;
  */
 class CloudWatchJsonFormatter implements FormatterInterface
 {
-
     /**
      * Used datetime format.
      */
-    const DATETIME_FORMAT = 'd/m/Y:H:i:s O';
+    public const DATETIME_FORMAT = 'd/m/Y:H:i:s O';
 
     /**
      * @inheritdoc
@@ -82,7 +81,7 @@ class CloudWatchJsonFormatter implements FormatterInterface
             'message' => $record['message'],
             'tag' => $record['context'],
         ];
-        
+
         if (isset($record['extra']['stack']['host_type'])) {
             $output['host_type'] = $record['extra']['stack']['host_type'];
         }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,10 +35,10 @@ function generisInstalledAsRootPackage(string $extensionRoot)
 }
 
 if (generisInstalledAsExtension($extensionRoot)) {
-    define('ROOT_PATH', realpath(__DIR__.'/../../'));
+    define('ROOT_PATH', realpath(__DIR__ . '/../../'));
     require_once $extensionRoot . '/../vendor/autoload.php';
 } elseif (generisInstalledAsRootPackage($extensionRoot)) {
-    define('ROOT_PATH', realpath(__DIR__.'/../'));
+    define('ROOT_PATH', realpath(__DIR__ . '/../'));
     require_once $extensionRoot . '/vendor/autoload.php';
 } else {
     throw new \Exception('Vendor directory not found');

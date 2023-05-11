@@ -98,7 +98,7 @@ class core_kernel_rules_ExpressionFactory
         $returnValue->setPropertyValue($firstExpressionProperty, $exp1->getUri());
         $returnValue->setPropertyValue($secondExpressionProperty, $exp2->getUri());
         $returnValue->setPropertyValue($logicalOperatorProperty, $operator->getUri());
-       
+
 
         return $returnValue;
     }

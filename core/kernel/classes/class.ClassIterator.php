@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,18 +27,17 @@
  */
 class core_kernel_classes_ClassIterator implements \Iterator
 {
-   
     /**
      * List of classes whose subclasses have not yet been exploded
      *
      * @var array
      */
     private $todoClasses = [];
-    
+
     private $classes = [];
 
     private $currentId = -1;
-    
+
     /**
      * Constructor of the iterator expecting a class or classes as argument
      *
@@ -51,40 +51,40 @@ class core_kernel_classes_ClassIterator implements \Iterator
         }
         $this->rewind();
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see Iterator::rewind()
      */
-    function rewind()
+    public function rewind()
     {
         $this->currentId = -1;
         $this->next();
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see Iterator::current()
      */
-    function current()
+    public function current()
     {
         return new \core_kernel_classes_Class($this->classes[$this->currentId]);
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see Iterator::key()
      */
-    function key()
+    public function key()
     {
         return $this->currentId;
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see Iterator::next()
      */
-    function next()
+    public function next()
     {
         $this->currentId++;
         if (!isset($this->classes[$this->currentId]) && !empty($this->todoClasses)) {
@@ -98,12 +98,12 @@ class core_kernel_classes_ClassIterator implements \Iterator
             }
         }
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see Iterator::valid()
      */
-    function valid()
+    public function valid()
     {
         return isset($this->classes[$this->currentId]);
     }

@@ -82,7 +82,7 @@ class core_kernel_rules_TermFactory
         $comment = 'Def Term SPX Label : ' . $subject->getUri() . ' ' . $predicate->getUri();
         $SPXResource = core_kernel_classes_ResourceFactory::create($termSPXClass, $label, $comment);
         $returnValue = new core_kernel_rules_Term($SPXResource->getUri());
-          
+
         $subjectProperty = new core_kernel_classes_Property(RulesRdf::PROPERTY_TERM_SPX_SUBJET, __METHOD__);
         $predicateProperty = new core_kernel_classes_Property(RulesRdf::PROPERTY_TERM_SPX_PREDICATE, __METHOD__);
         $returnValue->setPropertyValue($subjectProperty, $subject->getUri());

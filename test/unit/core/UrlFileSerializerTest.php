@@ -37,37 +37,37 @@ class UrlFileSerializerTest extends TestCase
         $file = $fileP->reveal();
         $baseDir = $this->prophesize(Directory::class);
         $baseDir->getRelPath($file)->willReturn('sample~Path.txt');
-        
+
         $fsMock = $this->prophesize(FileSystemService::class);
         $fsMock->getDirectory('sampleFs')->willReturn($baseDir->reveal());
-        
+
         $serializer = new UrlFileSerializer();
         $serializer->setServiceLocator($this->getServiceLocatorMock([
             FileSystemService::SERVICE_ID => $fsMock->reveal()
         ]));
-        
+
         $serial = $serializer->serialize($file);
         $this->assertEquals('file://sampleFs/sample%7EPath.txt', $serial);
     }
-    
+
     public function testUnSerialize()
     {
         $file = $this->prophesize(File::class)->reveal();
         $baseDir = $this->prophesize(Directory::class);
         $baseDir->getFile("sample~Path.txt")->willReturn($file);
-        
+
         $fsMock = $this->prophesize(FileSystemService::class);
         $fsMock->getDirectory('sampleFs')->willReturn($baseDir->reveal());
-        
+
         $serializer = new UrlFileSerializer();
         $serializer->setServiceLocator($this->getServiceLocatorMock([
             FileSystemService::SERVICE_ID => $fsMock->reveal()
         ]));
-        
+
         $unserialized = $serializer->unserialize('file://sampleFs/sample%7EPath.txt');
         $this->assertEquals($file, $unserialized);
     }
-    
+
     /**
      * @dataProvider invalidUrlReferenceProvider
      */
@@ -77,7 +77,7 @@ class UrlFileSerializerTest extends TestCase
         $serializer = new UrlFileSerializer();
         $serializer->unserialize($url);
     }
-    
+
     public function invalidUrlReferenceProvider()
     {
         return [

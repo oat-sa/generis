@@ -25,7 +25,6 @@ use oat\oatbox\service\ServiceManager;
 
 class ComplexSearchTest extends GenerisPhpUnitTestRunner
 {
-
     private $search;
 
     protected function setUp(): void

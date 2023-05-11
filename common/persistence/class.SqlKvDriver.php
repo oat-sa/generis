@@ -30,9 +30,9 @@ use oat\generis\persistence\sql\SchemaCollection;
  */
 class common_persistence_SqlKvDriver implements common_persistence_KvDriver, SchemaProviderInterface
 {
-    const DEFAULT_GC_PROBABILITY = 1000;
+    public const DEFAULT_GC_PROBABILITY = 1000;
 
-    const OPTION_PERSISTENCE_SQL = 'sqlPersistence';
+    public const OPTION_PERSISTENCE_SQL = 'sqlPersistence';
 
     /**
      * Identifier of the sql persitence used
@@ -57,7 +57,7 @@ class common_persistence_SqlKvDriver implements common_persistence_KvDriver, Sch
      * (non-PHPdoc)
      * @see common_persistence_Driver::connect()
      */
-    function connect($id, array $params)
+    public function connect($id, array $params)
     {
         if (!isset($params[self::OPTION_PERSISTENCE_SQL])) {
             throw new common_exception_Error('Missing underlying sql persistence');

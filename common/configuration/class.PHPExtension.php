@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,16 +49,16 @@ class common_configuration_PHPExtension extends common_configuration_BoundableCo
     {
         $returnValue = null;
 
-        
+
         $name = $this->getName();
         $min = $this->getMin();
         $max = $this->getMax();
         $validity = null;
         $message = null;
-        
+
         if (extension_loaded($name)) {
             $current = $this->getValue();
-            
+
             if (!empty($min) && !empty($max)) {
                 // Both min and max are specified.
                 if (version_compare($current, $min, '>=') && version_compare($current, $max, '<=')) {
@@ -97,7 +98,7 @@ class common_configuration_PHPExtension extends common_configuration_BoundableCo
         }
 
         $returnValue = new common_configuration_Report($validity, $message, $this);
-        
+
 
         return $returnValue;
     }
@@ -113,9 +114,9 @@ class common_configuration_PHPExtension extends common_configuration_BoundableCo
     {
         $returnValue = (string) '';
 
-        
+
         $returnValue = phpversion($this->getName());
-        
+
 
         return (string) $returnValue;
     }

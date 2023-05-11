@@ -46,7 +46,7 @@ trait ConfigSets
         $option[$field] = $value;
         return $this->setOption($key, $option);
     }
-    
+
     /**
      * Removes a specific field of an option
      *
@@ -65,7 +65,7 @@ trait ConfigSets
             return $this->setOption($key, $option);
         }
     }
-    
+
     /**
      * Returns a specific field of an option
      *

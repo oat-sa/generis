@@ -43,10 +43,9 @@ use oat\generis\model\data\Model;
  */
 class ComplexSearchService extends ConfigurableService
 {
-    
-    const SERVICE_ID = 'generis/complexSearch';
-    
-    const SERVICE_SEARCH_ID = 'search.tao.gateway';
+    public const SERVICE_ID = 'generis/complexSearch';
+
+    public const SERVICE_SEARCH_ID = 'search.tao.gateway';
 
     /**
      * internal service locator
@@ -87,11 +86,11 @@ class ComplexSearchService extends ConfigurableService
     protected function getOperator($like)
     {
         $operator = 'equals';
-        
+
         if ($like) {
             $operator = 'contains';
         }
-        
+
         return $operator;
     }
 
@@ -147,14 +146,14 @@ class ComplexSearchService extends ConfigurableService
         }
 
         $rdftypes[] = $class_uri;
-        
+
         $criteria = $query->newQuery()
                 ->add('http://www.w3.org/1999/02/22-rdf-syntax-ns#type')
                 ->in($rdftypes);
-        
+
         return $criteria;
     }
-    
+
     /**
      * set gateway language options
      * @param QueryBuilderInterface $query
@@ -172,12 +171,12 @@ class ComplexSearchService extends ConfigurableService
             $options['language'] = $userLanguage;
         }
         $options['defaultLanguage'] = $defaultLanguage;
-        
+
         $this->getGateway()->setOptions($options);
-        
+
         return $query->newQuery();
     }
-    
+
     protected function parseValue($rawValue)
     {
         $result = [];
@@ -193,7 +192,7 @@ class ComplexSearchService extends ConfigurableService
         }
         return count($result) === 1 ? $result[0] : $result;
     }
-    
+
     /**
      * verify if value is valid
      * @param string $value
@@ -227,17 +226,17 @@ class ComplexSearchService extends ConfigurableService
     public function getQuery(core_kernel_persistence_smoothsql_SmoothModel $model, $classUri, array $propertyFilters, $and = true, $isLikeOperator = true, $lang = '', $offset = 0, $limit = 0, $order = '', $orderDir = 'ASC')
     {
         $query = $this->getGateway()->query()->setLimit($limit)->setOffset($offset);
-        
+
         if (!empty($order)) {
             $query->sort([$order => strtolower($orderDir)]);
         }
-        
+
         $this->setLanguage($query, $lang);
 
         $criteria = $query->newQuery()
                 ->add('http://www.w3.org/1999/02/22-rdf-syntax-ns#type')
                 ->in($classUri);
-        
+
         $query->setCriteria($criteria);
         $count     = 0;
         $propertyFilters = FilterFactory::buildFilters($propertyFilters, $isLikeOperator);

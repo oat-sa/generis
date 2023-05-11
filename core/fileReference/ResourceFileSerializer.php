@@ -37,9 +37,9 @@ class ResourceFileSerializer extends ConfigurableService implements FileReferenc
 {
     use OntologyAwareTrait;
 
-    const RESOURCE_FILE_FILESYSTEM_URI = 'fileSystemUri';
-    const RESOURCE_FILE_PATH = 'path';
-    const RESOURCE_FILE_NAME = 'fileName';
+    public const RESOURCE_FILE_FILESYSTEM_URI = 'fileSystemUri';
+    public const RESOURCE_FILE_PATH = 'path';
+    public const RESOURCE_FILE_NAME = 'fileName';
 
     /**
      * @see FileReferenceSerializer::serialize

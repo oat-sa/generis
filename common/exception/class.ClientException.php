@@ -26,7 +26,6 @@
  */
 abstract class common_exception_ClientException extends common_Exception implements common_exception_UserReadableException
 {
-
     public function __construct($message = null, $code = 0)
     {
         if (! $message) {

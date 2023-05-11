@@ -29,7 +29,7 @@ class UuidPrimaryKeyTraitTest extends TestCase
 {
     public function testGetUniquePrimaryKey()
     {
-        $fixture = new class {
+        $fixture = new class () {
             use UuidPrimaryKeyTrait;
         };
 
