@@ -6,6 +6,7 @@ on:
       - develop
       - main
       - sonar-integration
+      - sonar-test
 
   workflow_dispatch:
 
