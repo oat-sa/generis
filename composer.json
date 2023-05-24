@@ -76,7 +76,8 @@
     "ramsey/uuid": "^3.8",
     "relay/relay": "~2.0",
     "composer-runtime-api": "^2.0",
-    "ext-pdo": "*"
+    "ext-pdo": "*",
+    "laudis/neo4j-php-client": "~2.0"
   },
   "require-dev": {
     "mikey179/vfsstream": "~1",
