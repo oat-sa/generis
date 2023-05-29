@@ -21,11 +21,8 @@ jobs:
         shell: bash
         run: |
           FILELIST=$(mktemp /tmp/phpmd-check.XXXXXX)
-          mapfile -d ',' -t added_modified_files < <(printf '%s,' '${{ steps.files.outputs.added_modified }}')
           RETVAL=0
-          if [ ! -s "${FILELIST}" ]; then
-              echo "There are no changes in PHP files (no PHP-MD test performed)"
-          fi
+          mapfile -d ',' -t added_modified_files < <(printf '%s,' '${{ steps.files.outputs.added_modified }}')
           for FILE in "${added_modified_files[@]}"; do
               EXT="${FILE##*.}"
               echo "Changed file: " $FILE ", extension: " $EXT
