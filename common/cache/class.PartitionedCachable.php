@@ -33,6 +33,8 @@ abstract class common_cache_PartitionedCachable implements common_Serializable
 {
     // --- ASSOCIATIONS ---
 
+    // @fixme Modify this file to trigger an error in php-md checks
+
 
     // --- ATTRIBUTES ---
 
