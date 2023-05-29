@@ -18,4 +18,24 @@ jobs:
           tools: phpmd
 
       - name: PHP Mess Detector
-        run: phpmd . github .github/phpmd-ruleset.xml --exclude 'vendor/*'
+        shell: bash
+        run: |
+          FILELIST=$(mktemp /tmp/phpmd-check.XXXXXX)
+          mapfile -d ',' -t added_modified_files < <(printf '%s,' '${{ steps.files.outputs.added_modified }}')
+          RETVAL=0
+          if [ ! -s "${FILELIST}" ]; then
+              echo "There are no changes in PHP files (no PHP-MD test performed)"
+          fi
+          for FILE in "${added_modified_files[@]}"; do
+              EXT="${FILE##*.}"
+              echo "Changed file: " $FILE ", extension: " $EXT
+              if [[ "$EXT" == "php" ]]; then
+                phpmd "${FILE}" github .github/phpmd-ruleset.xml
+                STATUS=$?
+                if [ $RETVAL -ne 0 ]; then
+                  FAILED = 1
+                fi
+              fi
+          done
+          rm "$FILELIST"
+          exit $RETVAL
