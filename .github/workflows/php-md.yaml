@@ -17,6 +17,11 @@ jobs:
           coverage: none
           tools: phpmd
 
+      - uses: Ana06/get-changed-files@v2.2.0
+        id: files
+        with:
+          format: 'csv'
+
       - name: PHP Mess Detector
         shell: bash
         run: |
@@ -25,7 +30,7 @@ jobs:
           readarray -t added_modified_files <<<"$(jq -r '.[]' <<<'${{ steps.files.outputs.added_modified }}')"
           for FILE in "${added_modified_files[@]}"; do
               EXT="${FILE##*.}"
-              echo "Changed file: ${FILE}, extension: ${EXT}"
+              echo "Changed file: $FILE, extension: $EXT"
               if [[ "$EXT" == "php" ]]; then
                 phpmd "${FILE}" github .github/phpmd-ruleset.xml
                 STATUS=$?
