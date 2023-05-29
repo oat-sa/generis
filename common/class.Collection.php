@@ -40,6 +40,7 @@ class common_Collection extends common_Object implements IteratorAggregate, Coun
 {
     // --- ASSOCIATIONS ---
 
+    // @fixme Modify this file to trigger an error in php-md checks
 
     // --- ATTRIBUTES ---
 
