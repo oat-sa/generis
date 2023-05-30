@@ -53,7 +53,10 @@ class SetupDb implements LoggerAwareInterface
     {
         $schemaManager = $p->getSchemaManager()->getDbalSchemaManager();
         if (!$this->dbExists($schemaManager, $dbName)) {
-            throw new \tao_install_utils_Exception('Unable to find the database, make sure that the db exists and that the db user has the rights to use it.');
+            throw new \tao_install_utils_Exception(
+                'Unable to find the database, make sure that the db exists and that the db user has the rights '
+                    . 'to use it.'
+            );
         }
     }
 

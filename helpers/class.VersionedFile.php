@@ -120,7 +120,12 @@ class helpers_VersionedFile
                         if (!$ignoreSystemFiles && $file[0] == '.') {
                             continue;
                         } else {
-                            self::cpWorkingCopy($source . '/' . $file, $destination . '/' . $file, true, $ignoreSystemFiles);
+                            self::cpWorkingCopy(
+                                $source . '/' . $file,
+                                $destination . '/' . $file,
+                                true,
+                                $ignoreSystemFiles
+                            );
                         }
                     }
                 }

@@ -126,7 +126,10 @@ abstract class common_cache_PartitionedCachable implements common_Serializable
                         }
                     }
                     if ($containsNonSerializable && $containsSerializable) {
-                        throw new common_exception_Error('Serializable ' . $this->getSerial() . ' mixed serializable and non serializable values in property ' . $propertyName);
+                        throw new common_exception_Error(
+                            'Serializable ' . $this->getSerial()
+                                . ' mixed serializable and non serializable values in property ' . $propertyName
+                        );
                     }
                 } else {
                     if (is_object($value) && $value instanceof self) {

@@ -59,7 +59,9 @@ class common_uri_MicrotimeUriProvider implements common_uri_UriProvider
         do {
             list($usec, $sec) = explode(" ", microtime());
             $uri = $modelUri . 'i' . (str_replace(".", "", $sec . "" . $usec));
-            $sqlResult = $dbWrapper->query("SELECT COUNT(subject) AS num FROM statements WHERE subject = '" . $uri . "'");
+            $sqlResult = $dbWrapper->query(
+                "SELECT COUNT(subject) AS num FROM statements WHERE subject = '" . $uri . "'"
+            );
 
             if ($row = $sqlResult->fetch()) {
                 $found = (int)$row['num'];

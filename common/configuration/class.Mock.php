@@ -57,8 +57,9 @@ class common_configuration_Mock extends common_configuration_Component
      *
      * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  int expectedStatus The expected status of the report that will be provided by the check method. Must correspond to a constant of the Report class.
-     * @param  string name The name of the mock configuration component to make it identifiable among others.
+     * @param int $expectedStatus The expected status of the report that will be provided by the check method. Must
+     *                            correspond to a constant of the Report class.
+     * @param string $name The name of the mock configuration component to make it identifiable among others.
      * @return mixed
      */
     public function __construct($expectedStatus, $name)

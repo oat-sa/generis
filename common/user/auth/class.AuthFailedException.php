@@ -28,6 +28,7 @@
  * @package generis
 
  */
-abstract class common_user_auth_AuthFailedException extends common_Exception implements common_exception_UserReadableException
+abstract class common_user_auth_AuthFailedException extends common_Exception implements
+    common_exception_UserReadableException
 {
 }

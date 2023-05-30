@@ -64,7 +64,13 @@ class common_Utils
         $returnValue = (bool) false;
         $uri = trim($strarg);
         if (!empty($uri)) {
-            if ((preg_match("/^(http|https|file|ftp):\/\/[\/:.A-Za-z0-9_-]+#[A-Za-z0-9_-]+$/", $uri) && strpos($uri, '#') > 0) || strpos($uri, "#") === 0) {
+            if (
+                (
+                    preg_match("/^(http|https|file|ftp):\/\/[\/:.A-Za-z0-9_-]+#[A-Za-z0-9_-]+$/", $uri)
+                    && strpos($uri, '#') > 0
+                )
+                || strpos($uri, "#") === 0
+            ) {
                 $returnValue = true;
             }
         }
@@ -156,7 +162,9 @@ class common_Utils
                 break;
             default:
                 // resource and unexpected types
-                throw new common_exception_Error("Could not convert variable of type " . gettype($value) . " to PHP variable string");
+                throw new common_exception_Error(
+                    "Could not convert variable of type " . gettype($value) . " to PHP variable string"
+                );
         }
 
         return (string) $returnValue;

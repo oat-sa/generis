@@ -121,7 +121,9 @@ class File extends FileSystemHandler
 
             $resource = StreamWrapper::getResource($mixed);
             if (!is_resource($resource)) {
-                throw new \common_Exception('Unable to create resource from the given stream. Write to filesystem aborted.');
+                throw new \common_Exception(
+                    'Unable to create resource from the given stream. Write to filesystem aborted.'
+                );
             }
             return $this->getFileSystem()->writeStream($this->getPrefix(), $resource, $config);
         } else {
@@ -169,7 +171,9 @@ class File extends FileSystemHandler
 
             $resource = StreamWrapper::getResource($mixed);
             if (!is_resource($resource)) {
-                throw new \common_Exception('Unable to create resource from the given stream. Write to filesystem aborted.');
+                throw new \common_Exception(
+                    'Unable to create resource from the given stream. Write to filesystem aborted.'
+                );
             }
             return $this->getFileSystem()->updateStream($this->getPrefix(), $resource, $config);
         }
@@ -211,7 +215,9 @@ class File extends FileSystemHandler
 
             $resource = StreamWrapper::getResource($mixed);
             if (!is_resource($resource)) {
-                throw new \common_Exception('Unable to create resource from the given stream. Write to filesystem aborted.');
+                throw new \common_Exception(
+                    'Unable to create resource from the given stream. Write to filesystem aborted.'
+                );
             }
             return $this->getFileSystem()->putStream($this->getPrefix(), $resource, $config);
         }

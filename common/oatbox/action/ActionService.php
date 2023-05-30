@@ -29,7 +29,10 @@ class ActionService extends ConfigurableService
 {
     public const SERVICE_ID = 'generis/actionService';
 
-    public static $blackList = ['\\oatbox\\composer\\ExtensionInstaller','\\oatbox\\composer\\ExtensionInstallerPlugin'];
+    public static $blackList = [
+        '\\oatbox\\composer\\ExtensionInstaller',
+        '\\oatbox\\composer\\ExtensionInstallerPlugin'
+    ];
 
     /**
      *
@@ -55,7 +58,12 @@ class ActionService extends ConfigurableService
         $actions = $this->getCache()->get(__FUNCTION__);
         if (is_null($actions)) {
             $actions = [];
-            foreach ($this->getServiceLocator()->get(common_ext_ExtensionsManager::SERVICE_ID)->getInstalledExtensions() as $ext) {
+            $installedExtensions = $this
+                ->getServiceLocator()
+                ->get(common_ext_ExtensionsManager::SERVICE_ID)
+                ->getInstalledExtensions();
+
+            foreach ($installedExtensions as $ext) {
                 $actions = array_merge($actions, $this->getActionsInDirectory($ext->getDir()));
             }
             $actions = array_merge($actions, $this->getActionsInDirectory(VENDOR_PATH . 'oat-sa'));

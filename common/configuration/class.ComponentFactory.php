@@ -254,7 +254,15 @@ class common_configuration_ComponentFactory
 
         if (!empty($array)) {
             if (!empty($array['type'])) {
-                $acceptedTypes = ['PHPRuntime', 'PHPINIValue', 'PHPExtension', 'PHPDatabaseDriver', 'FileSystemComponent', 'Custom', 'Mock'];
+                $acceptedTypes = [
+                    'PHPRuntime',
+                    'PHPINIValue',
+                    'PHPExtension',
+                    'PHPDatabaseDriver',
+                    'FileSystemComponent',
+                    'Custom',
+                    'Mock'
+                ];
                 $cleanType = preg_replace('/^Check/i', '', $array['type']);
                 if (in_array($cleanType, $acceptedTypes)) {
                     if (!empty($array['value'])) {
@@ -334,7 +342,11 @@ class common_configuration_ComponentFactory
                                     throw new common_configuration_ComponentFactoryException($msg);
                                 }
 
-                                $returnValue = self::buildFileSystemComponent($values['location'], $values['rights'], $optional);
+                                $returnValue = self::buildFileSystemComponent(
+                                    $values['location'],
+                                    $values['rights'],
+                                    $optional
+                                );
                                 break;
 
                             case 'Custom':

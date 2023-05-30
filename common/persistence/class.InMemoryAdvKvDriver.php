@@ -19,7 +19,8 @@
  *
  */
 
-class common_persistence_InMemoryAdvKvDriver extends common_persistence_InMemoryKvDriver implements common_persistence_AdvKvDriver
+class common_persistence_InMemoryAdvKvDriver extends common_persistence_InMemoryKvDriver implements
+    common_persistence_AdvKvDriver
 {
     public const HPREFIX = 'hPrfx_';
 

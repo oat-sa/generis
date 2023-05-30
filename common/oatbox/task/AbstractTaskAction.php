@@ -30,7 +30,8 @@ use oat\oatbox\extension\AbstractAction;
  *
  * @author Aleh Hutnikau <hutnikau@1pt.com>
  *
- * @deprecated since version 7.10.0, to be removed in 8.0. Use \oat\tao\model\taskQueue\Task\FilesystemAwareTrait instead.
+ * @deprecated since version 7.10.0, to be removed in 8.0. Use \oat\tao\model\taskQueue\Task\FilesystemAwareTrait
+ *             instead.
  */
 abstract class AbstractTaskAction extends AbstractAction
 {

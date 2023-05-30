@@ -39,7 +39,8 @@ class common_http_Request
      * The scheme in used (http|https) will be derived from
      *
      * * $_SERVER['HTTPS'] in case of a standard deployment
-     * * $_SERVER['HTTP_X_FORWARDED_PROTO'] or $_SERVER['HTTP_X_FORWARDED_SSL'] in case of being deployed behing a load balancer/proxy.
+     * * $_SERVER['HTTP_X_FORWARDED_PROTO'] or $_SERVER['HTTP_X_FORWARDED_SSL'] in case of being deployed behing a load
+     *   balancer/proxy.
      *
      * If no clues about whether HTTPS is in use are found, HTTP will be the scheme of the current request.
      *

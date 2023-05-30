@@ -384,7 +384,10 @@ class common_ext_Extension implements ServiceManagerAwareInterface
             if (is_file($manifestFile) && is_readable($manifestFile)) {
                 $this->manifest = new Manifest($manifestFile);
             } else {
-                throw new ManifestNotFoundException("Extension Manifest not found for extension '" . $this->id . "'.", $this->id);
+                throw new ManifestNotFoundException(
+                    "Extension Manifest not found for extension '" . $this->id . "'.",
+                    $this->id
+                );
             }
         }
         $this->manifest->setServiceLocator($this->getServiceLocator());
@@ -418,7 +421,10 @@ class common_ext_Extension implements ServiceManagerAwareInterface
                     $this->getExtensionManager()->getExtensionById($extId);
                 }
             } catch (ManifestNotFoundException $e) {
-                throw new common_ext_MissingExtensionException($e->getExtensionId() . ' not found but required for ' . $this->getId(), $e->getExtensionId());
+                throw new common_ext_MissingExtensionException(
+                    $e->getExtensionId() . ' not found but required for ' . $this->getId(),
+                    $e->getExtensionId()
+                );
             }
 
             $loader = new common_ext_ExtensionLoader($this);

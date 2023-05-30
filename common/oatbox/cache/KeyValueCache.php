@@ -93,7 +93,10 @@ class KeyValueCache extends ConfigurableService implements SimpleCache
     protected function getPersistence()
     {
         if (is_null($this->persistence)) {
-            $this->persistence = $this->getServiceLocator()->get(PersistenceManager::SERVICE_ID)->getPersistenceById($this->getOption(self::OPTION_PERSISTENCE));
+            $this->persistence = $this
+                ->getServiceLocator()
+                ->get(PersistenceManager::SERVICE_ID)
+                ->getPersistenceById($this->getOption(self::OPTION_PERSISTENCE));
         }
         return $this->persistence;
     }

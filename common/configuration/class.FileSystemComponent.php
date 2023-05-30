@@ -84,8 +84,13 @@ class common_configuration_FileSystemComponent extends common_configuration_Comp
      * @throws common_configuration_MalformedRightsException
      * @return mixed
      */
-    public function __construct($location, $expectedRights, $optional = false, $recursive = false, $mustCheckIfEmpty = false)
-    {
+    public function __construct(
+        $location,
+        $expectedRights,
+        $optional = false,
+        $recursive = false,
+        $mustCheckIfEmpty = false
+    ) {
         parent::__construct('tao.configuration.filesystem', $optional);
 
         $this->setExpectedRights($expectedRights);
@@ -275,7 +280,8 @@ class common_configuration_FileSystemComponent extends common_configuration_Comp
 
             return new common_configuration_Report(
                 common_configuration_Report::VALID,
-                "File system component '${name}' in '${location} is compliant with expected rights (${expectedRights}).'",
+                "File system component '${name}' in '${location} is compliant with expected rights "
+                    . "(${expectedRights}).'",
                 $this
             );
         }
@@ -304,7 +310,9 @@ class common_configuration_FileSystemComponent extends common_configuration_Comp
             $funcName = 'is_' . strtolower($rule);
             $returnValue = $funcName($location);
         } else {
-            $iterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($location, \RecursiveDirectoryIterator::SKIP_DOTS));
+            $iterator = new \RecursiveIteratorIterator(
+                new \RecursiveDirectoryIterator($location, \RecursiveDirectoryIterator::SKIP_DOTS)
+            );
 
             try {
                 $method = 'is' . $rule;

@@ -102,10 +102,15 @@ class SyncQueue extends AbstractQueue
         $taskResource = parent::linkTask($task, $resource);
         $report = $task->getReport();
         if (!empty($report)) {
-            //serialize only two first report levels because sometimes serialized report is huge and it does not fit into `k_po` index of statemetns table.
+            // serialize only two first report levels because sometimes serialized report is huge and it does not fit
+            // into `k_po` index of statemetns table.
             $serializableReport = new Report($report->getType(), $report->getMessage(), $report->getData());
             foreach ($report as $subReport) {
-                $serializableSubReport = new Report($subReport->getType(), $subReport->getMessage(), $subReport->getData());
+                $serializableSubReport = new Report(
+                    $subReport->getType(),
+                    $subReport->getMessage(),
+                    $subReport->getData()
+                );
                 $serializableReport->add($serializableSubReport);
             }
             $taskResource->setPropertyValue(

@@ -134,8 +134,11 @@ class MigrationHelper implements ServiceLocatorAwareInterface
      * @return void
      * @throws FileSerializerException
      */
-    public function migrateResource(core_kernel_classes_Resource $fileResource, core_kernel_classes_Property $property, core_kernel_classes_Resource $subject)
-    {
+    public function migrateResource(
+        core_kernel_classes_Resource $fileResource,
+        core_kernel_classes_Property $property,
+        core_kernel_classes_Resource $subject
+    ) {
         /** @var Directory|File $unserializedFileResource */
         $unserializedFileResource = $this->getResourceFileSerializer()->unserialize($fileResource);
         $migratedValue = $this->getUrlFileSerializer()->serialize($unserializedFileResource);

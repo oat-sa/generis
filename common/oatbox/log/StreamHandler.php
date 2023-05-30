@@ -50,8 +50,10 @@ class StreamHandler extends MonologStreamHandler
     public const PARAM_LOG_LEVEL = '--log-level';
 
     /**
-     * @param resource|string $defaultStream (Unless this parameter is specified on the command line as --log-file, otherwise it is ignored) resource where data will be output
-     * @param int $defaultLevel (Unless this parameter is specified on the command line as --log-level, otherwise it is ignored) The minimum logging level at which this handler will be triggered
+     * @param resource|string $defaultStream (Unless this parameter is specified on the command line as --log-file,
+     *                                       otherwise it is ignored) resource where data will be output
+     * @param int $defaultLevel (Unless this parameter is specified on the command line as --log-level, otherwise it is
+     *                          ignored) The minimum logging level at which this handler will be triggered
      * @param bool $bubble Whether the messages that are handled can bubble up the stack or not
      * @param int|null $filePermission Optional file permissions (default (0644) are only for owner read/write)
      * @param bool $useLocking Try to lock log file before doing any writes
@@ -59,8 +61,13 @@ class StreamHandler extends MonologStreamHandler
      * @throws \Exception                If a missing directory is not buildable
      * @throws \InvalidArgumentException If stream is not a resource or string
      */
-    public function __construct($defaultStream, int $defaultLevel = Logger::DEBUG, bool $bubble = true, $filePermission = null, bool $useLocking = false)
-    {
+    public function __construct(
+        $defaultStream,
+        int $defaultLevel = Logger::DEBUG,
+        bool $bubble = true,
+        $filePermission = null,
+        bool $useLocking = false
+    ) {
         $stream = $this->getScriptParameter(self::PARAM_LOG_FILE) ?: $defaultStream;
         $logLevel = $this->getLogLevelParameter() ?: $defaultLevel;
         parent::__construct($stream, $logLevel, $bubble, $filePermission, $useLocking);
@@ -92,7 +99,12 @@ class StreamHandler extends MonologStreamHandler
 
         $errorLevels = Logger::getLevels();
         if (!isset($errorLevels[$logLevelParameter])) {
-            throw new \Exception(sprintf('Such log level doesn`t exist. Please, use one of: %s', implode(', ', array_flip($errorLevels))));
+            throw new \Exception(
+                sprintf(
+                    'Such log level doesn`t exist. Please, use one of: %s',
+                    implode(', ', array_flip($errorLevels))
+                )
+            );
         }
 
         return $errorLevels[$logLevelParameter];

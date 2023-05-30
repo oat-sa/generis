@@ -126,7 +126,10 @@ abstract class ScriptAction extends AbstractAction
         if (!empty($usageDescription) && is_array($usageDescription)) {
             if (!empty($usageDescription['prefix']) && in_array('-' . $usageDescription['prefix'], $params)) {
                 return true;
-            } elseif (!empty($usageDescription['longPrefix']) && in_array('--' . $usageDescription['longPrefix'], $params)) {
+            } elseif (
+                !empty($usageDescription['longPrefix'])
+                && in_array('--' . $usageDescription['longPrefix'], $params)
+            ) {
                 return true;
             }
         }

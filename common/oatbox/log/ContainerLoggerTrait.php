@@ -48,7 +48,8 @@ trait ContainerLoggerTrait
                 $this->getContainer()->offsetGet(LoggerService::SERVICE_ID)->getLogger()
             );
 
-            // @TODO: implemented because of the legacy, we will don't need it when we're using the container in every case.
+            // @TODO: implemented because of the legacy, we will don't need it when we're using the container in every
+            //        case.
             if (!empty($key)) {
                 try {
                     return $this->getContainer()->offsetGet($key);

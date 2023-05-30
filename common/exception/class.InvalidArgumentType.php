@@ -57,7 +57,8 @@ class common_exception_InvalidArgumentType extends common_exception_Error
     {
 
         $object = is_object($object) ? get_class($object) : gettype($object);
-        $message = 'Argument ' . $position . ' passed to ' . $class . '::' . $function . '() must be an ' . $expectedType . ', ' . $object . ' given';
+        $message = 'Argument ' . $position . ' passed to ' . $class . '::' . $function . '() must be an '
+            . $expectedType . ', ' . $object . ' given';
         parent::__construct($message);
     }
 }
