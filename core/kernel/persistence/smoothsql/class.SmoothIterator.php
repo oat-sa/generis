@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,16 +39,16 @@ class core_kernel_persistence_smoothsql_SmoothIterator extends common_persistenc
             . 'ORDER BY id';
         parent::__construct($persistence, $query);
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see Iterator::current()
      * @return core_kernel_classes_Triple
      */
-    function current()
+    public function current()
     {
         $statement = parent::current();
-        
+
         $triple = new core_kernel_classes_Triple();
         $triple->modelid = $statement["modelid"];
         $triple->subject = $statement["subject"];

@@ -43,7 +43,7 @@ interface RdfInterface extends \IteratorAggregate
      * @return array
      */
     public function get($subject, $predicate);
-    
+
     /**
      * Adds a triple to the model
      *
@@ -64,7 +64,7 @@ interface RdfInterface extends \IteratorAggregate
      * @param \core_kernel_classes_Triple $triple
      */
     public function remove(\core_kernel_classes_Triple $triple);
-    
+
     /**
      * Returns an array of the triples with the given predicate, object
      *

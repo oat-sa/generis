@@ -37,7 +37,7 @@ class TaoLog extends ConfigurableService implements LoggerInterface
 {
     use LoggerTrait;
 
-    const OPTION_APPENDERS = 'appenders';
+    public const OPTION_APPENDERS = 'appenders';
 
     /** @var \common_log_Dispatcher */
     private $dispatcher;
@@ -79,7 +79,7 @@ class TaoLog extends ConfigurableService implements LoggerInterface
         } else {
             $requestURI = implode(' ', $_SERVER['argv']);
         }
-        
+
         //reformat input
         if (is_object($message)) {
             $message = 'Message is object of type ' . gettype($message);
@@ -88,16 +88,27 @@ class TaoLog extends ConfigurableService implements LoggerInterface
             if ($level <= \common_Logger::DEBUG_LEVEL) {
                 $message .= ' : ' . PHP_EOL . var_export($message, true);
             }
-            //same for arrays
+        //same for arrays
         } elseif (is_array($message) && $level <= \common_Logger::DEBUG_LEVEL) {
             $message = 'Message is an array : ' . PHP_EOL . var_export($message, true);
         } else {
             $message = (string) $message;
         }
         $level = \common_log_Logger2Psr::getCommonFromPsrLevel($level);
-        $this->getDispatcher()->log(new \common_log_Item($message, $level, time(), $stack, $context, $requestURI, $errorFile, $errorLine));
+        $this->getDispatcher()->log(
+            new \common_log_Item(
+                $message,
+                $level,
+                time(),
+                $stack,
+                $context,
+                $requestURI,
+                $errorFile,
+                $errorLine
+            )
+        );
     }
-    
+
     /**
      * Returns the dispatcher
      *

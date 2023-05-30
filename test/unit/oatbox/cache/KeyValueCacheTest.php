@@ -29,6 +29,7 @@ use oat\generis\test\KeyValueMockTrait;
 class KeyValueCacheTest extends TestCase
 {
     use KeyValueMockTrait;
+
     /**
      * @var KeyValueCache
      */

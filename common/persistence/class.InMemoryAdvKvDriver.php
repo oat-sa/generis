@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -18,15 +19,16 @@
  *
  */
 
-class common_persistence_InMemoryAdvKvDriver extends common_persistence_InMemoryKvDriver implements common_persistence_AdvKvDriver
+class common_persistence_InMemoryAdvKvDriver extends common_persistence_InMemoryKvDriver implements
+    common_persistence_AdvKvDriver
 {
-    const HPREFIX = 'hPrfx_';
+    public const HPREFIX = 'hPrfx_';
 
     /**
      *
      * @see common_persistence_Driver::connect()
      */
-    function connect($id, array $params)
+    public function connect($id, array $params)
     {
         return new \common_persistence_AdvKeyValuePersistence($params, $this);
     }

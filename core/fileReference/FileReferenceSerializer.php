@@ -6,7 +6,7 @@ use oat\oatbox\filesystem\FileSystemHandler;
 
 interface FileReferenceSerializer
 {
-    const SERVICE_ID = 'generis/fileReferenceSerializer';
+    public const SERVICE_ID = 'generis/fileReferenceSerializer';
 
     /**
      * Serialize filesystem abstraction to a serial
@@ -32,7 +32,7 @@ interface FileReferenceSerializer
      * @return \oat\oatbox\filesystem\File
      */
     public function unserializeFile($serial);
-    
+
     /**
      * Get the \oat\oatbox\filesystem\Directory associated to the serial
      *

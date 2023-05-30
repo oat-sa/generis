@@ -35,12 +35,12 @@ class FileRdf implements RdfInterface
      * @var string
      */
     private $file;
-    
+
     public function __construct($file)
     {
         $this->file = $file;
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see \oat\generis\model\data\RdfInterface::get()
@@ -49,7 +49,7 @@ class FileRdf implements RdfInterface
     {
         throw new \common_Exception('Not implemented');
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see \oat\generis\model\data\RdfInterface::add()
@@ -58,7 +58,7 @@ class FileRdf implements RdfInterface
     {
         throw new \common_Exception('Not implemented');
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see \oat\generis\model\data\RdfInterface::remove()
@@ -67,7 +67,7 @@ class FileRdf implements RdfInterface
     {
         throw new \common_Exception('Not implemented');
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see \oat\generis\model\data\RdfInterface::search()
@@ -76,7 +76,7 @@ class FileRdf implements RdfInterface
     {
         throw new \common_Exception('Not implemented');
     }
-    
+
     public function getIterator()
     {
         return new FileIterator($this->file);

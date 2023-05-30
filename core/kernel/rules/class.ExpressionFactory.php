@@ -15,8 +15,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2007-2010 (original work) Public Research Centre Henri Tudor & University of Luxembourg) (under the project TAO-QUAL);
- *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
+ * Copyright (c) 2007-2010 (original work) Public Research Centre Henri Tudor & University of Luxembourg
+ *                         (under the project TAO-QUAL);
+ *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung
+ *                         (under the project TAO-TRANSFER);
  *               2017 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  *
  */
@@ -59,7 +61,10 @@ class core_kernel_rules_ExpressionFactory
         $label = 'Terminal Expression : ' . $term->getLabel();
         $comment = 'Terminal Expression : ' . $term->getUri();
         $expressionInst = core_kernel_classes_ResourceFactory::create($expressionClass, $label, $comment);
-        $terminalExpressionProperty = new core_kernel_classes_Property(RulesRdf::PROPERTY_TERMINAL_EXPRESSION, __METHOD__);
+        $terminalExpressionProperty = new core_kernel_classes_Property(
+            RulesRdf::PROPERTY_TERMINAL_EXPRESSION,
+            __METHOD__
+        );
         $returnValue = new core_kernel_rules_Expression($expressionInst->getUri());
         $returnValue->setPropertyValue($terminalExpressionProperty, $term->getUri());
         $returnValue->debug = __METHOD__;
@@ -76,8 +81,11 @@ class core_kernel_rules_ExpressionFactory
      * @param  Resource operator
      * @return core_kernel_rules_Expression
      */
-    public static function createRecursiveExpression(core_kernel_rules_Expression $exp1, core_kernel_rules_Expression $exp2, core_kernel_classes_Resource $operator)
-    {
+    public static function createRecursiveExpression(
+        core_kernel_rules_Expression $exp1,
+        core_kernel_rules_Expression $exp2,
+        core_kernel_classes_Resource $operator
+    ) {
         $returnValue = null;
         if ($exp1 == null || $exp2 == null  || $operator == null) {
             var_dump($exp1, $exp2, $operator);
@@ -88,7 +96,10 @@ class core_kernel_rules_ExpressionFactory
         $label = 'Expression : ' . $exp1->getLabel() . ' ' . $operator->getLabel() . ' ' . $exp2->getLabel();
         $comment = 'Expression : ' . $exp1->getUri() . ' ' . $operator->getUri() . ' ' . $exp2->getUri();
         $expressionInst = core_kernel_classes_ResourceFactory::create($expressionClass, $label, $comment);
-        $terminalExpressionProperty = new core_kernel_classes_Property(RulesRdf::PROPERTY_TERMINAL_EXPRESSION, __METHOD__);
+        $terminalExpressionProperty = new core_kernel_classes_Property(
+            RulesRdf::PROPERTY_TERMINAL_EXPRESSION,
+            __METHOD__
+        );
         $logicalOperatorProperty = new core_kernel_classes_Property(RulesRdf::PROPERTY_HASLOGICALOPERATOR, __METHOD__);
         $firstExpressionProperty = new core_kernel_classes_Property(RulesRdf::PROPERTY_FIRST_EXPRESSION, __METHOD__);
         $secondExpressionProperty = new core_kernel_classes_Property(RulesRdf::PROPERTY_SECOND_EXPRESSION, __METHOD__);
@@ -98,7 +109,7 @@ class core_kernel_rules_ExpressionFactory
         $returnValue->setPropertyValue($firstExpressionProperty, $exp1->getUri());
         $returnValue->setPropertyValue($secondExpressionProperty, $exp2->getUri());
         $returnValue->setPropertyValue($logicalOperatorProperty, $operator->getUri());
-       
+
 
         return $returnValue;
     }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,7 +25,6 @@
  */
 abstract class common_persistence_sql_SchemaManager
 {
-    
     /**
      * HACK to set "PDO::MYSQL_ATTR_MAX_BUFFER_SIZE" for fileupload
      *
@@ -37,13 +37,13 @@ abstract class common_persistence_sql_SchemaManager
     {
         throw new core_kernel_persistence_Exception('setattribute only availlable for mysql pdo implementation');
     }
-    
+
     /**
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
      * @return Doctrine\DBAL\Schema\AbstractSchemaManager;
      */
     abstract protected function getSchemaManager();
-    
+
     /**
      * Returns the column names of a given table
      *
@@ -56,9 +56,9 @@ abstract class common_persistence_sql_SchemaManager
     {
         return $this->getSchemaManager()->listTableColumns($table);
     }
-    
-    
-    
+
+
+
     /**
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
      */
@@ -67,8 +67,8 @@ abstract class common_persistence_sql_SchemaManager
         $tables = $this->getSchemaManager()->listTables();
         return new \Doctrine\DBAL\Schema\Schema($tables, [], $this->getSchemaManager()->createSchemaConfig());
     }
-     
-    
+
+
     /**
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
      * @param unknown $schema
@@ -83,7 +83,7 @@ abstract class common_persistence_sql_SchemaManager
         $table->addColumn($column, "text", ["notnull" => false]);
         return $newSchema;
     }
-    
+
     /**
      * Returns an array of string containting the names of the tables contained
      * the currently selected database in the storage engine.
@@ -97,7 +97,7 @@ abstract class common_persistence_sql_SchemaManager
     {
         return $this->getSchemaManager()->listTableNames();
     }
-    
+
     /**
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
      * @param string $tableName
@@ -106,7 +106,7 @@ abstract class common_persistence_sql_SchemaManager
     {
         return $this->getSchemaManager()->listTableIndexes($tableName);
     }
-    
+
      /**
      * Create an index on a given table and selected columns. This method throws
      * in case of error.
@@ -142,7 +142,7 @@ abstract class common_persistence_sql_SchemaManager
      * @return string
      */
     abstract public function getIndexAlreadyExistsErrorCode();
-    
+
     /**
      *
      * @author Lionel Lecaque, lionel@taotesting.com

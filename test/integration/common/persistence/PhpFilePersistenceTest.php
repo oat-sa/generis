@@ -24,8 +24,8 @@ namespace oat\generis\test\integration\common\persistence;
 
 use common_exception_NotImplemented;
 use oat\generis\test\GenerisPhpUnitTestRunner;
-use \common_persistence_Persistence;
-use \common_persistence_PhpFileDriver;
+use common_persistence_Persistence;
+use common_persistence_PhpFileDriver;
 use org\bovigo\vfs\vfsStream;
 
 class PhpFilePersistenceTest extends GenerisPhpUnitTestRunner

@@ -27,39 +27,38 @@ namespace oat\oatbox\validator;
  */
 interface ValidatorInterface
 {
-    
     /**
      * return validator name
      * @return string
      */
     public function getName();
-    
+
     /**
      * return validator options
      * @return array
      */
     public function getOptions();
-    
+
     /**
      * return error message
      * @return string
      */
     public function getMessage();
-    
+
     /**
      * set up error message
      * @param string $message
      * @return $this
      */
     public function setMessage($message);
-    
+
     /**
      * set up validator options
      * @param array $options
      * @return $this
      */
     public function setOptions(array $options);
-    
+
     /**
      * valid $values
      * @param string $values

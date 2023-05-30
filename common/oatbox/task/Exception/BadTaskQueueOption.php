@@ -14,5 +14,4 @@ namespace oat\oatbox\task\Exception;
  */
 class BadTaskQueueOption extends \common_exception_Error
 {
-
 }

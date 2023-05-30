@@ -21,12 +21,11 @@
 
 namespace oat\generis\test\integration\model\persistence\smoothsql;
 
-use \core_kernel_persistence_smoothsql_SmoothModel;
+use core_kernel_persistence_smoothsql_SmoothModel;
 use oat\generis\test\GenerisPhpUnitTestRunner;
 
 class SmoothModelTest extends GenerisPhpUnitTestRunner
 {
-
     /**
      *
      * @see PHPUnit_Framework_TestCase::setUp()

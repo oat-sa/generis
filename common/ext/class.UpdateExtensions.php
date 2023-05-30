@@ -19,7 +19,7 @@
  *
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use oat\oatbox\action\Action;
 use oat\oatbox\log\LoggerAwareTrait;
@@ -28,6 +28,7 @@ use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Psr\Log\LoggerAwareInterface;
 use oat\oatbox\cache\SimpleCache;
+
 /**
  * Run the extension updater
  *
@@ -71,7 +72,9 @@ class common_ext_UpdateExtensions implements Action, ServiceLocatorAwareInterfac
                 $report->add(new Report(Report::TYPE_ERROR, $ex->getMessage()));
                 break;
             } catch (Exception $e) {
-                $this->logError('Exception during update of ' . $ext->getId() . ': ' . get_class($e) . ' "' . $e->getMessage() . '"');
+                $this->logError(
+                    'Exception during update of ' . $ext->getId() . ': ' . get_class($e) . ' "' . $e->getMessage() . '"'
+                );
                 $report->setType(Report::TYPE_ERROR);
                 $report->setMessage('Update failed');
                 $report->add(new Report(Report::TYPE_ERROR, 'Exception during update of ' . $ext->getId() . '.'));
@@ -98,7 +101,10 @@ class common_ext_UpdateExtensions implements Action, ServiceLocatorAwareInterfac
         $installed = $this->getExtensionManager()->getInstalledVersion($ext->getId());
         $codeVersion = $ext->getVersion();
         if ($installed !== $codeVersion) {
-            $report = new Report(Report::TYPE_INFO, $ext->getName() . ' requires update from ' . $installed . ' to ' . $codeVersion);
+            $report = new Report(
+                Report::TYPE_INFO,
+                $ext->getName() . ' requires update from ' . $installed . ' to ' . $codeVersion
+            );
             try {
                 $updater = $ext->getUpdater();
                 $returnedVersion = $updater->update($installed);
@@ -146,7 +152,9 @@ class common_ext_UpdateExtensions implements Action, ServiceLocatorAwareInterfac
 
     protected function getMissingExtensions()
     {
-        $missingId = \helpers_ExtensionHelper::getMissingExtensionIds($this->getExtensionManager()->getInstalledExtensions());
+        $missingId = \helpers_ExtensionHelper::getMissingExtensionIds(
+            $this->getExtensionManager()->getInstalledExtensions()
+        );
 
         $missingExt = [];
         foreach ($missingId as $extId) {
@@ -163,5 +171,4 @@ class common_ext_UpdateExtensions implements Action, ServiceLocatorAwareInterfac
     {
         return $this->getServiceLocator()->get(common_ext_ExtensionsManager::SERVICE_ID);
     }
-
 }

@@ -33,27 +33,27 @@ abstract class EnvironmentProcessorAbstract
     /**
      * Stack offset name under the log extra offset.
      */
-    const LOG_STACK           = 'stack';
+    public const LOG_STACK           = 'stack';
 
     /**
      * Stack identifier offset name under the stack offset.
      */
-    const LOG_STACK_ID        = 'id';
+    public const LOG_STACK_ID        = 'id';
 
     /**
      * Stack type offset name under the stack offset.
      */
-    const LOG_STACK_TYPE      = 'type';
+    public const LOG_STACK_TYPE      = 'type';
 
     /**
      * Client name offset name under the stack offset.
      */
-    const LOG_STACK_NAME      = 'name';
+    public const LOG_STACK_NAME      = 'name';
 
     /**
      * Host type offset name under the stack offset.
      */
-    const LOG_STACK_HOST_TYPE = 'host_type';
+    public const LOG_STACK_HOST_TYPE = 'host_type';
 
     /**
      * @var string

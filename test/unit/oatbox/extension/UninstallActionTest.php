@@ -32,14 +32,13 @@ use oat\generis\test\TestCase;
  */
 class UninstallActionTest extends TestCase
 {
-    
     public function testUnregisterEvent()
     {
-        
+
         $event    = 'testEvent';
         $callBack = function () {
         };
-        
+
         $instance = $this->getMockForAbstractClass(
             UninstallAction::class,
             [],
@@ -49,35 +48,35 @@ class UninstallActionTest extends TestCase
             true,
             ['getServiceLocator' , 'getServiceManager']
         );
-        
+
         $prophetServiceManager = $this->prophesize(ServiceManager::class);
         $prophetEventManager   = $this->prophesize(EventManager::class);
-        
+
         $prophetEventManager->detach($event, $callBack)->willReturn(null);
-        
+
         $EventManagerMock      = $prophetEventManager->reveal();
-        
+
         $prophetServiceManager->get(EventManager::CONFIG_ID)->willReturn($EventManagerMock);
         $prophetServiceManager->register(EventManager::CONFIG_ID, $EventManagerMock)->willReturn(null);
-        
+
         $serviceManagerMock    = $prophetServiceManager->reveal();
-        
+
         $instance->expects($this->once())
                ->method('getServiceLocator')
                ->willReturn($serviceManagerMock);
-        
+
         $instance->expects($this->once())
                ->method('getServiceManager')
                ->willReturn($serviceManagerMock);
-        
+
         $instance->unregisterEvent($event, $callBack);
     }
-    
+
     public function testUnregisterService()
     {
-        
+
         $fixtureService = 'test/service';
-        
+
         $instance = $this->getMockForAbstractClass(
             UninstallAction::class,
             [],
@@ -87,15 +86,15 @@ class UninstallActionTest extends TestCase
             true,
             ['getServiceManager']
         );
-        
+
         $prophetServiceManager = $this->prophesize(ServiceManager::class);
         $prophetServiceManager->unregister($fixtureService)->willReturn(null);
         $serviceManagerMock    = $prophetServiceManager->reveal();
-        
+
         $instance->expects($this->once())
                 ->method('getServiceManager')
                 ->willReturn($serviceManagerMock);
-        
+
         $instance->unregisterService($fixtureService);
     }
 }

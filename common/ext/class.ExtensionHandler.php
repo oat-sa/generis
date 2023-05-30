@@ -18,8 +18,10 @@ use oat\oatbox\service\ServiceManager;
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
- *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
+ * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung
+ *                         (under the project TAO-TRANSFER);
+ *               2009-2012 (update and modification) Public Research Centre Henri Tudor
+ *                         (under the project TAO-SUSTAIN & TAO-DEV);
  *
  */
 
@@ -55,7 +57,7 @@ abstract class common_ext_ExtensionHandler
     {
         $this->extension = $extension;
     }
-    
+
     /**
      * @return common_ext_Extension
      */
@@ -63,7 +65,7 @@ abstract class common_ext_ExtensionHandler
     {
         return $this->extension;
     }
-    
+
     /**
      * Run Extension Script
      *
@@ -73,7 +75,10 @@ abstract class common_ext_ExtensionHandler
      */
     protected function runExtensionScript($script, array $arguments = [])
     {
-        $this->log('d', 'Running custom extension script ' . $script . ' for extension ' . $this->getExtension()->getId());
+        $this->log(
+            'd',
+            'Running custom extension script ' . $script . ' for extension ' . $this->getExtension()->getId()
+        );
         if (file_exists($script)) {
             require_once $script;
         } elseif (class_exists($script) && is_subclass_of($script, \oat\oatbox\action\Action::class)) {

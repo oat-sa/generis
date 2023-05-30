@@ -26,7 +26,4 @@ namespace oat\oatbox\task\TaskInterface;
  */
 interface TaskListIterator extends \Iterator, \Countable
 {
-
-
-
 }

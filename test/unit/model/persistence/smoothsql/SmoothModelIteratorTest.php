@@ -27,7 +27,6 @@ use Prophecy\Promise\ReturnPromise;
 
 class SmoothModelIteratorTest extends TestCase
 {
-
     public function setUp(): void
     {
     }

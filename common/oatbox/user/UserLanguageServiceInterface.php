@@ -27,8 +27,7 @@ namespace oat\oatbox\user;
  */
 interface UserLanguageServiceInterface
 {
-
-    const SERVICE_ID = 'generis/UserLanguageService';
+    public const SERVICE_ID = 'generis/UserLanguageService';
 
     /**
      * @return string language code (e.g. 'en-US')
@@ -54,8 +53,8 @@ interface UserLanguageServiceInterface
     public function isDataLanguageEnabled();
 
     /**
-     * When a custom interface language is set, it overrides the interface language retrieved in the getInterfaceLanguage
-     * method.
+     * When a custom interface language is set, it overrides the interface language retrieved in the
+     * getInterfaceLanguage method.
      *
      * @param ?string $customInterfaceLanguage
      */

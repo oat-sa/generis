@@ -15,10 +15,13 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
- *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
+ * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung
+ *                         (under the project TAO-TRANSFER);
+ *               2009-2012 (update and modification) Public Research Centre Henri Tudor
+ *                         (under the project TAO-SUSTAIN & TAO-DEV);
  *
  */
+
 namespace oat\generis\test\unit\oatbox\log;
 
 use oat\oatbox\log\LoggerService;
@@ -27,8 +30,7 @@ use oat\generis\test\TestCase;
 
 class LoggerServiceTest extends TestCase
 {
-
-    const RUNS = 1000;
+    public const RUNS = 1000;
 
     protected function setUp(): void
     {

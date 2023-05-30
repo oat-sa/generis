@@ -69,11 +69,11 @@ class EventManagerTest extends TestCase
     {
         $callable = $this->prophesize(CallableListener::class);
         $callable->invoke(Argument::any())->should(new CallTimesPrediction(1));
-        
+
         $this->eventManager->attach('testEvent', [$callable->reveal(), 'invoke']);
         $this->eventManager->trigger('testEvent');
     }
-    
+
     public function testListenerIsInvokedWhenAttachedToMultipleEvents(): void
     {
         $callable = $this->prophesize(CallableListener::class);

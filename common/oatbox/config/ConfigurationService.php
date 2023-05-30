@@ -32,7 +32,7 @@ use oat\oatbox\service\ConfigurableService;
  */
 class ConfigurationService extends ConfigurableService
 {
-    const OPTION_CONFIG = 'config';
+    public const OPTION_CONFIG = 'config';
 
     /**
      * @var string Documentation header

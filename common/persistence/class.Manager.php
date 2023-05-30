@@ -23,19 +23,19 @@ use oat\oatbox\service\ServiceManager;
 use oat\oatbox\service\ServiceNotFoundException;
 use oat\generis\persistence\PersistenceManager;
 
- /**
- * A backward compatibility wrapper for our persistence factory
- *
- * @author Lionel Lecaque  <lionel@taotesting.com>
- * @license GPLv2
- * @package generis
- * @deprecated use PersistenceManager
- */
+/**
+* A backward compatibility wrapper for our persistence factory
+*
+* @author Lionel Lecaque  <lionel@taotesting.com>
+* @license GPLv2
+* @package generis
+* @deprecated use PersistenceManager
+*/
 class common_persistence_Manager extends PersistenceManager
 {
     /** @deprecated */
-    const SERVICE_KEY = 'generis/persistences';
-    
+    public const SERVICE_KEY = 'generis/persistences';
+
     /**
      * @return common_persistence_Manager
      * @deprecated

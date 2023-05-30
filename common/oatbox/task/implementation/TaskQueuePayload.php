@@ -17,7 +17,8 @@ use oat\tao\model\datatable\implementation\DatatableRequest;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 
 /**
- * @deprecated since version 7.10.0, to be removed in 8.0. Use \oat\tao\model\taskQueue\TaskLog\DataTablePayload instead.
+ * @deprecated since version 7.10.0, to be removed in 8.0. Use \oat\tao\model\taskQueue\TaskLog\DataTablePayload
+ *             instead.
  */
 class TaskQueuePayload implements TaskPayLoad
 {
@@ -91,8 +92,11 @@ class TaskQueuePayload implements TaskPayLoad
         return $this->persistence->count($params);
     }
 
-    public function __construct(TaskPersistenceInterface $persistence, $currentUserId = null, DatatableRequestInterface $request = null)
-    {
+    public function __construct(
+        TaskPersistenceInterface $persistence,
+        $currentUserId = null,
+        DatatableRequestInterface $request = null
+    ) {
         $this->persistence = $persistence;
         $this->currentUserId = $currentUserId;
 

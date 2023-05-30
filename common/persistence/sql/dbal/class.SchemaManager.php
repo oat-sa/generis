@@ -26,10 +26,9 @@ use Doctrine\DBAL\Schema\AbstractSchemaManager;
  */
 class common_persistence_sql_dbal_SchemaManager extends common_persistence_sql_SchemaManager
 {
-    
     private $dbalSchemaManager;
-    
-    
+
+
     /**
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
      * @param AbstractSchemaManager $dbalSchemaManager
@@ -38,8 +37,8 @@ class common_persistence_sql_dbal_SchemaManager extends common_persistence_sql_S
     {
         $this->dbalSchemaManager = $dbalSchemaManager;
     }
-    
-    
+
+
     /**
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
      * @return AbstractSchemaManager
@@ -48,8 +47,8 @@ class common_persistence_sql_dbal_SchemaManager extends common_persistence_sql_S
     {
         return $this->dbalSchemaManager;
     }
-    
-    
+
+
     /**
      * Short description of method getIndexAlreadyExistsErrorCode
      *
@@ -61,7 +60,7 @@ class common_persistence_sql_dbal_SchemaManager extends common_persistence_sql_S
     {
         return '42P07';
     }
-    
+
     /**
      * Short description of method getIndexAlreadyExistsErrorCode
      *

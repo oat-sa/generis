@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -14,12 +15,16 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
- *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
+ * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung
+ *                         (under the project TAO-TRANSFER);
+ *               2009-2012 (update and modification) Public Research Centre Henri Tudor
+ *                         (under the project TAO-SUSTAIN & TAO-DEV);
  *               2017 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
 
+// phpcs:disable PSR1.Files.SideEffects
 error_reporting(E_ALL);
+// phpcs:enable PSR1.Files.SideEffects
 
 use oat\generis\model\GenerisRdf;
 use oat\generis\model\OntologyRdfs;
@@ -28,8 +33,6 @@ use oat\generis\test\GenerisPhpUnitTestRunner;
 
 class TermFactoryTest extends GenerisPhpUnitTestRunner
 {
-
-
     public function setUp(): void
     {
         GenerisPhpUnitTestRunner::initTest();
@@ -67,7 +70,10 @@ class TermFactoryTest extends GenerisPhpUnitTestRunner
         $booleanClass = new core_kernel_classes_Class(GenerisRdf::GENERIS_BOOLEAN);
         $maybe = core_kernel_classes_ResourceFactory::create($booleanClass, 'testCase testCreateSPX', __METHOD__);
 
-        $SPXResource = core_kernel_rules_TermFactory::createSPX($maybe, new core_kernel_classes_Property(OntologyRdfs::RDFS_COMMENT));
+        $SPXResource = core_kernel_rules_TermFactory::createSPX(
+            $maybe,
+            new core_kernel_classes_Property(OntologyRdfs::RDFS_COMMENT)
+        );
         $this->assertIsA($SPXResource, 'core_kernel_rules_Term');
 
         $subjectProperty = new core_kernel_classes_Property(RulesRdf::PROPERTY_TERM_SPX_SUBJET);

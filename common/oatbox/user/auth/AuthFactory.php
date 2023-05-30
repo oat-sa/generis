@@ -32,8 +32,8 @@ use common_ext_ExtensionsManager;
  */
 class AuthFactory
 {
-    const CONFIG_KEY = 'auth';
-    
+    public const CONFIG_KEY = 'auth';
+
     public static function createAdapters()
     {
         $adapters = [];
@@ -43,7 +43,10 @@ class AuthFactory
                 if (isset($adapterConf['driver'])) {
                     $className = $adapterConf['driver'];
                     unset($adapterConf['driver']);
-                    if (class_exists($className) && in_array(__NAMESPACE__ . '\LoginAdapter', class_implements($className))) {
+                    if (
+                        class_exists($className)
+                        && in_array(__NAMESPACE__ . '\LoginAdapter', class_implements($className))
+                    ) {
                         $adapter = new $className();
                         $adapter->setOptions($adapterConf);
                         $adapters[] = $adapter;

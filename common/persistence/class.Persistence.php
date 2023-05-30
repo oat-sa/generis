@@ -23,7 +23,7 @@
  *
  */
 
-use \oat\generis\Helper\UuidPrimaryKeyTrait;
+use oat\generis\Helper\UuidPrimaryKeyTrait;
 
 abstract class common_persistence_Persistence
 {
@@ -60,12 +60,15 @@ abstract class common_persistence_Persistence
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
      * @param array $params
      * @param common_persistence_driver $driver
+     *
+     * phpcs:disable PEAR.Functions.ValidDefaultValue
      */
     public function __construct($params = [], common_persistence_driver $driver)
     {
         $this->setParams($params);
         $this->setDriver($driver);
     }
+    // phpcs:enable PEAR.Functions.ValidDefaultValue
 
     /**
      * Retrieve persistence's driver

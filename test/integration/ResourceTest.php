@@ -15,8 +15,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
- *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
+ * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung
+ *                         (under the project TAO-TRANSFER);
+ *               2009-2012 (update and modification) Public Research Centre Henri Tudor
+ *                         (under the project TAO-SUSTAIN & TAO-DEV);
  *               2017 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
 
@@ -27,18 +29,17 @@ use common_exception_Error;
 use oat\generis\model\GenerisRdf;
 use oat\generis\model\OntologyRdfs;
 use oat\generis\test\GenerisPhpUnitTestRunner;
-use \core_kernel_classes_Class;
-use \core_kernel_classes_Resource;
-use \core_kernel_classes_Property;
-use \core_kernel_impl_ApiModelOO;
-use \common_Utils;
-use \core_kernel_classes_Literal;
-use \common_Collection;
-use \core_kernel_classes_Triple;
+use core_kernel_classes_Class;
+use core_kernel_classes_Resource;
+use core_kernel_classes_Property;
+use core_kernel_impl_ApiModelOO;
+use common_Utils;
+use core_kernel_classes_Literal;
+use common_Collection;
+use core_kernel_classes_Triple;
 
 class ResourceTest extends GenerisPhpUnitTestRunner
 {
-
     protected $object;
 
     public function setUp(): void
@@ -52,7 +53,7 @@ class ResourceTest extends GenerisPhpUnitTestRunner
         $this->clazz = $clazz->createSubClass($clazz);
     }
 
-    function tearDown(): void
+    public function tearDown(): void
     {
         $this->clazz->delete();
     }
@@ -107,7 +108,9 @@ class ResourceTest extends GenerisPhpUnitTestRunner
         foreach ($collection->getIterator() as $value) {
             $this->assertIsA($value, 'core_kernel_classes_Container');
             if ($value instanceof core_kernel_classes_Resource) {
-                $this->assertTrue($value->getUri() == GenerisRdf::GENERIS_TRUE || $value->getUri() == GenerisRdf::GENERIS_FALSE);
+                $this->assertTrue(
+                    $value->getUri() == GenerisRdf::GENERIS_TRUE || $value->getUri() == GenerisRdf::GENERIS_FALSE
+                );
             }
             if ($value instanceof core_kernel_classes_Literal) {
                 $this->assertEquals($value->literal, 'plop');
@@ -122,7 +125,9 @@ class ResourceTest extends GenerisPhpUnitTestRunner
         foreach ($collection->getIterator() as $value) {
             $this->assertIsA($value, 'core_kernel_classes_Container');
             if ($value instanceof core_kernel_classes_Resource) {
-                $this->assertTrue($value->getUri() == GenerisRdf::GENERIS_TRUE || $value->getUri() == GenerisRdf::GENERIS_FALSE);
+                $this->assertTrue(
+                    $value->getUri() == GenerisRdf::GENERIS_TRUE || $value->getUri() == GenerisRdf::GENERIS_FALSE
+                );
             }
             if ($value instanceof core_kernel_classes_Literal) {
                 $this->assertEquals($value->literal, 'plop');
@@ -137,10 +142,16 @@ class ResourceTest extends GenerisPhpUnitTestRunner
         foreach ($collection->getIterator() as $value) {
             $this->assertInstanceOf('core_kernel_classes_Container', $value);
             if ($value instanceof core_kernel_classes_Resource) {
-                $this->assertTrue($value->getUri() == GenerisRdf::GENERIS_TRUE, $value->getUri() . ' must be equal to ' . GenerisRdf::GENERIS_TRUE);
+                $this->assertTrue(
+                    $value->getUri() == GenerisRdf::GENERIS_TRUE,
+                    $value->getUri() . ' must be equal to ' . GenerisRdf::GENERIS_TRUE
+                );
             }
             if ($value instanceof core_kernel_classes_Literal) {
-                $this->assertTrue($value->literal == 'plup' || $value->literal == 'plip', $value->literal . ' must be equal to plip or plop');
+                $this->assertTrue(
+                    $value->literal == 'plup' || $value->literal == 'plip',
+                    $value->literal . ' must be equal to plip or plop'
+                );
             }
         }
 
@@ -164,7 +175,8 @@ class ResourceTest extends GenerisPhpUnitTestRunner
         $resource->setPropertyValue($property2, 'prop2');
         $resource->setPropertyValue($property3, 'prop3');
 
-        //test that the get properties values is getting an array as parameter, if the parameter is not an array, the function will return an exception
+        // test that the get properties values is getting an array as parameter, if the parameter is not an array, the
+        // function will return an exception
         try {
             $resource->getPropertiesValues($property1);
             $this->assertTrue(false);
@@ -288,7 +300,9 @@ class ResourceTest extends GenerisPhpUnitTestRunner
         foreach ($collection->getIterator() as $value) {
             $this->assertIsA($value, 'core_kernel_classes_Container');
             if ($value instanceof core_kernel_classes_Resource) {
-                $this->assertTrue($value->getUri() == GenerisRdf::GENERIS_TRUE || $value->getUri() == GenerisRdf::GENERIS_FALSE);
+                $this->assertTrue(
+                    $value->getUri() == GenerisRdf::GENERIS_TRUE || $value->getUri() == GenerisRdf::GENERIS_FALSE
+                );
             }
             if ($value instanceof core_kernel_classes_Literal) {
                 $this->assertEquals($value->literal, "&plop n'\"; plop'\' plop");
@@ -304,11 +318,11 @@ class ResourceTest extends GenerisPhpUnitTestRunner
         $instance = $class->createInstance('a label', 'a comment');
         $this->assertIsA($instance, 'core_kernel_classes_Resource');
 
-            $instance->setPropertiesValues([
-            OntologyRdfs::RDFS_SEEALSO  => "&plop n'\"; plop'\' plop",
-            OntologyRdfs::RDFS_LABEL        => ['new label', 'another label', 'yet a last one'],
-            OntologyRdfs::RDFS_COMMENT  => 'new comment'
-            ]);
+        $instance->setPropertiesValues([
+        OntologyRdfs::RDFS_SEEALSO  => "&plop n'\"; plop'\' plop",
+        OntologyRdfs::RDFS_LABEL        => ['new label', 'another label', 'yet a last one'],
+        OntologyRdfs::RDFS_COMMENT  => 'new comment'
+        ]);
 
         $seeAlso = $instance->getOnePropertyValue(new core_kernel_classes_Property(OntologyRdfs::RDFS_SEEALSO));
         $this->assertNotNull($seeAlso);
@@ -367,8 +381,12 @@ class ResourceTest extends GenerisPhpUnitTestRunner
         $this->assertTrue($collectionFr->count() == 2);
         $collectionEn = $instance->getPropertyValuesByLg($seeAlso, 'EN');
         $this->assertTrue($collectionEn->count() == 1);
-        $this->assertTrue($collectionFr->get(0)->literal == 'vrai peut etre' || $collectionFr->get(0)->literal == 'vrai');
-        $this->assertTrue($collectionFr->get(1)->literal == 'vrai peut etre' || $collectionFr->get(1)->literal == 'vrai');
+        $this->assertTrue(
+            $collectionFr->get(0)->literal == 'vrai peut etre' || $collectionFr->get(0)->literal == 'vrai'
+        );
+        $this->assertTrue(
+            $collectionFr->get(1)->literal == 'vrai peut etre' || $collectionFr->get(1)->literal == 'vrai'
+        );
         $this->assertTrue($collectionEn->get(0)->literal == 'true');
         $instance->delete();
         $seeAlso->delete();
@@ -388,8 +406,12 @@ class ResourceTest extends GenerisPhpUnitTestRunner
         $this->assertTrue($collectionFr->count() == 2);
         $collectionEn = $instance->getPropertyValuesByLg($seeAlso, 'EN');
         $this->assertTrue($collectionEn->count() == 1);
-        $this->assertTrue($collectionFr->get(0)->literal == 'vrai peut etre' || $collectionFr->get(0)->literal == 'vrai');
-        $this->assertTrue($collectionFr->get(1)->literal == 'vrai peut etre' || $collectionFr->get(1)->literal == 'vrai');
+        $this->assertTrue(
+            $collectionFr->get(0)->literal == 'vrai peut etre' || $collectionFr->get(0)->literal == 'vrai'
+        );
+        $this->assertTrue(
+            $collectionFr->get(1)->literal == 'vrai peut etre' || $collectionFr->get(1)->literal == 'vrai'
+        );
         $this->assertTrue($collectionEn->get(0)->literal == 'true');
         $instance->delete();
         $seeAlso->delete();
@@ -732,7 +754,9 @@ class ResourceTest extends GenerisPhpUnitTestRunner
     public function testClone()
     {
         $this->expectException(common_exception_DeprecatedApiMethod::class);
-        $this->expectExceptionMessage('Use duplicated instead, because clone resource could not share same uri that original');
+        $this->expectExceptionMessage(
+            'Use duplicated instead, because clone resource could not share same uri that original'
+        );
         $class = new core_kernel_classes_Class(GenerisRdf::GENERIS_BOOLEAN, __METHOD__);
         $instance = $class->createInstance('test', 'test');
         $clone = clone $instance;

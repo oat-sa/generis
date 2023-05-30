@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -14,9 +15,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
- *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
- *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
+ * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg
+ *                         (under the project TAO & TAO2);
+ *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung
+ *                         (under the project TAO-TRANSFER);
+ *               2009-2012 (update and modification) Public Research Centre Henri Tudor
+ *                         (under the project TAO-SUSTAIN & TAO-DEV);
  *
  */
 
@@ -41,7 +45,7 @@ class common_log_ArchiveFileAppender extends common_log_SingleFileAppender
      * @access public
      * @var string
      */
-    const COMPRESSION_ZIP = 'zip';
+    public const COMPRESSION_ZIP = 'zip';
 
     /**
      * Short description of attribute COMPRESSION_NONE
@@ -49,7 +53,7 @@ class common_log_ArchiveFileAppender extends common_log_SingleFileAppender
      * @access public
      * @var string
      */
-    const COMPRESSION_NONE = 'none';
+    public const COMPRESSION_NONE = 'none';
 
     /**
      * Short description of attribute directory
@@ -81,7 +85,7 @@ class common_log_ArchiveFileAppender extends common_log_SingleFileAppender
     {
         $returnValue = (bool) false;
 
-        
+
         if (isset($configuration['directory']) && $configuration['directory']) {
             $this->directory = rtrim($configuration['directory'], DIRECTORY_SEPARATOR);
         } elseif (isset($configuration['file'])) {
@@ -103,13 +107,13 @@ class common_log_ArchiveFileAppender extends common_log_SingleFileAppender
                 }
             }
         }
-        
+
         if (!empty($this->directory)) {
             $returnValue = parent::init($configuration);
         } else {
             $returnValue = false;
         }
-        
+
 
         return (bool) $returnValue;
     }
@@ -123,7 +127,7 @@ class common_log_ArchiveFileAppender extends common_log_SingleFileAppender
      */
     public function initFile()
     {
-        
+
         if ($this->maxFileSize > 0 && file_exists($this->filename) && filesize($this->filename) >= $this->maxFileSize) {
             if ($this->compression == self::COMPRESSION_ZIP) {
                 $zip = new ZipArchive();
@@ -161,7 +165,7 @@ class common_log_ArchiveFileAppender extends common_log_SingleFileAppender
     {
         $returnValue = (string) '';
 
-        
+
         $filebase = basename($this->filename);
         $dotpos = strrpos($filebase, ".");
         if ($dotpos === false) {
@@ -175,7 +179,7 @@ class common_log_ArchiveFileAppender extends common_log_SingleFileAppender
             $count_string = "_" . ++$count;
         }
         $returnValue = $prefix . $count_string . $sufix;
-        
+
 
         return (string) $returnValue;
     }

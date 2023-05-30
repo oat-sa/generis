@@ -125,7 +125,8 @@ class FileSystemComponentTest extends TestCase
 
         $this->assertEquals(common_configuration_Report::VALID, $output->getStatus());
         $this->assertEquals(
-            "File system component 'tao.configuration.filesystem' in 'vfs://testDir7 is compliant with expected rights (rw).'",
+            "File system component 'tao.configuration.filesystem' in "
+                . "'vfs://testDir7 is compliant with expected rights (rw).'",
             $output->getMessage()
         );
     }
@@ -145,7 +146,8 @@ class FileSystemComponentTest extends TestCase
 
         $this->assertEquals(common_configuration_Report::VALID, $output->getStatus());
         $this->assertEquals(
-            "File system component 'tao.configuration.filesystem' in 'vfs://testDir8/test.txt is compliant with expected rights (rwx).'",
+            "File system component 'tao.configuration.filesystem' in "
+                . "'vfs://testDir8/test.txt is compliant with expected rights (rwx).'",
             $output->getMessage()
         );
     }
@@ -185,7 +187,8 @@ class FileSystemComponentTest extends TestCase
 
         $this->assertEquals(common_configuration_Report::VALID, $output->getStatus());
         $this->assertEquals(
-            "File system component 'tao.configuration.filesystem' in 'vfs://testDir10 is compliant with expected rights (rw).'",
+            "File system component 'tao.configuration.filesystem' in "
+                . "'vfs://testDir10 is compliant with expected rights (rw).'",
             $output->getMessage()
         );
     }

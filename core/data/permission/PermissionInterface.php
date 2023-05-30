@@ -34,7 +34,7 @@ use oat\oatbox\user\User;
  */
 interface PermissionInterface
 {
-    const SERVICE_ID = 'generis/permissions';
+    public const SERVICE_ID = 'generis/permissions';
 
     /**
      * All unsupported rigths will be mapped to this right
@@ -44,7 +44,7 @@ interface PermissionInterface
     public const RIGHT_UNSUPPORTED = 'unsupported';
     public const RIGHT_READ = 'READ';
     public const RIGHT_WRITE = 'WRITE';
-    
+
     /**
      * Return the permissions a specified user has on the resources
      * specified by their ids
@@ -57,12 +57,12 @@ interface PermissionInterface
      * @return array
      */
     public function getPermissions(User $user, array $resourceIds);
-    
+
     /**
      * Hook to set initial permissions
      */
     public function onResourceCreated(\core_kernel_classes_Resource $resource);
-    
+
     /**
      * Returns a list of rights ids
      *

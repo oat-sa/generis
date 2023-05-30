@@ -57,7 +57,7 @@ class ComposerInfo
         } else {
             $this->rootDir = $rootDir;
         }
-        $composerJsonPath = realpath($this->rootDir).DIRECTORY_SEPARATOR.self::COMPOSER_JSON;
+        $composerJsonPath = realpath($this->rootDir) . DIRECTORY_SEPARATOR . self::COMPOSER_JSON;
 
         if (!file_exists($composerJsonPath)) {
             throw new common_ext_ExtensionException(sprintf('Composer file missed at %s', $this->rootDir));
@@ -109,7 +109,7 @@ class ComposerInfo
     /**
      * @return string
      */
-    public function getPackageId():string
+    public function getPackageId(): string
     {
         return $this->getComposerJson()['name'];
     }
@@ -130,7 +130,7 @@ class ComposerInfo
     private function getComposerJson(): array
     {
         if (!isset(self::$jsons[$this->rootDir])) {
-            $file = realpath($this->rootDir).DIRECTORY_SEPARATOR.self::COMPOSER_JSON;
+            $file = realpath($this->rootDir) . DIRECTORY_SEPARATOR . self::COMPOSER_JSON;
             self::$jsons[$this->rootDir] = $this->getEncodedFileContent($file);
         }
         return self::$jsons[$this->rootDir];
@@ -147,7 +147,7 @@ class ComposerInfo
             return self::$locks[$this->rootDir];
         }
 
-        $composerLockPath = realpath($this->rootDir).DIRECTORY_SEPARATOR.self::COMPOSER_LOCK;
+        $composerLockPath = realpath($this->rootDir) . DIRECTORY_SEPARATOR . self::COMPOSER_LOCK;
         if (!file_exists($composerLockPath)) {
             $composerLockPath = rtrim($this->getTaoRoot(), DIRECTORY_SEPARATOR) .
                 DIRECTORY_SEPARATOR . self::COMPOSER_LOCK;

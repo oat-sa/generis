@@ -30,10 +30,10 @@ use oat\oatbox\service\ServiceManager;
  */
 class core_kernel_uri_UriService
 {
-    const CONFIG_KEY = 'uriProvider';
-        
+    public const CONFIG_KEY = 'uriProvider';
+
     private static $instance;
-    
+
     public static function singleton()
     {
         if (is_null(self::$instance)) {
@@ -41,9 +41,9 @@ class core_kernel_uri_UriService
         }
         return self::$instance;
     }
-    
+
     private $uriProvider = null;
-    
+
     /**
      * Generate a new URI with the UriProvider in force.
      *
@@ -53,7 +53,7 @@ class core_kernel_uri_UriService
     {
         return (string) $this->getUriProvider()->provide();
     }
-    
+
     /**
      * Set the UriProvider in force.
      *
@@ -64,7 +64,7 @@ class core_kernel_uri_UriService
         $this->uriProvider = $provider;
         ServiceManager::getServiceManager()->register(UriProvider::SERVICE_ID, $provider);
     }
-    
+
     /**
      * Get the UriProvider in force.
      *

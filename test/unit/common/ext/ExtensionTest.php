@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,7 +25,6 @@ use common_ext_Extension as Extension;
 
 class ExtensionTest extends TestCase
 {
-
     /**
      * @runInSeparateProcess
      * @throws \common_ext_ManifestException
@@ -32,16 +32,17 @@ class ExtensionTest extends TestCase
      */
     public function testGetUpdater()
     {
-        $dir = __DIR__.DIRECTORY_SEPARATOR.'samples'.DIRECTORY_SEPARATOR;
+        $dir = __DIR__ . DIRECTORY_SEPARATOR . 'samples' . DIRECTORY_SEPARATOR;
         $ext = new class ('foo', $dir) extends Extension {
             private $dir;
-            public function __construct($id, $dir) {
+            public function __construct($id, $dir)
+            {
                 parent::__construct($id);
                 $this->dir = $dir;
             }
             public function getDir()
             {
-                return $this->dir.$this->getId().DIRECTORY_SEPARATOR;
+                return $this->dir . $this->getId() . DIRECTORY_SEPARATOR;
             }
         };
         $ext->setServiceLocator($this->getServiceLocatorMock([]));

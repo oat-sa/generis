@@ -1,5 +1,7 @@
 <?php
 
+// phpcs:disable PSR1.Files.SideEffects
+
 require_once __DIR__ . '/../../../common/inc.extension.php';
 
 use oat\oatbox\mutex\LockService;

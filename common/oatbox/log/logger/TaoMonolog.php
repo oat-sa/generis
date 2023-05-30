@@ -41,7 +41,7 @@ class TaoMonolog extends ConfigurableService implements LoggerInterface
 {
     use LoggerTrait;
 
-    const HANDLERS_OPTION = 'handlers';
+    public const HANDLERS_OPTION = 'handlers';
 
     /** @var Logger null  */
     protected $logger = null;
@@ -78,7 +78,9 @@ class TaoMonolog extends ConfigurableService implements LoggerInterface
         if ($this->hasOption('processors')) {
             $processorsOptions = $this->getOption('processors');
             if (!is_array($processorsOptions)) {
-                throw new \common_configuration_ComponentFactoryException('Handler processors options as to be formatted as array');
+                throw new \common_configuration_ComponentFactoryException(
+                    'Handler processors options as to be formatted as array'
+                );
             }
 
             foreach ($processorsOptions as $processorsOption) {
@@ -97,11 +99,15 @@ class TaoMonolog extends ConfigurableService implements LoggerInterface
     protected function buildHandler(array $options)
     {
         if (!isset($options['class'])) {
-            throw new \common_configuration_ComponentFactoryException('Handler options has to contain a class attribute.');
+            throw new \common_configuration_ComponentFactoryException(
+                'Handler options has to contain a class attribute.'
+            );
         }
 
         if (!is_a($options['class'], HandlerInterface::class, true)) {
-            throw new \common_configuration_ComponentFactoryException('Handler class option has to be a HandlerInterface.');
+            throw new \common_configuration_ComponentFactoryException(
+                'Handler class option has to be a HandlerInterface.'
+            );
         }
 
         $handlerOptions = [];
@@ -114,7 +120,9 @@ class TaoMonolog extends ConfigurableService implements LoggerInterface
         if (isset($options['processors'])) {
             $processorsOptions = $options['processors'];
             if (!is_array($processorsOptions)) {
-                throw new \common_configuration_ComponentFactoryException('Handler processors options as to be formatted as array');
+                throw new \common_configuration_ComponentFactoryException(
+                    'Handler processors options as to be formatted as array'
+                );
             }
 
             foreach ($processorsOptions as $processorsOption) {
@@ -140,7 +148,9 @@ class TaoMonolog extends ConfigurableService implements LoggerInterface
             return $options;
         } else {
             if (!isset($options['class'])) {
-                throw new \common_configuration_ComponentFactoryException('Processor options has to contain a class attribute.');
+                throw new \common_configuration_ComponentFactoryException(
+                    'Processor options has to contain a class attribute.'
+                );
             }
 
             $processorOptions = [];
@@ -166,11 +176,15 @@ class TaoMonolog extends ConfigurableService implements LoggerInterface
             return $options;
         } else {
             if (!isset($options['class'])) {
-                throw new \common_configuration_ComponentFactoryException('Formatter options has to contain a class attribute.');
+                throw new \common_configuration_ComponentFactoryException(
+                    'Formatter options has to contain a class attribute.'
+                );
             }
 
             if (!is_a($options['class'], FormatterInterface::class, true)) {
-                throw new \common_configuration_ComponentFactoryException('Formatter class option has to be a FormatterInterface.');
+                throw new \common_configuration_ComponentFactoryException(
+                    'Formatter class option has to be a FormatterInterface.'
+                );
             }
 
             $formatterOptions = [];

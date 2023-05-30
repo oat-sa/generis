@@ -40,7 +40,7 @@ abstract class common_user_User implements User, Refreshable
     protected $roles = [];
 
     abstract public function getIdentifier();
-    
+
     abstract public function getPropertyValues($property);
 
     abstract public function refresh();
@@ -58,7 +58,11 @@ abstract class common_user_User implements User, Refreshable
             // We use a Depth First Search approach to flatten the Roles Graph.
             foreach ($this->getPropertyValues(GenerisRdf::PROPERTY_USER_ROLES) as $roleUri) {
                 $returnValue[] = $roleUri;
-                foreach (core_kernel_users_Service::singleton()->getIncludedRoles(new core_kernel_classes_Resource($roleUri)) as $role) {
+                $includedRoles = core_kernel_users_Service::singleton()->getIncludedRoles(
+                    new core_kernel_classes_Resource($roleUri)
+                );
+
+                foreach ($includedRoles as $role) {
                     $returnValue[] = $role->getUri();
                 }
             }

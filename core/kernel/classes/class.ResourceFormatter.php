@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,9 +22,6 @@
 
 class core_kernel_classes_ResourceFormatter
 {
-    
-
-    
     public function getResourceDescription(core_kernel_classes_Resource $resource, $fromDefinition = true)
     {
         $returnValue = new stdClass();
@@ -43,8 +41,7 @@ class core_kernel_classes_ResourceFormatter
                 throw new common_exception_NoContent();
             }
             $propertiesValuesStdClasses = $this->propertiesValuestoStdClasses($propertiesValues);
-        } else //get effective triples and map the returned information into the same structure
-        {
+        } else { //get effective triples and map the returned information into the same structure
             $triples = $resource->getRdfTriples();
             if (count($triples) == 0) {
                 throw new common_exception_NoContent();
@@ -56,12 +53,12 @@ class core_kernel_classes_ResourceFormatter
             }
             $propertiesValuesStdClasses = $this->propertiesValuestoStdClasses($properties);
         }
-       
+
         $returnValue->uri = $resource->getUri();
         $returnValue->properties = $propertiesValuesStdClasses;
         return $returnValue;
     }
-    
+
     /**
      * small helper provide more convenient data structure for propertiesValues for exchange
      * @return array
@@ -75,7 +72,9 @@ class core_kernel_classes_ResourceFormatter
             foreach ($values as $value) {
                 $stdValue = new stdClass();
                 $stdValue->valueType = (get_class($value) == "core_kernel_classes_Literal") ? "literal" : "resource";
-                $stdValue->value = (get_class($value) == "core_kernel_classes_Literal") ? $value->__toString() : $value->getUri();
+                $stdValue->value = (get_class($value) == "core_kernel_classes_Literal")
+                    ? $value->__toString()
+                    : $value->getUri();
                 $propStdClass->values[] = $stdValue;
             }
             $returnValue[] = $propStdClass;

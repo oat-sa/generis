@@ -38,9 +38,10 @@ class SimpleConfigDriver extends common_persistence_PhpFileDriver implements Con
      */
     protected function getContent($key, $value)
     {
-        return $this->getDefaultHeader($key) . PHP_EOL . "return " . common_Utils::toHumanReadablePhpString($value) . ";" . PHP_EOL;
+        return $this->getDefaultHeader($key) . PHP_EOL . "return " . common_Utils::toHumanReadablePhpString($value)
+            . ";" . PHP_EOL;
     }
-    
+
     /**
      * Generates a default header
      *
@@ -54,7 +55,7 @@ class SimpleConfigDriver extends common_persistence_PhpFileDriver implements Con
             . ' * Default config header created during install' . PHP_EOL
             . ' */' . PHP_EOL;
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see common_persistence_PhpFileDriver::getPath()

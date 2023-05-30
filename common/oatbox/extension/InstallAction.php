@@ -31,7 +31,6 @@ use oat\oatbox\service\ConfigurableService;
  */
 abstract class InstallAction extends AbstractAction
 {
-    
     /**
      * Add a new event Listener
      *

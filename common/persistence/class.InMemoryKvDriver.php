@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,7 +26,6 @@
  */
 class common_persistence_InMemoryKvDriver implements common_persistence_KvDriver, common_persistence_Purgable
 {
-
     /**
      * @var array
      */
@@ -35,7 +35,7 @@ class common_persistence_InMemoryKvDriver implements common_persistence_KvDriver
      *
      * @see common_persistence_Driver::connect()
      */
-    function connect($id, array $params)
+    public function connect($id, array $params)
     {
         return new common_persistence_KeyValuePersistence($params, $this);
     }
@@ -50,7 +50,7 @@ class common_persistence_InMemoryKvDriver implements common_persistence_KvDriver
     {
         return $this->exists($id) ? $this->persistence[$id] : false;
     }
-    
+
     public function exists($id)
     {
         return array_key_exists($id, $this->persistence);

@@ -22,12 +22,11 @@
 
 namespace oat\generis\test\unit\common\persistence;
 
-use \common_persistence_NoStorageKvDriver;
+use common_persistence_NoStorageKvDriver;
 use oat\generis\test\TestCase;
 
 class NoStaragePersistenceTest extends TestCase
 {
-    
     /**
      *
      * @author Lionel Lecaque, lionel@taotesting.com
@@ -41,7 +40,7 @@ class NoStaragePersistenceTest extends TestCase
         $this->assertInstanceOf('common_persistence_KeyValuePersistence', $persistence);
         return $persistence;
     }
-    
+
     /**
      * @depends testConnect
      * @author Lionel Lecaque, lionel@taotesting.com
@@ -51,7 +50,7 @@ class NoStaragePersistenceTest extends TestCase
     {
         $this->assertFalse($persistence->set('fakeKeyName', 'value'));
     }
-    
+
     /**
      * @depends testConnect
      * @author Lionel Lecaque, lionel@taotesting.com
@@ -61,8 +60,8 @@ class NoStaragePersistenceTest extends TestCase
     {
         $this->assertFalse($persistence->get('fakeKeyName'));
     }
-    
-    
+
+
     /**
      * @depends testConnect
      * @author Lionel Lecaque, lionel@taotesting.com
@@ -72,7 +71,7 @@ class NoStaragePersistenceTest extends TestCase
     {
         $this->assertFalse($persistence->exists('fakeKeyName'));
     }
-    
+
     /**
      * @depends testConnect
      * @author Lionel Lecaque, lionel@taotesting.com
@@ -80,10 +79,10 @@ class NoStaragePersistenceTest extends TestCase
      */
     public function testDel($persistence)
     {
-       
+
         $this->assertTrue($persistence->del('fakeKeyName'));
     }
-    
+
     /**
      * @depends testConnect
      * @author Lionel Lecaque, lionel@taotesting.com

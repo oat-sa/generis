@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,7 +27,6 @@
 
 interface common_persistence_Driver
 {
-
     /**
      * Allow to connect the driver and return the connection
      *
@@ -34,5 +34,5 @@ interface common_persistence_Driver
      * @param array $params
      * @return common_persistence_Persistence
      */
-    function connect($id, array $params);
+    public function connect($id, array $params);
 }

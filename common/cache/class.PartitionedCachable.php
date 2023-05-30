@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -14,9 +15,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
- *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
-*               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
+ * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg
+ *                         (under the project TAO & TAO2);
+ *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung
+ *                         (under the project TAO-TRANSFER);
+*               2009-2012 (update and modification) Public Research Centre Henri Tudor
+ *                         (under the project TAO-SUSTAIN & TAO-DEV);
  *
  */
 
@@ -65,12 +69,12 @@ abstract class common_cache_PartitionedCachable implements common_Serializable
     {
         $returnValue = (string) '';
 
-        
+
         if (empty($this->serial)) {
             $this->serial = $this->buildSerial();
         }
         $returnValue = $this->serial;
-        
+
 
         return (string) $returnValue;
     }
@@ -84,7 +88,7 @@ abstract class common_cache_PartitionedCachable implements common_Serializable
      */
     public function __construct()
     {
-        
+
         if (!is_null($this->getCache())) {
             $this->getCache()->put($this);
         }
@@ -101,7 +105,7 @@ abstract class common_cache_PartitionedCachable implements common_Serializable
     {
         $returnValue = [];
 
-        
+
         $this->serializedProperties = [];
         $reflection = new ReflectionClass($this);
         foreach ($reflection->getProperties() as $property) {
@@ -122,7 +126,10 @@ abstract class common_cache_PartitionedCachable implements common_Serializable
                         }
                     }
                     if ($containsNonSerializable && $containsSerializable) {
-                        throw new common_exception_Error('Serializable ' . $this->getSerial() . ' mixed serializable and non serializable values in property ' . $propertyName);
+                        throw new common_exception_Error(
+                            'Serializable ' . $this->getSerial()
+                                . ' mixed serializable and non serializable values in property ' . $propertyName
+                        );
                     }
                 } else {
                     if (is_object($value) && $value instanceof self) {
@@ -137,7 +144,7 @@ abstract class common_cache_PartitionedCachable implements common_Serializable
                 }
             }
         }
-        
+
 
         return (array) $returnValue;
     }
@@ -151,7 +158,7 @@ abstract class common_cache_PartitionedCachable implements common_Serializable
      */
     public function __wakeup()
     {
-        
+
         foreach ($this->serializedProperties as $key => $value) {
             if (is_array($value)) {
                 $restored = [];
@@ -172,16 +179,19 @@ abstract class common_cache_PartitionedCachable implements common_Serializable
      * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
      * @return mixed
+     *
+     * phpcs:disable PSR2.Methods.MethodDeclaration
      */
     public function _remove()
     {
-        
+
         //usefull only when persistance is enabled
         if (!is_null($this->getCache())) {
             //clean session
             $this->getCache()->remove($this->getSerial());
         }
     }
+    // phpcs:enable PSR2.Methods.MethodDeclaration
 
     /**
      * Short description of method getSuccessors
@@ -194,7 +204,7 @@ abstract class common_cache_PartitionedCachable implements common_Serializable
     {
         $returnValue = [];
 
-        
+
         $reflection = new ReflectionClass($this);
         foreach ($reflection->getProperties() as $property) {
             if (!$property->isStatic() && !$property->isPrivate()) {
@@ -203,15 +213,15 @@ abstract class common_cache_PartitionedCachable implements common_Serializable
                 if (is_array($value)) {
                     foreach ($value as $key => $subvalue) {
                         if (is_object($subvalue) && $subvalue instanceof self) {
-                                $returnValue[] = $subvalue;
+                            $returnValue[] = $subvalue;
                         }
                     }
                 } elseif (is_object($value) && $value instanceof self) {
-                        $returnValue[] = $value;
+                    $returnValue[] = $value;
                 }
             }
         }
-        
+
 
         return (array) $returnValue;
     }
@@ -228,7 +238,7 @@ abstract class common_cache_PartitionedCachable implements common_Serializable
     {
         $returnValue = [];
 
-        
+
         foreach ($this->getCache()->getAll() as $serial => $instance) {
             if (
                 ($classFilter == null || $instance instanceof $classFilter)
@@ -238,7 +248,7 @@ abstract class common_cache_PartitionedCachable implements common_Serializable
                 break;
             }
         }
-        
+
 
         return (array) $returnValue;
     }
@@ -262,4 +272,4 @@ abstract class common_cache_PartitionedCachable implements common_Serializable
      * @return common_cache_Cache
      */
     abstract public function getCache();
-} /* end of abstract class common_cache_PartitionedCachable */
+}

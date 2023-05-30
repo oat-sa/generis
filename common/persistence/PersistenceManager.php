@@ -36,7 +36,6 @@ use oat\oatbox\service\ServiceNotFoundException;
  */
 class PersistenceManager extends ConfigurableService
 {
-
     public const SERVICE_ID = 'generis/persistences';
 
     public const OPTION_PERSISTENCES = 'persistences';

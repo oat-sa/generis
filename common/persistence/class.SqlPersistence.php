@@ -109,7 +109,7 @@ class common_persistence_SqlPersistence extends common_persistence_Persistence
     {
         return $this->getDriver()->query($statement, $params, $types);
     }
-    
+
 
     /**
      * Convenience access to quote.
@@ -122,8 +122,8 @@ class common_persistence_SqlPersistence extends common_persistence_Persistence
     {
         return $this->getDriver()->quote($parameter, $parameter_type);
     }
-    
-    
+
+
     /**
      * Convenience access to lastInsertId.
      *

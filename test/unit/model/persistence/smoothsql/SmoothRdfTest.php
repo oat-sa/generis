@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,10 +19,12 @@ declare(strict_types=1);
  *
  */
 
+declare(strict_types=1);
+
 namespace oat\generis\test\unit\model\persistence\smoothsql;
 
 use common_Exception;
-use \core_kernel_persistence_smoothsql_SmoothRdf;
+use core_kernel_persistence_smoothsql_SmoothRdf;
 use Doctrine\DBAL\ParameterType;
 use Prophecy\Argument;
 use Prophecy\Prophet;
@@ -77,7 +77,8 @@ class SmoothRdfTest extends TestCase
 
         $persistence = $this->prophesize('\common_persistence_SqlPersistence');
         $persistence->getPlatForm()->willReturn($platform->reveal());
-        $query = "INSERT INTO statements ( modelId, subject, predicate, object, l_language, epoch, author) VALUES ( ? , ? , ? , ? , ? , ?, ?);";
+        $query = "INSERT INTO statements ( modelId, subject, predicate, object, l_language, epoch, author) VALUES "
+            . "( ? , ? , ? , ? , ? , ?, ?);";
 
         $triple = new \core_kernel_classes_Triple();
         $triple->modelid = 22;
@@ -118,7 +119,8 @@ class SmoothRdfTest extends TestCase
 
         $persistence = $this->prophesize('\common_persistence_SqlPersistence');
         $persistence->getPlatForm()->willReturn($platform->reveal());
-        $query = "INSERT INTO statements ( modelId, subject, predicate, object, l_language, epoch, author) VALUES ( ? , ? , ? , ? , ? , ?, ?);";
+        $query = "INSERT INTO statements ( modelId, subject, predicate, object, l_language, epoch, author) VALUES "
+            . "( ? , ? , ? , ? , ? , ?, ?);";
 
         $triple = new \core_kernel_classes_Triple();
         $triple->modelid = 22;

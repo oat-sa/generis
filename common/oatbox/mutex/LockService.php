@@ -40,9 +40,9 @@ use Symfony\Component\Lock\Store\RetryTillSaveStore;
  */
 class LockService extends ConfigurableService
 {
-    const SERVICE_ID = 'generis/LockService';
-    const OPTION_PERSISTENCE_CLASS = 'persistence_class';
-    const OPTION_PERSISTENCE_OPTIONS = 'persistence_options';
+    public const SERVICE_ID = 'generis/LockService';
+    public const OPTION_PERSISTENCE_CLASS = 'persistence_class';
+    public const OPTION_PERSISTENCE_OPTIONS = 'persistence_options';
 
     /** @var Factory */
     private $factory;

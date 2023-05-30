@@ -64,7 +64,7 @@ trait LoggerAwareTrait
     }
 
     // Helpers
-    
+
     /**
      * Logs an emergency
      *
@@ -75,37 +75,37 @@ trait LoggerAwareTrait
     {
         $this->getLogger()->emergency($message, $context);
     }
-    
+
     public function logAlert($message, $context = [])
     {
         $this->getLogger()->alert($message, $context);
     }
-    
+
     public function logCritical($message, $context = [])
     {
         $this->getLogger()->critical($message, $context);
     }
-    
+
     public function logError($message, $context = [])
     {
         $this->getLogger()->error($message, $context);
     }
-    
+
     public function logWarning($message, $context = [])
     {
         $this->getLogger()->warning($message, $context);
     }
-    
+
     public function logNotice($message, $context = [])
     {
         $this->getLogger()->notice($message, $context);
     }
-    
+
     public function logInfo($message, $context = [])
     {
         $this->getLogger()->info($message, $context);
     }
-    
+
     public function logDebug($message, $context = [])
     {
         $this->getLogger()->debug($message, $context);

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,7 +27,6 @@ use oat\oatbox\extension\exception\ManifestNotFoundException;
 
 class helpers_ExtensionHelper
 {
-
     /**
      * Based on a list of extensions we generate an array of missing extensions
      *
@@ -49,7 +49,7 @@ class helpers_ExtensionHelper
         }
         return $missing;
     }
-    
+
     /**
      * Sorts a list of extensions by dependencies,
      * starting with independent extensions
@@ -77,13 +77,18 @@ class helpers_ExtensionHelper
             if (count($unsorted) == $before) {
                 $notfound = array_diff($missing, array_keys($unsorted));
                 if (!empty($notfound)) {
-                    throw new common_exception_Error('Missing extensions ' . implode(',', $notfound) . ' for: ' . implode(',', array_keys($unsorted)));
+                    throw new common_exception_Error(
+                        'Missing extensions ' . implode(',', $notfound) . ' for: '
+                            . implode(',', array_keys($unsorted))
+                    );
                 } else {
-                    throw new common_exception_Error('Cyclic extension dependencies for: ' . implode(',', array_keys($unsorted)));
+                    throw new common_exception_Error(
+                        'Cyclic extension dependencies for: ' . implode(',', array_keys($unsorted))
+                    );
                 }
             }
         }
-        
+
         $returnValue = [];
         foreach ($sorted as $id) {
             foreach ($extensions as $ext) {
@@ -94,7 +99,7 @@ class helpers_ExtensionHelper
         }
         return $returnValue;
     }
-    
+
     public static function sortById($extensions)
     {
         usort($extensions, function ($a, $b) {
@@ -102,7 +107,7 @@ class helpers_ExtensionHelper
         });
         return $extensions;
     }
-    
+
     /**
      * Whenever or not the extension is required by other installed extensions
      *
@@ -120,7 +125,7 @@ class helpers_ExtensionHelper
         }
         return false;
     }
-    
+
     /**
      * Whenever or not the extension is required to be enabled
      * by other enabled extensions

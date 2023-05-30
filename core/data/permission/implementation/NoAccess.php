@@ -42,7 +42,7 @@ class NoAccess extends ConfigurableService implements PermissionInterface
     public function __construct()
     {
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see PermissionInterface::getPermissions()
@@ -51,7 +51,7 @@ class NoAccess extends ConfigurableService implements PermissionInterface
     {
         return array_fill_keys($resourceIds, []);
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see PermissionInterface::onResourceCreated()
@@ -60,7 +60,7 @@ class NoAccess extends ConfigurableService implements PermissionInterface
     {
         // do nothing
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see PermissionInterface::getSupportedRights()

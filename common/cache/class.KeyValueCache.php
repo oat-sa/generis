@@ -15,9 +15,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
- *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
- *               2010-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
+ * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg
+ *                         (under the project TAO & TAO2);
+ *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung
+ *                         (under the project TAO-TRANSFER);
+ *               2010-2012 (update and modification) Public Research Centre Henri Tudor
+ *                         (under the project TAO-SUSTAIN & TAO-DEV);
  *
  */
 
@@ -33,18 +36,21 @@ use oat\oatbox\service\ConfigurableService;
  */
 class common_cache_KeyValueCache extends ConfigurableService implements common_cache_Cache
 {
-    const OPTION_PERSISTENCE = 'persistence';
-    
-    
+    public const OPTION_PERSISTENCE = 'persistence';
+
+
     /**
      * @var common_persistence_KeyValuePersistence
      */
     private $persistence;
-    
+
     protected function getPersistence()
     {
         if (is_null($this->persistence)) {
-            $this->persistence = $this->getServiceLocator()->get('generis/persistences')->getPersistenceById($this->getOption(self::OPTION_PERSISTENCE));
+            $this->persistence = $this
+                ->getServiceLocator()
+                ->get('generis/persistences')
+                ->getPersistenceById($this->getOption(self::OPTION_PERSISTENCE));
         }
         return $this->persistence;
     }

@@ -245,9 +245,15 @@ class AdvKeyValuePersistenceTest extends TestCase
         $storedValue = $this->largeValuePersistence->hGet($key, $field);
 
         self::assertSame($value, $storedValue, 'The same value must be returned from persistence.');
-        self::assertTrue($this->largeValuePersistence->hDel($key, $field), 'Method must return FALSE when value was deleted.');
+        self::assertTrue(
+            $this->largeValuePersistence->hDel($key, $field),
+            'Method must return FALSE when value was deleted.'
+        );
         self::assertFalse($this->largeValuePersistence->hGet($key, $field), 'Value must be deleted from persistence.');
-        self::assertFalse($this->largeValuePersistence->hDel($key, $field), 'Method must return FALSE when key/field does not exist.');
+        self::assertFalse(
+            $this->largeValuePersistence->hDel($key, $field),
+            'Method must return FALSE when key/field does not exist.'
+        );
     }
 
     public function testHDelLargeValue(): void
@@ -272,13 +278,22 @@ class AdvKeyValuePersistenceTest extends TestCase
         $keyMap = array_values($this->largeValuePersistence->get($key))[0];
         $keyMap = json_decode(substr_replace($keyMap, '', 0, strlen($startMapDelimiter)), true);
         $mappedKye = $startMapDelimiter . $keyMap[0] . $endMapDelimiter;
-        self::assertFalse($this->largeValuePersistence->hDel($key, $mappedKye), 'It should not be allowed to delete one part of large value.');
+        self::assertFalse(
+            $this->largeValuePersistence->hDel($key, $mappedKye),
+            'It should not be allowed to delete one part of large value.'
+        );
 
 
         $storedValue = $this->largeValuePersistence->hGet($key, $field);
         self::assertSame($value, $storedValue, 'The same value must be returned from persistence.');
-        self::assertTrue($this->largeValuePersistence->hDel($key, $field), 'Method must return FALSE when value was deleted.');
+        self::assertTrue(
+            $this->largeValuePersistence->hDel($key, $field),
+            'Method must return FALSE when value was deleted.'
+        );
         self::assertFalse($this->largeValuePersistence->hGet($key, $field), 'Value must be deleted from persistence.');
-        self::assertFalse($this->largeValuePersistence->hDel($key, $field), 'Method must return FALSE when key/field does not exist.');
+        self::assertFalse(
+            $this->largeValuePersistence->hDel($key, $field),
+            'Method must return FALSE when key/field does not exist.'
+        );
     }
 }

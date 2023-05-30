@@ -35,7 +35,6 @@ use oat\oatbox\task\Queue;
  */
 class TaskQueue extends \common_ext_action_InstallAction
 {
-
     /**
      * Install action
      */

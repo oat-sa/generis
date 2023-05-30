@@ -41,12 +41,12 @@ class ResourceDeleted implements Event, JsonSerializable
     /**
      * @param string $uri
      */
-    function __construct($uri)
+    public function __construct($uri)
     {
         $this->uri = $uri;
     }
 
-    function getId(): string
+    public function getId(): string
     {
         return $this->uri;
     }
@@ -54,7 +54,7 @@ class ResourceDeleted implements Event, JsonSerializable
     /**
      * {@inheritdoc}
      */
-    function getName()
+    public function getName()
     {
         return __CLASS__;
     }

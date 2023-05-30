@@ -15,8 +15,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2007-2010 (original work) Public Research Centre Henri Tudor & University of Luxembourg) (under the project TAO-QUAL);
- *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
+ * Copyright (c) 2007-2010 (original work) Public Research Centre Henri Tudor & University of Luxembourg
+ *                         (under the project TAO-QUAL);
+ *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung
+ *                         (under the project TAO-TRANSFER);
  *               2017 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT)
  *
  */
@@ -127,7 +129,7 @@ class core_kernel_rules_Operation extends core_kernel_rules_Term
      */
     public function evaluate($variable = [])
     {
-        
+
         common_Logger::i('Evaluating Operation uri : ' . $this->getUri(), ['Generis Operation']);
         common_Logger::i('Evaluating Operation name : ' . $this->getLabel(), ['Generis Operation']);
         $operator = $this->getOperator();
@@ -152,7 +154,7 @@ class core_kernel_rules_Operation extends core_kernel_rules_Term
         }
 
 
-          
+
         if ($secondPart instanceof core_kernel_classes_ContainerCollection) {
             //if we have more than one result we only take the resource label
             $nbLiteral = 0;
@@ -173,7 +175,7 @@ class core_kernel_rules_Operation extends core_kernel_rules_Term
         common_Logger::d('Second Part : ' . $secondPart, ['Generis Operation']);
         $returnValue = $this->evaluateRecursiveOperation($firstPart, $secondPart, $operator);
         common_Logger::i('Operation value: ' . $returnValue, ['Generis Operation']);
-       
+
         return $returnValue;
     }
 
@@ -187,44 +189,45 @@ class core_kernel_rules_Operation extends core_kernel_rules_Term
      * @param  Resource operator
      * @return mixed
      */
-    public function evaluateRecursiveOperation(core_kernel_classes_Literal $first, core_kernel_classes_Literal $second, core_kernel_classes_Resource $operator)
-    {
-        
-        
+    public function evaluateRecursiveOperation(
+        core_kernel_classes_Literal $first,
+        core_kernel_classes_Literal $second,
+        core_kernel_classes_Resource $operator
+    ) {
+
+
         switch ($operator->getUri()) {
-            case RulesRdf::INSTANCE_OPERATOR_ADD: {
+            case RulesRdf::INSTANCE_OPERATOR_ADD:
                 $returnValue = new core_kernel_classes_Literal($first->literal + $second->literal);
                 break;
 
-            }
-            case RulesRdf::INSTANCE_OPERATOR_MINUS: {
+
+            case RulesRdf::INSTANCE_OPERATOR_MINUS:
                 $returnValue = new core_kernel_classes_Literal($first->literal - $second->literal);
                 break;
 
-            }
-            case RulesRdf::INSTANCE_OPERATOR_MULTIPLY: {
+
+            case RulesRdf::INSTANCE_OPERATOR_MULTIPLY:
                 $returnValue = new core_kernel_classes_Literal($first->literal * $second->literal);
                 break;
 
-            }
-            case RulesRdf::INSTANCE_OPERATOR_DIVISION: {
+
+            case RulesRdf::INSTANCE_OPERATOR_DIVISION:
                 $returnValue = new core_kernel_classes_Literal($first->literal / $second->literal);
                 break;
 
-            }
-            case RulesRdf::INSTANCE_OPERATOR_CONCAT: {
+
+            case RulesRdf::INSTANCE_OPERATOR_CONCAT:
                 // FIXME Hotfix for the concat operator. Can't find why traling spaces are not
                 // kept intact when using concat.
                 // ex: 'february ' CONCAT '2008' -> 'february2008' instead of 'february 2008'.
                 $returnValue = new core_kernel_classes_Literal($first->literal . ' ' . $second->literal);
                 break;
 
-            }
-                          
-            default : {
-                throw new common_Exception('problem evaluating operation, operator do not match with operands');
 
-            }
+
+            default:
+                throw new common_Exception('problem evaluating operation, operator do not match with operands');
         }
         $returnValue->debug = __METHOD__;
         return $returnValue;

@@ -24,8 +24,8 @@ namespace oat\generis\model\kernel\persistence\file;
 use EasyRdf\Format;
 use EasyRdf\Graph;
 use oat\generis\model\data\Model;
-use \common_exception_MissingParameter;
-use \common_exception_Error;
+use common_exception_MissingParameter;
+use common_exception_Error;
 use core_kernel_persistence_smoothsql_SmoothModel as SmoothModel;
 
 /**
@@ -42,7 +42,7 @@ class FileModel implements Model
      * @var string
      */
     private $file;
-    
+
     public static function fromFile($filePath)
     {
         return new self(['file' => $filePath]);
@@ -66,7 +66,7 @@ class FileModel implements Model
         $format = Format::getFormat('rdfxml');
         return file_put_contents($filePath, $graph->serialise($format));
     }
-    
+
     /**
      * Constructor of the smooth model, expects a persistence in the configuration
      *
@@ -80,7 +80,7 @@ class FileModel implements Model
         }
         $this->file = $options['file'];
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see \oat\generis\model\data\Model::getConfig()
@@ -91,7 +91,7 @@ class FileModel implements Model
             'file' => $this->file
         ];
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see \oat\generis\model\data\Model::getRdfInterface()
@@ -100,7 +100,7 @@ class FileModel implements Model
     {
         return new FileRdf($this->file);
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see \oat\generis\model\data\Model::getRdfsInterface()
@@ -109,7 +109,7 @@ class FileModel implements Model
     {
         throw new \common_exception_NoImplementation('Rdfs interface not implemented for ' . __CLASS__);
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see \oat\generis\model\data\Model::getSearchInterface()
@@ -120,7 +120,7 @@ class FileModel implements Model
     }
 
     // helper
-    
+
     /**
      * @deprecated
      *
@@ -129,6 +129,6 @@ class FileModel implements Model
      */
     public static function getModelIdFromXml($file)
     {
-       return SmoothModel::DEFAULT_READ_ONLY_MODEL;
+        return SmoothModel::DEFAULT_READ_ONLY_MODEL;
     }
 }

@@ -29,21 +29,20 @@ namespace oat\generis\model\data;
  */
 interface Model
 {
-    
     /**
      * Creates a model from a configuration array provided by getConfig()
      *
      * @param array $config
      */
-    function __construct($options = []);
-    
+    public function __construct($options = []);
+
     /**
      * Returns a configuration array that can be used to instanciate the model
      * should only contain scalars as values
      *
      * @return array
      */
-    function getOptions();
+    public function getOptions();
 
     /**
      * Experimental interface to access the data of the model
@@ -51,15 +50,15 @@ interface Model
      *
      * @return RdfInterface
      */
-    function getRdfInterface();
-    
+    public function getRdfInterface();
+
     /**
      * Expected interface to access the data of the model
      *
      * @return RdfsInterface
      */
-    function getRdfsInterface();
-    
+    public function getRdfsInterface();
+
     /**
      * Get search interface for model
      */

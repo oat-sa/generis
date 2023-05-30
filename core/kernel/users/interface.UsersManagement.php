@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -14,9 +15,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
- *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
- *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
+ * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg
+ *                         (under the project TAO & TAO2);
+ *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung
+ *                         (under the project TAO-TRANSFER);
+ *               2009-2012 (update and modification) Public Research Centre Henri Tudor
+ *                         (under the project TAO-SUSTAIN & TAO-DEV);
  *
  */
 
@@ -30,8 +34,6 @@
  */
 interface core_kernel_users_UsersManagement
 {
-
-
     // --- OPERATIONS ---
 
     /**
@@ -159,7 +161,7 @@ to test the pasword entered
      * @return void
      */
     public function unnatachRole(core_kernel_classes_Resource $user, core_kernel_classes_Resource $role);
-    
+
     /**
      * Returns an array of Roles (as Resources) where keys are their URIs. The
      * roles represent which kind of Roles are accepted to be identified against
@@ -180,4 +182,4 @@ to test the pasword entered
          * @return core_kernel_classes_Resource
         */
     public function getDefaultRole();
-} /* end of interface core_kernel_users_UsersManagement */
+}

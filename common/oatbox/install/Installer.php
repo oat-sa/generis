@@ -40,7 +40,6 @@ use League\Flysystem\Memory\MemoryAdapter;
  */
 class Installer extends ConfigurableService
 {
-
     /**
      * run the install
      */
@@ -116,7 +115,10 @@ class Installer extends ConfigurableService
 
     public function setupExtensionManager(): void
     {
-        $this->getServiceManager()->register(\common_ext_ExtensionsManager::SERVICE_ID, new \common_ext_ExtensionsManager());
+        $this->getServiceManager()->register(
+            \common_ext_ExtensionsManager::SERVICE_ID,
+            new \common_ext_ExtensionsManager()
+        );
     }
 
     /**

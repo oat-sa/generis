@@ -41,9 +41,9 @@ class FileSerializerMigrationHelperTest extends GenerisTestCase
 {
     use FileSystemMockTrait;
 
-    const PARENT_RESOURCE_URI = 'http://www.tao.lu/Ontologies/generis.rdf#UnitTest';
-    const PROPERTY_URI = 'http://www.tao.lu/Ontologies/generis.rdf#TestFile';
-    const SAMPLE_FILE = 'fileMigrationUnitTest.txt';
+    public const PARENT_RESOURCE_URI = 'http://www.tao.lu/Ontologies/generis.rdf#UnitTest';
+    public const PROPERTY_URI = 'http://www.tao.lu/Ontologies/generis.rdf#TestFile';
+    public const SAMPLE_FILE = 'fileMigrationUnitTest.txt';
 
     /**
      * @var MigrationHelper
@@ -156,7 +156,9 @@ class FileSerializerMigrationHelperTest extends GenerisTestCase
             [
                 GenerisRdf::PROPERTY_FILE_FILENAME => $filename,
                 GenerisRdf::PROPERTY_FILE_FILEPATH => $filePath,
-                GenerisRdf::PROPERTY_FILE_FILESYSTEM => $this->ontologyMock->getResource($this->testFile->getFileSystemId()),
+                GenerisRdf::PROPERTY_FILE_FILESYSTEM => $this->ontologyMock->getResource(
+                    $this->testFile->getFileSystemId()
+                ),
             ]
         );
 
@@ -193,7 +195,9 @@ class FileSerializerMigrationHelperTest extends GenerisTestCase
     private function getMockFileSystem()
     {
         if ($this->fileSystemService === null) {
-            $this->fileSystemService = $this->getServiceLocatorMock([FileSystemService::SERVICE_ID => new FileSystemService()])->get(FileSystemService::SERVICE_ID);
+            $this->fileSystemService = $this
+                ->getServiceLocatorMock([FileSystemService::SERVICE_ID => new FileSystemService()])
+                ->get(FileSystemService::SERVICE_ID);
         }
 
         return $this->fileSystemService;

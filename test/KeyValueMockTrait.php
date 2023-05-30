@@ -35,7 +35,7 @@ trait KeyValueMockTrait
     public function getKeyValueMock($key)
     {
         $driver = new \common_persistence_InMemoryKvDriver();
-        $persistence = new \common_persistence_KeyValuePersistence([],$driver);
+        $persistence = new \common_persistence_KeyValuePersistence([], $driver);
         $pmProphecy = $this->prophesize(PersistenceManager::class);
         $pmProphecy->setServiceLocator(Argument::any())->willReturn(null);
         $pmProphecy->getPersistenceById($key)->willReturn($persistence);
