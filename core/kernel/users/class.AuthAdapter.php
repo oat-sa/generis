@@ -84,7 +84,9 @@ class core_kernel_users_AuthAdapter implements common_user_auth_Adapter
 
         if (count($users) > 1) {
             // Multiple users matching
-            throw new common_exception_InconsistentData("Multiple Users found with the same login '" . $this->username . "'.");
+            throw new common_exception_InconsistentData(
+                "Multiple Users found with the same login '" . $this->username . "'."
+            );
         }
         if (empty($users)) {
             // fake code execution to prevent timing attacks
@@ -98,7 +100,9 @@ class core_kernel_users_AuthAdapter implements common_user_auth_Adapter
         }
 
         $userResource = current($users);
-        $hash = $userResource->getUniquePropertyValue(new core_kernel_classes_Property(GenerisRdf::PROPERTY_USER_PASSWORD));
+        $hash = $userResource->getUniquePropertyValue(
+            new core_kernel_classes_Property(GenerisRdf::PROPERTY_USER_PASSWORD)
+        );
         if (!core_kernel_users_Service::getPasswordHash()->verify($this->password, $hash)) {
             throw new core_kernel_users_InvalidLoginException();
         }

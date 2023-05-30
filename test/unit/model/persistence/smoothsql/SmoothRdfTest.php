@@ -77,7 +77,8 @@ class SmoothRdfTest extends TestCase
 
         $persistence = $this->prophesize('\common_persistence_SqlPersistence');
         $persistence->getPlatForm()->willReturn($platform->reveal());
-        $query = "INSERT INTO statements ( modelId, subject, predicate, object, l_language, epoch, author) VALUES ( ? , ? , ? , ? , ? , ?, ?);";
+        $query = "INSERT INTO statements ( modelId, subject, predicate, object, l_language, epoch, author) VALUES "
+            . "( ? , ? , ? , ? , ? , ?, ?);";
 
         $triple = new \core_kernel_classes_Triple();
         $triple->modelid = 22;
@@ -118,7 +119,8 @@ class SmoothRdfTest extends TestCase
 
         $persistence = $this->prophesize('\common_persistence_SqlPersistence');
         $persistence->getPlatForm()->willReturn($platform->reveal());
-        $query = "INSERT INTO statements ( modelId, subject, predicate, object, l_language, epoch, author) VALUES ( ? , ? , ? , ? , ? , ?, ?);";
+        $query = "INSERT INTO statements ( modelId, subject, predicate, object, l_language, epoch, author) VALUES "
+            . "( ? , ? , ? , ? , ? , ?, ?);";
 
         $triple = new \core_kernel_classes_Triple();
         $triple->modelid = 22;

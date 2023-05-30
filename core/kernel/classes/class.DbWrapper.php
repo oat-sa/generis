@@ -422,9 +422,11 @@ class core_kernel_classes_DbWrapper
      * @abstract
      * @access public
      * @author Jerome Bogaerts, <jerome@taotesting.com>
-     * @param  string indexName The name of the index to create.
-     * @param  string tableName A table name
-     * @param  array columns An associative array that represents the columns on which the index applies. The keys of the array are the name of the columns, the values are the length of the data to index in the column. If there is no length limitation, set the value of the array cell to null.
+     * @param string $indexName The name of the index to create.
+     * @param string $tableName A table name
+     * @param array $columns An associative array that represents the columns on which the index applies. The keys of
+     *                       the array are the name of the columns, the values are the length of the data to index in
+     *                       the column. If there is no length limitation, set the value of the array cell to null.
      * @return void
      */
     public function createIndex($indexName, $tableName, $columns)

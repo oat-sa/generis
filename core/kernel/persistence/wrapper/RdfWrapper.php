@@ -88,9 +88,18 @@ class RdfWrapper implements \oat\generis\model\data\RdfInterface
                 $resource = new \core_kernel_classes_Resource($triple->subject);
                 $property = new \core_kernel_classes_Property($triple->predicate);
                 if (empty($triple->lg)) {
-                    return $this->rdfsInterface->getResourceImplementation()->setPropertyValue($resource, $property, $triple->object);
+                    return $this->rdfsInterface->getResourceImplementation()->setPropertyValue(
+                        $resource,
+                        $property,
+                        $triple->object
+                    );
                 } else {
-                    return $this->rdfsInterface->getResourceImplementation()->setPropertyValueByLg($resource, $property, $triple->object, $triple->lg);
+                    return $this->rdfsInterface->getResourceImplementation()->setPropertyValueByLg(
+                        $resource,
+                        $property,
+                        $triple->object,
+                        $triple->lg
+                    );
                 }
         }
     }

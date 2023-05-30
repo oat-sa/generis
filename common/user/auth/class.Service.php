@@ -67,9 +67,10 @@ class common_user_auth_Service
      *
      * @access public
      * @author Jerome Bogaerts, <jerome@taotesting.com>
-     * @param  string login The login of the user.
-     * @param  string password the md5 hash of the password.
-     * @param  allowedRoles A Role or an array of Roles that are allowed to be logged in. If the user has a Role that matches one or more Roles in this array, the login request will be accepted.
+     * @param string $login The login of the user.
+     * @param string $password the md5 hash of the password.
+     * @param $allowedRoles - A Role or an array of Roles that are allowed to be logged in. If the user has a Role that
+     *                        matches one or more Roles in this array, the login request will be accepted.
      * @return boolean
      */
     public function login(common_user_auth_Adapter $adapter, $allowedRoles = [])

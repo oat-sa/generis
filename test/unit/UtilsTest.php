@@ -105,6 +105,23 @@ class generis_test_UtilsTest extends TestCase
         $score = "\x01" . pack('S', 8) . "\x00" . "\x01" . pack('d', 1.0);
         $response = "\x00" . pack('S', 0) . "\x00" . "\x01" . pack('S', 7) . 'ChoiceA';
 
-        return implode('', [$position, $state, $navigationMode, $submissionMode, $attempting, $hasItemSessionControl, $numAttempts, $duration, $completionStatus, $timeReference, $varCount, $score, $response]);
+        return implode(
+            '',
+            [
+                $position,
+                $state,
+                $navigationMode,
+                $submissionMode,
+                $attempting,
+                $hasItemSessionControl,
+                $numAttempts,
+                $duration,
+                $completionStatus,
+                $timeReference,
+                $varCount,
+                $score,
+                $response
+            ]
+        );
     }
 }

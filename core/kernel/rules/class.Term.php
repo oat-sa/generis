@@ -15,7 +15,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2007-2010 (original work) Public Research Centre Henri Tudor & University of Luxembourg) (under the project TAO-QUAL);
+ * Copyright (c) 2007-2010 (original work) Public Research Centre Henri Tudor & University of Luxembourg
+ *                         (under the project TAO-QUAL);
  *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung
  *                         (under the project TAO-TRANSFER);
  *               2017 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
@@ -106,8 +107,11 @@ class core_kernel_rules_Term extends core_kernel_classes_Resource
      * @param  ContainerCollection $newSet
      * @return core_kernel_classes_ContainerCollection
      */
-    public function evalutateSetOperation(core_kernel_classes_Resource $setOperator, common_Collection $actualSet, core_kernel_classes_ContainerCollection $newSet)
-    {
+    public function evalutateSetOperation(
+        core_kernel_classes_Resource $setOperator,
+        common_Collection $actualSet,
+        core_kernel_classes_ContainerCollection $newSet
+    ) {
         $returnValue = null;
         if ($setOperator->getUri() == RulesRdf::INSTANCE_OPERATOR_UNION) {
             $returnValue = $actualSet->union($newSet);
@@ -144,19 +148,15 @@ class core_kernel_rules_Term extends core_kernel_classes_Resource
             }
 
             try {
-                $propertyInstance = $this->getUniquePropertyValue(new core_kernel_classes_Property(RulesRdf::PROPERTY_TERM_SPX_PREDICATE));
+                $propertyInstance = $this->getUniquePropertyValue(
+                    new core_kernel_classes_Property(RulesRdf::PROPERTY_TERM_SPX_PREDICATE)
+                );
             } catch (common_Exception $e) {
                 echo $e;
                 var_dump($this);
                 die('unable to get property value in Term');
             }
-            //          if(array_key_exists($propertyInstance->getUri(),$variable)) {
-            //                $logger->debug('Variable uri : ' .  $propertyInstance->getUri() . ' found' , __FILE__, __LINE__);
-            //                $logger->debug('Variable name : ' .  $propertyInstance->getLabel() . ' found' , __FILE__, __LINE__);
-            //             $propertyInstance = new core_kernel_classes_Resource($variable[$resource->getUri()]);
-            //                $logger->debug('Variable repaced uri : ' .  $propertyInstance->getUri() , __FILE__, __LINE__);
-            //               $logger->debug('Variable repaced name : ' .  $propertyInstance->getLabel() , __FILE__, __LINE__);
-            //            }
+
             $property = new core_kernel_classes_Property($propertyInstance->getUri());
             common_Logger::d('Property uri ' . $property->getUri(), ['Generis Term evaluateSPX']);
             common_Logger::d('Property name ' . $property->getLabel(), ['Generis Term evaluateSPX']);

@@ -55,7 +55,10 @@ class EnvironmentVariableTest extends TestCase
 
     public function testToPhpCode()
     {
-        $this->assertSame('new ' . EnvironmentVariable::class . '(' . Utils::toPHPVariableString(self::VAR_NAME) . ')', $this->subject->__toPhpCode());
+        $this->assertSame(
+            'new ' . EnvironmentVariable::class . '(' . Utils::toPHPVariableString(self::VAR_NAME) . ')',
+            $this->subject->__toPhpCode()
+        );
     }
 
     public function testToString()

@@ -42,7 +42,10 @@ class CreateInstanceTest extends GenerisPhpUnitTestRunner
     {
 
         GenerisPhpUnitTestRunner::initTest();
-        $classres = core_kernel_classes_ResourceFactory::create(new core_kernel_classes_Class(OntologyRdfs::RDFS_CLASS), 'TestClass');
+        $classres = core_kernel_classes_ResourceFactory::create(
+            new core_kernel_classes_Class(OntologyRdfs::RDFS_CLASS),
+            'TestClass'
+        );
         $this->class = new core_kernel_classes_Class($classres->getUri());
         $this->assertIsA($this->class, 'core_kernel_classes_Class');
         $this->assertTrue($this->class->hasType(new core_kernel_classes_Class(OntologyRdfs::RDFS_CLASS)));
@@ -80,9 +83,17 @@ class CreateInstanceTest extends GenerisPhpUnitTestRunner
 
         // simple case, without params
 
-        $class          = $this->class;
-        $litproperty    = new core_kernel_classes_Property(core_kernel_classes_ResourceFactory::create(new core_kernel_classes_Class(OntologyRdf::RDF_PROPERTY))->getUri());
-        $property       = new core_kernel_classes_Property(core_kernel_classes_ResourceFactory::create(new core_kernel_classes_Class(OntologyRdf::RDF_PROPERTY))->getUri());
+        $class = $this->class;
+        $litproperty = new core_kernel_classes_Property(
+            core_kernel_classes_ResourceFactory::create(
+                new core_kernel_classes_Class(OntologyRdf::RDF_PROPERTY)
+            )->getUri()
+        );
+        $property = new core_kernel_classes_Property(
+            core_kernel_classes_ResourceFactory::create(
+                new core_kernel_classes_Class(OntologyRdf::RDF_PROPERTY)
+            )->getUri()
+        );
 
         $instance = $class->createInstanceWithProperties([]);
         $this->assertTrue($instance->hasType($class));
@@ -137,9 +148,15 @@ class CreateInstanceTest extends GenerisPhpUnitTestRunner
         $this->assertEquals($propActual, $propNormative);
 
         // multiple classes
-        $classres = core_kernel_classes_ResourceFactory::create(new core_kernel_classes_Class(OntologyRdfs::RDFS_CLASS), 'TestClass2');
+        $classres = core_kernel_classes_ResourceFactory::create(
+            new core_kernel_classes_Class(OntologyRdfs::RDFS_CLASS),
+            'TestClass2'
+        );
         $class2 = new core_kernel_classes_Class($classres);
-        $classres = core_kernel_classes_ResourceFactory::create(new core_kernel_classes_Class(OntologyRdfs::RDFS_CLASS), 'TestClass3');
+        $classres = core_kernel_classes_ResourceFactory::create(
+            new core_kernel_classes_Class(OntologyRdfs::RDFS_CLASS),
+            'TestClass3'
+        );
         $class3 = new core_kernel_classes_Class($classres);
 
         // 2 classes (by ressource)

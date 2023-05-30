@@ -66,9 +66,10 @@ class core_kernel_uri_DatabaseSerialUriProvider extends ConfigurableService impl
     {
         $returnValue = (string) '';
         try {
-            $sth = $this->getPersistence()->query($this->getPersistence()->getPlatForm()->getSqlFunction("generis_sequence_uri_provider"), [
-                    $this->getOption(self::OPTION_NAMESPACE)
-            ]);
+            $sth = $this->getPersistence()->query(
+                $this->getPersistence()->getPlatForm()->getSqlFunction("generis_sequence_uri_provider"),
+                [$this->getOption(self::OPTION_NAMESPACE)]
+            );
 
             if ($sth !== false) {
                 $row = $sth->fetch();
@@ -76,7 +77,10 @@ class core_kernel_uri_DatabaseSerialUriProvider extends ConfigurableService impl
                 $returnValue = current($row);
                 $sth->closeCursor();
             } else {
-                throw new UriProviderException("An error occured while calling the stored procedure for persistence " . $this->getOption(self::OPTION_PERSISTENCE) . ".");
+                throw new UriProviderException(
+                    "An error occured while calling the stored procedure for persistence "
+                    . $this->getOption(self::OPTION_PERSISTENCE) . "."
+                );
             }
         } catch (Exception $e) {
             throw new UriProviderException("An error occured while calling the stored ': " . $e->getMessage() . ".");

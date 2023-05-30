@@ -19,8 +19,8 @@
  *                         (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor
  *                         (under the project TAO-SUSTAIN & TAO-DEV);
- *               2012-2014 (update and modification) 2012-2014 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
+ *               2012-2014 (update and modification) 2012-2014 (update and modification) Open Assessment Technologies SA
+ *                         (under the project TAO-PRODUCT);
  */
 
 namespace oat\generis\test\integration\model\persistence\smoothsql;
@@ -58,7 +58,14 @@ class SmootsqlUtilsTest extends GenerisPhpUnitTestRunner
      */
     public function testBuildSearchPattern($pattern, $like, $expected)
     {
-        $this->assertSame($expected, core_kernel_persistence_smoothsql_Utils::buildSearchPattern($this->getModel()->getPersistence(), $pattern, $like));
+        $this->assertSame(
+            $expected,
+            core_kernel_persistence_smoothsql_Utils::buildSearchPattern(
+                $this->getModel()->getPersistence(),
+                $pattern,
+                $like
+            )
+        );
     }
 
     public function buildSearchPatternProvider()
@@ -76,8 +83,16 @@ class SmootsqlUtilsTest extends GenerisPhpUnitTestRunner
             [false, false, '= ' . $this->quote('')],
             [false, true, 'LIKE LOWER(' . $this->quote('%%') . ')'],
             ['', true, 'LIKE LOWER(' . $this->quote('%%') . ')'],
-            [new core_kernel_classes_Resource('http://www.13.com/ontology#toto'), false, '= ' . $this->quote('http://www.13.com/ontology#toto')],
-            [new core_kernel_classes_Resource('http://www.13.com/ontology#toto'), true, '= ' . $this->quote('http://www.13.com/ontology#toto')],
+            [
+                new core_kernel_classes_Resource('http://www.13.com/ontology#toto'),
+                false,
+                '= ' . $this->quote('http://www.13.com/ontology#toto')
+            ],
+            [
+                new core_kernel_classes_Resource('http://www.13.com/ontology#toto'),
+                true,
+                '= ' . $this->quote('http://www.13.com/ontology#toto')
+            ],
         ];
     }
 
@@ -91,7 +106,13 @@ class SmootsqlUtilsTest extends GenerisPhpUnitTestRunner
      */
     public function testBuildPropertyQuery($expected, $propertyUri, $values, $like, $lang = '')
     {
-        $query = core_kernel_persistence_smoothsql_Utils::buildPropertyQuery($this->getModel(), $propertyUri, $values, $like, $lang);
+        $query = core_kernel_persistence_smoothsql_Utils::buildPropertyQuery(
+            $this->getModel(),
+            $propertyUri,
+            $values,
+            $like,
+            $lang
+        );
         $queryWithoutModelRestrictions = substr($query, 0, strlen($expected));
         $this->assertSame($expected, $queryWithoutModelRestrictions);
         $this->assertSame(' AND modelid IN (', substr($query, strlen($expected), strlen(' AND modelid IN (')));
@@ -101,25 +122,35 @@ class SmootsqlUtilsTest extends GenerisPhpUnitTestRunner
     {
         return [
             [
-                "SELECT DISTINCT subject FROM statements WHERE (predicate = " . $this->quote('http://www.13.com/ontology#prop') . ") AND (object = " . $this->quote('hello') . ")",
+                "SELECT DISTINCT subject FROM statements WHERE (predicate = "
+                    . $this->quote('http://www.13.com/ontology#prop') . ") AND (object = "
+                    . $this->quote('hello') . ")",
                 'http://www.13.com/ontology#prop',
                 'hello',
                 false
             ],
             [
-                "SELECT DISTINCT subject FROM statements WHERE (predicate = " . $this->quote('http://www.13.com/ontology#prop') . ") AND (object = " . $this->quote('hello') . " OR object = " . $this->quote('world') . ")",
+                "SELECT DISTINCT subject FROM statements WHERE (predicate = "
+                    . $this->quote('http://www.13.com/ontology#prop') . ") AND (object = "
+                    . $this->quote('hello') . " OR object = " . $this->quote('world') . ")",
                 'http://www.13.com/ontology#prop',
                 ['hello', 'world'],
                 false
             ],
             [
-                "SELECT DISTINCT subject FROM statements WHERE (predicate = " . $this->quote('http://www.13.com/ontology#prop') . ") AND (LOWER(object) LIKE LOWER(" . $this->quote('%hello%') . ") OR LOWER(object) LIKE LOWER(" . $this->quote('%world%') . "))",
+                "SELECT DISTINCT subject FROM statements WHERE (predicate = "
+                    . $this->quote('http://www.13.com/ontology#prop') . ") AND (LOWER(object) LIKE LOWER("
+                    . $this->quote('%hello%') . ") OR LOWER(object) LIKE LOWER(" . $this->quote('%world%')
+                    . "))",
                 'http://www.13.com/ontology#prop',
                 ['hello', 'world'],
                 true
             ],
             [
-                "SELECT DISTINCT subject FROM statements WHERE (predicate = " . $this->quote('http://www.13.com/ontology#prop') . ") AND (object = " . $this->quote('hello') . " AND (l_language = " . $this->quote('') . " OR l_language = " . $this->quote('en-US') . "))",
+                "SELECT DISTINCT subject FROM statements WHERE (predicate = "
+                    . $this->quote('http://www.13.com/ontology#prop') . ") AND (object = "
+                    . $this->quote('hello') . " AND (l_language = " . $this->quote('') . " OR l_language = "
+                    . $this->quote('en-US') . "))",
                 'http://www.13.com/ontology#prop',
                 'hello',
                 false,
@@ -144,16 +175,50 @@ class SmootsqlUtilsTest extends GenerisPhpUnitTestRunner
         return [
             [
                 [
-                    core_kernel_persistence_smoothsql_Utils::buildPropertyQuery($this->getModel(), 'http://www.13.com/ontology#prop1', 'toto', false),
-                    core_kernel_persistence_smoothsql_Utils::buildPropertyQuery($this->getModel(), 'http://www.13.com/ontology#prop2', 'tata', false),
+                    core_kernel_persistence_smoothsql_Utils::buildPropertyQuery(
+                        $this->getModel(),
+                        'http://www.13.com/ontology#prop1',
+                        'toto',
+                        false
+                    ),
+                    core_kernel_persistence_smoothsql_Utils::buildPropertyQuery(
+                        $this->getModel(),
+                        'http://www.13.com/ontology#prop2',
+                        'tata',
+                        false
+                    ),
                 ],
-                '(' . core_kernel_persistence_smoothsql_Utils::buildPropertyQuery($this->getModel(), 'http://www.13.com/ontology#prop1', 'toto', false) . ') UNION ALL (' . core_kernel_persistence_smoothsql_Utils::buildPropertyQuery($this->getModel(), 'http://www.13.com/ontology#prop2', 'tata', false) . ')'
+                '('
+                    . core_kernel_persistence_smoothsql_Utils::buildPropertyQuery(
+                        $this->getModel(),
+                        'http://www.13.com/ontology#prop1',
+                        'toto',
+                        false
+                    )
+                    . ') UNION ALL ('
+                    . core_kernel_persistence_smoothsql_Utils::buildPropertyQuery(
+                        $this->getModel(),
+                        'http://www.13.com/ontology#prop2',
+                        'tata',
+                        false
+                    )
+                    . ')'
             ],
             [
                 [
-                    core_kernel_persistence_smoothsql_Utils::buildPropertyQuery($this->getModel(), 'http://www.13.com/ontology#prop1', 'toto', false)
+                    core_kernel_persistence_smoothsql_Utils::buildPropertyQuery(
+                        $this->getModel(),
+                        'http://www.13.com/ontology#prop1',
+                        'toto',
+                        false
+                    )
                 ],
-                core_kernel_persistence_smoothsql_Utils::buildPropertyQuery($this->getModel(), 'http://www.13.com/ontology#prop1', 'toto', false)
+                core_kernel_persistence_smoothsql_Utils::buildPropertyQuery(
+                    $this->getModel(),
+                    'http://www.13.com/ontology#prop1',
+                    'toto',
+                    false
+                )
             ],
             [[], false]
         ];

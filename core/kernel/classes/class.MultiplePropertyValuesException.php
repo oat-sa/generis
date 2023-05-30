@@ -56,7 +56,10 @@ class core_kernel_classes_MultiplePropertyValuesException extends common_Excepti
         $this->resource = $resource;
         $this->property = $property;
 
-        parent::__construct('Property ( ' . $property->getUri() . ' ) of resource ' . ' ( ' . $resource->getUri() . ' ) has more than one value do not use getUniquePropertyValue but use getPropertyValue instead');
+        parent::__construct(
+            'Property ( ' . $property->getUri() . ' ) of resource ' . ' ( ' . $resource->getUri()
+                . ' ) has more than one value do not use getUniquePropertyValue but use getPropertyValue instead'
+        );
     }
 
     /**

@@ -40,7 +40,10 @@ class SqlInjectionTestCase extends GenerisPhpUnitTestRunner
             $testInstance->setPropertiesValues([
                 OntologyRdfs::RDFS_COMMENT => '"hi"'
             ]);
-            $this->assertEquals($testInstance->getUniquePropertyValue(new core_kernel_classes_Property(OntologyRdfs::RDFS_LABEL)), "\"hi\"");
+            $this->assertEquals(
+                $testInstance->getUniquePropertyValue(new core_kernel_classes_Property(OntologyRdfs::RDFS_LABEL)),
+                "\"hi\""
+            );
         } catch (DBALException $e) {
             $this->fail('SQL Error: ' . $e->getMessage());
         }

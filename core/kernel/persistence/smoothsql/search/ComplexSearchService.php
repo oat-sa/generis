@@ -223,8 +223,18 @@ class ComplexSearchService extends ConfigurableService
      * @param string $orderDir
      * @return string
      */
-    public function getQuery(core_kernel_persistence_smoothsql_SmoothModel $model, $classUri, array $propertyFilters, $and = true, $isLikeOperator = true, $lang = '', $offset = 0, $limit = 0, $order = '', $orderDir = 'ASC')
-    {
+    public function getQuery(
+        core_kernel_persistence_smoothsql_SmoothModel $model,
+        $classUri,
+        array $propertyFilters,
+        $and = true,
+        $isLikeOperator = true,
+        $lang = '',
+        $offset = 0,
+        $limit = 0,
+        $order = '',
+        $orderDir = 'ASC'
+    ) {
         $query = $this->getGateway()->query()->setLimit($limit)->setOffset($offset);
 
         if (!empty($order)) {

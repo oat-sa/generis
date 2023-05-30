@@ -104,12 +104,19 @@ class core_kernel_users_Service implements
      * @param  Resource role A Role to grant to the new User.
      * @return core_kernel_classes_Resource
      */
-    public function addUser($login, $password, core_kernel_classes_Resource $role = null, core_kernel_classes_Class $class = null)
-    {
+    public function addUser(
+        $login,
+        $password,
+        core_kernel_classes_Resource $role = null,
+        core_kernel_classes_Class $class = null
+    ) {
         $returnValue = null;
 
         if ($this->loginExists($login)) {
-            throw new core_kernel_users_Exception("Login '${login}' already in use.", core_kernel_users_Exception::LOGIN_EXITS);
+            throw new core_kernel_users_Exception(
+                "Login '${login}' already in use.",
+                core_kernel_users_Exception::LOGIN_EXITS
+            );
         } else {
             $role = (empty($role)) ? new core_kernel_classes_Resource(GenerisRdf::INSTANCE_ROLE_GENERIS) : $role;
 
@@ -227,10 +234,15 @@ class core_kernel_users_Service implements
     public function setPassword(core_kernel_classes_Resource $user, $password)
     {
         if (!is_string($password)) {
-            throw new core_kernel_users_Exception('The password must be of "string" type, got ' . gettype($password));
+            throw new core_kernel_users_Exception(
+                'The password must be of "string" type, got ' . gettype($password)
+            );
         }
 
-        $user->editPropertyValues(new core_kernel_classes_Property(GenerisRdf::PROPERTY_USER_PASSWORD), core_kernel_users_Service::getPasswordHash()->encrypt($password));
+        $user->editPropertyValues(
+            new core_kernel_classes_Property(GenerisRdf::PROPERTY_USER_PASSWORD),
+            core_kernel_users_Service::getPasswordHash()->encrypt($password)
+        );
     }
 
     /**
@@ -291,7 +303,9 @@ class core_kernel_users_Service implements
             }
         } else {
             // After introducing remote users, we can no longer guarantee that any user and his roles are available
-            common_Logger::w('Roles of non current user (' . $user->getUri() . ') checked, trying fallback to local ontology');
+            common_Logger::w(
+                'Roles of non current user (' . $user->getUri() . ') checked, trying fallback to local ontology'
+            );
             $userRoles = array_keys($this->getUserRoles($user));
             $identicalRoles = array_intersect($searchRoles, $userRoles);
 
@@ -354,8 +368,9 @@ class core_kernel_users_Service implements
      *
      * @access public
      * @author Jerome Bogaerts, <jerome@taotesting.com>
-     * @param  string label The label to apply to the newly created Generis Role.
-     * @param  includedRoles The Role(s) to be included in the newly created Generis Role. Can be either a Resource or an array of Resources.
+     * @param string $label The label to apply to the newly created Generis Role.
+     * @param $includedRoles The Role(s) to be included in the newly created Generis Role. Can be either a Resource or
+     *                       an array of Resources.
      * @return core_kernel_classes_Resource
      */
     public function addRole($label, $includedRoles = null, core_kernel_classes_Class $class = null)
@@ -422,7 +437,8 @@ class core_kernel_users_Service implements
      *
      * @param  core_kernel_classes_Resource $role A Generis Role.
      *
-     * @return array An associative array where keys are Role URIs and values are instances of core_kernel_classes_Resource.
+     * @return array An associative array where keys are Role URIs and values are instances of
+     *               core_kernel_classes_Resource.
      * @throws core_kernel_users_CacheException
      * @throws core_kernel_users_Exception
      */
@@ -566,9 +582,10 @@ class core_kernel_users_Service implements
      *
      * @access public
      * @author Jerome Bogaerts, <jerome@taotesting.com>
-     * @param  string login The login of the user.
-     * @param  string password the md5 hash of the password.
-     * @param  allowedRoles A Role or an array of Roles that are allowed to be logged in. If the user has a Role that matches one or more Roles in this array, the login request will be accepted.
+     * @param string $login The login of the user.
+     * @param string $password the md5 hash of the password.
+     * @param $allowedRoles - A role or an array of Roles that are allowed to be logged in. If the user has a Role that
+     *                      matches one or more Roles in this array, the login request will be accepted.
      * @return boolean
      */
     public function login($login, $password, $allowedRoles)
@@ -622,7 +639,8 @@ class core_kernel_users_Service implements
     /**
      * Returns the whole collection of Roles in Generis.
      *
-     * @return array An associative array where keys are Role URIs and values are instances of the core_kernel_classes_Resource PHP class.
+     * @return array An associative array where keys are Role URIs and values are instances of the
+     *               core_kernel_classes_Resource PHP class.
      */
     public function getAllRoles()
     {

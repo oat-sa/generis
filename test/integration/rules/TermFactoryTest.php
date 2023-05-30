@@ -70,7 +70,10 @@ class TermFactoryTest extends GenerisPhpUnitTestRunner
         $booleanClass = new core_kernel_classes_Class(GenerisRdf::GENERIS_BOOLEAN);
         $maybe = core_kernel_classes_ResourceFactory::create($booleanClass, 'testCase testCreateSPX', __METHOD__);
 
-        $SPXResource = core_kernel_rules_TermFactory::createSPX($maybe, new core_kernel_classes_Property(OntologyRdfs::RDFS_COMMENT));
+        $SPXResource = core_kernel_rules_TermFactory::createSPX(
+            $maybe,
+            new core_kernel_classes_Property(OntologyRdfs::RDFS_COMMENT)
+        );
         $this->assertIsA($SPXResource, 'core_kernel_rules_Term');
 
         $subjectProperty = new core_kernel_classes_Property(RulesRdf::PROPERTY_TERM_SPX_SUBJET);

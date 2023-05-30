@@ -173,7 +173,9 @@ abstract class GenerisPhpUnitTestRunner extends TestCase
     public static function getTestSession()
     {
         if (!self::$connected) {
-            throw new common_exception_Error('Trying to retrieve TestSession without initialising it first via initTest()');
+            throw new common_exception_Error(
+                'Trying to retrieve TestSession without initialising it first via initTest()'
+            );
         }
         $session = common_session_SessionManager::getSession();
         if (!$session instanceof common_test_TestUserSession) {

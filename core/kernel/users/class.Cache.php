@@ -148,7 +148,8 @@ class core_kernel_users_Cache
      *
      * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  core_kernel_classes_Resource $role The Generis Role you want to check if its included roles are in the cache memory.
+     * @param core_kernel_classes_Resource $role The Generis Role you want to check if its included roles are in the
+     *                                           cache memory.
      * @return boolean
      */
     public static function areIncludedRolesInCache(core_kernel_classes_Resource $role)

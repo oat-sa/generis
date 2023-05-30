@@ -95,8 +95,13 @@ class core_kernel_classes_ClassFactory
      * @param  string uri
      * @return core_kernel_classes_Property
      */
-    public static function createProperty(core_kernel_classes_Class $clazz, $label = '', $comment = '', $isLgDependent = false, $uri = '')
-    {
+    public static function createProperty(
+        core_kernel_classes_Class $clazz,
+        $label = '',
+        $comment = '',
+        $isLgDependent = false,
+        $uri = ''
+    ) {
         $returnValue = null;
         $property = new core_kernel_classes_Class(OntologyRdf::RDF_PROPERTY);
         $propertyInstance = self::createInstance($property, $label, $comment, $uri);

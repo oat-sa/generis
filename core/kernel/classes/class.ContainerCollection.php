@@ -90,7 +90,11 @@ class core_kernel_classes_ContainerCollection extends common_Collection
 
 
         $returnValue = new core_kernel_classes_ContainerCollection(new common_Object(__METHOD__));
-        $returnValue->sequence = array_uintersect($this->sequence, $collection->sequence, 'core_kernel_classes_ContainerComparator::compare');
+        $returnValue->sequence = array_uintersect(
+            $this->sequence,
+            $collection->sequence,
+            'core_kernel_classes_ContainerComparator::compare'
+        );
 
 
         return $returnValue;

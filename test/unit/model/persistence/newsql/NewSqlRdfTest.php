@@ -33,7 +33,8 @@ class NewSqlRdfTest extends TestCase
 {
     public function testAdd()
     {
-        $query = 'INSERT INTO statements ( id, modelId, subject, predicate, object, l_language, epoch, author) VALUES ( ?, ? , ? , ? , ? , ? , ?, ?);';
+        $query = 'INSERT INTO statements ( id, modelId, subject, predicate, object, l_language, epoch, author) VALUES '
+            . '( ?, ? , ? , ? , ? , ? , ?, ?);';
 
         $triple = new \core_kernel_classes_Triple();
         $triple->modelid = 22;

@@ -72,7 +72,9 @@ class core_kernel_classes_ResourceFormatter
             foreach ($values as $value) {
                 $stdValue = new stdClass();
                 $stdValue->valueType = (get_class($value) == "core_kernel_classes_Literal") ? "literal" : "resource";
-                $stdValue->value = (get_class($value) == "core_kernel_classes_Literal") ? $value->__toString() : $value->getUri();
+                $stdValue->value = (get_class($value) == "core_kernel_classes_Literal")
+                    ? $value->__toString()
+                    : $value->getUri();
                 $propStdClass->values[] = $stdValue;
             }
             $returnValue[] = $propStdClass;

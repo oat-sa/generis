@@ -41,7 +41,10 @@ class ExpressionFactoryTestCase extends GenerisPhpUnitTestRunner
     {
         $constantResource = core_kernel_rules_TermFactory::createConst('test1');
         $terminalExpression = core_kernel_rules_ExpressionFactory::createTerminalExpression($constantResource);
-        $terminalExpressionProperty = new core_kernel_classes_Property(RulesRdf::PROPERTY_TERMINAL_EXPRESSION, __METHOD__);
+        $terminalExpressionProperty = new core_kernel_classes_Property(
+            RulesRdf::PROPERTY_TERMINAL_EXPRESSION,
+            __METHOD__
+        );
         $terminalExpressionVal = $terminalExpression->getOnePropertyValue($terminalExpressionProperty);
         $this->assertIsA($terminalExpressionVal, 'core_kernel_classes_Resource');
         $this->assertEquals($terminalExpressionVal->getUri(), $constantResource->getUri());
@@ -63,10 +66,17 @@ class ExpressionFactoryTestCase extends GenerisPhpUnitTestRunner
         $terminalExpression2 = core_kernel_rules_ExpressionFactory::createTerminalExpression($constantResource2);
 
         $equalsOperator = new core_kernel_classes_Resource(RulesRdf::INSTANCE_EQUALS_OPERATOR_URI);
-        $finalExpression = core_kernel_rules_ExpressionFactory::createRecursiveExpression($terminalExpression1, $terminalExpression2, $equalsOperator);
+        $finalExpression = core_kernel_rules_ExpressionFactory::createRecursiveExpression(
+            $terminalExpression1,
+            $terminalExpression2,
+            $equalsOperator
+        );
 
         //prop
-        $terminalExpressionProperty = new core_kernel_classes_Property(RulesRdf::PROPERTY_TERMINAL_EXPRESSION, __METHOD__);
+        $terminalExpressionProperty = new core_kernel_classes_Property(
+            RulesRdf::PROPERTY_TERMINAL_EXPRESSION,
+            __METHOD__
+        );
         $logicalOperatorProperty = new core_kernel_classes_Property(RulesRdf::PROPERTY_HASLOGICALOPERATOR, __METHOD__);
         $firstExpressionProperty = new core_kernel_classes_Property(RulesRdf::PROPERTY_FIRST_EXPRESSION, __METHOD__);
         $secondExpressionProperty = new core_kernel_classes_Property(RulesRdf::PROPERTY_SECOND_EXPRESSION, __METHOD__);

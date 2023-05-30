@@ -50,7 +50,10 @@ class FreeAccessTest extends TestCase
     {
         $model = new FreeAccess();
         $this->assertEquals(['res1' => [FreeAccess::RIGHT_UNSUPPORTED]], $model->getPermissions($this->user, ['res1']));
-        $this->assertEquals(['res1' => [FreeAccess::RIGHT_UNSUPPORTED], 'res2' => [FreeAccess::RIGHT_UNSUPPORTED]], $model->getPermissions($this->user, ['res1', 'res2']));
+        $this->assertEquals(
+            ['res1' => [FreeAccess::RIGHT_UNSUPPORTED], 'res2' => [FreeAccess::RIGHT_UNSUPPORTED]],
+            $model->getPermissions($this->user, ['res1', 'res2'])
+        );
     }
 
     public function testGetSupportedRights()
@@ -66,6 +69,9 @@ class FreeAccessTest extends TestCase
 
         $this->assertInstanceOf('oat\generis\model\data\permission\PermissionInterface', $restoredModel);
         $this->assertEquals([], $restoredModel->getSupportedRights());
-        $this->assertEquals(['res1' => [FreeAccess::RIGHT_UNSUPPORTED]], $restoredModel->getPermissions($this->user, ['res1']));
+        $this->assertEquals(
+            ['res1' => [FreeAccess::RIGHT_UNSUPPORTED]],
+            $restoredModel->getPermissions($this->user, ['res1'])
+        );
     }
 }

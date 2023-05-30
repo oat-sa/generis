@@ -144,7 +144,15 @@ class core_kernel_persistence_smoothsql_SmoothRdf implements RdfInterface
     public function remove(core_kernel_classes_Triple $triple)
     {
         $query = "DELETE FROM statements WHERE subject = ? AND predicate = ? AND object = ? AND l_language = ?;";
-        return $this->getPersistence()->exec($query, [$triple->subject, $triple->predicate, $triple->object, is_null($triple->lg) ? '' : $triple->lg]);
+        return $this->getPersistence()->exec(
+            $query,
+            [
+                $triple->subject,
+                $triple->predicate,
+                $triple->object,
+                is_null($triple->lg) ? '' : $triple->lg
+            ]
+        );
     }
 
     /**

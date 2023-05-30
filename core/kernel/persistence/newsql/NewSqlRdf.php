@@ -43,7 +43,8 @@ class NewSqlRdf extends core_kernel_persistence_smoothsql_SmoothRdf
 
     public function add(core_kernel_classes_Triple $triple)
     {
-        $query = 'INSERT INTO statements ( id, modelId, subject, predicate, object, l_language, epoch, author) VALUES ( ?, ? , ? , ? , ? , ? , ?, ?);';
+        $query = 'INSERT INTO statements ( id, modelId, subject, predicate, object, l_language, epoch, author) VALUES '
+            . '( ?, ? , ? , ? , ? , ? , ?, ?);';
 
         $success = $this->getPersistence()
         ->exec(

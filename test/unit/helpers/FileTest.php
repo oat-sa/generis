@@ -51,13 +51,28 @@ class FileTest extends TestCase
         $this->assertFalse(\helpers_File::isFileInsideDirectory('test2.txt', $this->dir));
         $this->assertTrue(\helpers_File::isFileInsideDirectory('test1.txt', $this->dir . DIRECTORY_SEPARATOR));
         $this->assertFalse(\helpers_File::isFileInsideDirectory('sub' . DIRECTORY_SEPARATOR . 'test2.txt', $this->dir));
-        $this->assertFalse(\helpers_File::isFileInsideDirectory('sub' . DIRECTORY_SEPARATOR . 'test2.txt', $this->dir . DIRECTORY_SEPARATOR));
+        $this->assertFalse(
+            \helpers_File::isFileInsideDirectory(
+                'sub' . DIRECTORY_SEPARATOR . 'test2.txt',
+                $this->dir . DIRECTORY_SEPARATOR
+            )
+        );
 
         $this->assertFalse(\helpers_File::isFileInsideDirectory('test1.txt', $this->subDir));
         $this->assertFalse(\helpers_File::isFileInsideDirectory('test1.txt', $this->subDir . DIRECTORY_SEPARATOR));
         $this->assertTrue(\helpers_File::isFileInsideDirectory('test2.txt', $this->subDir));
-        $this->assertFalse(\helpers_File::isFileInsideDirectory('sub' . DIRECTORY_SEPARATOR . 'test2.txt', $this->subDir));
-        $this->assertFalse(\helpers_File::isFileInsideDirectory('sub' . DIRECTORY_SEPARATOR . 'test2.txt', $this->subDir . DIRECTORY_SEPARATOR));
+        $this->assertFalse(
+            \helpers_File::isFileInsideDirectory(
+                'sub' . DIRECTORY_SEPARATOR . 'test2.txt',
+                $this->subDir
+            )
+        );
+        $this->assertFalse(
+            \helpers_File::isFileInsideDirectory(
+                'sub' . DIRECTORY_SEPARATOR . 'test2.txt',
+                $this->subDir . DIRECTORY_SEPARATOR
+            )
+        );
     }
 
     protected function tearDown(): void

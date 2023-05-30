@@ -53,143 +53,263 @@ class ExpressionTest extends TestCase
 
         // test1 == test2
         $equalsOperator = new core_kernel_classes_Resource(RulesRdf::INSTANCE_EQUALS_OPERATOR_URI);
-        $finalExpression = core_kernel_rules_ExpressionFactory::createRecursiveExpression($terminalExpression1, $terminalExpression2, $equalsOperator);
+        $finalExpression = core_kernel_rules_ExpressionFactory::createRecursiveExpression(
+            $terminalExpression1,
+            $terminalExpression2,
+            $equalsOperator
+        );
         $this->assertFalse($finalExpression->evaluate());
         $finalExpression->delete();
 
         // 12 == 12
-        $finalExpression = core_kernel_rules_ExpressionFactory::createRecursiveExpression($terminalExpression12, $terminalExpression12b, $equalsOperator);
+        $finalExpression = core_kernel_rules_ExpressionFactory::createRecursiveExpression(
+            $terminalExpression12,
+            $terminalExpression12b,
+            $equalsOperator
+        );
         $this->assertTrue($finalExpression->evaluate());
         $finalExpression->delete();
 
         // test1 != test2
         $diffOperator = new core_kernel_classes_Resource(RulesRdf::INSTANCE_DIFFERENT_OPERATOR_URI);
-        $finalExpression = core_kernel_rules_ExpressionFactory::createRecursiveExpression($terminalExpression1, $terminalExpression2, $diffOperator);
+        $finalExpression = core_kernel_rules_ExpressionFactory::createRecursiveExpression(
+            $terminalExpression1,
+            $terminalExpression2,
+            $diffOperator
+        );
         $this->assertTrue($finalExpression->evaluate());
         $finalExpression->delete();
 
         // 12 != 12
-        $finalExpression = core_kernel_rules_ExpressionFactory::createRecursiveExpression($terminalExpression12, $terminalExpression12b, $diffOperator);
+        $finalExpression = core_kernel_rules_ExpressionFactory::createRecursiveExpression(
+            $terminalExpression12,
+            $terminalExpression12b,
+            $diffOperator
+        );
         $this->assertFalse($finalExpression->evaluate());
         $finalExpression->delete();
 
         // 14 <= 12
         $infEqOperator = new core_kernel_classes_Resource(RulesRdf::INSTANCE_INF_EQ_OPERATOR_URI);
-        $finalExpression = core_kernel_rules_ExpressionFactory::createRecursiveExpression($terminalExpression14, $terminalExpression12, $infEqOperator);
+        $finalExpression = core_kernel_rules_ExpressionFactory::createRecursiveExpression(
+            $terminalExpression14,
+            $terminalExpression12,
+            $infEqOperator
+        );
         $this->assertFalse($finalExpression->evaluate());
         $finalExpression->delete();
 
         //12 <= 14
-        $finalExpression = core_kernel_rules_ExpressionFactory::createRecursiveExpression($terminalExpression12, $terminalExpression14, $infEqOperator);
+        $finalExpression = core_kernel_rules_ExpressionFactory::createRecursiveExpression(
+            $terminalExpression12,
+            $terminalExpression14,
+            $infEqOperator
+        );
         $this->assertTrue($finalExpression->evaluate());
         $finalExpression->delete();
 
         //12 <= 12
-        $finalExpression = core_kernel_rules_ExpressionFactory::createRecursiveExpression($terminalExpression12, $terminalExpression12b, $infEqOperator);
+        $finalExpression = core_kernel_rules_ExpressionFactory::createRecursiveExpression(
+            $terminalExpression12,
+            $terminalExpression12b,
+            $infEqOperator
+        );
         $this->assertTrue($finalExpression->evaluate());
         $finalExpression->delete();
 
         // 14 >= 12
         $supEqOperator = new core_kernel_classes_Resource(RulesRdf::INSTANCE_SUP_EQ_OPERATOR_URI);
-        $finalExpression = core_kernel_rules_ExpressionFactory::createRecursiveExpression($terminalExpression14, $terminalExpression12, $supEqOperator);
+        $finalExpression = core_kernel_rules_ExpressionFactory::createRecursiveExpression(
+            $terminalExpression14,
+            $terminalExpression12,
+            $supEqOperator
+        );
         $this->assertTrue($finalExpression->evaluate());
         $finalExpression->delete();
 
         //12 >= 14
-        $finalExpression = core_kernel_rules_ExpressionFactory::createRecursiveExpression($terminalExpression12, $terminalExpression14, $supEqOperator);
+        $finalExpression = core_kernel_rules_ExpressionFactory::createRecursiveExpression(
+            $terminalExpression12,
+            $terminalExpression14,
+            $supEqOperator
+        );
         $this->assertFalse($finalExpression->evaluate());
         $finalExpression->delete();
 
         //12 >= 12
-        $finalExpression = core_kernel_rules_ExpressionFactory::createRecursiveExpression($terminalExpression12, $terminalExpression12b, $supEqOperator);
+        $finalExpression = core_kernel_rules_ExpressionFactory::createRecursiveExpression(
+            $terminalExpression12,
+            $terminalExpression12b,
+            $supEqOperator
+        );
         $this->assertTrue($finalExpression->evaluate());
         $finalExpression->delete();
 
 
         // 14 < 12
         $infOperator = new core_kernel_classes_Resource(RulesRdf::INSTANCE_INF_OPERATOR_URI);
-        $finalExpression = core_kernel_rules_ExpressionFactory::createRecursiveExpression($terminalExpression14, $terminalExpression12, $infOperator);
+        $finalExpression = core_kernel_rules_ExpressionFactory::createRecursiveExpression(
+            $terminalExpression14,
+            $terminalExpression12,
+            $infOperator
+        );
         $this->assertFalse($finalExpression->evaluate());
         $finalExpression->delete();
 
         //12 < 14
-        $finalExpression = core_kernel_rules_ExpressionFactory::createRecursiveExpression($terminalExpression12, $terminalExpression14, $infOperator);
+        $finalExpression = core_kernel_rules_ExpressionFactory::createRecursiveExpression(
+            $terminalExpression12,
+            $terminalExpression14,
+            $infOperator
+        );
         $this->assertTrue($finalExpression->evaluate());
         $finalExpression->delete();
 
         //12 < 12
-        $finalExpression = core_kernel_rules_ExpressionFactory::createRecursiveExpression($terminalExpression12, $terminalExpression12b, $infOperator);
+        $finalExpression = core_kernel_rules_ExpressionFactory::createRecursiveExpression(
+            $terminalExpression12,
+            $terminalExpression12b,
+            $infOperator
+        );
         $this->assertFalse($finalExpression->evaluate());
         $finalExpression->delete();
 
         // 14 > 12
         $supOperator = new core_kernel_classes_Resource(RulesRdf::INSTANCE_SUP_OPERATOR_URI);
-        $finalExpression = core_kernel_rules_ExpressionFactory::createRecursiveExpression($terminalExpression14, $terminalExpression12, $supOperator);
+        $finalExpression = core_kernel_rules_ExpressionFactory::createRecursiveExpression(
+            $terminalExpression14,
+            $terminalExpression12,
+            $supOperator
+        );
         $this->assertTrue($finalExpression->evaluate());
         $finalExpression->delete();
 
         //12 > 14
-        $finalExpression = core_kernel_rules_ExpressionFactory::createRecursiveExpression($terminalExpression12, $terminalExpression14, $supOperator);
+        $finalExpression = core_kernel_rules_ExpressionFactory::createRecursiveExpression(
+            $terminalExpression12,
+            $terminalExpression14,
+            $supOperator
+        );
         $this->assertFalse($finalExpression->evaluate());
         $finalExpression->delete();
 
         //12 > 12
-        $finalExpression = core_kernel_rules_ExpressionFactory::createRecursiveExpression($terminalExpression12, $terminalExpression12b, $supOperator);
+        $finalExpression = core_kernel_rules_ExpressionFactory::createRecursiveExpression(
+            $terminalExpression12,
+            $terminalExpression12b,
+            $supOperator
+        );
         $this->assertFalse($finalExpression->evaluate());
         $finalExpression->delete();
 
         // trueExpression => 12 < 14
-        $trueExpression = core_kernel_rules_ExpressionFactory::createRecursiveExpression($terminalExpression12, $terminalExpression14, $infOperator);
+        $trueExpression = core_kernel_rules_ExpressionFactory::createRecursiveExpression(
+            $terminalExpression12,
+            $terminalExpression14,
+            $infOperator
+        );
         //falseExpression =>  test1 == test2
-        $falseExpression = core_kernel_rules_ExpressionFactory::createRecursiveExpression($terminalExpression1, $terminalExpression2, $equalsOperator);
+        $falseExpression = core_kernel_rules_ExpressionFactory::createRecursiveExpression(
+            $terminalExpression1,
+            $terminalExpression2,
+            $equalsOperator
+        );
         // trueExpression2 =>  test1 != test2
-        $trueExpression2 = core_kernel_rules_ExpressionFactory::createRecursiveExpression($terminalExpression1, $terminalExpression2, $diffOperator);
+        $trueExpression2 = core_kernel_rules_ExpressionFactory::createRecursiveExpression(
+            $terminalExpression1,
+            $terminalExpression2,
+            $diffOperator
+        );
         //falseExpression2 =>  14 < 12
-        $falseExpression2 = core_kernel_rules_ExpressionFactory::createRecursiveExpression($terminalExpression14, $terminalExpression12, $infOperator);
+        $falseExpression2 = core_kernel_rules_ExpressionFactory::createRecursiveExpression(
+            $terminalExpression14,
+            $terminalExpression12,
+            $infOperator
+        );
 
 
         // 12 < 14 AND test1 == test2
         $andOperator = new core_kernel_classes_Resource(RulesRdf::INSTANCE_AND_OPERATOR);
-        $finalExpression = core_kernel_rules_ExpressionFactory::createRecursiveExpression($trueExpression, $falseExpression, $andOperator);
+        $finalExpression = core_kernel_rules_ExpressionFactory::createRecursiveExpression(
+            $trueExpression,
+            $falseExpression,
+            $andOperator
+        );
         $this->assertFalse($finalExpression->evaluate());
         $finalExpression->delete();
 
         // 12 < 14 AND test1 != test2
-        $finalExpression = core_kernel_rules_ExpressionFactory::createRecursiveExpression($trueExpression, $trueExpression2, $andOperator);
+        $finalExpression = core_kernel_rules_ExpressionFactory::createRecursiveExpression(
+            $trueExpression,
+            $trueExpression2,
+            $andOperator
+        );
         $this->assertTrue($finalExpression->evaluate());
         $finalExpression->delete();
 
         // 12 < 14 OR test1 == test2
         $orOperator = new core_kernel_classes_Resource(RulesRdf::INSTANCE_OR_OPERATOR);
-        $finalExpression = core_kernel_rules_ExpressionFactory::createRecursiveExpression($trueExpression, $falseExpression, $orOperator);
+        $finalExpression = core_kernel_rules_ExpressionFactory::createRecursiveExpression(
+            $trueExpression,
+            $falseExpression,
+            $orOperator
+        );
         $this->assertTrue($finalExpression->evaluate());
         $finalExpression->delete();
 
         // 12 < 14 OR test1 != test2
-        $finalExpression = core_kernel_rules_ExpressionFactory::createRecursiveExpression($trueExpression, $trueExpression2, $orOperator);
+        $finalExpression = core_kernel_rules_ExpressionFactory::createRecursiveExpression(
+            $trueExpression,
+            $trueExpression2,
+            $orOperator
+        );
         $this->assertTrue($finalExpression->evaluate());
         $finalExpression->delete();
 
         // test1 == test2 OR 12 < 14
-        $finalExpression = core_kernel_rules_ExpressionFactory::createRecursiveExpression($falseExpression, $trueExpression, $orOperator);
+        $finalExpression = core_kernel_rules_ExpressionFactory::createRecursiveExpression(
+            $falseExpression,
+            $trueExpression,
+            $orOperator
+        );
         $this->assertTrue($finalExpression->evaluate());
         $finalExpression->delete();
 
         // test1 == test2 OR 14 < 12
-        $finalExpression = core_kernel_rules_ExpressionFactory::createRecursiveExpression($falseExpression, $falseExpression2, $orOperator);
+        $finalExpression = core_kernel_rules_ExpressionFactory::createRecursiveExpression(
+            $falseExpression,
+            $falseExpression2,
+            $orOperator
+        );
         $this->assertFalse($finalExpression->evaluate());
         $finalExpression->delete();
 
 
         // (test1 == test2 OR 14 < 12) AND (12 < 14 OR test1 == test2)
-        $finalExpression1 = core_kernel_rules_ExpressionFactory::createRecursiveExpression($falseExpression, $falseExpression2, $orOperator);
-        $finalExpression2 = core_kernel_rules_ExpressionFactory::createRecursiveExpression($trueExpression, $falseExpression, $orOperator);
-        $finalExpression = core_kernel_rules_ExpressionFactory::createRecursiveExpression($finalExpression1, $finalExpression2, $andOperator);
+        $finalExpression1 = core_kernel_rules_ExpressionFactory::createRecursiveExpression(
+            $falseExpression,
+            $falseExpression2,
+            $orOperator
+        );
+        $finalExpression2 = core_kernel_rules_ExpressionFactory::createRecursiveExpression(
+            $trueExpression,
+            $falseExpression,
+            $orOperator
+        );
+        $finalExpression = core_kernel_rules_ExpressionFactory::createRecursiveExpression(
+            $finalExpression1,
+            $finalExpression2,
+            $andOperator
+        );
         $this->assertFalse($finalExpression->evaluate());
         $finalExpression->delete();
 
         // (test1 == test2 OR 14 < 12) OR (12 < 14 OR test1 == test2)
-        $finalExpression = core_kernel_rules_ExpressionFactory::createRecursiveExpression($finalExpression1, $finalExpression2, $orOperator);
+        $finalExpression = core_kernel_rules_ExpressionFactory::createRecursiveExpression(
+            $finalExpression1,
+            $finalExpression2,
+            $orOperator
+        );
         $this->assertTrue($finalExpression->evaluate());
         $finalExpression->delete();
 

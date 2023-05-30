@@ -45,8 +45,23 @@ return [
             ['type' => 'CheckPHPExtension', 'value' => ['id' => 'ext_pdo', 'name' => 'PDO']],
             ['type' => 'CheckPHPExtension', 'value' => ['id' => 'ext_svn','name' => 'svn', 'optional' => true]],
             ['type' => 'CheckPHPExtension', 'value' => ['id' => 'ext_suhosin','name' => 'suhosin', 'optional' => true]],
-            ['type' => 'CheckPHPINIValue', 'value' => ['id' => 'ini_register_globals', 'name' => 'register_globals', 'value' => "0"]],
-            ['type' => 'CheckFileSystemComponent', 'value' => ['id' => 'fs_root','location' => '.', 'rights' => 'rw', 'name' => 'fs_root']],
+            [
+                'type' => 'CheckPHPINIValue',
+                'value' => [
+                    'id' => 'ini_register_globals',
+                    'name' => 'register_globals',
+                    'value' => "0"
+                ]
+            ],
+            [
+                'type' => 'CheckFileSystemComponent',
+                'value' => [
+                    'id' => 'fs_root',
+                    'location' => '.',
+                    'rights' => 'rw',
+                    'name' => 'fs_root'
+                ]
+            ],
         ]
     ],
      'constants' => [

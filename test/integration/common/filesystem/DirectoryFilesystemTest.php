@@ -129,7 +129,9 @@ class DirectoryFilesystemTest extends GenerisTestCase
     private function getMockFileSystem()
     {
         if ($this->fileSystemService === null) {
-            $this->fileSystemService = $this->getServiceLocatorMock([FileSystemService::SERVICE_ID => new FileSystemService()])->get(FileSystemService::SERVICE_ID);
+            $this->fileSystemService = $this
+                ->getServiceLocatorMock([FileSystemService::SERVICE_ID => new FileSystemService()])
+                ->get(FileSystemService::SERVICE_ID);
         }
 
         return $this->fileSystemService;

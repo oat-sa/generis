@@ -41,7 +41,12 @@ use oat\search\UsableTrait\SortableTrait;
  *
  * @author Christophe GARCIA <christopheg@taotesting.com>
  */
-class QueryJoiner implements DriverSensitiveInterface, SortableInterface, LimitableInterface, ParentFluateInterface, OptionsInterface
+class QueryJoiner implements
+    DriverSensitiveInterface,
+    SortableInterface,
+    LimitableInterface,
+    ParentFluateInterface,
+    OptionsInterface
 {
     use SortableTrait;
 
@@ -177,7 +182,8 @@ class QueryJoiner implements DriverSensitiveInterface, SortableInterface, Limita
         $sql = ' AND ( ';
         $sql .= $languageField . ' = ' . $this->getDriverEscaper()->quote($languageValue) . '';
         if ($emptyAvailable) {
-            $sql .= ' ' . $this->getDriverEscaper()->dbCommand('OR') . ' ' . $languageField . ' = ' . $this->getDriverEscaper()->getEmpty();
+            $sql .= ' ' . $this->getDriverEscaper()->dbCommand('OR') . ' ' . $languageField . ' = '
+                . $this->getDriverEscaper()->getEmpty();
         }
         $sql .= ' ) ';
         return $sql;
@@ -195,10 +201,13 @@ class QueryJoiner implements DriverSensitiveInterface, SortableInterface, Limita
         $aggrObject = $this->getDriverEscaper()->reserved('J') . '.' .
                 $this->getDriverEscaper()->reserved('object');
 
-        $query = $this->getDriverEscaper()->dbCommand('SELECT') . ' ' . $this->getDriverEscaper()->reserved('subject') . ' ' .
-                $this->getDriverEscaper()->dbCommand('FROM') . ' ( ' .
-                $this->getDriverEscaper()->dbCommand('SELECT') . ' ' . $this->getDriverEscaper()->dbCommand('DISTINCT') . ' ' .
-                $this->getDriverEscaper()->reserved('T') . '.' . $this->getDriverEscaper()->reserved('subject') . ' , ';
+        $query = $this->getDriverEscaper()->dbCommand('SELECT') . ' '
+            . $this->getDriverEscaper()->reserved('subject') . ' '
+            . $this->getDriverEscaper()->dbCommand('FROM') . ' ( '
+            . $this->getDriverEscaper()->dbCommand('SELECT') . ' '
+            . $this->getDriverEscaper()->dbCommand('DISTINCT') . ' '
+            . $this->getDriverEscaper()->reserved('T') . '.'
+            . $this->getDriverEscaper()->reserved('subject') . ' , ';
 
         $sortKeys = [];
 
@@ -216,19 +225,24 @@ class QueryJoiner implements DriverSensitiveInterface, SortableInterface, Limita
             $index++;
         }
 
-        $query .= implode(' , ', $sortKeys) . ' ' . $this->getDriverEscaper()->dbCommand('FROM') . ' ( ' .
-                $main . ' )' .
-                $this->getDriverEscaper()->dbCommand('AS') . ' ' . $this->getDriverEscaper()->reserved('T') .
-                $this->getDriverEscaper()->dbCommand('JOIN') . ' ( ' .
-                $this->getDriverEscaper()->dbCommand('SELECT') . ' ' . $this->getDriverEscaper()->reserved('subject') . ' , ' .
-                $this->getDriverEscaper()->reserved('object') . ' ' . $this->getDriverEscaper()->dbCommand('FROM') . ' ' .
-                $this->getDriverEscaper()->reserved('statements') . ' ' . $this->getDriverEscaper()->dbCommand('WHERE') . ' ' .
-                $this->getDriverEscaper()->reserved('predicate') . ' = ' .
-                $this->getDriverEscaper()->quote($this->getDriverEscaper()->escape($this->on)) . ' ) ' .
-                $this->getDriverEscaper()->dbCommand('AS') . ' ' . $this->getDriverEscaper()->reserved('R') .
-                $this->getDriverEscaper()->dbCommand('ON') . ' ( ' .
-                $this->getDriverEscaper()->reserved('T') . '.' . $this->getDriverEscaper()->reserved('subject') . ' = ' .
-                $this->getDriverEscaper()->reserved('R') . '.' . $this->getDriverEscaper()->reserved('subject') . ' ) ';
+        $query .= implode(' , ', $sortKeys) . ' '
+            . $this->getDriverEscaper()->dbCommand('FROM') . ' ( ' . $main . ' )'
+            . $this->getDriverEscaper()->dbCommand('AS') . ' '
+            . $this->getDriverEscaper()->reserved('T') . $this->getDriverEscaper()->dbCommand('JOIN')
+            . ' ( ' . $this->getDriverEscaper()->dbCommand('SELECT') . ' '
+            . $this->getDriverEscaper()->reserved('subject') . ' , '
+            . $this->getDriverEscaper()->reserved('object') . ' '
+            . $this->getDriverEscaper()->dbCommand('FROM') . ' '
+            . $this->getDriverEscaper()->reserved('statements') . ' '
+            . $this->getDriverEscaper()->dbCommand('WHERE') . ' '
+            . $this->getDriverEscaper()->reserved('predicate') . ' = '
+            . $this->getDriverEscaper()->quote($this->getDriverEscaper()->escape($this->on)) . ' ) '
+            . $this->getDriverEscaper()->dbCommand('AS') . ' '
+            . $this->getDriverEscaper()->reserved('R') . $this->getDriverEscaper()->dbCommand('ON')
+            . ' ( ' . $this->getDriverEscaper()->reserved('T') . '.'
+            . $this->getDriverEscaper()->reserved('subject') . ' = '
+            . $this->getDriverEscaper()->reserved('R') . '.'
+            . $this->getDriverEscaper()->reserved('subject') . ' ) ';
 
 
         $index = 1;
@@ -238,40 +252,56 @@ class QueryJoiner implements DriverSensitiveInterface, SortableInterface, Limita
             $orderSub = 'SUBJ' . $index;
             $orderAlias = 'ORDERJ' . $index;
 
-            $query .= $this->getDriverEscaper()->dbCommand('JOIN') . ' ( ' .
-                    $this->getDriverEscaper()->dbCommand('SELECT') . ' ' .
-                    $this->getDriverEscaper()->reserved($orderAlias) . '.' . $this->getDriverEscaper()->reserved('subject') . ' , ' .
-                    $this->getDriverEscaper()->reserved($orderAlias) . '.' . $this->getDriverEscaper()->reserved('object') . ' ' .
-                    $this->getDriverEscaper()->dbCommand('FROM') . ' ( ' .
-                    $join . ')' .
-                    $this->getDriverEscaper()->dbCommand('AS') . ' ' . $this->getDriverEscaper()->reserved($orderSub) . ' ' .
-                    $this->getDriverEscaper()->dbCommand('JOIN') . ' ( ' .
-                    $this->getDriverEscaper()->dbCommand('SELECT') . ' ' . $this->getDriverEscaper()->reserved('subject') . ' , ' .
-                    $this->getDriverEscaper()->reserved('object') . ' ' . $this->getDriverEscaper()->dbCommand('FROM') . ' ' .
-                    $this->getDriverEscaper()->reserved('statements') . ' ' . $this->getDriverEscaper()->dbCommand('WHERE') . ' ' .
-                    $this->getDriverEscaper()->reserved('predicate') . ' = ' .
-                    $this->getDriverEscaper()->quote($this->getDriverEscaper()->escape($predicate)) . ' ' .
-                    $this->getLanguage() . ' ' . $this->getDriverEscaper()->dbCommand('GROUP') . ' ' . $this->getDriverEscaper()->dbCommand('BY') . ' ' .
-                    $this->getDriverEscaper()->reserved('subject') . ' , ' .
-                    $this->getDriverEscaper()->reserved('object') . ' ) ' .
-                    $this->getDriverEscaper()->dbCommand('AS') . ' ' . $this->getDriverEscaper()->reserved($orderAlias) . ' ' .
-                    $this->getDriverEscaper()->dbCommand('ON') . ' ( ' .
-                    $this->getDriverEscaper()->reserved($orderSub) . '.' . $this->getDriverEscaper()->reserved('subject') . ' = ' .
-                    $this->getDriverEscaper()->reserved($orderAlias) . '.' . $this->getDriverEscaper()->reserved('subject') . ' ) ) ' .
-                    $this->getDriverEscaper()->dbCommand('AS') . ' ' . $this->getDriverEscaper()->reserved($alias) . ' ' .
-                    $this->getDriverEscaper()->dbCommand('ON') . ' ( ' .
-                    $this->getDriverEscaper()->reserved($alias) . '.' . $this->getDriverEscaper()->reserved('subject') . ' = ' .
-                    $this->getDriverEscaper()->reserved('R') . '.' . $this->getDriverEscaper()->reserved('object') . ' ) ';
+            $query .= $this->getDriverEscaper()->dbCommand('JOIN') . ' ( '
+                . $this->getDriverEscaper()->dbCommand('SELECT') . ' '
+                . $this->getDriverEscaper()->reserved($orderAlias) . '.'
+                . $this->getDriverEscaper()->reserved('subject') . ' , '
+                . $this->getDriverEscaper()->reserved($orderAlias) . '.'
+                . $this->getDriverEscaper()->reserved('object') . ' '
+                . $this->getDriverEscaper()->dbCommand('FROM') . ' ( ' . $join . ')'
+                . $this->getDriverEscaper()->dbCommand('AS') . ' '
+                . $this->getDriverEscaper()->reserved($orderSub) . ' '
+                . $this->getDriverEscaper()->dbCommand('JOIN') . ' ( '
+                . $this->getDriverEscaper()->dbCommand('SELECT') . ' '
+                . $this->getDriverEscaper()->reserved('subject') . ' , '
+                . $this->getDriverEscaper()->reserved('object') . ' '
+                . $this->getDriverEscaper()->dbCommand('FROM') . ' '
+                . $this->getDriverEscaper()->reserved('statements') . ' '
+                . $this->getDriverEscaper()->dbCommand('WHERE') . ' '
+                . $this->getDriverEscaper()->reserved('predicate') . ' = '
+                . $this->getDriverEscaper()->quote($this->getDriverEscaper()->escape($predicate)) . ' '
+                . $this->getLanguage() . ' ' . $this->getDriverEscaper()->dbCommand('GROUP') . ' '
+                . $this->getDriverEscaper()->dbCommand('BY') . ' '
+                . $this->getDriverEscaper()->reserved('subject') . ' , '
+                . $this->getDriverEscaper()->reserved('object') . ' ) '
+                . $this->getDriverEscaper()->dbCommand('AS') . ' '
+                . $this->getDriverEscaper()->reserved($orderAlias) . ' '
+                . $this->getDriverEscaper()->dbCommand('ON') . ' ( '
+                . $this->getDriverEscaper()->reserved($orderSub) . '.'
+                . $this->getDriverEscaper()->reserved('subject') . ' = '
+                . $this->getDriverEscaper()->reserved($orderAlias) . '.'
+                . $this->getDriverEscaper()->reserved('subject') . ' ) ) '
+                . $this->getDriverEscaper()->dbCommand('AS') . ' '
+                . $this->getDriverEscaper()->reserved($alias) . ' '
+                . $this->getDriverEscaper()->dbCommand('ON') . ' ( '
+                . $this->getDriverEscaper()->reserved($alias) . '.'
+                . $this->getDriverEscaper()->reserved('subject') . ' = '
+                . $this->getDriverEscaper()->reserved('R') . '.'
+                . $this->getDriverEscaper()->reserved('object') . ' ) ';
 
-            $sortBy[] = $this->getDriverEscaper()->reserved('sorter' . $index) . ' ' . $this->getDriverEscaper()->dbCommand($sortOrder);
+            $sortBy[] = $this->getDriverEscaper()->reserved('sorter' . $index) . ' '
+                . $this->getDriverEscaper()->dbCommand($sortOrder);
             $index++;
         }
 
-        $query .= $this->getDriverEscaper()->dbCommand('GROUP') . ' ' . $this->getDriverEscaper()->dbCommand('BY') . ' ' .
-                $this->getDriverEscaper()->reserved('T') . '.' . $this->getDriverEscaper()->reserved('subject') . ' ' .
-                $this->getDriverEscaper()->dbCommand('ORDER') . ' ' . $this->getDriverEscaper()->dbCommand('BY') . ' ' .
-                implode(' , ', $sortBy) . ' ) ' .
-                $this->getDriverEscaper()->dbCommand('AS') . ' ' . $this->getDriverEscaper()->reserved('rootq');
+        $query .= $this->getDriverEscaper()->dbCommand('GROUP') . ' '
+            . $this->getDriverEscaper()->dbCommand('BY') . ' '
+            . $this->getDriverEscaper()->reserved('T') . '.'
+            . $this->getDriverEscaper()->reserved('subject') . ' '
+            . $this->getDriverEscaper()->dbCommand('ORDER') . ' '
+            . $this->getDriverEscaper()->dbCommand('BY') . ' ' . implode(' , ', $sortBy) . ' ) '
+            . $this->getDriverEscaper()->dbCommand('AS') . ' '
+            . $this->getDriverEscaper()->reserved('rootq');
 
         return ($query);
     }
@@ -284,38 +314,42 @@ class QueryJoiner implements DriverSensitiveInterface, SortableInterface, Limita
      */
     protected function unSortedQuery($main, $join)
     {
-
-        $query = $this->getDriverEscaper()->dbCommand('SELECT') . ' ' .
-                $this->getDriverEscaper()->dbCommand('DISTINCT') . ' ' .
-                $this->getDriverEscaper()->reserved('A') . '.' .
-                $this->getDriverEscaper()->reserved('subject') . ' ' .
-                $this->getDriverEscaper()->dbCommand('FROM') . ' ' .
-                '(' . $main . ')' . $this->getDriverEscaper()->dbCommand('AS') . ' ' .
-                $this->getDriverEscaper()->reserved('A') . ' ' .
-                $this->getDriverEscaper()->dbCommand('JOIN') . ' ' .
-                '(' . $this->getDriverEscaper()->dbCommand('SELECT') . ' ' .
-                $this->getDriverEscaper()->reserved('subject') . ' , ' . $this->getDriverEscaper()->reserved('object') . ' ' .
-                $this->getDriverEscaper()->dbCommand('FROM') . ' ' . $this->getDriverEscaper()->reserved('statements') . ' ' .
-                $this->getDriverEscaper()->dbCommand('WHERE') . ' ' .
-                $this->getDriverEscaper()->reserved('predicate') . ' = ' .
-                $this->getDriverEscaper()->quote($this->getDriverEscaper()->escape($this->on)) . ') ' .
-                $this->getDriverEscaper()->dbCommand('AS') . ' ' . $this->getDriverEscaper()->reserved('R') . ' ' .
-                $this->getDriverEscaper()->dbCommand('ON') .
-                ' (' . $this->getDriverEscaper()->reserved('A') . '.' .
-                $this->getDriverEscaper()->reserved('subject') . ' = ' .
-                $this->getDriverEscaper()->reserved('R') . '.' .
-                $this->getDriverEscaper()->reserved('subject') . ') ' .
-                $this->getDriverEscaper()->dbCommand('JOIN') . ' (' .
-                $this->getDriverEscaper()->dbCommand('SELECT') . ' ' .
-                $this->getDriverEscaper()->reserved('subject') . ' ' .
-                $this->getDriverEscaper()->dbCommand('FROM') . ' ' .
-                '(' . $join . ')' . $this->getDriverEscaper()->dbCommand('AS') . ' ' .
-                $this->getDriverEscaper()->reserved('sd') . ' ) ' .
-                $this->getDriverEscaper()->dbCommand('AS') . ' ' .
-                $this->getDriverEscaper()->reserved('D') . ' ' .
-                $this->getDriverEscaper()->dbCommand('ON') .
-                '(' . $this->getDriverEscaper()->reserved('D') . '.' . $this->getDriverEscaper()->reserved('subject') .
-                ' = ' . $this->getDriverEscaper()->reserved('R') . '.' . $this->getDriverEscaper()->reserved('object') . ')';
+        $query = $this->getDriverEscaper()->dbCommand('SELECT') . ' '
+            . $this->getDriverEscaper()->dbCommand('DISTINCT') . ' '
+            . $this->getDriverEscaper()->reserved('A') . '.'
+            . $this->getDriverEscaper()->reserved('subject') . ' '
+            . $this->getDriverEscaper()->dbCommand('FROM') . ' (' . $main . ')'
+            . $this->getDriverEscaper()->dbCommand('AS') . ' '
+            . $this->getDriverEscaper()->reserved('A') . ' '
+            . $this->getDriverEscaper()->dbCommand('JOIN') . ' ('
+            . $this->getDriverEscaper()->dbCommand('SELECT') . ' '
+            . $this->getDriverEscaper()->reserved('subject') . ' , '
+            . $this->getDriverEscaper()->reserved('object') . ' '
+            . $this->getDriverEscaper()->dbCommand('FROM') . ' '
+            . $this->getDriverEscaper()->reserved('statements') . ' '
+            . $this->getDriverEscaper()->dbCommand('WHERE') . ' '
+            . $this->getDriverEscaper()->reserved('predicate') . ' = '
+            . $this->getDriverEscaper()->quote($this->getDriverEscaper()->escape($this->on)) . ') '
+            . $this->getDriverEscaper()->dbCommand('AS') . ' '
+            . $this->getDriverEscaper()->reserved('R') . ' '
+            . $this->getDriverEscaper()->dbCommand('ON') . ' ('
+            . $this->getDriverEscaper()->reserved('A') . '.'
+            . $this->getDriverEscaper()->reserved('subject') . ' = '
+            . $this->getDriverEscaper()->reserved('R') . '.'
+            . $this->getDriverEscaper()->reserved('subject') . ') '
+            . $this->getDriverEscaper()->dbCommand('JOIN') . ' ('
+            . $this->getDriverEscaper()->dbCommand('SELECT') . ' '
+            . $this->getDriverEscaper()->reserved('subject') . ' '
+            . $this->getDriverEscaper()->dbCommand('FROM') . ' ' . '(' . $join . ')'
+            . $this->getDriverEscaper()->dbCommand('AS') . ' '
+            . $this->getDriverEscaper()->reserved('sd') . ' ) '
+            . $this->getDriverEscaper()->dbCommand('AS') . ' '
+            . $this->getDriverEscaper()->reserved('D') . ' '
+            . $this->getDriverEscaper()->dbCommand('ON') . '('
+            . $this->getDriverEscaper()->reserved('D') . '.'
+            . $this->getDriverEscaper()->reserved('subject') . ' = '
+            . $this->getDriverEscaper()->reserved('R') . '.'
+            . $this->getDriverEscaper()->reserved('object') . ')';
 
         if ($this->getRandom()) {
             $query = $this->getDriverEscaper()->dbCommand('SELECT') . ' ' .
@@ -345,11 +379,12 @@ class QueryJoiner implements DriverSensitiveInterface, SortableInterface, Limita
             $query = $this->sortedQuery($main, $join);
         }
         if ($count) {
-            $query = $this->getDriverEscaper()->dbCommand('SELECT') . ' ' .
-                    $this->getDriverEscaper()->dbCommand('COUNT') .
-                    '( ' . $this->getDriverEscaper()->reserved('subject') . ' ) ' .
-                    $this->getDriverEscaper()->dbCommand('AS') . ' ' . $this->getDriverEscaper()->reserved('cpt') . ' ' .
-                    $this->getDriverEscaper()->dbCommand('FROM') . ' ( ' . $query . ' ) as cptQ';
+            $query = $this->getDriverEscaper()->dbCommand('SELECT') . ' '
+                . $this->getDriverEscaper()->dbCommand('COUNT') . '( '
+                . $this->getDriverEscaper()->reserved('subject') . ' ) '
+                . $this->getDriverEscaper()->dbCommand('AS') . ' '
+                . $this->getDriverEscaper()->reserved('cpt') . ' '
+                . $this->getDriverEscaper()->dbCommand('FROM') . ' ( ' . $query . ' ) as cptQ';
             return $query;
         }
         return $this->addLimit($query);

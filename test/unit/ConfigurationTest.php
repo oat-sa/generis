@@ -40,7 +40,11 @@ class ConfigurationTest extends TestCase
 
     public function testPhPConstant()
     {
-        $this->assertNotEquals(PHP_MAJOR_VERSION, self::UNSUPPORTED_PHP_MAJOR_VERSION, 'Current php major version equals our assummed unsupported php version');
+        $this->assertNotEquals(
+            PHP_MAJOR_VERSION,
+            self::UNSUPPORTED_PHP_MAJOR_VERSION,
+            'Current php major version equals our assummed unsupported php version'
+        );
     }
 
     public function testPHPIniValues()
@@ -280,7 +284,10 @@ class ConfigurationTest extends TestCase
             $reports = $collection->check();
             $this->assertTrue(true); // Acyclic graph, no CyclicDependencyException thrown.
             $this->assertEquals(count($reports), 4);
-            $this->assertEquals($collection->getCheckedComponents(), [$componentA, $componentB, $componentC, $componentD]);
+            $this->assertEquals(
+                $collection->getCheckedComponents(),
+                [$componentA, $componentB, $componentC, $componentD]
+            );
             $this->assertEquals($collection->getUncheckedComponents(), []);
 
             try {
@@ -292,7 +299,10 @@ class ConfigurationTest extends TestCase
                 $this->assertTrue(true);
                 $this->assertEquals($collection->getReports(), []);
                 $this->assertEquals($collection->getCheckedComponents(), []);
-                $this->assertEquals($collection->getUncheckedComponents(), [$componentA, $componentB, $componentC, $componentD]);
+                $this->assertEquals(
+                    $collection->getUncheckedComponents(),
+                    [$componentA, $componentB, $componentC, $componentD]
+                );
 
                 // Finally, we test a ComponentCollection reset.
                 $collection->reset();

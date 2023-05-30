@@ -144,7 +144,12 @@ interface core_kernel_persistence_ClassInterface extends core_kernel_persistence
      * @param  boolean isLgDependent
      * @return core_kernel_classes_Property
      */
-    public function createProperty(core_kernel_classes_Class $resource, $label = '', $comment = '', $isLgDependent = false);
+    public function createProperty(
+        core_kernel_classes_Class $resource,
+        $label = '',
+        $comment = '',
+        $isLgDependent = false
+    );
 
     /**
      * Short description of method searchInstances
@@ -181,7 +186,12 @@ interface core_kernel_persistence_ClassInterface extends core_kernel_persistence
      * @param  array options
      * @return array
      */
-    public function getInstancesPropertyValues(core_kernel_classes_Class $resource, core_kernel_classes_Property $property, $propertyFilters = [], $options = []);
+    public function getInstancesPropertyValues(
+        core_kernel_classes_Class $resource,
+        core_kernel_classes_Property $property,
+        $propertyFilters = [],
+        $options = []
+    );
 
     /**
      * Should not be called by application code, please use

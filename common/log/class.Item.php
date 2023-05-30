@@ -115,8 +115,16 @@ class common_log_Item
      * @param  int errorLine
      * @return mixed
      */
-    public function __construct($description, $severity, $datetime, $backtrace = [], $tags = [], $request = "", $errorFile = '', $errorLine = 0)
-    {
+    public function __construct(
+        $description,
+        $severity,
+        $datetime,
+        $backtrace = [],
+        $tags = [],
+        $request = "",
+        $errorFile = '',
+        $errorLine = 0
+    ) {
         if (!is_string($description)) {
             throw new InvalidArgumentException("The description must be a string, " . gettype($description) . " given");
         }
