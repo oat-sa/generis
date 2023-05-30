@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
@@ -32,7 +33,7 @@ class common_persistence_NoStorageKvDriver implements common_persistence_KvDrive
      *
      * @see common_persistence_Driver::connect()
      */
-    function connect($id, array $params)
+    public function connect($id, array $params)
     {
         return new common_persistence_KeyValuePersistence($params, $this);
     }
@@ -44,7 +45,7 @@ class common_persistence_NoStorageKvDriver implements common_persistence_KvDrive
     {
         return false;
     }
-    
+
     /**
      *
      * @see common_persistence_KvDriver::get()
@@ -53,7 +54,7 @@ class common_persistence_NoStorageKvDriver implements common_persistence_KvDrive
     {
         return false;
     }
-    
+
     /**
      *
      * @see common_persistence_KvDriver::exists()

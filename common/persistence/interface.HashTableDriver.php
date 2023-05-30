@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,7 +39,7 @@ interface common_persistence_HashTableDriver extends common_persistence_Driver
      * @return boolean
      */
     public function hmSet($key, $fields);
-    
+
     /**
      * Checks whenever a given field exists for a given key
      *
@@ -47,7 +48,7 @@ interface common_persistence_HashTableDriver extends common_persistence_Driver
      * @return boolean
      */
     public function hExists($key, $field);
-    
+
     /**
      * Sets the value of a field
      *
@@ -57,7 +58,7 @@ interface common_persistence_HashTableDriver extends common_persistence_Driver
      * @return boolean
      */
     public function hSet($key, $field, $value);
-    
+
     /**
      * gets the value of a field
      * return false if not found
@@ -76,7 +77,7 @@ interface common_persistence_HashTableDriver extends common_persistence_Driver
      * @return string
      */
     public function hDel($key, $field);
-    
+
     /**
      * Get all fields of the Hashtable
      * return false if not found

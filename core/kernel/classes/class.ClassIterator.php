@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,18 +27,17 @@
  */
 class core_kernel_classes_ClassIterator implements \Iterator
 {
-   
     /**
      * List of classes whose subclasses have not yet been exploded
      *
      * @var array
      */
     private $todoClasses = [];
-    
+
     private $classes = [];
 
     private $currentId = -1;
-    
+
     /**
      * Constructor of the iterator expecting a class or classes as argument
      *
@@ -47,44 +47,46 @@ class core_kernel_classes_ClassIterator implements \Iterator
     {
         $classes = is_array($classes) ? $classes : [$classes];
         foreach ($classes as $class) {
-            $this->todoClasses[] = (is_object($class) && $class instanceof core_kernel_classes_Class) ? $class->getUri() : $class;
+            $this->todoClasses[] = (is_object($class) && $class instanceof core_kernel_classes_Class)
+                ? $class->getUri()
+                : $class;
         }
         $this->rewind();
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see Iterator::rewind()
      */
-    function rewind()
+    public function rewind()
     {
         $this->currentId = -1;
         $this->next();
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see Iterator::current()
      */
-    function current()
+    public function current()
     {
         return new \core_kernel_classes_Class($this->classes[$this->currentId]);
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see Iterator::key()
      */
-    function key()
+    public function key()
     {
         return $this->currentId;
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see Iterator::next()
      */
-    function next()
+    public function next()
     {
         $this->currentId++;
         if (!isset($this->classes[$this->currentId]) && !empty($this->todoClasses)) {
@@ -92,18 +94,21 @@ class core_kernel_classes_ClassIterator implements \Iterator
             $this->classes[] = $newUri;
             $class = new \core_kernel_classes_Class($newUri);
             foreach ($class->getSubClasses(false) as $subClass) {
-                if (!in_array($subClass->getUri(), $this->classes) && !in_array($subClass->getUri(), $this->todoClasses)) {
+                if (
+                    !in_array($subClass->getUri(), $this->classes)
+                    && !in_array($subClass->getUri(), $this->todoClasses)
+                ) {
                     $this->todoClasses[] = $subClass->getUri();
                 }
             }
         }
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see Iterator::valid()
      */
-    function valid()
+    public function valid()
     {
         return isset($this->classes[$this->currentId]);
     }

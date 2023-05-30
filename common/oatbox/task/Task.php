@@ -26,15 +26,15 @@ namespace oat\oatbox\task;
  */
 interface Task
 {
-    const STATUS_CREATED  = 'created';
-    const STATUS_STARTED  = 'started';
-    const STATUS_RUNNING  = 'running';
-    const STATUS_FINISHED = 'finished';
-    const STATUS_ARCHIVED = 'archived';
+    public const STATUS_CREATED  = 'created';
+    public const STATUS_STARTED  = 'started';
+    public const STATUS_RUNNING  = 'running';
+    public const STATUS_FINISHED = 'finished';
+    public const STATUS_ARCHIVED = 'archived';
 
-    const TASK_CLASS = 'http://www.tao.lu/Ontologies/generis.rdf#TaskQueueTask';
-    const PROPERTY_LINKED_RESOURCE = 'http://www.tao.lu/Ontologies/generis.rdf#LinkedResource';
-    const PROPERTY_REPORT = 'http://www.tao.lu/Ontologies/generis.rdf#Report';
+    public const TASK_CLASS = 'http://www.tao.lu/Ontologies/generis.rdf#TaskQueueTask';
+    public const PROPERTY_LINKED_RESOURCE = 'http://www.tao.lu/Ontologies/generis.rdf#LinkedResource';
+    public const PROPERTY_REPORT = 'http://www.tao.lu/Ontologies/generis.rdf#Report';
 
     /**
      * @deprecated since version 7.10.0, to be removed in 8.0.

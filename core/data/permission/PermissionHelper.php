@@ -38,9 +38,11 @@ class PermissionHelper extends ConfigurableService
         if (!in_array($right, $provider->getSupportedRights())) {
             return $resourceIds;
         }
-        $permissions = $provider->getPermissions($this->getCurrentUser(),$resourceIds);
+        $permissions = $provider->getPermissions($this->getCurrentUser(), $resourceIds);
 
-        return array_filter($resourceIds, function($id) use ($right, $permissions){ return isset($permissions[$id]) && in_array($right, $permissions[$id]); });
+        return array_filter($resourceIds, function ($id) use ($right, $permissions) {
+            return isset($permissions[$id]) && in_array($right, $permissions[$id]);
+        });
     }
 
     private function getCurrentUser(): User

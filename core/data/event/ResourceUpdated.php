@@ -31,18 +31,18 @@ use oat\oatbox\event\Event;
 class ResourceUpdated implements Event
 {
     private $resource;
-    
-    function __construct(\core_kernel_classes_Resource $resource)
+
+    public function __construct(\core_kernel_classes_Resource $resource)
     {
         $this->resource = $resource;
     }
-    
-    function getResource()
+
+    public function getResource()
     {
         return $this->resource;
     }
 
-    function getName()
+    public function getName()
     {
         return __CLASS__;
     }

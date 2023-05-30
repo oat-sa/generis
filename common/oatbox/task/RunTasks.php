@@ -44,8 +44,8 @@ class RunTasks extends ConfigurableService implements Action
     protected $params = [];
 
     /**
-     * @param array $params
-     *              $params[0] (int) tasks limit. If parameter is not given or equals 0 then all tasks in queue will be executed.
+     * @param array $params $params[0] (int) tasks limit. If parameter is not given or equals 0 then all tasks in queue
+     *                      will be executed.
      * @return \common_report_Report
      */
     public function __invoke($params)

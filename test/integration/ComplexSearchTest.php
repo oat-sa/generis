@@ -25,7 +25,6 @@ use oat\oatbox\service\ServiceManager;
 
 class ComplexSearchTest extends GenerisPhpUnitTestRunner
 {
-
     private $search;
 
     protected function setUp(): void
@@ -35,7 +34,9 @@ class ComplexSearchTest extends GenerisPhpUnitTestRunner
         $this->object = new core_kernel_classes_Class(OntologyRdfs::RDFS_RESOURCE);
         $this->object->debug = __METHOD__;
 
-        $this->search = ServiceManager::getServiceManager()->get(\oat\generis\model\kernel\persistence\smoothsql\search\ComplexSearchService::SERVICE_ID);
+        $this->search = ServiceManager::getServiceManager()->get(
+            \oat\generis\model\kernel\persistence\smoothsql\search\ComplexSearchService::SERVICE_ID
+        );
     }
 
     public function testRandomized()

@@ -34,7 +34,6 @@ use oat\oatbox\mutex\NoLockStorage;
  */
 class LockServiceTest extends TestCase
 {
-
     public function testLock()
     {
         $service = $this->getInstance();
@@ -45,10 +44,22 @@ class LockServiceTest extends TestCase
         $actionId2 = 'action_2';
         $sleep = 3;
         $time = time();
-        $pipe1 = popen('php ' . __DIR__ . DIRECTORY_SEPARATOR . 'test_action.php ' . $actionId1 . ' ' . $sleep . ' 0', 'w');
-        $pipe2 = popen('php ' . __DIR__ . DIRECTORY_SEPARATOR . 'test_action.php ' . $actionId1 . ' ' . $sleep . ' 0', 'w');
-        $pipe3 = popen('php ' . __DIR__ . DIRECTORY_SEPARATOR . 'test_action.php ' . $actionId1 . ' ' . $sleep . ' 0', 'w');
-        $pipe4 = popen('php ' . __DIR__ . DIRECTORY_SEPARATOR . 'test_action.php ' . $actionId2 . ' ' . $sleep . ' 0', 'w');
+        $pipe1 = popen(
+            'php ' . __DIR__ . DIRECTORY_SEPARATOR . 'test_action.php ' . $actionId1 . ' ' . $sleep . ' 0',
+            'w'
+        );
+        $pipe2 = popen(
+            'php ' . __DIR__ . DIRECTORY_SEPARATOR . 'test_action.php ' . $actionId1 . ' ' . $sleep . ' 0',
+            'w'
+        );
+        $pipe3 = popen(
+            'php ' . __DIR__ . DIRECTORY_SEPARATOR . 'test_action.php ' . $actionId1 . ' ' . $sleep . ' 0',
+            'w'
+        );
+        $pipe4 = popen(
+            'php ' . __DIR__ . DIRECTORY_SEPARATOR . 'test_action.php ' . $actionId2 . ' ' . $sleep . ' 0',
+            'w'
+        );
         pclose($pipe1);
         pclose($pipe2);
         pclose($pipe3);
@@ -67,8 +78,14 @@ class LockServiceTest extends TestCase
         $sleep = 5;
         $timeout = 2;
         $time = time();
-        $pipe1 = popen('php ' . __DIR__ . DIRECTORY_SEPARATOR . 'test_action.php ' . $actionId1 . ' ' . $sleep . ' ' . $timeout, 'w');
-        $pipe2 = popen('php ' . __DIR__ . DIRECTORY_SEPARATOR . 'test_action.php ' . $actionId1 . ' ' . $sleep . ' ' . $timeout, 'w');
+        $pipe1 = popen(
+            'php ' . __DIR__ . DIRECTORY_SEPARATOR . 'test_action.php ' . $actionId1 . ' ' . $sleep . ' ' . $timeout,
+            'w'
+        );
+        $pipe2 = popen(
+            'php ' . __DIR__ . DIRECTORY_SEPARATOR . 'test_action.php ' . $actionId1 . ' ' . $sleep . ' ' . $timeout,
+            'w'
+        );
         pclose($pipe1);
         pclose($pipe2);
 

@@ -30,7 +30,7 @@ use Prophecy\Argument;
 
 class PermissionTest extends TestCase
 {
-    const RIGHT = 'testRight';
+    public const RIGHT = 'testRight';
     /**
      * @dataProvider getSamples
      */
@@ -61,8 +61,8 @@ class PermissionTest extends TestCase
             [[self::RIGHT], ['a', 'b'], [], []],
             [[self::RIGHT], [1,2,3,4,5], [1 => [self::RIGHT]], [1]],
             [[self::RIGHT], [1,2,3,4,5], [2 => [self::RIGHT, 'somethingelse']], [1 => 2]],
-            [[self::RIGHT], [1,2,3,4,5], [2 => [self::RIGHT], 3 =>['somethingelse']], [1 => 2]],
-            [[self::RIGHT], [1,2,3,4,5], [2 => [self::RIGHT], 4 =>[self::RIGHT]], [1 => 2, 3 => 4]],
+            [[self::RIGHT], [1,2,3,4,5], [2 => [self::RIGHT], 3 => ['somethingelse']], [1 => 2]],
+            [[self::RIGHT], [1,2,3,4,5], [2 => [self::RIGHT], 4 => [self::RIGHT]], [1 => 2, 3 => 4]],
             [[self::RIGHT, 'weird'], [1,2,3,4,5], [1 => [self::RIGHT]], [1]],
             [[], [1,2,3,4,5], [], [1,2,3,4,5]],
             [['weird'], [1,2,3,4,5], [], [1,2,3,4,5]]

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -14,13 +15,18 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
- *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
- *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
+ * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg
+ *                         (under the project TAO & TAO2);
+ *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung
+ *                         (under the project TAO-TRANSFER);
+ *               2009-2012 (update and modification) Public Research Centre Henri Tudor
+ *                         (under the project TAO-SUSTAIN & TAO-DEV);
  *
  */
 
+// phpcs:disable PSR1.Files.SideEffects
 error_reporting(E_ALL);
+// phpcs:enable PSR1.Files.SideEffects
 
 
 /**
@@ -95,7 +101,7 @@ class core_kernel_classes_DbWrapper
      * @var boolean
      */
     public $debug = false;
-    
+
     /**
      *
      * @var common_persistence_SqlPersistence
@@ -189,14 +195,14 @@ class core_kernel_classes_DbWrapper
     {
         $returnValue = null;
 
-        
+
         //         $trace=debug_backtrace();
         //         $caller=array_shift($trace);
         //         $caller=array_shift($trace);
         //         common_Logger::d('trace : '. $caller['function'] .$caller['class'] );
         //         common_Logger::d($statement . implode('|', $params));
         $sth = $this->persistence->query($statement, $params);
-        
+
         if (!empty($sth)) {
             $returnValue = $sth;
         }
@@ -218,13 +224,13 @@ class core_kernel_classes_DbWrapper
     public function exec($statement, $params = [])
     {
         $this->debug($statement);
-        
+
         $returnValue = $this->persistence->exec($statement, $params);
 
         $this->incrementNrOfQueries();
         return (int) $returnValue;
     }
-    
+
     /**
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
      * @param string $tableName
@@ -251,8 +257,8 @@ class core_kernel_classes_DbWrapper
     }
 
 
-    
-    
+
+
     /**
      * Returns the column names of a given table
      *
@@ -373,7 +379,7 @@ class core_kernel_classes_DbWrapper
         }
         return $this->platform;
     }
-    
+
     /**
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
      * return common_persistence_sql_SchemaManager
@@ -416,9 +422,11 @@ class core_kernel_classes_DbWrapper
      * @abstract
      * @access public
      * @author Jerome Bogaerts, <jerome@taotesting.com>
-     * @param  string indexName The name of the index to create.
-     * @param  string tableName A table name
-     * @param  array columns An associative array that represents the columns on which the index applies. The keys of the array are the name of the columns, the values are the length of the data to index in the column. If there is no length limitation, set the value of the array cell to null.
+     * @param string $indexName The name of the index to create.
+     * @param string $tableName A table name
+     * @param array $columns An associative array that represents the columns on which the index applies. The keys of
+     *                       the array are the name of the columns, the values are the length of the data to index in
+     *                       the column. If there is no length limitation, set the value of the array cell to null.
      * @return void
      */
     public function createIndex($indexName, $tableName, $columns)
@@ -474,7 +482,7 @@ class core_kernel_classes_DbWrapper
         $result->closeCursor();
         return (int) $returnValue;
     }
-    
+
     /**
      * Convenience access to lastInsertId.
      *
@@ -486,7 +494,7 @@ class core_kernel_classes_DbWrapper
     {
         return $this->persistence->lastInsertId($name);
     }
-    
+
     /**
      * Convenience access to platForm quote.
      *
@@ -499,7 +507,7 @@ class core_kernel_classes_DbWrapper
     {
         return $this->persistence->quote($parameter);
     }
-    
+
     public function quoteIdentifier($parameter)
     {
         return $this->persistence->getPlatForm()->quoteIdentifier($parameter);

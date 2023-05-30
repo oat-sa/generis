@@ -1,9 +1,9 @@
 <?php
 
-use oat\oatbox\session\SessionService;
-
 /**
  * Session config
  */
+
+use oat\oatbox\session\SessionService;
 
 return new SessionService();

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -14,9 +15,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
- *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
- *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
+ * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg
+ *                         (under the project TAO & TAO2);
+ *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung
+ *                         (under the project TAO-TRANSFER);
+ *               2009-2012 (update and modification) Public Research Centre Henri Tudor
+ *                         (under the project TAO-SUSTAIN & TAO-DEV);
  *
  */
 
@@ -35,8 +39,8 @@ class common_log_Dispatcher implements common_log_Appender
      *
      * @var string
      */
-    const CONFIG_ID = 'log';
-    
+    public const CONFIG_ID = 'log';
+
     // --- ATTRIBUTES ---
 
     /**
@@ -91,9 +95,9 @@ class common_log_Dispatcher implements common_log_Appender
     {
         $returnValue = (int) 0;
 
-        
+
         $returnValue = $this->minLevel;
-        
+
 
         return (int) $returnValue;
     }
@@ -127,7 +131,7 @@ class common_log_Dispatcher implements common_log_Appender
             }
         }
         $returnValue = (count($this->appenders) > 0);
-        
+
 
         return (bool) $returnValue;
     }
@@ -143,12 +147,12 @@ class common_log_Dispatcher implements common_log_Appender
     {
         $returnValue = null;
 
-        
+
         if (is_null(self::$instance)) {
             self::$instance = new common_log_Dispatcher();
         }
         $returnValue = self::$instance;
-        
+
 
         return $returnValue;
     }
@@ -178,7 +182,7 @@ class common_log_Dispatcher implements common_log_Appender
      */
     public function addAppender(common_log_Appender $appender)
     {
-        
+
         $this->appenders[] = $appender;
         if (is_null($this->minLevel) || $this->minLevel > $appender->getLogThreshold()) {
             $this->minLevel = $appender->getLogThreshold();

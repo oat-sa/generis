@@ -35,42 +35,42 @@ class TaoJsonLogFormatter implements FormatterInterface
     /**
      * Used datetime format.
      */
-    const DATETIME_FORMAT = 'd/m/Y:H:i:s O';
+    public const DATETIME_FORMAT = 'd/m/Y:H:i:s O';
 
     /**
      * Datetime offset in the generated output.
      */
-    const DATETIME_OFFSET = 'datetime';
+    public const DATETIME_OFFSET = 'datetime';
 
     /**
      * Stack offset in the generated output.
      */
-    const STACK_OFFSET    = 'stack';
+    public const STACK_OFFSET    = 'stack';
 
     /**
      * Severity offset in the generated output.
      */
-    const SEVERITY_OFFSET = 'severity';
+    public const SEVERITY_OFFSET = 'severity';
 
     /**
      * Line offset in the generated output.
      */
-    const LINE_OFFSET     = 'line';
+    public const LINE_OFFSET     = 'line';
 
     /**
      * File offset in the generated output.
      */
-    const FILE_OFFSET     = 'file';
+    public const FILE_OFFSET     = 'file';
 
     /**
      * Content/message offset in the generated output.
      */
-    const CONTENT_OFFSET  = 'content';
+    public const CONTENT_OFFSET  = 'content';
 
     /**
      * Backtrace offset in the generated output.
      */
-    const TRACE_OFFSET    = 'trace';
+    public const TRACE_OFFSET    = 'trace';
 
     /**
      * @inheritdoc

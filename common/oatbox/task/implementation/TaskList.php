@@ -28,5 +28,4 @@ use oat\oatbox\task\TaskInterface\TaskListIterator;
  */
 class TaskList extends \ArrayIterator implements TaskListIterator
 {
-
 }

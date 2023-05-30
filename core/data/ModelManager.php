@@ -32,8 +32,8 @@ use oat\oatbox\service\ServiceManager;
  */
 class ModelManager
 {
-    const CONFIG_KEY = 'ontology';
-    
+    public const CONFIG_KEY = 'ontology';
+
     /**
      * @return Model
      */
@@ -41,7 +41,7 @@ class ModelManager
     {
         return ServiceManager::getServiceManager()->get(Ontology::SERVICE_ID);
     }
-    
+
     /**
      * @param Ontology $model
      */
@@ -49,7 +49,7 @@ class ModelManager
     {
         return ServiceManager::getServiceManager()->register(Ontology::SERVICE_ID, $model);
     }
-    
+
     protected static function model2array(Model $model)
     {
         $className = get_class($model);
@@ -58,7 +58,7 @@ class ModelManager
             'config' => $model->getOptions()
         ];
     }
-    
+
     protected static function array2model($array)
     {
         if (!isset($array['class']) || !isset($array['config']) || !is_array($array['config'])) {

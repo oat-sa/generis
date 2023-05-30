@@ -128,7 +128,7 @@ class PersistenceManagerTest extends TestCase
 
     public function testApplySchemaProvider()
     {
-        $serviceClass = new class implements SchemaProviderInterface {
+        $serviceClass = new class () implements SchemaProviderInterface {
             public function provideSchema(SchemaCollection $schemaCollection)
             {
                 $table = $schemaCollection->getSchema('sql1')->createTable('serviceTable');

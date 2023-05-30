@@ -15,8 +15,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
- *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
+ * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung
+ *                         (under the project TAO-TRANSFER);
+ *               2009-2012 (update and modification) Public Research Centre Henri Tudor
+ *                         (under the project TAO-SUSTAIN & TAO-DEV);
  *               2013-2020 (update and modification) Open Assessment Technologies SA;
  *
  */
@@ -36,7 +38,6 @@ use oat\oatbox\cache\SimpleCache;
  */
 class common_ext_GenerisInstaller extends common_ext_ExtensionInstaller
 {
-
     /**
      * Setup the ontology configuration
      *
@@ -48,16 +49,18 @@ class common_ext_GenerisInstaller extends common_ext_ExtensionInstaller
     public function install()
     {
         if ($this->extension->getId() != 'generis') {
-            throw new common_ext_ExtensionException('Tried to install "' . $this->extension->getId() . '" extension using the GenerisInstaller');
+            throw new common_ext_ExtensionException(
+                'Tried to install "' . $this->extension->getId() . '" extension using the GenerisInstaller'
+            );
         }
- 
+
         $this->installLoadDefaultConfig();
         $this->setupSchema();
         $this->installOntology();
         $this->installRegisterExt();
 
         $this->getServiceManager()->get(SimpleCache::SERVICE_ID)->clear();
-        
+
         $this->log('d', 'Installing custom script for extension ' . $this->extension->getId());
         $this->installCustomScript();
     }

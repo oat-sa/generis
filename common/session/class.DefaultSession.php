@@ -29,5 +29,4 @@
  */
 class common_session_DefaultSession extends common_session_BasicSession implements common_session_StatefulSession
 {
-
 }

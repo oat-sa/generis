@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -14,9 +15,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
- *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
- *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
+ * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg
+ *                         (under the project TAO & TAO2);
+ *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung
+ *                         (under the project TAO-TRANSFER);
+ *               2009-2012 (update and modification) Public Research Centre Henri Tudor
+ *                         (under the project TAO-SUSTAIN & TAO-DEV);
  *
  */
 
@@ -48,8 +52,8 @@ class helpers_VersionedFile
     {
         $returnValue = (bool) false;
 
-        
-        
+
+
 
         return (bool) $returnValue;
     }
@@ -67,8 +71,8 @@ class helpers_VersionedFile
     {
         $returnValue = (bool) false;
 
-        
-        
+
+
         if (is_file($path)) {
             if (preg_match('/^\//', $path)) {
                 $returnValue = @unlink($path);
@@ -86,8 +90,8 @@ class helpers_VersionedFile
                 $returnValue = @rmdir($path);
             }
         }
-                        
-        
+
+
 
         return (bool) $returnValue;
     }
@@ -107,8 +111,8 @@ class helpers_VersionedFile
     {
         $returnValue = (bool) false;
 
-        
-        
+
+
         if (file_exists($source)) {
             if (is_dir($source) && $recursive) {
                 foreach (scandir($source) as $file) {
@@ -116,7 +120,12 @@ class helpers_VersionedFile
                         if (!$ignoreSystemFiles && $file[0] == '.') {
                             continue;
                         } else {
-                            self::cpWorkingCopy($source . '/' . $file, $destination . '/' . $file, true, $ignoreSystemFiles);
+                            self::cpWorkingCopy(
+                                $source . '/' . $file,
+                                $destination . '/' . $file,
+                                true,
+                                $ignoreSystemFiles
+                            );
                         }
                     }
                 }
@@ -130,8 +139,8 @@ class helpers_VersionedFile
                 }
             }
         }
-        
-        
+
+
 
         return (bool) $returnValue;
     }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,6 +20,8 @@
  * @license    GPLv2
  * @package    package_name
  * @subpackage
+ *
+ * phpcs:disable PSR1.Files.SideEffects
  */
 
 $extensionRoot = realpath(__DIR__ . '/../');
@@ -34,10 +37,10 @@ function generisInstalledAsRootPackage(string $extensionRoot)
 }
 
 if (generisInstalledAsExtension($extensionRoot)) {
-    define('ROOT_PATH', realpath(__DIR__.'/../../'));
+    define('ROOT_PATH', realpath(__DIR__ . '/../../'));
     require_once $extensionRoot . '/../vendor/autoload.php';
 } elseif (generisInstalledAsRootPackage($extensionRoot)) {
-    define('ROOT_PATH', realpath(__DIR__.'/../'));
+    define('ROOT_PATH', realpath(__DIR__ . '/../'));
     require_once $extensionRoot . '/vendor/autoload.php';
 } else {
     throw new \Exception('Vendor directory not found');

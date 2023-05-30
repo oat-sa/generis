@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,9 +30,6 @@
  */
 interface core_kernel_persistence_ClassInterface extends core_kernel_persistence_ResourceInterface
 {
-
-
-
     // --- OPERATIONS ---
 
     /**
@@ -54,8 +52,8 @@ interface core_kernel_persistence_ClassInterface extends core_kernel_persistence
      * @return boolean
      */
     public function setSubClassOf(core_kernel_classes_Class $resource, core_kernel_classes_Class $iClass);
-    
-    
+
+
     /**
      * check if the resource is a subclass of given parentClass
      *
@@ -146,7 +144,12 @@ interface core_kernel_persistence_ClassInterface extends core_kernel_persistence
      * @param  boolean isLgDependent
      * @return core_kernel_classes_Property
      */
-    public function createProperty(core_kernel_classes_Class $resource, $label = '', $comment = '', $isLgDependent = false);
+    public function createProperty(
+        core_kernel_classes_Class $resource,
+        $label = '',
+        $comment = '',
+        $isLgDependent = false
+    );
 
     /**
      * Short description of method searchInstances
@@ -183,7 +186,12 @@ interface core_kernel_persistence_ClassInterface extends core_kernel_persistence
      * @param  array options
      * @return array
      */
-    public function getInstancesPropertyValues(core_kernel_classes_Class $resource, core_kernel_classes_Property $property, $propertyFilters = [], $options = []);
+    public function getInstancesPropertyValues(
+        core_kernel_classes_Class $resource,
+        core_kernel_classes_Property $property,
+        $propertyFilters = [],
+        $options = []
+    );
 
     /**
      * Should not be called by application code, please use

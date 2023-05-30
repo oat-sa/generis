@@ -15,8 +15,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
- *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
+ * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung
+ *                         (under the project TAO-TRANSFER);
+ *               2009-2012 (update and modification) Public Research Centre Henri Tudor
+ *                         (under the project TAO-SUSTAIN & TAO-DEV);
  *               2012-2017 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
 
@@ -25,8 +27,7 @@ use oat\generis\test\GenerisPhpUnitTestRunner;
 
 class UserServiceTestCase extends GenerisPhpUnitTestRunner
 {
-
-    const TESTCASE_USER_LOGIN = 'testcase_user';
+    public const TESTCASE_USER_LOGIN = 'testcase_user';
 
     /**
      *
@@ -66,7 +67,11 @@ class UserServiceTestCase extends GenerisPhpUnitTestRunner
         $prefix = LOCAL_NAMESPACE . '#';
 
         // Do not forget that more you go deep in the Roles hierarchy, more rights you have.
-        $baseRole = $roleClass->createInstance('BASE Role', 'The base role of the hierarchy (minimal rights).', $prefix . 'baseRole');
+        $baseRole = $roleClass->createInstance(
+            'BASE Role',
+            'The base role of the hierarchy (minimal rights).',
+            $prefix . 'baseRole'
+        );
         $baseRole->setPropertyValue($isSystemProperty, $falseInstance);
 
         $subRole1 = $roleClass->createInstance('SUB Role 1', 'Includes BASE role.', $prefix . 'subRole1');
@@ -89,7 +94,11 @@ class UserServiceTestCase extends GenerisPhpUnitTestRunner
         $subRole12->setPropertyValue($includesRoleProperty, $subRole1);
         $subRole12->setPropertyValue($isSystemProperty, $falseInstance);
 
-        $subRole13 = $roleClass->createInstance('SUB Role 13', 'Includes SUB Role 1, SUB Role 11, SUB Role 12.', $prefix . 'subRole13');
+        $subRole13 = $roleClass->createInstance(
+            'SUB Role 13',
+            'Includes SUB Role 1, SUB Role 11, SUB Role 12.',
+            $prefix . 'subRole13'
+        );
         $subRole13->setPropertyValue($includesRoleProperty, $subRole1);
         $subRole13->setPropertyValue($includesRoleProperty, $subRole11);
         $subRole13->setPropertyValue($includesRoleProperty, $subRole12);
@@ -462,7 +471,11 @@ class UserServiceTestCase extends GenerisPhpUnitTestRunner
         // Nothing is in the cache, we should get an exception.
         try {
             core_kernel_users_Cache::retrieveIncludedRoles($role);
-            $this->assertTrue(false, 'An exception should be raised when trying to retrieve included roles that are not yet in the cache memory.');
+            $this->assertTrue(
+                false,
+                'An exception should be raised when trying to retrieve included roles that are not yet in the '
+                    . 'cache memory.'
+            );
         } catch (core_kernel_users_CacheException $e) {
             $this->assertTrue(true);
         }

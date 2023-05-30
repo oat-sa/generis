@@ -15,8 +15,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
- *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
+ * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung
+ *                         (under the project TAO-TRANSFER);
+ *               2009-2012 (update and modification) Public Research Centre Henri Tudor
+ *                         (under the project TAO-SUSTAIN & TAO-DEV);
  *               2017      (update and modification) Open Assessment Technologies SA;
  *
  */
@@ -25,7 +27,6 @@ use oat\generis\test\TestCase;
 
 class FileHelperTest extends TestCase
 {
-
     protected function setUp(): void
     {
     }
@@ -59,7 +60,8 @@ class FileHelperTest extends TestCase
 
     /**
      * @todo fix problematic test case
-     * why does this case try to read files 'ExpressionFactoryTest.php', 'ExpressionTest.php', 'OperationFactoryTest.php', 'OperationTest.php', 'TermFactoryTest.php', 'TermTest.php'?
+     * why does this case try to read files 'ExpressionFactoryTest.php', 'ExpressionTest.php',
+     * 'OperationFactoryTest.php', 'OperationTest.php', 'TermFactoryTest.php', 'TermTest.php'?
      *
      *
      * @dataProvider scandirDataProvider
@@ -71,7 +73,10 @@ class FileHelperTest extends TestCase
      */
     public function testScandir($toScan, $expectedResult, $recursive = false, $absolute = false)
     {
-        $result = helpers_File::scanDir($toScan, ['recursive' => $recursive, 'absolute' => $absolute, 'only' => helpers_File::SCAN_FILE]);
+        $result = helpers_File::scanDir(
+            $toScan,
+            ['recursive' => $recursive, 'absolute' => $absolute, 'only' => helpers_File::SCAN_FILE]
+        );
         $this->assertEquals(count($expectedResult), count($result));
         // The order might vary depending on the file system implementation...
         foreach ($expectedResult as $expected) {
@@ -123,7 +128,8 @@ class FileHelperTest extends TestCase
 
     public function testUrlToPath()
     {
-        $path = DIRECTORY_SEPARATOR . 'style' . DIRECTORY_SEPARATOR . 'custom' . DIRECTORY_SEPARATOR . 'tao-user-styles.css';
+        $path = DIRECTORY_SEPARATOR . 'style' . DIRECTORY_SEPARATOR . 'custom' . DIRECTORY_SEPARATOR
+            . 'tao-user-styles.css';
 
         $urls = [
             '/style/custom/tao-user-styles.css',

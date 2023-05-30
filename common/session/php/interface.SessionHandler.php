@@ -1,4 +1,5 @@
 <?php
+
 /**
  * starting from php 5.4 a built in interface exists
  */

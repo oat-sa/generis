@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -87,7 +88,8 @@ class helpers_InstallHelper
                     $missing = array_diff($missing, array_keys($toInstall));
                     foreach ($missing as $extID) {
                         static::log('d', 'Extension ' . $extID . ' is required but missing, added to install list');
-                        $toInstall = [$extID => common_ext_ExtensionsManager::singleton()->getExtensionById($extID)] + $toInstall;
+                        $toInstall = [$extID => common_ext_ExtensionsManager::singleton()->getExtensionById($extID)]
+                            + $toInstall;
                         $modified = true;
                     }
                 }
@@ -99,7 +101,7 @@ class helpers_InstallHelper
         }
         return $installed;
     }
-    
+
     protected static function install($extension, $installData)
     {
         $importLocalData = (isset($installData['import_local']) && $installData['import_local'] == true);
@@ -110,7 +112,7 @@ class helpers_InstallHelper
         helpers_TimeOutHelper::reset();
         ;
     }
-    
+
     protected static function getInstaller($extension, $importLocalData)
     {
         $instance = new \common_ext_ExtensionInstaller($extension, $importLocalData);
@@ -148,5 +150,4 @@ class helpers_InstallHelper
             call_user_func('common_Logger::' . $logLevel, $message, $tags);
         }
     }
-
 }

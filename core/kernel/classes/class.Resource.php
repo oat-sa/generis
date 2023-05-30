@@ -15,9 +15,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
- *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
- *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
+ * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg
+ *                         (under the project TAO & TAO2);
+ *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung
+ *                         (under the project TAO-TRANSFER);
+ *               2009-2012 (update and modification) Public Research Centre Henri Tudor
+ *                         (under the project TAO-SUSTAIN & TAO-DEV);
  *               2017-2021 (update and modification) Open Assessment Technologies SA;
  */
 
@@ -106,10 +109,15 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
     public function __construct($uri, $debug = '')
     {
         if (empty($uri)) {
-            throw new common_exception_Error('cannot construct the resource because the uri cannot be empty, debug: ' . $debug);
+            throw new common_exception_Error(
+                'cannot construct the resource because the uri cannot be empty, debug: ' . $debug
+            );
         }
         if (!is_string($uri) && !$uri instanceof self) {
-            throw new common_exception_Error('could not create resource from ' . (is_object($uri) ? get_class($uri) : gettype($uri)) . ' debug: ' . $debug);
+            throw new common_exception_Error(
+                'could not create resource from ' . (is_object($uri) ? get_class($uri) : gettype($uri))
+                    . ' debug: ' . $debug
+            );
         }
         $this->uriResource = $uri instanceof self ? $uri->getUri() : $uri;
     }
@@ -123,7 +131,9 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
      */
     public function __clone()
     {
-        throw new common_exception_DeprecatedApiMethod('Use duplicated instead, because clone resource could not share same uri that original');
+        throw new common_exception_DeprecatedApiMethod(
+            'Use duplicated instead, because clone resource could not share same uri that original'
+        );
     }
 
     public function isCustom(): bool
@@ -193,7 +203,8 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
      * Returns all the types of this resource as core_kernel_classes_Class objects.
      *
      * @author Joel Bout <joel@taotesting.com>
-     * @return core_kernel_classes_Class[] An associative array where keys are class URIs and values are core_kernel_classes_Class objects.
+     * @return core_kernel_classes_Class[] An associative array where keys are class URIs and values are
+     *                                     core_kernel_classes_Class objects.
      */
     public function getTypes()
     {
@@ -214,10 +225,11 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
             $label =  $this->getOnePropertyValue($this->getProperty(OntologyRdfs::RDFS_LABEL));
             $this->label = is_null($label)
                 ? ''
-                : ($label instanceof core_kernel_classes_Resource
+                : (
+                    $label instanceof core_kernel_classes_Resource
                     ? $label->getUri()
                     : (string)$label
-                   )
+                )
             ;
         }
 
@@ -283,8 +295,9 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
      *
      * @access public
      * @author Joel Bout, <joel.bout@tudor.lu>
-     * @param  Property property uriProperty is string and may be short in the case of a locally defined property (module namespace), or long uri
-     * @param  array options
+     * @param core_kernel_classes_Property $property uriProperty is string and may be short in the case of a locally
+     *                                               defined property (module namespace), or long uri
+     * @param array $options
      * @return array
      */
     public function getPropertyValues(core_kernel_classes_Property $property, $options = [])
@@ -354,7 +367,9 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
     {
         $returnValue = null;
         if ($last) {
-            throw new core_kernel_persistence_Exception('parameter \'last\' for getOnePropertyValue no longer supported');
+            throw new core_kernel_persistence_Exception(
+                'parameter \'last\' for getOnePropertyValue no longer supported'
+            );
         };
 
         $options = [
@@ -591,7 +606,8 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
      *
      * @author patrick.plichart@tudor.lu
      *
-     * @param  bool deleteReference set deleteReference to true when you need that all reference to this resource are removed.
+     * @param bool $deleteReference set deleteReference to true when you need that all reference to this resource are
+     *                              removed.
      *
      * @return bool
      */

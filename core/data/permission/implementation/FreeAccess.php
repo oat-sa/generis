@@ -44,7 +44,7 @@ class FreeAccess extends ConfigurableService implements PermissionInterface
     {
         return array_fill_keys($resourceIds, [PermissionInterface::RIGHT_UNSUPPORTED]);
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see PermissionInterface::onResourceCreated()
@@ -53,7 +53,7 @@ class FreeAccess extends ConfigurableService implements PermissionInterface
     {
         // do nothing
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see PermissionInterface::getSupportedPermissions()

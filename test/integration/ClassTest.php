@@ -15,8 +15,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
- *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
+ * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung
+ *                         (under the project TAO-TRANSFER);
+ *               2009-2012 (update and modification) Public Research Centre Henri Tudor
+ *                         (under the project TAO-SUSTAIN & TAO-DEV);
  *               2017 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
 
@@ -372,13 +374,31 @@ class ClassTest extends GenerisPhpUnitTestRunner
         $class = new core_kernel_classes_Class(GenerisRdf::CLASS_GENERIS_RESOURCE);
         $subClass = $class->createSubClass('GetInstancesPropertyValuesClass', 'GetInstancesPropertyValues_Class');
         // create a first property for this class
-        $p1 = core_kernel_classes_ClassFactory::createProperty($subClass, 'GetInstancesPropertyValues_Property1', 'GetInstancesPropertyValues_Property1', false, LOCAL_NAMESPACE . "#P1");
+        $p1 = core_kernel_classes_ClassFactory::createProperty(
+            $subClass,
+            'GetInstancesPropertyValues_Property1',
+            'GetInstancesPropertyValues_Property1',
+            false,
+            LOCAL_NAMESPACE . "#P1"
+        );
         $p1->setRange(new core_kernel_classes_Class(OntologyRdfs::RDFS_LITERAL));
         // create a second property for this class
-        $p2 = core_kernel_classes_ClassFactory::createProperty($subClass, 'GetInstancesPropertyValues_Property2', 'GetInstancesPropertyValues_Property2', false, LOCAL_NAMESPACE . "#P2");
+        $p2 = core_kernel_classes_ClassFactory::createProperty(
+            $subClass,
+            'GetInstancesPropertyValues_Property2',
+            'GetInstancesPropertyValues_Property2',
+            false,
+            LOCAL_NAMESPACE . "#P2"
+        );
         $p2->setRange(new core_kernel_classes_Class(OntologyRdfs::RDFS_LITERAL));
         // create a second property for this class
-        $p3 = core_kernel_classes_ClassFactory::createProperty($subClass, 'GetInstancesPropertyValues_Property3', 'GetInstancesPropertyValues_Property3', false, LOCAL_NAMESPACE . "#P3");
+        $p3 = core_kernel_classes_ClassFactory::createProperty(
+            $subClass,
+            'GetInstancesPropertyValues_Property3',
+            'GetInstancesPropertyValues_Property3',
+            false,
+            LOCAL_NAMESPACE . "#P3"
+        );
         $p2->setRange(new core_kernel_classes_Class(OntologyRdfs::RDFS_LITERAL));
         // $i1
         $i1 = $subClass->createInstance("i1", "i1");
@@ -486,13 +506,31 @@ class ClassTest extends GenerisPhpUnitTestRunner
         $class = new core_kernel_classes_Class(GenerisRdf::CLASS_GENERIS_RESOURCE);
         $subClass = $class->createSubClass('GetInstancesPropertyValuesClass', 'GetInstancesPropertyValues_Class');
         // create a first property for this class
-        $p1 = core_kernel_classes_ClassFactory::createProperty($subClass, 'GetInstancesPropertyValues_Property1', 'GetInstancesPropertyValues_Property1', false, LOCAL_NAMESPACE . "#P1");
+        $p1 = core_kernel_classes_ClassFactory::createProperty(
+            $subClass,
+            'GetInstancesPropertyValues_Property1',
+            'GetInstancesPropertyValues_Property1',
+            false,
+            LOCAL_NAMESPACE . "#P1"
+        );
         $p1->setRange(new core_kernel_classes_Class(GenerisRdf::GENERIS_BOOLEAN));
         // create a second property for this class
-        $p2 = core_kernel_classes_ClassFactory::createProperty($subClass, 'GetInstancesPropertyValues_Property2', 'GetInstancesPropertyValues_Property2', false, LOCAL_NAMESPACE . "#P2");
+        $p2 = core_kernel_classes_ClassFactory::createProperty(
+            $subClass,
+            'GetInstancesPropertyValues_Property2',
+            'GetInstancesPropertyValues_Property2',
+            false,
+            LOCAL_NAMESPACE . "#P2"
+        );
         $p1->setRange(new core_kernel_classes_Class(GenerisRdf::GENERIS_BOOLEAN));
         // create a second property for this class
-        $p3 = core_kernel_classes_ClassFactory::createProperty($subClass, 'GetInstancesPropertyValues_Property3', 'GetInstancesPropertyValues_Property3', false, LOCAL_NAMESPACE . "#P3");
+        $p3 = core_kernel_classes_ClassFactory::createProperty(
+            $subClass,
+            'GetInstancesPropertyValues_Property3',
+            'GetInstancesPropertyValues_Property3',
+            false,
+            LOCAL_NAMESPACE . "#P3"
+        );
         $p1->setRange(new core_kernel_classes_Class(OntologyRdfs::RDFS_LITERAL));
         // $i1
         $i1 = $subClass->createInstance("i1", "i1");
@@ -534,7 +572,9 @@ class ClassTest extends GenerisPhpUnitTestRunner
         $result = $subClass->getInstancesPropertyValues($p2, $propertyFilters, ["distinct" => true]);
         $this->assertEquals(count($result), 2);
         foreach ($result as $property) {
-            $this->assertTrue($property->getUri() == GenerisRdf::GENERIS_TRUE || $property->getUri() == GenerisRdf::GENERIS_FALSE);
+            $this->assertTrue(
+                $property->getUri() == GenerisRdf::GENERIS_TRUE || $property->getUri() == GenerisRdf::GENERIS_FALSE
+            );
         }
 
         // Search * P2 for P1=NotExistingProperty litteral WITH DISTINCT options
@@ -582,7 +622,9 @@ class ClassTest extends GenerisPhpUnitTestRunner
         $result = $subClass->getInstancesPropertyValues($p2, $propertyFilters, ["distinct" => true]);
         $this->assertEquals(count($result), 2);
         foreach ($result as $property) {
-            $this->assertTrue($property->getUri() == GenerisRdf::GENERIS_TRUE || $property->getUri() == GenerisRdf::GENERIS_FALSE);
+            $this->assertTrue(
+                $property->getUri() == GenerisRdf::GENERIS_TRUE || $property->getUri() == GenerisRdf::GENERIS_FALSE
+            );
         }
 
         // Clean the model

@@ -39,7 +39,7 @@ class ResourceCollection implements Iterator, Countable
     use ServiceLocatorAwareTrait;
     use OntologyAwareTrait;
 
-    const CACHE_SIZE = 100;
+    public const CACHE_SIZE = 100;
 
     /**
      * @var string[]

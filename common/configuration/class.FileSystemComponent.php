@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -14,9 +15,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
- *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
- *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
+ * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg
+ *                         (under the project TAO & TAO2);
+ *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung
+ *                         (under the project TAO-TRANSFER);
+ *               2009-2012 (update and modification) Public Research Centre Henri Tudor
+ *                         (under the project TAO-SUSTAIN & TAO-DEV);
  *
  */
 
@@ -42,7 +46,7 @@ class common_configuration_FileSystemComponent extends common_configuration_Comp
      * @var boolean
      */
     private $recursive = false;
-    
+
     /**
      * Short description of attribute location
      *
@@ -80,8 +84,13 @@ class common_configuration_FileSystemComponent extends common_configuration_Comp
      * @throws common_configuration_MalformedRightsException
      * @return mixed
      */
-    public function __construct($location, $expectedRights, $optional = false, $recursive = false, $mustCheckIfEmpty = false)
-    {
+    public function __construct(
+        $location,
+        $expectedRights,
+        $optional = false,
+        $recursive = false,
+        $mustCheckIfEmpty = false
+    ) {
         parent::__construct('tao.configuration.filesystem', $optional);
 
         $this->setExpectedRights($expectedRights);
@@ -116,7 +125,7 @@ class common_configuration_FileSystemComponent extends common_configuration_Comp
     {
         $this->location = $location;
     }
-    
+
     /**
      * Set $this->recursive value
      *
@@ -129,7 +138,7 @@ class common_configuration_FileSystemComponent extends common_configuration_Comp
     {
         $this->recursive = $recursive;
     }
-    
+
     /**
      * Get $this->recursive value
      *
@@ -205,7 +214,7 @@ class common_configuration_FileSystemComponent extends common_configuration_Comp
      */
     public function setExpectedRights($expectedRights)
     {
-        
+
         if (!empty($expectedRights) && preg_match('/^r*w*x*$/', $expectedRights) !== 0) {
             $this->expectedRights = $expectedRights;
         } else {
@@ -227,7 +236,7 @@ class common_configuration_FileSystemComponent extends common_configuration_Comp
         $expectedRights = $this->getExpectedRights();
         $location = $this->getLocation();
         $name = $this->getName();
-        
+
         if (!$this->exists()) {
             return new common_configuration_Report(
                 common_configuration_Report::UNKNOWN,
@@ -242,7 +251,7 @@ class common_configuration_FileSystemComponent extends common_configuration_Comp
                     $this
                 );
             }
-            
+
             if (strpos($expectedRights, 'w') !== false && !$this->isWritable($location)) {
                 return new common_configuration_Report(
                     common_configuration_Report::INVALID,
@@ -268,10 +277,11 @@ class common_configuration_FileSystemComponent extends common_configuration_Comp
                     );
                 }
             }
-            
+
             return new common_configuration_Report(
                 common_configuration_Report::VALID,
-                "File system component '${name}' in '${location} is compliant with expected rights (${expectedRights}).'",
+                "File system component '${name}' in '${location} is compliant with expected rights "
+                    . "(${expectedRights}).'",
                 $this
             );
         }
@@ -300,7 +310,9 @@ class common_configuration_FileSystemComponent extends common_configuration_Comp
             $funcName = 'is_' . strtolower($rule);
             $returnValue = $funcName($location);
         } else {
-            $iterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($location, \RecursiveDirectoryIterator::SKIP_DOTS));
+            $iterator = new \RecursiveIteratorIterator(
+                new \RecursiveDirectoryIterator($location, \RecursiveDirectoryIterator::SKIP_DOTS)
+            );
 
             try {
                 $method = 'is' . $rule;

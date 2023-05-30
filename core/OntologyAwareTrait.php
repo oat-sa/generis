@@ -36,12 +36,12 @@ trait OntologyAwareTrait
      * @var Ontology
      */
     private $ontology;
-    
+
     /**
      * Return the used model
      * @return Ontology
      */
-    function getModel()
+    public function getModel()
     {
         if (is_null($this->ontology)) {
             return ($this instanceof ServiceLocatorAwareInterface && !is_null($this->getServiceLocator()))
@@ -55,34 +55,34 @@ trait OntologyAwareTrait
      * Sets the model to use
      * @param Ontology $model
      */
-    function setModel(Ontology $model)
+    public function setModel(Ontology $model)
     {
         $this->ontology = $model;
     }
-    
+
     /**
      * @param string $uri
      * @return \core_kernel_classes_Resource
      */
-    function getResource($uri)
+    public function getResource($uri)
     {
         return $this->getModel()->getResource($uri);
     }
-    
+
     /**
      * @param string $uri
      * @return \core_kernel_classes_Class
      */
-    function getClass($uri)
+    public function getClass($uri)
     {
         return $this->getModel()->getClass($uri);
     }
-    
+
     /**
      * @param string $uri
      * @return \core_kernel_classes_Property
      */
-    function getProperty($uri)
+    public function getProperty($uri)
     {
         return $this->getModel()->getProperty($uri);
     }

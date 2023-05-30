@@ -33,7 +33,7 @@ use oat\oatbox\config\ConfigurationDriver;
 class common_ext_ConfigDriver extends common_persistence_PhpFileDriver implements ConfigurationDriver
 {
     private static $singleton = null;
-    
+
     public static function singleton()
     {
         if (is_null(self::$singleton)) {
@@ -45,7 +45,7 @@ class common_ext_ConfigDriver extends common_persistence_PhpFileDriver implement
         }
         return self::$singleton;
     }
-    
+
     /**
      * Override the function to allow an additional header
      *
@@ -58,10 +58,10 @@ class common_ext_ConfigDriver extends common_persistence_PhpFileDriver implement
         $header = !is_null($headerPath) && file_exists($headerPath)
             ? file_get_contents($headerPath)
             : $this->getDefaultHeader($key);
-            
+
         return $header . PHP_EOL . "return " . common_Utils::toHumanReadablePhpString($value) . ";" . PHP_EOL;
     }
-    
+
     /**
      * Generates a default header
      *
@@ -77,7 +77,7 @@ class common_ext_ConfigDriver extends common_persistence_PhpFileDriver implement
             . ' * To replace this add a file ' . $this->getHeaderPath($key) . PHP_EOL
             . ' */' . PHP_EOL;
     }
-    
+
     /**
      * Returns the path to the expected header file
      *
@@ -95,7 +95,7 @@ class common_ext_ConfigDriver extends common_persistence_PhpFileDriver implement
             return null;
         }
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see common_persistence_PhpFileDriver::getPath()

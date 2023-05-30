@@ -29,5 +29,4 @@
  */
 class common_http_InvalidSignatureException extends common_Exception
 {
-
 }

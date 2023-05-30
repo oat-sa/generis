@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,19 +29,19 @@ class common_persistence_KeyValuePersistence extends common_persistence_Persiste
     /**
      * Ability to set the key only if it does not already exist
      */
-    const FEATURE_NX = 'nx';
+    public const FEATURE_NX = 'nx';
 
-    const MAX_VALUE_SIZE = 'max_value_size';
-    const MAP_IDENTIFIER = 'map_identifier';
+    public const MAX_VALUE_SIZE = 'max_value_size';
+    public const MAP_IDENTIFIER = 'map_identifier';
 
-    const START_MAP_DELIMITER = 'start_map_delimiter';
-    const END_MAP_DELIMITER = 'end_map_delimiter';
-    const MAPPED_KEY_SEPARATOR = '###';
-    const LEVEL_SEPARATOR = '-';
+    public const START_MAP_DELIMITER = 'start_map_delimiter';
+    public const END_MAP_DELIMITER = 'end_map_delimiter';
+    public const MAPPED_KEY_SEPARATOR = '###';
+    public const LEVEL_SEPARATOR = '-';
 
-    const DEFAULT_MAP_IDENTIFIER = '<<<<mapped>>>>';
-    const DEFAULT_START_MAP_DELIMITER = '<<<<mappedKey>>>>';
-    const DEFAULT_END_MAP_DELIMITER = '<<<</mappedKey>>>>';
+    public const DEFAULT_MAP_IDENTIFIER = '<<<<mapped>>>>';
+    public const DEFAULT_START_MAP_DELIMITER = '<<<<mappedKey>>>>';
+    public const DEFAULT_END_MAP_DELIMITER = '<<<</mappedKey>>>>';
 
 
     /**
@@ -219,8 +220,15 @@ class common_persistence_KeyValuePersistence extends common_persistence_Persiste
      * @return mixed
      * @throws common_Exception
      */
-    protected function setLargeValue($key, $value, $level = 0, $flush = true, $toTransform = true, $ttl = null, $nx = false)
-    {
+    protected function setLargeValue(
+        $key,
+        $value,
+        $level = 0,
+        $flush = true,
+        $toTransform = true,
+        $ttl = null,
+        $nx = false
+    ) {
         if (!$this->isLarge($value)) {
             if ($flush) {
                 $this->set($key, $value, $ttl, $nx);

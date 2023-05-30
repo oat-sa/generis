@@ -30,15 +30,15 @@ use oat\oatbox\service\ServiceNotFoundException;
  */
 class EventManager extends ConfigurableService
 {
-    const SERVICE_ID = 'generis/event';
+    public const SERVICE_ID = 'generis/event';
 
     /**
      * @deprecated use SERVICE_ID
      */
-    const CONFIG_ID = 'generis/event';
-    
-    const OPTION_LISTENERS = 'listeners';
-    
+    public const CONFIG_ID = 'generis/event';
+
+    public const OPTION_LISTENERS = 'listeners';
+
     /**
      * Dispatch an event and trigger its listeners
      *
@@ -67,7 +67,7 @@ class EventManager extends ConfigurableService
             call_user_func($callback, $event);
         }
     }
-    
+
     /**
      * Attach a Listener to one or multiple events
      *
@@ -90,7 +90,7 @@ class EventManager extends ConfigurableService
         }
         $this->setOption(self::OPTION_LISTENERS, $listeners);
     }
-    
+
     /**
      * remove listener from an event and delete event if it dosn't have any listeners
      * @param array $listeners
@@ -130,7 +130,7 @@ class EventManager extends ConfigurableService
         }
         $this->setOption(self::OPTION_LISTENERS, $listeners);
     }
-    
+
     /**
      * Get all Listeners listening to this kind of event
      *

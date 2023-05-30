@@ -24,13 +24,12 @@ namespace oat\generis\test\integration\common\cache;
 
 use common_cache_NotFoundException;
 use oat\generis\test\GenerisPhpUnitTestRunner;
-use \common_cache_FileCache;
+use common_cache_FileCache;
 
 // @todo can be turned into unit test, the problem is only constructing the cache object
 
 class CacheTest extends GenerisPhpUnitTestRunner
 {
-
     /**
      * @dataProvider keyProvider
      */

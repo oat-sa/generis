@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,9 +30,8 @@ use oat\oatbox\reporting\ReportInterface;
  */
 class helpers_Report
 {
-   
-    const AUTOSENSE = 'autosense';
-    
+    public const AUTOSENSE = 'autosense';
+
     /**
      * Contains the logic to render a report and its children to the command line
      *
@@ -40,28 +40,31 @@ class helpers_Report
      * @param integer $intend the intend of the message.
      * @return string The shell output of $report.
      */
-    public static function renderToCommandLine(ReportInterface $report, $useColor = self::AUTOSENSE, $intend = 0): string
-    {
+    public static function renderToCommandLine(
+        ReportInterface $report,
+        $useColor = self::AUTOSENSE,
+        $intend = 0
+    ): string {
         switch ($report->getType()) {
             case ReportInterface::TYPE_SUCCESS:
                 $color = '0;32'; // green
                 break;
-            
+
             case ReportInterface::TYPE_WARNING:
                 $color = '1;33'; // yellow
                 break;
-            
+
             case ReportInterface::TYPE_ERROR:
                 $color = '1;31'; // red
                 break;
-            
+
             default:
                 $color = '0;37'; // light grey
         }
         if ($useColor === self::AUTOSENSE) {
             $useColor = getenv('TAO_CONSOLE') !== 'nocolor' && !SystemHelper::isWindows();
         }
-            
+
         $output =  ($useColor ? "\033[" . $color . 'm' : '')
             . ($intend > 0 ? str_repeat(' ', $intend) : '')
             . $report->getMessage()

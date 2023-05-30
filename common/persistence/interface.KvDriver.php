@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,7 +31,6 @@
  */
 interface common_persistence_KvDriver extends common_persistence_Driver
 {
-
     /**
      * Stores a value, implementing time to live and nx is optional
      * Should throw an exception if an option is not supported
@@ -51,7 +51,7 @@ interface common_persistence_KvDriver extends common_persistence_Driver
      * @return string
      */
     public function get($id);
-    
+
     /**
      * test whenever or not an entry exists
      *

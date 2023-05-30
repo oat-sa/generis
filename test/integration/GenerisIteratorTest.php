@@ -25,7 +25,6 @@ use oat\generis\model\GenerisRdf;
 
 class GenerisIteratorTest extends GenerisPhpUnitTestRunner
 {
-
     /**
      * @var core_kernel_classes_Class
      */

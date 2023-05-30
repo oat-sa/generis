@@ -22,7 +22,7 @@
 
 namespace oat\generis\test\unit\common\persistence;
 
-use \common_persistence_PhpFileDriver;
+use common_persistence_PhpFileDriver;
 use oat\generis\test\integration\tools\InvokeMethodTrait;
 use org\bovigo\vfs\vfsStream;
 use oat\generis\test\TestCase;
@@ -37,7 +37,7 @@ class PhpFilePersistenceTtlModeTest extends TestCase
     /**
      * The used TTL value.
      */
-    const TTL = 15;
+    public const TTL = 15;
 
     private $root;
 

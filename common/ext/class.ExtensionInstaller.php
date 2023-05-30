@@ -15,8 +15,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
- *             2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
+ * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung
+ *                         (under the project TAO-TRANSFER);
+ *             2009-2012 (update and modification) Public Research Centre Henri Tudor
+ *                         (under the project TAO-SUSTAIN & TAO-DEV);
  *
  */
 
@@ -193,10 +195,19 @@ class common_ext_ExtensionInstaller extends common_ext_ExtensionHandler
         foreach ($this->extension->getManifest()->getInstallPHPFiles() as $script) {
             if (is_string($script)) {
                 $this->runExtensionScript($script);
-            } elseif (is_array($script) && isset($script[0]) && is_string($script[0]) && !empty($script[0]) && isset($script[1]) && is_array($script[1])) {
+            } elseif (
+                is_array($script)
+                && isset($script[0])
+                && is_string($script[0])
+                && !empty($script[0])
+                && isset($script[1])
+                && is_array($script[1])
+            ) {
                 $this->runExtensionScript($script[0], $script[1]);
             } else {
-                \common_Logger::w("Ignored custom install script because it's call definition is malformed in extension manifest!");
+                \common_Logger::w(
+                    "Ignored custom install script because it's call definition is malformed in extension manifest!"
+                );
             }
         }
     }

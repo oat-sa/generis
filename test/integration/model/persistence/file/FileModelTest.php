@@ -22,12 +22,11 @@
 namespace oat\generis\test\integration\model\kernel\persistence\file;
 
 use oat\generis\model\kernel\persistence\file\FileModel;
-use \common_exception_MissingParameter;
+use common_exception_MissingParameter;
 use oat\generis\test\GenerisPhpUnitTestRunner;
 
 class FileModelTest extends GenerisPhpUnitTestRunner
 {
-
     /**
      *
      * @see PHPUnit_Framework_TestCase::setUp()
@@ -128,7 +127,10 @@ class FileModelTest extends GenerisPhpUnitTestRunner
         } catch (\Exception $e) {
             $this->assertInstanceOf('\common_exception_Error', $e);
             if ($id == 100) {
-                $this->assertContains('has to be defined with the "xml:base" attribute of the ROOT node', $e->getMessage());
+                $this->assertContains(
+                    'has to be defined with the "xml:base" attribute of the ROOT node',
+                    $e->getMessage()
+                );
             } else {
                 $this->fail('unexpected error');
             }

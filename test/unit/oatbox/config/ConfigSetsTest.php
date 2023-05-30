@@ -33,7 +33,6 @@ use oat\generis\test\TestCase;
  */
 class ConfigSetsTest extends TestCase
 {
-
     /**
      * @var ConfigSets
      */

@@ -19,7 +19,6 @@ use oat\search\base\Query\EscaperAbstract;
  */
 class TaoSearchDriver extends EscaperAbstract
 {
-    
     /**
      * @var common_persistence_SqlPersistence
      */
@@ -31,7 +30,7 @@ class TaoSearchDriver extends EscaperAbstract
                 ->get(\common_persistence_Manager::SERVICE_ID)
                 ->getPersistenceById('default');
     }
-    
+
     /**
      * @inherit
      */
@@ -46,7 +45,7 @@ class TaoSearchDriver extends EscaperAbstract
     {
         return $stringValue;
     }
-    
+
     /**
      * return quoted empty string
      */
@@ -54,7 +53,7 @@ class TaoSearchDriver extends EscaperAbstract
     {
         return $this->quote('');
     }
-    
+
     /**
      * @inherit
      */
@@ -62,7 +61,7 @@ class TaoSearchDriver extends EscaperAbstract
     {
         return $this->persistence->quote($stringValue);
     }
-    
+
     /**
      * @inherit
      */
@@ -70,7 +69,7 @@ class TaoSearchDriver extends EscaperAbstract
     {
         return $this->persistence->getPlatForm()->quoteIdentifier($stringValue);
     }
-    
+
     /**
      * @inherit
      */
@@ -84,15 +83,15 @@ class TaoSearchDriver extends EscaperAbstract
         $name = $this->persistence->getPlatForm()->getName();
         return $random[$name];
     }
-    
+
     public function groupAggregation($variable, $separator)
     {
-        
+
         $group = [
             'mysql'      => 'GROUP_CONCAT',
             'postgresql' => 'string_agg',
         ];
-        
+
         $name = $this->persistence->getPlatForm()->getName();
         return $group[$name] . '(' . $variable . ',' . $this->escape($this->quote($separator)) . ')';
     }

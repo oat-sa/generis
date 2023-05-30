@@ -41,13 +41,15 @@ use oat\generis\model\OntologyAwareTrait;
 class RdfImporter extends ConfigurableService
 {
     use OntologyAwareTrait;
+
     /**
      * Imports an RDF file into the ontology as readonly model
      * @param string $filePath
      * @throws common_Exception
      * @return boolean
      */
-    public function importFile(string $filePath) {
+    public function importFile(string $filePath)
+    {
         if (!file_exists($filePath) || !is_readable($filePath)) {
             throw new common_Exception("Unable to load ontology : $filePath");
         }
@@ -60,7 +62,8 @@ class RdfImporter extends ConfigurableService
      * @param iterable $triples
      * @return void
      */
-    public function importTriples(iterable $triples) {
+    public function importTriples(iterable $triples)
+    {
         $rdf = $this->getServiceLocator()->get(Ontology::SERVICE_ID)->getRdfInterface();
         $rdf->addTripleCollection($triples);
         foreach ($triples as $triple) {

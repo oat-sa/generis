@@ -29,5 +29,4 @@ use oat\oatbox\extension\InstallAction;
  */
 abstract class common_ext_action_InstallAction extends InstallAction
 {
-  
 }

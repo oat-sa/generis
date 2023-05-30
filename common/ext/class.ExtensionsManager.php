@@ -15,8 +15,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
- *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
+ * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung
+ *                         (under the project TAO-TRANSFER);
+ *               2009-2012 (update and modification) Public Research Centre Henri Tudor
+ *                         (under the project TAO-SUSTAIN & TAO-DEV);
  *
  */
 
@@ -39,9 +41,9 @@ use oat\oatbox\cache\SimpleCache;
  */
 class common_ext_ExtensionsManager extends ConfigurableService
 {
-    const EXTENSIONS_CONFIG_KEY = 'installation';
+    public const EXTENSIONS_CONFIG_KEY = 'installation';
 
-    const SERVICE_ID = 'generis/extensionManager';
+    public const SERVICE_ID = 'generis/extensionManager';
 
     public static $RESERVED_WORDS = [
         'config', 'data', 'vendor', 'tests'
@@ -220,7 +222,7 @@ class common_ext_ExtensionsManager extends ConfigurableService
         $exts[$extensionId]['enabled'] = (bool) $enabled;
         return $this->getExtensionById('generis')->setConfig(self::EXTENSIONS_CONFIG_KEY, $exts);
     }
-    
+
     /**
      * Get the set of currently enabled extensions. This method
      * returns an array of common_ext_Extension.
@@ -239,10 +241,10 @@ class common_ext_ExtensionsManager extends ConfigurableService
                 $returnValue[$ext->getId()] = $ext;
             }
         }
-    
+
         return (array) $returnValue;
     }
-    
+
     /**
      * Add the end of an installation register the new extension
      *
@@ -298,7 +300,7 @@ class common_ext_ExtensionsManager extends ConfigurableService
         }
         /** @var SimpleCache $cache */
         $cache = $this->getServiceManager()->get(SimpleCache::SERVICE_ID);
-        $key = static::class.'_'.__METHOD__;
+        $key = static::class . '_' . __METHOD__;
         if (!$cache->has($key)) {
             $cache->set($key, $composer->getAvailableTaoExtensions());
         }

@@ -21,7 +21,7 @@
 
 namespace oat\oatbox;
 
-use \common_ext_ExtensionsManager;
+use common_ext_ExtensionsManager;
 
 /**
  * Simple Registry for testing purpose
@@ -38,7 +38,7 @@ class BasicRegistry extends AbstractRegistry
     {
         return 'basic_registry';
     }
-    
+
     /**
      *
      * @see \oat\oatbox\AbstractRegistry::getExtension()

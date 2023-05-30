@@ -44,30 +44,30 @@ class Intersection extends ConfigurableService implements PermissionInterface
     {
         return new self(['inner' => $persmissionMdels]);
     }
-    
+
     public function __construct($options = [])
     {
         parent::__construct($options);
     }
-    
+
     protected function getInner()
     {
         return $this->getOption('inner');
     }
-    
-    
+
+
     /**
      * (non-PHPdoc)
      * @see PermissionInterface::getPermissions()
      */
     public function getPermissions(User $user, array $resourceIds)
     {
-        
+
         $results = [];
         foreach ($this->getInner() as $impl) {
             $results[] = $impl->getPermissions($user, $resourceIds);
         }
-        
+
         $rights = [];
         foreach ($resourceIds as $id) {
             $intersect = null;
@@ -78,10 +78,10 @@ class Intersection extends ConfigurableService implements PermissionInterface
             }
             $rights[$id] = array_values($intersect);
         }
-        
+
         return $rights;
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see PermissionInterface::onResourceCreated()
@@ -92,7 +92,7 @@ class Intersection extends ConfigurableService implements PermissionInterface
             $impl->onResourceCreated($resource);
         }
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see PermissionInterface::getSupportedPermissions()
@@ -102,12 +102,12 @@ class Intersection extends ConfigurableService implements PermissionInterface
         $models = $this->getInner();
         $first = array_pop($models);
         $supported = $first->getSupportedRights();
-        
+
         while (!empty($models)) {
             $model = array_pop($models);
             $supported = array_intersect($supported, $model->getSupportedRights());
         }
-        
+
         return array_values($supported);
     }
 }

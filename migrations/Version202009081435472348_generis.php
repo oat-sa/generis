@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,7 +36,6 @@ use oat\tao\scripts\tools\migrations\AbstractMigration;
  */
 final class Version202009081435472348_generis extends AbstractMigration
 {
-
     public function getDescription(): string
     {
         return 'Register UserTimezoneService';
@@ -55,7 +55,6 @@ final class Version202009081435472348_generis extends AbstractMigration
             UserTimezoneServiceInterface::SERVICE_ID,
             $userTimezoneService
         );
-
     }
 
     public function down(Schema $schema): void

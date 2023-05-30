@@ -15,8 +15,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
- *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
+ * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung
+ *                         (under the project TAO-TRANSFER);
+ *               2009-2012 (update and modification) Public Research Centre Henri Tudor
+ *                         (under the project TAO-SUSTAIN & TAO-DEV);
  *               2013      (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  *
  */
@@ -31,7 +33,6 @@ use oat\generis\test\GenerisPhpUnitTestRunner;
  */
 class DbWrapperTest extends GenerisPhpUnitTestRunner
 {
-
     protected function setUp(): void
     {
         GenerisPhpUnitTestRunner::initTest();
@@ -43,7 +44,10 @@ class DbWrapperTest extends GenerisPhpUnitTestRunner
                     "uri" VARCHAR(255) NOT NULL,
                     "coluMn1" VARCHAR(255) )');
         for ($i = 0; $i < 4; $i++) {
-            $dbWrapper->exec('INSERT INTO  "dbTestCase" (id,uri,"coluMn1") VALUES (?,?,?) ;', [$i,'http://uri' . $i,'value' . $i]);
+            $dbWrapper->exec(
+                'INSERT INTO  "dbTestCase" (id,uri,"coluMn1") VALUES (?,?,?) ;',
+                [$i,'http://uri' . $i,'value' . $i]
+            );
         }
     }
 
@@ -68,7 +72,10 @@ class DbWrapperTest extends GenerisPhpUnitTestRunner
         $possibleValues = ['id','uri','coluMn1'];
         foreach ($columns as $col) {
             if ($col instanceof Doctrine\DBAL\Schema\Column) {
-                $this->assertTrue(in_array($col->getName(), $possibleValues), $col->getName() . ' is not a correct value');
+                $this->assertTrue(
+                    in_array($col->getName(), $possibleValues),
+                    $col->getName() . ' is not a correct value'
+                );
             } else {
                 //legacy mode
                 $this->assertTrue(in_array($col, $possibleValues));
@@ -133,7 +140,10 @@ class DbWrapperTest extends GenerisPhpUnitTestRunner
 
         $indexes = $dbWrapper->getSchemaManager()->getTableIndexes('dbtestcase2');
         foreach ($indexes as $index) {
-            $this->assertTrue(in_array($index->getName(), ['idx_content','dbtestcase2_pkey','PRIMARY']), $index->getName() . 'is missing');
+            $this->assertTrue(
+                in_array($index->getName(), ['idx_content','dbtestcase2_pkey','PRIMARY']),
+                $index->getName() . 'is missing'
+            );
         }
 
         $dbWrapper->exec('DROP TABLE dbtestcase2');

@@ -25,7 +25,7 @@ use core_kernel_classes_Resource;
 
 interface UserFactoryServiceInterface
 {
-    const SERVICE_ID = 'generis/userFactory';
+    public const SERVICE_ID = 'generis/userFactory';
     /**
      * @param core_kernel_classes_Resource $userResource
      * @param string $hashForEncryption

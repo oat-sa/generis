@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,7 +36,6 @@
  */
 class common_exception_Unauthorized extends common_exception_ClientException
 {
-
     public function getUserMessage()
     {
         return __("You are not authorized to perform this operation");

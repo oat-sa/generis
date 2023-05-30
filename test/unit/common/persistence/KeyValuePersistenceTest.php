@@ -56,12 +56,12 @@ class KeyValuePersistenceTest extends TestCase
         /*
          * In memory persistence
          */
-            $this->largeValuePersistence = new \common_persistence_KeyValuePersistence(
-                [
-                \common_persistence_KeyValuePersistence::MAX_VALUE_SIZE => 100
-                ],
-                $this->driver
-            );
+        $this->largeValuePersistence = new \common_persistence_KeyValuePersistence(
+            [
+            \common_persistence_KeyValuePersistence::MAX_VALUE_SIZE => 100
+            ],
+            $this->driver
+        );
     }
 
     public function tearDown(): void

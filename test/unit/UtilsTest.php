@@ -15,12 +15,16 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
- *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
+ * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung
+ *                         (under the project TAO-TRANSFER);
+ *               2009-2012 (update and modification) Public Research Centre Henri Tudor
+ *                         (under the project TAO-SUSTAIN & TAO-DEV);
  *
  */
 
+// phpcs:disable PSR1.Files.SideEffects
 error_reporting(E_ALL);
+// phpcs:enable PSR1.Files.SideEffects
 
 use oat\generis\test\TestCase;
 use Prophecy\Prophet;
@@ -61,7 +65,7 @@ class generis_test_UtilsTest extends TestCase
         }
         $value = eval("return " . common_Utils::toPHPVariableString($all) . ";");
         $this->assertEquals($all, $value);
-        
+
         $serialized = serialize(new stdClass());
         $value = eval("return " . common_Utils::toPHPVariableString($serialized) . ";");
         $this->assertEquals($serialized, $value);
@@ -101,6 +105,23 @@ class generis_test_UtilsTest extends TestCase
         $score = "\x01" . pack('S', 8) . "\x00" . "\x01" . pack('d', 1.0);
         $response = "\x00" . pack('S', 0) . "\x00" . "\x01" . pack('S', 7) . 'ChoiceA';
 
-        return implode('', [$position, $state, $navigationMode, $submissionMode, $attempting, $hasItemSessionControl, $numAttempts, $duration, $completionStatus, $timeReference, $varCount, $score, $response]);
+        return implode(
+            '',
+            [
+                $position,
+                $state,
+                $navigationMode,
+                $submissionMode,
+                $attempting,
+                $hasItemSessionControl,
+                $numAttempts,
+                $duration,
+                $completionStatus,
+                $timeReference,
+                $varCount,
+                $score,
+                $response
+            ]
+        );
     }
 }

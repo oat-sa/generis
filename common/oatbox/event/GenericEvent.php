@@ -42,7 +42,7 @@ class GenericEvent implements Event
          * @var array()
          */
     private $params;
-    
+
     /**
      * Create a new generic event based on an event name
      * with optional parameters
@@ -55,7 +55,7 @@ class GenericEvent implements Event
         $this->eventName = (string)$eventName;
         $this->params = $params;
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see \oat\oatbox\event\Event::getName()

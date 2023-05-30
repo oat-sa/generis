@@ -73,7 +73,8 @@ class UserLanguageService extends ConfigurableService implements UserLanguageSer
      */
     public function isDataLanguageEnabled()
     {
-        return !$this->hasOption(self::OPTION_LOCK_DATA_LANGUAGE) || $this->getOption(self::OPTION_LOCK_DATA_LANGUAGE) === false;
+        return !$this->hasOption(self::OPTION_LOCK_DATA_LANGUAGE)
+            || $this->getOption(self::OPTION_LOCK_DATA_LANGUAGE) === false;
     }
 
     public function getAuthoringLanguage(): string

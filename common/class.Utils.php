@@ -19,9 +19,12 @@ use oat\generis\model\kernel\uri\UriProvider;
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
- *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
- *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
+ * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg
+ *                         (under the project TAO & TAO2);
+ *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung
+ *                         (under the project TAO-TRANSFER);
+ *               2009-2012 (update and modification) Public Research Centre Henri Tudor
+ *                         (under the project TAO-SUSTAIN & TAO-DEV);
  *
  */
 
@@ -61,13 +64,19 @@ class common_Utils
         $returnValue = (bool) false;
         $uri = trim($strarg);
         if (!empty($uri)) {
-            if ((preg_match("/^(http|https|file|ftp):\/\/[\/:.A-Za-z0-9_-]+#[A-Za-z0-9_-]+$/", $uri) && strpos($uri, '#') > 0) || strpos($uri, "#") === 0) {
+            if (
+                (
+                    preg_match("/^(http|https|file|ftp):\/\/[\/:.A-Za-z0-9_-]+#[A-Za-z0-9_-]+$/", $uri)
+                    && strpos($uri, '#') > 0
+                )
+                || strpos($uri, "#") === 0
+            ) {
                 $returnValue = true;
             }
         }
         return (bool) $returnValue;
     }
-    
+
     public static function toResource($value)
     {
         if (is_array($value)) {
@@ -153,12 +162,14 @@ class common_Utils
                 break;
             default:
                 // resource and unexpected types
-                throw new common_exception_Error("Could not convert variable of type " . gettype($value) . " to PHP variable string");
+                throw new common_exception_Error(
+                    "Could not convert variable of type " . gettype($value) . " to PHP variable string"
+                );
         }
 
         return (string) $returnValue;
     }
-    
+
     /**
      * Same as toPHPVariableString except the sting
      * is easier for humans to read
@@ -193,7 +204,7 @@ class common_Utils
             $lines = explode(PHP_EOL, self::toPHPVariableString($value));
             $returnValue = implode(PHP_EOL . str_repeat('    ', $indentation), $lines);
         }
-        
+
         return (string) $returnValue;
     }
 }

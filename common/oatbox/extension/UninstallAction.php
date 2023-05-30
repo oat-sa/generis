@@ -30,7 +30,6 @@ use oat\oatbox\event\EventManager;
  */
 abstract class UninstallAction extends AbstractAction
 {
-    
     /**
      * remove event listener
      * @param mixed $event either an Event object or a string

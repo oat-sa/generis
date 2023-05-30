@@ -43,7 +43,6 @@ class FluentdHandlerTest extends TestCase
     public function testConstructThrowsTypeException()
     {
         $this->expectException(\TypeError::class);
-        new FluentdHandler(FluentLogger::class.'foo');
+        new FluentdHandler(FluentLogger::class . 'foo');
     }
-
 }

@@ -23,7 +23,7 @@ namespace oat\oatbox\user;
 
 interface UserService
 {
-    const SERVICE_ID = 'generis/UserService';
+    public const SERVICE_ID = 'generis/UserService';
 
     /**
      * Will return the list of the first X users matching the search string

@@ -55,7 +55,7 @@ class LoginService
         }
         return $loggedIn;
     }
-    
+
     /**
      *
      * @param string $userLogin
@@ -66,7 +66,7 @@ class LoginService
     public static function authenticate($userLogin, $userPassword)
     {
         $user = null;
-        
+
         $adapters = AuthFactory::createAdapters();
         $exceptions = [];
         while (!empty($adapters) && is_null($user)) {
@@ -86,8 +86,8 @@ class LoginService
             throw new LoginFailedException($exceptions);
         }
     }
-    
-    
+
+
     /**
      * Start a session for a provided user
      *

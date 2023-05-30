@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -14,9 +15,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
- *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
- *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
+ * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg
+ *                         (under the project TAO & TAO2);
+ *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung
+ *                         (under the project TAO-TRANSFER);
+ *               2009-2012 (update and modification) Public Research Centre Henri Tudor
+ *                         (under the project TAO-SUSTAIN & TAO-DEV);
  *
  */
 
@@ -50,7 +54,7 @@ class core_kernel_classes_ContainerComparator
     {
         $returnValue = (int) 0;
 
-        
+
         if ($o1 instanceof core_kernel_classes_Literal && $o2 instanceof core_kernel_classes_Literal) {
             $returnValue = strcasecmp($o1->literal, $o2->literal);
         } elseif ($o1 instanceof core_kernel_classes_Resource && $o2 instanceof core_kernel_classes_Resource) {
@@ -58,7 +62,7 @@ class core_kernel_classes_ContainerComparator
         } else {
             throw new common_Exception('try to compared not implemented type');
         }
-        
+
 
         return (int) $returnValue;
     }

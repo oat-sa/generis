@@ -15,9 +15,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
- *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
- *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
+ * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg
+ *                         (under the project TAO & TAO2);
+ *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung
+ *                         (under the project TAO-TRANSFER);
+ *               2009-2012 (update and modification) Public Research Centre Henri Tudor
+ *                         (under the project TAO-SUSTAIN & TAO-DEV);
  *
  */
 
@@ -45,7 +48,7 @@ class core_kernel_users_Cache
      * @access public
      * @var string
      */
-    const SERIAL_PREFIX_INCLUDED_ROLES = 'roles-ir';
+    public const SERIAL_PREFIX_INCLUDED_ROLES = 'roles-ir';
     // --- OPERATIONS ---
 
     /**
@@ -101,7 +104,7 @@ class core_kernel_users_Cache
         foreach ($includedRoles as $resource) {
             $toCache[] = $resource->getUri();
         }
-        
+
         $serial = self::buildIncludedRolesSerial($role);
         /** @var SimpleCache $cache */
         $cache = ServiceManager::getServiceManager()->get(SimpleCache::SERVICE_ID);
@@ -114,7 +117,7 @@ class core_kernel_users_Cache
             $msg .= $e->getMessage();
             throw new core_kernel_users_CacheException($msg);
         }
-        
+
 
         return (bool) $returnValue;
     }
@@ -145,7 +148,8 @@ class core_kernel_users_Cache
      *
      * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  core_kernel_classes_Resource $role The Generis Role you want to check if its included roles are in the cache memory.
+     * @param core_kernel_classes_Resource $role The Generis Role you want to check if its included roles are in the
+     *                                           cache memory.
      * @return boolean
      */
     public static function areIncludedRolesInCache(core_kernel_classes_Resource $role)

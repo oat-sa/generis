@@ -15,8 +15,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2007-2010 (original work) Public Research Centre Henri Tudor & University of Luxembourg) (under the project TAO-QUAL);
- *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
+ * Copyright (c) 2007-2010 (original work) Public Research Centre Henri Tudor & University of Luxembourg
+ *                         (under the project TAO-QUAL);
+ *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung
+ *                         (under the project TAO-TRANSFER);
  *               2017 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
 
@@ -59,7 +61,10 @@ class core_kernel_rules_Rule extends core_kernel_classes_Resource
         common_Logger::i('Evaluating rule ' . $this->getLabel() . '(' . $this->getUri() . ')', ['Generis Rule']);
         if (empty($this->expression)) {
             $property = new core_kernel_classes_Property(RulesRdf::PROPERTY_RULE_IF);
-            $this->expression = new core_kernel_rules_Expression($this->getUniquePropertyValue($property)->getUri(), __METHOD__);
+            $this->expression = new core_kernel_rules_Expression(
+                $this->getUniquePropertyValue($property)->getUri(),
+                __METHOD__
+            );
         }
         $returnValue = $this->expression;
         return $returnValue;

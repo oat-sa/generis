@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -184,4 +185,6 @@ class common_legacy_LegacyAutoLoader
     }
 }
 
+// phpcs:disable PSR1.Files.SideEffects
 common_legacy_LegacyAutoLoader::register();
+// phpcs:enable PSR1.Files.SideEffects

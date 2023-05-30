@@ -8,7 +8,6 @@
  */
 class helpers_Random
 {
-    
     /**
      * Generate a random alphanumeric token with a specific $length.
      *
@@ -20,11 +19,11 @@ class helpers_Random
         $token = '';
         $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
         $maxIndex = strlen($chars) - 1;
-        
+
         for ($i = 0; $i < $length; $i++) {
             $token .= $chars[mt_rand(0, $maxIndex)];
         }
-         
+
         return $token;
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,7 +29,6 @@
  */
 class common_user_auth_Service
 {
-
     /**
      *
      * @access private
@@ -50,7 +50,7 @@ class common_user_auth_Service
         }
         return self::$instance;
     }
-    
+
     /**
      * The constructor is private to implement the Singleton Design Pattern.
      *
@@ -67,9 +67,10 @@ class common_user_auth_Service
      *
      * @access public
      * @author Jerome Bogaerts, <jerome@taotesting.com>
-     * @param  string login The login of the user.
-     * @param  string password the md5 hash of the password.
-     * @param  allowedRoles A Role or an array of Roles that are allowed to be logged in. If the user has a Role that matches one or more Roles in this array, the login request will be accepted.
+     * @param string $login The login of the user.
+     * @param string $password the md5 hash of the password.
+     * @param $allowedRoles - A Role or an array of Roles that are allowed to be logged in. If the user has a Role that
+     *                        matches one or more Roles in this array, the login request will be accepted.
      * @return boolean
      */
     public function login(common_user_auth_Adapter $adapter, $allowedRoles = [])
@@ -111,7 +112,7 @@ class common_user_auth_Service
     {
         return !common_session_SessionManager::isAnonymous();
     }
-    
+
     /**
      * Logout the current user. The session will be entirely reset.
      *
@@ -123,7 +124,7 @@ class common_user_auth_Service
     {
         return \common_session_SessionManager::endSession();
     }
-    
+
     /**
      * Short description of method startSession
      *

@@ -1,4 +1,5 @@
 <?php
+
 use oat\oatbox\session\SessionContext;
 
 /**
@@ -29,7 +30,6 @@ use oat\oatbox\session\SessionContext;
  */
 interface common_session_Session
 {
-
     /**
      * Get the user of the session
      *
@@ -40,7 +40,7 @@ interface common_session_Session
      * @return oat\oatbox\user\User
      */
     public function getUser();
-    
+
     /**
      * Get the URI identifying the currently authenticated user in persistent memory.
      *
@@ -58,7 +58,7 @@ interface common_session_Session
      * @return string
      */
     public function getUserLabel();
-    
+
     /**
      * returns the roles of the current user
      *
@@ -76,7 +76,7 @@ interface common_session_Session
      * @return string
      */
     public function getDataLanguage();
-    
+
     /**
      * returns the language identifier to use for the interface
      *
@@ -85,7 +85,7 @@ interface common_session_Session
      * @return string
      */
     public function getInterfaceLanguage();
-    
+
     /**
      * returns the timezone to use for times
      *
@@ -94,7 +94,7 @@ interface common_session_Session
      * @return string
      */
     public function getTimeZone();
-    
+
     /**
      * Generic information retrieval of user data
      *
@@ -102,7 +102,7 @@ interface common_session_Session
      * @return array
      */
     public function getUserPropertyValues($property);
-    
+
     /**
      * refreshes the information stored in the current session
      */

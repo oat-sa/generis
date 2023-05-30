@@ -21,7 +21,7 @@
  */
 
 namespace oat\oatbox\task;
- 
+
 use oat\oatbox\service\ConfigurableService;
 use common_report_Report as Report;
 
@@ -33,12 +33,12 @@ class TaskService extends ConfigurableService
     /**
      * @deprecated since version 7.10.0, to be removed in 8.0.
      */
-    const TASK_QUEUE_MANAGER_ROLE = 'http://www.tao.lu/Ontologies/TAO.rdf#TaskQueueManager';
+    public const TASK_QUEUE_MANAGER_ROLE = 'http://www.tao.lu/Ontologies/TAO.rdf#TaskQueueManager';
 
     /**
      * @deprecated since version 7.10.0, to be removed in 8.0.
      */
-    const OPTION_LIMIT = 'limit';
+    public const OPTION_LIMIT = 'limit';
 
 
     /**
@@ -65,7 +65,7 @@ class TaskService extends ConfigurableService
                 break;
             }
         }
-        
+
         if (empty($statistics)) {
             $report = new Report(Report::TYPE_INFO, __('No tasks to run'));
         } else {
