@@ -257,7 +257,7 @@ class common_http_Request
         //curl_setopt($curlHandler, );
         curl_close($curlHandler);
 
-        if (in_array($httpResponse->httpCode, self::REDIRECT_CODES, true)) {
+        if ($followRedirects && in_array($httpResponse->httpCode, self::REDIRECT_CODES, true)) {
             $redirectUrl = $fullInfo['redirectUrl'] ?? '';
             if ($redirectUrl) {
                 $this->url = $redirectUrl;
