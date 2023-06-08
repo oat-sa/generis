@@ -33,6 +33,14 @@ class common_http_Request
 
     const METHOD_GET = 'GET';
 
+    private const REDIRECT_CODES = [
+        301,
+        302,
+        303,
+        307,
+        308
+    ];
+
     /**
      * Creates an request from the current call
      *
@@ -249,7 +257,7 @@ class common_http_Request
         //curl_setopt($curlHandler, );
         curl_close($curlHandler);
 
-        if ($httpResponse->httpCode === 307) {
+        if (in_array($httpResponse->httpCode, self::REDIRECT_CODES, true)) {
             $redirectUrl = $fullInfo['redirectUrl'] ?? '';
             if ($redirectUrl) {
                 $this->url = $redirectUrl;
