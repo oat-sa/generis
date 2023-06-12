@@ -63,7 +63,7 @@ abstract class common_persistence_Persistence
      *
      * phpcs:disable PEAR.Functions.ValidDefaultValue
      */
-    public function __construct($params = [], common_persistence_driver $driver)
+    public function __construct($params = [], common_persistence_driver $driver = null)
     {
         $this->setParams($params);
         $this->setDriver($driver);

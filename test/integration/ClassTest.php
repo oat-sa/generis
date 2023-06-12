@@ -118,7 +118,7 @@ class ClassTest extends GenerisPhpUnitTestRunner
     {
         $list = new core_kernel_classes_Class(OntologyRdf::RDF_LIST);
         $properties = $list->getProperties();
-        $this->assertTrue(count($properties) == 2);
+        $this->assertCount(2, $properties);
         $expectedResult =  [   OntologyRdf::RDF_FIRST, OntologyRdf::RDF_REST];
 
         foreach ($properties as $property) {
