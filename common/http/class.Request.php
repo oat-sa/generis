@@ -33,6 +33,14 @@ class common_http_Request
 
     public const METHOD_GET = 'GET';
 
+    private const REDIRECT_CODES = [
+        301,
+        302,
+        303,
+        307,
+        308
+    ];
+
     /**
      * Creates an request from the current call
      *
@@ -188,12 +196,9 @@ class common_http_Request
     {
         return $this->body;
     }
-    /**
-     * @return common_http_Response
-     */
-    public function send()
-    {
 
+    public function send(bool $followRedirects = false): common_http_Response
+    {
         $curlHandler = curl_init($this->getUrl());
 
         //set the headers
@@ -244,8 +249,20 @@ class common_http_Request
         $httpResponse->headerOut = curl_getinfo($curlHandler, CURLINFO_HEADER_OUT);
         $httpResponse->effectiveUrl = curl_getinfo($curlHandler, CURLINFO_EFFECTIVE_URL);
         $httpResponse->responseData = $responseData;
+
+        $fullInfo = curl_getinfo($curlHandler);
+
         //curl_setopt($curlHandler, );
         curl_close($curlHandler);
+
+        if ($followRedirects && in_array($httpResponse->httpCode, self::REDIRECT_CODES, true)) {
+            $redirectUrl = $fullInfo['redirectUrl'] ?? '';
+            if ($redirectUrl) {
+                $this->url = $redirectUrl;
+                $httpResponse = $this->send();
+            }
+        }
+
         return $httpResponse;
     }
 
