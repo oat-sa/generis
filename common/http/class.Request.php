@@ -255,13 +255,20 @@ class common_http_Request
         $httpResponse->responseData = $responseData;
 
         $redirectUrl = curl_getinfo($curlHandler, CURLINFO_REDIRECT_URL);
+        $sameDomain = null;
+        if ($redirectUrl) {
+            $initialDomain = parse_url($this->getUrl(), PHP_URL_HOST);
+            $redirectDomain = parse_url($redirectUrl, PHP_URL_HOST);
+
+            $sameDomain = ($initialDomain === $redirectDomain);
+        }
 
         //curl_setopt($curlHandler, );
         curl_close($curlHandler);
 
         if (
             $followRedirects
-            && $redirectUrl
+            && $sameDomain
             && in_array($httpResponse->httpCode, self::REDIRECT_CODES, true)
         ) {
             $this->url = $redirectUrl;
