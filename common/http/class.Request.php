@@ -255,17 +255,18 @@ class common_http_Request
         $httpResponse->effectiveUrl = curl_getinfo($curlHandler, CURLINFO_EFFECTIVE_URL);
         $httpResponse->responseData = $responseData;
 
-        $fullInfo = curl_getinfo($curlHandler);
+        $redirectUrl = curl_getinfo($curlHandler, CURLINFO_REDIRECT_URL);
 
         //curl_setopt($curlHandler, );
         curl_close($curlHandler);
 
-        if ($followRedirects && in_array($httpResponse->httpCode, self::REDIRECT_CODES, true)) {
-            $redirectUrl = $fullInfo['redirectUrl'] ?? '';
-            if ($redirectUrl) {
-                $this->url = $redirectUrl;
-                $httpResponse = $this->send();
-            }
+        if (
+            $followRedirects
+            && $redirectUrl
+            && in_array($httpResponse->httpCode, self::REDIRECT_CODES, true)
+        ) {
+            $this->url = $redirectUrl;
+            $httpResponse = $this->send();
         }
 
         return $httpResponse;
