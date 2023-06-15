@@ -242,6 +242,10 @@ class common_http_Request
         //curl_setopt($curlHandler, CURLINFO_HEADER_OUT, 1);
         //curl_setopt($curlHandler, CURLOPT_HEADER, true);
 
+        //directly setting `FOLLOWLOCATION` to false to make sure next lines would be working as expected
+        //and we can get the redirect url from curl
+        curl_setopt($curlHandler, CURLOPT_FOLLOWLOCATION, 0);
+
         $responseData = curl_exec($curlHandler);
         $httpResponse = new common_http_Response();
 
