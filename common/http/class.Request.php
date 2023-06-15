@@ -33,6 +33,14 @@ class common_http_Request
 
     const METHOD_GET = 'GET';
 
+    private const REDIRECT_CODES = [
+        301,
+        302,
+        303,
+        307,
+        308
+    ];
+
     /**
      * Creates an request from the current call
      *
@@ -57,9 +65,9 @@ class common_http_Request
         $scheme = $https ? 'https' : 'http';
         $port = empty($_SERVER['HTTP_X_FORWARDED_PORT']) ? $_SERVER['SERVER_PORT'] : $_SERVER['HTTP_X_FORWARDED_PORT'];
         $url = $scheme . '://' . $_SERVER['SERVER_NAME'] . ':' . $port . $_SERVER['REQUEST_URI'];
-        
+
         $method = $_SERVER['REQUEST_METHOD'];
-        
+
         if ($_SERVER['REQUEST_METHOD'] == self::METHOD_GET) {
             $params = $_GET;
         } else {
@@ -152,7 +160,7 @@ class common_http_Request
     {
         return $this->headers[$key] = $value;
     }
-    
+
     public function getHeaders()
     {
         return $this->headers;
@@ -187,12 +195,9 @@ class common_http_Request
     {
         return $this->body;
     }
-    /**
-     * @return common_http_Response
-     */
-    public function send()
-    {
 
+    public function send(bool $followRedirects = false): common_http_Response
+    {
         $curlHandler = curl_init($this->getUrl());
 
           //set the headers
@@ -207,7 +212,7 @@ class common_http_Request
             }
             case "POST":{
                    curl_setopt($curlHandler, CURLOPT_POST, 1);
-                    
+
                 if (is_array($this->params) and (count($this->params) > 0)) {
                     $params =  $this->postEncode($this->params);
                     //application/x-www-form-urlencoded
@@ -219,9 +224,9 @@ class common_http_Request
                     }
                 }
 
-                   
+
                    //analyse if there is a body or structured postfields
-                   
+
                 break;
             }
             case "PUT":{
@@ -233,20 +238,44 @@ class common_http_Request
                 break;
             }
         }
-      
+
         curl_setopt($curlHandler, CURLOPT_RETURNTRANSFER, 1);
         //curl_setopt($curlHandler, CURLINFO_HEADER_OUT, 1);
         //curl_setopt($curlHandler, CURLOPT_HEADER, true);
+
+        //directly setting `FOLLOWLOCATION` to false to make sure next lines would be working as expected
+        //and we can get the redirect url from curl
+        curl_setopt($curlHandler, CURLOPT_FOLLOWLOCATION, 0);
         
         $responseData = curl_exec($curlHandler);
         $httpResponse = new common_http_Response();
-        
+
         $httpResponse->httpCode = curl_getinfo($curlHandler, CURLINFO_HTTP_CODE);
         $httpResponse->headerOut = curl_getinfo($curlHandler, CURLINFO_HEADER_OUT);
         $httpResponse->effectiveUrl = curl_getinfo($curlHandler, CURLINFO_EFFECTIVE_URL);
         $httpResponse->responseData = $responseData;
+
+        $redirectUrl = curl_getinfo($curlHandler, CURLINFO_REDIRECT_URL);
+        $sameDomain = null;
+        if ($redirectUrl) {
+            $initialDomain = parse_url($this->getUrl(), PHP_URL_HOST);
+            $redirectDomain = parse_url($redirectUrl, PHP_URL_HOST);
+
+            $sameDomain = ($initialDomain === $redirectDomain);
+        }
+
         //curl_setopt($curlHandler, );
         curl_close($curlHandler);
+
+        if (
+            $followRedirects
+            && $sameDomain
+            && in_array($httpResponse->httpCode, self::REDIRECT_CODES, true)
+        ) {
+            $this->url = $redirectUrl;
+            $httpResponse = $this->send();
+        }
+
         return $httpResponse;
     }
 
@@ -257,7 +286,7 @@ class common_http_Request
 
     public static function postEncode($parameters)
     {
-        
+
         //todo
         //$content_type = isset($this->headers['Content-Type']) ? $this->headers['Content-Type'] : 'text/plain';
         //should detect suitable encoding
