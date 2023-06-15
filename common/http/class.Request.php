@@ -33,6 +33,14 @@ class common_http_Request
 
     public const METHOD_GET = 'GET';
 
+    private const REDIRECT_CODES = [
+        301,
+        302,
+        303,
+        307,
+        308
+    ];
+
     /**
      * Creates an request from the current call
      *
@@ -188,12 +196,9 @@ class common_http_Request
     {
         return $this->body;
     }
-    /**
-     * @return common_http_Response
-     */
-    public function send()
-    {
 
+    public function send(bool $followRedirects = false): common_http_Response
+    {
         $curlHandler = curl_init($this->getUrl());
 
         //set the headers
@@ -237,6 +242,10 @@ class common_http_Request
         //curl_setopt($curlHandler, CURLINFO_HEADER_OUT, 1);
         //curl_setopt($curlHandler, CURLOPT_HEADER, true);
 
+        //directly setting `FOLLOWLOCATION` to false to make sure next lines would be working as expected
+        //and we can get the redirect url from curl
+        curl_setopt($curlHandler, CURLOPT_FOLLOWLOCATION, 0);
+
         $responseData = curl_exec($curlHandler);
         $httpResponse = new common_http_Response();
 
@@ -244,8 +253,28 @@ class common_http_Request
         $httpResponse->headerOut = curl_getinfo($curlHandler, CURLINFO_HEADER_OUT);
         $httpResponse->effectiveUrl = curl_getinfo($curlHandler, CURLINFO_EFFECTIVE_URL);
         $httpResponse->responseData = $responseData;
+
+        $redirectUrl = curl_getinfo($curlHandler, CURLINFO_REDIRECT_URL);
+        $sameDomain = null;
+        if ($redirectUrl) {
+            $initialDomain = parse_url($this->getUrl(), PHP_URL_HOST);
+            $redirectDomain = parse_url($redirectUrl, PHP_URL_HOST);
+
+            $sameDomain = ($initialDomain === $redirectDomain);
+        }
+
         //curl_setopt($curlHandler, );
         curl_close($curlHandler);
+
+        if (
+            $followRedirects
+            && $sameDomain
+            && in_array($httpResponse->httpCode, self::REDIRECT_CODES, true)
+        ) {
+            $this->url = $redirectUrl;
+            $httpResponse = $this->send();
+        }
+
         return $httpResponse;
     }
 
