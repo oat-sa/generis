@@ -131,11 +131,15 @@ class PersistenceManager extends ConfigurableService
         $config = $configs[$persistenceId];
         $driverString = $config['driver'];
 
-        $driverClassName = isset(self::DRIVER_MAP[$driverString]) ? self::DRIVER_MAP[$driverString] : $driverString;
+        $driverClassName = self::DRIVER_MAP[$driverString] ?? (string)$driverString;
 
         if (!class_exists($driverClassName)) {
             throw new \common_exception_Error(
-                'Driver ' . $driverString . ' not found, check your database configuration'
+                sprintf(
+                    'Driver "%s" not found, check your database configuration for %s.',
+                    $driverString,
+                    $persistenceId
+                )
             );
         }
 
