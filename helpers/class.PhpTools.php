@@ -36,13 +36,15 @@ class helpers_PhpTools
      */
     public static function getClassInfo($file)
     {
+        $namespaceToken = PHP_VERSION_ID < 80000 ? T_STRING : T_NAME_QUALIFIED;
+
         $buffer = file_get_contents($file);
         $tokens = @token_get_all($buffer);
         $class = $namespace = $buffer = '';
         for ($i = 0; $i < count($tokens); $i++) {
             if ($tokens[$i][0] === T_NAMESPACE) {
                 for ($j = $i + 1; $j < count($tokens); $j++) {
-                    if ($tokens[$j][0] === T_STRING) {
+                    if ($tokens[$j][0] === $namespaceToken) {
                         $namespace .= '\\' . $tokens[$j][1];
                     } elseif ($tokens[$j] === '{' || $tokens[$j] === ';') {
                         break;
