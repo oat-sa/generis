@@ -29,29 +29,33 @@ class core_kernel_api_ModelExporter
     /**
      * Export the entire ontology
      *
+     * @param string $format (optional) which format resulted ontology will be.
+     *
      * @return string
      */
-    public static function exportAll()
+    public static function exportAll($format = 'rdfxml')
     {
         $dbWrapper = core_kernel_classes_DbWrapper::singleton();
         $result = $dbWrapper->query('SELECT DISTINCT "subject", "predicate", "object", "l_language" FROM "statements"');
-        return self::statement2rdf($result);
+        return self::statement2rdf($result, $format);
     }
 
     /**
      * Export models by id
      *
      * @param array $modelIds
+     * @param string $format (optional) which format resulted models ontology will be.
+     *
      * @return string
      */
-    public static function exportModels($modelIds)
+    public static function exportModels($modelIds, $format = 'rdfxml')
     {
         $dbWrapper = core_kernel_classes_DbWrapper::singleton();
         $result = $dbWrapper->query('SELECT DISTINCT "subject", "predicate", "object", "l_language" FROM "statements" 
             WHERE "modelid" IN (\'' . implode('\',\'', $modelIds) . '\')');
 
         common_Logger::i('Found ' . $result->rowCount() . ' entries for models ' . implode(',', $modelIds));
-        return self::statement2rdf($result);
+        return self::statement2rdf($result, $format);
     }
 
     /**
@@ -68,20 +72,20 @@ class core_kernel_api_ModelExporter
      * @throws \EasyRdf\Exception
      * @ignore
      */
-    private static function statement2rdf(PDOStatement $statement)
+    private static function statement2rdf($statement, $format = 'rdfxml')
     {
         $graph = new Graph();
         while ($r = $statement->fetch()) {
             if (isset($r['l_language']) && !empty($r['l_language'])) {
                 $graph->addLiteral($r['subject'], $r['predicate'], $r['object'], $r['l_language']);
             } elseif (common_Utils::isUri($r['object'])) {
-                $graph->add($r['subject'], $r['predicate'], $r['object']);
+                $graph->addResource($r['subject'], $r['predicate'], $r['object']);
             } else {
                 $graph->addLiteral($r['subject'], $r['predicate'], $r['object']);
             }
         }
 
-        $format = Format::getFormat('rdfxml');
+        $format = Format::getFormat($format);
 
         return $graph->serialise($format);
     }
