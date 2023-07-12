@@ -24,15 +24,18 @@ use oat\generis\model\OntologyRdfs;
 use oat\oatbox\session\SessionService;
 use oat\oatbox\user\UserLanguageServiceInterface;
 use oat\generis\model\kernel\uri\UriProvider;
+use WikibaseSolutions\CypherDSL\Clauses\SetClause;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use function WikibaseSolutions\CypherDSL\node;
 use function WikibaseSolutions\CypherDSL\query;
+use function WikibaseSolutions\CypherDSL\parameter;
 use function WikibaseSolutions\CypherDSL\procedure;
 use function WikibaseSolutions\CypherDSL\relationshipTo;
+use function WikibaseSolutions\CypherDSL\variable;
 
 class core_kernel_persistence_starsql_Resource implements core_kernel_persistence_ResourceInterface
 {
-    const RELATIONSHIP_PROPERTIES = [
+    private const RELATIONSHIP_PROPERTIES = [
         OntologyRdf::RDF_TYPE,
         OntologyRdfs::RDFS_CLASS,
         OntologyRdfs::RDFS_RANGE,
@@ -40,6 +43,8 @@ class core_kernel_persistence_starsql_Resource implements core_kernel_persistenc
         OntologyRdfs::RDFS_SUBCLASSOF,
         OntologyRdfs::RDFS_SUBPROPERTYOF,
     ];
+
+    private const LANGUAGE_TAGGED_VALUE_PATTERN = "^(.*)@([a-zA-Z\\-]{5,6})$";
 
     /**
      * @var core_kernel_persistence_starsql_StarModel
@@ -74,14 +79,14 @@ class core_kernel_persistence_starsql_Resource implements core_kernel_persistenc
         $relatedResource = node();
         $query = query()
             ->match(
-                node()->withProperties(['uri' => $resource->getUri()])
+                node()->withProperties(['uri' => $uriParameter = parameter()])
+                    ->withLabels(['Resource'])
                     ->relationshipTo($relatedResource, OntologyRdf::RDF_TYPE)
             )
             ->returning($relatedResource->property('uri'))
             ->build();
 
-        common_Logger::i('getTypes(): ' . var_export($query, true));
-        $results = $this->getPersistence()->run($query);
+        $results = $this->getPersistence()->run($query, [$uriParameter->getParameter() => $resource->getUri()]);
         $returnValue = [];
         foreach ($results as $result) {
             $uri = $result->current();
@@ -97,7 +102,9 @@ class core_kernel_persistence_starsql_Resource implements core_kernel_persistenc
             throw new core_kernel_persistence_Exception('Option \'last\' no longer supported');
         }
 
-        $node = node()->withProperties(['uri' => $resource->getUri()]);
+        $node = node()
+            ->withProperties(['uri' => $uriParameter = parameter()])
+            ->withLabels(['Resource']);
         if (in_array($property->getUri(), self::RELATIONSHIP_PROPERTIES)) {
             $relationship = relationshipTo()->withTypes([$property->getUri()]);
             $remoteNode = node();
@@ -110,12 +117,26 @@ class core_kernel_persistence_starsql_Resource implements core_kernel_persistenc
                 ->returning($node->property($property->getUri()));
         }
 
-        common_Logger::i('getPropertyValues(): ' . var_export($query->build(), true));
-        $results = $this->getPersistence()->run($query->build());
+        $results = $this->getPersistence()->run($query->build(), [$uriParameter->getParameter() => $resource->getUri()]);
         $values = [];
+        $selectedLanguage = $options['lg'] ?? null;
+        $dataLanguage = $this->getDataLanguage();
+        $defaultLanguage = $this->getDefaultLanguage();
+
         foreach ($results as $result) {
-            // @FIXME filter results according to language
-            $values[] = (string) $result->current();
+            if ($result->current() === null) {
+                continue;
+            }
+            $value = $result->current();
+            if (is_array($value)) {
+                if (isset($selectedLanguage)) {
+                    $values = array_merge($values, $this->filterRecordsByLanguage($value, [$selectedLanguage]));
+                } else {
+                    $values = array_merge($values, $this->filterRecordsByAvailableLanguage($value, $dataLanguage, $defaultLanguage));
+                }
+            } else {
+                $values[] = $this->parseTranslatedValue($value);
+            }
         }
 
         return $values;
@@ -123,31 +144,48 @@ class core_kernel_persistence_starsql_Resource implements core_kernel_persistenc
 
     public function getPropertyValuesByLg(core_kernel_classes_Resource $resource, core_kernel_classes_Property $property, $lg): core_kernel_classes_ContainerCollection
     {
-        throw new common_Exception('Not implemented! ' . __FILE__ . ' line: ' . __LINE__);
+        $options =  ['lg' => $lg];
+
+        $returnValue = new core_kernel_classes_ContainerCollection($resource);
+        foreach ($this->getPropertyValues($resource, $property, $options) as $value) {
+            $returnValue->add(common_Utils::toResource($value));
+        }
+
+        return $returnValue;
     }
 
     public function setPropertyValue(core_kernel_classes_Resource $resource, core_kernel_classes_Property $property, $object, $lg = null): ?bool
     {
         $uri = $resource->getUri();
         $propertyUri = $property->getUri();
-        // @FIXME if language dependent, first pull current node properties to update
-        $object  = $object instanceof core_kernel_classes_Resource ? $object->getUri() : (string) $object;
+        if ($object instanceof core_kernel_classes_Resource) {
+            $object = $object->getUri();
+        } else {
+            $object = (string) $object;
+            if ($property->isLgDependent()) {
+                $lang = ((null != $lg)
+                    ? $lg
+                    : $this->getDataLanguage());
+                if (!empty($lang)) {
+                    $object .= '@' . $lang;
+                }
+            }
+        }
         if (in_array($propertyUri, self::RELATIONSHIP_PROPERTIES)) {
             $query = <<<CYPHER
                 MATCH
-                  (a), (b)
-                WHERE a.uri = "{$uri}" AND b.uri = "{$object}"
+                  (a:Resource), (b:Resource)
+                WHERE a.uri = \$uri AND b.uri = \$object
                 CREATE (a)-[r:`{$propertyUri}`]->(b)
                 RETURN type(r)
 CYPHER;
         } else {
             $query = <<<CYPHER
-            MATCH (n {uri: "{$uri}"})
-            SET n.`{$propertyUri}` = "{$object}"
+            MATCH (n:Resource {uri: \$uri})
+            SET n.`{$propertyUri}` = \$object
 CYPHER;
         }
-        common_Logger::i('setPropertyValue(): ' . var_export($query, true));
-        $this->getPersistence()->run($query);
+        $this->getPersistence()->run($query, ['uri' => $uri, 'object' => $object]);
 
         return true;
     }
@@ -158,14 +196,25 @@ CYPHER;
             return false;
         }
 
+        $parameters = [];
         $node = node();
-        $node->addProperty('uri', $resource->getUri());
+        $node->addLabel('Resource');
+        $node->addProperty('uri', $uriParameter = parameter());
+        $parameters[$uriParameter->getParameter()] = $resource->getUri();
 
         /** @var common_session_Session $session */
         $session = $this->getServiceLocator()->get(SessionService::SERVICE_ID)->getCurrentSession();
 
-        $node->addProperty('updatedBy', (string)$session->getUser()->getIdentifier());
-        $node->addProperty('http://www.tao.lu/Ontologies/TAO.rdf#UpdatedAt', procedure()::raw('timestamp'));
+        $setClause = new SetClause();
+        $setClause->add(
+            $node->property('http://www.tao.lu/Ontologies/TAO.rdf#UpdatedBy')
+                ->replaceWith($authorParameter = parameter())
+        );
+        $parameters[$authorParameter->getParameter()] = (string)$session->getUser()->getIdentifier();
+        $setClause->add(
+            $node->property('http://www.tao.lu/Ontologies/TAO.rdf#UpdatedAt')
+                ->replaceWith(procedure()::raw('timestamp'))
+        );
 
         $dataLanguage = $session->getDataLanguage();
 
@@ -186,40 +235,52 @@ CYPHER;
                     $collectedRelationships[$valUri] = array_merge($currentValues, [$propertyUri]);
                 } else {
                     if ($lang) {
-                        $val = $val . '@' . $lang;
+                        $val .= '@' . $lang;
                     }
-                    if (!empty($collectedProperties[$val->getUri()])) {
-                        $currentValue = $collectedProperties[$val->getUri()];
+                    if (!empty($collectedProperties[$propertyUri])) {
+                        $currentValue = $collectedProperties[$propertyUri];
                         if (is_array($currentValue)) {
-                            $collectedProperties[$val->getUri()] = array_merge($currentValue, [$val]);
+                            $collectedProperties[$propertyUri] = array_merge($currentValue, [$val]);
                         } else {
-                            $collectedProperties[$val->getUri()] = [$currentValue, $val];
+                            $collectedProperties[$propertyUri] = [$currentValue, $val];
                         }
                     } else {
-                        $collectedProperties[$val->getUri()] = $val;
+                        $collectedProperties[$propertyUri] = $val;
                     }
                 }
             }
         }
 
-        $node->addProperties($collectedProperties);
+        foreach ($collectedProperties as $propUri => $values) {
+            $setClause->add($node->property($propUri)->replaceWith($propertyParameter = parameter()));
+            $parameters[$propertyParameter->getParameter()] = $values;
+        }
+        $relatedResources = [];
         foreach ($collectedRelationships as $target => $relationshipTypes) {
             foreach ($relationshipTypes as $type) {
-                $node->relationshipTo(node()->withProperties(['uri' => $target]), $type);
+                $variableForRelatedResource = variable();
+                $nodeForRelationship = node()->withVariable($variableForRelatedResource);
+                $relatedResource = node('Resource')->withProperties(['uri' => $relatedUriParameter = parameter()])->withVariable($variableForRelatedResource);
+                $parameters[$relatedUriParameter->getParameter()] = $target;
+                $node = $node->relationshipTo($nodeForRelationship, $type);
+                $relatedResources[] = $relatedResource;
             }
         }
 
-        $query = query()->create($node)->build();
+        $query = query();
+        foreach ($relatedResources as $relResource) {
+            $query->match($relResource);
+        }
+        $query = $query->merge($node, $setClause, $setClause)->build();
 
-        common_Logger::i('setPropertiesValues(): ' . var_export($query, true));
-        $result = $this->getModel()->getPersistence()->run($query);
+        $result = $this->getModel()->getPersistence()->run($query, $parameters);
 
         return true;
     }
 
     public function setPropertyValueByLg(core_kernel_classes_Resource $resource, core_kernel_classes_Property $property, $value, $lg): ?bool
     {
-        throw new common_Exception('Not implemented! ' . __FILE__ . ' line: ' . __LINE__);
+        return $this->setPropertyValue($resource, $property, $value, $lg);
     }
 
     public function removePropertyValues(core_kernel_classes_Resource $resource, core_kernel_classes_Property $property, $options = []): ?bool
@@ -261,7 +322,7 @@ CYPHER;
         }
 
         $query = <<<CYPHER
-            MATCH (n {uri: "{$uri}"})
+            MATCH (n:Resource {uri: "{$uri}"})
             {$assembledConditions}
             REMOVE n.`{$propertyUri}`
             RETURN n
@@ -270,7 +331,6 @@ CYPHER;
         // @FIXME if value is array, then query should be for update. Try to deduce if $prop->isLgDependent or isMultiple
         // @FIXME if property is represented as node relationship, query should remove that instead
 
-        common_Logger::i('removePropertyValues(): ' . var_export($query, true));
         $this->getPersistence()->run($query);
 
         return true;
@@ -293,7 +353,29 @@ CYPHER;
 
     public function getUsedLanguages(core_kernel_classes_Resource $resource, core_kernel_classes_Property $property): array
     {
-        throw new common_Exception('Not implemented! ' . __FILE__ . ' line: ' . __LINE__);
+        $node = node()->withProperties(['uri' => $uriParameter = parameter()])
+            ->withLabels(['Resource']);
+        $query = query()
+            ->match($node)
+            ->returning($node->property($property->getUri()))
+            ->build();
+
+        $results = $this->getPersistence()->run($query, [$uriParameter->getParameter() => $resource->getUri()]);
+        $foundLanguages = [];
+        foreach ($results as $result) {
+            $values = $result->current();
+            if (!is_array($values)) {
+                $values = [$values];
+            }
+            foreach ($values as $value) {
+                preg_match(self::LANGUAGE_TAGGED_VALUE_PATTERN, $value, $matches);
+                if (isset($matches[2])) {
+                    $foundLanguages[] = $matches[2];
+                }
+            }
+        }
+
+        return (array) $foundLanguages;
     }
 
     public function duplicate(core_kernel_classes_Resource $resource, $excludedProperties = []): core_kernel_classes_Resource
@@ -305,13 +387,15 @@ CYPHER;
     {
         // @FIXME does $deleteReference still make sense? Since detach delete removes relationships as well?
 
-        $resourceNode = node()->withProperties(['uri' => $resource->getUri()]);
+        $resourceNode = node()
+            ->withProperties(['uri' => $uriParameter = parameter()])
+            ->withLabels(['Resource']);
         $query = query()
             ->match($resourceNode)
             ->detachDelete($resourceNode)
             ->build();
 
-        $result = $this->getPersistence()->run($query);
+        $result = $this->getPersistence()->run($query, [$uriParameter->getParameter() => $resource->getUri()]);
         // @FIXME handle failure, return false if no nodes/relationships affected
 
         return true;
@@ -323,15 +407,13 @@ CYPHER;
             return [];
         }
 
-        $uri = $resource->getUri();
         $query = <<<CYPHER
-            MATCH (resource)-[relationshipTo]->(relatedResource)
-            WHERE resource.uri = "{$uri}"
+            MATCH (resource:Resource)-[relationshipTo]->(relatedResource:Resource)
+            WHERE resource.uri = \$uri
             RETURN resource, collect({relationship: type(relationshipTo), relatedResourceUri: relatedResource.uri}) AS relationships
 CYPHER;
 
-        common_Logger::i('getPropertiesValues(): ' . var_export($query, true));
-        $results = $this->getPersistence()->run($query);
+        $results = $this->getPersistence()->run($query, ['uri' => $resource->getUri()]);
         $result = $results->first();
 
         $propertyUris = [];
@@ -340,12 +422,20 @@ CYPHER;
             $propertyUris[] = $uri;
             $returnValue[$uri] = [];
         }
+        $dataLanguage = $this->getDataLanguage();
+        $defaultLanguage = $this->getDefaultLanguage();
         foreach ($result->get('resource')->getProperties() as $key => $value) {
             if (in_array($key, $propertyUris)) {
-                $returnValue[$key][] = common_Utils::isUri($value)
-                    ? $this->getModel()->getResource($value)
-                    : new core_kernel_classes_Literal($value);
-                // @FIXME language dependent values according to the language
+                if (is_array($value)) {
+                    $returnValue[$key] = array_merge(
+                        $returnValue[$key] ?? [],
+                        $this->filterRecordsByLanguage($value, [$dataLanguage, $defaultLanguage])
+                    );
+                } else {
+                    $returnValue[$key][] = common_Utils::isUri($value)
+                        ? $this->getModel()->getResource($value)
+                        : new core_kernel_classes_Literal($this->parseTranslatedValue($value));
+                }
             }
         }
         foreach ($result->get('relationships') as $relationship) {
@@ -375,5 +465,79 @@ CYPHER;
     public function getServiceLocator()
     {
         return $this->getModel()->getServiceLocator();
+    }
+
+    private function getDataLanguage()
+    {
+        return $this->getServiceLocator()->get(SessionService::SERVICE_ID)->getCurrentSession()->getDataLanguage();
+    }
+
+    private function getDefaultLanguage()
+    {
+        return $this->getServiceLocator()->get(UserLanguageServiceInterface::SERVICE_ID)->getDefaultLanguage();
+    }
+
+    private function filterRecordsByLanguage($entries, $allowedLanguages): array
+    {
+        $filteredValues = [];
+        foreach ($entries as $entry) {
+            // collect all entries with matching language or without language
+            $matchSuccess = preg_match(self::LANGUAGE_TAGGED_VALUE_PATTERN, $entry, $matches);
+            if (!$matchSuccess) {
+                $filteredValues[] = $entry;
+            } elseif (isset($matches[2]) && $matches[2] === $allowedLanguages) {
+                $filteredValues[] = $matches[1];
+            }
+        }
+
+        return $filteredValues;
+    }
+
+    private function filterRecordsByAvailableLanguage($entries, $dataLanguage, $defaultLanguage): array
+    {
+        $fallbackLanguage = '';
+
+        $sortedResults = [
+            $dataLanguage => [],
+            $defaultLanguage => [],
+            $fallbackLanguage => []
+        ];
+
+        foreach ($entries as $entry) {
+            $matchSuccess = preg_match(self::LANGUAGE_TAGGED_VALUE_PATTERN, $entry, $matches);
+            $entryLang = $matches[2] ?? '';
+            $sortedResults[$entryLang][] = [
+                'value' => $matches[1] ?? $entry,
+                'language' => $entryLang
+            ];
+        }
+
+        $languageOrderedEntries = array_merge(
+            $sortedResults[$dataLanguage],
+            (count($sortedResults) > 2) ? $sortedResults[$defaultLanguage] : [],
+            $sortedResults[$fallbackLanguage]
+        );
+
+        $returnValue = [];
+        if (count($languageOrderedEntries) > 0) {
+            $previousLanguage = $languageOrderedEntries[0]['language'];
+
+            foreach ($languageOrderedEntries as $value) {
+                if ($value['language'] == $previousLanguage) {
+                    $returnValue[] = $value['value'];
+                } else {
+                    break;
+                }
+            }
+        }
+
+        return (array) $returnValue;
+    }
+
+    private function parseTranslatedValue($value): string
+    {
+        preg_match(self::LANGUAGE_TAGGED_VALUE_PATTERN, $value, $matches);
+
+        return $matches[1] ?? (string) $value;
     }
 }

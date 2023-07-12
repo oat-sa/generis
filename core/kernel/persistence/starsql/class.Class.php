@@ -20,12 +20,15 @@
 declare(strict_types=1);
 
 use oat\generis\model\data\event\ClassPropertyCreatedEvent;
+use oat\generis\model\GenerisRdf;
 use oat\generis\model\OntologyRdf;
 use oat\generis\model\OntologyRdfs;
 use oat\oatbox\event\EventManagerAwareTrait;
 use oat\generis\model\kernel\uri\UriProvider;
 use function WikibaseSolutions\CypherDSL\node;
+use function WikibaseSolutions\CypherDSL\parameter;
 use function WikibaseSolutions\CypherDSL\query;
+use function WikibaseSolutions\CypherDSL\variable;
 
 class core_kernel_persistence_starsql_Class extends core_kernel_persistence_starsql_Resource implements core_kernel_persistence_ClassInterface
 {
@@ -33,50 +36,69 @@ class core_kernel_persistence_starsql_Class extends core_kernel_persistence_star
 
     public function getSubClasses(core_kernel_classes_Class $resource, $recursive = false)
     {
-        throw new common_Exception('Not implemented! ' . __FILE__ . ' line: ' . __LINE__);
-    }
-
-    private function getRecursiveSubClasses(core_kernel_classes_Class $resource): array
-    {
-        $returnValue = [];
-        $todo = [$resource];
-        while (!empty($todo)) {
-            $classString = '';
-            foreach ($todo as $class) {
-                $classString .= ", " . $this->getPersistence()->quote($class->getUri()) ;
-            }
-            $sqlQuery = 'SELECT subject FROM statements WHERE predicate = ? and ' . $this->getPersistence()->getPlatForm()->getObjectTypeCondition()
-                . ' in (' . substr($classString, 1) . ')';
-            $sqlResult = $this->getPersistence()->query($sqlQuery, [OntologyRdfs::RDFS_SUBCLASSOF]);
-            $todo = [];
-            while ($row = $sqlResult->fetch()) {
-                $subClass = $this->getModel()->getClass($row['subject']);
-                if (!isset($returnValue[$subClass->getUri()])) {
-                    $todo[] = $subClass;
-                }
-                $returnValue[$subClass->getUri()] = $subClass;
-            }
+        $uri = $resource->getUri();
+        $relationship = OntologyRdfs::RDFS_SUBCLASSOF;
+        if (!empty($recursive)) {
+            $query = <<<CYPHER
+                MATCH (startNode:Resource {uri: \$uri})
+                MATCH path = (descendantNode)-[:`{$relationship}`*]->(startNode)
+                RETURN descendantNode.uri
+CYPHER;
+        } else {
+            $query = <<<CYPHER
+                MATCH (startNode:Resource {uri: \$uri})
+                MATCH path = (descendantNode)-[:`{$relationship}`]->(startNode)
+                RETURN descendantNode.uri
+CYPHER;
         }
-        return (array) $returnValue;
+
+//        \common_Logger::i('getSubClasses(): ' . var_export($query, true));
+        $results = $this->getPersistence()->run($query, ['uri' => $uri]);
+        $returnValue = [];
+        foreach ($results as $result) {
+            $uri = $result->current();
+            if (!$uri) {
+                continue;
+            }
+            $subClass = $this->getModel()->getClass($uri);
+            $returnValue[$subClass->getUri()] = $subClass ;
+        }
+
+        return $returnValue;
     }
 
     public function isSubClassOf(core_kernel_classes_Class $resource, core_kernel_classes_Class $parentClass)
     {
-        throw new common_Exception('Not implemented! ' . __FILE__ . ' line: ' . __LINE__);
+        // @TODO would it be worth it to check direct relationship of node:IS_SUBCLASS_OF?
+        $parentSubClasses = $parentClass->getSubClasses(true);
+        foreach ($parentSubClasses as $subClass) {
+            if ($subClass->getUri() === $resource->getUri()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public function getParentClasses(core_kernel_classes_Class $resource, $recursive = false)
     {
         $uri = $resource->getUri();
         $relationship = OntologyRdfs::RDFS_SUBCLASSOF;
-        $query = <<<CYPHER
-            MATCH (startNode {uri: "{$uri}"})
-            MATCH path = (startNode)-[:`{$relationship}`*]->(ancestorNode)
-            RETURN ancestorNode
+        if (!empty($recursive)) {
+            $query = <<<CYPHER
+                MATCH (startNode:Resource {uri: \$uri})
+                MATCH path = (startNode)-[:`{$relationship}`*]->(ancestorNode)
+                RETURN ancestorNode.uri
 CYPHER;
+        } else {
+            $query = <<<CYPHER
+                MATCH (startNode:Resource {uri: \$uri})
+                MATCH path = (startNode)-[:`{$relationship}`]->(ancestorNode)
+                RETURN ancestorNode.uri
+CYPHER;
+        }
 
-        \common_Logger::i('getParentClasses(): ' . var_export($query, true));
-        $results = $this->getPersistence()->run($query);
+        $results = $this->getPersistence()->run($query, ['uri' => $uri]);
         $returnValue = [];
         foreach ($results as $result) {
             $uri = $result->current();
@@ -133,27 +155,28 @@ CYPHER;
             $subject = $uri;
         }
 
-        $query = query()
-            ->create(
-                node()->withProperties(['uri' => $subject])
-            )->build();
-        $results = $this->getPersistence()->run($query);
-
-        $returnValue = $this->getModel()->getResource($subject);
-        if (!$returnValue->hasType($resource)) {
-            $returnValue->setType($resource);
-        } else {
-            common_Logger::e('already had type ' . $resource);
-        }
-
+        $node = node()->addProperty('uri', $uriParameter = parameter())
+            ->addLabel('Resource');
         if (!empty($label)) {
-            $returnValue->setLabel($label);
+            $node->addProperty(OntologyRdfs::RDFS_LABEL, $label);
         }
         if (!empty($comment)) {
-            $returnValue->setComment($comment);
+            $node->addProperty(OntologyRdfs::RDFS_COMMENT, $comment);
         }
 
-        return $returnValue;
+        $nodeForRelationship = node()->withVariable($variableForRelatedResource = variable());
+        $relatedResource = node('Resource')->withProperties(['uri' => $relatedUri = parameter()])->withVariable($variableForRelatedResource);
+        $node = $node->relationshipTo($nodeForRelationship, OntologyRdf::RDF_TYPE);
+
+        $query = query()
+            ->match($relatedResource)
+            ->create($node);
+        $results = $this->getPersistence()->run(
+            $query->build(),
+            [$uriParameter->getParameter() => $subject, $relatedUri->getParameter() => $resource->getUri()]
+        );
+
+        return $this->getModel()->getResource($subject);
     }
 
     /**
@@ -185,15 +208,20 @@ CYPHER;
     {
         $returnValue = null;
 
-
-        $property = $this->getModel()->getClass(OntologyRdf::RDF_PROPERTY);
-        $propertyInstance = $property->createInstance($label, $comment);
-        $returnValue = $this->getModel()->getProperty($propertyInstance->getUri());
-        $returnValue->setLgDependent($isLgDependent);
-
-        if (!$returnValue->setDomain($resource)) {
-            throw new common_Exception('problem creating property');
+        $propertyClass = $this->getModel()->getClass(OntologyRdf::RDF_PROPERTY);
+        $properties = [
+            OntologyRdfs::RDFS_DOMAIN => $resource->getUri(),
+            GenerisRdf::PROPERTY_IS_LG_DEPENDENT => ((bool)$isLgDependent) ?  GenerisRdf::GENERIS_TRUE : GenerisRdf::GENERIS_FALSE
+        ];
+        if (!empty($label)) {
+            $properties[OntologyRdfs::RDFS_LABEL] = $label;
         }
+        if (!empty($comment)) {
+            $properties[OntologyRdfs::RDFS_COMMENT] = $comment;
+        }
+        $propertyInstance = $propertyClass->createInstanceWithProperties($properties);
+
+        $returnValue = $this->getModel()->getProperty($propertyInstance->getUri());
 
         $this->getEventManager()->trigger(
             new ClassPropertyCreatedEvent(
