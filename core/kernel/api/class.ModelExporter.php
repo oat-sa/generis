@@ -26,6 +26,8 @@ use oat\generis\model\data\ModelManager;
 
 class core_kernel_api_ModelExporter
 {
+    private const DEFAULT_FORMAT = 'rdfxml';
+
     /**
      * Export the entire ontology
      *
@@ -33,7 +35,7 @@ class core_kernel_api_ModelExporter
      *
      * @return string
      */
-    public static function exportAll($format = 'rdfxml')
+    public static function exportAll($format = self::DEFAULT_FORMAT)
     {
         $dbWrapper = core_kernel_classes_DbWrapper::singleton();
         $result = $dbWrapper->query('SELECT DISTINCT "subject", "predicate", "object", "l_language" FROM "statements"');
@@ -48,7 +50,7 @@ class core_kernel_api_ModelExporter
      *
      * @return string
      */
-    public static function exportModels($modelIds, $format = 'rdfxml')
+    public static function exportModels($modelIds, $format = self::DEFAULT_FORMAT)
     {
         $dbWrapper = core_kernel_classes_DbWrapper::singleton();
         $result = $dbWrapper->query('SELECT DISTINCT "subject", "predicate", "object", "l_language" FROM "statements" 
@@ -72,7 +74,7 @@ class core_kernel_api_ModelExporter
      * @throws \EasyRdf\Exception
      * @ignore
      */
-    private static function statement2rdf($statement, $format = 'rdfxml')
+    private static function statement2rdf($statement, $format = self::DEFAULT_FORMAT)
     {
         $graph = new Graph();
         while ($r = $statement->fetch()) {
