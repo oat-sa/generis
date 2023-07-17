@@ -44,7 +44,7 @@ class core_kernel_persistence_starsql_Resource implements core_kernel_persistenc
         OntologyRdfs::RDFS_SUBPROPERTYOF,
     ];
 
-    private const LANGUAGE_TAGGED_VALUE_PATTERN = "^(.*)@([a-zA-Z\\-]{5,6})$";
+    private const LANGUAGE_TAGGED_VALUE_PATTERN = "/^(.*)@([a-zA-Z\\-]{5,6})$/";
 
     /**
      * @var core_kernel_persistence_starsql_StarModel
@@ -105,7 +105,7 @@ class core_kernel_persistence_starsql_Resource implements core_kernel_persistenc
         $node = node()
             ->withProperties(['uri' => $uriParameter = parameter()])
             ->withLabels(['Resource']);
-        if (in_array($property->getUri(), self::RELATIONSHIP_PROPERTIES)) {
+        if ($this->propertyIsRelationship($property)) {
             $relationship = relationshipTo()->withTypes([$property->getUri()]);
             $remoteNode = node();
             $query = query()
@@ -124,11 +124,11 @@ class core_kernel_persistence_starsql_Resource implements core_kernel_persistenc
         $defaultLanguage = $this->getDefaultLanguage();
 
         foreach ($results as $result) {
-            if ($result->current() === null) {
+            $value = $result->current();
+            if ($value === null) {
                 continue;
             }
-            $value = $result->current();
-            if (is_array($value)) {
+            if (is_iterable($value)) {
                 if (isset($selectedLanguage)) {
                     $values = array_merge($values, $this->filterRecordsByLanguage($value, [$selectedLanguage]));
                 } else {
@@ -171,7 +171,7 @@ class core_kernel_persistence_starsql_Resource implements core_kernel_persistenc
                 }
             }
         }
-        if (in_array($propertyUri, self::RELATIONSHIP_PROPERTIES)) {
+        if ($this->propertyIsRelationship($property)) {
             $query = <<<CYPHER
                 MATCH
                   (a:Resource), (b:Resource)
@@ -229,7 +229,7 @@ CYPHER;
             }
             foreach ($value as $val) {
                 // @TODO check if the property exists already
-                if ($val instanceof core_kernel_classes_Resource || in_array($propertyUri, self::RELATIONSHIP_PROPERTIES)) {
+                if ($val instanceof core_kernel_classes_Resource || $this->propertyIsRelationship($property)) {
                     $valUri = $val instanceof core_kernel_classes_Resource ? $val->getUri() : $val;
                     $currentValues = $collectedRelationships[$valUri] ?? [];
                     $collectedRelationships[$valUri] = array_merge($currentValues, [$propertyUri]);
@@ -364,7 +364,7 @@ CYPHER;
         $foundLanguages = [];
         foreach ($results as $result) {
             $values = $result->current();
-            if (!is_array($values)) {
+            if (!is_iterable($values)) {
                 $values = [$values];
             }
             foreach ($values as $value) {
@@ -426,7 +426,7 @@ CYPHER;
         $defaultLanguage = $this->getDefaultLanguage();
         foreach ($result->get('resource')->getProperties() as $key => $value) {
             if (in_array($key, $propertyUris)) {
-                if (is_array($value)) {
+                if (is_iterable($value)) {
                     $returnValue[$key] = array_merge(
                         $returnValue[$key] ?? [],
                         $this->filterRecordsByLanguage($value, [$dataLanguage, $defaultLanguage])
@@ -539,5 +539,16 @@ CYPHER;
         preg_match(self::LANGUAGE_TAGGED_VALUE_PATTERN, $value, $matches);
 
         return $matches[1] ?? (string) $value;
+    }
+
+    private function propertyIsRelationship(core_kernel_classes_Property $property)
+    {
+        if (in_array($property->getUri(), self::RELATIONSHIP_PROPERTIES)) {
+            return true;
+        }
+
+        $range = $property->getRange();
+
+        return $range->getUri() !== OntologyRdfs::RDFS_LITERAL;
     }
 }

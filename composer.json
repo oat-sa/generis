@@ -62,8 +62,8 @@
     "league/flysystem": "~1.0",
     "league/flysystem-memory": "~1.0",
     "oat-sa/oatbox-extension-installer": "~1.1||dev-master",
-    "oat-sa/lib-generis-search": "^2.1.2",
-    "monolog/monolog": "^1.23.0",
+      "oat-sa/lib-generis-search": "^2.1.2",
+      "monolog/monolog": "^1.23.0",
     "fluent/logger": "^1.0.1",
     "symfony/lock": "^3.4",
     "symfony/cache": "~4.1",
@@ -77,7 +77,8 @@
     "relay/relay": "~2.0",
     "composer-runtime-api": "^2.0",
     "ext-pdo": "*",
-    "laudis/neo4j-php-client": "~2.0"
+    "laudis/neo4j-php-client": "~2.0",
+    "wikibase-solutions/php-cypher-dsl": "^5.0"
   },
   "require-dev": {
     "mikey179/vfsstream": "~1",

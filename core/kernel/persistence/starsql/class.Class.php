@@ -111,7 +111,34 @@ CYPHER;
 
     public function getProperties(core_kernel_classes_Class $resource, $recursive = false)
     {
-        throw new common_Exception('Not implemented! ' . __FILE__ . ' line: ' . __LINE__);
+        $uri = $resource->getUri();
+        $relationship = OntologyRdfs::RDFS_DOMAIN;
+        $query = <<<CYPHER
+                MATCH (startNode:Resource {uri: \$uri})
+                MATCH path = (descendantNode)-[:`{$relationship}`]->(startNode)
+                RETURN descendantNode.uri
+CYPHER;
+        $results = $this->getPersistence()->run($query, ['uri' => $uri]);
+        $returnValue = [];
+        foreach ($results as $result) {
+            $uri = $result->current();
+            if (!$uri) {
+                continue;
+            }
+            $property = $this->getModel()->getProperty($uri);
+            $returnValue[$property->getUri()] = $property;
+        }
+
+        if ($recursive == true) {
+            $parentClasses = $this->getParentClasses($resource, true);
+            foreach ($parentClasses as $parent) {
+                if ($parent->getUri() != OntologyRdfs::RDFS_CLASS) {
+                    $returnValue = array_merge($returnValue, $parent->getProperties(false));
+                }
+            }
+        }
+
+        return $returnValue;
     }
 
     public function getInstances(core_kernel_classes_Class $resource, $recursive = false, $params = [])
