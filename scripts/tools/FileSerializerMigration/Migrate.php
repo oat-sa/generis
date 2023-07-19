@@ -38,7 +38,7 @@ use oat\oatbox\service\exception\InvalidServiceManagerException;
  */
 class Migrate extends ScriptAction
 {
-    const MIGRATION_REPORT_LINES = [
+    public const MIGRATION_REPORT_LINES = [
         'migration_success' => [
             'dry' => '%s old references will be migrated into %s new file serializer references.',
             'wet' => 'Successfully migrated %s old references to %s new file serializer references.'
@@ -92,7 +92,9 @@ class Migrate extends ScriptAction
         $this->report->add(Report::createSuccess('Completed file migration process.'));
 
         if (!$this->isWetRun()) {
-            $this->report->add(Report::createFailure('Use the --wet-run (-w) parameter to execute reference migration.'));
+            $this->report->add(
+                Report::createFailure('Use the --wet-run (-w) parameter to execute reference migration.')
+            );
         }
 
         return $this->report;
@@ -130,7 +132,8 @@ class Migrate extends ScriptAction
                 'flag' => true,
                 'prefix' => 'w',
                 'longPrefix' => 'wet-run',
-                'description' => 'Add this flag to migrate the references, as opposed to just listing them (dry/wet run)'
+                'description' => 'Add this flag to migrate the references, as opposed to just listing them '
+                    . '(dry/wet run)'
             ]
         ];
     }

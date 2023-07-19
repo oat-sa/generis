@@ -32,7 +32,7 @@ interface CreateOrReuseInterface
      * @return \core_kernel_classes_Resource
      */
     public function getResource(array $values);
-    
+
     /**
      * return if resource exists
      * @param array $values

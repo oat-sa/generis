@@ -30,7 +30,6 @@ namespace oat\oatbox\cache;
  */
 trait MultipleCacheTrait
 {
-
     public function deleteMultiple($keys)
     {
         $success = true;
@@ -57,5 +56,4 @@ trait MultipleCacheTrait
         }
         return $success;
     }
-
 }

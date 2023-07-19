@@ -37,7 +37,7 @@ class BacktraceProcessor
     /**
      * Trace offset name under the log extra offset.
      */
-    const TRACE_OFFSET = 'trace';
+    public const TRACE_OFFSET = 'trace';
 
     /**
      * @var array

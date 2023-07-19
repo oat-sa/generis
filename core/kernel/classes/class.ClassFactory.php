@@ -15,9 +15,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
- *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
- *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
+ * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg
+ *                         (under the project TAO & TAO2);
+ *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung
+ *                         (under the project TAO-TRANSFER);
+ *               2009-2012 (update and modification) Public Research Centre Henri Tudor
+ *                         (under the project TAO-SUSTAIN & TAO-DEV);
  *               2017 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
 
@@ -58,15 +61,15 @@ class core_kernel_classes_ClassFactory
         $newUri = (!empty($uri)) ? self::checkProvidedUri($uri) : common_Utils::getNewUri();
         $newResource = new core_kernel_classes_Class($newUri);
         $propertiesValues = [OntologyRdf::RDF_TYPE => $clazz->getUri()];
-     
+
         if (!empty($label)) {
             $propertiesValues[OntologyRdfs::RDFS_LABEL] = $label;
         }
-     
+
         if (!empty($comment)) {
             $propertiesValues[OntologyRdfs::RDFS_COMMENT] = $comment;
         }
-       
+
         $check = $newResource->setPropertiesValues($propertiesValues);
         if ($check) {
             $returnValue = $newResource;
@@ -75,7 +78,7 @@ class core_kernel_classes_ClassFactory
             throw new common_Exception($msg);
             common_Logger::e($msg);
         }
-        
+
 
         return $returnValue;
     }
@@ -92,8 +95,13 @@ class core_kernel_classes_ClassFactory
      * @param  string uri
      * @return core_kernel_classes_Property
      */
-    public static function createProperty(core_kernel_classes_Class $clazz, $label = '', $comment = '', $isLgDependent = false, $uri = '')
-    {
+    public static function createProperty(
+        core_kernel_classes_Class $clazz,
+        $label = '',
+        $comment = '',
+        $isLgDependent = false,
+        $uri = ''
+    ) {
         $returnValue = null;
         $property = new core_kernel_classes_Class(OntologyRdf::RDF_PROPERTY);
         $propertyInstance = self::createInstance($property, $label, $comment, $uri);
@@ -104,7 +112,7 @@ class core_kernel_classes_ClassFactory
             $returnValue->setLgDependent($isLgDependent);
         }
 
-        
+
 
         return $returnValue;
     }
@@ -150,7 +158,7 @@ class core_kernel_classes_ClassFactory
         } else {
             $returnValue = common_Utils::getNewUri();
         }
-        
+
 
         return (string) $returnValue;
     }

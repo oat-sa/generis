@@ -31,28 +31,27 @@ namespace oat\generis\model\data;
  */
 interface RdfsInterface
 {
-
     /**
      * Returns the implementation of the class interface
      *
      * @return \core_kernel_persistence_ClassInterface
      */
     public function getClassImplementation();
-    
+
     /**
      * Returns the implementation of the resource interface
      *
      * @return \core_kernel_persistence_ResourceInterface
      */
     public function getResourceImplementation();
-    
+
     /**
      * Returns the implementation of the property interface
      *
      * @return \core_kernel_persistence_PropertyInterface
      */
     public function getPropertyImplementation();
-    
+
     // planned interface
     // public function getSearchImplementation();
 }

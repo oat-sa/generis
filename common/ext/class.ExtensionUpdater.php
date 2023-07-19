@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -14,12 +15,14 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
- *             2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
+ * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung
+ *                         (under the project TAO-TRANSFER);
+ *               2009-2012 (update and modification) Public Research Centre Henri Tudor
+ *                         (under the project TAO-SUSTAIN & TAO-DEV);
  *
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use oat\oatbox\service\ServiceManagerAwareTrait;
 use oat\oatbox\service\ServiceManagerAwareInterface;
@@ -36,7 +39,6 @@ use common_report_Report as Report;
  */
 abstract class common_ext_ExtensionUpdater extends common_ext_ExtensionHandler implements ServiceManagerAwareInterface
 {
-
     use ServiceManagerAwareTrait;
 
     /** @var Report[] */
@@ -68,7 +70,7 @@ abstract class common_ext_ExtensionUpdater extends common_ext_ExtensionHandler i
     {
         common_ext_ExtensionsManager::singleton()->updateVersion($this->getExtension(), $version);
     }
-    
+
     /**
      * Test if $version is the current version
      *
@@ -80,7 +82,7 @@ abstract class common_ext_ExtensionUpdater extends common_ext_ExtensionHandler i
         $extensionsManager = $this->getServiceManager()->get(common_ext_ExtensionsManager::SERVICE_ID);
         return $version == $extensionsManager->getInstalledVersion($this->getExtension()->getId());
     }
-    
+
     /**
      * Please use "skip" instead of inBetween.
      *
@@ -93,7 +95,7 @@ abstract class common_ext_ExtensionUpdater extends common_ext_ExtensionHandler i
         $current = common_ext_ExtensionsManager::singleton()->getInstalledVersion($this->getExtension()->getId());
         return version_compare($minVersion, $current, '<=') && version_compare($current, $maxVersion, '<=');
     }
-    
+
     /**
      * Skip from version FROM to version TO without additional required actions
      *
@@ -138,7 +140,7 @@ abstract class common_ext_ExtensionUpdater extends common_ext_ExtensionHandler i
          * @param string $class_name
          */
         $missingClasses = [];
-        
+
         $fallbackAutoload = function ($class_name) use (&$missingClasses) {
             $missingClasses[] = $class_name;
             $split = strrpos($class_name, '\\');
@@ -147,14 +149,17 @@ abstract class common_ext_ExtensionUpdater extends common_ext_ExtensionHandler i
             } else {
                 $namespace = substr($class_name, 0, $split);
                 $class = substr($class_name, $split + 1);
-                eval('namespace ' . $namespace . '; ' . 'class ' . $class . ' extends \\oat\\oatbox\\service\\ConfigurableService {}');
+                eval(
+                    'namespace ' . $namespace . '; ' . 'class ' . $class
+                        . ' extends \\oat\\oatbox\\service\\ConfigurableService {}'
+                );
             }
         };
         $serviceManager = $this->getServiceManager();
         spl_autoload_register($fallbackAutoload);
         $service = $serviceManager->get($configId);
         spl_autoload_unregister($fallbackAutoload);
-        
+
         return $service;
     }
 }

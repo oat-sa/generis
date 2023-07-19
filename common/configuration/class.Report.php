@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -14,9 +15,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
- *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
- *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
+ * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg
+ *                         (under the project TAO & TAO2);
+ *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung
+ *                         (under the project TAO-TRANSFER);
+ *               2009-2012 (update and modification) Public Research Centre Henri Tudor
+ *                         (under the project TAO-SUSTAIN & TAO-DEV);
  *
  */
 
@@ -49,7 +53,7 @@ class common_configuration_Report
      * @access public
      * @var int
      */
-    const VALID = 0;
+    public const VALID = 0;
 
     /**
      * Short description of attribute INVALID
@@ -57,7 +61,7 @@ class common_configuration_Report
      * @access public
      * @var int
      */
-    const INVALID = 1;
+    public const INVALID = 1;
 
     /**
      * Short description of attribute UNKNOWN
@@ -65,7 +69,7 @@ class common_configuration_Report
      * @access public
      * @var int
      */
-    const UNKNOWN = 2;
+    public const UNKNOWN = 2;
 
     /**
      * Short description of attribute message
@@ -97,10 +101,10 @@ class common_configuration_Report
      */
     public function __construct($status, $message, common_configuration_Component $component = null)
     {
-        
+
         $this->setStatus($status);
         $this->setMessage($message);
-        
+
         if (!empty($component)) {
             $this->setComponent($component);
         }
@@ -143,21 +147,21 @@ class common_configuration_Report
     {
         $returnValue = (string) '';
 
-        
+
         switch ($this->getStatus()) {
             case self::INVALID:
                 $returnValue = 'invalid';
                 break;
-            
+
             case self::UNKNOWN:
                 $returnValue = 'unknown';
                 break;
-            
+
             case self::VALID:
                 $returnValue = 'valid';
                 break;
         }
-        
+
 
         return (string) $returnValue;
     }
@@ -184,7 +188,7 @@ class common_configuration_Report
      */
     public function setMessage($message)
     {
-        
+
         $this->message = $message;
     }
 

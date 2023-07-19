@@ -26,7 +26,6 @@ use oat\generis\test\TestCase;
 
 class OptionContainerTest extends TestCase
 {
-
     /**
      * @dataProvider instantiateProvider
      */

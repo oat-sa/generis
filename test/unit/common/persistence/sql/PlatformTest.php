@@ -28,7 +28,6 @@ use oat\generis\test\MockObject;
 
 class PlatformTest extends TestCase
 {
-
     public function testGetQueryBuilder()
     {
         $platform = $this->createInstance();

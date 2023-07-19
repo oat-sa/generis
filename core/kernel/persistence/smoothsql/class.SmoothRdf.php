@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,6 +18,8 @@ declare(strict_types=1);
  * Copyright (c) 2017-2020 (original work) Open Assessment Technologies SA
  *
  */
+
+declare(strict_types=1);
 
 use Doctrine\DBAL\ParameterType;
 use oat\generis\model\data\Ontology;
@@ -56,17 +56,17 @@ class core_kernel_persistence_smoothsql_SmoothRdf implements RdfInterface
      * @var core_kernel_persistence_smoothsql_SmoothModel
      */
     private $model;
-    
+
     public function __construct(core_kernel_persistence_smoothsql_SmoothModel $model)
     {
         $this->model = $model;
     }
-    
+
     protected function getPersistence()
     {
         return $this->model->getPersistence();
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see \oat\generis\model\data\RdfInterface::get()
@@ -136,7 +136,7 @@ class core_kernel_persistence_smoothsql_SmoothRdf implements RdfInterface
 
         return $this->getPersistence()->insertMultiple('statements', $valuesToInsert, $types);
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see \oat\generis\model\data\RdfInterface::remove()
@@ -144,9 +144,17 @@ class core_kernel_persistence_smoothsql_SmoothRdf implements RdfInterface
     public function remove(core_kernel_classes_Triple $triple)
     {
         $query = "DELETE FROM statements WHERE subject = ? AND predicate = ? AND object = ? AND l_language = ?;";
-        return $this->getPersistence()->exec($query, [$triple->subject, $triple->predicate, $triple->object, is_null($triple->lg) ? '' : $triple->lg]);
+        return $this->getPersistence()->exec(
+            $query,
+            [
+                $triple->subject,
+                $triple->predicate,
+                $triple->object,
+                is_null($triple->lg) ? '' : $triple->lg
+            ]
+        );
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see \oat\generis\model\data\RdfInterface::search()
@@ -155,7 +163,7 @@ class core_kernel_persistence_smoothsql_SmoothRdf implements RdfInterface
     {
         throw new \common_Exception('Not implemented');
     }
-    
+
     public function getIterator()
     {
         return new core_kernel_persistence_smoothsql_SmoothIterator($this->getPersistence());
@@ -173,7 +181,7 @@ class core_kernel_persistence_smoothsql_SmoothRdf implements RdfInterface
      * @param core_kernel_classes_Triple $triple
      * @return array
      */
-    protected function tripleToValue(core_kernel_classes_Triple $triple) : array
+    protected function tripleToValue(core_kernel_classes_Triple $triple): array
     {
         return [
             'modelid' => $triple->modelid,
@@ -186,7 +194,7 @@ class core_kernel_persistence_smoothsql_SmoothRdf implements RdfInterface
         ];
     }
 
-    protected function getTripleParameterTypes() : array
+    protected function getTripleParameterTypes(): array
     {
         return self::TRIPLE_PARAMETER_TYPE;
     }

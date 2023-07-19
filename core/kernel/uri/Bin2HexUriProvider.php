@@ -15,9 +15,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
- *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
- *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
+ * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg
+ *                         (under the project TAO & TAO2);
+ *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung
+ *                         (under the project TAO-TRANSFER);
+ *               2009-2012 (update and modification) Public Research Centre Henri Tudor
+ *                         (under the project TAO-SUSTAIN & TAO-DEV);
  *               2013      (update and modification) Open Assessment Technologies SA;
  */
 
@@ -34,7 +37,7 @@ use oat\oatbox\service\ConfigurableService;
  */
 class Bin2HexUriProvider extends ConfigurableService implements UriProvider
 {
-    const OPTION_NAMESPACE = 'namespace';
+    public const OPTION_NAMESPACE = 'namespace';
 
     /**
      * Generates a URI based on a serial stored in the database.
@@ -46,6 +49,7 @@ class Bin2HexUriProvider extends ConfigurableService implements UriProvider
      */
     public function provide()
     {
-        return $this->getOption(self::OPTION_NAMESPACE) . uniqid('i') . getmypid() . bin2hex(openssl_random_pseudo_bytes(8));
+        return $this->getOption(self::OPTION_NAMESPACE) . uniqid('i') . getmypid()
+            . bin2hex(openssl_random_pseudo_bytes(8));
     }
 }

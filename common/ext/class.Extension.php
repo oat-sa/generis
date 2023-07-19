@@ -15,8 +15,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
- *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
+ * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung
+ *                         (under the project TAO-TRANSFER);
+ *               2009-2012 (update and modification) Public Research Centre Henri Tudor
+ *                         (under the project TAO-SUSTAIN & TAO-DEV);
  *               2013-2014 (update and modification) Open Assessment Technologies SA;
  *
  */
@@ -49,7 +51,7 @@ class common_ext_Extension implements ServiceManagerAwareInterface
      *
      * @var string
      */
-    const MANIFEST_NAME = 'manifest.php';
+    public const MANIFEST_NAME = 'manifest.php';
 
     /**
      * List of extension dependencies
@@ -382,7 +384,10 @@ class common_ext_Extension implements ServiceManagerAwareInterface
             if (is_file($manifestFile) && is_readable($manifestFile)) {
                 $this->manifest = new Manifest($manifestFile);
             } else {
-                throw new ManifestNotFoundException("Extension Manifest not found for extension '" . $this->id . "'.", $this->id);
+                throw new ManifestNotFoundException(
+                    "Extension Manifest not found for extension '" . $this->id . "'.",
+                    $this->id
+                );
             }
         }
         $this->manifest->setServiceLocator($this->getServiceLocator());
@@ -416,7 +421,10 @@ class common_ext_Extension implements ServiceManagerAwareInterface
                     $this->getExtensionManager()->getExtensionById($extId);
                 }
             } catch (ManifestNotFoundException $e) {
-                throw new common_ext_MissingExtensionException($e->getExtensionId() . ' not found but required for ' . $this->getId(), $e->getExtensionId());
+                throw new common_ext_MissingExtensionException(
+                    $e->getExtensionId() . ' not found but required for ' . $this->getId(),
+                    $e->getExtensionId()
+                );
             }
 
             $loader = new common_ext_ExtensionLoader($this);

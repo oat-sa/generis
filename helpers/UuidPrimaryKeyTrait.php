@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,7 +20,7 @@
  * @author "Julien Sébire, <julien@taotesting.com>"
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace oat\generis\Helper;
 

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -96,7 +97,13 @@ class common_report_Report implements ReportInterface
     public static function __callStatic(string $name, array $arguments): self
     {
         if (strpos($name, 'create') !== 0) {
-            throw new BadMethodCallException(sprintf('Requested method `%s` is not found or is not allowed in class %s', $name, __CLASS__));
+            throw new BadMethodCallException(
+                sprintf(
+                    'Requested method `%s` is not found or is not allowed in class %s',
+                    $name,
+                    __CLASS__
+                )
+            );
         }
 
         $type = strtolower(str_replace('create', '', $name));
@@ -128,7 +135,13 @@ class common_report_Report implements ReportInterface
             return $this->handleContainsCalls($name, $arguments);
         }
 
-        throw new BadMethodCallException(sprintf('Requested method `%s` is not found or is not allowed in class %s', $name, __CLASS__));
+        throw new BadMethodCallException(
+            sprintf(
+                'Requested method `%s` is not found or is not allowed in class %s',
+                $name,
+                __CLASS__
+            )
+        );
     }
 
     /**
@@ -253,7 +266,9 @@ class common_report_Report implements ReportInterface
             } elseif ($element instanceof UserReadableException) {
                 $this->children[] = new static(self::TYPE_ERROR, $element->getUserMessage());
             } else {
-                throw new common_exception_Error('Tried to add ' . (is_object($element) ? get_class($element) : gettype($element)) . ' to the report');
+                throw new common_exception_Error(
+                    'Tried to add ' . (is_object($element) ? get_class($element) : gettype($element)) . ' to the report'
+                );
             }
         }
 

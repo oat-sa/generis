@@ -31,7 +31,6 @@ use core_kernel_classes_ResourceIterator as ResourceIterator;
  */
 class ResourceIteratorTest extends TaoPhpUnitTestRunner
 {
-
     protected static $sampleClass = 'http://www.tao.lu/Ontologies/TAO.rdf#ResourceIteratorTest';
 
     public function tearDown(): void

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -14,9 +15,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
- *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
- *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
+ * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg
+ *                         (under the project TAO & TAO2);
+ *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung
+ *                         (under the project TAO-TRANSFER);
+ *               2009-2012 (update and modification) Public Research Centre Henri Tudor
+ *                         (under the project TAO-SUSTAIN & TAO-DEV);
  *
  */
 
@@ -72,7 +76,7 @@ class common_Collection extends common_Object implements IteratorAggregate, Coun
      */
     public function __construct(common_Object $container, $debug = '')
     {
-        
+
         $this->sequence = [];
         $this->container = $container;
     }
@@ -88,9 +92,9 @@ class common_Collection extends common_Object implements IteratorAggregate, Coun
     {
         $returnValue = (int) 0;
 
-        
+
         $returnValue = count($this->sequence);
-        
+
 
         return (int) $returnValue;
     }
@@ -107,14 +111,14 @@ class common_Collection extends common_Object implements IteratorAggregate, Coun
     {
         $returnValue = (int) 0;
 
-        
+
         $returnValue = -1;
         foreach ($this->sequence as $index => $_object) {
             if ($object === $_object) {
                 return $index;
             }
         }
-        
+
 
         return (int) $returnValue;
     }
@@ -131,13 +135,13 @@ class common_Collection extends common_Object implements IteratorAggregate, Coun
     {
         $returnValue = null;
 
-        
-            
+
+
         $returnValue = isset($this->sequence[$index]) ? $this->sequence[$index] : null;
         if ($returnValue == null) {
             throw new common_Exception('index is out of range');
         }
-        
+
 
         return $returnValue;
     }
@@ -153,9 +157,9 @@ class common_Collection extends common_Object implements IteratorAggregate, Coun
     {
         $returnValue = (bool) false;
 
-        
+
         $returnValue = (count($this->sequence) == 0);
-        
+
 
         return (bool) $returnValue;
     }
@@ -171,7 +175,7 @@ class common_Collection extends common_Object implements IteratorAggregate, Coun
      */
     public function offsetSet(common_Object $key, common_Object $value)
     {
-        
+
         $this->sequence[$key] = $value;
     }
 
@@ -187,9 +191,9 @@ class common_Collection extends common_Object implements IteratorAggregate, Coun
     {
         $returnValue = null;
 
-        
+
         $returnValue = $this->sequence[$key];
-        
+
 
         return $returnValue;
     }
@@ -204,7 +208,7 @@ class common_Collection extends common_Object implements IteratorAggregate, Coun
      */
     public function offsetUnset(common_Object $key)
     {
-        
+
         unset($this->sequence[$key]);
     }
 
@@ -220,9 +224,9 @@ class common_Collection extends common_Object implements IteratorAggregate, Coun
     {
         $returnValue = (bool) false;
 
-        
+
         $returnValue = isset($this->sequence[$key]);
-        
+
 
         return (bool) $returnValue;
     }
@@ -236,8 +240,8 @@ class common_Collection extends common_Object implements IteratorAggregate, Coun
      */
     public function getIterator()
     {
-        
-         return new ArrayIterator($this->sequence);
+
+        return new ArrayIterator($this->sequence);
     }
 
     /**
@@ -250,7 +254,7 @@ class common_Collection extends common_Object implements IteratorAggregate, Coun
      */
     public function add(common_Object $node)
     {
-        
+
         $this->sequence[] = $node;
         $returnValue = $node;
     }
@@ -267,7 +271,7 @@ class common_Collection extends common_Object implements IteratorAggregate, Coun
     {
         $returnValue = (bool) false;
 
-        
+
         foreach ($this->sequence as $index => $_node) {
             if ($_node === $object) {
                 unset($this->sequence[$index]);
@@ -276,7 +280,7 @@ class common_Collection extends common_Object implements IteratorAggregate, Coun
             }
         }
         return false;
-        
+
 
         return (bool) $returnValue;
     }
@@ -293,10 +297,10 @@ class common_Collection extends common_Object implements IteratorAggregate, Coun
     {
         $returnValue = null;
 
-        
+
         $returnValue = new common_Collection($this);
         $returnValue->sequence = array_merge($this->sequence, $collection->sequence);
-        
+
 
         return $returnValue;
     }
@@ -313,10 +317,14 @@ class common_Collection extends common_Object implements IteratorAggregate, Coun
     {
         $returnValue = null;
 
-        
-         $returnValue = new common_Collection(new common_Object(__METHOD__));
-         $returnValue->sequence = array_uintersect($this->sequence, $collection->sequence, 'core_kernel_classes_ContainerComparator::compare');
-        
+
+        $returnValue = new common_Collection(new common_Object(__METHOD__));
+        $returnValue->sequence = array_uintersect(
+            $this->sequence,
+            $collection->sequence,
+            'core_kernel_classes_ContainerComparator::compare'
+        );
+
 
         return $returnValue;
     }
@@ -332,11 +340,11 @@ class common_Collection extends common_Object implements IteratorAggregate, Coun
     {
         $returnValue = [];
 
-        
+
         foreach ($this->getIterator() as $it) {
             $returnValue[] = $it;
         }
-        
+
 
         return (array) $returnValue;
     }

@@ -53,13 +53,15 @@ class LoggerAggregator extends ConfigurableService implements LoggerInterface
 
         foreach ($this->getOptions() as $logger) {
             if (!$logger instanceof LoggerInterface) {
-                throw new \common_Exception('Non PSR-3 compatible logger ' . get_class($logger) . ' added to ' . __CLASS__);
+                throw new \common_Exception(
+                    'Non PSR-3 compatible logger ' . get_class($logger) . ' added to ' . __CLASS__
+                );
             }
         }
 
         $this->loggers = $this->getOptions();
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see \Psr\Log\LoggerInterface::log()

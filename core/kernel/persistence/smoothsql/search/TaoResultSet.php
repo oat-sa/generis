@@ -33,14 +33,14 @@ class TaoResultSet extends ResultSet implements ResultSetInterface, \oat\search\
 {
     use \oat\search\UsableTrait\ParentFluateTrait;
     use \oat\generis\model\OntologyAwareTrait;
-    
+
     /**
      *
      * @var \oat\search\QueryBuilder
      */
     protected $countQuery;
     protected $totalCount = null;
-    
+
     public function setCountQuery($query)
     {
         $this->countQuery = $query;
@@ -53,15 +53,15 @@ class TaoResultSet extends ResultSet implements ResultSetInterface, \oat\search\
     */
     public function total()
     {
-        
+
         if (is_null($this->totalCount)) {
             $cpt = $this->getParent()->fetchQuery($this->countQuery);
             $this->totalCount = intval($cpt['cpt']);
         }
-        
+
         return $this->totalCount;
     }
-    
+
     /**
     * return a new resource create from current subject
     * @return core_kernel_classes_Resource

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,23 +28,88 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
     /**
      * The TTL mode offset in the connection parameters.
      */
-    const OPTION_TTL = 'ttlMode';
+    public const OPTION_TTL = 'ttlMode';
 
     /**
      * The value offset in the record.
      */
-    const ENTRY_VALUE = 'value';
+    public const ENTRY_VALUE = 'value';
 
     /**
      * The expiration timestamp of the record.
      */
-    const ENTRY_EXPIRATION = 'expiresAt';
+    public const ENTRY_EXPIRATION = 'expiresAt';
 
     /**
      * List of characters permited in filename
      * @var array
      */
-    private static $ALLOWED_CHARACTERS = ['A' => '','B' => '','C' => '','D' => '','E' => '','F' => '','G' => '','H' => '','I' => '','J' => '','K' => '','L' => '','M' => '','N' => '','O' => '','P' => '','Q' => '','R' => '','S' => '','T' => '','U' => '','V' => '','W' => '','X' => '','Y' => '','Z' => '','a' => '','b' => '','c' => '','d' => '','e' => '','f' => '','g' => '','h' => '','i' => '','j' => '','k' => '','l' => '','m' => '','n' => '','o' => '','p' => '','q' => '','r' => '','s' => '','t' => '','u' => '','v' => '','w' => '','x' => '','y' => '','z' => '',0 => '',1 => '',2 => '',3 => '',4 => '',5 => '',6 => '',7 => '',8 => '',9 => '','_' => '','-' => ''];
+    private static $ALLOWED_CHARACTERS = [
+        'A' => '',
+        'B' => '',
+        'C' => '',
+        'D' => '',
+        'E' => '',
+        'F' => '',
+        'G' => '',
+        'H' => '',
+        'I' => '',
+        'J' => '',
+        'K' => '',
+        'L' => '',
+        'M' => '',
+        'N' => '',
+        'O' => '',
+        'P' => '',
+        'Q' => '',
+        'R' => '',
+        'S' => '',
+        'T' => '',
+        'U' => '',
+        'V' => '',
+        'W' => '',
+        'X' => '',
+        'Y' => '',
+        'Z' => '',
+        'a' => '',
+        'b' => '',
+        'c' => '',
+        'd' => '',
+        'e' => '',
+        'f' => '',
+        'g' => '',
+        'h' => '',
+        'i' => '',
+        'j' => '',
+        'k' => '',
+        'l' => '',
+        'm' => '',
+        'n' => '',
+        'o' => '',
+        'p' => '',
+        'q' => '',
+        'r' => '',
+        's' => '',
+        't' => '',
+        'u' => '',
+        'v' => '',
+        'w' => '',
+        'x' => '',
+        'y' => '',
+        'z' => '',
+        0 => '',
+        1 => '',
+        2 => '',
+        3 => '',
+        4 => '',
+        5 => '',
+        6 => '',
+        7 => '',
+        8 => '',
+        9 => '',
+        '_' => '',
+        '-' => '',
+    ];
 
     /**
      * absolute path of the directory to use
@@ -80,9 +146,9 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
      *
      * @var int
      */
-    const DEFAULT_LEVELS = 3;
+    public const DEFAULT_LEVELS = 3;
 
-    const DEFAULT_MASK = 0700;
+    public const DEFAULT_MASK = 0700;
 
     /**
      * (non-PHPdoc)
@@ -91,7 +157,8 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
     public function connect($id, array $params)
     {
         $this->directory = isset($params['dir'])
-            ? $params['dir'] . ($params['dir'][strlen($params['dir']) - 1] === DIRECTORY_SEPARATOR ? '' : DIRECTORY_SEPARATOR)
+            ? $params['dir']
+                . ($params['dir'][strlen($params['dir']) - 1] === DIRECTORY_SEPARATOR ? '' : DIRECTORY_SEPARATOR)
             : FILES_PATH . 'generis' . DIRECTORY_SEPARATOR . $id . DIRECTORY_SEPARATOR;
         $this->levels = isset($params['levels']) ? $params['levels'] : self::DEFAULT_LEVELS;
         $this->humanReadable = isset($params['humanReadable']) ? $params['humanReadable'] : false;
@@ -206,7 +273,12 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
         if (is_dir($path)) {
             \common_Logger::w(sprintf('Directory already exists. Path: \'%s\'', $path));
         } elseif (is_file($path)) {
-            \common_Logger::w(sprintf('Directory was not created. File with the same name already exists. Path: \'%s\'', $path));
+            \common_Logger::w(
+                sprintf(
+                    'Directory was not created. File with the same name already exists. Path: \'%s\'',
+                    $path
+                )
+            );
         } else {
             \common_Logger::w(sprintf('Directory was not created. Path: \'%s\'', $path));
         }
@@ -388,7 +460,8 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
             $path = $this->sanitizeReadableFileName($key);
         } else {
             $encoded = hash('md5', $key);
-            $path = implode(DIRECTORY_SEPARATOR, str_split(substr($encoded, 0, $this->levels))) . DIRECTORY_SEPARATOR . $encoded;
+            $path = implode(DIRECTORY_SEPARATOR, str_split(substr($encoded, 0, $this->levels)))
+                . DIRECTORY_SEPARATOR . $encoded;
         }
         return  $this->directory . $path . '.php';
     }

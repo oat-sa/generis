@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,10 +41,12 @@ class SetupFileCache extends ConfigurableService
 
         if (!@mkdir($cachePath, 0700, true)) {
             $error = error_get_last();
-            throw new Exception(sprintf(
-                'Could not create application cache at "%s". Error message: %s',
-                $cachePath,
-                $error['message'] ?? 'unknown')
+            throw new Exception(
+                sprintf(
+                    'Could not create application cache at "%s". Error message: %s',
+                    $cachePath,
+                    $error['message'] ?? 'unknown'
+                )
             );
         }
     }

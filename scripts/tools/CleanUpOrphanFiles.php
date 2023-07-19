@@ -166,7 +166,7 @@ class CleanUpOrphanFiles extends ScriptAction
      */
     private function markForRemoval(core_kernel_classes_Resource $resource)
     {
-            $this->markedTobeRemoved[] = $resource;
+        $this->markedTobeRemoved[] = $resource;
     }
 
     /**
@@ -194,7 +194,12 @@ class CleanUpOrphanFiles extends ScriptAction
 
         if ($isOrphan && !$file->exists()) {
             if ($this->verbose) {
-                $this->report->add(new Report(Report::TYPE_INFO, sprintf('URI %s : File %s', $resource->getUri(), $file->getPrefix())));
+                $this->report->add(
+                    new Report(
+                        Report::TYPE_INFO,
+                        sprintf('URI %s : File %s', $resource->getUri(), $file->getPrefix())
+                    )
+                );
             }
             $this->markForRemoval($resource);
             $this->affectedCount++;
@@ -227,10 +232,20 @@ class CleanUpOrphanFiles extends ScriptAction
         $this->report->add(new Report(Report::TYPE_SUCCESS, sprintf('%s redundant at RDS', $this->redundantCount)));
         $this->report->add(new Report(Report::TYPE_SUCCESS, sprintf('%s missing at FS', $this->affectedCount)));
         $this->report->add(new Report(Report::TYPE_SUCCESS, sprintf('%s removed at FS', $this->removedCount)));
-        $this->report->add(new Report(Report::TYPE_SUCCESS, sprintf('Peak memory %s Mb', memory_get_peak_usage() / 1024 / 1024)));
+        $this->report->add(
+            new Report(
+                Report::TYPE_SUCCESS,
+                sprintf('Peak memory %s Mb', memory_get_peak_usage() / 1024 / 1024)
+            )
+        );
 
         if ($this->errorsCount) {
-            $this->report->add(new Report(Report::TYPE_ERROR, sprintf('%s errors happened, check details above', $this->errorsCount)));
+            $this->report->add(
+                new Report(
+                    Report::TYPE_ERROR,
+                    sprintf('%s errors happened, check details above', $this->errorsCount)
+                )
+            );
         }
     }
 }

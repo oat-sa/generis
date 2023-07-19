@@ -27,7 +27,7 @@ use oat\oatbox\service\EnvironmentVariable;
 
 class EnvironmentVariableTest extends TestCase
 {
-    const VAR_NAME = 'That\'s the variable\'s name.';
+    public const VAR_NAME = 'That\'s the variable\'s name.';
 
     /** @var EnvironmentVariable */
     private $subject;
@@ -55,7 +55,10 @@ class EnvironmentVariableTest extends TestCase
 
     public function testToPhpCode()
     {
-        $this->assertSame('new ' . EnvironmentVariable::class . '(' . Utils::toPHPVariableString(self::VAR_NAME) . ')', $this->subject->__toPhpCode());
+        $this->assertSame(
+            'new ' . EnvironmentVariable::class . '(' . Utils::toPHPVariableString(self::VAR_NAME) . ')',
+            $this->subject->__toPhpCode()
+        );
     }
 
     public function testToString()

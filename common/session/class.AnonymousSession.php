@@ -50,7 +50,7 @@ class common_session_AnonymousSession extends common_session_BasicSession implem
     {
         return __('guest');
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see common_session_Session::getUserRoles()
@@ -59,7 +59,7 @@ class common_session_AnonymousSession extends common_session_BasicSession implem
     {
         return [GenerisRdf::INSTANCE_ROLE_ANONYMOUS];
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see common_session_Session::getDataLanguage()
@@ -68,7 +68,7 @@ class common_session_AnonymousSession extends common_session_BasicSession implem
     {
         return $this->getServiceLocator()->get(UserLanguageServiceInterface::SERVICE_ID)->getDefaultLanguage();
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see common_session_Session::getInterfaceLanguage()
@@ -80,7 +80,7 @@ class common_session_AnonymousSession extends common_session_BasicSession implem
             : $this->getServiceLocator()->get(UserLanguageServiceInterface::SERVICE_ID)->getDefaultLanguage();
         ;
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see common_session_Session::getTimeZone()
@@ -89,7 +89,7 @@ class common_session_AnonymousSession extends common_session_BasicSession implem
     {
         return TIME_ZONE;
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see common_session_Session::getUserPropertyValues()
@@ -98,7 +98,7 @@ class common_session_AnonymousSession extends common_session_BasicSession implem
     {
         return [];
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see common_session_Session::refresh()

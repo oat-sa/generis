@@ -64,14 +64,14 @@ class ServiceManagerTest extends TestCase
 
 interface TestServiceInterface1
 {
-    const SERVICE_ID = 'test/TestService1';
+    public const SERVICE_ID = 'test/TestService1';
 }
 class TestService1 extends ConfigurableService implements TestServiceInterface1
 {
 }
 class TestService2 extends ConfigurableService
 {
-    const SERVICE_ID = 'test/TestService2';
+    public const SERVICE_ID = 'test/TestService2';
 }
 class TestService2_2 extends TestService2
 {
@@ -79,5 +79,4 @@ class TestService2_2 extends TestService2
 
 class TestService3 extends ConfigurableService
 {
-
 }

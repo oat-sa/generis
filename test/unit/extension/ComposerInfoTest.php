@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,6 +19,8 @@ declare(strict_types=1);
  *
  */
 
+declare(strict_types=1);
+
 namespace oat\generis\test\unit\extension;
 
 use oat\generis\test\TestCase;
@@ -33,7 +33,6 @@ use oat\oatbox\extension\exception\ManifestException;
  */
 class ComposerInfoTest extends TestCase
 {
-
     public function testGetAvailableTaoExtensions()
     {
         $instance = new ComposerInfo($this->getSamplesDir());
@@ -57,14 +56,13 @@ class ComposerInfoTest extends TestCase
 
     private function getSamplesDir()
     {
-        return realpath(__DIR__.DIRECTORY_SEPARATOR.
-            '..'.DIRECTORY_SEPARATOR.
-            '..'.DIRECTORY_SEPARATOR.
-            'samples'.
-            DIRECTORY_SEPARATOR.
+        return realpath(
+            __DIR__ . DIRECTORY_SEPARATOR .
+            '..' . DIRECTORY_SEPARATOR .
+            '..' . DIRECTORY_SEPARATOR .
+            'samples' .
+            DIRECTORY_SEPARATOR .
             'manifests'
         );
     }
-
-
 }

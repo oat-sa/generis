@@ -33,7 +33,6 @@ namespace oat\oatbox\task;
  */
 abstract class AbstractTask implements Task, \JsonSerializable
 {
-
     /**
      * @var string
      */

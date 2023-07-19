@@ -37,12 +37,12 @@ class RdfWrapper implements \oat\generis\model\data\RdfInterface
      * @var RdfsInterface
      */
     private $rdfsInterface;
-    
+
     public function __construct(RdfsInterface $rdfsInterface)
     {
         $this->rdfsInterface = $rdfsInterface;
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see \oat\generis\model\data\RdfInterface::get()
@@ -51,7 +51,7 @@ class RdfWrapper implements \oat\generis\model\data\RdfInterface
     {
         throw new \common_Exception('Not implemented');
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see \oat\generis\model\data\RdfInterface::add()
@@ -64,37 +64,46 @@ class RdfWrapper implements \oat\generis\model\data\RdfInterface
                 $class = new \core_kernel_classes_Class($triple->object);
                 return $this->rdfsInterface->getResourceImplementation()->setType($resource, $class);
                 break;
-                
+
             case OntologyRdfs::RDFS_RANGE:
                 $resource = new \core_kernel_classes_Property($triple->subject);
                 $class = new \core_kernel_classes_Class($triple->object);
                 return $this->rdfsInterface->getPropertyImplementation()->setRange($resource, $class);
                 break;
-                
+
             case GenerisRdf::PROPERTY_MULTIPLE:
                 $resource = new \core_kernel_classes_Property($triple->subject);
                 $value = $triple->object == GenerisRdf::GENERIS_TRUE;
                 return $this->rdfsInterface->getPropertyImplementation()->setMultiple($resource, $value);
                 break;
-                
+
             case GenerisRdf::PROPERTY_IS_LG_DEPENDENT:
                 $resource = new \core_kernel_classes_Property($triple->subject);
                 $value = $triple->object == GenerisRdf::GENERIS_TRUE;
                 return $this->rdfsInterface->getPropertyImplementation()->setLgDependent($resource, $value);
                 break;
-                
+
             case OntologyRdfs::RDFS_DOMAIN:
             default:
                 $resource = new \core_kernel_classes_Resource($triple->subject);
                 $property = new \core_kernel_classes_Property($triple->predicate);
                 if (empty($triple->lg)) {
-                    return $this->rdfsInterface->getResourceImplementation()->setPropertyValue($resource, $property, $triple->object);
+                    return $this->rdfsInterface->getResourceImplementation()->setPropertyValue(
+                        $resource,
+                        $property,
+                        $triple->object
+                    );
                 } else {
-                    return $this->rdfsInterface->getResourceImplementation()->setPropertyValueByLg($resource, $property, $triple->object, $triple->lg);
+                    return $this->rdfsInterface->getResourceImplementation()->setPropertyValueByLg(
+                        $resource,
+                        $property,
+                        $triple->object,
+                        $triple->lg
+                    );
                 }
         }
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see \oat\generis\model\data\RdfInterface::remove()
@@ -112,7 +121,7 @@ class RdfWrapper implements \oat\generis\model\data\RdfInterface
     {
         throw new \common_Exception('Not implemented');
     }
-    
+
     public function getIterator()
     {
         throw new \common_Exception('Not implemented');

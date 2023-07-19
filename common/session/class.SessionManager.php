@@ -32,8 +32,7 @@ use oat\oatbox\service\ServiceManager;
  */
 abstract class common_session_SessionManager
 {
-
-    const PHPSESSION_SESSION_KEY = 'common_session_Session';
+    public const PHPSESSION_SESSION_KEY = 'common_session_Session';
 
     private static $session = null;
 
@@ -61,7 +60,7 @@ abstract class common_session_SessionManager
         }
         return self::$session;
     }
-    
+
     /**
      * Starts a new session and stores it in the session if stateful
      *
@@ -83,13 +82,13 @@ abstract class common_session_SessionManager
                     // prevent session fixation.
                     session_regenerate_id();
                 }
-                
+
                 PHPSession::singleton()->setAttribute(self::PHPSESSION_SESSION_KEY, $session);
             }
         }
         return true;
     }
-    
+
     /**
      * Ends the session by replacing it with an anonymous session
      *
@@ -102,10 +101,10 @@ abstract class common_session_SessionManager
         if (session_id() != '') {
             session_destroy();
         }
-        
+
         return self::startSession(new common_session_AnonymousSession());
     }
-    
+
     /**
      * Is the current session anonymous or associated to a user?
      *

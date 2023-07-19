@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,14 +37,14 @@ class common_session_RestrictedSession implements common_session_StatefulSession
      * @var common_session_Session
      */
     private $internalSession;
-    
+
     /**
      * filter on the users roles
      *
      * @var array
      */
     private $filter;
-    
+
     /**
      *
      * @param common_session_Session $session
@@ -54,7 +55,7 @@ class common_session_RestrictedSession implements common_session_StatefulSession
         $this->internalSession = $session;
         $this->filter = $filter;
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see common_session_Session::getUser()
@@ -63,7 +64,7 @@ class common_session_RestrictedSession implements common_session_StatefulSession
     {
         return $this->internalSession->getUser();
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see common_session_AbstractSession::getUserUri()
@@ -72,7 +73,7 @@ class common_session_RestrictedSession implements common_session_StatefulSession
     {
         return $this->internalSession->getUserUri();
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see common_session_Session::getUserLabel()
@@ -81,7 +82,7 @@ class common_session_RestrictedSession implements common_session_StatefulSession
     {
         return $this->internalSession->getUserLabel();
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see common_session_AbstractSession::getUserRoles()
@@ -97,7 +98,7 @@ class common_session_RestrictedSession implements common_session_StatefulSession
         }
         return $returnValue;
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see common_session_Session::getDataLanguage()
@@ -106,7 +107,7 @@ class common_session_RestrictedSession implements common_session_StatefulSession
     {
         return $this->internalSession->getDataLanguage();
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see common_session_Session::getInterfaceLanguage()
@@ -115,7 +116,7 @@ class common_session_RestrictedSession implements common_session_StatefulSession
     {
         return $this->internalSession->getInterfaceLanguage();
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see common_session_Session::getUserPropertyValues()
@@ -124,7 +125,7 @@ class common_session_RestrictedSession implements common_session_StatefulSession
     {
         return $this->internalSession->getUserPropertyValues($property);
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see common_session_Session::getTimeZone()
@@ -133,8 +134,8 @@ class common_session_RestrictedSession implements common_session_StatefulSession
     {
         return $this->internalSession->getTimeZone();
     }
-    
-    
+
+
     /**
      * (non-PHPdoc)
      * @see common_session_Session::refresh()
@@ -143,7 +144,7 @@ class common_session_RestrictedSession implements common_session_StatefulSession
     {
         $this->internalSession->refresh();
     }
-    
+
     /**
      * Revert back to the original Session
      */

@@ -28,23 +28,23 @@ namespace oat\generis\model\data;
  */
 interface Ontology extends Model
 {
-    const SERVICE_ID = 'generis/ontology';
+    public const SERVICE_ID = 'generis/ontology';
 
     /**
      * @param string $uri
      * @return \core_kernel_classes_Resource
      */
-    function getResource($uri);
+    public function getResource($uri);
 
     /**
      * @param string $uri
      * @return \core_kernel_classes_Class
      */
-    function getClass($uri);
+    public function getClass($uri);
 
     /**
      * @param string $uri
      * @return \core_kernel_classes_Property
      */
-    function getProperty($uri);
+    public function getProperty($uri);
 }

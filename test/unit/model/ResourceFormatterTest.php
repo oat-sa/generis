@@ -21,7 +21,7 @@
 namespace oat\generis\test\unit\model;
 
 use common_exception_NoContent;
-use \core_kernel_classes_ResourceFormatter;
+use core_kernel_classes_ResourceFormatter;
 use oat\generis\model\GenerisRdf;
 use oat\generis\test\TestCase;
 
@@ -230,7 +230,7 @@ class ResourceFormatterTest extends TestCase
         $this->assertInstanceOf('stdClass', $result->properties[0]);
         $this->assertSame('#predicate0', $result->properties[0]->predicateUri);
         $this->assertIsArray($result->properties[0]->values);
-        $this->assertCount(1,$result->properties[0]->values);
+        $this->assertCount(1, $result->properties[0]->values);
 
         $this->assertInstanceOf('stdClass', $result->properties[0]->values[0]);
         $this->assertSame('resource', $result->properties[0]->values[0]->valueType);
@@ -240,7 +240,7 @@ class ResourceFormatterTest extends TestCase
             $this->assertInstanceOf('stdClass', $result->properties[$i]);
             $this->assertSame('#predicate' . $i, $result->properties[$i]->predicateUri);
             $this->assertIsArray($result->properties[$i]->values);
-            $this->assertCount(1,$result->properties[$i]->values);
+            $this->assertCount(1, $result->properties[$i]->values);
 
             $this->assertInstanceOf('stdClass', $result->properties[$i]->values[0]);
             $this->assertSame('literal', $result->properties[$i]->values[0]->valueType);

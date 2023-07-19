@@ -31,22 +31,22 @@ class EnvironmentProcessor extends EnvironmentProcessorAbstract
     /**
      * Environment variable name for stack identifier.
      */
-    const ENV_STACK_ID        = 'STACK_ID';
+    public const ENV_STACK_ID        = 'STACK_ID';
 
     /**
      * Environment variable name for stack name.
      */
-    const ENV_STACK_NAME      = 'STACK_NAME';
+    public const ENV_STACK_NAME      = 'STACK_NAME';
 
     /**
      * Environment variable name for stack host type.
      */
-    const ENV_STACK_HOST_TYPE = 'HOST_TYPE';
+    public const ENV_STACK_HOST_TYPE = 'HOST_TYPE';
 
     /**
      * Default stack type value.
      */
-    const DEFAULT_STACK_TYPE = 'tao';
+    public const DEFAULT_STACK_TYPE = 'tao';
 
     /**
      * @inheritdoc

@@ -32,12 +32,12 @@ class OptionContainer
      * @var array
      */
     protected $options;
-    
+
     /**
      * @var array
      */
     protected $data;
-    
+
     /**
      * Constructor
      *
@@ -51,7 +51,7 @@ class OptionContainer
         $this->data = self::extract($options, $values);
         $this->options = $options;
     }
-    
+
     /**
      * Has Option
      *
@@ -63,7 +63,7 @@ class OptionContainer
     {
         return isset($this->data[$optionName]);
     }
-    
+
     /**
      * Get Option
      *
@@ -76,7 +76,7 @@ class OptionContainer
     {
         return ($this->has($optionName)) ? $this->data[$optionName] : null;
     }
-    
+
     /**
      * Get Options
      *
@@ -88,7 +88,7 @@ class OptionContainer
     {
         return $this->options;
     }
-    
+
     /**
      * Is Flag
      *
@@ -98,21 +98,21 @@ class OptionContainer
     {
         return isset($this->options[$optionName]) && !empty($this->options[$optionName]['flag']);
     }
-    
+
     private static function extract(array $options, array $values)
     {
         $returnValue = [];
-        
+
         foreach ($options as $optionName => $optionParams) {
             // Ignore non string-indexed options.
             if (is_string($optionName)) {
                 $prefix = empty($optionParams['prefix']) ? '' : $optionParams['prefix'];
                 $longPrefix = empty($optionParams['longPrefix']) ? '' : $optionParams['longPrefix'];
-                
+
                 if (empty($prefix) && empty($longPrefix)) {
                     throw new \LogicException("Argument with name '${optionName}' has no prefix, nor long prefix.");
                 }
-                
+
                 if (!empty($optionParams['flag'])) {
                     // It's a flag!
                     if (is_int(self::searchOptionIndex($prefix, $longPrefix, $values))) {
@@ -123,11 +123,11 @@ class OptionContainer
                     $required = empty($optionParams['required']) ? false : true;
                     $castTo = empty($optionParams['cast']) ? null : $optionParams['cast'];
                     $optionIndex = self::searchOptionIndex($prefix, $longPrefix, $values);
-                    
+
                     if ($required && $optionIndex === false) {
                         throw new MissingOptionException("Required argument '${optionName}' is missing.", $optionName);
                     }
-                    
+
                     if ($optionIndex === false && isset($optionParams['defaultValue'])) {
                         $returnValue[$optionName] = self::cast($optionParams['defaultValue'], $castTo);
                     } else {
@@ -137,7 +137,10 @@ class OptionContainer
                         } else {
                             // Edge case. Option found, but it is the last value of the $value array.
                             if ($required) {
-                                throw new MissingOptionException("No value given for required argument '${optionName}'.", $optionName);
+                                throw new MissingOptionException(
+                                    "No value given for required argument '${optionName}'.",
+                                    $optionName
+                                );
                             } elseif (isset($optionParams['defaultValue'])) {
                                 $returnValue[$optionName] = self::cast($optionParams['defaultValue'], $castTo);
                             }
@@ -146,15 +149,15 @@ class OptionContainer
                 }
             }
         }
-        
+
         return $returnValue;
     }
-    
+
     private static function searchOptionIndex($prefix, $longPrefix, array $values)
     {
         $optionIndex = false;
         $prefixes = [$prefix, $longPrefix];
-        
+
         for ($i = 0; $i < count($prefixes); $i++) {
             $dashes = str_repeat('-', $i + 1);
             $p = $prefixes[$i];
@@ -165,36 +168,36 @@ class OptionContainer
                 }
             }
         }
-        
+
         return $optionIndex;
     }
-    
+
     private static function cast($value, $to)
     {
         $casted = $value;
-        
+
         if (is_string($to)) {
             switch (strtolower($to)) {
                 case 'integer':
                 case 'int':
                     $casted = @intval($value);
                     break;
-                    
+
                 case 'float':
                     $casted = @floatval($value);
                     break;
-                    
+
                 case 'string':
                     $casted = @strval($value);
                     break;
-                    
+
                 case 'boolean':
                 case 'bool':
                     $casted = @boolval($value);
                     break;
             }
         }
-        
+
         return $casted;
     }
 }

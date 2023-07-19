@@ -29,7 +29,6 @@ use oat\generis\test\TestCase;
  */
 class DriverTest extends TestCase
 {
-
     public function testGetPlatForm()
     {
         if (!extension_loaded('pdo_sqlite')) {

@@ -26,7 +26,8 @@ use oat\oatbox\task\TaskInterface\TaskPersistenceInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 
 /**
- * @deprecated since version 7.10.0, to be removed in 8.0. Use \oat\tao\model\taskQueue\Queue\Broker\InMemoryQueueBroker instead.
+ * @deprecated since version 7.10.0, to be removed in 8.0. Use \oat\tao\model\taskQueue\Queue\Broker\InMemoryQueueBroker
+ *             instead.
  */
 class InMemoryQueuePersistence implements TaskPersistenceInterface
 {

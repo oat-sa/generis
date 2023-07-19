@@ -15,8 +15,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2007-2010 (original work) Public Research Centre Henri Tudor & University of Luxembourg) (under the project TAO-QUAL);
- *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
+ * Copyright (c) 2007-2010 (original work) Public Research Centre Henri Tudor & University of Luxembourg
+ *                         (under the project TAO-QUAL);
+ *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung
+ *                         (under the project TAO-TRANSFER);
  *               2017 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  *
  *
@@ -51,8 +53,11 @@ class core_kernel_rules_OperationFactory
      * @param  Resource operator
      * @return core_kernel_rules_Operation
      */
-    public static function createOperation(core_kernel_rules_Term $term1, core_kernel_rules_Term $term2, core_kernel_classes_Resource $operator)
-    {
+    public static function createOperation(
+        core_kernel_rules_Term $term1,
+        core_kernel_rules_Term $term2,
+        core_kernel_classes_Resource $operator
+    ) {
         $returnValue = null;
         $operationClass = new core_kernel_classes_Class(RulesRdf::CLASS_OPERATION, __METHOD__);
         $label = 'Def Operation Label ' . $term1->getLabel() . ' ' . $operator->getLabel() . ' ' . $term2->getLabel();

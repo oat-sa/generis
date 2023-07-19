@@ -37,5 +37,4 @@ use oat\oatbox\task\Task;
  */
 class SyncTask extends AbstractTask
 {
-
 }

@@ -15,9 +15,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
- *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
- *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
+ * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg
+ *                         (under the project TAO & TAO2);
+ *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung
+ *                         (under the project TAO-TRANSFER);
+ *               2009-2012 (update and modification) Public Research Centre Henri Tudor
+ *                         (under the project TAO-SUSTAIN & TAO-DEV);
  *               2017 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
 
@@ -34,7 +37,8 @@ use oat\generis\model\OntologyRdfs;
  * @package generis
 
  */
-class core_kernel_persistence_smoothsql_Property extends core_kernel_persistence_smoothsql_Resource implements core_kernel_persistence_PropertyInterface
+class core_kernel_persistence_smoothsql_Property extends core_kernel_persistence_smoothsql_Resource implements
+    core_kernel_persistence_PropertyInterface
 {
     // --- ASSOCIATIONS ---
 
@@ -84,7 +88,10 @@ class core_kernel_persistence_smoothsql_Property extends core_kernel_persistence
     public function isMultiple(core_kernel_classes_Resource $resource)
     {
         $returnValue = (bool) false;
-        throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (" . __METHOD__ . ") is not available in this persistence implementation (" . __CLASS__ . ")");
+        throw new core_kernel_persistence_ProhibitedFunctionException(
+            "not implemented => The function (" . __METHOD__
+                . ") is not available in this persistence implementation (" . __CLASS__ . ")"
+        );
         return (bool) $returnValue;
     }
 
@@ -99,7 +106,10 @@ class core_kernel_persistence_smoothsql_Property extends core_kernel_persistence
     public function getRange(core_kernel_classes_Resource $resource)
     {
         $returnValue = null;
-        throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (" . __METHOD__ . ") is not available in this persistence implementation (" . __CLASS__ . ")");
+        throw new core_kernel_persistence_ProhibitedFunctionException(
+            "not implemented => The function (" . __METHOD__
+                . ") is not available in this persistence implementation (" . __CLASS__ . ")"
+        );
         return $returnValue;
     }
 
@@ -166,7 +176,7 @@ class core_kernel_persistence_smoothsql_Property extends core_kernel_persistence
     {
 
         $multipleProperty = new core_kernel_classes_Property(GenerisRdf::PROPERTY_MULTIPLE);
-        $value = ((bool)$isMultiple) ?  GenerisRdf::GENERIS_TRUE : GenerisRdf::GENERIS_FALSE ;
+        $value = ((bool)$isMultiple) ? GenerisRdf::GENERIS_TRUE : GenerisRdf::GENERIS_FALSE ;
         $this->removePropertyValues($resource, $multipleProperty);
         $this->setPropertyValue($resource, $multipleProperty, $value);
     }
@@ -184,7 +194,7 @@ class core_kernel_persistence_smoothsql_Property extends core_kernel_persistence
     {
 
         $lgDependentProperty = new core_kernel_classes_Property(GenerisRdf::PROPERTY_IS_LG_DEPENDENT, __METHOD__);
-        $value = ((bool)$isLgDependent) ?  GenerisRdf::GENERIS_TRUE : GenerisRdf::GENERIS_FALSE ;
+        $value = ((bool)$isLgDependent) ? GenerisRdf::GENERIS_TRUE : GenerisRdf::GENERIS_FALSE ;
         $this->removePropertyValues($resource, $lgDependentProperty);
         $this->setPropertyValue($resource, $lgDependentProperty, $value);
     }

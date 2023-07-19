@@ -33,11 +33,11 @@ abstract class ScriptAction extends AbstractAction
 {
     private $options;
     private $optionsDescription;
-    
+
     abstract protected function provideOptions();
-    
+
     abstract protected function provideDescription();
-    
+
     /**
      * Run Script.
      *
@@ -47,7 +47,7 @@ abstract class ScriptAction extends AbstractAction
      * @return \common_report_Report
      */
     abstract protected function run();
-    
+
     /**
      * Invoke
      *
@@ -59,12 +59,12 @@ abstract class ScriptAction extends AbstractAction
     {
         $this->optionsDescription = $this->provideOptions();
         $beginScript = microtime(true);
-        
+
         // Display help?
         if ($this->displayUsage($params)) {
             return $this->usage();
         }
-        
+
         // Build option container.
         try {
             $this->options = new OptionContainer(
@@ -98,17 +98,17 @@ abstract class ScriptAction extends AbstractAction
     {
         return $this->options->has($optionName);
     }
-    
+
     protected function getOption($optionName)
     {
         return $this->options->get($optionName);
     }
-    
+
     protected function provideUsage()
     {
         return [];
     }
-    
+
     protected function provideUsageOptionName()
     {
         return 'help';
@@ -118,61 +118,64 @@ abstract class ScriptAction extends AbstractAction
     {
         return false;
     }
-    
+
     private function displayUsage(array $params)
     {
         $usageDescription = $this->provideUsage();
-        
+
         if (!empty($usageDescription) && is_array($usageDescription)) {
             if (!empty($usageDescription['prefix']) && in_array('-' . $usageDescription['prefix'], $params)) {
                 return true;
-            } elseif (!empty($usageDescription['longPrefix']) && in_array('--' . $usageDescription['longPrefix'], $params)) {
+            } elseif (
+                !empty($usageDescription['longPrefix'])
+                && in_array('--' . $usageDescription['longPrefix'], $params)
+            ) {
                 return true;
             }
         }
-        
+
         return false;
     }
-    
+
     private function usage()
     {
         $report = new Report(
             Report::TYPE_INFO,
             $this->provideDescription() . "\n"
         );
-        
+
         $optionsDescription = $this->optionsDescription;
         $optionsDescription[$this->provideUsageOptionName()] = $this->provideUsage();
-        
+
         $required = new Report(Report::TYPE_INFO, 'Required Arguments:');
         $optional = new Report(Report::TYPE_INFO, 'Optional Arguments:');
-        
+
         foreach ($optionsDescription as $optionName => $optionParams) {
             // Deal with prefixes.
             $prefixes = [];
             $optionDisplay = (!empty($optionParams['flag'])) ? '' : " ${optionName}";
-            
+
             if (!empty($optionParams['prefix'])) {
                 $prefixes[] = '-' . $optionParams['prefix'] . "${optionDisplay}";
             }
-            
+
             if (!empty($optionParams['longPrefix'])) {
                 $prefixes[] = '--' . $optionParams['longPrefix'] . "${optionDisplay}";
             }
-            
+
             $optionMsg = implode(', ', $prefixes);
             if (isset($optionParams['defaultValue'])) {
                 $optionMsg .= ' (default: ' . self::valueToString($optionParams['defaultValue']) . ')';
             }
-            
+
             $optionReport = new Report(Report::TYPE_INFO, $optionMsg);
-            
+
             if (!empty($optionParams['description'])) {
                 $optionReport->add(
                     new Report(Report::TYPE_INFO, $optionParams['description'])
                 );
             }
-            
+
             $targetReport = (empty($optionParams['required'])) ? $optional : $required;
             $targetReport->add($optionReport);
         }
@@ -193,21 +196,21 @@ abstract class ScriptAction extends AbstractAction
 
         return $report;
     }
-    
+
     private static function valueToString($value)
     {
         $string = "\"${value}\"";
-        
+
         switch (gettype($value)) {
             case 'boolean':
                 $string = ($value === true) ? 'true' : 'false';
                 break;
-                
+
             case 'integer':
             case 'double':
                 $string = $value;
         }
-        
+
         return $string;
     }
 

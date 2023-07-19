@@ -24,7 +24,7 @@ namespace oat\oatbox\task\implementation;
 use oat\oatbox\task\AbstractQueue;
 use oat\oatbox\task\Task;
 use oat\oatbox\task\TaskRunner;
-use \common_report_Report as Report;
+use common_report_Report as Report;
 
 /**
  * Class SyncQueue
@@ -45,7 +45,6 @@ use \common_report_Report as Report;
  */
 class SyncQueue extends AbstractQueue
 {
-
     /**
      * @var TaskRunner
      */
@@ -103,10 +102,15 @@ class SyncQueue extends AbstractQueue
         $taskResource = parent::linkTask($task, $resource);
         $report = $task->getReport();
         if (!empty($report)) {
-            //serialize only two first report levels because sometimes serialized report is huge and it does not fit into `k_po` index of statemetns table.
+            // serialize only two first report levels because sometimes serialized report is huge and it does not fit
+            // into `k_po` index of statemetns table.
             $serializableReport = new Report($report->getType(), $report->getMessage(), $report->getData());
             foreach ($report as $subReport) {
-                $serializableSubReport = new Report($subReport->getType(), $subReport->getMessage(), $subReport->getData());
+                $serializableSubReport = new Report(
+                    $subReport->getType(),
+                    $subReport->getMessage(),
+                    $subReport->getData()
+                );
                 $serializableReport->add($serializableSubReport);
             }
             $taskResource->setPropertyValue(

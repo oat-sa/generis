@@ -130,13 +130,17 @@ class Updater extends common_ext_ExtensionUpdater
                         'search.query.criterion' => '\\oat\\search\\QueryCriterion',
                         'search.driver.postgres' => '\\oat\\search\\DbSql\\Driver\\PostgreSQL',
                         'search.driver.mysql' => '\\oat\\search\\DbSql\\Driver\\MySQL',
+                        // phpcs:disable Generic.Files.LineLength
                         'search.driver.tao' => '\\oat\\generis\\model\\kernel\\persistence\\smoothsql\\search\\driver\\TaoSearchDriver',
+                        // phpcs:enable Generic.Files.LineLength
                         'search.tao.serialyser' => '\\oat\\search\\DbSql\\TaoRdf\\UnionQuerySerialyser',
                         'search.factory.query' => '\\oat\\search\\factory\\QueryFactory',
                         'search.factory.builder' => '\\oat\\search\\factory\\QueryBuilderFactory',
                         'search.factory.criterion' => '\\oat\\search\\factory\\QueryCriterionFactory',
+                        // phpcs:disable Generic.Files.LineLength
                         'search.tao.gateway' => '\\oat\\generis\\model\\kernel\\persistence\\smoothsql\\search\\GateWay',
                         'search.tao.result' => '\\oat\\generis\\model\\kernel\\persistence\\smoothsql\\search\\TaoResultSet',
+                        // phpcs:enable Generic.Files.LineLength
                     ],
                     'abstract_factories' => [
                         '\\oat\\search\\Command\\OperatorAbstractfactory',

@@ -72,7 +72,9 @@ abstract class Configurable implements PhpSerializable, TaoLoggerAwareInterface
             if (is_object($options) && method_exists($options, 'toArray')) {
                 $options = $options->toArray();
             } else {
-                throw new \common_exception_Error('Options submitted to ' . get_called_class() . ' must be an array or implement toArray');
+                throw new \common_exception_Error(
+                    'Options submitted to ' . get_called_class() . ' must be an array or implement toArray'
+                );
             }
         }
         $this->options = $options;

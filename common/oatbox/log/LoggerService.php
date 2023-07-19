@@ -30,9 +30,9 @@ class LoggerService extends ConfigurableService implements LoggerInterface
 {
     use LoggerTrait;
 
-    const SERVICE_ID = 'generis/log';
+    public const SERVICE_ID = 'generis/log';
 
-    const LOGGER_OPTION = 'logger';
+    public const LOGGER_OPTION = 'logger';
 
     /** @var LoggerInterface */
     protected $logger;

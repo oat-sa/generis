@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,9 +30,6 @@
  */
 interface core_kernel_persistence_PropertyInterface
 {
-
-
-
     /**
      * Short description of method isLgDependent
      *
@@ -110,4 +108,4 @@ interface core_kernel_persistence_PropertyInterface
      * @return void
      */
     public function setLgDependent(core_kernel_classes_Resource $resource, $isLgDependent);
-} /* end of interface core_kernel_persistence_PropertyInterface */
+}

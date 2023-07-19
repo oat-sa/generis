@@ -40,7 +40,9 @@ class common_session_php_KeyValueSessionHandler extends ConfigurableService impl
     protected function getPersistence()
     {
         if (is_null($this->sessionPersistence)) {
-            $this->sessionPersistence = common_persistence_KeyValuePersistence::getPersistence($this->getOption(self::OPTION_PERSISTENCE));
+            $this->sessionPersistence = common_persistence_KeyValuePersistence::getPersistence(
+                $this->getOption(self::OPTION_PERSISTENCE)
+            );
         }
 
         return $this->sessionPersistence;
@@ -52,7 +54,7 @@ class common_session_php_KeyValueSessionHandler extends ConfigurableService impl
      */
     public function open($savePath, $sessionName)
     {
-           return true;
+        return true;
     }
 
     /**

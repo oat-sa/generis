@@ -34,7 +34,7 @@ class AnonymousUser implements User
     {
         return null;
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see \oat\oatbox\user\User::getRoles()
@@ -43,7 +43,7 @@ class AnonymousUser implements User
     {
         return [GenerisRdf::INSTANCE_ROLE_ANONYMOUS];
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see \oat\oatbox\user\User::getPropertyValues()

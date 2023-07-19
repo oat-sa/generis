@@ -33,7 +33,7 @@ use oat\oatbox\user\AnonymousUser;
  */
 class SessionService extends ConfigurableService
 {
-    const SERVICE_ID = 'generis/session';
+    public const SERVICE_ID = 'generis/session';
 
     /**
      * Returns the currently active session

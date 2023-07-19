@@ -50,7 +50,7 @@ class RdfImportTest extends GenerisTestCase
         $this->assertEquals(0, $this->getTripleCount($ontology));
         $importer = new RdfImporter();
         $importer->setServiceLocator($ontology->getServiceLocator());
-        $importer->importFile(__DIR__.'/../../../../samples/rdf/generis.rdf');
+        $importer->importFile(__DIR__ . '/../../../../samples/rdf/generis.rdf');
         $this->assertEquals(3, $this->getTripleCount($ontology));
     }
 

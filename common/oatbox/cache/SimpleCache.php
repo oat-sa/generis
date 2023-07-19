@@ -25,5 +25,5 @@ use Psr\SimpleCache\CacheInterface;
 
 interface SimpleCache extends CacheInterface
 {
-    const SERVICE_ID = 'generis/SimpleCache';
+    public const SERVICE_ID = 'generis/SimpleCache';
 }

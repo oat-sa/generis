@@ -86,10 +86,23 @@ class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDrive
         } else {
             $this->connection->connect($host, $port, $timeout);
         }
+        if (isset($this->params['database_index'])) {
+            if (!$this->connection->select($this->params['database_index'])) {
+                $this->connection->close();
+                throw new common_exception_Error(
+                    "Failed to select Redis database"
+                );
+            }
+        }
     }
 
     private function connectToCluster(array $host, int $timeout, bool $persist)
     {
+        if (isset($this->params['database_index'])) {
+            throw new common_exception_Error(
+                "Redis Cluster can only support a single database, 'database_index' parameter is invalid."
+            );
+        }
         $this->connection = new RedisCluster(null, $host, $timeout, null, $persist);
     }
 
@@ -138,16 +151,15 @@ class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDrive
         $options = [];
         if (!is_null($ttl)) {
             $options['ex'] = $ttl;
-        };
+        }
         if ($nx) {
             $options[] = 'nx';
-        };
+        }
         return $this->callWithRetry('set', [$key, $value, $options]);
     }
 
     public function get($key)
     {
-
         return $this->callWithRetry('get', [$key]);
     }
 

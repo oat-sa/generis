@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -14,9 +15,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
- *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
- *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
+ * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg
+ *                         (under the project TAO & TAO2);
+ *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung
+ *                         (under the project TAO-TRANSFER);
+ *               2009-2012 (update and modification) Public Research Centre Henri Tudor
+ *                         (under the project TAO-SUSTAIN & TAO-DEV);
  *               2013 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  *
  */
@@ -70,7 +74,7 @@ class common_Logger
      * @access public
      * @var int
      */
-    const TRACE_LEVEL = 0;
+    public const TRACE_LEVEL = 0;
 
     /**
      * the level of events representing fine grained informations for debugging
@@ -78,7 +82,7 @@ class common_Logger
      * @access public
      * @var int
      */
-    const DEBUG_LEVEL = 1;
+    public const DEBUG_LEVEL = 1;
 
     /**
      * the level of information events that represent high level system events
@@ -86,7 +90,7 @@ class common_Logger
      * @access public
      * @var int
      */
-    const INFO_LEVEL = 2;
+    public const INFO_LEVEL = 2;
 
     /**
      * the level of warning events that represent potential problems
@@ -94,7 +98,7 @@ class common_Logger
      * @access public
      * @var int
      */
-    const WARNING_LEVEL = 3;
+    public const WARNING_LEVEL = 3;
 
     /**
      * the level of error events that allow the system to continue
@@ -102,7 +106,7 @@ class common_Logger
      * @access public
      * @var int
      */
-    const ERROR_LEVEL = 4;
+    public const ERROR_LEVEL = 4;
 
     /**
      * the level of very severe error events that prevent the system to continue
@@ -110,15 +114,15 @@ class common_Logger
      * @access public
      * @var int
      */
-    const FATAL_LEVEL = 5;
+    public const FATAL_LEVEL = 5;
 
-    const CONTEXT_ERROR_FILE = 'file';
+    public const CONTEXT_ERROR_FILE = 'file';
 
-    const CONTEXT_ERROR_LINE = 'line';
+    public const CONTEXT_ERROR_LINE = 'line';
 
-    const CONTEXT_TRACE = 'trace';
+    public const CONTEXT_TRACE = 'trace';
 
-    const CONTEXT_EXCEPTION = 'exception';
+    public const CONTEXT_EXCEPTION = 'exception';
 
     /**
      * Warnings that are acceptable in our projects
@@ -216,7 +220,7 @@ class common_Logger
      */
     public function enable()
     {
-        
+
         $this->stateStack[] = self::singleton()->enabled;
         $this->enabled = true;
     }
@@ -230,7 +234,7 @@ class common_Logger
      */
     public function disable()
     {
-        
+
         $this->stateStack[] = self::singleton()->enabled;
         $this->enabled = false;
     }
@@ -244,7 +248,7 @@ class common_Logger
      */
     public function restore()
     {
-        
+
         if (count($this->stateStack) > 0) {
             $this->enabled = array_pop($this->stateStack);
         } else {
@@ -263,7 +267,7 @@ class common_Logger
      */
     public static function t($message, $tags = [])
     {
-        
+
         self::singleton()->log(self::TRACE_LEVEL, $message, $tags);
     }
 
@@ -278,7 +282,7 @@ class common_Logger
      */
     public static function d($message, $tags = [])
     {
-        
+
         self::singleton()->log(self::DEBUG_LEVEL, $message, $tags);
     }
 
@@ -295,7 +299,7 @@ class common_Logger
      */
     public static function i($message, $tags = [])
     {
-        
+
         self::singleton()->log(self::INFO_LEVEL, $message, $tags);
     }
 
@@ -310,7 +314,7 @@ class common_Logger
      */
     public static function w($message, $tags = [])
     {
-        
+
         self::singleton()->log(self::WARNING_LEVEL, $message, $tags);
     }
 
@@ -462,8 +466,9 @@ class common_Logger
 
         if ($error !== null && ($error['type'] & (E_COMPILE_ERROR | E_ERROR | E_PARSE | E_CORE_ERROR)) !== 0) {
             $msg = (isset($error['file'], $error['line']))
-               ? 'php error(' . $error['type'] . ') in ' . $error['file'] . '@' . $error['line'] . ': ' . $error['message']
-               : 'php error(' . $error['type'] . '): ' . $error['message'];
+                ? 'php error(' . $error['type'] . ') in ' . $error['file'] . '@' . $error['line'] . ': '
+                    . $error['message']
+                : 'php error(' . $error['type'] . '): ' . $error['message'];
             self::singleton()->log(self::FATAL_LEVEL, $msg, ['PHPERROR']);
         }
     }

@@ -15,8 +15,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
- *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
+ * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung
+ *                         (under the project TAO-TRANSFER);
+ *               2009-2012 (update and modification) Public Research Centre Henri Tudor
+ *                         (under the project TAO-SUSTAIN & TAO-DEV);
  *               2017 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
 
@@ -27,7 +29,6 @@ use Doctrine\DBAL\DBALException;
 
 class SqlInjectionTestCase extends GenerisPhpUnitTestRunner
 {
-    
     public function testInject()
     {
         $generisClass = new core_kernel_classes_Class(GenerisRdf::CLASS_GENERIS_RESOURCE);
@@ -39,7 +40,10 @@ class SqlInjectionTestCase extends GenerisPhpUnitTestRunner
             $testInstance->setPropertiesValues([
                 OntologyRdfs::RDFS_COMMENT => '"hi"'
             ]);
-            $this->assertEquals($testInstance->getUniquePropertyValue(new core_kernel_classes_Property(OntologyRdfs::RDFS_LABEL)), "\"hi\"");
+            $this->assertEquals(
+                $testInstance->getUniquePropertyValue(new core_kernel_classes_Property(OntologyRdfs::RDFS_LABEL)),
+                "\"hi\""
+            );
         } catch (DBALException $e) {
             $this->fail('SQL Error: ' . $e->getMessage());
         }

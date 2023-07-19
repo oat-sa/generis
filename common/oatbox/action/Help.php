@@ -28,7 +28,7 @@ use Zend\ServiceManager\ServiceLocatorAwareInterface;
 class Help implements Action, ServiceLocatorAwareInterface
 {
     use ServiceLocatorAwareTrait;
-    
+
     public function __invoke($params)
     {
         $actionResolver = $this->getServiceLocator()->get(ActionService::SERVICE_ID);

@@ -15,8 +15,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
- *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
+ * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung
+ *                         (under the project TAO-TRANSFER);
+ *               2009-2012 (update and modification) Public Research Centre Henri Tudor
+ *                         (under the project TAO-SUSTAIN & TAO-DEV);
  *               2017 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
 
@@ -25,10 +27,9 @@ use oat\generis\test\GenerisPhpUnitTestRunner;
 
 class ModelsRightTest extends GenerisPhpUnitTestRunner
 {
-
     public function setUp(): void
     {
-            GenerisPhpUnitTestRunner::initTest();
+        GenerisPhpUnitTestRunner::initTest();
     }
 
     public function testRightModels()
@@ -54,7 +55,7 @@ class ModelsRightTest extends GenerisPhpUnitTestRunner
 
         // Try to delete a resource of a locked model
         $property = new core_kernel_classes_Property(OntologyRdfs::RDFS_LABEL);
-            $domain = new core_kernel_classes_Property(OntologyRdfs::RDFS_DOMAIN, __METHOD__);
+        $domain = new core_kernel_classes_Property(OntologyRdfs::RDFS_DOMAIN, __METHOD__);
         $this->assertFalse($property->removePropertyValues($domain, ['pattern' => OntologyRdfs::RDFS_LABEL]));
 
 

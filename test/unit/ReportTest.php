@@ -84,7 +84,6 @@ class ReportTest extends TestCase
             ],
         ];
         $this->assertEquals($expectedArray, $report->toArray());
-
     }
 
     public function testBasicReport(): void
@@ -384,8 +383,9 @@ class ReportTest extends TestCase
         $report = Report::createInfo('1')
             ->add(
                 Report::createSuccess('2')
-                    ->add(Report::createWarning('3')
-                )
+                    ->add(
+                        Report::createWarning('3')
+                    )
             );
 
         self::assertEquals('1, 2, 3', $report->getAllMessages());
