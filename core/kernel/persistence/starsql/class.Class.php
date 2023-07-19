@@ -22,12 +22,20 @@ declare(strict_types=1);
 
 use oat\generis\model\data\event\ClassPropertyCreatedEvent;
 use oat\generis\model\GenerisRdf;
+use oat\generis\model\kernel\persistence\Filter;
+use oat\generis\model\kernel\uri\UriProvider;
 use oat\generis\model\OntologyRdf;
 use oat\generis\model\OntologyRdfs;
 use oat\oatbox\event\EventManagerAwareTrait;
-use oat\generis\model\kernel\uri\UriProvider;
+use WikibaseSolutions\CypherDSL\Clauses\WhereClause;
+use WikibaseSolutions\CypherDSL\Expressions\RawExpression;
+use WikibaseSolutions\CypherDSL\Query;
+
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
+
 use function WikibaseSolutions\CypherDSL\node;
 use function WikibaseSolutions\CypherDSL\parameter;
+use function WikibaseSolutions\CypherDSL\procedure;
 use function WikibaseSolutions\CypherDSL\query;
 use function WikibaseSolutions\CypherDSL\variable;
 
@@ -144,7 +152,22 @@ CYPHER;
 
     public function getInstances(core_kernel_classes_Class $resource, $recursive = false, $params = [])
     {
-        throw new common_Exception('Not implemented! ' . __FILE__ . ' line: ' . __LINE__);
+        $returnValue = [];
+
+        $params = array_merge($params, ['like' => false, 'recursive' => $recursive]);
+
+        $query = $this->getFilteredQuery($resource, [], $params);
+        $results = $this->getPersistence()->run($query);
+
+        foreach ($results as $result) {
+            $uri = $result->current();
+            if (!$uri) {
+                continue;
+            }
+            $returnValue[$uri] = $this->getModel()->getResource($uri);
+        }
+
+        return $returnValue;
     }
 
     /**
@@ -269,17 +292,88 @@ CYPHER;
      */
     public function searchInstances(core_kernel_classes_Class $resource, $propertyFilters = [], $options = [])
     {
-        throw new common_Exception('Not implemented! ' . __FILE__ . ' line: ' . __LINE__);
+        $returnValue = [];
+
+        // Avoid a 'like' search on OntologyRdf::RDF_TYPE!
+        if (count($propertyFilters) === 0) {
+            $options = array_merge($options, ['like' => false]);
+        }
+
+        $query = $this->getFilteredQuery($resource, $propertyFilters, $options);
+        $results = $this->getPersistence()->run($query);
+
+        foreach ($results as $result) {
+            $uri = $result->current();
+            if (!$uri) {
+                continue;
+            }
+            $returnValue[$uri] = $this->getModel()->getResource($uri);
+        }
+
+        return $returnValue;
     }
 
-    public function countInstances(core_kernel_classes_Class $resource, $propertyFilters = [], $options = [])
-    {
-        throw new common_Exception('Not implemented! ' . __FILE__ . ' line: ' . __LINE__);
+    public function countInstances(
+        core_kernel_classes_Class $resource,
+        $propertyFilters = [],
+        $options = []
+    ) {
+        if (isset($options['offset'])) {
+            unset($options['offset']);
+        }
+
+        if (isset($options['limit'])) {
+            unset($options['limit']);
+        }
+
+        if (isset($options['order'])) {
+            unset($options['order']);
+        }
+
+        $options['return'] = 'count(subject)';
+
+        $query = $this->getFilteredQuery($resource, $propertyFilters, $options);
+        $results = $this->getPersistence()->run($query);
+
+        return (int)$results->first()->current();
     }
 
-    public function getInstancesPropertyValues(core_kernel_classes_Class $resource, core_kernel_classes_Property $property, $propertyFilters = [], $options = [])
-    {
-        throw new common_Exception('Not implemented! ' . __FILE__ . ' line: ' . __LINE__);
+    public function getInstancesPropertyValues(
+        core_kernel_classes_Class $resource,
+        core_kernel_classes_Property $property,
+        $propertyFilters = [],
+        $options = []
+    ) {
+        $returnValue = [];
+
+        if (count($propertyFilters) === 0) {
+            $options = array_merge($options, ['like' => false]);
+        }
+
+        $predicate = sprintf('subject.`%s`', $property->getUri());
+        if ($property->isLgDependent()) {
+            $predicate = $this->buildLanguagePattern($predicate, $options['lang'] ?? '')->toQuery();
+        }
+
+        $distinct = $options['distinct'] ?? false;
+        if ($distinct) {
+            $options['return'] = sprintf('DISTINCT toStringOrNull(%s)', $predicate);
+        } else {
+            $options['return'] = sprintf('toStringOrNull(%s)', $predicate);
+        }
+
+        $query = $this->getFilteredQuery($resource, $propertyFilters, $options);
+        $results = $this->getPersistence()->run($query);
+
+        foreach ($results as $result) {
+            $object = $result->current();
+            if (!$object) {
+                continue;
+            }
+            $returnValue[] = common_Utils::toResource($object);
+        }
+
+        return $returnValue;
     }
 
     /**
@@ -310,8 +404,168 @@ CYPHER;
         throw new common_Exception('Not implemented! ' . __FILE__ . ' line: ' . __LINE__);
     }
 
-    public function getFilteredQuery(core_kernel_classes_Class $resource, $propertyFilters = [], $options = []): string
+    private function getFilteredQuery(core_kernel_classes_Class $resource, $propertyFilters = [], $options = []): string
     {
-        throw new common_Exception('Not implemented! ' . __FILE__ . ' line: ' . __LINE__);
+        $and = (!isset($options['chaining']) || (strtolower($options['chaining']) === 'and'));
+        $like = $options['like'] ?? true;
+        $lang = $options['lang'] ?? '';
+        $offset = $options['offset'] ?? 0;
+        $limit = $options['limit'] ?? 0;
+        $order = $options['order'] ?? '';
+        $orderDir = $options['orderdir'] ?? 'ASC';
+        $return = $options['return'] ?? 'subject.uri';
+
+        $subject = Query::node('Resource')->withVariable(Query::variable('subject'));
+
+        $rdftypes = [$resource->getUri()];
+
+        if (isset($options['additionalClasses'])) {
+            foreach ($options['additionalClasses'] as $aC) {
+                $rdftypes[] = ($aC instanceof core_kernel_classes_Resource) ? $aC->getUri() : $aC;
+            }
+        }
+
+        $rdftypes = array_unique($rdftypes);
+
+        $parentClass = Query::node('Resource')->withVariable(Query::variable('parent'));
+        $parentPath = $subject->relationshipTo($parentClass, OntologyRdf::RDF_TYPE);
+        $parentWhere = $this->buildPropertyQuery($parentClass->property('uri'), $rdftypes, false);
+
+        $recursive = $options['recursive'] ?? false;
+        if ($recursive) {
+            $grandParentClass = Query::node('Resource')->withVariable(Query::variable('grandParent'));
+            $subClassRelation = Query::relationshipTo()->addType(OntologyRdfs::RDFS_SUBCLASSOF)->withArbitraryHops(true);
+
+            $parentPath = $parentPath->relationship($subClassRelation, $grandParentClass);
+            $parentWhere = $parentWhere->or($this->buildPropertyQuery($grandParentClass->property('uri'), $resource, false));
+        }
+
+        $matchPatterns = [$parentPath];
+        $propertyFilter = [$parentWhere];
+        foreach ($propertyFilters as $propertyUri => $filterValues) {
+            if ($filterValues instanceof Filter) {
+                throw new common_exception_NoImplementation();
+            }
+
+            $property = $this->getModel()->getProperty($propertyUri);
+            if ($property->isRelationship()) {
+                $object = Query::node('Resource');
+                $matchPatterns[] = $subject->relationshipTo($object, $propertyUri);
+
+                $predicate = $object->property('uri');
+                $propertyFilter[] = $this->buildPropertyQuery($predicate, $filterValues, false);
+            } else {
+                $predicate = $subject->property($propertyUri);
+                if ($property->isLgDependent()) {
+                    $predicate = $this->buildLanguagePattern($predicate->toQuery(), $lang);
+                }
+                $propertyFilter[] = $this->buildPropertyQuery($predicate, $filterValues, $like);
+            }
+        }
+
+        $query = Query::new()->match($matchPatterns);
+        $query->where($propertyFilter, $and ? WhereClause::AND : WhereClause::OR);
+        $query->returning(Query::rawExpression($return));
+
+        if (!empty($order)) {
+            $predicate = $subject->property($order);
+
+            $orderProperty = $this->getModel()->getProperty($order);
+            if ($orderProperty->isLgDependent()) {
+                $predicate = $this->buildLanguagePattern($predicate->toQuery(), $lang);
+            }
+            //Can't use dedicated order function as it doesn't support raw expressions
+            $query->raw(
+                'ORDER BY',
+                $predicate->toQuery() . ((strtoupper($orderDir) === 'DESC') ? ' DESCENDING': '')
+            );
+        }
+
+        if ($limit > 0) {
+            $query
+                ->skip($offset)
+                ->limit($limit);
+        }
+
+        return $query->build();
+    }
+
+    private function buildPropertyQuery(
+        $predicate,
+        $values,
+        bool $like
+    ): BooleanType {
+        if (!is_array($values)) {
+            $values = [$values];
+        }
+
+        $valuePatterns = null;
+        $lastItem = array_key_last($values);
+        foreach ($values as $key => $val) {
+            if ($val instanceof core_kernel_classes_Resource) {
+                $returnValue = $predicate->equals($val->getUri());
+            } else {
+                $patternToken = trim((string)$val);
+                if ($like) {
+                    $isWildcard = (strpos($patternToken, '*') !== false);
+                    $patternToken = strtr(
+                        trim($patternToken, '%'),
+                        [
+                            '.' => '\\.',
+                            '\_' => '_',
+                            '\%' => '%',
+                            '*' => '.*',
+                            '_' => '.',
+                            '%' => '.*',
+                        ]
+                    );
+                    if (!$isWildcard) {
+                        $patternToken = '.*' . $patternToken . '.*';
+                    }
+                    $returnValue = $predicate->regex('(?i)' . $patternToken);
+                } else {
+                    $returnValue = $predicate->equals($patternToken);
+                }
+            }
+
+            $valuePatterns = ($valuePatterns)
+                ? $valuePatterns->or($returnValue, ($key === $lastItem))
+                : $returnValue;
+        }
+
+        return $valuePatterns;
+    }
+
+    /**
+     * @param string $predicate
+     * @param string $lang
+     *
+     * @return RawExpression
+     */
+    private function buildLanguagePattern(string $predicate, string $lang = ''): RawExpression
+    {
+        $defaultLanguage = $this->getDefaultLanguage();
+
+        if (empty($lang) || $lang === $defaultLanguage) {
+            $resultExpression = Query::rawExpression(
+                sprintf(
+                    "n10s.rdf.getLangValue('%s', %s)",
+                    $defaultLanguage,
+                    $predicate
+                )
+            );
+        } else {
+            $resultExpression = Query::rawExpression(
+                sprintf(
+                    "coalesce(n10s.rdf.getLangValue('%s', %s), n10s.rdf.getLangValue('%s', %s))",
+                    $lang,
+                    $predicate,
+                    $defaultLanguage,
+                    $predicate
+                )
+            );
+        }
+
+        return $resultExpression;
     }
 }
