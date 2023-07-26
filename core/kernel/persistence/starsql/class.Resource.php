@@ -527,7 +527,7 @@ CYPHER;
 
     private function parseTranslatedValue($value): string
     {
-        preg_match(self::LANGUAGE_TAGGED_VALUE_PATTERN, $value, $matches);
+        preg_match(self::LANGUAGE_TAGGED_VALUE_PATTERN, (string)$value, $matches);
 
         return $matches[1] ?? (string) $value;
     }
