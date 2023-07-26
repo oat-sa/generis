@@ -458,12 +458,12 @@ CYPHER;
         return $this->getModel()->getServiceLocator();
     }
 
-    private function getDataLanguage()
+    protected function getDataLanguage()
     {
         return $this->getServiceLocator()->get(SessionService::SERVICE_ID)->getCurrentSession()->getDataLanguage();
     }
 
-    private function getDefaultLanguage()
+    protected function getDefaultLanguage()
     {
         return $this->getServiceLocator()->get(UserLanguageServiceInterface::SERVICE_ID)->getDefaultLanguage();
     }
