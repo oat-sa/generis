@@ -35,15 +35,6 @@ use function WikibaseSolutions\CypherDSL\variable;
 
 class core_kernel_persistence_starsql_Resource implements core_kernel_persistence_ResourceInterface
 {
-    private const RELATIONSHIP_PROPERTIES = [
-        OntologyRdf::RDF_TYPE,
-        OntologyRdfs::RDFS_CLASS,
-        OntologyRdfs::RDFS_RANGE,
-        OntologyRdfs::RDFS_DOMAIN,
-        OntologyRdfs::RDFS_SUBCLASSOF,
-        OntologyRdfs::RDFS_SUBPROPERTYOF,
-    ];
-
     private const LANGUAGE_TAGGED_VALUE_PATTERN = "/^(.*)@([a-zA-Z\\-]{5,6})$/";
 
     /**
@@ -105,7 +96,7 @@ class core_kernel_persistence_starsql_Resource implements core_kernel_persistenc
         $node = node()
             ->withProperties(['uri' => $uriParameter = parameter()])
             ->withLabels(['Resource']);
-        if ($this->propertyIsRelationship($property)) {
+        if ($property->isRelationship()) {
             $relationship = relationshipTo()->withTypes([$property->getUri()]);
             $remoteNode = node();
             $query = query()
@@ -171,7 +162,7 @@ class core_kernel_persistence_starsql_Resource implements core_kernel_persistenc
                 }
             }
         }
-        if ($this->propertyIsRelationship($property)) {
+        if ($property->isRelationship()) {
             $query = <<<CYPHER
                 MATCH
                   (a:Resource), (b:Resource)
@@ -229,7 +220,7 @@ CYPHER;
             }
             foreach ($value as $val) {
                 // @TODO check if the property exists already
-                if ($val instanceof core_kernel_classes_Resource || $this->propertyIsRelationship($property)) {
+                if ($val instanceof core_kernel_classes_Resource || $property->isRelationship()) {
                     $valUri = $val instanceof core_kernel_classes_Resource ? $val->getUri() : $val;
                     $currentValues = $collectedRelationships[$valUri] ?? [];
                     $collectedRelationships[$valUri] = array_merge($currentValues, [$propertyUri]);
@@ -539,16 +530,5 @@ CYPHER;
         preg_match(self::LANGUAGE_TAGGED_VALUE_PATTERN, $value, $matches);
 
         return $matches[1] ?? (string) $value;
-    }
-
-    private function propertyIsRelationship(core_kernel_classes_Property $property)
-    {
-        if (in_array($property->getUri(), self::RELATIONSHIP_PROPERTIES)) {
-            return true;
-        }
-
-        $range = $property->getRange();
-
-        return $range->getUri() !== OntologyRdfs::RDFS_LITERAL;
     }
 }
