@@ -231,7 +231,17 @@ class ClassTest extends GenerisPhpUnitTestRunner
         $subClass->delete();
     }
 
+    public function testGetCountInstances()
+    {
+        $class = new core_kernel_classes_Class(WidgetRdf::CLASS_URI_WIDGET);
+        $sub1Class = $class->createSubClass('subTest Class', 'subTest Class');
+        $sub1Class->createInstance('test', 'comment');
+        $subclass2 = $sub1Class->createSubClass('subTest Class 2', 'subTest Class 2');
+        $subclass2->createInstance('test3', 'comment3');
 
+        $this->assertEquals(1, $sub1Class->countInstances());
+        $this->assertEquals(2, $sub1Class->countInstances([], ['recursive' => true]));
+    }
 
     public function testSetSubClasseOf()
     {
@@ -337,9 +347,9 @@ class ClassTest extends GenerisPhpUnitTestRunner
         $sub1Clazz = $clazz->createSubClass();
         $sub1ClazzInstance = $sub1Clazz->createInstance('test case instance');
         $sub2Clazz = $sub1Clazz->createSubClass();
-        $sub2ClazzInstance = $sub2Clazz->createInstance('test case instance');
+        $sub2ClazzInstance = $sub2Clazz->createInstance('second test case instance');
         $sub3Clazz = $sub2Clazz->createSubClass();
-        $sub3ClazzInstance = $sub3Clazz->createInstance('test case instance');
+        $sub3ClazzInstance = $sub3Clazz->createInstance('test case instance 3');
 
         $options = [
             'recursive'             => true,
@@ -365,6 +375,174 @@ class ClassTest extends GenerisPhpUnitTestRunner
         $sub1Clazz->delete(true);
         $sub2Clazz->delete(true);
         $sub3Clazz->delete(true);
+    }
+
+    public function testSearchInstancesWithOrder()
+    {
+        $class = new core_kernel_classes_Class(WidgetRdf::CLASS_URI_WIDGET);
+        $subClass = $class->createSubClass();
+        $sub1ClassInstance = $subClass->createInstance( 'test case instance');
+        $sub2ClassInstance = $subClass->createInstance( 'second test case instance');
+        $sub3ClassInstance = $subClass->createInstance( 'test case instance 3');
+
+        $instances = $class->searchInstances(
+            [
+                OntologyRdfs::RDFS_LABEL => 'test case instance'
+            ],
+            [
+                'recursive' => true,
+                'order' => OntologyRdfs::RDFS_LABEL,
+                'orderdir' => 'DESC',
+                'limit' => 1,
+                'offset' => 1,
+            ]
+        );
+
+        $this->assertCount(1, $instances);
+        $this->assertArrayHasKey($sub1ClassInstance->getUri(), $instances);
+    }
+
+    public function dataProviderSearchInstancesWithRegularExpressions(): iterable
+    {
+        yield 'case-insensitive match' => [
+            'correctLabel' => 'test Case Instance With dot',
+            'incorrectLabel' => 'test case instance without dot',
+            'searchCriterion' => 'instance with dot',
+        ];
+
+        yield 'dot escape' => [
+            'correctLabel' => 'test case instance with d.t',
+            'incorrectLabel' => 'test case instance with dot',
+            'searchCriterion' => 'instance with d.t',
+        ];
+
+        yield 'star in the beginning' => [
+            'correctLabel' => 'test case instance with',
+            'incorrectLabel' => 'test case instance without star',
+            'searchCriterion' => '*instance with',
+        ];
+
+        yield 'star in the end' => [
+            'correctLabel' => 'test case instance with',
+            'incorrectLabel' => 'incorrect test case instance with',
+            'searchCriterion' => 'test case instance*',
+        ];
+
+        yield 'star in the middle' => [
+            'correctLabel' => 'test case instance with',
+            'incorrectLabel' => 'incorrect test case instance without star',
+            'searchCriterion' => 'test*with',
+        ];
+
+        yield 'percent in the beginning' => [
+            'correctLabel' => 'test case instance with',
+            'incorrectLabel' => 'test case wrong instance with',
+            'searchCriterion' => '%case instance',
+        ];
+
+        yield 'percent in the end' => [
+            'correctLabel' => 'test case instance with',
+            'incorrectLabel' => 'test case wrong instance with',
+            'searchCriterion' => 'case instance%',
+        ];
+
+        yield 'percent in the middle' => [
+            'correctLabel' => 'test case instance with star',
+            'incorrectLabel' => 'test instance without star',
+            'searchCriterion' => 'case%with',
+        ];
+
+        yield 'multiple percents in the middle' => [
+            'correctLabel' => 'test case instance with star',
+            'incorrectLabel' => 'test instance without star',
+            'searchCriterion' => 'test%case%with',
+        ];
+
+        yield 'both percent and star present' => [
+            'correctLabel' => 'test case instance with',
+            'incorrectLabel' => 'test instance without star',
+            'searchCriterion' => '*case%with',
+        ];
+
+        yield 'underscore is present' => [
+            'correctLabel' => 'test case instance with underscore symbol',
+            'incorrectLabel' => 'test case instance without underscore symbol',
+            'searchCriterion' => 'instance with under_core',
+        ];
+
+        yield 'escaped wildcard symbols' => [
+            'correctLabel' => 'test case instance w_th %pecial %ymbols',
+            'incorrectLabel' => 'test case instance with special ymbols',
+            'searchCriterion' => 'w\_th \%pecial \%ymbols',
+        ];
+    }
+
+    /**
+     * @dataProvider dataProviderSearchInstancesWithRegularExpressions
+     *
+     * @param string $correctLabel
+     * @param string $incorrectLabel
+     * @param string $searchCriterion
+     */
+    public function testSearchInstancesWithRegularExpressions(
+        string $correctLabel,
+        string $incorrectLabel,
+        string $searchCriterion
+    ) {
+        $class = new core_kernel_classes_Class(WidgetRdf::CLASS_URI_WIDGET);
+        $subClass = $class->createSubClass();
+        $incorrectInstance = $subClass->createInstance($incorrectLabel);
+        $correctInstance = $subClass->createInstance($correctLabel);
+
+        $instances = $subClass->searchInstances(
+            [
+                OntologyRdfs::RDFS_LABEL => $searchCriterion
+            ],
+            [
+                'recursive' => false,
+                'like' => true,
+            ]
+        );
+
+        $this->assertCount(1, $instances);
+        $this->assertArrayHasKey($correctInstance->getUri(), $instances);
+    }
+
+    public function testSearchInstancesLanguageSpecific()
+    {
+        $class = new core_kernel_classes_Class(WidgetRdf::CLASS_URI_WIDGET);
+        $labelProperty = new \core_kernel_classes_Property(OntologyRdfs::RDFS_LABEL);
+        $sub1Class = $class->createSubClass();
+        $sub1ClassInstance = $sub1Class->createInstance( 'test case instance'); //en-US
+        $sub1ClassInstance->setPropertyValueByLg($labelProperty, 'instance de cas de test', 'fr-FR');
+        $sub1ClassInstance->setPropertyValueByLg($labelProperty, 'Testfallinstanz', 'de-DE');
+
+        $sub2Class = $sub1Class->createSubClass();
+        $sub2ClassInstance = $sub2Class->createInstance( 'second test case instance'); //en-US
+        $sub2ClassInstance->setPropertyValueByLg($labelProperty, 'deuxième instance de cas de test', 'fr-FR');
+        $sub2ClassInstance->setPropertyValueByLg($labelProperty, 'zweite Testfallinstanz', 'de-DE');
+
+        $sub3Class = $sub2Class->createSubClass();
+        $sub3ClassInstance = $sub3Class->createInstance( 'test case instance 3'); //en-US
+        $sub3ClassInstance->setPropertyValueByLg($labelProperty, 'exemple de cas de test 3', 'fr-FR');
+        $sub3ClassInstance->setPropertyValueByLg($labelProperty, 'Testfallinstanz 3', 'de-DE');
+
+        $instances = $sub1Class->searchInstances(
+            [
+                OntologyRdfs::RDFS_LABEL => 'Testfallinstanz'
+            ],
+            [
+                'recursive' => true,
+                'order' => OntologyRdfs::RDFS_LABEL,
+                'orderdir' => 'DESC',
+                'lang' => 'de-DE'
+            ]
+        );
+
+        $this->assertCount(3, $instances);
+        $this->assertEquals($sub2ClassInstance->getUri(), array_shift($instances)->getUri());
+        $this->assertEquals($sub3ClassInstance->getUri(), array_shift($instances)->getUri());
+        $this->assertEquals($sub1ClassInstance->getUri(), array_shift($instances)->getUri());
     }
 
     //Test the function getInstancesPropertyValues of the class Class with literal properties
@@ -497,6 +675,49 @@ class ClassTest extends GenerisPhpUnitTestRunner
         $p3->delete();
 
         $subClass->delete();
+    }
+
+    public function testGetInstancesPropertyValuesLanguageSpecific()
+    {
+        $class = new core_kernel_classes_Class(WidgetRdf::CLASS_URI_WIDGET);
+        $subClass = $class->createSubClass('GetInstancesPropertyValuesClass', 'GetInstancesPropertyValues_Class');
+        $p1 = \core_kernel_classes_ClassFactory::createProperty(
+            $subClass,
+            'GetInstancesPropertyValues_Property1',
+            'GetInstancesPropertyValues_Property1',
+            true,
+            LOCAL_NAMESPACE . "#PLG1"
+        );
+        $p1->setRange(new core_kernel_classes_Class(OntologyRdfs::RDFS_LITERAL));
+
+        // $i1
+        $i1 = $subClass->createInstance("i1", "i1");
+        $i1->setPropertyValue($p1, "p11 litteral");
+        $i1->setPropertyValueByLg($p1, "p11 littéral", 'fr-FR');
+        // $i2
+        $i2 = $subClass->createInstance("i2", "i2");
+        $i2->setPropertyValue($p1, "p11 litteral");
+        $i2->setPropertyValueByLg($p1, "p11 littéral", 'fr-FR');
+
+        $propertyFilters =  [
+            $p1->getUri() => "p11 littéral"
+        ];
+        $result = $subClass->getInstancesPropertyValues($p1, $propertyFilters, ['lang' => 'fr-FR']);
+        $this->assertCount(2, $result);
+        $this->assertTrue(in_array("p11 littéral", $result));
+
+        $propertyFilters =  [
+            $p1->getUri() => "p11 littéral"
+        ];
+        $result = $subClass->getInstancesPropertyValues($p1, $propertyFilters, ["distinct" => true, 'lang' => 'fr-FR']);
+        $this->assertCount(1, $result);
+        $this->assertTrue(in_array("p11 littéral", $result));
+
+        $propertyFilters =  [
+            $p1->getUri() => "p11 littéral"
+        ];
+        $result = $subClass->getInstancesPropertyValues($p1, $propertyFilters, ["distinct" => true, 'lang' => 'en-US']);
+        $this->assertCount(0, $result);
     }
 
     //Test the function getInstancesPropertyValues of the class Class  with resource properties

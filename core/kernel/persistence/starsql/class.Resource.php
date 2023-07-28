@@ -169,6 +169,10 @@ class core_kernel_persistence_starsql_Resource implements core_kernel_persistenc
                 WHERE a.uri = \$uri AND b.uri = \$object
                 CREATE (a)-[r:`{$propertyUri}`]->(b)
                 RETURN type(r)
+CYPHER; } else if($property->isLgDependent()) {
+            $query = <<<CYPHER
+            MATCH (n:Resource {uri: \$uri})
+            SET n.`{$propertyUri}` = coalesce(n.`{$propertyUri}`, []) + \$object
 CYPHER;
         } else {
             $query = <<<CYPHER

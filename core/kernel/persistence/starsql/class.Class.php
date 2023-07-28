@@ -196,7 +196,6 @@ CYPHER;
 
     public function createInstance(core_kernel_classes_Class $resource, $label = '', $comment = '', $uri = '')
     {
-        $subject = '';
         if ($uri == '') {
             $subject = $this->getServiceLocator()->get(UriProvider::SERVICE_ID)->provide();
         } elseif ($uri[0] == '#') { //$uri should start with # and be well formed
@@ -206,14 +205,25 @@ CYPHER;
             $subject = $uri;
         }
 
+        $session = $this->getServiceLocator()->get(\oat\oatbox\session\SessionService::SERVICE_ID)->getCurrentSession();
+        $sessionLanguage = $this->getDataLanguage();
         $node = node()->addProperty('uri', $uriParameter = parameter())
             ->addLabel('Resource');
         if (!empty($label)) {
-            $node->addProperty(OntologyRdfs::RDFS_LABEL, $label);
+            $node->addProperty(OntologyRdfs::RDFS_LABEL, [$label . '@' . $sessionLanguage]);
         }
         if (!empty($comment)) {
-            $node->addProperty(OntologyRdfs::RDFS_COMMENT, $comment);
+            $node->addProperty(OntologyRdfs::RDFS_COMMENT, [$comment . '@' . $sessionLanguage]);
         }
+
+        $node->addProperty(
+            'http://www.tao.lu/Ontologies/TAO.rdf#UpdatedBy',
+            (string)$session->getUser()->getIdentifier()
+        );
+        $node->addProperty(
+            'http://www.tao.lu/Ontologies/TAO.rdf#UpdatedAt',
+            procedure()::raw('timestamp')
+        );
 
         $nodeForRelationship = node()->withVariable($variableForRelatedResource = variable());
         $relatedResource = node('Resource')->withProperties(['uri' => $relatedUri = parameter()])->withVariable($variableForRelatedResource);
@@ -222,7 +232,7 @@ CYPHER;
         $query = query()
             ->match($relatedResource)
             ->create($node);
-        $results = $this->getPersistence()->run(
+        $this->getPersistence()->run(
             $query->build(),
             [$uriParameter->getParameter() => $subject, $relatedUri->getParameter() => $resource->getUri()]
         );
@@ -401,7 +411,28 @@ CYPHER;
 
     public function deleteInstances(core_kernel_classes_Class $resource, $resources, $deleteReference = false)
     {
-        throw new common_Exception('Not implemented! ' . __FILE__ . ' line: ' . __LINE__);
+        //TODO: We need to figure out if commented checks below is still correct.
+//        $class = $this->getModel()->getClass($resource->getUri());
+//        if (!$class->exists() || empty($resources)) {
+        if (empty($resources)) {
+            return false;
+        }
+
+        $uris = [];
+        foreach ($resources as $r) {
+            $uri = (($r instanceof core_kernel_classes_Resource) ? $r->getUri() : $r);
+            $uris[] = $uri;
+        }
+
+        $node = Query::node('Resource');
+        $query = Query::new()
+            ->match($node)
+            ->where($node->property('uri')->in($uris))
+            ->delete($node, $deleteReference);
+
+        $this->getPersistence()->run($query->build());
+
+        return true;
     }
 
     private function getFilteredQuery(core_kernel_classes_Class $resource, $propertyFilters = [], $options = []): string

@@ -56,6 +56,17 @@ trait OntologyMockTrait
         return $this->setupOntology($model);
     }
 
+    protected function getStarSqlMock()
+    {
+        $model = new \core_kernel_persistence_starsql_StarModel([
+            \core_kernel_persistence_starsql_StarModel::OPTION_PERSISTENCE => 'neo4j',
+            \core_kernel_persistence_starsql_StarModel::OPTION_READABLE_MODELS => [2,3],
+            \core_kernel_persistence_starsql_StarModel::OPTION_WRITEABLE_MODELS => [2],
+            \core_kernel_persistence_starsql_StarModel::OPTION_NEW_TRIPLE_MODEL => 2,
+        ]);
+        return $this->setupOntology($model);
+    }
+
     /**
      * @return core_kernel_persistence_smoothsql_SmoothModel
      */
