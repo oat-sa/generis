@@ -20,7 +20,6 @@
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
-use oat\generis\model\kernel\persistence\smoothsql\search\filter\Filter;
 
 /**
  * Handles the application of filters.
