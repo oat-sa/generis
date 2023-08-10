@@ -101,6 +101,10 @@ class ContainerBuilder extends SymfonyContainerBuilder
             return $this->legacyContainer;
         }
 
+        if (!file_exists($this->cachePath)) {
+            mkdir($this->cachePath, 0700, true);
+        }
+
         if (!is_writable($this->cachePath)) {
             throw new InvalidArgumentException(
                 sprintf(
