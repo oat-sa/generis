@@ -70,8 +70,7 @@ class ClassTest extends GenerisPhpUnitTestRunner
             $class = new \core_kernel_classes_Class($classUri);
             $instances = $class->searchInstances(
                 [
-                    'http://www.tao.lu/Ontologies/TAO.rdf#UpdatedBy' =>
-                        'https://luoss.docker.localhost/ontologies/tao.rdfvirtualTestUser'
+                    'http://www.tao.lu/Ontologies/TAO.rdf#UpdatedBy' => LOCAL_NAMESPACE . 'virtualTestUser'
                 ],
                 ['recursive' => true, 'like' => false]
             );
@@ -112,9 +111,9 @@ class ClassTest extends GenerisPhpUnitTestRunner
                 $this->assertEquals($instance->getLabel(), 'A Text Box');
                 $this->assertEquals($instance->getComment(), 'A particular text box');
             }
-            if ($instance->getUri() === $subclassInstance->getUri()) {
-                $this->assertEquals($instance->getLabel(), 'test3');
-                $this->assertEquals($instance->getComment(), 'comment3');
+            if ($instance->getUri() === $plop->getUri()) {
+                $this->assertEquals($instance->getLabel(), 'test');
+                $this->assertEquals($instance->getComment(), 'comment');
             }
         }
 
@@ -142,9 +141,9 @@ class ClassTest extends GenerisPhpUnitTestRunner
                 $this->assertEquals($instance->getLabel(), 'test');
                 $this->assertEquals($instance->getComment(), 'comment');
             }
-            if ($instance->getUri() === $plop->getUri()) {
-                $this->assertEquals($instance->getLabel(), 'test');
-                $this->assertEquals($instance->getComment(), 'comment');
+            if ($instance->getUri() === $subclassInstance->getUri()) {
+                $this->assertEquals($instance->getLabel(), 'test3');
+                $this->assertEquals($instance->getComment(), 'comment3');
             }
         }
     }
@@ -325,8 +324,8 @@ class ClassTest extends GenerisPhpUnitTestRunner
         ];
 
         yield 'underscore is present' => [
-            'correctLabel' => 'test case instance with underscore symbol',
-            'incorrectLabel' => 'test case instance without underscore symbol',
+            'correctLabel' => 'test case instance with underScore symbol',
+            'incorrectLabel' => 'test case instance with undercore symbol',
             'searchCriterion' => 'instance with under_core',
         ];
 
