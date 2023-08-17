@@ -27,6 +27,7 @@ use oat\generis\model\OntologyRdf;
 use oat\generis\model\OntologyRdfs;
 use oat\generis\model\WidgetRdf;
 use oat\generis\test\GenerisPhpUnitTestRunner;
+use oat\generis\test\OntologyMockTrait;
 
 /**
  * Test class for Class.
@@ -37,12 +38,15 @@ use oat\generis\test\GenerisPhpUnitTestRunner;
 
 class ClassTest extends GenerisPhpUnitTestRunner
 {
+    use OntologyMockTrait;
+
     protected $object;
 
     protected function setUp(): void
     {
 
         GenerisPhpUnitTestRunner::initTest();
+        $ontologyModel = $this->getOntologyMock();
 
         $this->object = new core_kernel_classes_Class(OntologyRdfs::RDFS_RESOURCE);
         $this->object->debug = __METHOD__;

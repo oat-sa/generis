@@ -25,6 +25,7 @@ use common_session_Session;
 use core_kernel_persistence_smoothsql_SmoothModel;
 use oat\generis\model\data\Ontology;
 use oat\generis\model\kernel\persistence\newsql\NewSqlOntology;
+use oat\generis\model\kernel\persistence\smoothsql\search\ComplexSearchService;
 use oat\generis\model\kernel\uri\Bin2HexUriProvider;
 use oat\generis\model\kernel\uri\UriProvider;
 use oat\generis\persistence\DriverConfigurationFeeder;
@@ -63,6 +64,7 @@ trait OntologyMockTrait
             \core_kernel_persistence_starsql_StarModel::OPTION_READABLE_MODELS => [2,3],
             \core_kernel_persistence_starsql_StarModel::OPTION_WRITEABLE_MODELS => [2],
             \core_kernel_persistence_starsql_StarModel::OPTION_NEW_TRIPLE_MODEL => 2,
+            \core_kernel_persistence_starsql_StarModel::OPTION_SEARCH_SERVICE => ComplexSearchService::SERVICE_ID,
         ]);
         return $this->setupOntology($model);
     }

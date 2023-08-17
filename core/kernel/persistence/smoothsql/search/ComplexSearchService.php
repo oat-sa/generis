@@ -26,6 +26,7 @@
 namespace   oat\generis\model\kernel\persistence\smoothsql\search;
 
 use core_kernel_persistence_smoothsql_SmoothModel;
+use oat\generis\model\data\Model;
 use oat\generis\model\kernel\persistence\smoothsql\search\filter\FilterFactory;
 use oat\oatbox\service\ConfigurableService;
 use oat\search\base\QueryBuilderInterface;
@@ -33,8 +34,6 @@ use oat\search\base\QueryInterface;
 use oat\search\base\SearchGateWayInterface;
 use Zend\ServiceManager\Config;
 use Zend\ServiceManager\ServiceManager;
-use oat\generis\model\data\ModelManager;
-use oat\generis\model\data\Model;
 
 /**
  * Complexe search service
