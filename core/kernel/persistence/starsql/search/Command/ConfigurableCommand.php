@@ -21,9 +21,8 @@
 
 namespace oat\generis\model\kernel\persistence\starsql\search\Command;
 
-use WikibaseSolutions\CypherDSL\Expressions\Literals\Literal;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\UnaryOperator;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
+use WikibaseSolutions\CypherDSL\Query;
 
 class ConfigurableCommand implements CommandInterface
 {
@@ -34,12 +33,16 @@ class ConfigurableCommand implements CommandInterface
         $this->operationClass = $operationClass;
     }
 
-    public function buildQuery($predicate, $values): BooleanType
+    public function buildQuery($predicate, $values): Condition
     {
         if (is_a($this->operationClass, UnaryOperator::class, true)) {
-            return new $this->operationClass($predicate);
+            $condition =  new $this->operationClass($predicate);
+            $parameterList = [];
         } else {
-            return new $this->operationClass($predicate, Literal::literal($values));
+            $condition =  new $this->operationClass($predicate, $valueParam = Query::parameter());
+            $parameterList = [$valueParam->getParameter() => $values];
         }
+
+        return new Condition($condition, $parameterList);
     }
 }

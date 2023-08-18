@@ -26,6 +26,7 @@
 namespace oat\generis\model\kernel\persistence\starsql\search;
 
 use common_persistence_Manager;
+use Laudis\Neo4j\Databags\Statement;
 use oat\oatbox\service\ServiceManager;
 use oat\search\base\exception\SearchGateWayExeption;
 use oat\search\base\QueryBuilderInterface;
@@ -87,10 +88,10 @@ class GateWay extends TaoSearchGateWay
      *
      * @return array
      */
-    private function fetchObjectList(string $query): array
+    private function fetchObjectList(Statement $query): array
     {
         $returnValue = [];
-        $statement = $this->connector->run($query);
+        $statement = $this->connector->runStatement($query);
         foreach ($statement as $result) {
             $object = $result->current();
             if (!$object) {
@@ -101,12 +102,9 @@ class GateWay extends TaoSearchGateWay
         return $returnValue;
     }
 
-    /**
-     * @param string $query
-     */
-    private function fetchOne(string $query)
+    private function fetchOne(Statement $query)
     {
-        $results = $this->connector->run($query);
+        $results = $this->connector->runStatement($query);
         return $results->first()->current();
     }
 
@@ -121,5 +119,14 @@ class GateWay extends TaoSearchGateWay
     {
         $this->parsedQuery = parent::count($builder);
         return (int)($this->fetchOne($this->parsedQuery));
+    }
+
+    public function getQuery()
+    {
+        if ($this->parsedQuery instanceof Statement) {
+            return $this->parsedQuery->getText();
+        } else {
+            return '';
+        }
     }
 }

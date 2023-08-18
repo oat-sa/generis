@@ -61,9 +61,6 @@ trait OntologyMockTrait
     {
         $model = new \core_kernel_persistence_starsql_StarModel([
             \core_kernel_persistence_starsql_StarModel::OPTION_PERSISTENCE => 'neo4j',
-            \core_kernel_persistence_starsql_StarModel::OPTION_READABLE_MODELS => [2,3],
-            \core_kernel_persistence_starsql_StarModel::OPTION_WRITEABLE_MODELS => [2],
-            \core_kernel_persistence_starsql_StarModel::OPTION_NEW_TRIPLE_MODEL => 2,
             \core_kernel_persistence_starsql_StarModel::OPTION_SEARCH_SERVICE => ComplexSearchService::SERVICE_ID,
         ]);
         return $this->setupOntology($model);

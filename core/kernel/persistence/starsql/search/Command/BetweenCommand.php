@@ -21,18 +21,26 @@
 
 namespace oat\generis\model\kernel\persistence\starsql\search\Command;
 
-use WikibaseSolutions\CypherDSL\Expressions\Literals\Literal;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\GreaterThanOrEqual;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\LessThanOrEqual;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
+use WikibaseSolutions\CypherDSL\Query;
 
 class BetweenCommand implements CommandInterface
 {
-    public function buildQuery($predicate, $values): BooleanType
+    public function buildQuery($predicate, $values): Condition
     {
-        $leftSide = new GreaterThanOrEqual($predicate, Literal::literal(reset($values)));
-        $rightSide = new LessThanOrEqual($predicate, Literal::literal(end($values)));
+        $leftValue = Query::parameter();
+        $rightValue = Query::parameter();
 
-        return $leftSide->and($rightSide);
+        $leftSide = new GreaterThanOrEqual($predicate, $leftValue);
+        $rightSide = new LessThanOrEqual($predicate, $rightValue);
+
+        return new Condition(
+            $leftSide->and($rightSide),
+            [
+                $leftValue->getParameter() => reset($values),
+                $rightValue->getParameter() => end($values),
+            ]
+        );
     }
 }

@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
@@ -14,29 +14,32 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2023 (original work) Open Assessment Technologies SA ;
+ * Copyright (c) 2023 (original work) Open Assessment Technologies SA;
+ *
  */
 
-declare(strict_types=1);
+namespace oat\generis\model\kernel\persistence\starsql\search\Command;
 
-use Laudis\Neo4j\Contracts\ClientInterface;
-use Laudis\Neo4j\Databags\Statement;
+use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 
-class common_persistence_GraphPersistence extends common_persistence_Persistence
+class Condition
 {
-    public function run(string $statement, iterable $parameters = [])
-    {
-        /** @var ClientInterface $client */
-        $client = $this->getDriver()->getClient();
+    private BooleanType $condition;
 
-        return $client->run($statement, $parameters);
+    private array $parameterList;
+    public function __construct(BooleanType $condition, array $parameterList = [])
+    {
+        $this->condition = $condition;
+        $this->parameterList = $parameterList;
     }
 
-    public function runStatement(Statement $statement)
+    public function getCondition(): BooleanType
     {
-        /** @var ClientInterface $client */
-        $client = $this->getDriver()->getClient();
+        return $this->condition;
+    }
 
-        return $client->runStatement($statement);
+    public function getParameterList(): array
+    {
+        return $this->parameterList;
     }
 }

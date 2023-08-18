@@ -22,6 +22,7 @@
 namespace oat\generis\model\kernel\persistence\starsql\search;
 
 use Laminas\ServiceManager\ServiceLocatorAwareTrait;
+use Laudis\Neo4j\Databags\Statement;
 use oat\generis\model\data\ModelManager;
 use oat\generis\model\kernel\persistence\starsql\search\Command\CommandFactory;
 use oat\generis\model\OntologyRdf;
@@ -56,7 +57,7 @@ class QuerySerializer implements QuerySerialyserInterface
 
     protected QueryConvertible $orderCondition;
 
-    protected array $properties = [];
+    protected array $parameters = [];
 
     private string $userLanguage = '';
 
@@ -138,7 +139,7 @@ class QuerySerializer implements QuerySerialyserInterface
                 ->limit($this->criteriaList->getLimit());
         }
 
-        return $query->build();
+        return Statement::create($query->build(), $this->parameters);
     }
 
     public function buildMatchPatters(Node $subject): void
@@ -258,7 +259,10 @@ class QuerySerializer implements QuerySerialyserInterface
         }
 
         $command = CommandFactory::createCommand($operation);
-        return $command->buildQuery($predicate, $values);
+        $condition = $command->buildQuery($predicate, $values);
+
+        $this->parameters = array_merge($this->parameters, $condition->getParameterList());
+        return $condition->getCondition();
     }
 
     private function buildLanguagePattern(QueryConvertible $predicate): RawExpression

@@ -22,9 +22,12 @@
 namespace oat\generis\model\kernel\persistence\starsql\search;
 
 use oat\search\base\Query\EscaperAbstract;
+use WikibaseSolutions\CypherDSL\Traits\EscapeTrait;
 
 class Neo4jEscapeDriver extends EscaperAbstract
 {
+    use EscapeTrait;
+
     /**
     * use to quote string value
     * @var string
@@ -49,7 +52,7 @@ class Neo4jEscapeDriver extends EscaperAbstract
      * @return string
      */
     public function escape($stringValue) {
-        return addcslashes($stringValue, '\'"');
+        return self::escape($stringValue);
     }
     
     public function random() {

@@ -21,9 +21,7 @@
 
 namespace oat\generis\model\kernel\persistence\starsql\search\Command;
 
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
-
 interface CommandInterface
 {
-    public function buildQuery($predicate, $values): BooleanType;
+    public function buildQuery($predicate, $values): Condition;
 }

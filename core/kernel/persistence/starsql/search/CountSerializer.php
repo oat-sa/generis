@@ -22,6 +22,7 @@
 namespace oat\generis\model\kernel\persistence\starsql\search;
 
 use Laminas\ServiceManager\ServiceLocatorAwareTrait;
+use Laudis\Neo4j\Databags\Statement;
 use oat\generis\model\data\ModelManager;
 use oat\generis\model\OntologyRdf;
 use oat\generis\model\OntologyRdfs;
@@ -51,7 +52,7 @@ class CountSerializer extends QuerySerializer
         $query->where($this->whereConditions);
         $query->returning(Procedure::raw('count', $subject));
 
-        return $query->build();
+        return Statement::create($query->build(), $this->parameters);
     }
 
     public function count(bool $count = true): self

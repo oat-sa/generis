@@ -21,9 +21,8 @@
 
 namespace oat\generis\model\kernel\persistence\starsql\search\Command;
 
-use WikibaseSolutions\CypherDSL\Expressions\Literals\Literal;
 use WikibaseSolutions\CypherDSL\Expressions\Operators\Regex;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
+use WikibaseSolutions\CypherDSL\Query;
 
 class RegexCommand implements CommandInterface
 {
@@ -36,7 +35,7 @@ class RegexCommand implements CommandInterface
         $this->hasEndWildcard = $endWildcard;
     }
 
-    public function buildQuery($predicate, $values): BooleanType
+    public function buildQuery($predicate, $values): Condition
     {
         // Compatibility with legacy queries
         if (str_contains($values, '*')) {
@@ -55,7 +54,12 @@ class RegexCommand implements CommandInterface
             $patternToken = $patternToken . '.*';
         }
 
-        return new Regex($predicate, Literal::literal('(?i)' . $patternToken));
+        return new Condition(
+            new Regex($predicate, $valueParam = Query::parameter()),
+            [
+                $valueParam->getParameter() => "(?i)" . $patternToken,
+            ]
+        );
     }
 
     /**
