@@ -28,26 +28,42 @@ class CommandFactory
 {
     public static function createCommand(string $operator): CommandInterface
     {
-        return match ($operator) {
-            SupportedOperatorHelper::EQUAL => new ConfigurableCommand(Operators\Equality::class),
-            SupportedOperatorHelper::DIFFERENT => new NotCommandWrapper(
-                new ConfigurableCommand(Operators\Equality::class)
-            ),
-            SupportedOperatorHelper::GREATER_THAN => new ConfigurableCommand(Operators\GreaterThan::class),
-            SupportedOperatorHelper::LESSER_THAN => new ConfigurableCommand(Operators\LessThan::class),
-            SupportedOperatorHelper::GREATER_THAN_EQUAL => new ConfigurableCommand(Operators\GreaterThanOrEqual::class),
-            SupportedOperatorHelper::LESSER_THAN_EQUAL => new ConfigurableCommand(Operators\LessThanOrEqual::class),
-            SupportedOperatorHelper::MATCH => new RegexCommand(),
-            SupportedOperatorHelper::NOT_MATCH => new NotCommandWrapper(new RegexCommand()),
-            SupportedOperatorHelper::IN => new ConfigurableCommand(Operators\In::class),
-            SupportedOperatorHelper::NOT_IN => new NotCommandWrapper(new ConfigurableCommand(Operators\In::class)),
-            SupportedOperatorHelper::BETWEEN => new BetweenCommand(),
-            SupportedOperatorHelper::CONTAIN => new RegexCommand(true, true),
-            SupportedOperatorHelper::BEGIN_BY => new RegexCommand(false, true),
-            SupportedOperatorHelper::ENDING_BY => new RegexCommand(true, false),
-            SupportedOperatorHelper::IS_NULL => new ConfigurableCommand(Operators\IsNull::class),
-            SupportedOperatorHelper::IS_NOT_NULL => new ConfigurableCommand(Operators\IsNotNull::class),
-            default => new ConfigurableCommand(Operators\Equality::class),
-        };
+        switch ($operator) {
+            case SupportedOperatorHelper::DIFFERENT:
+                return new NotCommandWrapper(
+                    new ConfigurableCommand(Operators\Equality::class)
+                );
+            case SupportedOperatorHelper::GREATER_THAN:
+                return new ConfigurableCommand(Operators\GreaterThan::class);
+            case SupportedOperatorHelper::LESSER_THAN:
+                return new ConfigurableCommand(Operators\LessThan::class);
+            case SupportedOperatorHelper::GREATER_THAN_EQUAL:
+                return new ConfigurableCommand(Operators\GreaterThanOrEqual::class);
+            case SupportedOperatorHelper::LESSER_THAN_EQUAL:
+                return new ConfigurableCommand(Operators\LessThanOrEqual::class);
+            case SupportedOperatorHelper::MATCH:
+                return new RegexCommand();
+            case SupportedOperatorHelper::NOT_MATCH:
+                return new NotCommandWrapper(new RegexCommand());
+            case SupportedOperatorHelper::IN:
+                return new ConfigurableCommand(Operators\In::class);
+            case SupportedOperatorHelper::NOT_IN:
+                return new NotCommandWrapper(new ConfigurableCommand(Operators\In::class));
+            case SupportedOperatorHelper::BETWEEN:
+                return new BetweenCommand();
+            case SupportedOperatorHelper::CONTAIN:
+                return new RegexCommand(true, true);
+            case SupportedOperatorHelper::BEGIN_BY:
+                return new RegexCommand(false, true);
+            case SupportedOperatorHelper::ENDING_BY:
+                return new RegexCommand(true, false);
+            case SupportedOperatorHelper::IS_NULL:
+                return new ConfigurableCommand(Operators\IsNull::class);
+            case SupportedOperatorHelper::IS_NOT_NULL:
+                return new ConfigurableCommand(Operators\IsNotNull::class);
+            case SupportedOperatorHelper::EQUAL:
+            default:
+                return new ConfigurableCommand(Operators\Equality::class);
+        }
     }
 }
