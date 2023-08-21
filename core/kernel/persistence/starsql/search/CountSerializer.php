@@ -21,23 +21,9 @@
 
 namespace oat\generis\model\kernel\persistence\starsql\search;
 
-use Laminas\ServiceManager\ServiceLocatorAwareTrait;
 use Laudis\Neo4j\Databags\Statement;
-use oat\generis\model\data\ModelManager;
-use oat\generis\model\OntologyRdf;
-use oat\generis\model\OntologyRdfs;
-use oat\search\base\QueryBuilderInterface;
-use oat\search\base\QueryCriterionInterface;
-use oat\search\base\QuerySerialyserInterface;
-use oat\search\helper\SupportedOperatorHelper;
-use oat\search\UsableTrait\DriverSensitiveTrait;
-use oat\search\UsableTrait\OptionsTrait;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\Procedure;
-use WikibaseSolutions\CypherDSL\Expressions\RawExpression;
-use WikibaseSolutions\CypherDSL\Patterns\Node;
 use WikibaseSolutions\CypherDSL\Query;
-use WikibaseSolutions\CypherDSL\QueryConvertible;
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
 
 class CountSerializer extends QuerySerializer
 {
@@ -45,7 +31,7 @@ class CountSerializer extends QuerySerializer
     {
         $subject = Query::node('Resource')->withVariable(Query::variable('subject'));
 
-        $this->buildMatchPatters($subject);
+        $this->buildMatchPatterns($subject);
         $this->buildWhereConditions($subject);
 
         $query = Query::new()->match($this->matchPatterns);

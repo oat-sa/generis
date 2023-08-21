@@ -1,6 +1,6 @@
 <?php
 
-/**b
+/*
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
@@ -15,11 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2016 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
- * @author Christophe GARCIA <christopheg@taotesting.com>
- * @license GPLv2
- * @package generis
+ * Copyright (c) 2023 (original work) Open Assessment Technologies SA;
  *
  */
 
@@ -77,17 +73,13 @@ class GateWay extends TaoSearchGateWay
     public function search(QueryBuilderInterface $Builder)
     {
         $this->serialyse($Builder);
-        $result    = $this->fetchObjectList($this->parsedQuery);
+        $result = $this->fetchObjectList($this->parsedQuery);
         $totalCount = $this->count($Builder);
 
         return new $this->resultSetClassName($result, $totalCount);
     }
 
-    /**
-     * @param string $query
-     *
-     * @return array
-     */
+
     private function fetchObjectList(Statement $query): array
     {
         $returnValue = [];
@@ -113,7 +105,7 @@ class GateWay extends TaoSearchGateWay
      *
      * @param QueryBuilderInterface $builder
      *
-     * @return integer
+     * @return int
      */
     public function count(QueryBuilderInterface $builder)
     {

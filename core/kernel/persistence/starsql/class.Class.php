@@ -384,7 +384,7 @@ CYPHER;
         return true;
     }
 
-    public function getFilterQuery(
+    private function getFilterQuery(
         QueryBuilder $query,
         core_kernel_classes_Class $resource,
         array $propertyFilters = [],
@@ -424,7 +424,7 @@ CYPHER;
      * @param array $propertyFilters
      * @param array $options
      */
-    public function addFilters(QueryBuilder $query, array $propertyFilters, array $options): void
+    private function addFilters(QueryBuilder $query, array $propertyFilters, array $options): void
     {
         $isLikeOperator = $options['like'] ?? true;
         $and = (!isset($options['chaining']) || (strtolower($options['chaining']) === 'and'));
@@ -468,14 +468,14 @@ CYPHER;
         }
     }
 
-/**
- * @param array $options
- * @param core_kernel_classes_Class $resource
- * @param array $queryOptions
- *
- * @return array
- */
-    public function getClassFilter(array $options, core_kernel_classes_Class $resource, array $queryOptions): array
+    /**
+     * @param array $options
+     * @param core_kernel_classes_Class $resource
+     * @param array $queryOptions
+     *
+     * @return array
+     */
+    private function getClassFilter(array $options, core_kernel_classes_Class $resource, array $queryOptions): array
     {
         $rdftypes = [];
 

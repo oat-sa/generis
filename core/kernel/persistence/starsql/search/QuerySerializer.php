@@ -33,7 +33,6 @@ use oat\search\base\QuerySerialyserInterface;
 use oat\search\helper\SupportedOperatorHelper;
 use oat\search\UsableTrait\DriverSensitiveTrait;
 use oat\search\UsableTrait\OptionsTrait;
-use WikibaseSolutions\CypherDSL\Clauses\WhereClause;
 use WikibaseSolutions\CypherDSL\Expressions\Procedures\Procedure;
 use WikibaseSolutions\CypherDSL\Expressions\RawExpression;
 use WikibaseSolutions\CypherDSL\Patterns\Node;
@@ -119,7 +118,7 @@ class QuerySerializer implements QuerySerialyserInterface
     {
         $subject = Query::node('Resource')->withVariable(Query::variable('subject'));
 
-        $this->buildMatchPatters($subject);
+        $this->buildMatchPatterns($subject);
         $this->buildWhereConditions($subject);
         $this->buildReturn($subject);
         $this->buildOrderCondition($subject);
@@ -142,7 +141,7 @@ class QuerySerializer implements QuerySerialyserInterface
         return Statement::create($query->build(), $this->parameters);
     }
 
-    public function buildMatchPatters(Node $subject): void
+    public function buildMatchPatterns(Node $subject): void
     {
         $queryOptions = $this->criteriaList->getOptions();
 
