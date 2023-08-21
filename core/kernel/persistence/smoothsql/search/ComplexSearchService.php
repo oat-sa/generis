@@ -28,6 +28,7 @@ namespace   oat\generis\model\kernel\persistence\smoothsql\search;
 use core_kernel_persistence_smoothsql_SmoothModel;
 use oat\generis\model\data\Model;
 use oat\generis\model\kernel\persistence\smoothsql\search\filter\FilterFactory;
+use oat\generis\model\OntologyAwareTrait;
 use oat\oatbox\service\ConfigurableService;
 use oat\search\base\QueryBuilderInterface;
 use oat\search\base\QueryInterface;
@@ -42,6 +43,8 @@ use Zend\ServiceManager\ServiceManager;
  */
 class ComplexSearchService extends ConfigurableService
 {
+    use OntologyAwareTrait;
+
     public const SERVICE_ID = 'generis/complexSearch';
 
     public const SERVICE_SEARCH_ID = 'search.tao.gateway';
@@ -70,7 +73,10 @@ class ComplexSearchService extends ConfigurableService
     {
         if (is_null($this->services)) {
             $options = $this->getOptions();
-            $options['services']['search.options']['model'] = $this->model;
+            $model = $this->model ?? $this->getModel();
+            $ontologyOptions = $model->getOptions();
+            $options['services']['search.options']['model'] = $model;
+            $options['services']['search.options']['persistence'] = $ontologyOptions['persistence'] ?? null;
             $config         = new Config($options);
             $this->services =  new ServiceManager($config);
         }
