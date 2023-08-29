@@ -402,9 +402,13 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
             return true;
         }
 
+        if ($this->getUri() === OntologyRdf::RDF_VALUE) {
+            return false;
+        }
+
         $range = $this->getRange();
 
-        return $range && $range->getUri() !== OntologyRdfs::RDFS_LITERAL;
+        return $range && !in_array($range->getUri(), [OntologyRdfs::RDFS_LITERAL, GenerisRdf::CLASS_GENERIS_FILE], true);
     }
 
     /**
