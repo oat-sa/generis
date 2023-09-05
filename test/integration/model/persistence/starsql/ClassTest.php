@@ -201,6 +201,27 @@ class ClassTest extends GenerisPhpUnitTestRunner
         $this->assertArrayHasKey($sub1ClassInstance->getUri(), $instances);
         $this->assertArrayHasKey($sub2ClassInstance->getUri(), $instances);
         $this->assertArrayHasKey($sub3ClassInstance->getUri(), $instances);
+        $this->assertArrayNotHasKey($sub4ClassInstance->getUri(), $instances);
+    }
+
+    public function testSearchInstancesWithOr()
+    {
+        $class = new core_kernel_classes_Class(WidgetRdf::CLASS_URI_WIDGET);
+        $subClass = $class->createSubClass();
+        $sub1ClassInstance = $subClass->createInstance( 'first test case instance', 'first test case instance');
+        $sub2ClassInstance = $subClass->createInstance( 'second test case instance', 'second test case instance');
+        $sub3ClassInstance = $subClass->createInstance( 'non-matching instance', 'non-matching instance');
+
+        $propertyFilter = [
+            OntologyRdfs::RDFS_LABEL => 'first test case instance',
+            OntologyRdfs::RDFS_COMMENT => 'second test case instance'
+        ];
+        $instances = $class->searchInstances($propertyFilter, ['recursive' => true, 'chaining' => 'or']);
+
+        $this->assertCount(2, $instances);
+        $this->assertArrayHasKey($sub1ClassInstance->getUri(), $instances);
+        $this->assertArrayHasKey($sub2ClassInstance->getUri(), $instances);
+        $this->assertArrayNotHasKey($sub3ClassInstance->getUri(), $instances);
     }
 
     public function testSearchInstancesComplexQuery()
@@ -259,6 +280,9 @@ class ClassTest extends GenerisPhpUnitTestRunner
 
         $this->assertCount(1, $instances);
         $this->assertArrayHasKey($sub1ClassInstance->getUri(), $instances);
+        $this->assertArrayNotHasKey($sub2ClassInstance->getUri(), $instances);
+        $this->assertArrayNotHasKey($sub3ClassInstance->getUri(), $instances);
+        $this->assertArrayNotHasKey($sub4ClassInstance->getUri(), $instances);
     }
 
     public function dataProviderSearchInstancesWithRegularExpressions(): iterable
@@ -365,6 +389,7 @@ class ClassTest extends GenerisPhpUnitTestRunner
 
         $this->assertCount(1, $instances);
         $this->assertArrayHasKey($correctInstance->getUri(), $instances);
+        $this->assertArrayNotHasKey($incorrectInstance->getUri(), $instances);
     }
 
     public function testSearchInstancesLanguageSpecific()

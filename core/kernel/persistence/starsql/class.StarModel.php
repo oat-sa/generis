@@ -201,8 +201,7 @@ class core_kernel_persistence_starsql_StarModel extends ConfigurableService impl
 
     public function provideSchema(SchemaCollection $schemaCollection)
     {
-        $schema = $schemaCollection->getSchema($this->getOption(self::OPTION_PERSISTENCE));
-        SmoothRdsModel::addSmoothTables($schema);
+//        $schema = $schemaCollection->getSchema($this->getOption(self::OPTION_PERSISTENCE));
+//        SmoothRdsModel::addSmoothTables($schema);
     }
-
 }

@@ -1,5 +1,6 @@
 <?php
-/**
+
+/*
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
@@ -14,29 +15,13 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2023 (original work) Open Assessment Technologies SA ;
+ * Copyright (c) 2023 (original work) Open Assessment Technologies SA;
+ *
  */
 
-declare(strict_types=1);
+namespace oat\generis\model\kernel\persistence\starsql\search\Command;
 
-use Laudis\Neo4j\Contracts\ClientInterface;
-use Laudis\Neo4j\Databags\Statement;
-
-class common_persistence_GraphPersistence extends common_persistence_Persistence
+interface CommandInterface
 {
-    public function run(string $statement, iterable $parameters = [])
-    {
-        /** @var ClientInterface $client */
-        $client = $this->getDriver()->getClient();
-
-        return $client->run($statement, $parameters);
-    }
-
-    public function runStatement(Statement $statement)
-    {
-        /** @var ClientInterface $client */
-        $client = $this->getDriver()->getClient();
-
-        return $client->runStatement($statement);
-    }
+    public function buildQuery($predicate, $values): Condition;
 }

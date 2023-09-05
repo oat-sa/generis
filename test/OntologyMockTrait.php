@@ -25,6 +25,7 @@ use common_session_Session;
 use core_kernel_persistence_smoothsql_SmoothModel;
 use oat\generis\model\data\Ontology;
 use oat\generis\model\kernel\persistence\newsql\NewSqlOntology;
+use oat\generis\model\kernel\persistence\smoothsql\search\ComplexSearchService;
 use oat\generis\model\kernel\uri\Bin2HexUriProvider;
 use oat\generis\model\kernel\uri\UriProvider;
 use oat\generis\persistence\DriverConfigurationFeeder;
@@ -52,6 +53,15 @@ trait OntologyMockTrait
             NewSqlOntology::OPTION_READABLE_MODELS => [2,3],
             NewSqlOntology::OPTION_WRITEABLE_MODELS => [2],
             NewSqlOntology::OPTION_NEW_TRIPLE_MODEL => 2,
+        ]);
+        return $this->setupOntology($model);
+    }
+
+    protected function getStarSqlMock()
+    {
+        $model = new \core_kernel_persistence_starsql_StarModel([
+            \core_kernel_persistence_starsql_StarModel::OPTION_PERSISTENCE => 'neo4j',
+            \core_kernel_persistence_starsql_StarModel::OPTION_SEARCH_SERVICE => ComplexSearchService::SERVICE_ID,
         ]);
         return $this->setupOntology($model);
     }
