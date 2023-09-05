@@ -74,9 +74,8 @@ class core_kernel_persistence_starsql_Property extends core_kernel_persistence_s
         return true;
     }
 
-    public function setRange(core_kernel_classes_Resource $resource, core_kernel_classes_Class $class): ?core_kernel_classes_Class
+    public function setRange(core_kernel_classes_Resource $resource, core_kernel_classes_Class $class): ?bool
     {
-        $returnValue = null;
         $rangeProp = new core_kernel_classes_Property(OntologyRdfs::RDFS_RANGE, __METHOD__);
         $returnValue = $this->setPropertyValue($resource, $rangeProp, $class->getUri());
         return $returnValue;

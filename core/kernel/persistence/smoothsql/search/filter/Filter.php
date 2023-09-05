@@ -2,23 +2,14 @@
 
 namespace oat\generis\model\kernel\persistence\smoothsql\search\filter;
 
-class Filter
+use oat\generis\model\kernel\persistence\Filter as PersistenceFilter;
+
+/**
+ * @deprecated As we have multiple persistence implementation now please use
+ * \oat\generis\model\kernel\persistence\Filter::class as more generic filter implementation
+ */
+class Filter extends PersistenceFilter
 {
-    /** @var  string */
-    protected $key;
-
-    /** @var  string */
-    protected $value;
-
-    /** @var  FilterOperator */
-    protected $operator;
-
-    /** @var  array */
-    protected $inValues;
-
-    /** @var  array */
-    protected $orConditionValues;
-
     /**
      * @param string $key
      * @param string $value
@@ -28,41 +19,11 @@ class Filter
      */
     public function __construct($key, $value, FilterOperator $operator, array $orConditionValues = [])
     {
-        $this->key = $key;
-        $this->value = $value;
-        $this->operator = $operator;
-        $this->orConditionValues = $orConditionValues;
-    }
-
-    /**
-     * @return string
-     */
-    public function getKey()
-    {
-        return $this->key;
-    }
-
-    /**
-     * @return string
-     */
-    public function getValue()
-    {
-        return $this->value;
-    }
-
-    /**
-     * @return string
-     */
-    public function getOperator()
-    {
-        return $this->operator->getValue();
-    }
-
-    /**
-     * @return array
-     */
-    public function getOrConditionValues()
-    {
-        return $this->orConditionValues;
+        parent::__construct(
+            $key,
+            $value,
+            $operator->getValue(),
+            $orConditionValues
+        );
     }
 }

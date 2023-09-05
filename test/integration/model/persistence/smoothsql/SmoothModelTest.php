@@ -26,6 +26,8 @@ use oat\generis\test\GenerisPhpUnitTestRunner;
 
 class SmoothModelTest extends GenerisPhpUnitTestRunner
 {
+    private core_kernel_persistence_smoothsql_SmoothModel $model;
+
     /**
      *
      * @see PHPUnit_Framework_TestCase::setUp()
@@ -33,60 +35,39 @@ class SmoothModelTest extends GenerisPhpUnitTestRunner
     public function setUp(): void
     {
         GenerisPhpUnitTestRunner::initTest();
-    }
-
-    /**
-     *
-     * @author Lionel Lecaque, lionel@taotesting.com
-     * @return \core_kernel_persistence_smoothsql_SmoothModel
-     */
-    public function testConstuct()
-    {
-        // $this->markTestSkipped('test it');
-        try {
-            $model = new core_kernel_persistence_smoothsql_SmoothModel([]);
-        } catch (\common_Exception $e) {
-            $this->assertInstanceOf('common_exception_MissingParameter', $e);
-        }
         $conf = [
             'persistence' => 'default'
         ];
-        $model = new core_kernel_persistence_smoothsql_SmoothModel($conf);
-        return $model;
+
+        $this->model = new core_kernel_persistence_smoothsql_SmoothModel($conf);
     }
 
     /**
-     * @depends testConstuct
-     *
      * @author Lionel Lecaque, lionel@taotesting.com
      */
-    public function testGetConfig($model)
+    public function testGetConfig()
     {
         $this->assertEquals([
             'persistence' => 'default'
-        ], $model->getOptions());
+        ], $this->model->getOptions());
     }
 
     /**
-     * @depends testConstuct
-     *
      * @author Lionel Lecaque, lionel@taotesting.com
      * @param array $model
      */
-    public function testGetRdfInterface($model)
+    public function testGetRdfInterface()
     {
-        $this->assertInstanceOf('core_kernel_persistence_smoothsql_SmoothRdf', $model->getRdfInterface());
+        $this->assertInstanceOf('core_kernel_persistence_smoothsql_SmoothRdf', $this->model->getRdfInterface());
     }
 
     /**
-     * @depends testConstuct
-     *
      * @author Lionel Lecaque, lionel@taotesting.com
      * @param array $model
      */
-    public function testGetRdfsInterface($model)
+    public function testGetRdfsInterface()
     {
-        $this->assertInstanceOf('core_kernel_persistence_smoothsql_SmoothRdfs', $model->getRdfsInterface());
+        $this->assertInstanceOf('core_kernel_persistence_smoothsql_SmoothRdfs', $this->model->getRdfsInterface());
     }
 
     /**
@@ -96,9 +77,7 @@ class SmoothModelTest extends GenerisPhpUnitTestRunner
     public function testGetUpdatableModelIds()
     {
         $models = core_kernel_persistence_smoothsql_SmoothModel::getUpdatableModelIds();
-        $this->assertArraySubset([
-            1
-        ], $models);
+        $this->assertContains(1, $models);
     }
 
     /**
@@ -108,8 +87,6 @@ class SmoothModelTest extends GenerisPhpUnitTestRunner
     public function testGetReadableModelIds()
     {
         $models = core_kernel_persistence_smoothsql_SmoothModel::getReadableModelIds();
-        $this->assertArraySubset([
-            1
-        ], $models);
+        $this->assertContains(1, $models);
     }
 }

@@ -37,20 +37,15 @@ class RdfExportTest extends GenerisPhpUnitTestRunner
         $triples = $result['count'];
 
 
-        $xml = core_kernel_api_ModelExporter::exportModels(
-            ModelManager::getModel()->getReadableModels()
+        $descriptions = core_kernel_api_ModelExporter::exportModels(
+            ModelManager::getModel()->getReadableModels(),
+            'php'
         );
 
-        $doc = new DOMDocument();
-        $doc->loadXML($xml);
-
         $count = 0;
-        $descriptions = $doc->getElementsByTagNameNS('http://www.w3.org/1999/02/22-rdf-syntax-ns#', 'Description');
         foreach ($descriptions as $description) {
-            foreach ($description->childNodes as $child) {
-                if ($child instanceof DOMElement) {
-                    $count++;
-                }
+            foreach ($description as $child) {
+                $count+=count($child);
             }
         }
 
