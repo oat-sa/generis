@@ -24,6 +24,7 @@ use oat\generis\model\OntologyRdfs;
 use oat\oatbox\session\SessionService;
 use oat\oatbox\user\UserLanguageServiceInterface;
 use oat\generis\model\kernel\uri\UriProvider;
+use oat\tao\model\TaoOntology;
 use WikibaseSolutions\CypherDSL\Clauses\SetClause;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use function WikibaseSolutions\CypherDSL\node;
@@ -338,7 +339,40 @@ CYPHER;
 
     public function getRdfTriples(core_kernel_classes_Resource $resource): core_kernel_classes_ContainerCollection
     {
-        throw new common_Exception('Not implemented! ' . __FILE__ . ' line: ' . __LINE__);
+        $relationship = relationshipTo()->withVariable($relationshipVar = variable());
+        $relatedNode = node()->withLabels(['Resource'])->withVariable($relatedNodeVar = variable());
+        $node = node()->withProperties(['uri' => $uriParameter = parameter()])
+            ->withVariable($nodeVar = variable())
+            ->withLabels(['Resource'])
+            ->relationship($relationship, $relatedNode);
+        $query = query()
+            ->match($node)
+            ->returning([$nodeVar, $relatedNodeVar, $relationshipVar])
+            ->build();
+
+        $results = $this->getPersistence()->run($query, [$uriParameter->getParameter() => $resource->getUri()]);
+        $returnValue = new core_kernel_classes_ContainerCollection(new common_Object(__METHOD__));
+        foreach ($results as $result) {
+            $resultNode = $result->get($nodeVar->getName());
+            $resultRelationship = $result->get($relationshipVar->getName());
+            $resultRelatedNode = $result->get($relatedNodeVar->getName());
+            $updatedAt = $resultNode->getProperty(TaoOntology::PROPERTY_UPDATED_AT);
+//            $updatedBy = $resultNode->getProperty(TaoOntology::PROPERTY_UPDATED_BY);
+            if (!$nodeProcessed) {
+                $returnValue = $this->buildTriplesFromNode($returnValue, $resource->getUri(), $updatedAt, $resultNode);
+                $nodeProcessed = true;
+            }
+            if ($resultRelationship) {
+                $triple = new core_kernel_classes_Triple();
+                $triple->subject = $resource->getUri();
+                $triple->epoch = $updatedAt;
+                $triple->predicate = $resultRelationship->getType();
+                $triple->object = $resultRelatedNode->getProperty('uri');
+                $returnValue->add($triple);
+            }
+        }
+
+        return $returnValue;
     }
 
     public function isWritable(core_kernel_classes_Resource $resource): bool
@@ -451,7 +485,23 @@ CYPHER;
 
     public function removeType(core_kernel_classes_Resource $resource, core_kernel_classes_Class $class): ?bool
     {
-        throw new common_Exception('Not implemented! ' . __FILE__ . ' line: ' . __LINE__);
+        $typeRelationship = relationshipTo()->withTypes([OntologyRdf::RDF_TYPE]);
+        $classNode = node()->withProperties(['uri' => $classUriParameter = parameter()])
+            ->withLabels(['Resource']);
+        $node = node()->withProperties(['uri' => $uriParameter = parameter()])
+            ->withLabels(['Resource'])
+            ->relationship($typeRelationship, $classNode);
+        $query = query()
+            ->match($node)
+            ->delete($typeRelationship)
+            ->build();
+
+        $this->getPersistence()->run($query, [
+            $uriParameter->getParameter() => $resource->getUri(),
+            $classUriParameter->getParameter() => $class->getUri()
+        ]);
+
+        return true;
     }
 
     /**
@@ -480,7 +530,7 @@ CYPHER;
             $matchSuccess = preg_match(self::LANGUAGE_TAGGED_VALUE_PATTERN, $entry, $matches);
             if (!$matchSuccess) {
                 $filteredValues[] = $entry;
-            } elseif (isset($matches[2]) && $matches[2] === $allowedLanguages) {
+            } elseif (isset($matches[2]) && in_array($matches[2], $allowedLanguages)) {
                 $filteredValues[] = $matches[1];
             }
         }
@@ -534,5 +584,36 @@ CYPHER;
         preg_match(self::LANGUAGE_TAGGED_VALUE_PATTERN, (string)$value, $matches);
 
         return $matches[1] ?? (string) $value;
+    }
+
+    private function parseTranslatedLang($value): string
+    {
+        preg_match(self::LANGUAGE_TAGGED_VALUE_PATTERN, (string)$value, $matches);
+
+        return $matches[2] ?? '';
+    }
+
+    private function buildTriplesFromNode(core_kernel_classes_ContainerCollection $tripleCollection, $uri, $updatedAt, $resultNode)
+    {
+        foreach ($resultNode->getProperties() as $propKey => $propValue) {
+            $triple = new core_kernel_classes_Triple();
+            $triple->subject = $uri;
+//            $triple->author = $updatedBy;
+            $triple->epoch = $updatedAt;
+            $triple->predicate = $propKey;
+            if (is_iterable($propValue)) {
+                foreach ($propValue as $value) {
+                    $triple->lg = $this->parseTranslatedLang($value);
+                    $triple->object = $this->parseTranslatedValue($value);
+                    $tripleCollection->add($triple);
+                }
+            } else {
+                $triple->lg = $this->parseTranslatedLang($propValue);
+                $triple->object = $this->parseTranslatedValue($propValue);
+                $tripleCollection->add($triple);
+            }
+        }
+
+        return $tripleCollection;
     }
 }
