@@ -32,7 +32,8 @@ use function WikibaseSolutions\CypherDSL\parameter;
 use function WikibaseSolutions\CypherDSL\procedure;
 use function WikibaseSolutions\CypherDSL\relationshipTo;
 use function WikibaseSolutions\CypherDSL\variable;
-
+use function WikibaseSolutions\CypherDSL\literal;
+use WikibaseSolutions\CypherDSL\Query;
 class core_kernel_persistence_starsql_Resource implements core_kernel_persistence_ResourceInterface
 {
     private const LANGUAGE_TAGGED_VALUE_PATTERN = "/^(.*)@([a-zA-Z\\-]{5,6})$/";
@@ -402,13 +403,26 @@ CYPHER;
             return [];
         }
 
-        $query = <<<CYPHER
-            MATCH (resource:Resource)-[relationshipTo]->(relatedResource:Resource)
-            WHERE resource.uri = \$uri
-            RETURN resource, collect({relationship: type(relationshipTo), relatedResourceUri: relatedResource.uri}) AS relationships
-CYPHER;
+        $uriParameter = parameter();
 
-        $results = $this->getPersistence()->run($query, ['uri' => $resource->getUri()]);
+        $relatedResource = node('Resource')->withVariable("relatedResource");
+        $query_resource = node()
+            ->withLabels(['Resource'])
+            ->withVariable("resource");
+
+        $params = literal()::map([
+            'relationship' => procedure()::raw('type',Query::variable('relationshipTo')),
+            'relatedResourceUri' => $relatedResource->property('uri')
+        ]);
+
+        $procedure =procedure()::raw('collect', $params)->alias('relationships');
+        $query = query()
+            ->match($query_resource->relationshipTo($relatedResource,name:"relationshipTo"))
+            ->where($query_resource->property('uri')->equals($uriParameter) )
+            ->returning([$query_resource,$procedure])
+            ->build();
+
+        $results = $this->getPersistence()->run($query, [$uriParameter->getParameter() => $resource->getUri()]);
         $result = $results->first();
 
         $propertyUris = [];

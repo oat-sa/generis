@@ -1,0 +1,161 @@
+<?php
+
+/**
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; under version 2
+ * of the License (non-upgradable).
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ *
+ * Copyright (c) 2023 (original work) Open Assessment Technologies SA ;
+ */
+
+namespace oat\generis\test\integration\model\persistence\starsql;
+
+use core_kernel_classes_Class;
+use core_kernel_classes_Resource;
+use core_kernel_persistence_starsql_Resource;
+use common_Collection;
+use core_kernel_classes_Property;
+use oat\generis\model\data\Model;
+use oat\generis\model\data\ModelManager;
+use oat\generis\model\GenerisRdf;
+use oat\generis\model\OntologyRdf;
+use oat\generis\model\OntologyRdfs;
+use oat\generis\model\resource\Repository\ClassRepository;
+use oat\generis\model\WidgetRdf;
+use oat\generis\test\GenerisPhpUnitTestRunner;
+use oat\generis\test\OntologyMockTrait;
+
+use common_Utils;
+use core_kernel_classes_Literal;
+/**
+ * Test class for Class.
+ *
+ */
+class ResourceTest extends GenerisPhpUnitTestRunner
+{
+    use OntologyMockTrait;
+
+    protected $object;
+    private Model $oldModel;
+
+    /** @var string[] */
+    private array $cleanupList = [
+        WidgetRdf::CLASS_URI_WIDGET,
+        OntologyRdf::RDF_PROPERTY,
+
+    ];
+
+    protected function setUp(): void
+    {
+        GenerisPhpUnitTestRunner::initTest();
+        $this->oldModel = ModelManager::getModel();
+        $this->object = new core_kernel_persistence_starsql_Resource($this->oldModel );
+
+        //create test class
+        $clazz = new core_kernel_classes_Class(GenerisRdf::CLASS_GENERIS_RESOURCE);
+        $this->clazz = $clazz->createSubClass($clazz);
+
+    }
+
+    protected function tearDown(): void
+    {
+        $this->clazz->delete();
+    }
+
+    /*
+        *
+        * TOOLS FUNCTIONS
+        *
+        */
+
+    private function createTestResource()
+    {
+        return $this->clazz->createInstance();
+    }
+
+    private function createTestProperty()
+    {
+        return $this->clazz->createProperty('ResourceTestCaseProperty ' . common_Utils::getNewUri());
+    }
+
+    /*
+        *
+        * TEST CASE FUNCTIONS
+        *
+        */
+
+    //Test the function testGetPropertyValuesAreEmpty of the class Resource with resource properties
+    public function testGetPropertyValuesAreEmpty()
+    {
+        $resource = $this->createTestResource();
+        $this->assertEquals(0,count($this->object->getPropertiesValues($resource,[])));
+    }
+
+    //Test the function testAnPropietyIsAddedToResource of the class Resource with resource properties
+    public function testAnPropertyIsAddedToResource()
+    {
+        $property1 = $this->createTestProperty();
+        $resource = $this->createTestResource();
+        $resource->setPropertyValue($property1, 'prop1');
+        $this->assertEquals(1,count($this->object->getPropertiesValues($resource, [$property1])));
+
+        //clean all
+        $property1->delete();
+        $resource->delete();
+    }
+
+
+    /**
+     * Test the function testGetPropertiesValuesWithServeralValues();
+     */
+    public function testGetPropertiesValuesWithServeralValues()
+    {
+        $resource = $this->createTestResource();
+        $property1 = $this->createTestProperty();
+        $property2 = $this->createTestProperty();
+        $property3 = $this->createTestProperty();
+
+        $resource->setPropertyValue($property1, 'prop1');
+        $resource->setPropertyValue($property2, 'prop2');
+        $resource->setPropertyValue($property3, 'prop3');
+
+        try {
+            $this->object->getPropertiesValues($resource, [$property1]);
+            $this->assertTrue(false);
+        } catch (\Exception $e) {
+            $this->assertTrue(true);
+        }
+
+        //test if a property1 is stored
+        $result =$this->object->getPropertiesValues($resource, [$property1]);
+        $this->assertTrue(in_array(new core_kernel_classes_Literal('prop1'), $result[$property1->getUri()]));
+
+        //test if a property2 is stored
+        $result =$this->object->getPropertiesValues($resource, [$property2]);
+        $this->assertTrue(in_array('prop2', $result[$property2->getUri()]));
+
+
+        //test if three propierties is stored
+        $result = $resource->getPropertiesValues([$property1, $property2, $property3]);
+        $this->assertTrue(in_array('prop1', $result[$property1->getUri()]));
+        $this->assertTrue(in_array('prop2', $result[$property2->getUri()]));
+        $this->assertTrue(in_array('prop3', $result[$property3->getUri()]));
+
+        //clean all
+        $property1->delete();
+        $property2->delete();
+        $property3->delete();
+        $resource->delete();
+    }
+
+}
