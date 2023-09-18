@@ -150,7 +150,7 @@ class ResourceRepositoryTest extends TestCase
     {
         $class = $this->createMock(core_kernel_classes_Resource::class);
         $class
-            ->expects($this->once())
+            ->expects($this->exactly(2))
             ->method('getUri')
             ->willReturn($uri);
         $class
