@@ -407,21 +407,22 @@ CYPHER;
         $uriParameter = parameter();
 
         $relatedResource = node('Resource')->withVariable("relatedResource");
-        $query_resource = node()
+        $queryResource = node()
             ->withLabels(['Resource'])
             ->withVariable("resource");
 
         $params = literal()::map([
-            'relationship' => procedure()::raw('type',Query::variable('relationshipTo')),
+            'relationship' => procedure()::raw('type', Query::variable('relationshipTo')),
             'relatedResourceUri' => $relatedResource->property('uri')
         ]);
 
-        $procedure =procedure()::raw('collect', $params)->alias('relationships');
+        $procedure = procedure()::raw('collect', $params)->alias('relationships');
         $query = query()
-            ->match($query_resource->relationshipTo($relatedResource,name:"relationshipTo"))
-            ->where($query_resource->property('uri')->equals($uriParameter) )
-            ->returning([$query_resource,$procedure])
+            ->match($queryResource->relationshipTo($relatedResource, null, null, "relationshipTo"))
+            ->where($queryResource->property('uri')->equals($uriParameter))
+            ->returning([$queryResource, $procedure])
             ->build();
+
 
         $results = $this->getPersistence()->run($query, [$uriParameter->getParameter() => $resource->getUri()]);
         $result = $results->first();

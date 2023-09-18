@@ -37,6 +37,7 @@ use oat\generis\test\OntologyMockTrait;
 
 use common_Utils;
 use core_kernel_classes_Literal;
+
 /**
  * Test class for Class.
  *
@@ -46,25 +47,17 @@ class ResourceTest extends GenerisPhpUnitTestRunner
     use OntologyMockTrait;
 
     protected $object;
-    private Model $oldModel;
-
-    /** @var string[] */
-    private array $cleanupList = [
-        WidgetRdf::CLASS_URI_WIDGET,
-        OntologyRdf::RDF_PROPERTY,
-
-    ];
+    private Model $model;
 
     protected function setUp(): void
     {
         GenerisPhpUnitTestRunner::initTest();
-        $this->oldModel = ModelManager::getModel();
-        $this->object = new core_kernel_persistence_starsql_Resource($this->oldModel );
+        $this->model = ModelManager::getModel();
+        $this->object = new core_kernel_persistence_starsql_Resource($this->model);
 
         //create test class
         $clazz = new core_kernel_classes_Class(GenerisRdf::CLASS_GENERIS_RESOURCE);
         $this->clazz = $clazz->createSubClass($clazz);
-
     }
 
     protected function tearDown(): void
@@ -94,31 +87,13 @@ class ResourceTest extends GenerisPhpUnitTestRunner
         *
         */
 
-    //Test the function testGetPropertyValuesAreEmpty of the class Resource with resource properties
-    public function testGetPropertyValuesAreEmpty()
+    public function testGetPropertiesValuesWithoutProperties()
     {
         $resource = $this->createTestResource();
-        $this->assertEquals(0,count($this->object->getPropertiesValues($resource,[])));
+        $this->assertEquals(0, count($this->object->getPropertiesValues($resource, [])));
     }
 
-    //Test the function testAnPropietyIsAddedToResource of the class Resource with resource properties
-    public function testAnPropertyIsAddedToResource()
-    {
-        $property1 = $this->createTestProperty();
-        $resource = $this->createTestResource();
-        $resource->setPropertyValue($property1, 'prop1');
-        $this->assertEquals(1,count($this->object->getPropertiesValues($resource, [$property1])));
-
-        //clean all
-        $property1->delete();
-        $resource->delete();
-    }
-
-
-    /**
-     * Test the function testGetPropertiesValuesWithServeralValues();
-     */
-    public function testGetPropertiesValuesWithServeralValues()
+    public function testGetPropertiesValuesWithProperties()
     {
         $resource = $this->createTestResource();
         $property1 = $this->createTestProperty();
@@ -137,11 +112,11 @@ class ResourceTest extends GenerisPhpUnitTestRunner
         }
 
         //test if a property1 is stored
-        $result =$this->object->getPropertiesValues($resource, [$property1]);
+        $result = $this->object->getPropertiesValues($resource, [$property1]);
         $this->assertTrue(in_array(new core_kernel_classes_Literal('prop1'), $result[$property1->getUri()]));
 
         //test if a property2 is stored
-        $result =$this->object->getPropertiesValues($resource, [$property2]);
+        $result = $this->object->getPropertiesValues($resource, [$property2]);
         $this->assertTrue(in_array('prop2', $result[$property2->getUri()]));
 
 
