@@ -22,6 +22,7 @@ declare(strict_types=1);
 
 namespace oat\generis\test\unit\model\resource\Repository;
 
+use oat\generis\model\data\event\BeforeResourceDeleted;
 use RuntimeException;
 use InvalidArgumentException;
 use core_kernel_classes_Class;
@@ -90,7 +91,7 @@ class ResourceRepositoryTest extends TestCase
             ->method('delete')
             ->willReturn(true);
         $this->eventManager
-            ->expects($this->once())
+            ->expects($this->exactly(2))
             ->method('trigger');
 
         $context = $this->createContext(4, $this->createResource('resourceUri'));
@@ -132,8 +133,11 @@ class ResourceRepositoryTest extends TestCase
             ->method('delete')
             ->willReturn(false);
         $this->eventManager
-            ->expects($this->never())
-            ->method('trigger');
+            ->expects($this->once())
+            ->method('trigger')
+            ->with($this->callback(function ($parameter) {
+                return $parameter instanceof BeforeResourceDeleted;
+            }));
 
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Resource "resourceLabel" ("resourceUri") was not deleted.');
@@ -146,7 +150,7 @@ class ResourceRepositoryTest extends TestCase
     {
         $class = $this->createMock(core_kernel_classes_Resource::class);
         $class
-            ->expects($this->once())
+            ->expects($this->exactly(2))
             ->method('getUri')
             ->willReturn($uri);
         $class
