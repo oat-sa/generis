@@ -476,6 +476,7 @@ class ClassTest extends GenerisPhpUnitTestRunner
 
     public function testGetPropertiesWithZeroProperties()
     {
+        // create a class
         $classWithZeroProperties = new core_kernel_classes_Class(OntologyRdfs::RDFS_LITERAL);
         $properties = $classWithZeroProperties->getProperties();
         $this->assertEquals(0, count($properties));
@@ -483,6 +484,7 @@ class ClassTest extends GenerisPhpUnitTestRunner
 
     public function testGetPropertiesWithSeveralProperties()
     {
+        // create a class
         $classWithTwoProperties = new core_kernel_classes_Class(WidgetRdf::CLASS_URI_WIDGET);
         $properties = $classWithTwoProperties->getProperties();
         $this->assertEquals(2, count($properties));

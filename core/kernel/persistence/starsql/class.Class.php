@@ -118,23 +118,21 @@ CYPHER;
     public function getProperties(core_kernel_classes_Class $resource, $recursive = false)
     {
         $relationship = OntologyRdfs::RDFS_DOMAIN;
-
+        $startNode = node()
+            ->withVariable("startNode");
         $parameter = parameter();
         $uri = $resource->getUri();
-        $descendantNode = node()->withVariable("descendantNode");
         $startNodeFilteringUri = node()
             ->withLabels(['Resource'])
             ->withVariable("startNode")
             ->withProperties(["uri" => $parameter]);
-
-        $startNode = node()
-            ->withVariable("startNode");
-
+        $descendantNode = node()->withVariable("descendantNode");
         $query = query()
             ->match($startNodeFilteringUri)
             ->match($descendantNode->relationshipTo($startNode, $relationship))
             ->returning([$descendantNode->property('uri')])
             ->build();
+
         $results = $this->getPersistence()->run($query, [$parameter->getParameter() => $uri]);
 
         $returnValue = [];
