@@ -33,7 +33,6 @@ use WikibaseSolutions\CypherDSL\Query;
 
 use function WikibaseSolutions\CypherDSL\node;
 use function WikibaseSolutions\CypherDSL\parameter;
-use function WikibaseSolutions\CypherDSL\procedure;
 use function WikibaseSolutions\CypherDSL\query;
 use function WikibaseSolutions\CypherDSL\variable;
 
@@ -118,14 +117,26 @@ CYPHER;
 
     public function getProperties(core_kernel_classes_Class $resource, $recursive = false)
     {
-        $uri = $resource->getUri();
         $relationship = OntologyRdfs::RDFS_DOMAIN;
-        $query = <<<CYPHER
-                MATCH (startNode:Resource {uri: \$uri})
-                MATCH path = (descendantNode)-[:`{$relationship}`]->(startNode)
-                RETURN descendantNode.uri
-CYPHER;
-        $results = $this->getPersistence()->run($query, ['uri' => $uri]);
+
+        $parameter = parameter();
+        $uri = $resource->getUri();
+        $descendantNode = node()->withVariable("descendantNode");
+        $startNodeFilteringUri = node()
+            ->withLabels(['Resource'])
+            ->withVariable("startNode")
+            ->withProperties(["uri" => $parameter]);
+
+        $startNode = node()
+            ->withVariable("startNode");
+
+        $query = query()
+            ->match($startNodeFilteringUri)
+            ->match($descendantNode->relationshipTo($startNode, $relationship))
+            ->returning([$descendantNode->property('uri')])
+            ->build();
+        $results = $this->getPersistence()->run($query, [$parameter->getParameter() => $uri]);
+
         $returnValue = [];
         foreach ($results as $result) {
             $uri = $result->current();

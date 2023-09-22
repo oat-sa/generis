@@ -22,6 +22,7 @@ namespace oat\generis\test\integration\model\persistence\starsql;
 
 use core_kernel_classes_Class;
 use core_kernel_classes_Resource;
+use core_kernel_persistence_starsql_Class;
 use oat\generis\model\data\Model;
 use oat\generis\model\data\ModelManager;
 use oat\generis\model\GenerisRdf;
@@ -227,6 +228,9 @@ class ClassTest extends GenerisPhpUnitTestRunner
     public function testSearchInstancesComplexQuery()
     {
         $class = new core_kernel_classes_Class(WidgetRdf::CLASS_URI_WIDGET);
+        $classTest = new core_kernel_persistence_starsql_Class(WidgetRdf::CLASS_URI_WIDGET);
+
+        $classTest->getProperties(null, false);
         $subClass = $class->createSubClass();
         $relationSubClass = $class->createSubClass();
 
@@ -470,7 +474,20 @@ class ClassTest extends GenerisPhpUnitTestRunner
         $this->assertTrue(in_array($class->getUri(), array_values($subClassOfPropertyValue)));
     }
 
-    //Test the function getInstancesPropertyValues of the class Class with literal properties
+    public function testGetPropertiesWithZeroProperties()
+    {
+        $classWithZeroProperties = new core_kernel_classes_Class(OntologyRdfs::RDFS_LITERAL);
+        $properties = $classWithZeroProperties->getProperties();
+        $this->assertEquals(0, count($properties));
+    }
+
+    public function testGetPropertiesWithSeveralProperties()
+    {
+        $classWithTwoProperties = new core_kernel_classes_Class(WidgetRdf::CLASS_URI_WIDGET);
+        $properties = $classWithTwoProperties->getProperties();
+        $this->assertEquals(2, count($properties));
+    }
+
     public function testGetInstancesPropertyValuesWithLiteralProperties()
     {
         // create a class
