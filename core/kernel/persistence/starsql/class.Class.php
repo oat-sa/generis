@@ -34,32 +34,55 @@ use WikibaseSolutions\CypherDSL\Query;
 use function WikibaseSolutions\CypherDSL\node;
 use function WikibaseSolutions\CypherDSL\parameter;
 use function WikibaseSolutions\CypherDSL\query;
+use function WikibaseSolutions\CypherDSL\relationshipTo;
 use function WikibaseSolutions\CypherDSL\variable;
 
 class core_kernel_persistence_starsql_Class extends core_kernel_persistence_starsql_Resource implements core_kernel_persistence_ClassInterface
 {
     use EventManagerAwareTrait;
-
     public function getSubClasses(core_kernel_classes_Class $resource, $recursive = false)
     {
         $uri = $resource->getUri();
         $relationship = OntologyRdfs::RDFS_SUBCLASSOF;
+        $parameter = parameter();
+
         if (!empty($recursive)) {
-            $query = <<<CYPHER
-                MATCH (startNode:Resource {uri: \$uri})
-                MATCH path = (descendantNode)-[:`{$relationship}`*]->(startNode)
-                RETURN descendantNode.uri
-CYPHER;
+            $startNodeFilteringUri = node()
+                ->withLabels(['Resource'])
+                ->withVariable("startNode")
+                ->withProperties(["uri" => $parameter]);
+
+            $startNode = node()
+                ->withVariable("startNode");
+            $descendantRelationship = relationshipTo();
+            $descendantRelationship->addType($relationship)
+                ->withArbitraryHops(true);
+            $descendantNode = node()->withVariable("descendantNode");
+
+            $query = query()
+                ->match($startNodeFilteringUri)
+                ->match($descendantNode->relationship($descendantRelationship, $startNode))
+                ->returning([$descendantNode->property('uri')])
+                ->build();
         } else {
-            $query = <<<CYPHER
-                MATCH (startNode:Resource {uri: \$uri})
-                MATCH path = (descendantNode)-[:`{$relationship}`]->(startNode)
-                RETURN descendantNode.uri
-CYPHER;
+            $startNodeFilteringUri = node()
+                ->withLabels(['Resource'])
+                ->withVariable("startNode")
+                ->withProperties(["uri" => $parameter]);
+
+            $startNode = node()
+                ->withVariable("startNode");
+            $descendantNode = node()->withVariable("descendantNode");
+
+            $query = query()
+                ->match($startNodeFilteringUri)
+                ->match($descendantNode->relationshipTo($startNode, $relationship))
+                ->returning([$descendantNode->property('uri')])
+                ->build();
         }
 
 //        \common_Logger::i('getSubClasses(): ' . var_export($query, true));
-        $results = $this->getPersistence()->run($query, ['uri' => $uri]);
+        $results = $this->getPersistence()->run($query, [$parameter->getParameter() => $uri]);
         $returnValue = [];
         foreach ($results as $result) {
             $uri = $result->current();
@@ -67,7 +90,7 @@ CYPHER;
                 continue;
             }
             $subClass = $this->getModel()->getClass($uri);
-            $returnValue[$subClass->getUri()] = $subClass ;
+            $returnValue[$subClass->getUri()] = $subClass;
         }
 
         return $returnValue;
