@@ -20,20 +20,19 @@
 declare(strict_types=1);
 
 use oat\generis\model\OntologyRdf;
-use oat\generis\model\OntologyRdfs;
 use oat\oatbox\session\SessionService;
 use oat\oatbox\user\UserLanguageServiceInterface;
-use oat\generis\model\kernel\uri\UriProvider;
 use WikibaseSolutions\CypherDSL\Clauses\SetClause;
 use WikibaseSolutions\CypherDSL\Query;
 use Zend\ServiceManager\ServiceLocatorInterface;
+
+use function WikibaseSolutions\CypherDSL\literal;
 use function WikibaseSolutions\CypherDSL\node;
-use function WikibaseSolutions\CypherDSL\query;
 use function WikibaseSolutions\CypherDSL\parameter;
 use function WikibaseSolutions\CypherDSL\procedure;
+use function WikibaseSolutions\CypherDSL\query;
 use function WikibaseSolutions\CypherDSL\relationshipTo;
 use function WikibaseSolutions\CypherDSL\variable;
-use function WikibaseSolutions\CypherDSL\literal;
 
 class core_kernel_persistence_starsql_Resource implements core_kernel_persistence_ResourceInterface
 {
@@ -172,6 +171,35 @@ class core_kernel_persistence_starsql_Resource implements core_kernel_persistenc
                 CREATE (a)-[r:`{$propertyUri}`]->(b)
                 RETURN type(r)
 CYPHER; } else if($property->isLgDependent()) {
+//            $uriParameter = parameter();
+//
+//            $relatedResource = node('Resource')->withVariable("relatedResource");
+//            $queryResource = node()
+//                ->withLabels(['Resource'])
+//                ->withVariable("n");
+//
+//             $n= node()
+//                ->withLabels(['Resource'])
+//                ->withVariable("n");
+//
+//            $params = literal()::map([
+//                'relatedResourceUri' => $n->property('uri')
+//            ]);
+//
+//             $procedure = procedure()::raw('coalesce', $params);
+////            $query = query()
+////                ->match($queryResource->relationshipTo($relatedResource, null, null, "relationshipTo"))
+////                ->where($queryResource->property('uri')->equals($uriParameter))
+////                ->returning([$queryResource, $procedure])
+////                ->build();
+////
+//
+////            $results = $this->getPersistence()->run($query, [$uriParameter->getParameter() => $resource->getUri()]);
+//
+//            $query = query()
+//            ->match($n)
+//            ->set([$procedure]);
+//            $results = $this->getPersistence()->run($query, [$uriParameter->getParameter() => $resource->getUri()]);
             $query = <<<CYPHER
             MATCH (n:Resource {uri: \$uri})
             SET n.`{$propertyUri}` = coalesce(n.`{$propertyUri}`, []) + \$object
@@ -317,6 +345,19 @@ CYPHER;
                 $assembledConditions .= " AND ( {$additionalCondition} ) ";
             }
         }
+
+//        $parameter = parameter();
+//
+//            $n = node()
+//                ->withLabels(['Resource'])
+//                ->withVariable("n")
+//                ->withProperties(["uri" => $parameter]);;
+//            $query = query()
+//                ->match($n)
+//                ->where(false)
+//                ->remove($n)
+//                ->build();
+//        $results = $this->getPersistence()->run($query, [$parameter->getParameter() => $uri]);
 
         $query = <<<CYPHER
             MATCH (n:Resource {uri: "{$uri}"})

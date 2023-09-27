@@ -20,23 +20,16 @@
 
 namespace oat\generis\test\integration\model\persistence\starsql;
 
+use common_Utils;
 use core_kernel_classes_Class;
-use core_kernel_classes_Resource;
+use core_kernel_classes_Literal;
 use core_kernel_persistence_starsql_Resource;
-use common_Collection;
-use core_kernel_classes_Property;
 use oat\generis\model\data\Model;
 use oat\generis\model\data\ModelManager;
 use oat\generis\model\GenerisRdf;
-use oat\generis\model\OntologyRdf;
-use oat\generis\model\OntologyRdfs;
-use oat\generis\model\resource\Repository\ClassRepository;
 use oat\generis\model\WidgetRdf;
 use oat\generis\test\GenerisPhpUnitTestRunner;
 use oat\generis\test\OntologyMockTrait;
-
-use common_Utils;
-use core_kernel_classes_Literal;
 
 /**
  * Test class for Class.
@@ -133,4 +126,49 @@ class ResourceTest extends GenerisPhpUnitTestRunner
         $resource->delete();
     }
 
+    public function testGetParentClassesWithoutParent()
+    {
+        $class = new core_kernel_classes_Class(WidgetRdf::CLASS_URI_WIDGET);
+        $subClasses = $class->getParentClasses(false);
+        $this->assertEquals(0, count($subClasses));
+    }
+
+    public function testGetParentClassesWithoutParentRecursively()
+    {
+        $class = new core_kernel_classes_Class('http://www.tao.lu/Ontologies/generis.rdf#UserRole');
+        $ancesors = $class->getParentClasses(false);
+        $this->assertEquals(1, count($ancesors));
+    }
+
+    public function testGetParentClassesWithAParentNoRecursive()
+    {
+        $class = new core_kernel_classes_Class(WidgetRdf::CLASS_URI_WIDGET);
+        $subclass = $class->createSubClass('example', 'comment', 'tata.com');
+        $ancesors = $subclass->getParentClasses(false);
+        $this->assertEquals(1, count($ancesors));
+    }
+
+
+    public function testGetParentClassesWithAParentRecusively()
+    {
+        $class = new core_kernel_classes_Class(WidgetRdf::CLASS_URI_WIDGET);
+        $subclass = $class->createSubClass('example', 'comment', 'tata.com');
+        $ancesors = $subclass->getParentClasses(true);
+        $this->assertEquals(1, count($ancesors));
+    }
+
+    public function testGetSetPropertyValue()
+    {
+        $resource = $this->createTestResource();
+        $property1 = $this->createTestProperty();
+        $resource->setPropertyValueByLg($property1, "p11 littéral", 'fr-FR');
+    }
+
+    public function testRemovePropertyValue()
+    {
+        $resource = $this->createTestResource();
+        $property1 = $this->createTestProperty();
+        $resource->setPropertyValueBy($property1, "p11 littéral");
+        $resource->removePropertyValue($property1, "p11 littéral");
+    }
 }
