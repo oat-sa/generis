@@ -126,7 +126,7 @@ class ResourceTest extends GenerisPhpUnitTestRunner
         $resource->delete();
     }
 
-    public function testGetParentClassesWithoutParent()
+    public function testGetParentClassesWithoutParentNoRecursive()
     {
         $class = new core_kernel_classes_Class(WidgetRdf::CLASS_URI_WIDGET);
         $subClasses = $class->getParentClasses(false);
@@ -136,16 +136,16 @@ class ResourceTest extends GenerisPhpUnitTestRunner
     public function testGetParentClassesWithoutParentRecursively()
     {
         $class = new core_kernel_classes_Class('http://www.tao.lu/Ontologies/generis.rdf#UserRole');
-        $ancesors = $class->getParentClasses(false);
-        $this->assertEquals(1, count($ancesors));
+        $ancestors = $class->getParentClasses(false);
+        $this->assertEquals(1, count($ancestors));
     }
 
     public function testGetParentClassesWithAParentNoRecursive()
     {
         $class = new core_kernel_classes_Class(WidgetRdf::CLASS_URI_WIDGET);
         $subclass = $class->createSubClass('example', 'comment', 'tata.com');
-        $ancesors = $subclass->getParentClasses(false);
-        $this->assertEquals(1, count($ancesors));
+        $ancestors = $subclass->getParentClasses(false);
+        $this->assertEquals(1, count($ancestors));
     }
 
 
@@ -153,8 +153,8 @@ class ResourceTest extends GenerisPhpUnitTestRunner
     {
         $class = new core_kernel_classes_Class(WidgetRdf::CLASS_URI_WIDGET);
         $subclass = $class->createSubClass('example', 'comment', 'tata.com');
-        $ancesors = $subclass->getParentClasses(true);
-        $this->assertEquals(1, count($ancesors));
+        $ancestors = $subclass->getParentClasses(true);
+        $this->assertEquals(1, count($ancestors));
     }
 
     public function testGetSetPropertyValue()
