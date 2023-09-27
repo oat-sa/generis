@@ -124,22 +124,17 @@ class core_kernel_persistence_starsql_Class extends core_kernel_persistence_star
 
             $startNode = node()
                 ->withVariable("startNode");
-            $ancestorNode = node()
+            $ancestorsNode = node()
                 ->withVariable("ancestorsNode");
-            $descendantRelationship = relationshipTo()
-                ->addType($relationship)
+            $descendantRelationship = relationshipTo();
+            $descendantRelationship->addType($relationship)
                 ->withArbitraryHops(true);
 
             $query = query()
                 ->match($startNodeFilteringUri)
-                ->match($startNode->relationship($descendantRelationship, $ancestorNode))
-                ->returning([$ancestorNode->property('uri')])
+                ->match($startNode->relationship($descendantRelationship, $ancestorsNode))
+                ->returning([$ancestorsNode->property('uri')])
                 ->build();
-//            $query = <<<CYPHER
-//                MATCH (startNode:Resource {uri: \$uri})
-//                MATCH path = (startNode)-[:`{$relationship}`*]->(ancestorNode)
-//                RETURN ancestorNode.uri
-//CYPHER;
         } else {
             $startNodeFilteringUri = node()
                 ->withLabels(['Resource'])
@@ -148,21 +143,15 @@ class core_kernel_persistence_starsql_Class extends core_kernel_persistence_star
 
             $startNode = node()
                 ->withVariable("startNode");
-            $ancestorNode = node()
-                ->withVariable("ancestorNode");
+            $ancestorsNode = node()
+                ->withVariable("ancestorsNode");
 
             $query = query()
                 ->match($startNodeFilteringUri)
-                ->match($startNode->relationshipTo($ancestorNode, $relationship))
-                ->returning([$ancestorNode->property('uri')])
+                ->match($startNode->relationshipTo($ancestorsNode, $relationship))
+                ->returning([$ancestorsNode->property('uri')])
                 ->build();
-//            $query = <<<CYPHER
-//                MATCH (startNode:Resource {uri: \$uri})
-//                MATCH path = (startNode)-[:`{$relationship}`]->(ancestorNode)
-//                RETURN ancestorNode.uri
-//CYPHER;
         }
-//        $results = $this->getPersistence()->run($query, ['uri' => $uri]);
         $results = $this->getPersistence()->run($query, [$parameter->getParameter() => $uri]);
 
         $returnValue = [];
