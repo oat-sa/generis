@@ -200,18 +200,36 @@ CYPHER; } else if($property->isLgDependent()) {
 //            ->match($n)
 //            ->set([$procedure]);
 //            $results = $this->getPersistence()->run($query, [$uriParameter->getParameter() => $resource->getUri()]);
+
             $query = <<<CYPHER
             MATCH (n:Resource {uri: \$uri})
             SET n.`{$propertyUri}` = coalesce(n.`{$propertyUri}`, []) + \$object
 CYPHER;
         } else {
+//            $node= node()
+//                ->withLabels(['Resource'])
+//                ->withVariable("n");
+//
+//             $relationship = relationshipTo()->withTypes([$property->getUri()]);
+//            $remoteNode = node();
+//            $query = query()
+//                ->match($node->withProperties($uri))
+//                ->returning($remoteNode->property('uri'))->build();
+//                   $results = $this->getPersistence()->run($query );
+//            $n= node()
+//                ->withLabels(['Resource'])
+//                ->withVariable("n");
+//
+//            $query = query()
+//                ->match($n)
+//                ->set($n->withProperties($propertyUri));
+
             $query = <<<CYPHER
             MATCH (n:Resource {uri: \$uri})
             SET n.`{$propertyUri}` = \$object
 CYPHER;
         }
         $this->getPersistence()->run($query, ['uri' => $uri, 'object' => $object]);
-
         return true;
     }
 
@@ -352,10 +370,15 @@ CYPHER;
 //                ->withLabels(['Resource'])
 //                ->withVariable("n")
 //                ->withProperties(["uri" => $parameter]);;
-//            $query = query()
+//
+//
+//
+//
+//        $query = query()
 //                ->match($n)
-//                ->where(false)
-//                ->remove($n)
+////                ->where(false)
+//                  ->remove($n->property($propertyUri))
+//                  ->returning($n)
 //                ->build();
 //        $results = $this->getPersistence()->run($query, [$parameter->getParameter() => $uri]);
 
@@ -369,7 +392,7 @@ CYPHER;
         // @FIXME if value is array, then query should be for update. Try to deduce if $prop->isLgDependent or isMultiple
         // @FIXME if property is represented as node relationship, query should remove that instead
 
-        $this->getPersistence()->run($query);
+//        $this->getPersistence()->run($query);
 
         return true;
     }
@@ -539,7 +562,7 @@ CYPHER;
             $matchSuccess = preg_match(self::LANGUAGE_TAGGED_VALUE_PATTERN, $entry, $matches);
             if (!$matchSuccess) {
                 $filteredValues[] = $entry;
-            } elseif (isset($matches[2]) && $matches[2] === $allowedLanguages) {
+            } elseif (isset($matches[2]) && in_array($matches[2], $allowedLanguages, true)) {
                 $filteredValues[] = $matches[1];
             }
         }

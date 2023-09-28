@@ -161,14 +161,33 @@ class ResourceTest extends GenerisPhpUnitTestRunner
     {
         $resource = $this->createTestResource();
         $property1 = $this->createTestProperty();
-        $resource->setPropertyValueByLg($property1, "p11 littéral", 'fr-FR');
+
+        $property1->setLgDependent(true);
+        $resource->setPropertyValue($property1, 'prop1');
+
+        //test if a property1 is stored
+        $result = $this->object->getPropertiesValues($resource, [$property1]);
+        $this->assertTrue(in_array('prop1', $result[$property1->getUri()]));
+        $resource->setPropertyValue($property1, 'prop1newvalue');
+        $result = $this->object->getPropertiesValues($resource, [$property1]);
+        $this->assertTrue(in_array('prop1newvalue', $result[$property1->getUri()]));
+//
+//        $resource-> setPropertyValue($property1, "p1 initial value", 'fr-FR');
+//        $this->assertEquals(["p1 initial value"], $resource->getPropertyValues($property1,'fr-FR'));
+//        $resource->setPropertyValueByLg($property1, "p1 added value", 'fr-FR');
+//        $this->assertEquals(["p1 added value"], $resource->getPropertyValues($property1,'fr-FR'));
     }
 
     public function testRemovePropertyValue()
     {
         $resource = $this->createTestResource();
         $property1 = $this->createTestProperty();
-        $resource->setPropertyValueBy($property1, "p11 littéral");
-        $resource->removePropertyValue($property1, "p11 littéral");
+
+        $resource->setPropertyValue($property1, 'prop1');
+
+        $resource->removePropertyValues($property1, "prop1", ['pattern' => OntologyRdfs::RDFS_LABEL]);
+        $result = $this->object->getPropertiesValues($resource, [$property1]);
+        $this->assertFalse(in_array(new core_kernel_classes_Literal('prop1'), $result[$property1->getUri()]));
+//
     }
 }
