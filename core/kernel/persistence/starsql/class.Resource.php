@@ -171,7 +171,10 @@ class core_kernel_persistence_starsql_Resource implements core_kernel_persistenc
                 WHERE a.uri = \$uri AND b.uri = \$object
                 CREATE (a)-[r:`{$propertyUri}`]->(b)
                 RETURN type(r)
-CYPHER; } else if($property->isLgDependent()) {
+CYPHER;
+
+            $this->getPersistence()->run($query, ['uri' => $uri, 'object' => $object]);
+        } elseif ($property->isLgDependent()) {
 //            $n= node()
 //                ->withLabels(['Resource'])
 //                ->withVariable("n")
@@ -196,36 +199,27 @@ CYPHER; } else if($property->isLgDependent()) {
             MATCH (n:Resource {uri: \$uri})
             SET n.`{$propertyUri}` = coalesce(n.`{$propertyUri}`, []) + \$object
 CYPHER;
+
+            $this->getPersistence()->run($query, ['uri' => $uri, 'object' => $object]);
         } else {
-//            $nodedsl= node()
-//                ->withLabels(['Resource'])
-//                ->withVariable("n");
-//
-//             $relationshipdsl = relationshipTo()->withTypes([$property->getUri()]);
-//            $remoteNodedsl = node();
-//            $querydls = query()
-//                ->match($nodedsl->withProperties($uri))
-//                ->returning($remoteNodedsl->property('uri'))->build();
-//                   $results = $this->getPersistence()->run($query );
             $ndsl = node()
                 ->withLabels(['Resource'])
                 ->withVariable("n")
                 ->withProperties(["uri" => $uri]);
-            $resource = node('Resouce')
-                ->withProperties(["uri" => $uri]);
-            $resourceUri = $resource->property($propertyUri);
+//            $resource = node('Resouce')
+//                ->withProperties(["uri" => $uri]);
             $querydls = query()
                 ->match($ndsl)
-//                ->returning([$ndsl, $resourceUri = $object])->build();
-                ->set($ndsl->property($uri)->replaceWith($object))->build();
-
-            $resultsdls = $this->getPersistence()->run($querydls);
-            $query = <<<CYPHER
-            MATCH (n:Resource {uri: \$uri})
-            SET n.`{$propertyUri}` = \$object
-CYPHER;
+                ->set($ndsl->property($propertyUri)->replaceWith($object))->build();
+            $results = $this->getPersistence()->run($querydls);
+            //TODO: Delete old query and  comments
+//            $query = <<<CYPHER
+//            MATCH (n:Resource {uri: \$uri})
+//            SET n.`{$propertyUri}` = \$object
+//CYPHER;
+//
+//            $this->getPersistence()->run($query, ['uri' => $uri, 'object' => $object]);
         }
-        $this->getPersistence()->run($query, ['uri' => $uri, 'object' => $object]);
         return true;
     }
 
