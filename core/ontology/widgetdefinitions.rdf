@@ -109,7 +109,6 @@
     <rdfs:comment xml:lang="en-US"><![CDATA[A particular text box]]></rdfs:comment>
     <widget:rangeConstraint rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#rangeConstraint-Literal"/>
     <widget:textHeight><![CDATA[1]]></widget:textHeight>
-    <widget:textLength><![CDATA[3]]></widget:textLength>
     <widget:textLength><![CDATA[255]]></widget:textLength>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#HiddenBox">
@@ -124,7 +123,6 @@
     <rdfs:label xml:lang="en-US"><![CDATA[HTMLArea]]></rdfs:label>
     <rdfs:comment xml:lang="en-US"><![CDATA[An html area]]></rdfs:comment>
     <widget:rangeConstraint rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#rangeConstraint-Literal"/>
-    <widget:textHeight><![CDATA[1]]></widget:textHeight>
     <widget:textLength><![CDATA[255]]></widget:textLength>
     <widget:textHeight><![CDATA[10]]></widget:textHeight>
   </rdf:Description>
