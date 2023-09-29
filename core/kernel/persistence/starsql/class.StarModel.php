@@ -26,8 +26,7 @@ use oat\generis\persistence\sql\SchemaCollection;
 use oat\generis\model\kernel\persistence\smoothsql\install\SmoothRdsModel;
 use oat\oatbox\cache\SimpleCache;
 
-class core_kernel_persistence_starsql_StarModel extends ConfigurableService implements Ontology,
-                                                                                           SchemaProviderInterface
+class core_kernel_persistence_starsql_StarModel extends ConfigurableService implements Ontology
 {
     const OPTION_PERSISTENCE = 'persistence';
     const OPTION_READABLE_MODELS = 'readable';
@@ -197,11 +196,5 @@ class core_kernel_persistence_starsql_StarModel extends ConfigurableService impl
             );
         }
         return $model->getWritableModels();
-    }
-
-    public function provideSchema(SchemaCollection $schemaCollection)
-    {
-//        $schema = $schemaCollection->getSchema($this->getOption(self::OPTION_PERSISTENCE));
-//        SmoothRdsModel::addSmoothTables($schema);
     }
 }

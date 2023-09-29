@@ -116,7 +116,7 @@ class QuerySerializer implements QuerySerialyserInterface
 
     public function serialyse()
     {
-        $subject = Query::node('Resource')->withVariable(Query::variable('subject'));
+        $subject = $this->getMainNode();
 
         $this->buildMatchPatterns($subject);
         $this->buildWhereConditions($subject);
@@ -141,7 +141,7 @@ class QuerySerializer implements QuerySerialyserInterface
         return Statement::create($query->build(), $this->parameters);
     }
 
-    public function buildMatchPatterns(Node $subject): void
+    protected function buildMatchPatterns(Node $subject): void
     {
         $queryOptions = $this->criteriaList->getOptions();
 
@@ -181,10 +181,12 @@ class QuerySerializer implements QuerySerialyserInterface
 
             $this->matchPatterns[] = $parentPath;
             $this->whereConditions[] = $parentWhere;
+        } else {
+            $this->matchPatterns[] = $subject;
         }
     }
 
-    public function buildWhereConditions(Node $subject): void
+    protected function buildWhereConditions(Node $subject): void
     {
         $whereCondition = null;
         foreach ($this->criteriaList->getStoredQueries() as $query) {
@@ -218,7 +220,7 @@ class QuerySerializer implements QuerySerialyserInterface
         }
     }
 
-    public function buildCondition(QueryCriterionInterface $operation, Node $subject): BooleanType
+    protected function buildCondition(QueryCriterionInterface $operation, Node $subject): BooleanType
     {
         $property = ModelManager::getModel()->getProperty($operation->getName());
         if ($property->isRelationship()) {
@@ -248,7 +250,7 @@ class QuerySerializer implements QuerySerialyserInterface
         return $fieldCondition;
     }
 
-    private function buildPropertyQuery(
+    protected function buildPropertyQuery(
         $predicate,
         $values,
         string $operation
@@ -342,5 +344,21 @@ class QuerySerializer implements QuerySerialyserInterface
         if (!empty($sort)) {
             $this->orderCondition = Query::rawExpression(implode(', ', $sort));
         }
+    }
+
+    /**
+     * @return Node
+     */
+    protected function getMainNode(): Node
+    {
+        $queryOptions = $this->criteriaList->getOptions();
+
+        if (isset($queryOptions['system_only']) && $queryOptions['system_only']) {
+            $node = Query::node('System');
+        } else {
+            $node = Query::node('Resource');
+        }
+
+        return $node->withVariable(Query::variable('subject'));
     }
 }

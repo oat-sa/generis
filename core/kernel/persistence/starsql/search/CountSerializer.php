@@ -29,7 +29,7 @@ class CountSerializer extends QuerySerializer
 {
     public function serialyse()
     {
-        $subject = Query::node('Resource')->withVariable(Query::variable('subject'));
+        $subject = $this->getMainNode();
 
         $this->buildMatchPatterns($subject);
         $this->buildWhereConditions($subject);

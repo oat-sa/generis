@@ -77,7 +77,7 @@ class helpers_RdfDiff
         return md5(
             implode(
                 ' ',
-                [$triple->subject, $triple->predicate, $triple->object, $triple->lg, $triple->modelid]
+                [$triple->subject, $triple->predicate, $triple->object, (string)$triple->lg]
             )
         );
     }

@@ -339,7 +339,10 @@ CYPHER;
 
     public function getRdfTriples(core_kernel_classes_Resource $resource): core_kernel_classes_ContainerCollection
     {
-        $relationship = relationshipTo()->withVariable($relationshipVar = variable());
+        $relationship = relationshipTo()
+            ->withVariable($relationshipVar = variable())
+            ->withMinHops(0)
+            ->withMaxHops(1);
         $relatedNode = node()->withLabels(['Resource'])->withVariable($relatedNodeVar = variable());
         $node = node()->withProperties(['uri' => $uriParameter = parameter()])
             ->withVariable($nodeVar = variable())
@@ -352,20 +355,20 @@ CYPHER;
 
         $results = $this->getPersistence()->run($query, [$uriParameter->getParameter() => $resource->getUri()]);
         $returnValue = new core_kernel_classes_ContainerCollection(new common_Object(__METHOD__));
+        $nodeProcessed = false;
         foreach ($results as $result) {
             $resultNode = $result->get($nodeVar->getName());
+            /** @var \Laudis\Neo4j\Types\CypherMap $resultRelationship */
             $resultRelationship = $result->get($relationshipVar->getName());
             $resultRelatedNode = $result->get($relatedNodeVar->getName());
-            $updatedAt = $resultNode->getProperty(TaoOntology::PROPERTY_UPDATED_AT);
-//            $updatedBy = $resultNode->getProperty(TaoOntology::PROPERTY_UPDATED_BY);
             if (!$nodeProcessed) {
-                $returnValue = $this->buildTriplesFromNode($returnValue, $resource->getUri(), $updatedAt, $resultNode);
+                $returnValue = $this->buildTriplesFromNode($returnValue, $resource->getUri(), $resultNode);
                 $nodeProcessed = true;
             }
-            if ($resultRelationship) {
+            if (!$resultRelationship->isEmpty()) {
+                $resultRelationship = $resultRelationship->first();
                 $triple = new core_kernel_classes_Triple();
                 $triple->subject = $resource->getUri();
-                $triple->epoch = $updatedAt;
                 $triple->predicate = $resultRelationship->getType();
                 $triple->object = $resultRelatedNode->getProperty('uri');
                 $returnValue->add($triple);
@@ -593,19 +596,21 @@ CYPHER;
         return $matches[2] ?? '';
     }
 
-    private function buildTriplesFromNode(core_kernel_classes_ContainerCollection $tripleCollection, $uri, $updatedAt, $resultNode)
+    private function buildTriplesFromNode(core_kernel_classes_ContainerCollection $tripleCollection, $uri, $resultNode)
     {
         foreach ($resultNode->getProperties() as $propKey => $propValue) {
+            if ($propKey === 'uri') {
+                continue;
+            }
             $triple = new core_kernel_classes_Triple();
             $triple->subject = $uri;
-//            $triple->author = $updatedBy;
-            $triple->epoch = $updatedAt;
             $triple->predicate = $propKey;
             if (is_iterable($propValue)) {
                 foreach ($propValue as $value) {
-                    $triple->lg = $this->parseTranslatedLang($value);
-                    $triple->object = $this->parseTranslatedValue($value);
-                    $tripleCollection->add($triple);
+                    $langTriple = clone $triple;
+                    $langTriple->lg = $this->parseTranslatedLang($value);
+                    $langTriple->object = $this->parseTranslatedValue($value);
+                    $tripleCollection->add($langTriple);
                 }
             } else {
                 $triple->lg = $this->parseTranslatedLang($propValue);
