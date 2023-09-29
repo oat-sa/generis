@@ -20,6 +20,7 @@
 declare(strict_types=1);
 
 use oat\generis\model\OntologyRdf;
+use oat\generis\model\OntologyRdfs;
 use oat\oatbox\session\SessionService;
 use oat\oatbox\user\UserLanguageServiceInterface;
 use WikibaseSolutions\CypherDSL\Clauses\SetClause;
@@ -165,15 +166,56 @@ class core_kernel_persistence_starsql_Resource implements core_kernel_persistenc
             }
         }
         if ($property->isRelationship()) {
-            $query = <<<CYPHER
-                MATCH
-                  (a:Resource), (b:Resource)
-                WHERE a.uri = \$uri AND b.uri = \$object
-                CREATE (a)-[r:`{$propertyUri}`]->(b)
-                RETURN type(r)
-CYPHER;
+            $relationship = OntologyRdfs::RDFS_SUBCLASSOF;
+            $aResource = node()
+                ->withLabels(['Resource'])
+                ->withVariable("a");
+            $bResource = node()
+                ->withLabels(['Resource'])
+                ->withVariable("b");
 
-            $this->getPersistence()->run($query, ['uri' => $uri, 'object' => $object]);
+            $a = node()
+                ->withVariable("a");
+            $b = node()
+                ->withVariable("b");
+//            $rRelationship = node()
+//                ->withVariable("r")
+//               ->withLabels(['r'])
+//            ;
+            $r = relationshipTo()
+                ->withVariable("r");
+//            $rURI= relationshipTo()
+//                ->withVariable("r:$uri")
+//            ;
+            $rURI = $r->toQuery();
+            $rURI = relationshipTo()
+                ->withTypes([$propertyUri])
+                ->withVariable("r");
+            $type = procedure()::raw('type', $r);
+//        $params = literal()::map([
+//            'relationship' => procedure()::raw('type', Query::variable('relationshipTo')),
+//        ]);
+//            $resource = node('Resouce')
+//                ->withProperties(["uri" => $uri]);
+
+
+            $query = query()
+                ->match([$aResource, $bResource])
+                ->where([$a->property('uri')->equals($uri), $b->property('uri')->equals($object)])
+                ->create($a->relationship($rURI, $b))
+                ->returning($type)
+                ->build();
+            $results = $this->getPersistence()->run($query, ['uri' => $uri]);
+
+//            $query = <<<CYPHER
+//                MATCH
+//                  (a:Resource), (b:Resource)
+//                WHERE a.uri = \$uri AND b.uri = \$object
+//                CREATE (a)-[r:`{$propertyUri}`]->(b)
+//                RETURN type(r)
+//CYPHER;
+//
+//            $this->getPersistence()->run($query, ['uri' => $uri, 'object' => $object]);
         } elseif ($property->isLgDependent()) {
 //            $n= node()
 //                ->withLabels(['Resource'])

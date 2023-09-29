@@ -27,6 +27,7 @@ use core_kernel_persistence_starsql_Resource;
 use oat\generis\model\data\Model;
 use oat\generis\model\data\ModelManager;
 use oat\generis\model\GenerisRdf;
+use oat\generis\model\OntologyRdfs;
 use oat\generis\model\WidgetRdf;
 use oat\generis\test\GenerisPhpUnitTestRunner;
 use oat\generis\test\OntologyMockTrait;
@@ -157,10 +158,11 @@ class ResourceTest extends GenerisPhpUnitTestRunner
         $this->assertEquals(1, count($ancestors));
     }
 
-    public function testGetSetPropertyValue()
+    public function testGetSetPropertyValueIsNotLanguadeDependenNorRelationship()
     {
         $resource = $this->createTestResource();
         $property1 = $this->createTestProperty();
+        $property2 = $this->createTestProperty();
 
         $property1->setLgDependent(true);
         $resource->setPropertyValue($property1, 'prop1');
@@ -171,6 +173,46 @@ class ResourceTest extends GenerisPhpUnitTestRunner
         $resource->setPropertyValue($property1, 'prop1newvalue');
         $result = $this->object->getPropertiesValues($resource, [$property1]);
         $this->assertTrue(in_array('prop1newvalue', $result[$property1->getUri()]));
+
+//
+////test if a property2 is stored
+//
+//        $resource->setPropertyValue($property2, OntologyRdfs::RDFS_DOMAIN);
+//        $result = $this->object->getPropertiesValues($resource, [$property2]);
+//        $this->assertTrue(in_array(OntologyRdfs::RDFS_DOMAIN, $result[$property2->getUri()]));
+//        $resource->setPropertyValue($property2, OntologyRdfs::RDFS_SUBCLASSOF);
+//        $result = $this->object->getPropertiesValues($resource, [$property2]);
+//        $this->assertTrue(in_array(OntologyRdfs::RDFS_SUBCLASSOF, $result[$property2->getUri()]));
+
+    }
+
+
+    public function testGetSetPropertyValueIsRelationship()
+    {
+        $resource = $this->createTestResource();
+        $property1 = $this->createTestProperty();
+
+        $property1->setLgDependent(true);
+        $resource->setPropertyValue($property1, 'prop1');
+
+//        //test if a property1 is stored
+//        $result = $this->object->getPropertiesValues($resource, [$property1]);
+//        $this->assertTrue(in_array('prop1', $result[$property1->getUri()]));
+//        $resource->setPropertyValue($property1, 'prop1newvalue');
+//        $result = $this->object->getPropertiesValues($resource, [$property1]);
+//        $this->assertTrue(in_array('prop1newvalue', $result[$property1->getUri()]));
+//
+
+//test if a property2 is stored
+
+        $resource->setPropertyValue($property1, OntologyRdfs::RDFS_DOMAIN);
+        $result = $this->object->getPropertiesValues($resource, [$property1]);
+        $this->assertTrue(in_array(OntologyRdfs::RDFS_DOMAIN, $result[$property1->getUri()]));
+        $resource->setPropertyValue($property1, OntologyRdfs::RDFS_SUBCLASSOF);
+        $result = $this->object->getPropertiesValues($resource, [$property1]);
+        $this->assertTrue(in_array(OntologyRdfs::RDFS_SUBCLASSOF, $result[$property1->getUri()]));
+
+
 //
 //        $resource-> setPropertyValue($property1, "p1 initial value", 'fr-FR');
 //        $this->assertEquals(["p1 initial value"], $resource->getPropertyValues($property1,'fr-FR'));
