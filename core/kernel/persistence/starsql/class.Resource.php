@@ -395,6 +395,15 @@ CYPHER;
                 $assembledConditions .= " AND ( {$additionalCondition} ) ";
             }
         }
+//        $query = <<<CYPHER
+//            MATCH (n:Resource {uri: "{$uri}"})
+//            {$assembledConditions}
+//            REMOVE n.`{$propertyUri}`
+//            RETURN n
+//CYPHER;
+//        $results =$this->getPersistence()->run($query);
+//
+//
         $parameter = parameter();
         $nResource = node()
             ->withLabels(['Resource'])
@@ -404,12 +413,6 @@ CYPHER;
         $n = node()
             ->withVariable("n")
             ->withProperties(["uri" => $uri]);;
-        $query = <<<CYPHER
-            MATCH (n:Resource {uri: "{$uri}"})
-            {$assembledConditions}
-            REMOVE n.`{$propertyUri}`
-            RETURN n
-CYPHER;
 
         if (!isset($pattern)) {
             $querydls = query()
@@ -418,9 +421,14 @@ CYPHER;
                 ->returning($n)
                 ->build();
         } else {
+            if ($isLike) {
+                $whereCondition = $n->property($propertyUri)->regex($token);
+            } else {
+                $whereCondition = $n->property($propertyUri)->equals($token);
+            }
             $querydls = query()
                 ->match($nResource)
-                ->where($n->property($propertyUri)->equals($token))
+                ->where($whereCondition)
                 ->remove($n->property($propertyUri))
                 ->returning($n)
                 ->build();

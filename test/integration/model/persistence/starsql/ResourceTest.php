@@ -244,4 +244,17 @@ class ResourceTest extends GenerisPhpUnitTestRunner
         $this->assertFalse(in_array(new core_kernel_classes_Literal('prop1'), $result[$property1->getUri()]));
     }
 
+    public function testRemovePropertyValueWithPatternAndLike()
+    {
+        $resource = $this->createTestResource();
+        $property1 = $this->createTestProperty();
+
+        $resource->setPropertyValue($property1, 'prop1');
+
+//        $result = $this->object->getPropertiesValues($resource, [$property1]);
+        $resource->removePropertyValues($property1, ['like' => true, 'pattern' => 'prop1']
+        );//, "prop1", ['pattern' => OntologyRdfs::RDFS_LABEL]);
+        $result = $this->object->getPropertiesValues($resource, [$property1]);
+        $this->assertFalse(in_array(new core_kernel_classes_Literal('pro'), $result[$property1->getUri()]));
+    }
 }
