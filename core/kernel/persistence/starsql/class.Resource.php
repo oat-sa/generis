@@ -205,7 +205,7 @@ class core_kernel_persistence_starsql_Resource implements core_kernel_persistenc
                 ->create($a->relationship($rURI, $b))
                 ->returning($type)
                 ->build();
-            $results = $this->getPersistence()->run($query, ['uri' => $uri]);
+            $results = $this->getPersistence()->run($query,);
 
 //            $query = <<<CYPHER
 //                MATCH
@@ -395,31 +395,37 @@ CYPHER;
                 $assembledConditions .= " AND ( {$additionalCondition} ) ";
             }
         }
+        $parameter = parameter();
+        $nResource = node()
+            ->withLabels(['Resource'])
+            ->withVariable("n")
+            ->withProperties(["uri" => $uri]);;
 
-//        $parameter = parameter();
-//
-//            $n = node()
-//                ->withLabels(['Resource'])
-//                ->withVariable("n")
-//                ->withProperties(["uri" => $parameter]);;
-//
-//
-//
-//
-//        $query = query()
-//                ->match($n)
-////                ->where(false)
-//                  ->remove($n->property($propertyUri))
-//                  ->returning($n)
-//                ->build();
-//        $results = $this->getPersistence()->run($query, [$parameter->getParameter() => $uri]);
-
+        $n = node()
+            ->withVariable("n")
+            ->withProperties(["uri" => $uri]);;
         $query = <<<CYPHER
             MATCH (n:Resource {uri: "{$uri}"})
             {$assembledConditions}
             REMOVE n.`{$propertyUri}`
             RETURN n
 CYPHER;
+
+        if (!isset($pattern)) {
+            $querydls = query()
+                ->match($nResource)
+                ->remove($n->property($propertyUri))
+                ->returning($n)
+                ->build();
+        } else {
+            $querydls = query()
+                ->match($nResource)
+                ->where($n->property($propertyUri)->equals($token))
+                ->remove($n->property($propertyUri))
+                ->returning($n)
+                ->build();
+        }
+        $results = $this->getPersistence()->run($querydls, [$parameter->getParameter() => 'e']);
 
         // @FIXME if value is array, then query should be for update. Try to deduce if $prop->isLgDependent or isMultiple
         // @FIXME if property is represented as node relationship, query should remove that instead
