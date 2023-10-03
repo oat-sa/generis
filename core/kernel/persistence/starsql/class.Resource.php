@@ -30,7 +30,6 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 use function WikibaseSolutions\CypherDSL\literal;
 use function WikibaseSolutions\CypherDSL\node;
 use function WikibaseSolutions\CypherDSL\parameter;
-use function WikibaseSolutions\CypherDSL\plus;
 use function WikibaseSolutions\CypherDSL\procedure;
 use function WikibaseSolutions\CypherDSL\query;
 use function WikibaseSolutions\CypherDSL\relationshipTo;
@@ -166,6 +165,7 @@ class core_kernel_persistence_starsql_Resource implements core_kernel_persistenc
             }
         }
         if ($property->isRelationship()) {
+            //TODO Clean. I am still working and testing
             $relationship = OntologyRdfs::RDFS_SUBCLASSOF;
             $aResource = node()
                 ->withLabels(['Resource'])
@@ -178,26 +178,12 @@ class core_kernel_persistence_starsql_Resource implements core_kernel_persistenc
                 ->withVariable("a");
             $b = node()
                 ->withVariable("b");
-//            $rRelationship = node()
-//                ->withVariable("r")
-//               ->withLabels(['r'])
-//            ;
             $r = relationshipTo()
                 ->withVariable("r");
-//            $rURI= relationshipTo()
-//                ->withVariable("r:$uri")
-//            ;
-            $rURI = $r->toQuery();
             $rURI = relationshipTo()
                 ->withTypes([$propertyUri])
                 ->withVariable("r");
             $type = procedure()::raw('type', $r);
-//        $params = literal()::map([
-//            'relationship' => procedure()::raw('type', Query::variable('relationshipTo')),
-//        ]);
-//            $resource = node('Resouce')
-//                ->withProperties(["uri" => $uri]);
-
 
             $query = query()
                 ->match([$aResource, $bResource])
@@ -206,7 +192,7 @@ class core_kernel_persistence_starsql_Resource implements core_kernel_persistenc
                 ->returning($type)
                 ->build();
             $results = $this->getPersistence()->run($query,);
-
+            //TODO delete old query
 //            $query = <<<CYPHER
 //                MATCH
 //                  (a:Resource), (b:Resource)
@@ -217,26 +203,38 @@ class core_kernel_persistence_starsql_Resource implements core_kernel_persistenc
 //
 //            $this->getPersistence()->run($query, ['uri' => $uri, 'object' => $object]);
         } elseif ($property->isLgDependent()) {
-//            $n= node()
-//                ->withLabels(['Resource'])
-//                ->withVariable("n")
-//                ->withProperties(["uri" => $uri ]);
-//            $resource = node('Resource')->withProperties(['uri' => $uri]);
-//            $resourceUri = $resource->property($propertyUri);
-//            $query = query()
-//                ->match($n)
-//                ->returning($n)
+//            TODO Clean up and finish query
+//            $uri = $resource->getUri();
+//            $object = $object->getUri();
+
+            $resource = node('Resource')->withProperties(['uri' => $uri]);
+            $n = node()
+                ->withLabels(['Resource'])
+                ->withVariable("n")
+                ->withProperties(["uri" => $uri]);
+            $nPropertyUri = node()
+                ->withVariable("n")
+                ->withProperties(["uri" => $uri]);
+            $resourceUri = $resource->property($propertyUri);
+            $querydsl = query()
+                ->match($n)
 //                ->set(
+                // Replace the URI property of the resource with the coalesced version, and add $object
+                // NOTE: 'coalesce' is not (yet) implemented as a native function in php-cypher-dsl, so we use a "raw" function
+//                    $resourceUri->replaceWith(procedure()::raw('coalesce', [$resourceUri])->plus($object))
+//                )
+                ->set(
 //                // Replace the URI property of the resource with the coalesced version, and add $object
 //                // NOTE: 'coalesce' is not (yet) implemented as a native function in php-cypher-dsl, so we use a "raw" function
-//                    $resourceUri->replaceWith(procedure()::raw('coalesce', [$resourceUri])->plus('hello'))
-//                )
-//                ->build();
-////            ->set([$procedure]);
-//
-//            $results = $this->getPersistence()->run($query);
-//            $results = $this->getPersistence()->run($query, [$uriParameter->getParameter() => $resource->getUri()]);
+                    $n->property($uri)->replaceWith('example')
+                )
+                ->returning($n)
+                ->build();
+//            ->set([$procedure]);
 
+//            $results = $this->getPersistence()->run($query, [$urier->getParameter() => $resource->getUri()]);
+            $resultsdls = $this->getPersistence()->run($querydsl);
+            //TODO Clean up and delete all query
             $query = <<<CYPHER
             MATCH (n:Resource {uri: \$uri})
             SET n.`{$propertyUri}` = coalesce(n.`{$propertyUri}`, []) + \$object
@@ -244,23 +242,21 @@ CYPHER;
 
             $this->getPersistence()->run($query, ['uri' => $uri, 'object' => $object]);
         } else {
+            //TODO: Delete old query and  comments
             $ndsl = node()
                 ->withLabels(['Resource'])
                 ->withVariable("n")
                 ->withProperties(["uri" => $uri]);
-//            $resource = node('Resouce')
-//                ->withProperties(["uri" => $uri]);
             $querydls = query()
                 ->match($ndsl)
                 ->set($ndsl->property($propertyUri)->replaceWith($object))->build();
             $results = $this->getPersistence()->run($querydls);
-            //TODO: Delete old query and  comments
-//            $query = <<<CYPHER
-//            MATCH (n:Resource {uri: \$uri})
-//            SET n.`{$propertyUri}` = \$object
-//CYPHER;
-//
-//            $this->getPersistence()->run($query, ['uri' => $uri, 'object' => $object]);
+            $query = <<<CYPHER
+            MATCH (n:Resource {uri: \$uri})
+            SET n.`{$propertyUri}` = \$object
+CYPHER;
+
+            $this->getPersistence()->run($query, ['uri' => $uri, 'object' => $object]);
         }
         return true;
     }
@@ -395,6 +391,7 @@ CYPHER;
                 $assembledConditions .= " AND ( {$additionalCondition} ) ";
             }
         }
+//TODO Delete original query when everthing is implemented
 //        $query = <<<CYPHER
 //            MATCH (n:Resource {uri: "{$uri}"})
 //            {$assembledConditions}
@@ -402,8 +399,6 @@ CYPHER;
 //            RETURN n
 //CYPHER;
 //        $results =$this->getPersistence()->run($query);
-//
-//
         $parameter = parameter();
         $nResource = node()
             ->withLabels(['Resource'])

@@ -136,7 +136,9 @@ class ResourceTest extends GenerisPhpUnitTestRunner
 
     public function testGetParentClassesWithoutParentRecursively()
     {
-        $class = new core_kernel_classes_Class('http://www.tao.lu/Ontologies/generis.rdf#UserRole');
+        $class = new core_kernel_classes_Class(
+            'http://www.tao.lu/Ontologies/generis.rdf#UserRole'
+        );//TODO change by correct value
         $ancestors = $class->getParentClasses(false);
         $this->assertEquals(1, count($ancestors));
     }
@@ -158,32 +160,32 @@ class ResourceTest extends GenerisPhpUnitTestRunner
         $this->assertEquals(1, count($ancestors));
     }
 
-    public function testGetSetPropertyValueIsNotLanguadeDependenNorRelationship()
+    public function testGetSetPropertyValueLanguageIndependentNorRelationship()
     {
         $resource = $this->createTestResource();
         $property1 = $this->createTestProperty();
-        $property2 = $this->createTestProperty();
-
-        $property1->setLgDependent(true);
         $resource->setPropertyValue($property1, 'prop1');
-
-        //test if a property1 is stored
         $result = $this->object->getPropertiesValues($resource, [$property1]);
         $this->assertTrue(in_array('prop1', $result[$property1->getUri()]));
         $resource->setPropertyValue($property1, 'prop1newvalue');
         $result = $this->object->getPropertiesValues($resource, [$property1]);
         $this->assertTrue(in_array('prop1newvalue', $result[$property1->getUri()]));
+    }
 
-//
-////test if a property2 is stored
-//
-//        $resource->setPropertyValue($property2, OntologyRdfs::RDFS_DOMAIN);
-//        $result = $this->object->getPropertiesValues($resource, [$property2]);
-//        $this->assertTrue(in_array(OntologyRdfs::RDFS_DOMAIN, $result[$property2->getUri()]));
-//        $resource->setPropertyValue($property2, OntologyRdfs::RDFS_SUBCLASSOF);
-//        $result = $this->object->getPropertiesValues($resource, [$property2]);
-//        $this->assertTrue(in_array(OntologyRdfs::RDFS_SUBCLASSOF, $result[$property2->getUri()]));
+    public function testGetSetPropertyValueLanguageDependent()
+    {
+        $resource = $this->createTestResource();
+        $property1 = $this->createTestProperty();
+        $property1->isMultiple();
 
+        $property1->setLgDependent(true);
+        $resource->setPropertyValue($property1, 'prop1');
+
+        $result = $this->object->getPropertiesValues($resource, [$property1]);
+        $this->assertTrue(in_array('prop1', $result[$property1->getUri()]));
+        $resource->setPropertyValue($property1, 'prop1newvalue');
+        $result = $this->object->getPropertiesValues($resource, [$property1]);
+        $this->assertTrue(in_array('prop1newvalue', $result[$property1->getUri()]));
     }
 
 
@@ -194,30 +196,12 @@ class ResourceTest extends GenerisPhpUnitTestRunner
 
         $property1->setLgDependent(true);
         $resource->setPropertyValue($property1, 'prop1');
-
-//        //test if a property1 is stored
-//        $result = $this->object->getPropertiesValues($resource, [$property1]);
-//        $this->assertTrue(in_array('prop1', $result[$property1->getUri()]));
-//        $resource->setPropertyValue($property1, 'prop1newvalue');
-//        $result = $this->object->getPropertiesValues($resource, [$property1]);
-//        $this->assertTrue(in_array('prop1newvalue', $result[$property1->getUri()]));
-//
-
-//test if a property2 is stored
-
         $resource->setPropertyValue($property1, OntologyRdfs::RDFS_DOMAIN);
         $result = $this->object->getPropertiesValues($resource, [$property1]);
         $this->assertTrue(in_array(OntologyRdfs::RDFS_DOMAIN, $result[$property1->getUri()]));
         $resource->setPropertyValue($property1, OntologyRdfs::RDFS_SUBCLASSOF);
         $result = $this->object->getPropertiesValues($resource, [$property1]);
         $this->assertTrue(in_array(OntologyRdfs::RDFS_SUBCLASSOF, $result[$property1->getUri()]));
-
-
-//
-//        $resource-> setPropertyValue($property1, "p1 initial value", 'fr-FR');
-//        $this->assertEquals(["p1 initial value"], $resource->getPropertyValues($property1,'fr-FR'));
-//        $resource->setPropertyValueByLg($property1, "p1 added value", 'fr-FR');
-//        $this->assertEquals(["p1 added value"], $resource->getPropertyValues($property1,'fr-FR'));
     }
 
     public function testRemovePropertyValueWithoutOptions()
@@ -226,7 +210,7 @@ class ResourceTest extends GenerisPhpUnitTestRunner
         $property1 = $this->createTestProperty();
 
         $resource->setPropertyValue($property1, 'prop1');
-        $resource->removePropertyValues($property1);//, "prop1", ['pattern' => OntologyRdfs::RDFS_LABEL]);
+        $resource->removePropertyValues($property1);
         $result = $this->object->getPropertiesValues($resource, [$property1]);
         $this->assertFalse(in_array(new core_kernel_classes_Literal('prop1'), $result[$property1->getUri()]));
     }
@@ -238,8 +222,7 @@ class ResourceTest extends GenerisPhpUnitTestRunner
         $property1 = $this->createTestProperty();
 
         $resource->setPropertyValue($property1, 'prop1');
-        $resource->removePropertyValues($property1, ['pattern' => 'prop1']
-        );//, "prop1", ['pattern' => OntologyRdfs::RDFS_LABEL]);
+        $resource->removePropertyValues($property1, ['pattern' => 'prop1']);
         $result = $this->object->getPropertiesValues($resource, [$property1]);
         $this->assertFalse(in_array(new core_kernel_classes_Literal('prop1'), $result[$property1->getUri()]));
     }
@@ -248,12 +231,8 @@ class ResourceTest extends GenerisPhpUnitTestRunner
     {
         $resource = $this->createTestResource();
         $property1 = $this->createTestProperty();
-
         $resource->setPropertyValue($property1, 'prop1');
-
-//        $result = $this->object->getPropertiesValues($resource, [$property1]);
-        $resource->removePropertyValues($property1, ['like' => true, 'pattern' => 'prop1']
-        );//, "prop1", ['pattern' => OntologyRdfs::RDFS_LABEL]);
+        $resource->removePropertyValues($property1, ['like' => true, 'pattern' => ['prop1', 'prop2']]);
         $result = $this->object->getPropertiesValues($resource, [$property1]);
         $this->assertFalse(in_array(new core_kernel_classes_Literal('pro'), $result[$property1->getUri()]));
     }
