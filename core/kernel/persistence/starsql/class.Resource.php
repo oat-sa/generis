@@ -151,6 +151,7 @@ class core_kernel_persistence_starsql_Resource implements core_kernel_persistenc
     {
         $uri = $resource->getUri();
         $propertyUri = $property->getUri();
+        $originalObject = $object;
         if ($object instanceof core_kernel_classes_Resource) {
             $object = $object->getUri();
         } else {
@@ -185,14 +186,15 @@ class core_kernel_persistence_starsql_Resource implements core_kernel_persistenc
                 ->withVariable("r");
             $type = procedure()::raw('type', $r);
 
-            $query = query()
+            $querydsl = query()
                 ->match([$aResource, $bResource])
                 ->where([$a->property('uri')->equals($uri), $b->property('uri')->equals($object)])
                 ->create($a->relationship($rURI, $b))
                 ->returning($type)
                 ->build();
-            $results = $this->getPersistence()->run($query,);
-            //TODO delete old query
+            $results = $this->getPersistence()->run($querydsl,);
+
+//            //TODO delete old query
 //            $query = <<<CYPHER
 //                MATCH
 //                  (a:Resource), (b:Resource)
@@ -200,47 +202,63 @@ class core_kernel_persistence_starsql_Resource implements core_kernel_persistenc
 //                CREATE (a)-[r:`{$propertyUri}`]->(b)
 //                RETURN type(r)
 //CYPHER;
-//
+
 //            $this->getPersistence()->run($query, ['uri' => $uri, 'object' => $object]);
         } elseif ($property->isLgDependent()) {
-//            TODO Clean up and finish query
+////            TODO Clean up and finish query
 //            $uri = $resource->getUri();
 //            $object = $object->getUri();
+////            TODO Clean up and delete all query
+//            $query = <<<CYPHER
+//MATCH (n:Resource {uri: \$uri})
+//RETURN n.`{$propertyUri}`
+//CYPHER;
+//
+//            $results =  $this->getPersistence()->run($query, ['uri' => $uri, 'object' => $object]);
+//            $returnValue = [];
+//            foreach ($results as $result) {
+//                $exists = $result->values();
+//            }
+//            MATCH (n:Resource {uri: \$uri})
+//            SET n.`{$propertyUri}` = coalesce(n.`{$propertyUri}`, []) + \$object
 
-            $resource = node('Resource')->withProperties(['uri' => $uri]);
             $n = node()
                 ->withLabels(['Resource'])
                 ->withVariable("n")
                 ->withProperties(["uri" => $uri]);
-            $nPropertyUri = node()
-                ->withVariable("n")
-                ->withProperties(["uri" => $uri]);
-            $resourceUri = $resource->property($propertyUri);
+            $procedure = procedure()::raw('coalesce', [$n->property($uri), []]);//($object);
+            $parameter = parameter();
+            $expression = Query::rawExpression(sprintf('%s+ $%s', $procedure->toQuery(), $parameter->getParameter()));
             $querydsl = query()
                 ->match($n)
-//                ->set(
-                // Replace the URI property of the resource with the coalesced version, and add $object
-                // NOTE: 'coalesce' is not (yet) implemented as a native function in php-cypher-dsl, so we use a "raw" function
-//                    $resourceUri->replaceWith(procedure()::raw('coalesce', [$resourceUri])->plus($object))
-//                )
                 ->set(
 //                // Replace the URI property of the resource with the coalesced version, and add $object
 //                // NOTE: 'coalesce' is not (yet) implemented as a native function in php-cypher-dsl, so we use a "raw" function
-                    $n->property($uri)->replaceWith('example')
+                    $n->property($uri)->replaceWith($expression)
                 )
                 ->returning($n)
                 ->build();
-//            ->set([$procedure]);
 
-//            $results = $this->getPersistence()->run($query, [$urier->getParameter() => $resource->getUri()]);
-            $resultsdls = $this->getPersistence()->run($querydsl);
-            //TODO Clean up and delete all query
-            $query = <<<CYPHER
-            MATCH (n:Resource {uri: \$uri})
-            SET n.`{$propertyUri}` = coalesce(n.`{$propertyUri}`, []) + \$object
-CYPHER;
+            $resultsdls = $this->getPersistence()->run($querydsl, [$parameter->getParameter() => $object]);
 
-            $this->getPersistence()->run($query, ['uri' => $uri, 'object' => $object]);
+
+//            //TODO Clean up and delete all query
+//            $query = <<<CYPHER
+//MATCH (n:Resource {uri: \$uri})
+//RETURN n.`{$propertyUri}`
+//CYPHER;
+//
+//            $results =  $this->getPersistence()->run($query, ['uri' => $uri, 'object' => $object]);
+
+            // @FIXME If there is multiple values and we are
+
+//            //TODO Clean up and delete all query
+//            $query = <<<CYPHER
+//            MATCH (n:Resource {uri: \$uri})
+//            SET n.`{$propertyUri}` = coalesce(n.`{$propertyUri}`, []) + \$object
+//CYPHER;
+//
+//            $this->getPersistence()->run($query, ['uri' => $uri, 'object' => $object]);
         } else {
             //TODO: Delete old query and  comments
             $ndsl = node()
@@ -251,12 +269,12 @@ CYPHER;
                 ->match($ndsl)
                 ->set($ndsl->property($propertyUri)->replaceWith($object))->build();
             $results = $this->getPersistence()->run($querydls);
-            $query = <<<CYPHER
-            MATCH (n:Resource {uri: \$uri})
-            SET n.`{$propertyUri}` = \$object
-CYPHER;
-
-            $this->getPersistence()->run($query, ['uri' => $uri, 'object' => $object]);
+//            $query = <<<CYPHER
+//            MATCH (n:Resource {uri: \$uri})
+//            SET n.`{$propertyUri}` = \$object
+//CYPHER;
+//
+//            $this->getPersistence()->run($query, ['uri' => $uri, 'object' => $object]);
         }
         return true;
     }
@@ -430,6 +448,12 @@ CYPHER;
         }
         $results = $this->getPersistence()->run($querydls, [$parameter->getParameter() => 'e']);
 
+//        if ($$property->isMultiple() && $property->isLgDependent()){
+//
+//        }
+//        elseif ($property->isRelationship()){
+//            //
+//        }
         // @FIXME if value is array, then query should be for update. Try to deduce if $prop->isLgDependent or isMultiple
         // @FIXME if property is represented as node relationship, query should remove that instead
 
@@ -555,6 +579,7 @@ CYPHER;
                 }
             }
         }
+
         foreach ($result->get('relationships') as $relationship) {
             if (in_array($relationship['relationship'], $propertyUris)) {
                 $returnValue[$relationship['relationship']][] = common_Utils::isUri($relationship['relatedResourceUri'])
