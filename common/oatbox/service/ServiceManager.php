@@ -265,12 +265,10 @@ class ServiceManager implements ServiceLocatorInterface, ContainerInterface
         return $this->getContainerStarter()->getContainer();
     }
 
-    public function rebuildContainer(): bool
+    public function rebuildContainer(): void
     {
         $this->getContainerStarter()->getContainerBuilder()->forceBuild();
         $this->containerStarter = null;
-
-        return true;
     }
 
     /**
