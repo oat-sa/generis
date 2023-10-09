@@ -207,35 +207,9 @@ class ResourceTest extends GenerisPhpUnitTestRunner
         $result = $this->object->getPropertiesValues($resource, [$property1]);
         $returnedResource = $result[$property1->getUri()][0];
         $this->assertEquals(OntologyRdfs::RDFS_CLASS, $returnedResource->getUri());
-//        $this->assertEquals(OntologyRdfs::RDFS_CLASS, $result[$property1->getUri()][0]->getUri());
-//        $resource->setPropertyValue($property1, OntologyRdfs::RDFS_SUBCLASSOF);
-//        $result = $this->object->getPropertiesValues($resource, [$property1]);
-//        $this->assertTrue(in_array(OntologyRdfs::RDFS_SUBCLASSOF, $result[$property1->getUri()]));
-//
-////        $property1->setLgDependent(true);
-//        $resource->setPropertyValue($property1, 'prop1');
-//        $resource->setPropertyValue($property1, OntologyRdfs::RDFS_DOMAIN);
-////        $result = $this->object->getPropertiesValues($resource, [$property1]);
-////        $this->assertTrue(in_array('prop1', $result[$property1->getUri()]));
-////
-//         //TODO leave as before?
-//        $result = $this->object->getPropertiesValues($resource, [$property1]);
-//        $this->assertTrue(in_array('prop1', $result[$property1->getUri()]));
-//
-//        $resource = $this->createTestResource();
-//        $property1 = $this->createTestProperty();
-//
-//        $property1->setLgDependent(true);
-//        $resource->setPropertyValue($property1, 'prop1');
-//        $resource->setPropertyValue($property1, OntologyRdfs::RDFS_DOMAIN);
-//        $result = $this->object->getPropertiesValues($resource, [$property1]);
-//        $this->assertTrue(in_array(OntologyRdfs::RDFS_DOMAIN, $result[$property1->getUri()]));
-//        $resource->setPropertyValue($property1, OntologyRdfs::RDFS_SUBCLASSOF);
-//        $result = $this->object->getPropertiesValues($resource, [$property1]);
-//        $this->assertTrue(in_array(OntologyRdfs::RDFS_SUBCLASSOF, $result[$property1->getUri()]));
     }
 
-    public function testRemovePropertyValueWithoutOptions()
+    public function testRemovePropertyValue()
     {
         $resource = $this->createTestResource();
         $property1 = $this->createTestProperty();
@@ -245,6 +219,7 @@ class ResourceTest extends GenerisPhpUnitTestRunner
         $result = $this->object->getPropertiesValues($resource, [$property1]);
         $this->assertFalse(in_array(new core_kernel_classes_Literal('prop1'), $result[$property1->getUri()]));
     }
+
 
 
     public function testRemovePropertyValueWithPattern()
@@ -258,13 +233,62 @@ class ResourceTest extends GenerisPhpUnitTestRunner
         $this->assertFalse(in_array(new core_kernel_classes_Literal('prop1'), $result[$property1->getUri()]));
     }
 
-    public function testRemovePropertyValueWithPatternAndLike()
+    public function testRemovePropertyValueWithPatternAndLikeFalse()
     {
         $resource = $this->createTestResource();
         $property1 = $this->createTestProperty();
         $resource->setPropertyValue($property1, 'prop1');
-        $resource->removePropertyValues($property1, ['like' => true, 'pattern' => ['prop1', 'prop2']]);
+        $resource->removePropertyValues($property1, ['like' => false, 'pattern' => ['prop1']]);
         $result = $this->object->getPropertiesValues($resource, [$property1]);
-        $this->assertFalse(in_array(new core_kernel_classes_Literal('pro'), $result[$property1->getUri()]));
+        $this->assertFalse(in_array(new core_kernel_classes_Literal('prop1'), $result[$property1->getUri()]));
     }
+
+    public function testRemovePropertyValueWithPatternAndLikeTrue()
+    {
+        $resource = $this->createTestResource();
+        $property1 = $this->createTestProperty();
+        $resource->setPropertyValue($property1, 'prop1');
+        $resource->removePropertyValues($property1, ['like' => true, 'pattern' => ['prop*']]);
+        $result = $this->object->getPropertiesValues($resource, [$property1]);
+        $this->assertFalse(in_array(new core_kernel_classes_Literal('prop1'), $result[$property1->getUri()]));
+    }
+
+
+    public function testRemovePropertyValueWithPatternLikeFalseAndTwoValues()
+    {
+        $resource = $this->createTestResource();
+        $property1 = $this->createTestProperty();
+        $resource->setPropertyValue($property1, 'prop1');
+        $resource->removePropertyValues($property1, ['like' => false, 'pattern' => [['prop1', 'prop2']]]);
+        $result = $this->object->getPropertiesValues($resource, [$property1]);
+        $this->assertFalse(in_array(new core_kernel_classes_Literal('prop1'), $result[$property1->getUri()]));
+    }
+
+    public function testRemovePropertyValueWithPatternLikeFalseAndTwoValuesWithAnOr()
+    {
+        $resource = $this->createTestResource();
+        $property1 = $this->createTestProperty();
+        $resource->setPropertyValue($property1, 'prop1');
+        $resource->removePropertyValues(
+            $property1,
+            ['like' => false, 'pattern' => [['prop1', 'prop2'], ['prop1', 'prop4']]]
+        );
+        $result = $this->object->getPropertiesValues($resource, [$property1]);
+        $this->assertFalse(in_array(new core_kernel_classes_Literal('prop1'), $result[$property1->getUri()]));
+    }
+
+    public function testRemovePropertyValueWithPatternLikeFalseAndTwoValuesAndTwoSetOfValues()
+    {
+        $resource = $this->createTestResource();
+        $property1 = $this->createTestProperty();
+        $resource->setPropertyValue($property1, 'prop1');
+        $resource->removePropertyValues($property1, ['like' => false, 'pattern' => [['prop1', 'value2'], ['prop1']]]);
+        $result = $this->object->getPropertiesValues($resource, [$property1]);
+        $this->assertFalse(in_array(new core_kernel_classes_Literal('prop1'), $result[$property1->getUri()]));
+    }
+
+
+    //TODO Duplicate last functions with like true
+
+
 }

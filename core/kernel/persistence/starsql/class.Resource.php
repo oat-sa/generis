@@ -151,7 +151,6 @@ class core_kernel_persistence_starsql_Resource implements core_kernel_persistenc
     {
         $uri = $resource->getUri();
         $propertyUri = $property->getUri();
-        $originalObject = $object;
         if ($object instanceof core_kernel_classes_Resource) {
             $object = $object->getUri();
         } else {
@@ -226,14 +225,12 @@ class core_kernel_persistence_starsql_Resource implements core_kernel_persistenc
                 ->withLabels(['Resource'])
                 ->withVariable("n")
                 ->withProperties(["uri" => $uri]);
-            $procedure = procedure()::raw('coalesce', [$n->property($uri), []]);//($object);
+            $procedure = procedure()::raw('coalesce', [$n->property($uri), []]);
             $parameter = parameter();
             $expression = Query::rawExpression(sprintf('%s+ $%s', $procedure->toQuery(), $parameter->getParameter()));
             $querydsl = query()
                 ->match($n)
                 ->set(
-//                // Replace the URI property of the resource with the coalesced version, and add $object
-//                // NOTE: 'coalesce' is not (yet) implemented as a native function in php-cypher-dsl, so we use a "raw" function
                     $n->property($uri)->replaceWith($expression)
                 )
                 ->returning($n)
@@ -367,13 +364,93 @@ class core_kernel_persistence_starsql_Resource implements core_kernel_persistenc
         return true;
     }
 
-    public function setPropertyValueByLg(core_kernel_classes_Resource $resource, core_kernel_classes_Property $property, $value, $lg): ?bool
-    {
+    public function setPropertyValueByLg(
+        core_kernel_classes_Resource $resource,
+        core_kernel_classes_Property $property,
+        $value,
+        $lg
+    ): ?bool {
         return $this->setPropertyValue($resource, $property, $value, $lg);
     }
 
-    public function removePropertyValues(core_kernel_classes_Resource $resource, core_kernel_classes_Property $property, $options = []): ?bool
-    {
+
+//     public function removePropertyValues(core_kernel_classes_Resource $resource, core_kernel_classes_Property $property, $options = []): ?bool
+//    {
+//        $uri = $resource->getUri();
+//        $propertyUri = $property->getUri();
+//        $conditions = [];
+//        $pattern = $options['pattern'] ?? null;
+//        $isLike = !empty($options['like']);
+//        if (!empty($pattern)) {
+//            if (!is_array($pattern)) {
+//                $pattern = [$pattern];
+//            }
+//
+//            $multiCondition = "( ";
+//            foreach ($pattern as $index => $token) {
+//                if (empty($token)) {
+//                    continue;
+//                }
+//                if ($index > 0) {
+//                    $multiCondition .= ' OR ';
+//                }
+//                if ($isLike) {
+//                    $multiCondition .= "n.`{$propertyUri}` =~ '" . str_replace('*', '.*', $token) . "'";
+//                } else {
+//                    $multiCondition .= "n.`{$propertyUri}` = '$token'";
+//                }
+//            }
+//            $conditions[] = "{$multiCondition} ) ";
+//        }
+//
+//        $assembledConditions = '';
+//        foreach ($conditions as $i => $additionalCondition) {
+//            if (empty($assembledConditions)) {
+//                $assembledConditions .= " WHERE ( {$additionalCondition} ) ";
+//            } else {
+//                $assembledConditions .= " AND ( {$additionalCondition} ) ";
+//            }
+//        }
+//
+//        $query = <<<CYPHER
+//            MATCH (n:Resource {uri: "{$uri}"})
+//            {$assembledConditions}
+//            REMOVE n.`{$propertyUri}`
+//            RETURN n
+//CYPHER;
+//
+//        // @FIXME if value is array, then query should be for update. Try to deduce if $prop->isLgDependent or isMultiple
+//        // @FIXME if property is represented as node relationship, query should remove that instead
+//
+//        $this->getPersistence()->run($query);
+//
+//
+//          $parameter = parameter();
+//        $nResource = node()
+//            ->withLabels(['Resource'])
+//            ->withVariable("n")
+//            ->withProperties(["uri" => $uri]);;
+//
+//        $n = node()
+//            ->withVariable("n")
+//            ->withProperties(["uri" => $uri]);;
+//
+//                $whereCondition = $n->property($propertyUri)->equals($token);
+//            $querydls = query()
+//                ->match($nResource)
+//                ->where($whereCondition)
+//                ->remove($n->property($propertyUri))
+//                ->returning($n)
+//                ->build();
+//        $results = $this->getPersistence()->run($querydls, [$parameter->getParameter() => 'e']);
+//
+//        return true;
+//    }
+    public function removePropertyValues(
+        core_kernel_classes_Resource $resource,
+        core_kernel_classes_Property $property,
+        $options = []
+    ): ?bool {
         $uri = $resource->getUri();
         $propertyUri = $property->getUri();
         $conditions = [];
@@ -384,30 +461,30 @@ class core_kernel_persistence_starsql_Resource implements core_kernel_persistenc
                 $pattern = [$pattern];
             }
 
-            $multiCondition = "( ";
-            foreach ($pattern as $index => $token) {
-                if (empty($token)) {
-                    continue;
-                }
-                if ($index > 0) {
-                    $multiCondition .= ' OR ';
-                }
-                if ($isLike) {
-                    $multiCondition .= "n.`{$propertyUri}` =~ '" . str_replace('*', '.*', $token) . "'";
-                } else {
-                    $multiCondition .= "n.`{$propertyUri}` = '$token'";
-                }
-            }
-            $conditions[] = "{$multiCondition} ) ";
-        }
-
-        $assembledConditions = '';
-        foreach ($conditions as $i => $additionalCondition) {
-            if (empty($assembledConditions)) {
-                $assembledConditions .= " WHERE ( {$additionalCondition} ) ";
-            } else {
-                $assembledConditions .= " AND ( {$additionalCondition} ) ";
-            }
+//            $multiCondition = "( ";
+//            foreach ($pattern as $index => $token) {
+//                if (empty($token)) {
+//                    continue;
+//                }
+//                if ($index > 0) {
+//                    $multiCondition .= ' OR ';
+//                }
+//                if ($isLike) {
+//                    $multiCondition .= "n.`{$propertyUri}` =~ '" . str_replace('*', '.*', $token) . "'";
+//                } else {
+//                    $multiCondition .= "n.`{$propertyUri}` = '$token'";
+//                }
+//            }
+//            $conditions[] = "{$multiCondition} ) ";
+//        }
+//
+//        $assembledConditions = '';
+//        foreach ($conditions as $i => $additionalCondition) {
+//            if (empty($assembledConditions)) {
+//                $assembledConditions .= " WHERE ( {$additionalCondition} ) ";
+//            } else {
+//                $assembledConditions .= " AND ( {$additionalCondition} ) ";
+//            }
         }
 //TODO Delete original query when everthing is implemented
 //        $query = <<<CYPHER
@@ -427,6 +504,9 @@ class core_kernel_persistence_starsql_Resource implements core_kernel_persistenc
             ->withVariable("n")
             ->withProperties(["uri" => $uri]);;
 
+
+        $whereCondition = [];
+
         if (!isset($pattern)) {
             $querydls = query()
                 ->match($nResource)
@@ -435,9 +515,19 @@ class core_kernel_persistence_starsql_Resource implements core_kernel_persistenc
                 ->build();
         } else {
             if ($isLike) {
-                $whereCondition = $n->property($propertyUri)->regex($token);
+//                $whereCondition = $n->property($propertyUri)->regex($token);
             } else {
-                $whereCondition = $n->property($propertyUri)->equals($token);
+//                if(count($pattern) == 1){// To ($property1, ['like' => false, 'pattern' => [['prop1', 'prop2']]]);
+//                    $whereCondition = $n->property($propertyUri)->in($pattern);
+//                }
+//                else {
+                foreach ($pattern as $index => $token) {
+                    if (!is_array($pattern[$index])) {
+                        $pattern[$index] = [$pattern[$index]];
+                    }
+                    $whereCondition[] = $n->property($propertyUri)->in($pattern[$index]);
+                }
+//                }
             }
             $querydls = query()
                 ->match($nResource)
