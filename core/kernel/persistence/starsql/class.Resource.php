@@ -24,6 +24,7 @@ use oat\generis\model\OntologyRdfs;
 use oat\oatbox\session\SessionService;
 use oat\oatbox\user\UserLanguageServiceInterface;
 use WikibaseSolutions\CypherDSL\Clauses\SetClause;
+use WikibaseSolutions\CypherDSL\Clauses\WhereClause;
 use WikibaseSolutions\CypherDSL\Query;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -373,79 +374,63 @@ class core_kernel_persistence_starsql_Resource implements core_kernel_persistenc
         return $this->setPropertyValue($resource, $property, $value, $lg);
     }
 
+    public function removePropertyValuesOriginal(
+        core_kernel_classes_Resource $resource,
+        core_kernel_classes_Property $property,
+        $options = []
+    ): ?bool {
+        $uri = $resource->getUri();
+        $propertyUri = $property->getUri();
+        $conditions = [];
+        $pattern = $options['pattern'] ?? null;
+        $isLike = !empty($options['like']);
+        if (!empty($pattern)) {
+            if (!is_array($pattern)) {
+                $pattern = [$pattern];
+            }
 
-//     public function removePropertyValues(core_kernel_classes_Resource $resource, core_kernel_classes_Property $property, $options = []): ?bool
-//    {
-//        $uri = $resource->getUri();
-//        $propertyUri = $property->getUri();
-//        $conditions = [];
-//        $pattern = $options['pattern'] ?? null;
-//        $isLike = !empty($options['like']);
-//        if (!empty($pattern)) {
-//            if (!is_array($pattern)) {
-//                $pattern = [$pattern];
-//            }
-//
-//            $multiCondition = "( ";
-//            foreach ($pattern as $index => $token) {
-//                if (empty($token)) {
-//                    continue;
-//                }
-//                if ($index > 0) {
-//                    $multiCondition .= ' OR ';
-//                }
-//                if ($isLike) {
-//                    $multiCondition .= "n.`{$propertyUri}` =~ '" . str_replace('*', '.*', $token) . "'";
-//                } else {
-//                    $multiCondition .= "n.`{$propertyUri}` = '$token'";
-//                }
-//            }
-//            $conditions[] = "{$multiCondition} ) ";
-//        }
-//
-//        $assembledConditions = '';
-//        foreach ($conditions as $i => $additionalCondition) {
-//            if (empty($assembledConditions)) {
-//                $assembledConditions .= " WHERE ( {$additionalCondition} ) ";
-//            } else {
-//                $assembledConditions .= " AND ( {$additionalCondition} ) ";
-//            }
-//        }
-//
-//        $query = <<<CYPHER
-//            MATCH (n:Resource {uri: "{$uri}"})
-//            {$assembledConditions}
-//            REMOVE n.`{$propertyUri}`
-//            RETURN n
-//CYPHER;
-//
-//        // @FIXME if value is array, then query should be for update. Try to deduce if $prop->isLgDependent or isMultiple
-//        // @FIXME if property is represented as node relationship, query should remove that instead
-//
-//        $this->getPersistence()->run($query);
-//
-//
-//          $parameter = parameter();
-//        $nResource = node()
-//            ->withLabels(['Resource'])
-//            ->withVariable("n")
-//            ->withProperties(["uri" => $uri]);;
-//
-//        $n = node()
-//            ->withVariable("n")
-//            ->withProperties(["uri" => $uri]);;
-//
-//                $whereCondition = $n->property($propertyUri)->equals($token);
-//            $querydls = query()
-//                ->match($nResource)
-//                ->where($whereCondition)
-//                ->remove($n->property($propertyUri))
-//                ->returning($n)
-//                ->build();
-//        $results = $this->getPersistence()->run($querydls, [$parameter->getParameter() => 'e']);
-//
-//        return true;
-//    }
+            $multiCondition = "( ";
+            foreach ($pattern as $index => $token) {
+                if (empty($token)) {
+                    continue;
+                }
+                if ($index > 0) {
+                    $multiCondition .= ' OR ';
+                }
+                if ($isLike) {
+                    $multiCondition .= "n.`{$propertyUri}` =~ '" . str_replace('*', '.*', $token) . "'";
+                } else {
+                    $multiCondition .= "n.`{$propertyUri}` = '$token'";
+                }
+            }
+            $conditions[] = "{$multiCondition} ) ";
+        }
+
+        $assembledConditions = '';
+        foreach ($conditions as $i => $additionalCondition) {
+            if (empty($assembledConditions)) {
+                $assembledConditions .= " WHERE ( {$additionalCondition} ) ";
+            } else {
+                $assembledConditions .= " AND ( {$additionalCondition} ) ";
+            }
+        }
+
+        $query = <<<CYPHER
+            MATCH (n:Resource {uri: "{$uri}"})
+            {$assembledConditions}
+            REMOVE n.`{$propertyUri}`
+            RETURN n
+CYPHER;
+
+        // @FIXME if value is array, then query should be for update. Try to deduce if $prop->isLgDependent or isMultiple
+        // @FIXME if property is represented as node relationship, query should remove that instead
+
+        $this->getPersistence()->run($query);
+
+        return true;
+    }
+
+
     public function removePropertyValues(
         core_kernel_classes_Resource $resource,
         core_kernel_classes_Property $property,
@@ -515,23 +500,37 @@ class core_kernel_persistence_starsql_Resource implements core_kernel_persistenc
                 ->build();
         } else {
             if ($isLike) {
-//                $whereCondition = $n->property($propertyUri)->regex($token);
-            } else {
-//                if(count($pattern) == 1){// To ($property1, ['like' => false, 'pattern' => [['prop1', 'prop2']]]);
-//                    $whereCondition = $n->property($propertyUri)->in($pattern);
-//                }
-//                else {
+                $whereClause = new WhereClause();
                 foreach ($pattern as $index => $token) {
                     if (!is_array($pattern[$index])) {
                         $pattern[$index] = [$pattern[$index]];
                     }
+                    $clause = null;
+                    foreach ($pattern[$index] as $i => $word) {
+                        $word = str_replace('*', '.*', $word);
+                        $queryCondition = $n->property($propertyUri)->regex($word);
+                        $clause = ($clause === null)
+                            ? $queryCondition
+                            : $clause->or($queryCondition);
+                    }
+                    if ($clause != null) {
+                        $whereClause->addExpression($clause);
+                    }
+                }
+            } else {
+
+                foreach ($pattern as $index => $token) {
+                    if (!is_array($pattern[$index])) {
+                        $pattern[$index] = [$pattern[$index]];
+                    }
+
                     $whereCondition[] = $n->property($propertyUri)->in($pattern[$index]);
                 }
-//                }
             }
             $querydls = query()
                 ->match($nResource)
-                ->where($whereCondition)
+//                ->where($whereCondition)
+                ->addClause($whereClause)
                 ->remove($n->property($propertyUri))
                 ->returning($n)
                 ->build();

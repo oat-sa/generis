@@ -248,13 +248,33 @@ class ResourceTest extends GenerisPhpUnitTestRunner
         $resource = $this->createTestResource();
         $property1 = $this->createTestProperty();
         $resource->setPropertyValue($property1, 'prop1');
-        $resource->removePropertyValues($property1, ['like' => true, 'pattern' => ['prop*']]);
+        $resource->removePropertyValues($property1, ['like' => true, 'pattern' => ['*prop*']]);
         $result = $this->object->getPropertiesValues($resource, [$property1]);
         $this->assertFalse(in_array(new core_kernel_classes_Literal('prop1'), $result[$property1->getUri()]));
     }
 
 
-    public function testRemovePropertyValueWithPatternLikeFalseAndTwoValues()
+    public function testRemovePropertyValueWithPatternLikeTrueUsingTwoPatternsAndBothOfThemHaveToBeMeet()
+    {
+        $resource = $this->createTestResource();
+        $property1 = $this->createTestProperty();
+        $resource->setPropertyValue($property1, 'prop1');
+        $resource->removePropertyValues($property1, ['like' => true, 'pattern' => [['pr*'], ['*1']]]);
+        $result = $this->object->getPropertiesValues($resource, [$property1]);
+        $this->assertFalse(in_array(new core_kernel_classes_Literal('prop1'), $result[$property1->getUri()]));
+    }
+
+    public function testRemovePropertyValueWithPatternLikeTrueUsingTwoPatternsWhichkkkOneOfThemHasToBeMeet()
+    {
+        $resource = $this->createTestResource();
+        $property1 = $this->createTestProperty();
+        $resource->setPropertyValue($property1, 'prop1');
+        $resource->removePropertyValues($property1, ['like' => true, 'pattern' => [['pr*', '*1'], ['*o*']]]);
+        $result = $this->object->getPropertiesValues($resource, [$property1]);
+        $this->assertFalse(in_array(new core_kernel_classes_Literal('prop1'), $result[$property1->getUri()]));
+    }
+
+    public function testRemovePropertyValueWithPatternLikeFalseAndTwoValues1()
     {
         $resource = $this->createTestResource();
         $property1 = $this->createTestProperty();
@@ -262,6 +282,17 @@ class ResourceTest extends GenerisPhpUnitTestRunner
         $resource->removePropertyValues($property1, ['like' => false, 'pattern' => [['prop1', 'prop2']]]);
         $result = $this->object->getPropertiesValues($resource, [$property1]);
         $this->assertFalse(in_array(new core_kernel_classes_Literal('prop1'), $result[$property1->getUri()]));
+    }
+
+    public function testRemovePropertyValueWithPatternLikeTrueAndTwoValuesOneOfThemDifferentThanProperty()
+    {
+        $resource = $this->createTestResource();
+        $property1 = $this->createTestProperty();
+        $resource->setPropertyValue($property1, 'prop1');
+        $resource->removePropertyValues($property1, ['like' => true, 'pattern' => [['prop1'], ['4']]]);
+        $result = $this->object->getPropertiesValues($resource, [$property1]);
+
+        $this->assertTrue(in_array(new core_kernel_classes_Literal('prop1'), $result[$property1->getUri()]));
     }
 
     public function testRemovePropertyValueWithPatternLikeFalseAndTwoValuesWithAnOr()
