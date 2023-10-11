@@ -184,14 +184,6 @@ class ResourceTest extends GenerisPhpUnitTestRunner
         $result = $this->object->getPropertiesValues($resource, [$property1]);
         $this->assertTrue(in_array('prop1', $result[$property1->getUri()]));
 
-//        $resource = $this->createTestResource();
-//        $property1 = $this->createTestProperty();
-////        $property1->isMultiple();
-//        $property1->setLgDependent(true);
-//        $resource->setPropertyValue($property1, 'prop1');
-//
-//        $result = $this->object->getPropertiesValues($resource, [$property1]);
-//        $this->assertTrue(in_array('prop1', $result[$property1->getUri()]));
         $resource->setPropertyValue($property1, 'prop1newvalue');
         $result = $this->object->getPropertiesValues($resource, [$property1]);
         $this->assertTrue(in_array('prop1newvalue', $result[$property1->getUri()]));
@@ -310,18 +302,5 @@ class ResourceTest extends GenerisPhpUnitTestRunner
         $result = $this->object->getPropertiesValues($resource, [$property1]);
         $this->assertFalse(in_array(new core_kernel_classes_Literal('prop1'), $result[$property1->getUri()]));
     }
-
-
-//    //TODO Check if it is necesarry
-//    public function testRemovePropertyValueWithPatternLikeFalseAndFourPatternsOnePatternOnEachGroupHasToBeMeet()
-//    {
-//        $resource = $this->createTestResource();
-//        $property1 = $this->createTestProperty();
-//        $resource->setPropertyValue($property1, 'prop1');
-//        $resource->removePropertyValues($property1, ['like' => false, 'pattern' => [['prop1', 'value2'], ['prop1']]]);
-//        $result = $this->object->getPropertiesValues($resource, [$property1]);
-//        $this->assertFalse(in_array(new core_kernel_classes_Literal('prop1'), $result[$property1->getUri()]));
-//    }
-
 
 }
