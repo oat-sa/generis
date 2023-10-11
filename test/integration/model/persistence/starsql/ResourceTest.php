@@ -179,7 +179,7 @@ class ResourceTest extends GenerisPhpUnitTestRunner
         $resource = $this->createTestResource();
         $property1 = $this->createTestProperty();
 
-//        $property1->setLgDependent(true);
+        $property1->setLgDependent(true);
         $resource->setPropertyValue($property1, 'prop1');
         $result = $this->object->getPropertiesValues($resource, [$property1]);
         $this->assertTrue(in_array('prop1', $result[$property1->getUri()]));
