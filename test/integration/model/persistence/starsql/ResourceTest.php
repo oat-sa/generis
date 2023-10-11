@@ -220,7 +220,6 @@ class ResourceTest extends GenerisPhpUnitTestRunner
     }
 
 
-
     public function testRemovePropertyValueWithPattern()
     {
         $resource = $this->createTestResource();

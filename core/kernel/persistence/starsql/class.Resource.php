@@ -87,11 +87,14 @@ class core_kernel_persistence_starsql_Resource implements core_kernel_persistenc
             $returnValue[$uri] = $this->getModel()->getClass($uri);
         }
 
-        return (array) $returnValue;
+        return (array)$returnValue;
     }
 
-    public function getPropertyValues(core_kernel_classes_Resource $resource, core_kernel_classes_Property $property, $options = []): array
-    {
+    public function getPropertyValues(
+        core_kernel_classes_Resource $resource,
+        core_kernel_classes_Property $property,
+        $options = []
+    ): array {
         if (isset($options['last'])) {
             throw new core_kernel_persistence_Exception('Option \'last\' no longer supported');
         }
@@ -111,7 +114,8 @@ class core_kernel_persistence_starsql_Resource implements core_kernel_persistenc
                 ->returning($node->property($property->getUri()));
         }
 
-        $results = $this->getPersistence()->run($query->build(), [$uriParameter->getParameter() => $resource->getUri()]);
+        $results = $this->getPersistence()->run($query->build(), [$uriParameter->getParameter() => $resource->getUri()]
+        );
         $values = [];
         $selectedLanguage = $options['lg'] ?? null;
         $dataLanguage = $this->getDataLanguage();
@@ -126,7 +130,10 @@ class core_kernel_persistence_starsql_Resource implements core_kernel_persistenc
                 if (isset($selectedLanguage)) {
                     $values = array_merge($values, $this->filterRecordsByLanguage($value, [$selectedLanguage]));
                 } else {
-                    $values = array_merge($values, $this->filterRecordsByAvailableLanguage($value, $dataLanguage, $defaultLanguage));
+                    $values = array_merge(
+                        $values,
+                        $this->filterRecordsByAvailableLanguage($value, $dataLanguage, $defaultLanguage)
+                    );
                 }
             } else {
                 $values[] = $this->parseTranslatedValue($value);
@@ -136,9 +143,12 @@ class core_kernel_persistence_starsql_Resource implements core_kernel_persistenc
         return $values;
     }
 
-    public function getPropertyValuesByLg(core_kernel_classes_Resource $resource, core_kernel_classes_Property $property, $lg): core_kernel_classes_ContainerCollection
-    {
-        $options =  ['lg' => $lg];
+    public function getPropertyValuesByLg(
+        core_kernel_classes_Resource $resource,
+        core_kernel_classes_Property $property,
+        $lg
+    ): core_kernel_classes_ContainerCollection {
+        $options = ['lg' => $lg];
 
         $returnValue = new core_kernel_classes_ContainerCollection($resource);
         foreach ($this->getPropertyValues($resource, $property, $options) as $value) {
@@ -148,14 +158,18 @@ class core_kernel_persistence_starsql_Resource implements core_kernel_persistenc
         return $returnValue;
     }
 
-    public function setPropertyValue(core_kernel_classes_Resource $resource, core_kernel_classes_Property $property, $object, $lg = null): ?bool
-    {
+    public function setPropertyValue(
+        core_kernel_classes_Resource $resource,
+        core_kernel_classes_Property $property,
+        $object,
+        $lg = null
+    ): ?bool {
         $uri = $resource->getUri();
         $propertyUri = $property->getUri();
         if ($object instanceof core_kernel_classes_Resource) {
             $object = $object->getUri();
         } else {
-            $object = (string) $object;
+            $object = (string)$object;
             if ($property->isLgDependent()) {
                 $lang = ((null != $lg)
                     ? $lg
@@ -347,7 +361,8 @@ class core_kernel_persistence_starsql_Resource implements core_kernel_persistenc
             foreach ($relationshipTypes as $type) {
                 $variableForRelatedResource = variable();
                 $nodeForRelationship = node()->withVariable($variableForRelatedResource);
-                $relatedResource = node('Resource')->withProperties(['uri' => $relatedUriParameter = parameter()])->withVariable($variableForRelatedResource);
+                $relatedResource = node('Resource')->withProperties(['uri' => $relatedUriParameter = parameter()]
+                )->withVariable($variableForRelatedResource);
                 $parameters[$relatedUriParameter->getParameter()] = $target;
                 $node = $node->relationshipTo($nodeForRelationship, $type);
                 $relatedResources[] = $relatedResource;
@@ -518,7 +533,6 @@ CYPHER;
                     }
                 }
             } else {
-
                 foreach ($pattern as $index => $token) {
                     if (!is_array($pattern[$index])) {
                         $pattern[$index] = [$pattern[$index]];
@@ -551,8 +565,12 @@ CYPHER;
         return true;
     }
 
-    public function removePropertyValueByLg(core_kernel_classes_Resource $resource, core_kernel_classes_Property $property, $lg, $options = []): ?bool
-    {
+    public function removePropertyValueByLg(
+        core_kernel_classes_Resource $resource,
+        core_kernel_classes_Property $property,
+        $lg,
+        $options = []
+    ): ?bool {
         throw new common_Exception('Not implemented! ' . __FILE__ . ' line: ' . __LINE__);
     }
 
@@ -566,8 +584,10 @@ CYPHER;
         return $this->model->isWritable($resource);
     }
 
-    public function getUsedLanguages(core_kernel_classes_Resource $resource, core_kernel_classes_Property $property): array
-    {
+    public function getUsedLanguages(
+        core_kernel_classes_Resource $resource,
+        core_kernel_classes_Property $property
+    ): array {
         $node = node()->withProperties(['uri' => $uriParameter = parameter()])
             ->withLabels(['Resource']);
         $query = query()
@@ -590,11 +610,13 @@ CYPHER;
             }
         }
 
-        return (array) $foundLanguages;
+        return (array)$foundLanguages;
     }
 
-    public function duplicate(core_kernel_classes_Resource $resource, $excludedProperties = []): core_kernel_classes_Resource
-    {
+    public function duplicate(
+        core_kernel_classes_Resource $resource,
+        $excludedProperties = []
+    ): core_kernel_classes_Resource {
         throw new common_Exception('Not implemented! ' . __FILE__ . ' line: ' . __LINE__);
     }
 
@@ -677,7 +699,7 @@ CYPHER;
             }
         }
 
-        return (array) $returnValue;
+        return (array)$returnValue;
     }
 
 
@@ -763,13 +785,13 @@ CYPHER;
             }
         }
 
-        return (array) $returnValue;
+        return (array)$returnValue;
     }
 
     private function parseTranslatedValue($value): string
     {
         preg_match(self::LANGUAGE_TAGGED_VALUE_PATTERN, (string)$value, $matches);
 
-        return $matches[1] ?? (string) $value;
+        return $matches[1] ?? (string)$value;
     }
 }
