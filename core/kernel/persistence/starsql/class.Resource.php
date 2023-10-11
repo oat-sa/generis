@@ -491,7 +491,7 @@ CYPHER;
 
 
         $whereCondition = [];
-
+        $whereClause = new WhereClause();
         if (!isset($pattern)) {
             $querydls = query()
                 ->match($nResource)
@@ -500,7 +500,7 @@ CYPHER;
                 ->build();
         } else {
             if ($isLike) {
-                $whereClause = new WhereClause();
+//                $whereClause = new WhereClause();
                 foreach ($pattern as $index => $token) {
                     if (!is_array($pattern[$index])) {
                         $pattern[$index] = [$pattern[$index]];
@@ -529,7 +529,7 @@ CYPHER;
             }
             $querydls = query()
                 ->match($nResource)
-//                ->where($whereCondition)
+                ->where($whereCondition)
                 ->addClause($whereClause)
                 ->remove($n->property($propertyUri))
                 ->returning($n)
