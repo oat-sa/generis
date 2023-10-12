@@ -327,12 +327,18 @@ CYPHER;
         $propertyFilters = [],
         $options = []
     ) {
-        $options['return_field'] = $property->getUri();
-
         $search = $this->getModel()->getSearchInterface();
         $query = $this->getFilterQuery($search->query(), $resource, $propertyFilters, $options);
 
-        return $search->getGateway()->search($query);
+        $resultSet = $search->getGateway()->searchTriples($query, $property->getUri(), $options['distinct'] ?? false);
+
+        $valueList = [];
+        /** @var core_kernel_classes_Triple $triple */
+        foreach($resultSet as $triple) {
+            $valueList[] = common_Utils::toResource($triple->object);
+        }
+
+        return $valueList;
     }
 
     /**
@@ -397,8 +403,6 @@ CYPHER;
             $this->getClassFilter($options, $resource, $queryOptions),
             [
                 'language' => $options['lang'] ?? '',
-                'distinct' => $options['distinct'] ?? false,
-                'return_field' => $options['return_field'] ?? null,
             ]
         );
 
