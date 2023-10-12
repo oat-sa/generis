@@ -86,15 +86,10 @@ class common_Collection extends common_Object implements IteratorAggregate, Coun
      *
      * @access public
      * @author Lionel Lecaque <lionel.lecaque@tudor.lu>
-     * @return int
      */
-    public function count()
+    public function count(): int
     {
-        $returnValue = (int) 0;
-
-
         $returnValue = count($this->sequence);
-
 
         return (int) $returnValue;
     }
