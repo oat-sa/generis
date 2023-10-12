@@ -107,7 +107,7 @@ class common_persistence_sql_QueryIterator implements Iterator
         }
     }
 
-    public function valid()
+    public function valid(): bool
     {
         return !empty($this->cache);
     }
