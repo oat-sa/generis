@@ -96,7 +96,7 @@ class common_persistence_sql_QueryIterator implements Iterator
         return $this->currentResult;
     }
 
-    public function next()
+    public function next(): void
     {
         if ($this->valid()) {
             $last = $this->key();
