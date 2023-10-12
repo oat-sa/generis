@@ -490,9 +490,19 @@ CYPHER;
         $queryOptions['type'] = [
             'resource' => $resource,
             'recursive' => $options['recursive'] ?? false,
-            'extraClassUriList' => $rdftypes
+            'extraClassUriList' => $rdftypes,
         ];
 
         return $queryOptions;
+    }
+
+    public function updateUri(core_kernel_classes_Class $resource, string $newUri)
+    {
+        $query = <<<CYPHER
+            MATCH (n:Resource {uri: \$original_uri})
+            SET n.uri = \$uri
+CYPHER;
+
+        $this->getPersistence()->run($query, ['original_uri' => $resource->getUri(), 'uri' => $newUri]);
     }
 }

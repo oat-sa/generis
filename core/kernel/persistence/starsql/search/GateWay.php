@@ -26,6 +26,7 @@ use Laudis\Neo4j\Databags\Statement;
 use oat\oatbox\service\ServiceManager;
 use oat\search\base\exception\SearchGateWayExeption;
 use oat\search\base\QueryBuilderInterface;
+use oat\search\base\ResultSetInterface;
 use oat\search\ResultSet;
 use oat\search\TaoSearchGateWay;
 
@@ -76,11 +77,53 @@ class GateWay extends TaoSearchGateWay
 
     public function search(QueryBuilderInterface $Builder)
     {
-        $this->serialyse($Builder);
-        $result = $this->fetchObjectList($this->parsedQuery);
+        $result = $this->fetchObjectList(parent::search($Builder));
         $totalCount = $this->count($Builder);
 
         return new $this->resultSetClassName($result, $totalCount);
+    }
+
+    /**
+     * @param QueryBuilderInterface $Builder
+     * @param string $propertyUri
+     * @param bool $isDistinct
+     *
+     * @return ResultSetInterface
+     */
+    public function searchTriples(QueryBuilderInterface $Builder, string $propertyUri, bool $isDistinct = false)
+    {
+       $result = $this->fetchTripleList(
+           parent::searchTriples($Builder, $propertyUri, $isDistinct)
+       );
+        return new $this->resultSetClassName($result, count($result));
+    }
+
+    /**
+     * return total count result
+     *
+     * @param QueryBuilderInterface $builder
+     *
+     * @return int
+     */
+    public function count(QueryBuilderInterface $builder)
+    {
+        return (int)($this->fetchOne(parent::count($builder)));
+    }
+
+    private function fetchTripleList(Statement $query): array
+    {
+        $returnValue = [];
+        $statement = $this->connector->runStatement($query);
+        foreach ($statement as $row) {
+            $triple = new \core_kernel_classes_Triple();
+
+            $triple->id = $row->get('id') ?? 0;
+            $triple->subject = $row->get('uri') ?? '';
+            $triple->object = $row->get('object');
+
+            $returnValue[] = $triple;
+        }
+        return $returnValue;
     }
 
 
@@ -102,19 +145,6 @@ class GateWay extends TaoSearchGateWay
     {
         $results = $this->connector->runStatement($query);
         return $results->first()->current();
-    }
-
-    /**
-     * return total count result
-     *
-     * @param QueryBuilderInterface $builder
-     *
-     * @return int
-     */
-    public function count(QueryBuilderInterface $builder)
-    {
-        $this->parsedQuery = parent::count($builder);
-        return (int)($this->fetchOne($this->parsedQuery));
     }
 
     public function getQuery()

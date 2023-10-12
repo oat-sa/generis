@@ -31,6 +31,7 @@ use function WikibaseSolutions\CypherDSL\node;
 use function WikibaseSolutions\CypherDSL\query;
 use function WikibaseSolutions\CypherDSL\parameter;
 use function WikibaseSolutions\CypherDSL\procedure;
+use function WikibaseSolutions\CypherDSL\raw;
 use function WikibaseSolutions\CypherDSL\relationshipTo;
 use function WikibaseSolutions\CypherDSL\variable;
 
@@ -334,7 +335,27 @@ CYPHER;
 
     public function removePropertyValueByLg(core_kernel_classes_Resource $resource, core_kernel_classes_Property $property, $lg, $options = []): ?bool
     {
-        throw new common_Exception('Not implemented! ' . __FILE__ . ' line: ' . __LINE__);
+        if (!$property->isLgDependent()) {
+            return $this->removePropertyValues($resource, $property, $options);
+        }
+
+        $node = node('Resource')->withProperties(['uri' => $uriParameter = parameter()]);
+        $property = $node->property($property->getUri());
+        $removeKeyProcedure = raw(sprintf(
+            "[item in %s WHERE NOT item ENDS WITH '@%s']",
+            $property->toQuery(),
+            $lg
+        ));
+
+        $query = query()
+            ->match($node)
+            ->where($property->isNotNull())
+            ->set($property->replaceWith($removeKeyProcedure))
+            ->build();
+
+        $this->getPersistence()->run($query, [$uriParameter->getParameter() => $resource->getUri()]);
+
+        return true;
     }
 
     public function getRdfTriples(core_kernel_classes_Resource $resource): core_kernel_classes_ContainerCollection

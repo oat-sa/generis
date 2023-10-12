@@ -485,4 +485,9 @@ class core_kernel_classes_Class extends core_kernel_classes_Resource
     {
         return $this->getServiceManager()->getContainer()->get(ClassRepository::class);
     }
+
+    public function updateUri(string $newUri)
+    {
+        return $this->getImplementation()->updateUri($this, $newUri);
+    }
 }
