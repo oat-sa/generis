@@ -164,7 +164,7 @@ class core_kernel_persistence_smoothsql_SmoothRdf implements RdfInterface
         throw new \common_Exception('Not implemented');
     }
 
-    public function getIterator()
+    public function getIterator(): core_kernel_persistence_smoothsql_SmoothIterator
     {
         return new core_kernel_persistence_smoothsql_SmoothIterator($this->getPersistence());
     }

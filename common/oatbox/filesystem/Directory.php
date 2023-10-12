@@ -21,6 +21,7 @@
 
 namespace oat\oatbox\filesystem;
 
+use ArrayIterator;
 use League\Flysystem\FileExistsException;
 
 class Directory extends FileSystemHandler implements \IteratorAggregate
@@ -57,10 +58,8 @@ class Directory extends FileSystemHandler implements \IteratorAggregate
 
     /**
      * Method constraints by IteratorAggregator, wrapper to getFlyIterator
-     *
-     * @return \ArrayIterator
      */
-    public function getIterator()
+    public function getIterator(): ArrayIterator
     {
         return $this->getFlyIterator();
     }
@@ -71,9 +70,8 @@ class Directory extends FileSystemHandler implements \IteratorAggregate
      * By default iterator is not recursive and includes directories & files
      *
      * @param null $flags
-     * @return \ArrayIterator
      */
-    public function getFlyIterator($flags = null)
+    public function getFlyIterator($flags = null): ArrayIterator
     {
         if (is_null($flags)) {
             $flags = self::ITERATOR_DIRECTORY | self::ITERATOR_FILE;
@@ -99,7 +97,7 @@ class Directory extends FileSystemHandler implements \IteratorAggregate
             }
         }
 
-        return new \ArrayIterator($iterator);
+        return new ArrayIterator($iterator);
     }
 
     /**
