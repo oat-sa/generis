@@ -236,9 +236,8 @@ class common_Collection extends common_Object implements IteratorAggregate, Coun
      *
      * @access public
      * @author Lionel Lecaque <lionel.lecaque@tudor.lu>
-     * @return mixed
      */
-    public function getIterator()
+    public function getIterator(): ArrayIterator
     {
 
         return new ArrayIterator($this->sequence);
