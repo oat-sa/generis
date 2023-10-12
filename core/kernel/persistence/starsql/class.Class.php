@@ -267,7 +267,7 @@ CYPHER;
         $propertyClass = $this->getModel()->getClass(OntologyRdf::RDF_PROPERTY);
         $properties = [
             OntologyRdfs::RDFS_DOMAIN => $resource->getUri(),
-            GenerisRdf::PROPERTY_IS_LG_DEPENDENT => ((bool)$isLgDependent) ?  GenerisRdf::GENERIS_TRUE : GenerisRdf::GENERIS_FALSE
+            GenerisRdf::PROPERTY_IS_LG_DEPENDENT => ((bool)$isLgDependent) ?  GenerisRdf::GENERIS_TRUE : GenerisRdf::GENERIS_FALSE,
         ];
         if (!empty($label)) {
             $properties[OntologyRdfs::RDFS_LABEL] = $label;
@@ -284,7 +284,7 @@ CYPHER;
                 $resource,
                 [
                     'propertyUri' => $propertyInstance->getUri(),
-                    'propertyLabel' => $propertyInstance->getLabel()
+                    'propertyLabel' => $propertyInstance->getLabel(),
                 ]
             )
         );

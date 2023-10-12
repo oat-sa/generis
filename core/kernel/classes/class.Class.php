@@ -184,21 +184,6 @@ class core_kernel_classes_Class extends core_kernel_classes_Resource
     }
 
     /**
-     * Short description of method __construct
-     *
-     * @access public
-     * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param string uri
-     * @param string debug
-     * @throws common_exception_Error
-     */
-    public function __construct($uri, $debug = '')
-    {
-        parent::__construct($uri, $debug);
-    }
-
-
-    /**
      * Should not be called by application code, please use
      * core_kernel_classes_ResourceFactory::create() instead
      *
