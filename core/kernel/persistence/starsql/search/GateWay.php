@@ -92,9 +92,9 @@ class GateWay extends TaoSearchGateWay
      */
     public function searchTriples(QueryBuilderInterface $Builder, string $propertyUri, bool $isDistinct = false)
     {
-       $result = $this->fetchTripleList(
-           parent::searchTriples($Builder, $propertyUri, $isDistinct)
-       );
+        $result = $this->fetchTripleList(
+            parent::searchTriples($Builder, $propertyUri, $isDistinct)
+        );
         return new $this->resultSetClassName($result, count($result));
     }
 

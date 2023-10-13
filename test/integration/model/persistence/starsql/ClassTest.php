@@ -66,7 +66,7 @@ class ClassTest extends GenerisPhpUnitTestRunner
     {
         $ontologyModel = ModelManager::getModel();
         /** @var ClassRepository $classRepo */
-        foreach($this->cleanupList as $classUri) {
+        foreach ($this->cleanupList as $classUri) {
             $class = new \core_kernel_classes_Class($classUri);
             $instances = $class->searchInstances(
                 [
@@ -185,12 +185,12 @@ class ClassTest extends GenerisPhpUnitTestRunner
     {
         $class = new core_kernel_classes_Class(WidgetRdf::CLASS_URI_WIDGET);
         $sub1Class = $class->createSubClass();
-        $sub1ClassInstance = $sub1Class->createInstance( 'test case instance');
+        $sub1ClassInstance = $sub1Class->createInstance('test case instance');
         $sub2Class = $sub1Class->createSubClass();
-        $sub2ClassInstance = $sub2Class->createInstance( 'second test case instance');
+        $sub2ClassInstance = $sub2Class->createInstance('second test case instance');
         $sub3Class = $sub2Class->createSubClass();
-        $sub3ClassInstance = $sub3Class->createInstance( 'test case instance 3');
-        $sub4ClassInstance = $sub3Class->createInstance( 'non-matching instance');
+        $sub3ClassInstance = $sub3Class->createInstance('test case instance 3');
+        $sub4ClassInstance = $sub3Class->createInstance('non-matching instance');
 
         $propertyFilter = [
             OntologyRdfs::RDFS_LABEL => 'test case instance'
@@ -208,9 +208,9 @@ class ClassTest extends GenerisPhpUnitTestRunner
     {
         $class = new core_kernel_classes_Class(WidgetRdf::CLASS_URI_WIDGET);
         $subClass = $class->createSubClass();
-        $sub1ClassInstance = $subClass->createInstance( 'first test case instance', 'first test case instance');
-        $sub2ClassInstance = $subClass->createInstance( 'second test case instance', 'second test case instance');
-        $sub3ClassInstance = $subClass->createInstance( 'non-matching instance', 'non-matching instance');
+        $sub1ClassInstance = $subClass->createInstance('first test case instance', 'first test case instance');
+        $sub2ClassInstance = $subClass->createInstance('second test case instance', 'second test case instance');
+        $sub3ClassInstance = $subClass->createInstance('non-matching instance', 'non-matching instance');
 
         $propertyFilter = [
             OntologyRdfs::RDFS_LABEL => 'first test case instance',
@@ -239,8 +239,8 @@ class ClassTest extends GenerisPhpUnitTestRunner
         );
         $relationProperty->setRange($relationSubClass);
 
-        $sub1ClassInstance = $subClass->createInstance( 'test case instance');
-        $sub2ClassInstance = $relationSubClass->createInstance( 'relation test case instance');
+        $sub1ClassInstance = $subClass->createInstance('test case instance');
+        $sub2ClassInstance = $relationSubClass->createInstance('relation test case instance');
         $sub1ClassInstance->setPropertyValue($relationProperty, $sub2ClassInstance);
 
         $instances = $subClass->searchInstances(
@@ -260,10 +260,10 @@ class ClassTest extends GenerisPhpUnitTestRunner
     {
         $class = new core_kernel_classes_Class(WidgetRdf::CLASS_URI_WIDGET);
         $subClass = $class->createSubClass();
-        $sub1ClassInstance = $subClass->createInstance( 'test case instance');
-        $sub2ClassInstance = $subClass->createInstance( 'second test case instance');
-        $sub3ClassInstance = $subClass->createInstance( 'test case instance 3');
-        $sub4ClassInstance = $subClass->createInstance( 'non-matching instance');
+        $sub1ClassInstance = $subClass->createInstance('test case instance');
+        $sub2ClassInstance = $subClass->createInstance('second test case instance');
+        $sub3ClassInstance = $subClass->createInstance('test case instance 3');
+        $sub4ClassInstance = $subClass->createInstance('non-matching instance');
 
         $instances = $subClass->searchInstances(
             [
@@ -397,21 +397,21 @@ class ClassTest extends GenerisPhpUnitTestRunner
         $class = new core_kernel_classes_Class(WidgetRdf::CLASS_URI_WIDGET);
         $labelProperty = new \core_kernel_classes_Property(OntologyRdfs::RDFS_LABEL);
         $sub1Class = $class->createSubClass();
-        $sub1ClassInstance = $sub1Class->createInstance( 'test case instance'); //en-US
+        $sub1ClassInstance = $sub1Class->createInstance('test case instance'); //en-US
         $sub1ClassInstance->setPropertyValueByLg($labelProperty, 'instance de cas de test', 'fr-FR');
         $sub1ClassInstance->setPropertyValueByLg($labelProperty, 'Testfallinstanz', 'de-DE');
 
         $sub2Class = $sub1Class->createSubClass();
-        $sub2ClassInstance = $sub2Class->createInstance( 'second test case instance'); //en-US
+        $sub2ClassInstance = $sub2Class->createInstance('second test case instance'); //en-US
         $sub2ClassInstance->setPropertyValueByLg($labelProperty, 'deuxième instance de cas de test', 'fr-FR');
         $sub2ClassInstance->setPropertyValueByLg($labelProperty, 'zweite Testfallinstanz', 'de-DE');
 
         $sub3Class = $sub2Class->createSubClass();
-        $sub3ClassInstance = $sub3Class->createInstance( 'test case instance 3'); //en-US
+        $sub3ClassInstance = $sub3Class->createInstance('test case instance 3'); //en-US
         $sub3ClassInstance->setPropertyValueByLg($labelProperty, 'exemple de cas de test 3', 'fr-FR');
         $sub3ClassInstance->setPropertyValueByLg($labelProperty, 'Testfallinstanz 3', 'de-DE');
 
-        $sub4ClassInstance = $sub3Class->createInstance( 'non-matching instance'); //en-US
+        $sub4ClassInstance = $sub3Class->createInstance('non-matching instance'); //en-US
         $sub4ClassInstance->setPropertyValueByLg($labelProperty, 'instance non correspondante', 'fr-FR');
         $sub4ClassInstance->setPropertyValueByLg($labelProperty, 'nicht passende Instanz', 'de-DE');
 

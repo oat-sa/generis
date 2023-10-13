@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,17 +21,15 @@
 declare(strict_types=1);
 
 use oat\generis\model\OntologyRdf;
-use oat\generis\model\OntologyRdfs;
 use oat\oatbox\session\SessionService;
 use oat\oatbox\user\UserLanguageServiceInterface;
-use oat\generis\model\kernel\uri\UriProvider;
-use oat\tao\model\TaoOntology;
 use WikibaseSolutions\CypherDSL\Clauses\SetClause;
 use Zend\ServiceManager\ServiceLocatorInterface;
+
 use function WikibaseSolutions\CypherDSL\node;
-use function WikibaseSolutions\CypherDSL\query;
 use function WikibaseSolutions\CypherDSL\parameter;
 use function WikibaseSolutions\CypherDSL\procedure;
+use function WikibaseSolutions\CypherDSL\query;
 use function WikibaseSolutions\CypherDSL\raw;
 use function WikibaseSolutions\CypherDSL\relationshipTo;
 use function WikibaseSolutions\CypherDSL\variable;
@@ -89,8 +88,11 @@ class core_kernel_persistence_starsql_Resource implements core_kernel_persistenc
         return (array) $returnValue;
     }
 
-    public function getPropertyValues(core_kernel_classes_Resource $resource, core_kernel_classes_Property $property, $options = []): array
-    {
+    public function getPropertyValues(
+        core_kernel_classes_Resource $resource,
+        core_kernel_classes_Property $property,
+        $options = []
+    ): array {
         if (isset($options['last'])) {
             throw new core_kernel_persistence_Exception('Option \'last\' no longer supported');
         }
@@ -110,7 +112,10 @@ class core_kernel_persistence_starsql_Resource implements core_kernel_persistenc
                 ->returning($node->property($property->getUri()));
         }
 
-        $results = $this->getPersistence()->run($query->build(), [$uriParameter->getParameter() => $resource->getUri()]);
+        $results = $this->getPersistence()->run(
+            $query->build(),
+            [$uriParameter->getParameter() => $resource->getUri()]
+        );
         $values = [];
         $selectedLanguage = $options['lg'] ?? null;
         $dataLanguage = $this->getDataLanguage();
@@ -125,7 +130,10 @@ class core_kernel_persistence_starsql_Resource implements core_kernel_persistenc
                 if (isset($selectedLanguage)) {
                     $values = array_merge($values, $this->filterRecordsByLanguage($value, [$selectedLanguage]));
                 } else {
-                    $values = array_merge($values, $this->filterRecordsByAvailableLanguage($value, $dataLanguage, $defaultLanguage));
+                    $values = array_merge(
+                        $values,
+                        $this->filterRecordsByAvailableLanguage($value, $dataLanguage, $defaultLanguage)
+                    );
                 }
             } else {
                 $values[] = $this->parseTranslatedValue($value);
@@ -135,8 +143,11 @@ class core_kernel_persistence_starsql_Resource implements core_kernel_persistenc
         return $values;
     }
 
-    public function getPropertyValuesByLg(core_kernel_classes_Resource $resource, core_kernel_classes_Property $property, $lg): core_kernel_classes_ContainerCollection
-    {
+    public function getPropertyValuesByLg(
+        core_kernel_classes_Resource $resource,
+        core_kernel_classes_Property $property,
+        $lg
+    ): core_kernel_classes_ContainerCollection {
         $options =  ['lg' => $lg];
 
         $returnValue = new core_kernel_classes_ContainerCollection($resource);
@@ -147,8 +158,12 @@ class core_kernel_persistence_starsql_Resource implements core_kernel_persistenc
         return $returnValue;
     }
 
-    public function setPropertyValue(core_kernel_classes_Resource $resource, core_kernel_classes_Property $property, $object, $lg = null): ?bool
-    {
+    public function setPropertyValue(
+        core_kernel_classes_Resource $resource,
+        core_kernel_classes_Property $property,
+        $object,
+        $lg = null
+    ): ?bool {
         $uri = $resource->getUri();
         $propertyUri = $property->getUri();
         if ($object instanceof core_kernel_classes_Resource) {
@@ -171,7 +186,8 @@ class core_kernel_persistence_starsql_Resource implements core_kernel_persistenc
                 WHERE a.uri = \$uri AND b.uri = \$object
                 CREATE (a)-[r:`{$propertyUri}`]->(b)
                 RETURN type(r)
-CYPHER; } else if($property->isLgDependent()) {
+CYPHER;
+        } elseif ($property->isLgDependent()) {
             $query = <<<CYPHER
             MATCH (n:Resource {uri: \$uri})
             SET n.`{$propertyUri}` = coalesce(n.`{$propertyUri}`, []) + \$object
@@ -257,7 +273,9 @@ CYPHER;
             foreach ($relationshipTypes as $type) {
                 $variableForRelatedResource = variable();
                 $nodeForRelationship = node()->withVariable($variableForRelatedResource);
-                $relatedResource = node('Resource')->withProperties(['uri' => $relatedUriParameter = parameter()])->withVariable($variableForRelatedResource);
+                $relatedResource = node('Resource')
+                    ->withProperties(['uri' => $relatedUriParameter = parameter()])
+                    ->withVariable($variableForRelatedResource);
                 $parameters[$relatedUriParameter->getParameter()] = $target;
                 $node = $node->relationshipTo($nodeForRelationship, $type);
                 $relatedResources[] = $relatedResource;
@@ -275,13 +293,20 @@ CYPHER;
         return true;
     }
 
-    public function setPropertyValueByLg(core_kernel_classes_Resource $resource, core_kernel_classes_Property $property, $value, $lg): ?bool
-    {
+    public function setPropertyValueByLg(
+        core_kernel_classes_Resource $resource,
+        core_kernel_classes_Property $property,
+        $value,
+        $lg
+    ): ?bool {
         return $this->setPropertyValue($resource, $property, $value, $lg);
     }
 
-    public function removePropertyValues(core_kernel_classes_Resource $resource, core_kernel_classes_Property $property, $options = []): ?bool
-    {
+    public function removePropertyValues(
+        core_kernel_classes_Resource $resource,
+        core_kernel_classes_Property $property,
+        $options = []
+    ): ?bool {
         $uri = $resource->getUri();
         $propertyUri = $property->getUri();
         $conditions = [];
@@ -325,16 +350,20 @@ CYPHER;
             RETURN n
 CYPHER;
 
-        // @FIXME if value is array, then query should be for update. Try to deduce if $prop->isLgDependent or isMultiple
-        // @FIXME if property is represented as node relationship, query should remove that instead
+        //@FIXME if value is array, then query should be for update. Try to deduce if $prop->isLgDependent or isMultiple
+        //@FIXME if property is represented as node relationship, query should remove that instead
 
         $this->getPersistence()->run($query);
 
         return true;
     }
 
-    public function removePropertyValueByLg(core_kernel_classes_Resource $resource, core_kernel_classes_Property $property, $lg, $options = []): ?bool
-    {
+    public function removePropertyValueByLg(
+        core_kernel_classes_Resource $resource,
+        core_kernel_classes_Property $property,
+        $lg,
+        $options = []
+    ): ?bool {
         if (!$property->isLgDependent()) {
             return $this->removePropertyValues($resource, $property, $options);
         }
@@ -404,8 +433,10 @@ CYPHER;
         return $this->model->isWritable($resource);
     }
 
-    public function getUsedLanguages(core_kernel_classes_Resource $resource, core_kernel_classes_Property $property): array
-    {
+    public function getUsedLanguages(
+        core_kernel_classes_Resource $resource,
+        core_kernel_classes_Property $property
+    ): array {
         $node = node()->withProperties(['uri' => $uriParameter = parameter()])
             ->withLabels(['Resource']);
         $query = query()
@@ -431,8 +462,10 @@ CYPHER;
         return (array) $foundLanguages;
     }
 
-    public function duplicate(core_kernel_classes_Resource $resource, $excludedProperties = []): core_kernel_classes_Resource
-    {
+    public function duplicate(
+        core_kernel_classes_Resource $resource,
+        $excludedProperties = []
+    ): core_kernel_classes_Resource {
         throw new common_Exception('Not implemented! ' . __FILE__ . ' line: ' . __LINE__);
     }
 
@@ -463,7 +496,8 @@ CYPHER;
         $query = <<<CYPHER
             MATCH (resource:Resource)-[relationshipTo]->(relatedResource:Resource)
             WHERE resource.uri = \$uri
-            RETURN resource, collect({relationship: type(relationshipTo), relatedResourceUri: relatedResource.uri}) AS relationships
+            RETURN resource,
+                collect({relationship: type(relationshipTo), relatedResourceUri: relatedResource.uri}) AS relationships
 CYPHER;
 
         $results = $this->getPersistence()->run($query, ['uri' => $resource->getUri()]);

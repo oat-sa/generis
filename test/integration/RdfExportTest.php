@@ -45,7 +45,7 @@ class RdfExportTest extends GenerisPhpUnitTestRunner
         $count = 0;
         foreach ($descriptions as $description) {
             foreach ($description as $child) {
-                $count+=count($child);
+                $count += count($child);
             }
         }
 

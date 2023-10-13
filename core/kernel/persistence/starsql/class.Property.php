@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,12 +22,12 @@ declare(strict_types=1);
 
 use oat\generis\model\GenerisRdf;
 use oat\generis\model\OntologyRdfs;
+
 use function WikibaseSolutions\CypherDSL\node;
 use function WikibaseSolutions\CypherDSL\query;
-use function WikibaseSolutions\CypherDSL\procedure;
-use function WikibaseSolutions\CypherDSL\relationshipTo;
 
-class core_kernel_persistence_starsql_Property extends core_kernel_persistence_starsql_Resource implements core_kernel_persistence_PropertyInterface
+class core_kernel_persistence_starsql_Property extends core_kernel_persistence_starsql_Resource implements
+    core_kernel_persistence_PropertyInterface
 {
     public static $instance = null;
 
@@ -46,16 +47,18 @@ class core_kernel_persistence_starsql_Property extends core_kernel_persistence_s
 
     public function isMultiple(core_kernel_classes_Resource $resource): bool
     {
-        $returnValue = (bool) false;
-        throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (" . __METHOD__ . ") is not available in this persistence implementation (" . __CLASS__ . ")");
-        return (bool) $returnValue;
+        throw new core_kernel_persistence_ProhibitedFunctionException(
+            "not implemented => The function (" . __METHOD__
+            . ") is not available in this persistence implementation (" . __CLASS__ . ")"
+        );
     }
 
     public function getRange(core_kernel_classes_Resource $resource): core_kernel_classes_Class
     {
-        $returnValue = null;
-        throw new core_kernel_persistence_ProhibitedFunctionException("not implemented => The function (" . __METHOD__ . ") is not available in this persistence implementation (" . __CLASS__ . ")");
-        return $returnValue;
+        throw new core_kernel_persistence_ProhibitedFunctionException(
+            "not implemented => The function (" . __METHOD__
+            . ") is not available in this persistence implementation (" . __CLASS__ . ")"
+        );
     }
 
     public function delete(core_kernel_classes_Resource $resource, $deleteReference = false): bool

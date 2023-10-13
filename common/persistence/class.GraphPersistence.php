@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,8 +27,8 @@ use oat\generis\persistence\Graph\BasicTransactionManager;
 use oat\generis\persistence\Graph\NestedTransactionWrapper;
 use oat\generis\persistence\Graph\TransactionManagerInterface;
 
-class common_persistence_GraphPersistence extends common_persistence_Persistence
-    implements common_persistence_Transactional
+class common_persistence_GraphPersistence extends common_persistence_Persistence implements
+    common_persistence_Transactional
 {
     private TransactionManagerInterface $transactionManager;
 

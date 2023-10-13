@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -141,7 +142,10 @@ class core_kernel_persistence_starsql_StarRdf implements RdfInterface
         $systemSubjectList = [];
         /** @var core_kernel_classes_Triple $triple */
         foreach ($tripleList as $triple) {
-            if (!empty($triple->modelid) && $triple->modelid != \core_kernel_persistence_starsql_StarModel::DEFAULT_WRITABLE_MODEL) {
+            if (
+                !empty($triple->modelid)
+                && $triple->modelid != \core_kernel_persistence_starsql_StarModel::DEFAULT_WRITABLE_MODEL
+            ) {
                 $systemSubjectList[$triple->subject] = true;
             }
         }

@@ -408,7 +408,15 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
 
         $range = $this->getRange();
 
-        return $range && !in_array($range->getUri(), [OntologyRdfs::RDFS_LITERAL, GenerisRdf::CLASS_GENERIS_FILE], true);
+        return $range
+            && !in_array(
+                $range->getUri(),
+                [
+                    OntologyRdfs::RDFS_LITERAL,
+                    GenerisRdf::CLASS_GENERIS_FILE
+                ],
+                true
+            );
     }
 
     /**
