@@ -152,8 +152,10 @@ class core_kernel_persistence_starsql_StarRdf implements RdfInterface
             $query = Query::new()->match($systemNode)
                 ->where($systemNode->property('uri')->in(array_keys($systemSubjectList)))
                 ->set($systemNode->labeled('System'));
+
+            $query = Statement::create($query->build());
         }
 
-        return Statement::create($query->build());
+        return $query;
     }
 }
