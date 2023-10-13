@@ -37,7 +37,8 @@ use function WikibaseSolutions\CypherDSL\procedure;
 use function WikibaseSolutions\CypherDSL\query;
 use function WikibaseSolutions\CypherDSL\variable;
 
-class core_kernel_persistence_starsql_Class extends core_kernel_persistence_starsql_Resource implements core_kernel_persistence_ClassInterface
+class core_kernel_persistence_starsql_Class extends core_kernel_persistence_starsql_Resource implements
+    core_kernel_persistence_ClassInterface
 {
     use EventManagerAwareTrait;
 
@@ -210,7 +211,9 @@ CYPHER;
         }
 
         $nodeForRelationship = node()->withVariable($variableForRelatedResource = variable());
-        $relatedResource = node('Resource')->withProperties(['uri' => $relatedUri = parameter()])->withVariable($variableForRelatedResource);
+        $relatedResource = node('Resource')
+            ->withProperties(['uri' => $relatedUri = parameter()])
+            ->withVariable($variableForRelatedResource);
         $node = $node->relationshipTo($nodeForRelationship, OntologyRdf::RDF_TYPE);
 
         $query = query()
@@ -249,14 +252,20 @@ CYPHER;
         return $returnValue;
     }
 
-    public function createProperty(core_kernel_classes_Class $resource, $label = '', $comment = '', $isLgDependent = false)
-    {
+    public function createProperty(
+        core_kernel_classes_Class $resource,
+        $label = '',
+        $comment = '',
+        $isLgDependent = false
+    ) {
         $returnValue = null;
 
         $propertyClass = $this->getModel()->getClass(OntologyRdf::RDF_PROPERTY);
         $properties = [
             OntologyRdfs::RDFS_DOMAIN => $resource->getUri(),
-            GenerisRdf::PROPERTY_IS_LG_DEPENDENT => ((bool)$isLgDependent) ?  GenerisRdf::GENERIS_TRUE : GenerisRdf::GENERIS_FALSE
+            GenerisRdf::PROPERTY_IS_LG_DEPENDENT => ((bool)$isLgDependent)
+                ? GenerisRdf::GENERIS_TRUE
+                : GenerisRdf::GENERIS_FALSE,
         ];
         if (!empty($label)) {
             $properties[OntologyRdfs::RDFS_LABEL] = $label;
@@ -334,14 +343,16 @@ CYPHER;
 
     public function createInstanceWithProperties(core_kernel_classes_Class $type, $properties)
     {
-        $returnValue = null;
-
         if (isset($properties[OntologyRdf::RDF_TYPE])) {
-            throw new core_kernel_persistence_Exception('Additional types in createInstanceWithProperties not permited');
+            throw new core_kernel_persistence_Exception(
+                'Additional types in createInstanceWithProperties not permitted'
+            );
         }
 
         $properties[OntologyRdf::RDF_TYPE] = $type;
-        $returnValue = $this->getModel()->getResource($this->getServiceLocator()->get(UriProvider::SERVICE_ID)->provide());
+        $returnValue = $this->getModel()->getResource(
+            $this->getServiceLocator()->get(UriProvider::SERVICE_ID)->provide()
+        );
         $returnValue->setPropertiesValues($properties);
 
         return $returnValue;

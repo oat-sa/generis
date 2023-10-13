@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -18,24 +19,21 @@
  */
 
 use oat\generis\model\data\ModelManager;
-use oat\oatbox\service\ConfigurableService;
-use oat\generis\model\kernel\persistence\smoothsql\search\ComplexSearchService;
 use oat\generis\model\data\Ontology;
-use oat\generis\persistence\sql\SchemaProviderInterface;
-use oat\generis\persistence\sql\SchemaCollection;
-use oat\generis\model\kernel\persistence\smoothsql\install\SmoothRdsModel;
+use oat\generis\model\kernel\persistence\smoothsql\search\ComplexSearchService;
 use oat\oatbox\cache\SimpleCache;
+use oat\oatbox\service\ConfigurableService;
 
 class core_kernel_persistence_starsql_StarModel extends ConfigurableService implements Ontology
 {
-    const OPTION_PERSISTENCE = 'persistence';
-    const OPTION_READABLE_MODELS = 'readable';
-    const OPTION_WRITEABLE_MODELS = 'writeable';
-    const OPTION_NEW_TRIPLE_MODEL = 'addTo';
-    const OPTION_SEARCH_SERVICE = 'search';
+    public const OPTION_PERSISTENCE = 'persistence';
+    public const OPTION_READABLE_MODELS = 'readable';
+    public const OPTION_WRITEABLE_MODELS = 'writeable';
+    public const OPTION_NEW_TRIPLE_MODEL = 'addTo';
+    public const OPTION_SEARCH_SERVICE = 'search';
 
-    const DEFAULT_WRITABLE_MODEL = 1;
-    const DEFAULT_READ_ONLY_MODEL = 2;
+    public const DEFAULT_WRITABLE_MODEL = 1;
+    public const DEFAULT_READ_ONLY_MODEL = 2;
 
     /**
      * Persistence to use for the smoothmodel
@@ -44,21 +42,21 @@ class core_kernel_persistence_starsql_StarModel extends ConfigurableService impl
      */
     private $persistence;
 
-    function getResource($uri)
+    public function getResource($uri)
     {
         $resource = new \core_kernel_classes_Resource($uri);
         $resource->setModel($this);
         return $resource;
     }
 
-    function getClass($uri)
+    public function getClass($uri)
     {
         $class = new \core_kernel_classes_Class($uri);
         $class->setModel($this);
         return $class;
     }
 
-    function getProperty($uri)
+    public function getProperty($uri)
     {
         $property = new \core_kernel_classes_Property($uri);
         $property->setModel($this);
