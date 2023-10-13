@@ -117,8 +117,8 @@ class GateWay extends TaoSearchGateWay
         foreach ($statement as $row) {
             $triple = new \core_kernel_classes_Triple();
 
-            $triple->id = $row->get('id') ?? 0;
-            $triple->subject = $row->get('uri') ?? '';
+            $triple->id = $row->get('id', 0);
+            $triple->subject = $row->get('uri', '');
             $triple->object = $row->get('object');
 
             $returnValue[] = $triple;
