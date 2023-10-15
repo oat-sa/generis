@@ -167,7 +167,7 @@ class QuerySerializer implements QuerySerialyserInterface
                     ->withVariable(Query::variable('grandParent'));
                 $subClassRelation = Query::relationshipTo()
                     ->addType(OntologyRdfs::RDFS_SUBCLASSOF)
-                    ->withArbitraryHops();
+                    ->withMinHops(0);
 
                 $parentPath = $parentPath->relationship($subClassRelation, $grandParentClass);
                 $parentWhere = $parentWhere->or(
