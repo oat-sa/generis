@@ -24,6 +24,7 @@ use oat\generis\model\OntologyRdf;
 use oat\oatbox\session\SessionService;
 use oat\oatbox\user\UserLanguageServiceInterface;
 use WikibaseSolutions\CypherDSL\Clauses\SetClause;
+use WikibaseSolutions\CypherDSL\Clauses\WhereClause;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 use function WikibaseSolutions\CypherDSL\node;
@@ -213,6 +214,7 @@ CYPHER;
         $node = node();
         $node->addLabel('Resource');
         $node->addProperty('uri', $uriParameter = parameter());
+        $node->withVariable($nodeVariable = variable());
         $parameters[$uriParameter->getParameter()] = $resource->getUri();
 
         /** @var common_session_Session $session */
@@ -268,25 +270,36 @@ CYPHER;
             $setClause->add($node->property($propUri)->replaceWith($propertyParameter = parameter()));
             $parameters[$propertyParameter->getParameter()] = $values;
         }
-        $relatedResources = [];
+
+        $query = query();
+        $query->merge($node, $setClause, $setClause);
+
+        if (!empty($collectedRelationships)) {
+            $query->with($nodeVariable);
+        }
+        $variablesForRelationshipCreation = [];
         foreach ($collectedRelationships as $target => $relationshipTypes) {
             foreach ($relationshipTypes as $type) {
                 $variableForRelatedResource = variable();
-                $nodeForRelationship = node()->withVariable($variableForRelatedResource);
                 $relatedResource = node('Resource')
                     ->withProperties(['uri' => $relatedUriParameter = parameter()])
                     ->withVariable($variableForRelatedResource);
+                $query->match($relatedResource);
                 $parameters[$relatedUriParameter->getParameter()] = $target;
-                $node = $node->relationshipTo($nodeForRelationship, $type);
-                $relatedResources[] = $relatedResource;
+                $variablesForRelationshipCreation[$type] = array_merge($variablesForRelationshipCreation[$type] ?? [$variableForRelatedResource]) ;
             }
         }
 
-        $query = query();
-        foreach ($relatedResources as $relResource) {
-            $query->match($relResource);
+        foreach ($variablesForRelationshipCreation as $type => $variables) {
+            foreach ($variables as $v) {
+                $query->create(
+                    node()->withVariable($nodeVariable)
+                        ->relationshipTo(node()->withVariable($v), $type)
+                );
+            }
         }
-        $query = $query->merge($node, $setClause, $setClause)->build();
+
+        $query = $query->build();
 
         $result = $this->getModel()->getPersistence()->run($query, $parameters);
 
