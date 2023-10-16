@@ -37,7 +37,8 @@ use function WikibaseSolutions\CypherDSL\procedure;
 use function WikibaseSolutions\CypherDSL\query;
 use function WikibaseSolutions\CypherDSL\variable;
 
-class core_kernel_persistence_starsql_Class extends core_kernel_persistence_starsql_Resource implements core_kernel_persistence_ClassInterface
+class core_kernel_persistence_starsql_Class extends core_kernel_persistence_starsql_Resource implements
+    core_kernel_persistence_ClassInterface
 {
     use EventManagerAwareTrait;
 
@@ -200,28 +201,19 @@ CYPHER;
             $subject = $uri;
         }
 
-        $session = $this->getServiceLocator()->get(\oat\oatbox\session\SessionService::SERVICE_ID)->getCurrentSession();
-        $sessionLanguage = $this->getDataLanguage();
         $node = node()->addProperty('uri', $uriParameter = parameter())
             ->addLabel('Resource');
         if (!empty($label)) {
-            $node->addProperty(OntologyRdfs::RDFS_LABEL, [$label . '@' . $sessionLanguage]);
+            $node->addProperty(OntologyRdfs::RDFS_LABEL, $label);
         }
         if (!empty($comment)) {
-            $node->addProperty(OntologyRdfs::RDFS_COMMENT, [$comment . '@' . $sessionLanguage]);
+            $node->addProperty(OntologyRdfs::RDFS_COMMENT, $comment);
         }
 
-        $node->addProperty(
-            'http://www.tao.lu/Ontologies/TAO.rdf#UpdatedBy',
-            (string)$session->getUser()->getIdentifier()
-        );
-        $node->addProperty(
-            'http://www.tao.lu/Ontologies/TAO.rdf#UpdatedAt',
-            procedure()::raw('timestamp')
-        );
-
         $nodeForRelationship = node()->withVariable($variableForRelatedResource = variable());
-        $relatedResource = node('Resource')->withProperties(['uri' => $relatedUri = parameter()])->withVariable($variableForRelatedResource);
+        $relatedResource = node('Resource')
+            ->withProperties(['uri' => $relatedUri = parameter()])
+            ->withVariable($variableForRelatedResource);
         $node = $node->relationshipTo($nodeForRelationship, OntologyRdf::RDF_TYPE);
 
         $query = query()
@@ -260,14 +252,20 @@ CYPHER;
         return $returnValue;
     }
 
-    public function createProperty(core_kernel_classes_Class $resource, $label = '', $comment = '', $isLgDependent = false)
-    {
+    public function createProperty(
+        core_kernel_classes_Class $resource,
+        $label = '',
+        $comment = '',
+        $isLgDependent = false
+    ) {
         $returnValue = null;
 
         $propertyClass = $this->getModel()->getClass(OntologyRdf::RDF_PROPERTY);
         $properties = [
             OntologyRdfs::RDFS_DOMAIN => $resource->getUri(),
-            GenerisRdf::PROPERTY_IS_LG_DEPENDENT => ((bool)$isLgDependent) ?  GenerisRdf::GENERIS_TRUE : GenerisRdf::GENERIS_FALSE
+            GenerisRdf::PROPERTY_IS_LG_DEPENDENT => ((bool)$isLgDependent)
+                ? GenerisRdf::GENERIS_TRUE
+                : GenerisRdf::GENERIS_FALSE,
         ];
         if (!empty($label)) {
             $properties[OntologyRdfs::RDFS_LABEL] = $label;
@@ -284,7 +282,7 @@ CYPHER;
                 $resource,
                 [
                     'propertyUri' => $propertyInstance->getUri(),
-                    'propertyLabel' => $propertyInstance->getLabel()
+                    'propertyLabel' => $propertyInstance->getLabel(),
                 ]
             )
         );
@@ -327,12 +325,18 @@ CYPHER;
         $propertyFilters = [],
         $options = []
     ) {
-        $options['return_field'] = $property->getUri();
-
         $search = $this->getModel()->getSearchInterface();
         $query = $this->getFilterQuery($search->query(), $resource, $propertyFilters, $options);
 
-        return $search->getGateway()->search($query);
+        $resultSet = $search->getGateway()->searchTriples($query, $property->getUri(), $options['distinct'] ?? false);
+
+        $valueList = [];
+        /** @var core_kernel_classes_Triple $triple */
+        foreach ($resultSet as $triple) {
+            $valueList[] = common_Utils::toResource($triple->object);
+        }
+
+        return $valueList;
     }
 
     /**
@@ -345,14 +349,16 @@ CYPHER;
 
     public function createInstanceWithProperties(core_kernel_classes_Class $type, $properties)
     {
-        $returnValue = null;
-
         if (isset($properties[OntologyRdf::RDF_TYPE])) {
-            throw new core_kernel_persistence_Exception('Additional types in createInstanceWithProperties not permited');
+            throw new core_kernel_persistence_Exception(
+                'Additional types in createInstanceWithProperties not permitted'
+            );
         }
 
         $properties[OntologyRdf::RDF_TYPE] = $type;
-        $returnValue = $this->getModel()->getResource($this->getServiceLocator()->get(UriProvider::SERVICE_ID)->provide());
+        $returnValue = $this->getModel()->getResource(
+            $this->getServiceLocator()->get(UriProvider::SERVICE_ID)->provide()
+        );
         $returnValue->setPropertiesValues($properties);
 
         return $returnValue;
@@ -397,8 +403,6 @@ CYPHER;
             $this->getClassFilter($options, $resource, $queryOptions),
             [
                 'language' => $options['lang'] ?? '',
-                'distinct' => $options['distinct'] ?? false,
-                'return_field' => $options['return_field'] ?? null,
             ]
         );
 
@@ -490,9 +494,19 @@ CYPHER;
         $queryOptions['type'] = [
             'resource' => $resource,
             'recursive' => $options['recursive'] ?? false,
-            'extraClassUriList' => $rdftypes
+            'extraClassUriList' => $rdftypes,
         ];
 
         return $queryOptions;
+    }
+
+    public function updateUri(core_kernel_classes_Class $resource, string $newUri)
+    {
+        $query = <<<CYPHER
+            MATCH (n:Resource {uri: \$original_uri})
+            SET n.uri = \$uri
+CYPHER;
+
+        $this->getPersistence()->run($query, ['original_uri' => $resource->getUri(), 'uri' => $newUri]);
     }
 }

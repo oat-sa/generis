@@ -385,9 +385,9 @@ class ClassTest extends GenerisPhpUnitTestRunner
     {
         $class = new core_kernel_classes_Class(WidgetRdf::CLASS_URI_WIDGET);
         $subClass = $class->createSubClass();
-        $sub1ClassInstance = $subClass->createInstance( 'test case instance');
-        $sub2ClassInstance = $subClass->createInstance( 'second test case instance');
-        $sub3ClassInstance = $subClass->createInstance( 'test case instance 3');
+        $sub1ClassInstance = $subClass->createInstance('test case instance');
+        $sub2ClassInstance = $subClass->createInstance('second test case instance');
+        $sub3ClassInstance = $subClass->createInstance('test case instance 3');
 
         $instances = $class->searchInstances(
             [
@@ -517,17 +517,17 @@ class ClassTest extends GenerisPhpUnitTestRunner
         $class = new core_kernel_classes_Class(WidgetRdf::CLASS_URI_WIDGET);
         $labelProperty = new \core_kernel_classes_Property(OntologyRdfs::RDFS_LABEL);
         $sub1Class = $class->createSubClass();
-        $sub1ClassInstance = $sub1Class->createInstance( 'test case instance'); //en-US
+        $sub1ClassInstance = $sub1Class->createInstance('test case instance'); //en-US
         $sub1ClassInstance->setPropertyValueByLg($labelProperty, 'instance de cas de test', 'fr-FR');
         $sub1ClassInstance->setPropertyValueByLg($labelProperty, 'Testfallinstanz', 'de-DE');
 
         $sub2Class = $sub1Class->createSubClass();
-        $sub2ClassInstance = $sub2Class->createInstance( 'second test case instance'); //en-US
+        $sub2ClassInstance = $sub2Class->createInstance('second test case instance'); //en-US
         $sub2ClassInstance->setPropertyValueByLg($labelProperty, 'deuxième instance de cas de test', 'fr-FR');
         $sub2ClassInstance->setPropertyValueByLg($labelProperty, 'zweite Testfallinstanz', 'de-DE');
 
         $sub3Class = $sub2Class->createSubClass();
-        $sub3ClassInstance = $sub3Class->createInstance( 'test case instance 3'); //en-US
+        $sub3ClassInstance = $sub3Class->createInstance('test case instance 3'); //en-US
         $sub3ClassInstance->setPropertyValueByLg($labelProperty, 'exemple de cas de test 3', 'fr-FR');
         $sub3ClassInstance->setPropertyValueByLg($labelProperty, 'Testfallinstanz 3', 'de-DE');
 

@@ -19,19 +19,12 @@
  *
  */
 
-namespace oat\generis\model\kernel\persistence\starsql;
+namespace oat\generis\persistence\Graph;
 
-use RecursiveIterator;
-
-class FlatRecursiveIterator extends \IteratorIterator implements RecursiveIterator
+class GraphTransactionException extends \RuntimeException
 {
-    public function hasChildren()
+    public function __construct($message = "", \Throwable $previous = null)
     {
-        return false;
-    }
-
-    public function getChildren()
-    {
-        return new \EmptyIterator();
+        parent::__construct($message, 0, $previous);
     }
 }

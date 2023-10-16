@@ -57,7 +57,7 @@ class common_Utils
      * @access public
      * @author Joel Bout, <joel@taotesting.com>
      * @param  string strarg
-     * @return boolean
+     * @return bool
      */
     public static function isUri($strarg)
     {

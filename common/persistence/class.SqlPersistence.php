@@ -27,7 +27,8 @@ use Doctrine\DBAL\Driver\Statement;
 /**
  * Persistence base on SQL
  */
-class common_persistence_SqlPersistence extends common_persistence_Persistence
+class common_persistence_SqlPersistence extends common_persistence_Persistence implements
+    common_persistence_Transactional
 {
     /**
      * @return common_persistence_sql_SchemaManager

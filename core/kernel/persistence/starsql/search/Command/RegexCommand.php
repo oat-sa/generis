@@ -70,7 +70,8 @@ class RegexCommand implements CommandInterface
     public function escapeString($values): string
     {
         return strtr(
-            trim($values, '%'), [
+            trim($values, '%'),
+            [
                 '.' => '\\.',
                 '\\_' => '_',
                 '\\%' => '%',

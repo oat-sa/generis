@@ -89,21 +89,6 @@ class core_kernel_rules_Expression extends core_kernel_classes_Resource
     }
 
     /**
-     * Short description of method __construct
-     *
-     * @access public
-     * @author firstname and lastname of author, <author@example.org>
-     * @param  string uri
-     * @param  string debug
-     * @return void
-     */
-    public function __construct($uri, $debug = '')
-    {
-
-        parent::__construct($uri);
-    }
-
-    /**
      * Short description of method getLogicalOperator
      *
      * @access public
