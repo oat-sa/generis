@@ -49,7 +49,7 @@ class ContainerCacheWarmup extends ScriptAction
 
     protected function run(): Report
     {
-        $this->getServiceManager()->getContainerBuilder()->forceBuild();
+        $this->getServiceManager()->rebuildContainer();
 
         return Report::createSuccess('Dependency Injection Container cache warmed up!');
     }
