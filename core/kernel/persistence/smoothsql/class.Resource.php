@@ -159,8 +159,10 @@ SQL;
             return [];
         }
 
-        $inQuery = implode(',', array_fill(0, count($classIds), '?'));
-        $query = "SELECT subject, object FROM statements WHERE predicate IN (?, ?) AND object IN ($inQuery)";
+        $query = sprintf(
+            'SELECT subject, object FROM statements WHERE predicate IN (?, ?) AND object IN (%s)',
+            implode(',', array_fill(0, count($classIds), '?'))
+        );
 
         $statement = $this->getPersistence()->query(
             $query,
@@ -174,12 +176,11 @@ SQL;
         $results = $statement->fetchAll();
         $resourceIds = [];
 
-        foreach ($classIds as $classId) {
-            /**
-             * @TODO FIXME Better filter it instead of go through all results every time
-             */
-            $resources = array_filter($results, static fn (array $result): bool => $result['object'] === $classId);
-            $resourceIds[$classId] = array_column($resources, 'subject');
+        foreach ($results as $result) {
+            $resourceId = $result['subject'];
+            $classId = $result['object'];
+            $resourceIds[$classId] = $resourceIds[$classId] ?? [];
+            $resourceIds[$classId][] = $resourceId;
         }
 
         return $resourceIds;
