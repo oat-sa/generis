@@ -155,6 +155,10 @@ SQL;
      */
     public function getClassesResourceIds(array $classIds): array
     {
+        if (empty($classIds)) {
+            return [];
+        }
+
         $inQuery = implode(',', array_fill(0, count($classIds), '?'));
         $query = "SELECT subject, object FROM statements WHERE predicate IN (?, ?) AND object IN ($inQuery)";
 
