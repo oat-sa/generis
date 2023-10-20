@@ -38,8 +38,8 @@ class OntologyRdfTest extends GenerisTestCase
     public function testRdfInterface(Ontology $ontology)
     {
         $this->assertEquals(0, $this->getTripleCount($ontology));
-        $triple1 = core_kernel_classes_Triple::createTriple(0, 'subject', 'predicate', 'object');
-        $triple2 = core_kernel_classes_Triple::createTriple(0, 'subject', 'predicate', 'object2');
+        $triple1 = core_kernel_classes_Triple::createTriple(2, 'subject', 'predicate', 'object');
+        $triple2 = core_kernel_classes_Triple::createTriple(2, 'subject', 'predicate', 'object2');
         $ontology->getRdfInterface()->add($triple1);
         $this->assertEquals(1, $this->getTripleCount($ontology));
         $ontology->getRdfInterface()->remove($triple2);
@@ -55,7 +55,7 @@ class OntologyRdfTest extends GenerisTestCase
     public function testAdd(Ontology $ontology)
     {
         $this->assertEquals(0, $this->getTripleCount($ontology));
-        $triple1 = core_kernel_classes_Triple::createTriple(0, 'subject', 'predicate', 'object');
+        $triple1 = core_kernel_classes_Triple::createTriple(2, 'subject', 'predicate', 'object');
         $ontology->getRdfInterface()->add($triple1);
         $this->assertEquals(1, $this->getTripleCount($ontology));
         $triples = $ontology->getRdfInterface();
@@ -79,9 +79,9 @@ class OntologyRdfTest extends GenerisTestCase
         $this->assertInstanceOf(Ontology::class, $ontology);
         $this->assertEquals(0, $this->getTripleCount($ontology));
 
-        $triple1 = core_kernel_classes_Triple::createTriple(0, 'subject', 'predicate', 'object');
-        $triple2 = core_kernel_classes_Triple::createTriple(0, 'subject2', OntologyRdf::RDF_TYPE, 'object2');
-        $triple3 = core_kernel_classes_Triple::createTriple(0, 'subject3', OntologyRdfs::RDFS_SUBCLASSOF, 'object2');
+        $triple1 = core_kernel_classes_Triple::createTriple(2, 'subject', 'predicate', 'object');
+        $triple2 = core_kernel_classes_Triple::createTriple(2, 'subject2', OntologyRdf::RDF_TYPE, 'object2');
+        $triple3 = core_kernel_classes_Triple::createTriple(2, 'subject3', OntologyRdfs::RDFS_SUBCLASSOF, 'object2');
         $ontology->getRdfInterface()->addTripleCollection([$triple1, $triple2, $triple3]);
 
         $this->assertEquals(3, $this->getTripleCount($ontology));
@@ -95,7 +95,7 @@ class OntologyRdfTest extends GenerisTestCase
     {
         $this->assertInstanceOf(Ontology::class, $ontology);
         $this->assertEquals(0, $this->getTripleCount($ontology));
-        $triple1 = core_kernel_classes_Triple::createTriple(0, 'subject', 'predicate', 'object');
+        $triple1 = core_kernel_classes_Triple::createTriple(2, 'subject', 'predicate', 'object');
         $ontology->getRdfInterface()->add($triple1);
         $this->assertEquals(1, $this->getTripleCount($ontology));
         $ontology->getRdfInterface()->remove($triple1);

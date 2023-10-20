@@ -647,8 +647,8 @@ class ResourceTest extends GenerisPhpUnitTestRunner
     public function testGetComment()
     {
         $inst = new core_kernel_classes_Resource(GenerisRdf::CLASS_GENERIS_RESOURCE);
-        $this->assertTrue($inst->getLabel() == 'generis_Ressource');
-        $this->assertTrue($inst->getComment() == 'generis_Ressource');
+        $this->assertEquals('generis_Ressource', $inst->getLabel());
+        $this->assertEquals('generis_Ressource', $inst->getComment());
     }
 
 
@@ -713,20 +713,22 @@ class ResourceTest extends GenerisPhpUnitTestRunner
     /**
      * @author Lionel Lecaque, lionel@taotesting.com
      */
-    public function testConstructNull()
+    public function testConstructWrongClass()
     {
         $this->expectException(common_exception_Error::class);
-        $this->expectExceptionMessage('could not create resource from NULL debug:');
-        $new = new core_kernel_classes_Resource(null);
+        $this->expectExceptionMessage('could not create resource from stdClass debug:');
+
+        $new = new core_kernel_classes_Resource(new \stdClass());
     }
 
     /**
-     * @expectedException        common_exception_Error
-     * @expectedExceptionMessage cannot construct the resource because the uri cannot be empty, debug:
      * @author Lionel Lecaque, lionel@taotesting.com
      */
     public function testConstructEmtpy()
     {
+        $this->expectException(common_exception_Error::class);
+        $this->expectExceptionMessage('cannot construct the resource because the uri cannot be empty, debug:');
+
         $new = new core_kernel_classes_Resource('');
     }
 
@@ -738,11 +740,11 @@ class ResourceTest extends GenerisPhpUnitTestRunner
 
         $class = new core_kernel_classes_Class(OntologyRdfs::RDFS_CLASS, __METHOD__);
         $sublClass = $class->createInstance('subclass', 'subclass');
-        $this->assertTrue($class->isClass());
-        $this->assertTrue($sublClass->isClass());
+        $this->assertTrue($class->isClass(), 'Main class is not a class.');
+        $this->assertTrue($sublClass->isClass(), 'Sub class is not a class');
 
         $instance = $this->createTestResource();
-        $this->assertFalse($instance->isClass());
+        $this->assertFalse($instance->isClass(), 'Instance is not a class');
 
         $prop->delete();
         $instance->delete();

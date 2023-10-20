@@ -401,7 +401,8 @@ SQL;
         }
 
         if (!empty($triples)) {
-            $returnValue = $this->getModel()->getRdfInterface()->addTripleCollection($triples);
+            $this->getModel()->getRdfInterface()->addTripleCollection($triples);
+            $returnValue = true;
         }
 
         return $returnValue;

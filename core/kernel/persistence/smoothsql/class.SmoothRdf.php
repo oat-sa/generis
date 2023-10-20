@@ -78,6 +78,15 @@ class core_kernel_persistence_smoothsql_SmoothRdf implements RdfInterface
 
     /**
      * (non-PHPdoc)
+     * @see \oat\generis\model\data\RdfInterface::search()
+     */
+    public function search($predicate, $object)
+    {
+        throw new \common_Exception('Not implemented');
+    }
+
+    /**
+     * (non-PHPdoc)
      * @see \oat\generis\model\data\RdfInterface::add()
      */
     public function add(core_kernel_classes_Triple $triple)
@@ -155,18 +164,12 @@ class core_kernel_persistence_smoothsql_SmoothRdf implements RdfInterface
         );
     }
 
-    /**
-     * (non-PHPdoc)
-     * @see \oat\generis\model\data\RdfInterface::search()
-     */
-    public function search($predicate, $object)
-    {
-        throw new \common_Exception('Not implemented');
-    }
-
     public function getIterator()
     {
-        return new core_kernel_persistence_smoothsql_SmoothIterator($this->getPersistence());
+        return new core_kernel_persistence_smoothsql_SmoothIterator(
+            $this->getPersistence(),
+            array_diff($this->model->getReadableModels(), ['1'])
+        );
     }
 
     /**

@@ -26,6 +26,7 @@
 
 declare(strict_types=1);
 
+use oat\generis\model\OntologyRdf;
 use oat\generis\model\WidgetRdf;
 use oat\generis\model\GenerisRdf;
 use oat\generis\model\OntologyRdfs;
@@ -42,6 +43,15 @@ use oat\generis\model\resource\DependsOnPropertyCollection;
  */
 class core_kernel_classes_Property extends core_kernel_classes_Resource
 {
+    private const RELATIONSHIP_PROPERTIES = [
+        OntologyRdf::RDF_TYPE,
+        OntologyRdfs::RDFS_CLASS,
+        OntologyRdfs::RDFS_RANGE,
+        OntologyRdfs::RDFS_DOMAIN,
+        OntologyRdfs::RDFS_SUBCLASSOF,
+        OntologyRdfs::RDFS_SUBPROPERTYOF,
+    ];
+
     // --- ASSOCIATIONS ---
 
 
@@ -379,6 +389,34 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
 
         $this->getImplementation()->setMultiple($this, $isMultiple);
         $this->multiple = $isMultiple;
+    }
+
+    /**
+     * Checks if property is a relation to other class
+     *
+     * @return bool
+     */
+    public function isRelationship(): bool
+    {
+        if (in_array($this->getUri(), self::RELATIONSHIP_PROPERTIES)) {
+            return true;
+        }
+
+        if ($this->getUri() === OntologyRdf::RDF_VALUE) {
+            return false;
+        }
+
+        $range = $this->getRange();
+
+        return $range
+            && !in_array(
+                $range->getUri(),
+                [
+                    OntologyRdfs::RDFS_LITERAL,
+                    GenerisRdf::CLASS_GENERIS_FILE
+                ],
+                true
+            );
     }
 
     /**

@@ -27,6 +27,7 @@ use oat\generis\persistence\sql\SchemaCollection;
 use common_persistence_SqlPersistence;
 use oat\generis\persistence\sql\SchemaProviderInterface;
 use oat\oatbox\service\ServiceNotFoundException;
+use common_persistence_PhpNeo4jDriver;
 
 /**
  * The PersistenceManager is responsible for initializing all persistences
@@ -51,6 +52,7 @@ class PersistenceManager extends ConfigurableService
         'dbal_pdo_sqlite' => 'common_persistence_sql_dbal_Driver',
         'dbal_pdo_pgsql' => 'common_persistence_sql_dbal_Driver',
         'dbal_pdo_ibm' => 'common_persistence_sql_dbal_Driver',
+        'phpneo4j' => 'common_persistence_PhpNeo4jDriver',
         'phpredis' => 'common_persistence_PhpRedisDriver',
         'phpfile' => 'common_persistence_PhpFileDriver',
         'SqlKvWrapper' => 'common_persistence_SqlKvDriver',

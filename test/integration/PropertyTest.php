@@ -57,6 +57,8 @@ class PropertyTest extends GenerisPhpUnitTestRunner
     {
         $domainCollection = $this->object->getDomain();
         $this->assertTrue($domainCollection instanceof core_kernel_classes_ContainerCollection);
+        $this->assertCount(1, $domainCollection);
+
         $domain = $domainCollection->get(0);
         $this->assertEquals($domain->getUri(), OntologyRdf::RDF_PROPERTY);
         $this->assertEquals($domain->getLabel(), 'Property');
@@ -97,9 +99,9 @@ class PropertyTest extends GenerisPhpUnitTestRunner
     {
         $range = $this->object->getRange();
         $this->assertTrue($range instanceof core_kernel_classes_Class);
-        $this->assertEquals($range->getUri(), WidgetRdf::CLASS_URI_WIDGET);
-        $this->assertEquals($range->getLabel(), 'Widget Class');
-        $this->assertEquals($range->getComment(), 'The class of all possible widgets');
+        $this->assertEquals(WidgetRdf::CLASS_URI_WIDGET, $range->getUri());
+        $this->assertEquals('Widget Class', $range->getLabel());
+        $this->assertEquals('The class of all possible widgets', $range->getComment());
     }
     /**
      *
@@ -109,9 +111,9 @@ class PropertyTest extends GenerisPhpUnitTestRunner
     {
         $widget = $this->object->getWidget();
         $this->assertInstanceOf(core_kernel_classes_Resource::class, $widget);
-        $this->assertEquals($widget->getUri(), 'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#ComboBox');
-        $this->assertEquals($widget->getLabel(), 'Drop down menu');
-        $this->assertEquals($widget->getComment(), 'In drop down menu, one may select 1 to N options');
+        $this->assertEquals('http://www.tao.lu/datatypes/WidgetDefinitions.rdf#ComboBox', $widget->getUri());
+        $this->assertEquals('Drop down menu', $widget->getLabel());
+        $this->assertEquals('In drop down menu, one may select 1 to N options', $widget->getComment());
     }
     /**
      *
