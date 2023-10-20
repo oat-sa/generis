@@ -66,11 +66,15 @@ class GateWay extends TaoSearchGateWay
      */
     protected $resultSetClassName = '\\oat\\generis\\model\\kernel\\persistence\\smoothsql\\search\\TaoResultSet';
 
-    public function __construct()
+    public function init()
     {
+        parent::init();
+
         $this->connector = ServiceManager::getServiceManager()
                 ->get(common_persistence_Manager::SERVICE_ID)
-                ->getPersistenceById('default');
+                ->getPersistenceById($this->options['persistence'] ?? 'default');
+
+        return $this;
     }
 
         /**
