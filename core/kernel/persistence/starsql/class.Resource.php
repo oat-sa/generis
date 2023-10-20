@@ -343,12 +343,21 @@ CYPHER;
             }
         }
 
-        $query = <<<CYPHER
-            MATCH (n:Resource {uri: "{$uri}"})
-            {$assembledConditions}
-            REMOVE n.`{$propertyUri}`
-            RETURN n
+        if (!$property->isRelationship()) {
+            $query = <<<CYPHER
+                MATCH (n:Resource {uri: "{$uri}"})
+                {$assembledConditions}
+                REMOVE n.`{$propertyUri}`
+                RETURN n
 CYPHER;
+        } else {
+            $query = <<<CYPHER
+                MATCH (n:Resource {uri: "{$uri}"})-[p:`{$propertyUri}`]->()
+                {$assembledConditions}
+                DELETE p
+                RETURN n
+CYPHER;
+        }
 
         //@FIXME if value is array, then query should be for update. Try to deduce if $prop->isLgDependent or isMultiple
         //@FIXME if property is represented as node relationship, query should remove that instead
@@ -501,6 +510,9 @@ CYPHER;
 CYPHER;
 
         $results = $this->getPersistence()->run($query, ['uri' => $resource->getUri()]);
+        if ($results->isEmpty()) {
+            return [];
+        }
         $result = $results->first();
 
         $propertyUris = [];
