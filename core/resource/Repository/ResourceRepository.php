@@ -22,6 +22,7 @@ declare(strict_types=1);
 
 namespace oat\generis\model\resource\Repository;
 
+use oat\generis\model\data\event\BeforeResourceDeleted;
 use RuntimeException;
 use BadMethodCallException;
 use InvalidArgumentException;
@@ -67,6 +68,9 @@ class ResourceRepository implements ResourceRepositoryInterface
             ResourceRepositoryContext::PARAM_DELETE_REFERENCE,
             false
         );
+
+        $beforeResourceDeletedEvent = new BeforeResourceDeleted($resource->getUri());
+        $this->eventManager->trigger($beforeResourceDeletedEvent);
 
         if (!$this->getImplementation()->delete($resource, $deleteReference)) {
             throw new RuntimeException(
