@@ -266,7 +266,8 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
         }
 
         if (!empty($triples)) {
-            $returnValue = $this->getModel()->getRdfInterface()->addTripleCollection($triples);
+            $this->getModel()->getRdfInterface()->addTripleCollection($triples);
+            $returnValue = true;
         }
 
         return $returnValue;

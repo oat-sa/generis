@@ -22,6 +22,7 @@ namespace oat\generis\test\integration\helpers;
 
 use common_Config;
 use core_kernel_persistence_smoothsql_SmoothModel;
+use oat\generis\model\data\Ontology;
 use oat\generis\scripts\tools\FileSerializerMigration\MigrationHelper;
 use oat\generis\model\fileReference\ResourceFileSerializer;
 use oat\generis\model\fileReference\UrlFileSerializer;
@@ -100,12 +101,16 @@ class FileSerializerMigrationHelperTest extends GenerisTestCase
         $this->resourceFileSerializer = new ResourceFileSerializer();
         $this->urlFileSerializer = new UrlFileSerializer();
 
-        $serviceLocator = $this->getServiceLocatorMock([FileSystemService::SERVICE_ID => $this->getMockFileSystem()]);
+        $this->ontologyMock = $this->getOntologyMock();
+
+        $serviceLocator = $this->getServiceLocatorMock([
+            FileSystemService::SERVICE_ID => $this->getMockFileSystem(),
+            Ontology::SERVICE_ID => $this->ontologyMock,
+        ]);
         $this->fileMigrationHelper->setServiceLocator($serviceLocator);
         $this->resourceFileSerializer->setServiceLocator($serviceLocator);
         $this->urlFileSerializer->setServiceLocator($serviceLocator);
-
-        $this->ontologyMock = $this->getOntologyMock();
+        $this->fileSystemService->setServiceLocator($serviceLocator);
     }
 
     /**
