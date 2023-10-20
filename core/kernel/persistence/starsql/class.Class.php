@@ -48,13 +48,13 @@ class core_kernel_persistence_starsql_Class extends core_kernel_persistence_star
         if (!empty($recursive)) {
             $query = <<<CYPHER
                 MATCH (startNode:Resource {uri: \$uri})
-                MATCH path = (descendantNode)-[:`{$relationship}`*]->(startNode)
+                MATCH (descendantNode)-[:`{$relationship}`*]->(startNode)
                 RETURN descendantNode.uri
 CYPHER;
         } else {
             $query = <<<CYPHER
                 MATCH (startNode:Resource {uri: \$uri})
-                MATCH path = (descendantNode)-[:`{$relationship}`]->(startNode)
+                MATCH (descendantNode)-[:`{$relationship}`]->(startNode)
                 RETURN descendantNode.uri
 CYPHER;
         }
@@ -94,13 +94,13 @@ CYPHER;
         if (!empty($recursive)) {
             $query = <<<CYPHER
                 MATCH (startNode:Resource {uri: \$uri})
-                MATCH path = (startNode)-[:`{$relationship}`*]->(ancestorNode)
+                MATCH (startNode)-[:`{$relationship}`*]->(ancestorNode)
                 RETURN ancestorNode.uri
 CYPHER;
         } else {
             $query = <<<CYPHER
                 MATCH (startNode:Resource {uri: \$uri})
-                MATCH path = (startNode)-[:`{$relationship}`]->(ancestorNode)
+                MATCH (startNode)-[:`{$relationship}`]->(ancestorNode)
                 RETURN ancestorNode.uri
 CYPHER;
         }
@@ -122,7 +122,7 @@ CYPHER;
         $relationship = OntologyRdfs::RDFS_DOMAIN;
         $query = <<<CYPHER
                 MATCH (startNode:Resource {uri: \$uri})
-                MATCH path = (descendantNode)-[:`{$relationship}`]->(startNode)
+                MATCH (descendantNode)-[:`{$relationship}`]->(startNode)
                 RETURN descendantNode.uri
 CYPHER;
         $results = $this->getPersistence()->run($query, ['uri' => $uri]);

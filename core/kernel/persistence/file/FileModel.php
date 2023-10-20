@@ -58,7 +58,7 @@ class FileModel implements Model
             if (!empty($triple->lg)) {
                 $graph->addLiteral($triple->subject, $triple->predicate, $triple->object, $triple->lg);
             } elseif (\common_Utils::isUri($triple->object)) {
-                $graph->add($triple->subject, $triple->predicate, $triple->object);
+                $graph->addResource($triple->subject, $triple->predicate, $triple->object);
             } else {
                 $graph->addLiteral($triple->subject, $triple->predicate, $triple->object);
             }

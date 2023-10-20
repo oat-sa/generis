@@ -19,31 +19,14 @@
 
 declare(strict_types=1);
 
-use Doctrine\DBAL\ParameterType;
-use oat\generis\model\data\Ontology;
+use EasyRdf\Format;
+use EasyRdf\Graph;
+use Laudis\Neo4j\Databags\Statement;
 use oat\generis\model\data\RdfInterface;
+use WikibaseSolutions\CypherDSL\Query;
 
 class core_kernel_persistence_starsql_StarRdf implements RdfInterface
 {
-    public const BATCH_SIZE = 100;
-
-    public const TRIPLE_PARAMETER_TYPE = [
-        // modelid
-        ParameterType::INTEGER,
-        // subject
-        ParameterType::STRING,
-        // predicate
-        ParameterType::STRING,
-        // object
-        ParameterType::STRING,
-        // l_language
-        ParameterType::STRING,
-        // epoch
-        ParameterType::STRING,
-        // author
-        ParameterType::STRING,
-    ];
-
     /**
      * @var core_kernel_persistence_starsql_StarModel
      */
@@ -60,8 +43,7 @@ class core_kernel_persistence_starsql_StarRdf implements RdfInterface
     }
 
     /**
-     * (non-PHPdoc)
-     * @see \oat\generis\model\data\RdfInterface::get()
+     * {@inheritDoc}
      */
     public function get($subject, $predicate)
     {
@@ -69,88 +51,111 @@ class core_kernel_persistence_starsql_StarRdf implements RdfInterface
     }
 
     /**
-     * (non-PHPdoc)
-     * @see \oat\generis\model\data\RdfInterface::add()
-     */
-    public function add(core_kernel_classes_Triple $triple)
-    {
-        throw new common_Exception('Not implemented! ' . __FILE__ . ' line: ' . __LINE__);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function addTripleCollection(iterable $triples)
-    {
-        throw new common_Exception('Not implemented! ' . __FILE__ . ' line: ' . __LINE__);
-    }
-
-    protected function insertTriples(array $triples)
-    {
-        $values = array_map([$this, "tripleToValue"], $triples);
-        return $this->insertValues($values);
-    }
-
-    protected function insertValues(array $valuesToInsert)
-    {
-        $types = [];
-        foreach ($valuesToInsert as $value) {
-            array_push($types, ...$this->getTripleParameterTypes());
-        }
-
-        return $this->getPersistence()->insertMultiple('statements', $valuesToInsert, $types);
-    }
-
-    /**
-     * (non-PHPdoc)
-     * @see \oat\generis\model\data\RdfInterface::remove()
-     */
-    public function remove(core_kernel_classes_Triple $triple)
-    {
-        throw new common_Exception('Not implemented! ' . __FILE__ . ' line: ' . __LINE__);
-    }
-
-    /**
-     * (non-PHPdoc)
-     * @see \oat\generis\model\data\RdfInterface::search()
+     * {@inheritDoc}
      */
     public function search($predicate, $object)
     {
         throw new common_Exception('Not implemented');
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public function add(core_kernel_classes_Triple $triple)
+    {
+        $this->addTripleCollection([$triple]);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function addTripleCollection(iterable $triples)
+    {
+        $nTriple = $this->triplesToValues($triples, Format::getFormat('ntriples'));
+
+        $persistence = $this->getPersistence();
+        $persistence->run(
+            'CALL n10s.rdf.import.inline($nTriple,"N-Triples")',
+            ['nTriple' => $nTriple]
+        );
+
+        $systemTripleQuery = $this->createSystemTripleQuery($triples);
+        if ($systemTripleQuery instanceof Statement) {
+            $persistence->runStatement($systemTripleQuery);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function remove(core_kernel_classes_Triple $triple)
+    {
+        $nTriple = $this->triplesToValues([$triple], Format::getFormat('ntriples'));
+
+        $persistence = $this->getPersistence();
+        $persistence->run(
+            'CALL n10s.rdf.delete.inline($nTriple,"N-Triples")',
+            ['nTriple' => $nTriple]
+        );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function getIterator()
     {
-        throw new common_Exception('Not implemented! ' . __FILE__ . ' line: ' . __LINE__);
+        return new RecursiveIteratorIterator(new core_kernel_persistence_starsql_StarIterator($this->model));
     }
 
     /**
-     * @return Ontology
+     * @param iterable $tripleList
+     * @param Format $format
+     *
+     * @return string
      */
-    protected function getModel()
+    private function triplesToValues(iterable $tripleList, Format $format): string
     {
-        return $this->model;
+        $graph = new Graph();
+
+        /** @var core_kernel_classes_Triple $triple */
+        foreach ($tripleList as $triple) {
+            if (!empty($triple->lg)) {
+                $graph->addLiteral(
+                    $triple->subject,
+                    $triple->predicate,
+                    $triple->object,
+                    $triple->lg
+                );
+            } elseif (\common_Utils::isUri($triple->object)) {
+                $graph->addResource($triple->subject, $triple->predicate, $triple->object);
+            } else {
+                $graph->addLiteral($triple->subject, $triple->predicate, $triple->object);
+            }
+        }
+
+        return $graph->serialise($format);
     }
 
-    /**
-     * @param core_kernel_classes_Triple $triple
-     * @return array
-     */
-    protected function tripleToValue(core_kernel_classes_Triple $triple): array
+    private function createSystemTripleQuery(iterable $tripleList): ?Statement
     {
-        return [
-            'modelid' => $triple->modelid,
-            'subject' => $triple->subject,
-            'predicate' => $triple->predicate,
-            'object' => $triple->object,
-            'l_language' => is_null($triple->lg) ? '' : $triple->lg,
-            'author' => is_null($triple->author) ? '' : $triple->author,
-            'epoch' => $this->getPersistence()->getPlatForm()->getNowExpression()
-        ];
-    }
+        $systemSubjectList = [];
+        /** @var core_kernel_classes_Triple $triple */
+        foreach ($tripleList as $triple) {
+            if (!empty($triple->modelid) && $triple->modelid != \core_kernel_persistence_starsql_StarModel::DEFAULT_WRITABLE_MODEL) {
+                $systemSubjectList[$triple->subject] = true;
+            }
+        }
 
-    protected function getTripleParameterTypes(): array
-    {
-        return self::TRIPLE_PARAMETER_TYPE;
+        $query  = null;
+        if (!empty($systemSubjectList)) {
+            $systemNode = Query::node('Resource');
+            $query = Query::new()->match($systemNode)
+                ->where($systemNode->property('uri')->in(array_keys($systemSubjectList)))
+                ->set($systemNode->labeled('System'));
+
+            $query = Statement::create($query->build());
+        }
+
+        return $query;
     }
 }
