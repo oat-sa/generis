@@ -119,7 +119,7 @@ class GateWay extends TaoSearchGateWay
 
             $triple->id = $row->get('id', 0);
             $triple->subject = $row->get('uri', '');
-            $triple->object = $row->get('object');
+            $triple->object = $row->get('object') ?? '';
 
             $returnValue[] = $triple;
         }
