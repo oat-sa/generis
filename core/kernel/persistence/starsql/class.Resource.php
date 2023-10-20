@@ -244,6 +244,9 @@ CYPHER;
                 // @TODO check if the property exists already
                 if ($val instanceof core_kernel_classes_Resource || $property->isRelationship()) {
                     $valUri = $val instanceof core_kernel_classes_Resource ? $val->getUri() : $val;
+                    if (empty($valUri)) {
+                        continue;
+                    }
                     $currentValues = $collectedRelationships[$valUri] ?? [];
                     $collectedRelationships[$valUri] = array_merge($currentValues, [$propertyUri]);
                 } else {
@@ -269,6 +272,8 @@ CYPHER;
             $parameters[$propertyParameter->getParameter()] = $values;
         }
         $relatedResources = [];
+        $merges = [];
+        $nodeCopy = node()->withVariable($node->getVariable());
         foreach ($collectedRelationships as $target => $relationshipTypes) {
             foreach ($relationshipTypes as $type) {
                 $variableForRelatedResource = variable();
@@ -277,7 +282,7 @@ CYPHER;
                     ->withProperties(['uri' => $relatedUriParameter = parameter()])
                     ->withVariable($variableForRelatedResource);
                 $parameters[$relatedUriParameter->getParameter()] = $target;
-                $node = $node->relationshipTo($nodeForRelationship, $type);
+                $merges[] = $nodeCopy->relationshipTo($nodeForRelationship, $type);
                 $relatedResources[] = $relatedResource;
             }
         }
@@ -286,7 +291,13 @@ CYPHER;
         foreach ($relatedResources as $relResource) {
             $query->match($relResource);
         }
-        $query = $query->merge($node, $setClause, $setClause)->build();
+
+        $query->merge($node, $setClause, $setClause);
+        foreach ($merges as $mergeNode) {
+            $query->merge($mergeNode);
+        }
+
+        $query = $query->build();
 
         $result = $this->getModel()->getPersistence()->run($query, $parameters);
 
