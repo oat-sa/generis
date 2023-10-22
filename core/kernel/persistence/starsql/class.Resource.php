@@ -23,9 +23,12 @@ declare(strict_types=1);
 use oat\generis\model\OntologyRdf;
 use oat\oatbox\session\SessionService;
 use oat\oatbox\user\UserLanguageServiceInterface;
+use WikibaseSolutions\CypherDSL\Clauses\WhereClause;
+use WikibaseSolutions\CypherDSL\Query;
 use WikibaseSolutions\CypherDSL\Clauses\SetClause;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
+use function WikibaseSolutions\CypherDSL\literal;
 use function WikibaseSolutions\CypherDSL\node;
 use function WikibaseSolutions\CypherDSL\parameter;
 use function WikibaseSolutions\CypherDSL\procedure;
@@ -179,26 +182,47 @@ class core_kernel_persistence_starsql_Resource implements core_kernel_persistenc
                 }
             }
         }
+        $uriParam = parameter();
+        $objectParam = parameter();
         if ($property->isRelationship()) {
-            $query = <<<CYPHER
-                MATCH
-                  (a:Resource), (b:Resource)
-                WHERE a.uri = \$uri AND b.uri = \$object
-                CREATE (a)-[r:`{$propertyUri}`]->(b)
-                RETURN type(r)
-CYPHER;
+            $uriParam = parameter();
+            $firstResource = node('Resource')->withVariable('a');
+            $secondResource = node('Resource')->withVariable('b');
+            $firstNode = node()->withVariable('a');
+            $secondNode = node()->withVariable('b');
+            $relationship = relationshipTo()->withVariable('r');
+            $rURI = relationshipTo()->withTypes([$propertyUri])->withVariable('r');
+
+            $query = query()
+                ->match([$firstResource, $secondResource])
+                ->where([
+                    $firstNode->property('uri')->equals($uriParam),
+                    $secondNode->property('uri')->equals($objectParam)
+                ])
+                ->create($firstNode->relationship($rURI, $secondNode))
+                ->returning(procedure()::raw('type', $relationship))
+                ->build();
         } elseif ($property->isLgDependent()) {
-            $query = <<<CYPHER
-            MATCH (n:Resource {uri: \$uri})
-            SET n.`{$propertyUri}` = coalesce(n.`{$propertyUri}`, []) + \$object
-CYPHER;
+            $node = node('Resource')->withVariable('n')->withProperties(['uri' => $uriParam]);
+            $procedure = procedure()::raw('coalesce', [$node->property($propertyUri), []]);
+            $expression = Query::rawExpression(
+                sprintf('%s+ $%s', $procedure->toQuery(), $objectParam->getParameter())
+            );
+            $query = query()
+                ->match($node)
+                ->set($node->property($propertyUri)->replaceWith($expression))
+                ->build();
         } else {
-            $query = <<<CYPHER
-            MATCH (n:Resource {uri: \$uri})
-            SET n.`{$propertyUri}` = \$object
-CYPHER;
+            $node = node('Resource')->withVariable('n')->withProperties(['uri' => $uriParam]);
+            $query = query()
+                ->match($node)
+                ->set($node->property($propertyUri)->replaceWith($objectParam))->build();
         }
-        $this->getPersistence()->run($query, ['uri' => $uri, 'object' => $object]);
+
+        $this->getPersistence()->run($query, [
+            $uriParam->getParameter() => $uri,
+            $objectParam->getParameter() => $object
+        ]);
 
         return true;
     }
@@ -320,60 +344,74 @@ CYPHER;
     ): ?bool {
         $uri = $resource->getUri();
         $propertyUri = $property->getUri();
-        $conditions = [];
         $pattern = $options['pattern'] ?? null;
         $isLike = !empty($options['like']);
+        $whereClause = new WhereClause();
+
         if (!empty($pattern)) {
             if (!is_array($pattern)) {
                 $pattern = [$pattern];
             }
 
-            $multiCondition = "( ";
-            foreach ($pattern as $index => $token) {
+            $clause = null;
+            foreach ($pattern as $token) {
                 if (empty($token)) {
                     continue;
                 }
-                if ($index > 0) {
-                    $multiCondition .= ' OR ';
-                }
-                if ($isLike) {
-                    $multiCondition .= "n.`{$propertyUri}` =~ '" . str_replace('*', '.*', $token) . "'";
-                } else {
-                    $multiCondition .= "n.`{$propertyUri}` = '$token'";
+                $queryCondition = node()
+                    ->withVariable('n')
+                    ->withProperties(['uri' => $uri])
+                    ->property($propertyUri)
+                    ->regex(
+                        $isLike
+                        ? str_replace('*', '.*', $token)
+                        : $token
+                    );
+
+                $clause = ($clause === null)
+                    ? $queryCondition
+                    : $clause->or($queryCondition);
+
+                if ($clause != null) {
+                    $whereClause->addExpression($clause);
                 }
             }
-            $conditions[] = "{$multiCondition} ) ";
         }
 
-        $assembledConditions = '';
-        foreach ($conditions as $i => $additionalCondition) {
-            if (empty($assembledConditions)) {
-                $assembledConditions .= " WHERE ( {$additionalCondition} ) ";
-            } else {
-                $assembledConditions .= " AND ( {$additionalCondition} ) ";
-            }
-        }
-
+        $uriParameter = parameter();
         if (!$property->isRelationship()) {
-            $query = <<<CYPHER
-                MATCH (n:Resource {uri: "{$uri}"})
-                {$assembledConditions}
-                REMOVE n.`{$propertyUri}`
-                RETURN n
-CYPHER;
+            $nResource = node()
+                ->withLabels(['Resource'])
+                ->withVariable('n')
+                ->withProperties(['uri' => $uriParameter]);
+
+            $node = node()
+                ->withVariable('n')
+                ->withProperties(['uri' => $uriParameter]);
+
+            $query = query()
+                ->match($nResource)
+                ->addClause($whereClause)
+                ->remove($node->property($propertyUri))
+                ->returning($node)
+                ->build();
         } else {
-            $query = <<<CYPHER
-                MATCH (n:Resource {uri: "{$uri}"})-[p:`{$propertyUri}`]->()
-                {$assembledConditions}
-                DELETE p
-                RETURN n
-CYPHER;
+            $nResource = node('Resource')
+                ->withVariable('n')
+                ->withProperties(['uri' => $uriParameter]);
+
+            $query = query()
+                ->match($nResource->relationshipTo(node(), $propertyUri, null, 'p'))
+                ->addClause($whereClause)
+                ->delete(raw('p'))
+                ->returning($nResource)
+                ->build();
         }
 
         //@FIXME if value is array, then query should be for update. Try to deduce if $prop->isLgDependent or isMultiple
         //@FIXME if property is represented as node relationship, query should remove that instead
 
-        $this->getPersistence()->run($query);
+        $this->getPersistence()->run($query, [$uriParameter->getParameter() => $uri]);
 
         return true;
     }
@@ -513,14 +551,27 @@ CYPHER;
             return [];
         }
 
-        $query = <<<CYPHER
-            MATCH (resource:Resource)-[relationshipTo]->(relatedResource:Resource)
-            WHERE resource.uri = \$uri
-            RETURN resource,
-                collect({relationship: type(relationshipTo), relatedResourceUri: relatedResource.uri}) AS relationships
-CYPHER;
+        $uriParameter = parameter();
 
-        $results = $this->getPersistence()->run($query, ['uri' => $resource->getUri()]);
+        $relatedResource = node('Resource')->withVariable('relatedResource');
+        $queryResource = node()
+            ->withLabels(['Resource'])
+            ->withVariable('resource');
+
+        $params = literal()::map([
+            'relationship' => procedure()::raw('type', Query::variable('relationshipTo')),
+            'relatedResourceUri' => $relatedResource->property('uri')
+        ]);
+
+        $procedure = procedure()::raw('collect', $params)->alias('relationships');
+        $query = query()
+            ->match($queryResource->relationshipTo($relatedResource, null, null, 'relationshipTo'))
+            ->where($queryResource->property('uri')->equals($uriParameter))
+            ->returning([$queryResource, $procedure])
+            ->build();
+
+        $results = $this->getPersistence()->run($query, [$uriParameter->getParameter() => $resource->getUri()]);
+
         if ($results->isEmpty()) {
             return [];
         }

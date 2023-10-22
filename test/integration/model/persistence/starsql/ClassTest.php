@@ -764,4 +764,26 @@ class ClassTest extends GenerisPhpUnitTestRunner
             );
         }
     }
+
+    public function testGetSubclassWithSubclassesWithoutRecursion()
+    {
+        $class = new core_kernel_classes_Class(WidgetRdf::CLASS_URI_WIDGET);
+        $subClasses = $class->getSubClasses(false);
+        $subClass = $class->createSubClass('subclasslabel', 'subclasscomment', 'subclassuri.com');
+        $subClassesAfter = $class->getSubClasses(false);
+        $subClass->delete();
+
+        $this->assertCount(count($subClasses) + 1, $subClassesAfter);
+    }
+
+    public function testGetSubclassWithSubclassesWithRecursion()
+    {
+        $class = new core_kernel_classes_Class(WidgetRdf::CLASS_URI_WIDGET);
+        $subClasses = $class->getSubClasses(true);
+        $subclass = $class->createSubClass('subclasslabel', 'subclasscomment', 'subclassuri.com');
+        $subClassesAfter = $class->getSubClasses(true);
+        $subclass->delete();
+
+        $this->assertCount(count($subClasses) + 1, $subClassesAfter);
+    }
 }

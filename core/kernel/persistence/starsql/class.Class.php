@@ -35,6 +35,7 @@ use function WikibaseSolutions\CypherDSL\node;
 use function WikibaseSolutions\CypherDSL\parameter;
 use function WikibaseSolutions\CypherDSL\procedure;
 use function WikibaseSolutions\CypherDSL\query;
+use function WikibaseSolutions\CypherDSL\relationshipTo;
 use function WikibaseSolutions\CypherDSL\variable;
 
 class core_kernel_persistence_starsql_Class extends core_kernel_persistence_starsql_Resource implements
@@ -46,22 +47,29 @@ class core_kernel_persistence_starsql_Class extends core_kernel_persistence_star
     {
         $uri = $resource->getUri();
         $relationship = OntologyRdfs::RDFS_SUBCLASSOF;
+
+        $uriParameter = parameter();
+        $startNodeFilteringUri = node()
+            ->withLabels(['Resource'])
+            ->withVariable("startNode")
+            ->withProperties(["uri" => $uriParameter]);
+        $startNode = node()
+            ->withVariable("startNode");
+        $descendantNode = node()
+            ->withVariable("descendantNode");
+        $descendantRelationship = relationshipTo()
+            ->addType($relationship);
         if (!empty($recursive)) {
-            $query = <<<CYPHER
-                MATCH (startNode:Resource {uri: \$uri})
-                MATCH (descendantNode)-[:`{$relationship}`*]->(startNode)
-                RETURN descendantNode.uri
-CYPHER;
-        } else {
-            $query = <<<CYPHER
-                MATCH (startNode:Resource {uri: \$uri})
-                MATCH (descendantNode)-[:`{$relationship}`]->(startNode)
-                RETURN descendantNode.uri
-CYPHER;
+            $descendantRelationship ->withArbitraryHops();
         }
 
-//        \common_Logger::i('getSubClasses(): ' . var_export($query, true));
-        $results = $this->getPersistence()->run($query, ['uri' => $uri]);
+        $query = query()
+            ->match($startNodeFilteringUri)
+            ->match($descendantNode->relationship($descendantRelationship, $startNode))
+            ->returning([$descendantNode->property('uri')])
+            ->build();
+
+        $results = $this->getPersistence()->run($query, [$uriParameter->getParameter() => $uri]);
         $returnValue = [];
         foreach ($results as $result) {
             $uri = $result->current();
@@ -92,21 +100,29 @@ CYPHER;
     {
         $uri = $resource->getUri();
         $relationship = OntologyRdfs::RDFS_SUBCLASSOF;
+
+        $uriParameter = parameter();
+        $startNodeFilteringUri = node()
+            ->withLabels(['Resource'])
+            ->withVariable("startNode")
+            ->withProperties(["uri" => $uriParameter]);
+        $startNode = node()
+            ->withVariable("startNode");
+        $ancestorNode = node()
+            ->withVariable("ancestorNode");
+        $descendantRelationship = relationshipTo()
+            ->addType($relationship);
         if (!empty($recursive)) {
-            $query = <<<CYPHER
-                MATCH (startNode:Resource {uri: \$uri})
-                MATCH (startNode)-[:`{$relationship}`*]->(ancestorNode)
-                RETURN ancestorNode.uri
-CYPHER;
-        } else {
-            $query = <<<CYPHER
-                MATCH (startNode:Resource {uri: \$uri})
-                MATCH (startNode)-[:`{$relationship}`]->(ancestorNode)
-                RETURN ancestorNode.uri
-CYPHER;
+            $descendantRelationship ->withArbitraryHops();
         }
 
-        $results = $this->getPersistence()->run($query, ['uri' => $uri]);
+        $query = query()
+            ->match($startNodeFilteringUri)
+            ->match($startNode->relationship($descendantRelationship, $ancestorNode))
+            ->returning([$ancestorNode->property('uri')])
+            ->build();
+
+        $results = $this->getPersistence()->run($query, [$uriParameter->getParameter() => $uri]);
         $returnValue = [];
         foreach ($results as $result) {
             $uri = $result->current();
@@ -121,12 +137,26 @@ CYPHER;
     {
         $uri = $resource->getUri();
         $relationship = OntologyRdfs::RDFS_DOMAIN;
-        $query = <<<CYPHER
-                MATCH (startNode:Resource {uri: \$uri})
-                MATCH (descendantNode)-[:`{$relationship}`]->(startNode)
-                RETURN descendantNode.uri
-CYPHER;
-        $results = $this->getPersistence()->run($query, ['uri' => $uri]);
+
+        $uriParameter = parameter();
+        $startNodeFilteringUri = node()
+            ->withLabels(['Resource'])
+            ->withVariable('startNode')
+            ->withProperties(["uri" => $uriParameter]);
+        $startNode = node()
+            ->withVariable("startNode");
+        $descendantNode = node()
+            ->withVariable('descendantNode');
+        $descendantRelationship = relationshipTo()
+            ->addType($relationship);
+
+        $query = query()
+            ->match($startNodeFilteringUri)
+            ->match($descendantNode->relationship($descendantRelationship, $startNode))
+            ->returning([$descendantNode->property('uri')])
+            ->build();
+
+        $results = $this->getPersistence()->run($query, [$uriParameter->getParameter() => $uri]);
         $returnValue = [];
         foreach ($results as $result) {
             $uri = $result->current();
@@ -137,7 +167,7 @@ CYPHER;
             $returnValue[$property->getUri()] = $property;
         }
 
-        if ($recursive == true) {
+        if ($recursive) {
             $parentClasses = $this->getParentClasses($resource, true);
             foreach ($parentClasses as $parent) {
                 if ($parent->getUri() != OntologyRdfs::RDFS_CLASS) {
