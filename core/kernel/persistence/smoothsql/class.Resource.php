@@ -219,7 +219,11 @@ WITH RECURSIVE statements_tree AS (
             ON s.object = st.subject
     WHERE s.predicate IN (?, ?)
 )
-SELECT subject as id, IF(predicate = ?, 1, 0) as isClass, level FROM statements_tree;
+SELECT
+    subject as id,
+    CASE WHEN predicate = ? THEN 1 ELSE 0 END as isClass,
+    level
+FROM statements_tree;
 SQL;
 
         $statement = $this->getPersistence()->query(
