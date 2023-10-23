@@ -24,7 +24,6 @@ use oat\generis\model\OntologyRdf;
 use oat\oatbox\session\SessionService;
 use oat\oatbox\user\UserLanguageServiceInterface;
 use WikibaseSolutions\CypherDSL\Clauses\SetClause;
-use WikibaseSolutions\CypherDSL\Clauses\WhereClause;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 use function WikibaseSolutions\CypherDSL\node;
@@ -214,7 +213,6 @@ CYPHER;
         $node = node();
         $node->addLabel('Resource');
         $node->addProperty('uri', $uriParameter = parameter());
-        $node->withVariable($nodeVariable = variable());
         $parameters[$uriParameter->getParameter()] = $resource->getUri();
 
         /** @var common_session_Session $session */
@@ -246,6 +244,9 @@ CYPHER;
                 // @TODO check if the property exists already
                 if ($val instanceof core_kernel_classes_Resource || $property->isRelationship()) {
                     $valUri = $val instanceof core_kernel_classes_Resource ? $val->getUri() : $val;
+                    if (empty($valUri)) {
+                        continue;
+                    }
                     $currentValues = $collectedRelationships[$valUri] ?? [];
                     $collectedRelationships[$valUri] = array_merge($currentValues, [$propertyUri]);
                 } else {
@@ -270,33 +271,30 @@ CYPHER;
             $setClause->add($node->property($propUri)->replaceWith($propertyParameter = parameter()));
             $parameters[$propertyParameter->getParameter()] = $values;
         }
-
-        $query = query();
-        $query->merge($node, $setClause, $setClause);
-
-        if (!empty($collectedRelationships)) {
-            $query->with($nodeVariable);
-        }
-        $variablesForRelationshipCreation = [];
+        $relatedResources = [];
+        $merges = [];
+        $nodeCopy = node()->withVariable($node->getVariable());
         foreach ($collectedRelationships as $target => $relationshipTypes) {
             foreach ($relationshipTypes as $type) {
                 $variableForRelatedResource = variable();
+                $nodeForRelationship = node()->withVariable($variableForRelatedResource);
                 $relatedResource = node('Resource')
                     ->withProperties(['uri' => $relatedUriParameter = parameter()])
                     ->withVariable($variableForRelatedResource);
-                $query->match($relatedResource);
                 $parameters[$relatedUriParameter->getParameter()] = $target;
-                $variablesForRelationshipCreation[$type] = array_merge($variablesForRelationshipCreation[$type] ?? [$variableForRelatedResource]) ;
+                $merges[] = $nodeCopy->relationshipTo($nodeForRelationship, $type);
+                $relatedResources[] = $relatedResource;
             }
         }
 
-        foreach ($variablesForRelationshipCreation as $type => $variables) {
-            foreach ($variables as $v) {
-                $query->create(
-                    node()->withVariable($nodeVariable)
-                        ->relationshipTo(node()->withVariable($v), $type)
-                );
-            }
+        $query = query();
+        foreach ($relatedResources as $relResource) {
+            $query->match($relResource);
+        }
+
+        $query->merge($node, $setClause, $setClause);
+        foreach ($merges as $mergeNode) {
+            $query->merge($mergeNode);
         }
 
         $query = $query->build();
@@ -356,12 +354,21 @@ CYPHER;
             }
         }
 
-        $query = <<<CYPHER
-            MATCH (n:Resource {uri: "{$uri}"})
-            {$assembledConditions}
-            REMOVE n.`{$propertyUri}`
-            RETURN n
+        if (!$property->isRelationship()) {
+            $query = <<<CYPHER
+                MATCH (n:Resource {uri: "{$uri}"})
+                {$assembledConditions}
+                REMOVE n.`{$propertyUri}`
+                RETURN n
 CYPHER;
+        } else {
+            $query = <<<CYPHER
+                MATCH (n:Resource {uri: "{$uri}"})-[p:`{$propertyUri}`]->()
+                {$assembledConditions}
+                DELETE p
+                RETURN n
+CYPHER;
+        }
 
         //@FIXME if value is array, then query should be for update. Try to deduce if $prop->isLgDependent or isMultiple
         //@FIXME if property is represented as node relationship, query should remove that instead
@@ -514,6 +521,9 @@ CYPHER;
 CYPHER;
 
         $results = $this->getPersistence()->run($query, ['uri' => $resource->getUri()]);
+        if ($results->isEmpty()) {
+            return [];
+        }
         $result = $results->first();
 
         $propertyUris = [];

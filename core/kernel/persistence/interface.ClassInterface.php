@@ -225,11 +225,6 @@ interface core_kernel_persistence_ClassInterface extends core_kernel_persistence
 
     /**
      * Changes class URI for all its properties and linked objects.
-     *
-     * @param core_kernel_classes_Class $resource
-     * @param string $newUri
-     *
-     * @return void
      */
-    public function updateUri(core_kernel_classes_Class $resource, string $newUri);
+    public function updateUri(core_kernel_classes_Class $resource, string $newUri): void;
 }

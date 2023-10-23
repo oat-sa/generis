@@ -201,14 +201,25 @@ CYPHER;
             $subject = $uri;
         }
 
+        $session = $this->getServiceLocator()->get(\oat\oatbox\session\SessionService::SERVICE_ID)->getCurrentSession();
+        $sessionLanguage = $this->getDataLanguage();
         $node = node()->addProperty('uri', $uriParameter = parameter())
             ->addLabel('Resource');
         if (!empty($label)) {
-            $node->addProperty(OntologyRdfs::RDFS_LABEL, $label);
+            $node->addProperty(OntologyRdfs::RDFS_LABEL, [$label . '@' . $sessionLanguage]);
         }
         if (!empty($comment)) {
-            $node->addProperty(OntologyRdfs::RDFS_COMMENT, $comment);
+            $node->addProperty(OntologyRdfs::RDFS_COMMENT, [$comment . '@' . $sessionLanguage]);
         }
+
+        $node->addProperty(
+            'http://www.tao.lu/Ontologies/TAO.rdf#UpdatedBy',
+            (string)$session->getUser()->getIdentifier()
+        );
+        $node->addProperty(
+            'http://www.tao.lu/Ontologies/TAO.rdf#UpdatedAt',
+            procedure()::raw('timestamp')
+        );
 
         $nodeForRelationship = node()->withVariable($variableForRelatedResource = variable());
         $relatedResource = node('Resource')
@@ -500,7 +511,7 @@ CYPHER;
         return $queryOptions;
     }
 
-    public function updateUri(core_kernel_classes_Class $resource, string $newUri)
+    public function updateUri(core_kernel_classes_Class $resource, string $newUri): void
     {
         $query = <<<CYPHER
             MATCH (n:Resource {uri: \$original_uri})

@@ -205,12 +205,12 @@ class QuerySerializer implements QuerySerialyserInterface
             foreach ($operationList as $operation) {
                 $mainCondition = $this->buildCondition($operation, $subject);
                 foreach ($operation->getAnd() as $subOperation) {
-                    $subCondition = $this->buildCondition($subOperation, $subject);
+                    $subCondition = $this->buildCondition($subOperation, $subject, $operation);
                     $mainCondition = $mainCondition->and($subCondition);
                 }
 
                 foreach ($operation->getOr() as $subOperation) {
-                    $subCondition = $this->buildCondition($subOperation, $subject);
+                    $subCondition = $this->buildCondition($subOperation, $subject, $operation);
                     $mainCondition = $mainCondition->or($subCondition);
                 }
 
@@ -229,11 +229,20 @@ class QuerySerializer implements QuerySerialyserInterface
         }
     }
 
-    protected function buildCondition(QueryCriterionInterface $operation, Node $subject): BooleanType
-    {
-        $propertyName = $operation->getName() === QueryCriterionInterface::VIRTUAL_URI_FIELD
+    protected function buildCondition(
+        QueryCriterionInterface $operation,
+        Node $subject,
+        QueryCriterionInterface $parentOperation = null
+    ): BooleanType {
+        $propertyName = $operation->getName();
+
+        if (empty($propertyName) && $parentOperation) {
+            $propertyName = $parentOperation->getName();
+        }
+
+        $propertyName = $propertyName === QueryCriterionInterface::VIRTUAL_URI_FIELD
             ? 'uri'
-            : $operation->getName();
+            : $propertyName;
 
         $property = ModelManager::getModel()->getProperty($propertyName);
         if ($property->isRelationship()) {

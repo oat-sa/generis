@@ -21,8 +21,6 @@
 
 namespace oat\generis\model\kernel\persistence\starsql\search\Command;
 
-use WikibaseSolutions\CypherDSL\Types\PropertyTypes\BooleanType;
-
 class NotCommandWrapper implements CommandInterface
 {
     private CommandInterface $wrappedCommand;
@@ -32,8 +30,13 @@ class NotCommandWrapper implements CommandInterface
         $this->wrappedCommand = $wrappedCommand;
     }
 
-    public function buildQuery($predicate, $values): BooleanType
+    public function buildQuery($predicate, $values): Condition
     {
-        return $this->wrappedCommand->buildQuery($predicate, $values)->not();
+        $wrappedCondition = $this->wrappedCommand->buildQuery($predicate, $values);
+
+        return new Condition(
+            $wrappedCondition->getCondition()->not(),
+            $wrappedCondition->getParameterList()
+        );
     }
 }

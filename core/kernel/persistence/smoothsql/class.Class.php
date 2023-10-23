@@ -596,7 +596,7 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
         return $query;
     }
 
-    public function updateUri(core_kernel_classes_Class $resource, string $newUri)
+    public function updateUri(core_kernel_classes_Class $resource, string $newUri): void
     {
         $query = $this->getPersistence()->getPlatForm()->getQueryBuilder();
 
