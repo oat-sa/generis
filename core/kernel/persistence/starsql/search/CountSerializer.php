@@ -36,7 +36,10 @@ class CountSerializer extends QuerySerializer
 
         $query = Query::new()->match($this->matchPatterns);
         $query->where($this->whereConditions);
-        $query->returning(Procedure::raw('count', $subject));
+        $query->returning(Procedure::raw(
+            'count',
+            Query::rawExpression(sprintf('DISTINCT %s', $subject->getVariable()->getName()))
+        ));
 
         return Statement::create($query->build(), $this->parameters);
     }

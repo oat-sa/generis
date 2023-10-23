@@ -22,22 +22,53 @@ declare(strict_types=1);
 
 use Laudis\Neo4j\Contracts\ClientInterface;
 use Laudis\Neo4j\Databags\Statement;
+use Laudis\Neo4j\Databags\SummarizedResult;
+use oat\generis\persistence\Graph\BasicTransactionManager;
+use oat\generis\persistence\Graph\NestedTransactionWrapper;
+use oat\generis\persistence\Graph\TransactionManagerInterface;
 
-class common_persistence_GraphPersistence extends common_persistence_Persistence
+class common_persistence_GraphPersistence extends common_persistence_Persistence implements
+    common_persistence_Transactional
 {
-    public function run(string $statement, iterable $parameters = [])
-    {
-        /** @var ClientInterface $client */
-        $client = $this->getDriver()->getClient();
+    private TransactionManagerInterface $transactionManager;
 
-        return $client->run($statement, $parameters);
+    public function run(string $statement, iterable $parameters = []): SummarizedResult
+    {
+        return $this->getConnection()->run($statement, $parameters);
     }
 
-    public function runStatement(Statement $statement)
+    public function runStatement(Statement $statement): SummarizedResult
     {
-        /** @var ClientInterface $client */
-        $client = $this->getDriver()->getClient();
+        return $this->getConnection()->runStatement($statement);
+    }
 
-        return $client->runStatement($statement);
+    public function transactional(Closure $func)
+    {
+        $transactionManager = $this->getConnection();
+
+        $transactionManager->beginTransaction();
+        try {
+            $res = $func();
+            $transactionManager->commit();
+
+            return $res;
+        } catch (\Throwable $e) {
+            $transactionManager->rollBack();
+
+            throw $e;
+        }
+    }
+
+    private function getConnection(): TransactionManagerInterface
+    {
+        if (!isset($this->transactionManager)) {
+            /** @var ClientInterface $client */
+            $client = $this->getDriver()->getClient();
+            $this->transactionManager = new NestedTransactionWrapper(
+                new BasicTransactionManager($client)
+            );
+        }
+
+        return $this->transactionManager;
     }
 }

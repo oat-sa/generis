@@ -24,6 +24,8 @@ use core_kernel_classes_Resource;
 use oat\search\base\ResultSetInterface;
 use oat\search\ResultSet;
 
+use function PHPUnit\Framework\returnArgument;
+
 /**
  * Complex Search resultSet iterator
  *
@@ -40,11 +42,17 @@ class TaoResultSet extends ResultSet implements ResultSetInterface, \oat\search\
      */
     protected $countQuery;
     protected $totalCount = null;
+    private bool $isTriple = false;
 
     public function setCountQuery($query)
     {
         $this->countQuery = $query;
         return $this;
+    }
+
+    public function setIsTriple(bool $isTriple)
+    {
+        $this->isTriple = $isTriple;
     }
 
     /**
@@ -64,11 +72,26 @@ class TaoResultSet extends ResultSet implements ResultSetInterface, \oat\search\
 
     /**
     * return a new resource create from current subject
-    * @return core_kernel_classes_Resource
+    * @return core_kernel_classes_Resource|\core_kernel_classes_Triple
     */
     public function current()
     {
         $index = parent::current();
-        return $this->getResource($index->subject);
+        if ($this->isTriple) {
+            return $this->getTriple($index);
+        } else {
+            return $this->getResource($index->subject);
+        }
+    }
+
+    private function getTriple($row): \core_kernel_classes_Triple
+    {
+        $triple = new \core_kernel_classes_Triple();
+
+        $triple->id = $row->id ?? 0;
+        $triple->subject = $row->subject ?? '';
+        $triple->object = $row->object ?? $row->subject;
+
+        return $triple;
     }
 }

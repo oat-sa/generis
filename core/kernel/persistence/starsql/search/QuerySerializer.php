@@ -52,7 +52,7 @@ class QuerySerializer implements QuerySerialyserInterface
 
     protected array $whereConditions = [];
 
-    private array $returnStatements = [];
+    protected array $returnStatements = [];
 
     protected QueryConvertible $orderCondition;
 
@@ -101,6 +101,15 @@ class QuerySerializer implements QuerySerialyserInterface
         }
     }
 
+    public function property(string $propertyUri, bool $isDistinct = false): self
+    {
+        return (new PropertySerializer($propertyUri, $isDistinct))
+            ->setServiceLocator($this->getServiceLocator())
+            ->setOptions($this->getOptions())
+            ->setDriverEscaper($this->getDriverEscaper())
+            ->setCriteriaList($this->criteriaList);
+    }
+
     public function setOptions(array $options)
     {
         $this->defaultLanguage = !empty($options['defaultLanguage'])
@@ -134,8 +143,8 @@ class QuerySerializer implements QuerySerialyserInterface
 
         if ($this->criteriaList->getLimit() > 0) {
             $query
-                ->skip($this->criteriaList->getOffset())
-                ->limit($this->criteriaList->getLimit());
+                ->skip((int)$this->criteriaList->getOffset())
+                ->limit((int)$this->criteriaList->getLimit());
         }
 
         return Statement::create($query->build(), $this->parameters);
@@ -167,7 +176,7 @@ class QuerySerializer implements QuerySerialyserInterface
                     ->withVariable(Query::variable('grandParent'));
                 $subClassRelation = Query::relationshipTo()
                     ->addType(OntologyRdfs::RDFS_SUBCLASSOF)
-                    ->withArbitraryHops();
+                    ->withMinHops(0);
 
                 $parentPath = $parentPath->relationship($subClassRelation, $grandParentClass);
                 $parentWhere = $parentWhere->or(
@@ -196,12 +205,12 @@ class QuerySerializer implements QuerySerialyserInterface
             foreach ($operationList as $operation) {
                 $mainCondition = $this->buildCondition($operation, $subject);
                 foreach ($operation->getAnd() as $subOperation) {
-                    $subCondition = $this->buildCondition($subOperation, $subject);
+                    $subCondition = $this->buildCondition($subOperation, $subject, $operation);
                     $mainCondition = $mainCondition->and($subCondition);
                 }
 
                 foreach ($operation->getOr() as $subOperation) {
-                    $subCondition = $this->buildCondition($subOperation, $subject);
+                    $subCondition = $this->buildCondition($subOperation, $subject, $operation);
                     $mainCondition = $mainCondition->or($subCondition);
                 }
 
@@ -220,12 +229,25 @@ class QuerySerializer implements QuerySerialyserInterface
         }
     }
 
-    protected function buildCondition(QueryCriterionInterface $operation, Node $subject): BooleanType
-    {
-        $property = ModelManager::getModel()->getProperty($operation->getName());
+    protected function buildCondition(
+        QueryCriterionInterface $operation,
+        Node $subject,
+        QueryCriterionInterface $parentOperation = null
+    ): BooleanType {
+        $propertyName = $operation->getName();
+
+        if (empty($propertyName) && $parentOperation) {
+            $propertyName = $parentOperation->getName();
+        }
+
+        $propertyName = $propertyName === QueryCriterionInterface::VIRTUAL_URI_FIELD
+            ? 'uri'
+            : $propertyName;
+
+        $property = ModelManager::getModel()->getProperty($propertyName);
         if ($property->isRelationship()) {
             $object = Query::node('Resource');
-            $this->matchPatterns[] = $subject->relationshipTo($object, $operation->getName());
+            $this->matchPatterns[] = $subject->relationshipTo($object, $propertyName);
 
             $predicate = $object->property('uri');
             $values = $operation->getValue();
@@ -236,7 +258,7 @@ class QuerySerializer implements QuerySerialyserInterface
                 is_array($values) ? SupportedOperatorHelper::IN : SupportedOperatorHelper::EQUAL
             );
         } else {
-            $predicate = $subject->property($operation->getName());
+            $predicate = $subject->property($propertyName);
             if ($property->isLgDependent()) {
                 $predicate = $this->buildLanguagePattern($predicate);
             }
@@ -266,7 +288,7 @@ class QuerySerializer implements QuerySerialyserInterface
         return $condition->getCondition();
     }
 
-    private function buildLanguagePattern(QueryConvertible $predicate): RawExpression
+    protected function buildLanguagePattern(QueryConvertible $predicate): RawExpression
     {
         if (empty($this->userLanguage) || $this->userLanguage === $this->defaultLanguage) {
             $resultExpression = Query::rawExpression(
@@ -291,31 +313,9 @@ class QuerySerializer implements QuerySerialyserInterface
         return $resultExpression;
     }
 
-    private function buildReturn(Node $subject): void
+    protected function buildReturn(Node $subject): void
     {
-        $queryOptions = $this->criteriaList->getOptions();
-
-        $isDistinct = $queryOptions['distinct'] ?? false;
-
-        if (isset($queryOptions['return_field'])) {
-            $property = $queryOptions['return_field'];
-            $returnProperty = ModelManager::getModel()->getProperty($property);
-
-            $predicate = $subject->property($property);
-            if ($returnProperty->isLgDependent()) {
-                $predicate = $this->buildLanguagePattern($predicate);
-            }
-
-            $predicate = Procedure::raw('toStringOrNull', $predicate);
-        } else {
-            $predicate = $subject->property('uri');
-        }
-
-        if ($isDistinct) {
-            $predicate = Query::rawExpression(sprintf('DISTINCT %s', $predicate->toQuery()));
-        }
-
-        $this->returnStatements[] = $predicate;
+        $this->returnStatements[] = $subject->property('uri');
     }
 
     protected function buildOrderCondition(Node $subject): void

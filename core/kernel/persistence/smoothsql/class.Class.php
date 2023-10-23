@@ -595,4 +595,37 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
 
         return $query;
     }
+
+    public function updateUri(core_kernel_classes_Class $resource, string $newUri): void
+    {
+        $query = $this->getPersistence()->getPlatForm()->getQueryBuilder();
+
+        $expressionBuilder = $query->expr();
+
+        $query
+            ->update('statements')
+            ->set('subject', ':uri')
+            ->where($expressionBuilder->eq('subject', ':original_uri'));
+
+        $this->getPersistence()->exec(
+            $query,
+            [
+                'uri' => $newUri,
+                'original_uri' => $resource->getUri(),
+            ]
+        );
+
+        $query
+            ->update('statements')
+            ->set('object', ':uri')
+            ->where($expressionBuilder->eq('object', ':original_uri'));
+
+        $this->getPersistence()->exec(
+            $query,
+            [
+                'uri' => $newUri,
+                'original_uri' => $resource->getUri(),
+            ]
+        );
+    }
 }
