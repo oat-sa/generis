@@ -31,6 +31,7 @@ use Doctrine\DBAL\Driver\Statement;
 use oat\oatbox\service\ServiceManager;
 use oat\search\base\exception\SearchGateWayExeption;
 use oat\search\base\QueryBuilderInterface;
+use oat\search\base\ResultSetInterface;
 use oat\search\TaoSearchGateWay;
 
 /**
@@ -107,6 +108,22 @@ class GateWay extends TaoSearchGateWay
     }
 
     /**
+     * @param QueryBuilderInterface $Builder
+     * @param string $propertyUri
+     * @param bool $isDistinct
+     *
+     * @return ResultSetInterface
+     */
+    public function searchTriples(QueryBuilderInterface $Builder, string $propertyUri, bool $isDistinct = false)
+    {
+        $statement = $this->connector->query(parent::searchTriples($Builder, $propertyUri, $isDistinct));
+        $result    = $this->statementToArray($statement);
+        $resultSet = new $this->resultSetClassName($result, count($result));
+        $resultSet->setIsTriple(true);
+        return $resultSet;
+    }
+
+    /**
      *
      * @param Statement $statement
      * @return array
@@ -161,15 +178,5 @@ class GateWay extends TaoSearchGateWay
         $queryCount = $joiner->count();
         $resultSet->setParent($this)->setCountQuery($queryCount);
         return $resultSet;
-    }
-
-        /**
-     * return parsed query as string
-     * @return $this
-     */
-    public function printQuery()
-    {
-        echo $this->parsedQuery;
-        return $this;
     }
 }
