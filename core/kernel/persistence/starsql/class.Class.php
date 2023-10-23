@@ -500,7 +500,7 @@ CYPHER;
         return $queryOptions;
     }
 
-    public function updateUri(core_kernel_classes_Class $resource, string $newUri)
+    public function updateUri(core_kernel_classes_Class $resource, string $newUri): void
     {
         $query = <<<CYPHER
             MATCH (n:Resource {uri: \$original_uri})
