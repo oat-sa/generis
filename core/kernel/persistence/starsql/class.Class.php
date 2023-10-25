@@ -51,12 +51,12 @@ class core_kernel_persistence_starsql_Class extends core_kernel_persistence_star
         $uriParameter = parameter();
         $startNodeFilteringUri = node()
             ->withLabels(['Resource'])
-            ->withVariable("startNode")
-            ->withProperties(["uri" => $uriParameter]);
+            ->withVariable('startNode')
+            ->withProperties(['uri' => $uriParameter]);
         $startNode = node()
-            ->withVariable("startNode");
+            ->withVariable('startNode');
         $descendantNode = node()
-            ->withVariable("descendantNode");
+            ->withVariable('descendantNode');
         $descendantRelationship = relationshipTo()
             ->addType($relationship);
         if (!empty($recursive)) {
@@ -104,12 +104,12 @@ class core_kernel_persistence_starsql_Class extends core_kernel_persistence_star
         $uriParameter = parameter();
         $startNodeFilteringUri = node()
             ->withLabels(['Resource'])
-            ->withVariable("startNode")
-            ->withProperties(["uri" => $uriParameter]);
+            ->withVariable('startNode')
+            ->withProperties(['uri' => $uriParameter]);
         $startNode = node()
-            ->withVariable("startNode");
+            ->withVariable('startNode');
         $ancestorNode = node()
-            ->withVariable("ancestorNode");
+            ->withVariable('ancestorNode');
         $descendantRelationship = relationshipTo()
             ->addType($relationship);
         if (!empty($recursive)) {
@@ -142,9 +142,9 @@ class core_kernel_persistence_starsql_Class extends core_kernel_persistence_star
         $startNodeFilteringUri = node()
             ->withLabels(['Resource'])
             ->withVariable('startNode')
-            ->withProperties(["uri" => $uriParameter]);
+            ->withProperties(['uri' => $uriParameter]);
         $startNode = node()
-            ->withVariable("startNode");
+            ->withVariable('startNode');
         $descendantNode = node()
             ->withVariable('descendantNode');
         $descendantRelationship = relationshipTo()
