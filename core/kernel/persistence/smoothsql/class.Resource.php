@@ -176,11 +176,10 @@ SQL;
         $results = $statement->fetchAll();
         $resourceIds = [];
 
-        foreach ($results as $result) {
-            $resourceId = $result['subject'];
-            $classId = $result['object'];
-            $resourceIds[$classId] = $resourceIds[$classId] ?? [];
-            $resourceIds[$classId][] = $resourceId;
+        // Iterate over the provided class IDs to keep the same order
+        foreach ($classIds as $classId) {
+            $resources = array_filter($results, static fn (array $result): bool => $result['object'] === $classId);
+            $resourceIds[$classId] = array_column($resources, 'subject');
         }
 
         return $resourceIds;
