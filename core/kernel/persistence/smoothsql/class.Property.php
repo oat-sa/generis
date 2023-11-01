@@ -65,15 +65,12 @@ class core_kernel_persistence_smoothsql_Property extends core_kernel_persistence
      */
     public function isLgDependent(core_kernel_classes_Resource $resource)
     {
-        $lgDependent = $this->getModel()->getCache()->get($resource->getUri());
-        if (is_null($lgDependent)) {
-            $lgDependentProperty = $this->getModel()->getProperty(GenerisRdf::PROPERTY_IS_LG_DEPENDENT);
-            $lgDependentResource = $resource->getOnePropertyValue($lgDependentProperty);
-            $lgDependent = !is_null($lgDependentResource)
-                && $lgDependentResource instanceof \core_kernel_classes_Resource
-                && $lgDependentResource->getUri() == GenerisRdf::GENERIS_TRUE;
-            $this->getModel()->getCache()->set($resource->getUri(), $lgDependent);
-        }
+        $lgDependentProperty = $this->getModel()->getProperty(GenerisRdf::PROPERTY_IS_LG_DEPENDENT);
+        $lgDependentResource = $resource->getOnePropertyValue($lgDependentProperty);
+        $lgDependent = !is_null($lgDependentResource)
+            && $lgDependentResource instanceof \core_kernel_classes_Resource
+            && $lgDependentResource->getUri() == GenerisRdf::GENERIS_TRUE;
+
         return (bool) $lgDependent;
     }
 
@@ -174,7 +171,6 @@ class core_kernel_persistence_smoothsql_Property extends core_kernel_persistence
      */
     public function setMultiple(core_kernel_classes_Resource $resource, $isMultiple)
     {
-
         $multipleProperty = new core_kernel_classes_Property(GenerisRdf::PROPERTY_MULTIPLE);
         $value = ((bool)$isMultiple) ? GenerisRdf::GENERIS_TRUE : GenerisRdf::GENERIS_FALSE ;
         $this->removePropertyValues($resource, $multipleProperty);
@@ -192,7 +188,6 @@ class core_kernel_persistence_smoothsql_Property extends core_kernel_persistence
      */
     public function setLgDependent(core_kernel_classes_Resource $resource, $isLgDependent)
     {
-
         $lgDependentProperty = new core_kernel_classes_Property(GenerisRdf::PROPERTY_IS_LG_DEPENDENT, __METHOD__);
         $value = ((bool)$isLgDependent) ? GenerisRdf::GENERIS_TRUE : GenerisRdf::GENERIS_FALSE ;
         $this->removePropertyValues($resource, $lgDependentProperty);
@@ -208,7 +203,6 @@ class core_kernel_persistence_smoothsql_Property extends core_kernel_persistence
      */
     public static function singleton()
     {
-        $returnValue = null;
         if (core_kernel_persistence_smoothsql_Property::$instance == null) {
             core_kernel_persistence_smoothsql_Property::$instance = new core_kernel_persistence_smoothsql_Property();
         }

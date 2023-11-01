@@ -31,6 +31,7 @@ use oat\generis\model\WidgetRdf;
 use oat\generis\model\GenerisRdf;
 use oat\generis\model\OntologyRdfs;
 use oat\generis\model\resource\DependsOnPropertyCollection;
+use oat\generis\model\kernel\persistence\Cache;
 
 /**
  * uriProperty must be a valid property otherwis return false, add this as a
@@ -86,23 +87,6 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
      */
     public $widget = false;
 
-    /**
-     * Short description of attribute lgDependent
-     *
-     * @access public
-     * @var boolean
-     */
-    public $lgDependent = false;
-
-
-    /**
-     * Short description of attribute multiple
-     *
-     * @access public
-     * @var boolean
-     */
-    public $multiple = false;
-
     /** @var DependsOnPropertyCollection */
     private $dependsOnPropertyCollection;
 
@@ -114,7 +98,6 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
     {
         return $this->getModel()->getRdfsInterface()->getPropertyImplementation();
     }
-
 
     /**
      * constructor
@@ -128,9 +111,6 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
     public function __construct($uri, $debug = '')
     {
         parent::__construct($uri, $debug);
-
-        $this->lgDependent = null;
-        $this->multiple = null;
     }
 
     /**
@@ -237,6 +217,7 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
             $this->range = $returnValue;
         }
         $returnValue = $this->range;
+
         return $returnValue;
     }
 
@@ -248,14 +229,13 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
      * @param  Class class
      * @return boolean
      */
-    public function setRange(core_kernel_classes_Class $class)
+    public function setRange(core_kernel_classes_Class $class): bool
     {
-        $returnValue = (bool) false;
         $returnValue = $this->getImplementation()->setRange($this, $class);
         if ($returnValue) {
             $this->range = $class;
         }
-        return (bool) $returnValue;
+        return (bool)$returnValue;
     }
 
     public function getAlias(): ?string
@@ -326,12 +306,19 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
      * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @return boolean
      */
-    public function isLgDependent()
+    public function isLgDependent(): bool
     {
-        if (is_null($this->lgDependent)) {
-            $this->lgDependent  = $this->getImplementation()->isLgDependent($this);
+        if ($this->supportCache() && $this->getModel()->getCache()->has($this->generateIsLgDependentKey($this->getUri()))) {
+            return (bool)$this->getModel()->getCache()->get($this->generateIsLgDependentKey($this->getUri()));
         }
-        return (bool) $this->lgDependent;
+
+        $isLgDependent = $this->getImplementation()->isLgDependent($this);
+
+        if ($this->supportCache()) {
+            $this->getModel()->getCache()->set($this->generateIsLgDependentKey($this->getUri()), $isLgDependent);
+        }
+
+        return $isLgDependent;
     }
 
     /**
@@ -339,13 +326,15 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
      *
      * @access public
      * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
-     * @param  boolean isLgDependent
      * @return mixed
      */
-    public function setLgDependent($isLgDependent)
+    public function setLgDependent($isLgDependent): void
     {
         $this->getImplementation()->setLgDependent($this, $isLgDependent);
-        $this->lgDependent = $isLgDependent;
+
+        if ($this->supportCache()) {
+            $this->getModel()->getCache()->set($this->generateIsLgDependentKey($this->getUri()), $isLgDependent);
+        }
     }
 
     /**
@@ -355,24 +344,26 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
      * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
      * @return boolean
      */
-    public function isMultiple()
+    public function isMultiple(): bool
     {
-        $returnValue = (bool) false;
-
-        if (is_null($this->multiple)) {
-            $multipleProperty = $this->getProperty(GenerisRdf::PROPERTY_MULTIPLE);
-            $multiple = $this->getOnePropertyValue($multipleProperty);
-
-            if (is_null($multiple)) {
-                $returnValue = false;
-            } else {
-                $returnValue = ($multiple->getUri() == GenerisRdf::GENERIS_TRUE);
-            }
-            $this->multiple = $returnValue;
+        if ($this->supportCache() && $this->getModel()->getCache()->has($this->generateIsMultipleKey($this->getUri()))) {
+            return (bool)$this->getModel()->getCache()->get($this->generateIsMultipleKey($this->getUri()));
         }
 
-        $returnValue = $this->multiple;
-        return (bool) $returnValue;
+        $multipleProperty = $this->getProperty(GenerisRdf::PROPERTY_MULTIPLE);
+        $multiple = $this->getOnePropertyValue($multipleProperty);
+
+        if (is_null($multiple)) {
+            $returnValue = false;
+        } else {
+            $returnValue = ($multiple->getUri() == GenerisRdf::GENERIS_TRUE);
+        }
+
+        if ($this->supportCache()) {
+            $this->getModel()->getCache()->set($this->generateIsMultipleKey($this->getUri()), $returnValue);
+        }
+
+        return $returnValue;
     }
 
     /**
@@ -381,14 +372,15 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
      *
      * @access public
      * @author Cédric Alfonsi, <cedric.alfonsi@tudor.lu>
-     * @param  boolean isMultiple
      * @return mixed
      */
-    public function setMultiple($isMultiple)
+    public function setMultiple($isMultiple): void
     {
-
         $this->getImplementation()->setMultiple($this, $isMultiple);
-        $this->multiple = $isMultiple;
+
+        if ($this->supportCache()) {
+            $this->getModel()->getCache()->set($this->generateIsMultipleKey($this->getUri()), $isMultiple);
+        }
     }
 
     /**
@@ -398,17 +390,15 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
      */
     public function isRelationship(): bool
     {
-        if (in_array($this->getUri(), self::RELATIONSHIP_PROPERTIES)) {
-            return true;
-        }
+        $model = $this->getModel();
 
-        if ($this->getUri() === OntologyRdf::RDF_VALUE) {
-            return false;
+        if ($this->supportCache() && $model->getCache()->has($this->generateIsRelationshipKey($this->getUri()))) {
+            return (bool)$model->getCache()->get($this->generateIsRelationshipKey($this->getUri()));
         }
 
         $range = $this->getRange();
 
-        return $range
+        $isRelationship = $range
             && !in_array(
                 $range->getUri(),
                 [
@@ -417,6 +407,12 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
                 ],
                 true
             );
+
+        if ($this->supportCache()) {
+            $this->getModel()->getCache()->set($this->generateIsRelationshipKey($this->getUri()), $isRelationship);
+        }
+
+        return $isRelationship;
     }
 
     /**
@@ -427,10 +423,82 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
      * @param  boolean deleteReference
      * @return boolean
      */
-    public function delete($deleteReference = false)
+    public function delete($deleteReference = false): bool
     {
-        $returnValue = (bool) false;
         $returnValue = $this->getImplementation()->delete($this, $deleteReference);
+
+        $this->clearCachedValues($this->getUri());
+
         return (bool) $returnValue;
+    }
+    /**
+     * Clear property cached data
+     *
+     * @param string $uri
+     */
+    protected function clearCachedValues(string $uri): void
+    {
+        if (!$this->supportCache()) {
+            return;
+        }
+
+        /** @var \oat\oatbox\cache\SimpleCache $cache */
+        $cache = $this->getModel()->getCache();
+        $isRelationshipKey = $this->generateIsRelationshipKey($uri);
+        $isMultipleKey = $this->generateIsMultipleKey($uri);
+        $isLgDependentKey = $this->generateIsLgDependentKey($uri);
+
+        if ($cache->has($isRelationshipKey)) {
+            $cache->delete($isRelationshipKey);
+        }
+
+        if ($cache->has($isMultipleKey)) {
+            $cache->delete($isMultipleKey);
+        }
+
+        if ($cache->has($isLgDependentKey)) {
+            $cache->delete($isLgDependentKey);
+        }
+    }
+
+    /**
+     * Generate cache key for relationship data
+     *
+     * @param string $uri
+     * @return string
+     */
+    protected function generateIsRelationshipKey(string $uri): string
+    {
+        return sprintf('PropIsRelationship_%s', $uri);
+    }
+
+    /**
+     * Generate cache key for lg dependent data
+     *
+     * @param string $uri
+     * @return string
+     */
+    protected function generateIsLgDependentKey(string $uri): string
+    {
+        return sprintf('PropIsLgDependent_%s', $uri);
+    }
+
+    /**
+     * Generate cache key for multiple data
+     *
+     * @param string $uri
+     * @return string
+     */
+    protected function generateIsMultipleKey(string $uri): string
+    {
+        return sprintf('PropIsMultiple_%s', $uri);
+    }
+
+    /**
+     * @return bool
+     */
+    protected function supportCache(): bool
+    {
+        return $this->getModel() instanceof Cache;
     }
 }

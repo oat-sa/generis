@@ -20,11 +20,12 @@
 
 use oat\generis\model\data\ModelManager;
 use oat\generis\model\data\Ontology;
+use oat\generis\model\kernel\persistence\Cache;
 use oat\generis\model\kernel\persistence\smoothsql\search\ComplexSearchService;
 use oat\oatbox\cache\SimpleCache;
 use oat\oatbox\service\ConfigurableService;
 
-class core_kernel_persistence_starsql_StarModel extends ConfigurableService implements Ontology
+class core_kernel_persistence_starsql_StarModel extends ConfigurableService implements Ontology, Cache
 {
     public const OPTION_PERSISTENCE = 'persistence';
     public const OPTION_READABLE_MODELS = 'readable';
@@ -89,7 +90,7 @@ class core_kernel_persistence_starsql_StarModel extends ConfigurableService impl
 
     public function getCache(): SimpleCache
     {
-        return $this->getServiceLocator()->get(SimpleCache::SERVICE_ID);
+        return $this->getServiceLocator()->get('generis/RedisCache');
     }
 
     /**

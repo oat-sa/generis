@@ -20,13 +20,14 @@
  */
 
 use oat\generis\model\data\ModelManager;
-use oat\oatbox\service\ConfigurableService;
-use oat\generis\model\kernel\persistence\smoothsql\search\ComplexSearchService;
 use oat\generis\model\data\Ontology;
-use oat\generis\persistence\sql\SchemaProviderInterface;
-use oat\generis\persistence\sql\SchemaCollection;
+use oat\generis\model\kernel\persistence\Cache;
 use oat\generis\model\kernel\persistence\smoothsql\install\SmoothRdsModel;
+use oat\generis\model\kernel\persistence\smoothsql\search\ComplexSearchService;
+use oat\generis\persistence\sql\SchemaCollection;
+use oat\generis\persistence\sql\SchemaProviderInterface;
 use oat\oatbox\cache\SimpleCache;
+use oat\oatbox\service\ConfigurableService;
 
 /**
  * transitory model for the smooth sql implementation
@@ -36,7 +37,8 @@ use oat\oatbox\cache\SimpleCache;
  */
 class core_kernel_persistence_smoothsql_SmoothModel extends ConfigurableService implements
     Ontology,
-    SchemaProviderInterface
+    SchemaProviderInterface,
+    Cache
 {
     public const OPTION_PERSISTENCE = 'persistence';
     public const OPTION_READABLE_MODELS = 'readable';
@@ -104,7 +106,7 @@ class core_kernel_persistence_smoothsql_SmoothModel extends ConfigurableService 
 
     public function getCache(): SimpleCache
     {
-        return $this->getServiceLocator()->get(SimpleCache::SERVICE_ID);
+        return $this->getServiceLocator()->get('generis/RedisCache');
     }
 
     /**
