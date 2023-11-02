@@ -778,6 +778,58 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
         return (bool) $returnValue;
     }
 
+    public function getParentClassesIds(): array
+    {
+        $implementation = $this->getImplementation();
+
+        if ($implementation instanceof core_kernel_persistence_smoothsql_Resource) {
+            return $implementation->getParentClassesIds($this->getUri());
+        }
+
+        return [];
+    }
+
+    /**
+     * @return array [
+     *     '{classUri}' => [
+     *         '{resourceUri_1}',
+     *         '{resourceUri_N...}',
+     *     ]
+     * ]
+     */
+    public function getParentClassesResourceIds(array $classIds = null): array
+    {
+        $implementation = $this->getImplementation();
+
+        if ($implementation instanceof core_kernel_persistence_smoothsql_Resource) {
+            return $implementation->getClassesResourceIds($classIds ?? $this->getParentClassesIds());
+        }
+
+        return [];
+    }
+
+    /**
+     * Returns a list of nested resources/classes under a resource
+     *
+     * @return array [
+     *     [
+     *         'id' => '{resourceId}',
+     *         'isClass' => true|false,
+     *         'level' => 1..N,
+     *     ]
+     * ]
+     */
+    public function getNestedResources(): array
+    {
+        $implementation = $this->getImplementation();
+
+        if ($implementation instanceof core_kernel_persistence_smoothsql_Resource) {
+            return $implementation->getNestedResources($this->getUri());
+        }
+
+        return [];
+    }
+
     public function getServiceManager(): ServiceLocatorInterface
     {
         return ($this->getModel() instanceof ServiceLocatorAwareInterface)
