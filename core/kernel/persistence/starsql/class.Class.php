@@ -201,14 +201,25 @@ CYPHER;
             $subject = $uri;
         }
 
+        $session = $this->getServiceLocator()->get(\oat\oatbox\session\SessionService::SERVICE_ID)->getCurrentSession();
+        $sessionLanguage = $this->getDataLanguage();
         $node = node()->addProperty('uri', $uriParameter = parameter())
             ->addLabel('Resource');
         if (!empty($label)) {
-            $node->addProperty(OntologyRdfs::RDFS_LABEL, $label);
+            $node->addProperty(OntologyRdfs::RDFS_LABEL, [$label . '@' . $sessionLanguage]);
         }
         if (!empty($comment)) {
-            $node->addProperty(OntologyRdfs::RDFS_COMMENT, $comment);
+            $node->addProperty(OntologyRdfs::RDFS_COMMENT, [$comment . '@' . $sessionLanguage]);
         }
+
+        $node->addProperty(
+            'http://www.tao.lu/Ontologies/TAO.rdf#UpdatedBy',
+            (string)$session->getUser()->getIdentifier()
+        );
+        $node->addProperty(
+            'http://www.tao.lu/Ontologies/TAO.rdf#UpdatedAt',
+            procedure()::raw('timestamp')
+        );
 
         $nodeForRelationship = node()->withVariable($variableForRelatedResource = variable());
         $relatedResource = node('Resource')
@@ -282,7 +293,7 @@ CYPHER;
                 $resource,
                 [
                     'propertyUri' => $propertyInstance->getUri(),
-                    'propertyLabel' => $propertyInstance->getLabel()
+                    'propertyLabel' => $propertyInstance->getLabel(),
                 ]
             )
         );
@@ -325,12 +336,18 @@ CYPHER;
         $propertyFilters = [],
         $options = []
     ) {
-        $options['return_field'] = $property->getUri();
-
         $search = $this->getModel()->getSearchInterface();
         $query = $this->getFilterQuery($search->query(), $resource, $propertyFilters, $options);
 
-        return $search->getGateway()->search($query);
+        $resultSet = $search->getGateway()->searchTriples($query, $property->getUri(), $options['distinct'] ?? false);
+
+        $valueList = [];
+        /** @var core_kernel_classes_Triple $triple */
+        foreach ($resultSet as $triple) {
+            $valueList[] = common_Utils::toResource($triple->object);
+        }
+
+        return $valueList;
     }
 
     /**
@@ -397,8 +414,6 @@ CYPHER;
             $this->getClassFilter($options, $resource, $queryOptions),
             [
                 'language' => $options['lang'] ?? '',
-                'distinct' => $options['distinct'] ?? false,
-                'return_field' => $options['return_field'] ?? null,
             ]
         );
 
@@ -490,9 +505,19 @@ CYPHER;
         $queryOptions['type'] = [
             'resource' => $resource,
             'recursive' => $options['recursive'] ?? false,
-            'extraClassUriList' => $rdftypes
+            'extraClassUriList' => $rdftypes,
         ];
 
         return $queryOptions;
+    }
+
+    public function updateUri(core_kernel_classes_Class $resource, string $newUri): void
+    {
+        $query = <<<CYPHER
+            MATCH (n:Resource {uri: \$original_uri})
+            SET n.uri = \$uri
+CYPHER;
+
+        $this->getPersistence()->run($query, ['original_uri' => $resource->getUri(), 'uri' => $newUri]);
     }
 }

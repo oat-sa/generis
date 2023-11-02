@@ -19,24 +19,12 @@
  *
  */
 
-namespace oat\generis\model\kernel\persistence\starsql\search\Command;
+namespace oat\generis\persistence\Graph;
 
-class NotCommandWrapper implements CommandInterface
+class GraphTransactionException extends \RuntimeException
 {
-    private CommandInterface $wrappedCommand;
-
-    public function __construct(CommandInterface $wrappedCommand)
+    public function __construct($message = "", \Throwable $previous = null)
     {
-        $this->wrappedCommand = $wrappedCommand;
-    }
-
-    public function buildQuery($predicate, $values): Condition
-    {
-        $wrappedCondition = $this->wrappedCommand->buildQuery($predicate, $values);
-
-        return new Condition(
-            $wrappedCondition->getCondition()->not(),
-            $wrappedCondition->getParameterList()
-        );
+        parent::__construct($message, 0, $previous);
     }
 }
