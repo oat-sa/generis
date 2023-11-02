@@ -390,6 +390,14 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
      */
     public function isRelationship(): bool
     {
+        if (in_array($this->getUri(), self::RELATIONSHIP_PROPERTIES)) {
+            return true;
+        }
+
+        if ($this->getUri() === OntologyRdf::RDF_VALUE) {
+            return false;
+        }
+
         $model = $this->getModel();
 
         if ($this->supportCache() && $model->getCache()->has($this->generateIsRelationshipKey($this->getUri()))) {
@@ -427,16 +435,15 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
     {
         $returnValue = $this->getImplementation()->delete($this, $deleteReference);
 
-        $this->clearCachedValues($this->getUri());
+        $this->clearCachedValues();
 
         return (bool) $returnValue;
     }
+
     /**
      * Clear property cached data
-     *
-     * @param string $uri
      */
-    protected function clearCachedValues(string $uri): void
+    public function clearCachedValues(): void
     {
         if (!$this->supportCache()) {
             return;
@@ -444,9 +451,9 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
 
         /** @var \oat\oatbox\cache\SimpleCache $cache */
         $cache = $this->getModel()->getCache();
-        $isRelationshipKey = $this->generateIsRelationshipKey($uri);
-        $isMultipleKey = $this->generateIsMultipleKey($uri);
-        $isLgDependentKey = $this->generateIsLgDependentKey($uri);
+        $isRelationshipKey = $this->generateIsRelationshipKey($this->getUri());
+        $isMultipleKey = $this->generateIsMultipleKey($this->getUri());
+        $isLgDependentKey = $this->generateIsLgDependentKey($this->getUri());
 
         if ($cache->has($isRelationshipKey)) {
             $cache->delete($isRelationshipKey);
@@ -459,6 +466,20 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
         if ($cache->has($isLgDependentKey)) {
             $cache->delete($isLgDependentKey);
         }
+    }
+
+    /**
+     * Warmup property cached data
+     */
+    public function warmupCachedValues(): void
+    {
+        if (!$this->supportCache()) {
+            return;
+        }
+
+        $this->isRelationship();
+        $this->isMultiple();
+        $this->isLgDependent();
     }
 
     /**
