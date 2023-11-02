@@ -25,6 +25,7 @@
  */
 
 use oat\generis\model\OntologyRdf;
+use oat\generis\model\OntologyRdfs;
 use oat\oatbox\session\SessionService;
 use oat\oatbox\user\UserLanguageServiceInterface;
 use oat\generis\model\kernel\uri\UriProvider;
@@ -100,6 +101,143 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
         }
 
         return (array) $returnValue;
+    }
+
+    public function getParentClassesIds(string $resourceUri): array
+    {
+        $query = <<<'SQL'
+WITH RECURSIVE statements_tree AS (
+    SELECT
+        r.object
+    FROM statements r
+    WHERE r.subject = ?
+      AND r.predicate IN (?, ?)
+      AND r.object != ?
+    UNION ALL
+    SELECT
+        s.object
+    FROM statements s
+        JOIN statements_tree st
+            ON s.subject = st.object
+                   AND s.predicate IN (?, ?)
+                   AND s.object NOT IN (?, ?, ?, ?)
+)
+SELECT object FROM statements_tree;
+SQL;
+
+        $statement = $this->getPersistence()->query(
+            $query,
+            [
+                $resourceUri,
+                OntologyRdfs::RDFS_SUBCLASSOF,
+                OntologyRdf::RDF_TYPE,
+                'http://www.tao.lu/Ontologies/TAO.rdf#AssessmentContentObject',
+                OntologyRdfs::RDFS_SUBCLASSOF,
+                OntologyRdf::RDF_TYPE,
+                'http://www.tao.lu/Ontologies/TAO.rdf#AssessmentContentObject',
+                'http://www.tao.lu/Ontologies/TAO.rdf#TAOObject',
+                'http://www.tao.lu/Ontologies/generis.rdf#generis_Ressource',
+                'http://www.w3.org/2000/01/rdf-schema#Resource',
+            ]
+        );
+
+        return array_column($statement->fetchAll(), 'object');
+    }
+
+    /**
+     * @param array $classIds
+     * @return array [
+     *     '{classUri}' => [
+     *         '{resourceUri_1}',
+     *         '{resourceUri_N...}',
+     *     ]
+     * ]
+     */
+    public function getClassesResourceIds(array $classIds): array
+    {
+        if (empty($classIds)) {
+            return [];
+        }
+
+        $query = sprintf(
+            'SELECT subject, object FROM statements WHERE predicate IN (?, ?) AND object IN (%s)',
+            implode(',', array_fill(0, count($classIds), '?'))
+        );
+
+        $statement = $this->getPersistence()->query(
+            $query,
+            [
+                OntologyRdfs::RDFS_SUBCLASSOF,
+                OntologyRdf::RDF_TYPE,
+                ...$classIds,
+            ]
+        );
+
+        $results = $statement->fetchAll();
+        $resourceIds = [];
+
+        // Iterate over the provided class IDs to keep the same order
+        foreach ($classIds as $classId) {
+            $resources = array_filter($results, static fn (array $result): bool => $result['object'] === $classId);
+            $resourceIds[$classId] = array_column($resources, 'subject');
+        }
+
+        return $resourceIds;
+    }
+
+    /**
+     * Returns a list of nested resources/classes under a resource
+     *
+     * @param string $classId
+     * @return array [
+     *     [
+     *         'id' => '{resourceId}',
+     *         'isClass' => true|false,
+     *         'level' => 1..N,
+     *     ]
+     * ]
+     */
+    public function getNestedResources(string $classId): array
+    {
+        $query = <<<'SQL'
+WITH RECURSIVE statements_tree AS (
+    SELECT
+        r.subject,
+        r.predicate,
+        1 as level
+    FROM statements r
+    WHERE r.subject = ?
+      AND r.predicate IN (?, ?)
+    UNION ALL
+    SELECT
+        s.subject,
+        s.predicate,
+        level + 1
+    FROM statements s
+        JOIN statements_tree st
+            ON s.object = st.subject
+    WHERE s.predicate IN (?, ?)
+)
+SELECT
+    subject as id,
+    CASE WHEN predicate = ? THEN 1 ELSE 0 END as isClass,
+    level
+FROM statements_tree;
+SQL;
+
+        $statement = $this->getPersistence()->query(
+            $query,
+            [
+                $classId,
+                OntologyRdfs::RDFS_SUBCLASSOF,
+                OntologyRdf::RDF_TYPE,
+                OntologyRdfs::RDFS_SUBCLASSOF,
+                OntologyRdf::RDF_TYPE,
+                OntologyRdfs::RDFS_SUBCLASSOF,
+            ]
+        );
+
+        return $statement->fetchAll();
     }
 
     /**
