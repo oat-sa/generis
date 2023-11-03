@@ -134,7 +134,6 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
      */
     public function getDomain()
     {
-        $returnValue = null;
         if (is_null($this->domain)) {
             $this->domain = new core_kernel_classes_ContainerCollection(new common_Object(__METHOD__));
             $domainValues = $this->getPropertyValues($this->getProperty(OntologyRdfs::RDFS_DOMAIN));
@@ -142,10 +141,8 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
                 $this->domain->add($this->getClass($domainValue));
             }
         }
-        $returnValue = $this->domain;
 
-
-        return $returnValue;
+        return $this->domain;
     }
 
     public function getRelatedClass(): ?core_kernel_classes_Class
@@ -211,14 +208,13 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
             $rangeProperty = $this->getProperty(OntologyRdfs::RDFS_RANGE);
             $rangeValues = $this->getPropertyValues($rangeProperty);
 
-            if (sizeOf($rangeValues) > 0) {
+            if (empty($rangeValues)) {
                 $returnValue = $this->getClass($rangeValues[0]);
             }
             $this->range = $returnValue;
         }
         $returnValue = $this->range;
-
-        return $returnValue;
+        return $this->range;
     }
 
     /**
@@ -308,7 +304,9 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
      */
     public function isLgDependent(): bool
     {
-        if ($this->supportCache() && $this->getModel()->getCache()->has($this->generateIsLgDependentKey($this->getUri()))) {
+        if ($this->supportCache() && $this->getModel()->getCache()->has(
+                $this->generateIsLgDependentKey($this->getUri())
+            )) {
             return (bool)$this->getModel()->getCache()->get($this->generateIsLgDependentKey($this->getUri()));
         }
 
@@ -346,7 +344,9 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
      */
     public function isMultiple(): bool
     {
-        if ($this->supportCache() && $this->getModel()->getCache()->has($this->generateIsMultipleKey($this->getUri()))) {
+        if ($this->supportCache() && $this->getModel()->getCache()->has(
+                $this->generateIsMultipleKey($this->getUri())
+            )) {
             return (bool)$this->getModel()->getCache()->get($this->generateIsMultipleKey($this->getUri()));
         }
 
@@ -401,23 +401,23 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
         $model = $this->getModel();
 
         if ($this->supportCache() && $model->getCache()->has($this->generateIsRelationshipKey($this->getUri()))) {
-            return (bool)$model->getCache()->get($this->generateIsRelationshipKey($this->getUri()));
-        }
+            $isRelationship = (bool)$model->getCache()->get($this->generateIsRelationshipKey($this->getUri()));
+        } else {
+            $range = $this->getRange();
 
-        $range = $this->getRange();
+            $isRelationship = $range
+                && !in_array(
+                    $range->getUri(),
+                    [
+                        OntologyRdfs::RDFS_LITERAL,
+                        GenerisRdf::CLASS_GENERIS_FILE
+                    ],
+                    true
+                );
 
-        $isRelationship = $range
-            && !in_array(
-                $range->getUri(),
-                [
-                    OntologyRdfs::RDFS_LITERAL,
-                    GenerisRdf::CLASS_GENERIS_FILE
-                ],
-                true
-            );
-
-        if ($this->supportCache()) {
-            $this->getModel()->getCache()->set($this->generateIsRelationshipKey($this->getUri()), $isRelationship);
+            if ($this->supportCache()) {
+                $this->getModel()->getCache()->set($this->generateIsRelationshipKey($this->getUri()), $isRelationship);
+            }
         }
 
         return $isRelationship;
