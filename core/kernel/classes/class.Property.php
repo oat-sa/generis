@@ -214,7 +214,7 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
             $this->range = $returnValue;
         }
         $returnValue = $this->range;
-        return $this->range;
+        return $returnValue;
     }
 
     /**
