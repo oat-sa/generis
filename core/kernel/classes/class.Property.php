@@ -304,9 +304,10 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
      */
     public function isLgDependent(): bool
     {
-        if ($this->supportCache() && $this->getModel()->getCache()->has(
-                $this->generateIsLgDependentKey($this->getUri())
-            )) {
+        if (
+            $this->supportCache()
+            && $this->getModel()->getCache()->has($this->generateIsLgDependentKey($this->getUri()))
+        ) {
             return (bool)$this->getModel()->getCache()->get($this->generateIsLgDependentKey($this->getUri()));
         }
 
@@ -344,9 +345,10 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
      */
     public function isMultiple(): bool
     {
-        if ($this->supportCache() && $this->getModel()->getCache()->has(
-                $this->generateIsMultipleKey($this->getUri())
-            )) {
+        if (
+            $this->supportCache()
+            && $this->getModel()->getCache()->has($this->generateIsMultipleKey($this->getUri()))
+        ) {
             return (bool)$this->getModel()->getCache()->get($this->generateIsMultipleKey($this->getUri()));
         }
 
