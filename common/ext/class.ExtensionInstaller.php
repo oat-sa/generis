@@ -192,6 +192,13 @@ class common_ext_ExtensionInstaller extends common_ext_ExtensionHandler
                 $this->runExtensionScript($script);
             } elseif (
                 is_array($script)
+                && array_key_exists('service', $script)
+                && array_key_exists('method', $script)
+            ) {
+                $parameters = $script['arguments'] && is_array($script['arguments']) ? $script['arguments'] : [];
+                $this->runExtensionService($script['service'], $script['method'], $parameters);
+            } elseif (
+                is_array($script)
                 && isset($script[0])
                 && is_string($script[0])
                 && !empty($script[0])
