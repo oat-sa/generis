@@ -86,7 +86,7 @@ class Manifest implements ServiceLocatorAwareInterface
                 "The Extension Manifest file located at '${filePath}' could not be read."
             );
         }
-        $this->manifest = require($filePath);
+        $this->manifest = require $filePath;
         // mandatory
         if (empty($this->manifest['name'])) {
             throw new exception\MalformedManifestException(
@@ -191,6 +191,21 @@ class Manifest implements ServiceLocatorAwareInterface
             [$this->manifest['install']['rdf']];
         $files = array_filter($files);
         return (array) $files;
+    }
+
+    /**
+     * Get service container reload flag
+     * @return bool
+     */
+    public function getInstallContainerRebuild(): bool
+    {
+        $result = false;
+
+        if (isset($this->manifest['install']['containerRebuild'])) {
+            $result = $this->manifest['install']['containerRebuild'];
+        }
+
+        return $result;
     }
 
     /**
@@ -317,7 +332,7 @@ class Manifest implements ServiceLocatorAwareInterface
             );
         }
 
-        $manifest = require($file);
+        $manifest = require $file;
         $returnValue = $manifest['install']['checks'] ?? [];
         foreach ($returnValue as &$component) {
             if (strpos($component['type'], 'FileSystemComponent') !== false) {

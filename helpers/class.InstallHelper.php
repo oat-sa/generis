@@ -60,16 +60,9 @@ class helpers_InstallHelper
      */
     public static function installRecursively($extensionIDs, $installData = [])
     {
-        $toInstall = [];
-        $installed = [];
-        foreach ($extensionIDs as $id) {
-            $ext = common_ext_ExtensionsManager::singleton()->getExtensionById($id);
-            if (!common_ext_ExtensionsManager::singleton()->isInstalled($ext->getId())) {
-                static::log('d', 'Extension ' . $id . ' needs to be installed');
-                $toInstall[$id] = $ext;
-            }
-        }
+        $toInstall = self::getToInstall($extensionIDs);
 
+        $installed = [];
         while (!empty($toInstall)) {
             $modified = false;
             foreach ($toInstall as $key => $extension) {
@@ -80,14 +73,17 @@ class helpers_InstallHelper
                 if (count($missing) == 0) {
                     static::install($extension, $installData);
                     $installed[] = $extension->getId();
-                    static::log('i', 'Extension ' . $extension->getId() . ' installed');
+                    static::log('i', sprintf('Extension %s installed', $extension->getId()));
                     unset($toInstall[$key]);
                     $modified = true;
                     break;
                 } else {
                     $missing = array_diff($missing, array_keys($toInstall));
                     foreach ($missing as $extID) {
-                        static::log('d', 'Extension ' . $extID . ' is required but missing, added to install list');
+                        static::log(
+                            'd',
+                            sprintf('Extension %s is required but missing, added to install list', $extID)
+                        );
                         $toInstall = [$extID => common_ext_ExtensionsManager::singleton()->getExtensionById($extID)]
                             + $toInstall;
                         $modified = true;
@@ -104,13 +100,12 @@ class helpers_InstallHelper
 
     protected static function install($extension, $installData)
     {
-        $importLocalData = (isset($installData['import_local']) && $installData['import_local'] == true);
+        $importLocalData = (isset($installData['import_local']) && $installData['import_local']);
         $extinstaller = static::getInstaller($extension, $importLocalData);
 
         helpers_TimeOutHelper::setTimeOutLimit(helpers_TimeOutHelper::LONG);
         $extinstaller->install();
         helpers_TimeOutHelper::reset();
-        ;
     }
 
     protected static function getInstaller($extension, $importLocalData)
@@ -149,5 +144,23 @@ class helpers_InstallHelper
         if (method_exists('common_Logger', $logLevel)) {
             call_user_func('common_Logger::' . $logLevel, $message, $tags);
         }
+    }
+
+    /**
+     * @param array $extensionIDs
+     * @return array
+     * @throws common_ext_ExtensionException
+     */
+    protected static function getToInstall(array $extensionIDs): array
+    {
+        $toInstall = [];
+        foreach ($extensionIDs as $id) {
+            $ext = common_ext_ExtensionsManager::singleton()->getExtensionById($id);
+            if (!common_ext_ExtensionsManager::singleton()->isInstalled($ext->getId())) {
+                static::log('d', 'Extension ' . $id . ' needs to be installed');
+                $toInstall[$id] = $ext;
+            }
+        }
+        return $toInstall;
     }
 }

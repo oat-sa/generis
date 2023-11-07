@@ -28,6 +28,7 @@ use common_ext_Extension;
 use common_ext_ExtensionsManager;
 use InvalidArgumentException;
 use oat\generis\model\Middleware\MiddlewareExtensionsMapper;
+use oat\taoLti\models\classes\Platform\Service\UpdatePlatformRegistrationSnapshotListener;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder as SymfonyContainerBuilder;
@@ -133,6 +134,11 @@ class ContainerBuilder extends SymfonyContainerBuilder
         }
     }
 
+    public function resetContainerIsAlreadyBuilt()
+    {
+        self::$containerIsAlreadyBuilt = false;
+    }
+
     /**
      * @inheritDoc
      */
@@ -141,6 +147,7 @@ class ContainerBuilder extends SymfonyContainerBuilder
         try {
             return parent::get($id, $invalidBehavior);
         } catch (SymfonyServiceNotFoundException $exception) {
+            // do nothing
         }
 
         try {
