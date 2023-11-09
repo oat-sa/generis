@@ -484,34 +484,16 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
         $this->isLgDependent();
     }
 
-    /**
-     * Generate cache key for relationship data
-     *
-     * @param string $uri
-     * @return string
-     */
     protected function generateIsRelationshipKey(string $uri): string
     {
         return sprintf('PropIsRelationship_%s', $uri);
     }
 
-    /**
-     * Generate cache key for lg dependent data
-     *
-     * @param string $uri
-     * @return string
-     */
     protected function generateIsLgDependentKey(string $uri): string
     {
         return sprintf('PropIsLgDependent_%s', $uri);
     }
 
-    /**
-     * Generate cache key for multiple data
-     *
-     * @param string $uri
-     * @return string
-     */
     protected function generateIsMultipleKey(string $uri): string
     {
         return sprintf('PropIsMultiple_%s', $uri);

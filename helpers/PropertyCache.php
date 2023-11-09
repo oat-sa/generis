@@ -1,6 +1,8 @@
 <?php
 
-class helpers_PropertyCache
+namespace oat\generis\Helper;
+
+class PropertyCache
 {
     /**
      * Clear property cached data
