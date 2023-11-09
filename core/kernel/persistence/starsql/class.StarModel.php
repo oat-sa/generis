@@ -90,7 +90,7 @@ class core_kernel_persistence_starsql_StarModel extends ConfigurableService impl
 
     public function getCache(): SimpleCache
     {
-        return $this->getServiceLocator()->get('generis/RedisCache');
+        return $this->getServiceLocator()->get('generis/PropertyCache');
     }
 
     /**

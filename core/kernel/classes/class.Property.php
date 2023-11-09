@@ -208,7 +208,7 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
             $rangeProperty = $this->getProperty(OntologyRdfs::RDFS_RANGE);
             $rangeValues = $this->getPropertyValues($rangeProperty);
 
-            if (empty($rangeValues)) {
+            if (!empty($rangeValues)) {
                 $returnValue = $this->getClass($rangeValues[0]);
             }
             $this->range = $returnValue;

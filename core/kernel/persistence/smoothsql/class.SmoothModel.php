@@ -106,7 +106,7 @@ class core_kernel_persistence_smoothsql_SmoothModel extends ConfigurableService 
 
     public function getCache(): SimpleCache
     {
-        return $this->getServiceLocator()->get('generis/RedisCache');
+        return $this->getServiceLocator()->get('generis/PropertyCache');
     }
 
     /**
