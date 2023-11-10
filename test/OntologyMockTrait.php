@@ -101,7 +101,7 @@ trait OntologyMockTrait
                 Bin2HexUriProvider::OPTION_NAMESPACE => 'http://ontology.mock/bin2hex#'
             ]),
             SimpleCache::SERVICE_ID => new NoCache(),
-            'generis/RedisCache' => new NoCache(),
+            'generis/PropertyCache' => new NoCache(),
             DriverConfigurationFeeder::SERVICE_ID => new DriverConfigurationFeeder(),
             EventAggregator::SERVICE_ID => $eventAggregator
         ]);
