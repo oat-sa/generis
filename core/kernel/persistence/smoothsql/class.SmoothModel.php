@@ -26,6 +26,7 @@ use oat\generis\model\kernel\persistence\smoothsql\install\SmoothRdsModel;
 use oat\generis\model\kernel\persistence\smoothsql\search\ComplexSearchService;
 use oat\generis\persistence\sql\SchemaCollection;
 use oat\generis\persistence\sql\SchemaProviderInterface;
+use oat\oatbox\cache\PropertyCache;
 use oat\oatbox\cache\SimpleCache;
 use oat\oatbox\service\ConfigurableService;
 
@@ -106,7 +107,7 @@ class core_kernel_persistence_smoothsql_SmoothModel extends ConfigurableService 
 
     public function getCache(): SimpleCache
     {
-        return $this->getServiceLocator()->get('generis/PropertyCache');
+        return $this->getServiceLocator()->get(PropertyCache::SERVICE_ID);
     }
 
     /**

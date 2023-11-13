@@ -5,7 +5,7 @@
  */
 
 use oat\generis\persistence\PersistenceManager;
-use oat\oatbox\cache\KeyValueCache;
+use oat\oatbox\cache\PropertyCache;
 use oat\oatbox\service\ServiceFactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -17,12 +17,12 @@ return new class implements ServiceFactoryInterface {
                 ->get(PersistenceManager::SERVICE_ID)
                 ->getPersistenceById('redis');
 
-            return new KeyValueCache([
-                KeyValueCache::OPTION_PERSISTENCE => 'redis'
+            return new PropertyCache([
+                PropertyCache::OPTION_PERSISTENCE => 'redis'
             ]);
         } catch (Exception $e) {
-            return new KeyValueCache([
-                KeyValueCache::OPTION_PERSISTENCE => 'cache'
+            return new PropertyCache([
+                PropertyCache::OPTION_PERSISTENCE => 'cache'
             ]);
         }
     }
