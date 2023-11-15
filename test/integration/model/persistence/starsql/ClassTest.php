@@ -433,6 +433,19 @@ class ClassTest extends GenerisPhpUnitTestRunner
         $this->assertEquals($sub1ClassInstance->getUri(), array_shift($instances)->getUri());
     }
 
+    public function testGetUniquePropertyValueLanguageSpecific()
+    {
+        $class = new core_kernel_classes_Class(WidgetRdf::CLASS_URI_WIDGET);
+        $labelProperty = new \core_kernel_classes_Property(OntologyRdfs::RDFS_LABEL);
+        $subClass = $class->createSubClass();
+
+        $subClassInstance = $subClass->createInstance('test case instance'); //en-US
+        $subClassInstance->setPropertyValueByLg($labelProperty, 'instance de cas de test', 'fr-FR');
+        $subClassInstance->setPropertyValueByLg($labelProperty, 'Testfallinstanz', 'de-DE');
+
+        $this->assertEquals('test case instance', $subClassInstance->getUniquePropertyValue($labelProperty));
+    }
+
     public function testGetCountInstances()
     {
         $class = new core_kernel_classes_Class(WidgetRdf::CLASS_URI_WIDGET);
