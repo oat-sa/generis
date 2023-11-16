@@ -20,6 +20,8 @@
  *
  */
 
+use oat\oatbox\service\ServiceManager;
+
 /**
  * Helper class for instalation.
  */
@@ -60,8 +62,9 @@ class helpers_InstallHelper
      */
     public static function installRecursively($extensionIDs, $installData = [])
     {
-        $toInstall = self::getToInstall($extensionIDs);
+        self::buildDIContainerForInstallExtensions($extensionIDs);
 
+        $toInstall = self::getToInstall($extensionIDs);
         $installed = [];
         while (!empty($toInstall)) {
             $modified = false;
@@ -96,6 +99,42 @@ class helpers_InstallHelper
             }
         }
         return $installed;
+    }
+
+    public static function buildDIContainerForInstallExtensions($extensionIDs = [])
+    {
+        $toInstall = self::getToInstall($extensionIDs);
+
+        $extensionsToInstall = [];
+        while (!empty($toInstall)) {
+            foreach ($toInstall as $key => $extension) {
+                $allReadyToInstall = array_keys($extensionsToInstall);
+                $missing = array_diff(array_keys($extension->getDependencies()), $allReadyToInstall);
+                if (count($missing) == 0) {
+                    $extensionsToInstall[$key] = $extension->getId();
+                    unset($toInstall[$key]);
+
+                    break;
+                } else {
+                    $missing = array_diff($missing, array_keys($toInstall));
+                    foreach ($missing as $extID) {
+                        $toInstall = [$extID => common_ext_ExtensionsManager::singleton()->getExtensionById($extID)]
+                            + $toInstall;
+                    }
+                }
+            }
+        }
+
+        $serviceManager = ServiceManager::getServiceManager();
+        foreach ($extensionsToInstall as $key => $extensionId) {
+            $extension = common_ext_ExtensionsManager::singleton()->getExtensionById($extensionId);
+            $extensionsToInstall[$key] = $extension;
+            if ($extension->getManifest()->getInstallContainerRebuild() === false) {
+                unset($extensionsToInstall[$key]);
+            }
+        }
+
+        $serviceManager->buildDIContainer($extensionsToInstall);
     }
 
     protected static function install($extension, $installData)

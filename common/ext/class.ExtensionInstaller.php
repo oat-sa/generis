@@ -22,7 +22,6 @@
  *
  */
 
-use oat\generis\model\data\ModelManager;
 use oat\oatbox\service\ServiceFactoryInterface;
 use oat\oatbox\service\ServiceManager;
 use oat\oatbox\event\EventManager;
@@ -182,10 +181,6 @@ class common_ext_ExtensionInstaller extends common_ext_ExtensionHandler
      */
     protected function installCustomScript()
     {
-        if ($this->getExtension()->getManifest()->getInstallContainerRebuild()) {
-            $this->getServiceManager()->rebuildContainer();
-        }
-
         //install script
         foreach ($this->extension->getManifest()->getInstallPHPFiles() as $script) {
             if (is_string($script)) {

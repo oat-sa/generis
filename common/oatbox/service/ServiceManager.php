@@ -24,9 +24,9 @@ namespace oat\oatbox\service;
 use oat\generis\model\DependencyInjection\ContainerBuilder;
 use oat\generis\model\DependencyInjection\ContainerStarter;
 use oat\oatbox\Configurable;
-use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Psr\Container\ContainerInterface;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * The simple placeholder ServiceManager
@@ -267,8 +267,17 @@ class ServiceManager implements ServiceLocatorInterface, ContainerInterface
 
     public function rebuildContainer(): void
     {
-        $this->getContainerStarter()->getContainerBuilder()->resetContainerIsAlreadyBuilt();
-        $this->getContainerStarter()->getContainerBuilder()->forceBuild();
+        $containerBuilder = $this->getContainerStarter()->getContainerBuilder();
+        $containerBuilder->resetContainerIsAlreadyBuilt();
+        $containerBuilder->forceBuild();
+        $this->resetContainerStarter();
+    }
+
+    public function buildDIContainer($extensions = []): void
+    {
+        $containerBuilder = $this->getContainerStarter()->getContainerBuilder();
+        $containerBuilder->resetContainerIsAlreadyBuilt();
+        $containerBuilder->buildDIContainer($extensions);
         $this->resetContainerStarter();
     }
 

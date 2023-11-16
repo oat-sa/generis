@@ -101,6 +101,14 @@ class ContainerBuilder extends SymfonyContainerBuilder
             return $this->legacyContainer;
         }
 
+        /** @var common_ext_Extension[] $extensions */
+        $extensions = $this->getExtensionsManager()->getInstalledExtensions();
+
+        return $this->buildDIContainer($extensions);
+    }
+
+    public function buildDIContainer($extensions = []): ContainerInterface
+    {
         if (!is_writable($this->cachePath)) {
             throw new InvalidArgumentException(
                 sprintf(
@@ -111,7 +119,10 @@ class ContainerBuilder extends SymfonyContainerBuilder
         }
 
         try {
-            file_put_contents($this->cachePath . '/services.php', $this->getTemporaryServiceFileContent());
+            file_put_contents(
+                $this->cachePath . '/services.php',
+                $this->getTemporaryServiceFileContent($extensions)
+            );
 
             $phpLoader = new PhpFileLoader(
                 $this,
@@ -190,12 +201,9 @@ class ContainerBuilder extends SymfonyContainerBuilder
         }
     }
 
-    private function getTemporaryServiceFileContent(): string
+    private function getTemporaryServiceFileContent($extensions = []): string
     {
         $contents = [];
-
-        /** @var common_ext_Extension[] $extensions */
-        $extensions = $this->getExtensionsManager()->getInstalledExtensions();
 
         foreach ($extensions as $extension) {
             foreach ($extension->getManifest()->getContainerServiceProvider() as $serviceProvider) {
