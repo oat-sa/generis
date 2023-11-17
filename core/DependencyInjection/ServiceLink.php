@@ -31,4 +31,8 @@ class ServiceLink
 
         return $this->service;
     }
+
+    public function __call($name, $arguments) {
+        return $this->getService()->$name(...$arguments);
+    }
 }
