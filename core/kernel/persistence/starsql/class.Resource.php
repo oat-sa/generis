@@ -623,37 +623,23 @@ CYPHER;
     {
         $fallbackLanguage = '';
 
-        $sortedResults = [
-            $dataLanguage => [],
-            $defaultLanguage => [],
-            $fallbackLanguage => []
-        ];
-
         foreach ($entries as $entry) {
-            $matchSuccess = preg_match(self::LANGUAGE_TAGGED_VALUE_PATTERN, $entry, $matches);
-            $entryLang = $matches[2] ?? '';
-            $sortedResults[$entryLang][] = [
-                'value' => $matches[1] ?? $entry,
-                'language' => $entryLang
-            ];
+            preg_match(self::LANGUAGE_TAGGED_VALUE_PATTERN, $entry, $matches);
+            $entryLang = $matches[2] ?? $fallbackLanguage;
+            $sortedResults[$entryLang][] = $matches[1] ?? $entry;
         }
 
-        $languageOrderedEntries = array_merge(
-            $sortedResults[$dataLanguage],
-            (count($sortedResults) > 2) ? $sortedResults[$defaultLanguage] : [],
-            $sortedResults[$fallbackLanguage]
-        );
+        $languageOrderedEntries = [
+            $dataLanguage,
+            $defaultLanguage,
+            $fallbackLanguage,
+        ];
 
         $returnValue = [];
-        if (count($languageOrderedEntries) > 0) {
-            $previousLanguage = $languageOrderedEntries[0]['language'];
-
-            foreach ($languageOrderedEntries as $value) {
-                if ($value['language'] == $previousLanguage) {
-                    $returnValue[] = $value['value'];
-                } else {
-                    break;
-                }
+        foreach ($languageOrderedEntries as $language) {
+            if (isset($sortedResults[$language])) {
+                $returnValue = $sortedResults[$language];
+                break;
             }
         }
 
