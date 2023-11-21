@@ -64,7 +64,6 @@ class ClassTest extends GenerisPhpUnitTestRunner
 
     protected function tearDown(): void
     {
-        $ontologyModel = ModelManager::getModel();
         /** @var ClassRepository $classRepo */
         foreach ($this->cleanupList as $classUri) {
             $class = new \core_kernel_classes_Class($classUri);
@@ -92,59 +91,47 @@ class ClassTest extends GenerisPhpUnitTestRunner
 
         $this->assertGreaterThan(0, count($instances));
 
-        foreach ($instances as $instance) {
-            $this->assertTrue($instance instanceof core_kernel_classes_Resource);
+        $expectedItems = [
+            'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#ComboBox' => [
+                'label' => 'Drop down menu',
+                'comment' => 'In drop down menu, one may select 1 to N options',
+            ],
+            'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#RadioBox' => [
+                'label' => 'Radio button',
+                'comment' => 'In radio boxes, one may select exactly one option',
+            ],
+            'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#CheckBox' => [
+                'label' => 'Check box',
+                'comment' => 'In check boxes, one may select 0 to N options',
+            ],
+            'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#TextBox' => [
+                'label' => 'A Text Box',
+                'comment' => 'A particular text box',
+            ],
+            $plop->getUri() => [
+                'label' => 'test',
+                'comment' => 'comment',
+            ],
+        ];
 
-            if ($instance->getUri() === 'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#ComboBox') {
-                $this->assertEquals($instance->getLabel(), 'Drop down menu');
-                $this->assertEquals($instance->getComment(), 'In drop down menu, one may select 1 to N options');
-            }
-            if ($instance->getUri() === 'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#RadioBox') {
-                $this->assertEquals($instance->getLabel(), 'Radio button');
-                $this->assertEquals($instance->getComment(), 'In radio boxes, one may select exactly one option');
-            }
-            if ($instance->getUri() === 'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#CheckBox') {
-                $this->assertEquals($instance->getLabel(), 'Check box');
-                $this->assertEquals($instance->getComment(), 'In check boxes, one may select 0 to N options');
-            }
-            if ($instance->getUri() === 'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#TextBox') {
-                $this->assertEquals($instance->getLabel(), 'A Text Box');
-                $this->assertEquals($instance->getComment(), 'A particular text box');
-            }
-            if ($instance->getUri() === $plop->getUri()) {
-                $this->assertEquals($instance->getLabel(), 'test');
-                $this->assertEquals($instance->getComment(), 'comment');
-            }
+        foreach (array_intersect_key($instances, $expectedItems) as $instance) {
+            $this->assertTrue($instance instanceof core_kernel_classes_Resource);
+            $this->assertEquals($instance->getLabel(), $expectedItems[$instance->getUri()]['label']);
+            $this->assertEquals($instance->getComment(), $expectedItems[$instance->getUri()]['comment']);
         }
 
         $instances2 = $class->getInstances(true);
         $this->assertTrue(count($instances2) > 0);
-        foreach ($instances2 as $k => $instance) {
+
+        $expectedItems[$subclassInstance->getUri()] = [
+            'label' => 'test3',
+            'comment' => 'comment3',
+        ];
+
+        foreach (array_intersect_key($instances2, $expectedItems) as $instance) {
             $this->assertTrue($instance instanceof core_kernel_classes_Resource);
-            if ($instance->getUri() === 'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#ComboBox') {
-                $this->assertEquals($instance->getLabel(), 'Drop down menu');
-                $this->assertEquals($instance->getComment(), 'In drop down menu, one may select 1 to N options');
-            }
-            if ($instance->getUri() === 'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#RadioBox') {
-                $this->assertEquals($instance->getLabel(), 'Radio button');
-                $this->assertEquals($instance->getComment(), 'In radio boxes, one may select exactly one option');
-            }
-            if ($instance->getUri() === 'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#CheckBox') {
-                $this->assertEquals($instance->getLabel(), 'Check box');
-                $this->assertEquals($instance->getComment(), 'In check boxes, one may select 0 to N options');
-            }
-            if ($instance->getUri() === 'http://www.tao.lu/datatypes/WidgetDefinitions.rdf#TextBox') {
-                $this->assertEquals($instance->getLabel(), 'A Text Box');
-                $this->assertEquals($instance->getComment(), 'A particular text box');
-            }
-            if ($instance->getUri() === $plop->getUri()) {
-                $this->assertEquals($instance->getLabel(), 'test');
-                $this->assertEquals($instance->getComment(), 'comment');
-            }
-            if ($instance->getUri() === $subclassInstance->getUri()) {
-                $this->assertEquals($instance->getLabel(), 'test3');
-                $this->assertEquals($instance->getComment(), 'comment3');
-            }
+            $this->assertEquals($instance->getLabel(), $expectedItems[$instance->getUri()]['label']);
+            $this->assertEquals($instance->getComment(), $expectedItems[$instance->getUri()]['comment']);
         }
     }
 
@@ -175,9 +162,9 @@ class ClassTest extends GenerisPhpUnitTestRunner
             ->searchInstances($instance, $propertyFilter, $options)
             ->willReturn($mockResult);
 
-        $ImplementationMock = $prophetImplementation->reveal();
+        $implementationMock = $prophetImplementation->reveal();
 
-        $instance->expects($this->once())->method('getImplementation')->willReturn($ImplementationMock);
+        $instance->expects($this->once())->method('getImplementation')->willReturn($implementationMock);
         $this->assertSame([1,2,3,4,5,6], $instance->searchInstances($propertyFilter, $options));
     }
 
@@ -431,6 +418,19 @@ class ClassTest extends GenerisPhpUnitTestRunner
         $this->assertEquals($sub2ClassInstance->getUri(), array_shift($instances)->getUri());
         $this->assertEquals($sub3ClassInstance->getUri(), array_shift($instances)->getUri());
         $this->assertEquals($sub1ClassInstance->getUri(), array_shift($instances)->getUri());
+    }
+
+    public function testGetUniquePropertyValueLanguageSpecific()
+    {
+        $class = new core_kernel_classes_Class(WidgetRdf::CLASS_URI_WIDGET);
+        $labelProperty = new \core_kernel_classes_Property(OntologyRdfs::RDFS_LABEL);
+        $subClass = $class->createSubClass();
+
+        $subClassInstance = $subClass->createInstance('test case instance'); //en-US
+        $subClassInstance->setPropertyValueByLg($labelProperty, 'instance de cas de test', 'fr-FR');
+        $subClassInstance->setPropertyValueByLg($labelProperty, 'Testfallinstanz', 'de-DE');
+
+        $this->assertEquals('test case instance', $subClassInstance->getUniquePropertyValue($labelProperty));
     }
 
     public function testGetCountInstances()
