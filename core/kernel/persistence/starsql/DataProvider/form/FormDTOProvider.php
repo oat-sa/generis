@@ -109,8 +109,7 @@ class FormDTOProvider implements FormDTOProviderInterface
                                 $optionData['label'],
                                 $language,
                                 $language
-                                )[0]
-                                ?? null
+                            )[0] ?? null
                         ];
                 }
             }
@@ -206,8 +205,11 @@ CYPHER;
         return $this->persistence->run($query, ['ranges' => $ranges])->toRecursiveArray();
     }
 
-    private function getPropertiesValues(string $elementUri, array $relationProperties, array $notRelationProperties): array
-    {
+    private function getPropertiesValues(
+        string $elementUri,
+        array $relationProperties,
+        array $notRelationProperties
+    ): array {
         $startNode = node()
             ->withLabels(['Resource'])
             ->withVariable('startNode')
