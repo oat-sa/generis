@@ -17,12 +17,11 @@
  *
  * Copyright (c) 2023 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  *
- * @author Gabriel Felipe Soares <gabriel.felipe.soares@taotesting.com>
  */
 
 namespace oat\generis\model\kernel\persistence\starsql\DataProvider\form;
 
-use common_persistence_GraphPersistence;
+use common_persistence_Persistence;
 use core_kernel_classes_Property;
 use oat\generis\model\data\Ontology;
 use oat\generis\model\GenerisRdf;
@@ -44,7 +43,7 @@ class FormDTOProvider implements FormDTOProviderInterface
         GenerisRdf::CLASS_GENERIS_FILE,
     ];
 
-    private common_persistence_GraphPersistence $persistence;
+    private common_persistence_Persistence $persistence;
     private RecordProcessor $recordProcessor;
 
     public function __construct(Ontology $ontology, RecordProcessor $recordProcessor)
@@ -53,7 +52,7 @@ class FormDTOProvider implements FormDTOProviderInterface
         $this->recordProcessor = $recordProcessor;
     }
 
-    public function get(string $classUri, string $topClassUri, string $elementUri, string $language): FormDTO
+    public function get(string $classUri, string $topClassUri, string $elementUri, string $language): ?FormDTO
     {
         $formData = [];
         $ranges = [];

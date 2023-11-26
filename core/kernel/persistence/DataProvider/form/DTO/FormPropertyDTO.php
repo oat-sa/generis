@@ -26,7 +26,7 @@ class FormPropertyDTO
 {
     private string $classUri;
     private string $propertyUri;
-    private string $rangeUri;
+    private ?string $rangeUri;
     private ?string $widgetUri;
     private ?string $label;
     private array $validationRule;
@@ -39,7 +39,7 @@ class FormPropertyDTO
     public function __construct(
         string $classUri,
         string $propertyUri,
-        string $rangeUri,
+        ?string $rangeUri,
         ?string $widgetUri,
         ?string $label,
         array $validationRule,
@@ -83,7 +83,7 @@ class FormPropertyDTO
         return $this->propertyUri;
     }
 
-    public function getRangeUri(): string
+    public function getRangeUri(): ?string
     {
         return $this->rangeUri;
     }

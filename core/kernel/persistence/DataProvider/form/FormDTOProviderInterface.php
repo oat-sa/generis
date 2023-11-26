@@ -17,7 +17,6 @@
  *
  * Copyright (c) 2023 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  *
- * @author Gabriel Felipe Soares <gabriel.felipe.soares@taotesting.com>
  */
 
 namespace oat\generis\model\kernel\persistence\DataProvider\form;
@@ -26,5 +25,5 @@ use oat\generis\model\kernel\persistence\DataProvider\form\DTO\FormDTO;
 
 interface FormDTOProviderInterface
 {
-    public function get(string $classUri, string $topClassUri, string $elementUri, string $language): FormDTO;
+    public function get(string $classUri, string $topClassUri, string $elementUri, string $language): ?FormDTO;
 }
