@@ -29,7 +29,7 @@ class FormDTO
 
     public function __construct(array $data)
     {
-        foreach($data as $propertyData) {
+        foreach ($data as $propertyData) {
             $this->properties[$propertyData['property']] = new FormPropertyDTO(...array_values($propertyData));
         }
     }

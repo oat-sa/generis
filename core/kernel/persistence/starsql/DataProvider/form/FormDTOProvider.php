@@ -30,6 +30,7 @@ use oat\generis\model\kernel\persistence\DataProvider\form\FormDTOProviderInterf
 use oat\generis\model\kernel\persistence\starsql\helper\RecordProcessor;
 use oat\generis\model\OntologyRdf;
 use oat\generis\model\OntologyRdfs;
+
 use function WikibaseSolutions\CypherDSL\node;
 use function WikibaseSolutions\CypherDSL\query;
 use function WikibaseSolutions\CypherDSL\relationshipTo;
@@ -105,9 +106,9 @@ class FormDTOProvider implements FormDTOProviderInterface
                             'uri' => $optionData['option'],
                             'level' => $optionData['level'],
                             'label' => $this->recordProcessor->filterRecordsByAvailableLanguage(
-                                    $optionData['label'],
-                                    $language,
-                                    $language
+                                $optionData['label'],
+                                $language,
+                                $language
                                 )[0]
                                 ?? null
                         ];
@@ -161,20 +162,28 @@ MATCH (classNode:Resource {uri: \$uri})
 OPTIONAL MATCH (propertyNode)-[:`http://www.w3.org/2000/01/rdf-schema#domain`]->(classNode)
 OPTIONAL MATCH (propertyNode)-[:`http://www.w3.org/2000/01/rdf-schema#range`]->(rangeResource)
 OPTIONAL MATCH (propertyNode)-[:`http://www.tao.lu/datatypes/WidgetDefinitions.rdf#widget`]->(widgetResource)
-RETURN distinct classNode.uri as class, propertyNode.uri as property, rangeResource.uri as range, widgetResource.uri as widget, 
-                propertyNode.`http://www.w3.org/2000/01/rdf-schema#label` as label,
-                propertyNode.`http://www.tao.lu/Ontologies/generis.rdf#validationRule` as validationRule,
-                propertyNode.`http://www.tao.lu/Ontologies/TAO.rdf#TAOGUIOrder` as guiOrder
+RETURN distinct 
+classNode.uri as class, 
+propertyNode.uri as property, 
+rangeResource.uri as range, 
+widgetResource.uri as widget, 
+propertyNode.`http://www.w3.org/2000/01/rdf-schema#label` as label,
+propertyNode.`http://www.tao.lu/Ontologies/generis.rdf#validationRule` as validationRule,
+propertyNode.`http://www.tao.lu/Ontologies/TAO.rdf#TAOGUIOrder` as guiOrder
 UNION
 MATCH (classNode:Resource {uri: \$uri})
 MATCH (classNode)-[:`http://www.w3.org/2000/01/rdf-schema#subClassOf`*]->(classAncestorNode)
 OPTIONAL MATCH (propertyNode)-[:`http://www.w3.org/2000/01/rdf-schema#domain`]->(classAncestorNode)
 OPTIONAL MATCH (propertyNode)-[:`http://www.w3.org/2000/01/rdf-schema#range`]->(rangeResource)
 OPTIONAL MATCH (propertyNode)-[:`http://www.tao.lu/datatypes/WidgetDefinitions.rdf#widget`]->(widgetResource)
-RETURN distinct classAncestorNode.uri as class, propertyNode.uri as property, rangeResource.uri as range, widgetResource.uri as widget, 
-                propertyNode.`http://www.w3.org/2000/01/rdf-schema#label` as label,
-                propertyNode.`http://www.tao.lu/Ontologies/generis.rdf#validationRule` as validationRule,
-                propertyNode.`http://www.tao.lu/Ontologies/TAO.rdf#TAOGUIOrder` as guiOrder
+RETURN distinct 
+classAncestorNode.uri as class, 
+propertyNode.uri as property, 
+rangeResource.uri as range, 
+widgetResource.uri as widget, 
+propertyNode.`http://www.w3.org/2000/01/rdf-schema#label` as label,
+propertyNode.`http://www.tao.lu/Ontologies/generis.rdf#validationRule` as validationRule,
+propertyNode.`http://www.tao.lu/Ontologies/TAO.rdf#TAOGUIOrder` as guiOrder
 CYPHER;
 
         $results = $this->persistence->run($query, ['uri' => $classUri]);
@@ -185,7 +194,8 @@ CYPHER;
     private function getOptionsData(array $ranges): array
     {
         $query = <<<CYPHER
-MATCH (subject:Resource)-[:`http://www.w3.org/1999/02/22-rdf-syntax-ns#type`]->(parent:Resource)-[:`http://www.w3.org/2000/01/rdf-schema#subClassOf`*0..]->(grandParent:Resource)
+MATCH (subject:Resource)-[:`http://www.w3.org/1999/02/22-rdf-syntax-ns#type`]
+->(parent:Resource)-[:`http://www.w3.org/2000/01/rdf-schema#subClassOf`*0..]->(grandParent:Resource)
 WHERE ((parent.uri IN \$ranges) OR (grandParent.uri IN \$ranges)) 
 RETURN distinct parent.uri as range, 
 subject.uri as option, 

@@ -127,11 +127,18 @@ class core_kernel_persistence_starsql_Resource implements core_kernel_persistenc
             }
             if (is_iterable($value)) {
                 if (isset($selectedLanguage)) {
-                    $values = array_merge($values, $this->getRecordProcessor()->filterRecordsByLanguage($value, [$selectedLanguage]));
+                    $values = array_merge(
+                        $values,
+                        $this->getRecordProcessor()->filterRecordsByLanguage($value, [$selectedLanguage])
+                    );
                 } else {
                     $values = array_merge(
                         $values,
-                        $this->getRecordProcessor()->filterRecordsByAvailableLanguage($value, $dataLanguage, $defaultLanguage)
+                        $this->getRecordProcessor()->filterRecordsByAvailableLanguage(
+                            $value,
+                            $dataLanguage,
+                            $defaultLanguage
+                        )
                     );
                 }
             } else {

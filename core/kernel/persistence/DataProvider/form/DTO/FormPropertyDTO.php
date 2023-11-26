@@ -57,7 +57,7 @@ class FormPropertyDTO
         $this->guiOrder = $guiOrder;
         $this->isList = $isList;
         $this->value = $value;
-        foreach($options as $option) {
+        foreach ($options as $option) {
             $this->options[$option['uri']] = new FormPropertyOptionDTO(...array_values($option));
         }
     }
