@@ -31,6 +31,9 @@ use oat\generis\model\kernel\persistence\starsql\helper\RecordProcessor;
 use oat\generis\model\OntologyRdf;
 use oat\generis\model\OntologyRdfs;
 
+use oat\tao\helpers\form\ValidationRuleRegistry;
+use oat\tao\model\TaoOntology;
+use WikibaseSolutions\CypherDSL\Clauses\WhereClause;
 use function WikibaseSolutions\CypherDSL\node;
 use function WikibaseSolutions\CypherDSL\query;
 use function WikibaseSolutions\CypherDSL\relationshipTo;
@@ -65,7 +68,7 @@ class FormDTOProvider implements FormDTOProviderInterface
         foreach ($propertiesData as $propertyData) {
             if (
                 $propertyData['property'] === null ||
-                ($passNextProperty && $propertyData['property'] !== 'http://www.w3.org/2000/01/rdf-schema#label')
+                ($passNextProperty && $propertyData['property'] !== OntologyRdfs::RDFS_LABEL)
             ) {
                 continue;
             }
@@ -87,6 +90,7 @@ class FormDTOProvider implements FormDTOProviderInterface
             $formData[$propertyData['property']] = $propertyData;
             $formData[$propertyData['property']]['value'] = [];
             if (
+                $propertyData['range'] !== null &&
                 !in_array($propertyData['range'], $ranges) &&
                 !in_array($propertyData['range'], self::PROPERTIES_WITHOUT_OPTIONS)
             ) {
@@ -145,64 +149,110 @@ class FormDTOProvider implements FormDTOProviderInterface
 
     private function getListRanges(): array
     {
-        $query = <<<CYPHER
-MATCH (startNode:Resource {uri: 'http://www.tao.lu/Ontologies/TAO.rdf#List'}) 
-MATCH (listRangeNode)-[:`http://www.w3.org/2000/01/rdf-schema#subClassOf`*]->(startNode) 
-RETURN listRangeNode.uri
-CYPHER;
+        $startNodeVariable = 'startNode';
+        $listRangeNodeVariable = 'listRangeNode';
+        $startNode = node()
+            ->withLabels(['Resource'])
+            ->withVariable($startNodeVariable)
+            ->withProperties(['uri' => TaoOntology::CLASS_URI_LIST]);
+        $listRangeNode = node()->withVariable($listRangeNodeVariable);
+        $descendantRelationship = relationshipTo()
+            ->addType(OntologyRdfs::RDFS_SUBCLASSOF)
+            ->withArbitraryHops();
 
-        return array_column($this->persistence->run($query)->toRecursiveArray(), 'descendantNode.uri');
+        $query = query()
+            ->match($startNode)
+            ->match($listRangeNode->relationship($descendantRelationship, node()->withVariable($startNodeVariable)))
+            ->returning($listRangeNode->property('uri'));
+
+        return array_column(
+            $this->persistence->run($query->build())->toRecursiveArray(),
+            "$listRangeNodeVariable.uri"
+        );
     }
 
     private function getPropertiesData(string $classUri): array
     {
-        $query = <<<CYPHER
-MATCH (classNode:Resource {uri: \$uri})
-OPTIONAL MATCH (propertyNode)-[:`http://www.w3.org/2000/01/rdf-schema#domain`]->(classNode)
-OPTIONAL MATCH (propertyNode)-[:`http://www.w3.org/2000/01/rdf-schema#range`]->(rangeResource)
-OPTIONAL MATCH (propertyNode)-[:`http://www.tao.lu/datatypes/WidgetDefinitions.rdf#widget`]->(widgetResource)
-RETURN distinct 
-classNode.uri as class, 
-propertyNode.uri as property, 
-rangeResource.uri as range, 
-widgetResource.uri as widget, 
-propertyNode.`http://www.w3.org/2000/01/rdf-schema#label` as label,
-propertyNode.`http://www.tao.lu/Ontologies/generis.rdf#validationRule` as validationRule,
-propertyNode.`http://www.tao.lu/Ontologies/TAO.rdf#TAOGUIOrder` as guiOrder
-UNION
-MATCH (classNode:Resource {uri: \$uri})
-MATCH (classNode)-[:`http://www.w3.org/2000/01/rdf-schema#subClassOf`*]->(classAncestorNode)
-OPTIONAL MATCH (propertyNode)-[:`http://www.w3.org/2000/01/rdf-schema#domain`]->(classAncestorNode)
-OPTIONAL MATCH (propertyNode)-[:`http://www.w3.org/2000/01/rdf-schema#range`]->(rangeResource)
-OPTIONAL MATCH (propertyNode)-[:`http://www.tao.lu/datatypes/WidgetDefinitions.rdf#widget`]->(widgetResource)
-RETURN distinct 
-classAncestorNode.uri as class, 
-propertyNode.uri as property, 
-rangeResource.uri as range, 
-widgetResource.uri as widget, 
-propertyNode.`http://www.w3.org/2000/01/rdf-schema#label` as label,
-propertyNode.`http://www.tao.lu/Ontologies/generis.rdf#validationRule` as validationRule,
-propertyNode.`http://www.tao.lu/Ontologies/TAO.rdf#TAOGUIOrder` as guiOrder
-CYPHER;
+        $classNodeVariable = 'classNode';
+        $classNode = node('Resource')->withVariable($classNodeVariable)->withProperties(['uri' => $classUri]);
+        $propertyNode = node()->withVariable('propertyNode');
+        $rangeResource = node()->withVariable('rangeResource');
+        $widgetResource = node()->withVariable('widgetResource');
+        $domainRelation = relationshipTo()->addType(OntologyRdfs::RDFS_DOMAIN);
+        $rangeRelation = relationshipTo()->addType(OntologyRdfs::RDFS_RANGE);
+        $widgetRelation = relationshipTo()->addType('http://www.tao.lu/datatypes/WidgetDefinitions.rdf#widget');
+        $classPropertiesQueryReturn =  [
+            $classNode->property('uri')->alias('class'),
+            $propertyNode->property('uri')->alias('property'),
+            $rangeResource->property('uri')->alias('range'),
+            $widgetResource->property('uri')->alias('widget'),
+            $propertyNode->property(OntologyRdfs::RDFS_LABEL)->alias('label'),
+            $propertyNode
+                ->property(ValidationRuleRegistry::PROPERTY_VALIDATION_RULE)
+                ->alias('validationRule'),
+            $propertyNode->property(TaoOntology::PROPERTY_GUI_ORDER)->alias('guiOrder'),
+        ];
 
-        $results = $this->persistence->run($query, ['uri' => $classUri]);
+        $classPropertiesQuery = query()
+            ->match($classNode)
+            ->optionalMatch($propertyNode->relationship($domainRelation, node()->withVariable($classNodeVariable)))
+            ->optionalMatch($propertyNode->relationship($rangeRelation, $rangeResource))
+            ->optionalMatch($propertyNode->relationship($widgetRelation, $widgetResource))
+            ->returning($classPropertiesQueryReturn, true);
+
+        $classAncestorNode = node()->withVariable('classAncestorNode');
+        $classAncestorRelation = relationshipTo()
+            ->addType(OntologyRdfs::RDFS_SUBCLASSOF)
+            ->withArbitraryHops();
+        $classAncestorsPropertiesQueryReturn = $classPropertiesQueryReturn;
+        $classAncestorsPropertiesQueryReturn[0] = $classAncestorNode->property('uri')->alias('class');
+
+        $classAncestorsPropertiesQuery = query()
+            ->match($classNode)
+            ->match(node()->withVariable($classNodeVariable)->relationship($classAncestorRelation, $classAncestorNode))
+            ->optionalMatch($propertyNode->relationship($domainRelation, $classAncestorNode))
+            ->optionalMatch($propertyNode->relationship($rangeRelation, $rangeResource))
+            ->optionalMatch($propertyNode->relationship($widgetRelation, $widgetResource))
+            ->returning($classAncestorsPropertiesQueryReturn, true);
+
+        $allClassesPropertiesQuery = $classPropertiesQuery->union($classAncestorsPropertiesQuery);
+
+        $results = $this->persistence->run($allClassesPropertiesQuery->build());
 
         return $results->toRecursiveArray();
     }
 
     private function getOptionsData(array $ranges): array
     {
-        $query = <<<CYPHER
-MATCH (subject:Resource)-[:`http://www.w3.org/1999/02/22-rdf-syntax-ns#type`]
-->(parent:Resource)-[:`http://www.w3.org/2000/01/rdf-schema#subClassOf`*0..]->(grandParent:Resource)
-WHERE ((parent.uri IN \$ranges) OR (grandParent.uri IN \$ranges)) 
-RETURN distinct parent.uri as range, 
-subject.uri as option, 
-subject.`http://www.tao.lu/Ontologies/TAO.rdf#level` as level,
-subject.`http://www.w3.org/2000/01/rdf-schema#label` as label
-CYPHER;
+        $subjectNode = node('Resource')->withVariable('subject');
+        $parentNode = node('Resource')->withVariable('parent');
+        $grandParentNode = node('Resource')->withVariable('grandParent');
+        $subjectParentRelation = relationshipTo()->addType(OntologyRdf::RDF_TYPE);
+        $parentGrandParentRelation = relationshipTo()
+            ->addType(OntologyRdfs::RDFS_SUBCLASSOF)
+            ->withArbitraryHops();
 
-        return $this->persistence->run($query, ['ranges' => $ranges])->toRecursiveArray();
+        $query = query()->match(
+            $subjectNode
+                ->relationship($subjectParentRelation, $parentNode)
+                ->relationship($parentGrandParentRelation,$grandParentNode)
+        )->where(
+            [
+                $parentNode->property('uri')->in($ranges),
+                $grandParentNode->property('uri')->in($ranges),
+            ],
+            WhereClause::OR
+        )->returning(
+            [
+                $parentNode->property('uri')->alias('range'),
+                $subjectNode->property('uri')->alias('option'),
+                $subjectNode->property(TaoOntology::PROPERTY_LIST_LEVEL)->alias('level'),
+                $subjectNode->property(OntologyRdfs::RDFS_LABEL)->alias('label'),
+            ],
+            true
+        );
+
+        return $this->persistence->run($query->build())->toRecursiveArray();
     }
 
     private function getPropertiesValues(
@@ -234,7 +284,7 @@ CYPHER;
             )
         );
 
-        return $this->persistence->run($query->build(), ['uri' => $elementUri])->toRecursiveArray();
+        return $this->persistence->run($query->build())->toRecursiveArray();
     }
 
     private function isPropertyRelation($uri, $range): bool
