@@ -25,5 +25,5 @@ use oat\generis\model\kernel\persistence\DataProvider\form\DTO\FormDTO;
 
 interface FormDTOProviderInterface
 {
-    public function get(string $classUri, string $topClassUri, string $elementUri, string $language): ?FormDTO;
+    public function get(string $classUri, string $topClassUri, string $elementUri, string $language): FormDTO;
 }

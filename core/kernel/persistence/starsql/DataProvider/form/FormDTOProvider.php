@@ -30,11 +30,12 @@ use oat\generis\model\kernel\persistence\DataProvider\form\FormDTOProviderInterf
 use oat\generis\model\kernel\persistence\starsql\helper\RecordProcessor;
 use oat\generis\model\OntologyRdf;
 use oat\generis\model\OntologyRdfs;
-
 use oat\tao\helpers\form\ValidationRuleRegistry;
 use oat\tao\model\TaoOntology;
 use WikibaseSolutions\CypherDSL\Clauses\WhereClause;
+
 use function WikibaseSolutions\CypherDSL\node;
+use function WikibaseSolutions\CypherDSL\parameter;
 use function WikibaseSolutions\CypherDSL\query;
 use function WikibaseSolutions\CypherDSL\relationshipTo;
 
@@ -56,7 +57,7 @@ class FormDTOProvider implements FormDTOProviderInterface
         $this->recordProcessor = $recordProcessor;
     }
 
-    public function get(string $classUri, string $topClassUri, string $elementUri, string $language): ?FormDTO
+    public function get(string $classUri, string $topClassUri, string $elementUri, string $language): FormDTO
     {
         $formData = [];
         $ranges = [];
@@ -151,10 +152,11 @@ class FormDTOProvider implements FormDTOProviderInterface
     {
         $startNodeVariable = 'startNode';
         $listRangeNodeVariable = 'listRangeNode';
+        $uriParameter = parameter();
         $startNode = node()
             ->withLabels(['Resource'])
             ->withVariable($startNodeVariable)
-            ->withProperties(['uri' => TaoOntology::CLASS_URI_LIST]);
+            ->withProperties(['uri' => $uriParameter]);
         $listRangeNode = node()->withVariable($listRangeNodeVariable);
         $descendantRelationship = relationshipTo()
             ->addType(OntologyRdfs::RDFS_SUBCLASSOF)
@@ -166,7 +168,9 @@ class FormDTOProvider implements FormDTOProviderInterface
             ->returning($listRangeNode->property('uri'));
 
         return array_column(
-            $this->persistence->run($query->build())->toRecursiveArray(),
+            $this->persistence->run($query->build(), [
+                $uriParameter->getParameter() => TaoOntology::CLASS_URI_LIST
+            ])->toRecursiveArray(),
             "$listRangeNodeVariable.uri"
         );
     }
@@ -174,7 +178,8 @@ class FormDTOProvider implements FormDTOProviderInterface
     private function getPropertiesData(string $classUri): array
     {
         $classNodeVariable = 'classNode';
-        $classNode = node('Resource')->withVariable($classNodeVariable)->withProperties(['uri' => $classUri]);
+        $uriParameter = parameter();
+        $classNode = node('Resource')->withVariable($classNodeVariable)->withProperties(['uri' => $uriParameter]);
         $propertyNode = node()->withVariable('propertyNode');
         $rangeResource = node()->withVariable('rangeResource');
         $widgetResource = node()->withVariable('widgetResource');
@@ -217,7 +222,9 @@ class FormDTOProvider implements FormDTOProviderInterface
 
         $allClassesPropertiesQuery = $classPropertiesQuery->union($classAncestorsPropertiesQuery);
 
-        $results = $this->persistence->run($allClassesPropertiesQuery->build());
+        $results = $this->persistence->run($allClassesPropertiesQuery->build(), [
+            $uriParameter->getParameter() => $classUri
+        ]);
 
         return $results->toRecursiveArray();
     }
@@ -232,14 +239,15 @@ class FormDTOProvider implements FormDTOProviderInterface
             ->addType(OntologyRdfs::RDFS_SUBCLASSOF)
             ->withArbitraryHops();
 
+        $rangesParameter = parameter();
         $query = query()->match(
             $subjectNode
                 ->relationship($subjectParentRelation, $parentNode)
-                ->relationship($parentGrandParentRelation,$grandParentNode)
+                ->relationship($parentGrandParentRelation, $grandParentNode)
         )->where(
             [
-                $parentNode->property('uri')->in($ranges),
-                $grandParentNode->property('uri')->in($ranges),
+                $parentNode->property('uri')->in($rangesParameter),
+                $grandParentNode->property('uri')->in($rangesParameter),
             ],
             WhereClause::OR
         )->returning(
@@ -252,7 +260,9 @@ class FormDTOProvider implements FormDTOProviderInterface
             true
         );
 
-        return $this->persistence->run($query->build())->toRecursiveArray();
+        return $this->persistence->run($query->build(), [
+            $rangesParameter->getParameter() => $ranges
+        ])->toRecursiveArray();
     }
 
     private function getPropertiesValues(
