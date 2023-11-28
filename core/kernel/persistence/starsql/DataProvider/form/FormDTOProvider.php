@@ -30,6 +30,7 @@ use oat\generis\model\kernel\persistence\DataProvider\form\FormDTOProviderInterf
 use oat\generis\model\kernel\persistence\starsql\helper\RecordProcessor;
 use oat\generis\model\OntologyRdf;
 use oat\generis\model\OntologyRdfs;
+use oat\oatbox\user\UserLanguageServiceInterface;
 use oat\tao\helpers\form\ValidationRuleRegistry;
 use oat\tao\model\TaoOntology;
 use WikibaseSolutions\CypherDSL\Clauses\WhereClause;
@@ -50,11 +51,16 @@ class FormDTOProvider implements FormDTOProviderInterface
 
     private common_persistence_Persistence $persistence;
     private RecordProcessor $recordProcessor;
+    private UserLanguageServiceInterface $userLanguageService;
 
-    public function __construct(Ontology $ontology, RecordProcessor $recordProcessor)
-    {
+    public function __construct(
+        Ontology $ontology,
+        RecordProcessor $recordProcessor,
+        UserLanguageServiceInterface $userLanguageService
+    ) {
         $this->persistence = $ontology->getPersistence();
         $this->recordProcessor = $recordProcessor;
+        $this->userLanguageService = $userLanguageService;
     }
 
     public function get(string $classUri, string $topClassUri, string $elementUri, string $language): FormDTO
@@ -64,6 +70,7 @@ class FormDTOProvider implements FormDTOProviderInterface
         $relationProperties = [];
         $notRelationProperties = [];
         $passNextProperty = false;
+        $defaultLanguage = $this->userLanguageService->getDefaultLanguage();
         $listRanges = $this->getListRanges();
         $propertiesData = $this->getPropertiesData($classUri);
         foreach ($propertiesData as $propertyData) {
@@ -76,7 +83,7 @@ class FormDTOProvider implements FormDTOProviderInterface
             $propertyData['label'] = $this->recordProcessor->filterRecordsByAvailableLanguage(
                 $propertyData['label'],
                 $language,
-                $language
+                $defaultLanguage
             )[0] ?? null;
             $propertyData['isList'] = in_array($propertyData['range'], $listRanges);
             $propertyData['validationRule'] = $propertyData['validationRule'] !== null ?
@@ -113,7 +120,7 @@ class FormDTOProvider implements FormDTOProviderInterface
                             'label' => $this->recordProcessor->filterRecordsByAvailableLanguage(
                                 $optionData['label'],
                                 $language,
-                                $language
+                                $defaultLanguage
                             )[0] ?? null
                         ];
                 }
@@ -135,7 +142,7 @@ class FormDTOProvider implements FormDTOProviderInterface
                         $value = $this->recordProcessor->filterRecordsByAvailableLanguage(
                             $propertyValue,
                             $language,
-                            $language
+                            $defaultLanguage
                         )[0] ?? null;
                         if ($value !== null && !in_array($value, $formData[$i]['value'])) {
                             $formData[$i]['value'][] = $value;
