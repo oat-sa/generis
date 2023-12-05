@@ -69,14 +69,19 @@ class FormDTOProvider implements FormDTOProviderInterface
         $ranges = [];
         $relationProperties = [];
         $notRelationProperties = [];
-        $passNextProperty = false;
+        $reachedTopClass = false;
         $defaultLanguage = $this->userLanguageService->getDefaultLanguage();
         $listRanges = $this->getListRanges();
         $propertiesData = $this->getPropertiesData($classUri);
         foreach ($propertiesData as $propertyData) {
             if (
                 $propertyData['property'] === null ||
-                ($passNextProperty && $propertyData['property'] !== OntologyRdfs::RDFS_LABEL)
+                (
+                    $reachedTopClass &&
+                    $propertyData['class'] !== $topClassUri &&
+                    // label should be added anyway even though it's beyond top class
+                    $propertyData['property'] !== OntologyRdfs::RDFS_LABEL
+                )
             ) {
                 continue;
             }
@@ -104,8 +109,8 @@ class FormDTOProvider implements FormDTOProviderInterface
             ) {
                 $ranges[] = $propertyData['range'];
             }
-            if ($propertyData['class'] === $topClassUri) {
-                $passNextProperty = true;
+            if (!$reachedTopClass && $propertyData['class'] === $topClassUri) {
+                $reachedTopClass = true;
             }
         }
 
