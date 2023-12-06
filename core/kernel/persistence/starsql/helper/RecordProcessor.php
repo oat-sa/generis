@@ -27,6 +27,10 @@ class RecordProcessor
 
     public function filterRecordsByLanguage($entries, $allowedLanguages): array
     {
+        if (empty($entries)) {
+            return [];
+        }
+
         $filteredValues = [];
         foreach ($entries as $entry) {
             // collect all entries with matching language or without language
@@ -43,6 +47,10 @@ class RecordProcessor
 
     public function filterRecordsByAvailableLanguage($entries, $dataLanguage, $defaultLanguage): array
     {
+        if (empty($entries)) {
+            return [];
+        }
+
         $fallbackLanguage = '';
 
         foreach ($entries as $entry) {

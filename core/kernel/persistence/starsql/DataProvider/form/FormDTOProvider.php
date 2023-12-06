@@ -117,7 +117,10 @@ class FormDTOProvider implements FormDTOProviderInterface
         $optionsData = $this->getOptionsData($ranges);
         foreach ($optionsData as $optionData) {
             foreach ($formData as $propertyUri => $propertyData) {
-                if ($propertyData['range'] === $optionData['range']) {
+                if (
+                    $propertyData['range'] === $optionData['parentRange'] ||
+                    $propertyData['range'] === $optionData['grandParentRange']
+                ) {
                     $formData[$propertyUri]['options'][$optionData['option']] =
                         [
                             'uri' => $optionData['option'],
@@ -264,7 +267,8 @@ class FormDTOProvider implements FormDTOProviderInterface
             WhereClause::OR
         )->returning(
             [
-                $parentNode->property('uri')->alias('range'),
+                $parentNode->property('uri')->alias('parentRange'),
+                $grandParentNode->property('uri')->alias('grandParentRange'),
                 $subjectNode->property('uri')->alias('option'),
                 $subjectNode->property(TaoOntology::PROPERTY_LIST_LEVEL)->alias('level'),
                 $subjectNode->property(OntologyRdfs::RDFS_LABEL)->alias('label'),

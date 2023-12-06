@@ -33,7 +33,7 @@ class FormPropertyDTO
     private bool $isList;
     private array $value;
     /** @var array<FormPropertyOptionDTO> */
-    private array $options;
+    private array $options = [];
 
     public function __construct(
         string $classUri,

@@ -24,7 +24,7 @@ namespace oat\generis\model\kernel\persistence\DataProvider\form\DTO;
 class FormDTO
 {
     /** @var array<FormPropertyDTO>  */
-    private array $properties;
+    private array $properties = [];
 
     public function __construct(array $data)
     {
