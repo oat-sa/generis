@@ -21,7 +21,7 @@
 
 use oat\generis\model\data\ModelManager;
 use oat\generis\model\data\Ontology;
-use oat\generis\model\kernel\persistence\Cache;
+use oat\generis\model\kernel\persistence\Cacheable;
 use oat\generis\model\kernel\persistence\smoothsql\install\SmoothRdsModel;
 use oat\generis\model\kernel\persistence\smoothsql\search\ComplexSearchService;
 use oat\generis\persistence\sql\SchemaCollection;
@@ -39,7 +39,7 @@ use oat\oatbox\service\ConfigurableService;
 class core_kernel_persistence_smoothsql_SmoothModel extends ConfigurableService implements
     Ontology,
     SchemaProviderInterface,
-    Cache
+    Cacheable
 {
     public const OPTION_PERSISTENCE = 'persistence';
     public const OPTION_READABLE_MODELS = 'readable';

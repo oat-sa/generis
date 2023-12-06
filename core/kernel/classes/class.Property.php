@@ -31,7 +31,7 @@ use oat\generis\model\WidgetRdf;
 use oat\generis\model\GenerisRdf;
 use oat\generis\model\OntologyRdfs;
 use oat\generis\model\resource\DependsOnPropertyCollection;
-use oat\generis\model\kernel\persistence\Cache;
+use oat\generis\model\kernel\persistence\Cacheable;
 
 /**
  * uriProperty must be a valid property otherwis return false, add this as a
@@ -504,6 +504,6 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
      */
     protected function supportCache(): bool
     {
-        return $this->getModel() instanceof Cache;
+        return $this->getModel() instanceof Cacheable;
     }
 }

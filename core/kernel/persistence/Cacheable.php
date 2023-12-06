@@ -22,7 +22,7 @@ namespace oat\generis\model\kernel\persistence;
 
 use oat\oatbox\cache\SimpleCache;
 
-interface Cache
+interface Cacheable
 {
     public function getCache(): SimpleCache;
 }

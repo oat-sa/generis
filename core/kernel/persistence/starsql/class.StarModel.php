@@ -20,13 +20,13 @@
 
 use oat\generis\model\data\ModelManager;
 use oat\generis\model\data\Ontology;
-use oat\generis\model\kernel\persistence\Cache;
+use oat\generis\model\kernel\persistence\Cacheable;
 use oat\generis\model\kernel\persistence\smoothsql\search\ComplexSearchService;
 use oat\oatbox\cache\PropertyCache;
 use oat\oatbox\cache\SimpleCache;
 use oat\oatbox\service\ConfigurableService;
 
-class core_kernel_persistence_starsql_StarModel extends ConfigurableService implements Ontology, Cache
+class core_kernel_persistence_starsql_StarModel extends ConfigurableService implements Ontology, Cacheable
 {
     public const OPTION_PERSISTENCE = 'persistence';
     public const OPTION_READABLE_MODELS = 'readable';

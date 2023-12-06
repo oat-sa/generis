@@ -20,8 +20,6 @@ final class Version202312011658572348_generis extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-        $extension = $this->getExtension();
-
         try {
             $this->getServiceManager()
                 ->get(PersistenceManager::SERVICE_ID)
@@ -36,29 +34,12 @@ final class Version202312011658572348_generis extends AbstractMigration
             ]);
         }
 
-        $confKey = 'PropertyCache';
-
-        if (!$extension->hasConfig($confKey)) {
-            $extension->setConfig($confKey, $config);
-        }
+        $this->registerService(PropertyCache::SERVICE_ID, $config);
     }
 
     public function down(
         Schema $schema
     ): void {
-        $extension = $this->getExtension();
-        $confKey = 'PropertyCache';
-
-        if ($extension->hasConfig($confKey)) {
-            $extension->unsetConfig($confKey);
-        }
-    }
-
-    private function getExtension(): Extension
-    {
-        return $this->getServiceLocator()
-            ->getContainer()
-            ->get(ExtensionsManager::SERVICE_ID)
-            ->getExtensionById('generis');
+        $this->getServiceManager()->unregister(PropertyCache::SERVICE_ID);
     }
 }
