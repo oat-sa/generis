@@ -40,6 +40,7 @@ use oat\oatbox\session\SessionService;
 use oat\oatbox\user\UserLanguageServiceInterface;
 use Prophecy\Argument;
 use Psr\Log\LoggerInterface;
+use oat\oatbox\cache\PropertyCache;
 
 trait OntologyMockTrait
 {
@@ -101,6 +102,7 @@ trait OntologyMockTrait
                 Bin2HexUriProvider::OPTION_NAMESPACE => 'http://ontology.mock/bin2hex#'
             ]),
             SimpleCache::SERVICE_ID => new NoCache(),
+            PropertyCache::SERVICE_ID => new NoCache(),
             DriverConfigurationFeeder::SERVICE_ID => new DriverConfigurationFeeder(),
             EventAggregator::SERVICE_ID => $eventAggregator
         ]);
@@ -129,7 +131,8 @@ trait OntologyMockTrait
         if (!extension_loaded('pdo_sqlite')) {
             $this->markTestSkipped('sqlite not found, tests skipped.');
         }
-        $pm = new PersistenceManager([
+
+        return new PersistenceManager([
             PersistenceManager::OPTION_PERSISTENCES => [
                 $sqlId => [
                     'driver' => 'dbal',
@@ -139,7 +142,6 @@ trait OntologyMockTrait
                 ]
             ]
         ]);
-        return $pm;
     }
 
     /**

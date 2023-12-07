@@ -21,12 +21,12 @@
 
 namespace oat\oatbox\cache;
 
-use oat\oatbox\service\ConfigurableService;
-use common_persistence_KeyValuePersistence;
-use oat\generis\persistence\PersistenceManager;
 use common_exception_NotImplemented;
+use common_persistence_KeyValuePersistence;
 use DateInterval;
 use DateTimeImmutable;
+use oat\generis\persistence\PersistenceManager;
+use oat\oatbox\service\ConfigurableService;
 
 /**
  * Caches data in a key-value store
