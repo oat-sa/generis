@@ -19,13 +19,13 @@
  *
  */
 
-namespace oat\generis\model\kernel\persistence\starsql\helper;
+namespace oat\generis\model\kernel\persistence\starsql;
 
-class RecordProcessor
+class LanguageProcessor
 {
     public const LANGUAGE_TAGGED_VALUE_PATTERN = "/^(.*)@([a-zA-Z\\-]{5,6})$/";
 
-    public function filterRecordsByLanguage($entries, $allowedLanguages): array
+    public function filterByLanguage($entries, $allowedLanguages): array
     {
         if (empty($entries)) {
             return [];
@@ -45,7 +45,7 @@ class RecordProcessor
         return $filteredValues;
     }
 
-    public function filterRecordsByAvailableLanguage($entries, $dataLanguage, $defaultLanguage): array
+    public function filterByAvailableLanguage($entries, $dataLanguage, $defaultLanguage): array
     {
         if (empty($entries)) {
             return [];

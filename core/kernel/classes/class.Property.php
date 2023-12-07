@@ -416,25 +416,15 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
      */
     public function isRelationship(): bool
     {
-        if (in_array($this->getUri(), self::RELATIONSHIP_PROPERTIES)) {
-            return true;
-        }
-
-        if ($this->getUri() === OntologyRdf::RDF_VALUE) {
-            return false;
-        }
-
-        $range = $this->getRange();
-
-        return $range
-            && !in_array(
-                $range->getUri(),
-                [
-                    OntologyRdfs::RDFS_LITERAL,
-                    GenerisRdf::CLASS_GENERIS_FILE
-                ],
-                true
+        try {
+            return self::isRelationshipBasedOnUri($this->getUri());
+        } catch (RuntimeException $e) {
+            return self::isRelationshipBasedOnRange(
+                $this->getRange() !== null ?
+                    $this->getRange()->getUri() :
+                    null
             );
+        }
     }
 
     /**
@@ -450,5 +440,31 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
         $returnValue = (bool) false;
         $returnValue = $this->getImplementation()->delete($this, $deleteReference);
         return (bool) $returnValue;
+    }
+
+    public static function isRelationshipBasedOnUri(string $uri): bool
+    {
+        if (in_array($uri, self::RELATIONSHIP_PROPERTIES)) {
+            return true;
+        }
+
+        if ($uri === OntologyRdf::RDF_VALUE) {
+            return false;
+        }
+
+        throw new RuntimeException('Unable to find if property a relation based on uri');
+    }
+
+    public static function isRelationshipBasedOnRange(?string $rangeUri): bool
+    {
+        return $rangeUri !== null
+            && !in_array(
+                $rangeUri,
+                [
+                    OntologyRdfs::RDFS_LITERAL,
+                    GenerisRdf::CLASS_GENERIS_FILE
+                ],
+                true
+            );
     }
 }

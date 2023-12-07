@@ -27,14 +27,14 @@ use oat\generis\model\data\Ontology;
 use oat\generis\model\GenerisRdf;
 use oat\generis\model\kernel\persistence\DataProvider\form\DTO\FormDTO;
 use oat\generis\model\kernel\persistence\DataProvider\form\FormDTOProviderInterface;
-use oat\generis\model\kernel\persistence\starsql\helper\RecordProcessor;
+use oat\generis\model\kernel\persistence\starsql\LanguageProcessor;
 use oat\generis\model\OntologyRdf;
 use oat\generis\model\OntologyRdfs;
+use oat\generis\model\WidgetRdf;
 use oat\oatbox\user\UserLanguageServiceInterface;
 use oat\tao\helpers\form\ValidationRuleRegistry;
 use oat\tao\model\TaoOntology;
 use WikibaseSolutions\CypherDSL\Clauses\WhereClause;
-
 use function WikibaseSolutions\CypherDSL\node;
 use function WikibaseSolutions\CypherDSL\parameter;
 use function WikibaseSolutions\CypherDSL\query;
@@ -50,42 +50,40 @@ class FormDTOProvider implements FormDTOProviderInterface
     ];
 
     private common_persistence_Persistence $persistence;
-    private RecordProcessor $recordProcessor;
+    private LanguageProcessor $languageProcessor;
     private UserLanguageServiceInterface $userLanguageService;
 
     public function __construct(
         Ontology $ontology,
-        RecordProcessor $recordProcessor,
+        LanguageProcessor $languageProcessor,
         UserLanguageServiceInterface $userLanguageService
     ) {
         $this->persistence = $ontology->getPersistence();
-        $this->recordProcessor = $recordProcessor;
+        $this->languageProcessor = $languageProcessor;
         $this->userLanguageService = $userLanguageService;
     }
 
     public function get(string $classUri, string $topClassUri, string $elementUri, string $language): FormDTO
     {
-        $formData = [];
-        $ranges = [];
-        $relationProperties = [];
-        $notRelationProperties = [];
+        $formData = $ranges = $relationProperties = $notRelationProperties = [];
         $reachedTopClass = false;
         $defaultLanguage = $this->userLanguageService->getDefaultLanguage();
         $listRanges = $this->getListRanges();
         $propertiesData = $this->getPropertiesData($classUri);
+
         foreach ($propertiesData as $propertyData) {
             if (
                 $propertyData['property'] === null ||
                 (
                     $reachedTopClass &&
                     $propertyData['class'] !== $topClassUri &&
-                    // label should be added anyway even though it's beyond top class
+                    // label should be added anyway even though it's beyond a top class
                     $propertyData['property'] !== OntologyRdfs::RDFS_LABEL
                 )
             ) {
                 continue;
             }
-            $propertyData['label'] = $this->recordProcessor->filterRecordsByAvailableLanguage(
+            $propertyData['label'] = $this->languageProcessor->filterByAvailableLanguage(
                 $propertyData['label'],
                 $language,
                 $defaultLanguage
@@ -115,8 +113,10 @@ class FormDTOProvider implements FormDTOProviderInterface
         }
 
         $optionsData = $this->getOptionsData($ranges);
-        foreach ($optionsData as $optionData) {
-            foreach ($formData as $propertyUri => $propertyData) {
+        $propertiesValues = $this->getPropertiesValues($elementUri, $relationProperties, $notRelationProperties);
+
+        foreach ($formData as $propertyUri => $propertyData) {
+            foreach ($optionsData as $optionData) {
                 if (
                     $propertyData['range'] === $optionData['parentRange'] ||
                     $propertyData['range'] === $optionData['grandParentRange']
@@ -125,36 +125,31 @@ class FormDTOProvider implements FormDTOProviderInterface
                         [
                             'uri' => $optionData['option'],
                             'level' => $optionData['level'],
-                            'label' => $this->recordProcessor->filterRecordsByAvailableLanguage(
-                                $optionData['label'],
-                                $language,
-                                $defaultLanguage
-                            )[0] ?? null
+                            'label' => $this->languageProcessor->filterByAvailableLanguage(
+                                    $optionData['label'],
+                                    $language,
+                                    $defaultLanguage
+                                )[0] ?? null
                         ];
                 }
             }
-        }
 
-        $propertiesValues = $this->getPropertiesValues($elementUri, $relationProperties, $notRelationProperties);
-        foreach ($formData as $i => $propertyData) {
-            foreach ($propertiesValues as $result) {
-                foreach ($result as $propertyId => $propertyValue) {
-                    if (!str_contains($propertyId, $propertyData['property'])) {
-                        continue;
+            foreach ($propertiesValues as $propertyId => $propertyValue) {
+                if (!str_contains($propertyId, $propertyData['property'])) {
+                    continue;
+                }
+                if (!is_array($propertyValue) && $propertyValue !== null) {
+                    if (!in_array($propertyValue, $formData[$propertyUri]['value'])) {
+                        $formData[$propertyUri]['value'][] = $propertyValue;
                     }
-                    if (!is_array($propertyValue) && $propertyValue !== null) {
-                        if (!in_array($propertyValue, $formData[$i]['value'])) {
-                            $formData[$i]['value'][] = $propertyValue;
-                        }
-                    } else {
-                        $value = $this->recordProcessor->filterRecordsByAvailableLanguage(
-                            $propertyValue,
-                            $language,
-                            $defaultLanguage
-                        )[0] ?? null;
-                        if ($value !== null && !in_array($value, $formData[$i]['value'])) {
-                            $formData[$i]['value'][] = $value;
-                        }
+                } else {
+                    $value = $this->languageProcessor->filterByAvailableLanguage(
+                        $propertyValue,
+                        $language,
+                        $defaultLanguage
+                    )[0] ?? null;
+                    if ($value !== null && !in_array($value, $formData[$propertyUri]['value'])) {
+                        $formData[$propertyUri]['value'][] = $value;
                     }
                 }
             }
@@ -200,7 +195,7 @@ class FormDTOProvider implements FormDTOProviderInterface
         $widgetResource = node()->withVariable('widgetResource');
         $domainRelation = relationshipTo()->addType(OntologyRdfs::RDFS_DOMAIN);
         $rangeRelation = relationshipTo()->addType(OntologyRdfs::RDFS_RANGE);
-        $widgetRelation = relationshipTo()->addType('http://www.tao.lu/datatypes/WidgetDefinitions.rdf#widget');
+        $widgetRelation = relationshipTo()->addType(WidgetRdf::PROPERTY_WIDGET);
         $classPropertiesQueryReturn =  [
             $classNode->property('uri')->alias('class'),
             $propertyNode->property('uri')->alias('property'),
@@ -224,8 +219,7 @@ class FormDTOProvider implements FormDTOProviderInterface
         $classAncestorRelation = relationshipTo()
             ->addType(OntologyRdfs::RDFS_SUBCLASSOF)
             ->withArbitraryHops();
-        $classAncestorsPropertiesQueryReturn = $classPropertiesQueryReturn;
-        $classAncestorsPropertiesQueryReturn[0] = $classAncestorNode->property('uri')->alias('class');
+        $classPropertiesQueryReturn[0] = $classAncestorNode->property('uri')->alias('class');
 
         $classAncestorsPropertiesQuery = query()
             ->match($classNode)
@@ -233,7 +227,7 @@ class FormDTOProvider implements FormDTOProviderInterface
             ->optionalMatch($propertyNode->relationship($domainRelation, $classAncestorNode))
             ->optionalMatch($propertyNode->relationship($rangeRelation, $rangeResource))
             ->optionalMatch($propertyNode->relationship($widgetRelation, $widgetResource))
-            ->returning($classAncestorsPropertiesQueryReturn, true);
+            ->returning($classPropertiesQueryReturn, true);
 
         $allClassesPropertiesQuery = $classPropertiesQuery->union($classAncestorsPropertiesQuery);
 
@@ -310,26 +304,15 @@ class FormDTOProvider implements FormDTOProviderInterface
             )
         );
 
-        return $this->persistence->run($query->build())->toRecursiveArray();
+        return $this->persistence->run($query->build())->toRecursiveArray()[0] ?? [];
     }
 
-    private function isPropertyRelation($uri, $range): bool
+    private function isPropertyRelation(string $uri, ?string $range): bool
     {
-        if (in_array($uri, core_kernel_classes_Property::RELATIONSHIP_PROPERTIES)) {
-            return true;
+        try {
+            return core_kernel_classes_Property::isRelationshipBasedOnUri($uri);
+        } catch (\RuntimeException $e) {
+            return core_kernel_classes_Property::isRelationshipBasedOnRange($range);
         }
-
-        if ($uri === OntologyRdf::RDF_VALUE) {
-            return false;
-        }
-
-        return !in_array(
-            $range,
-            [
-                OntologyRdfs::RDFS_LITERAL,
-                GenerisRdf::CLASS_GENERIS_FILE
-            ],
-            true
-        );
     }
 }

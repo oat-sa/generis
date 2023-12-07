@@ -20,13 +20,12 @@
 
 declare(strict_types=1);
 
-use oat\generis\model\kernel\persistence\starsql\helper\RecordProcessor;
+use oat\generis\model\kernel\persistence\starsql\LanguageProcessor;
 use oat\generis\model\OntologyRdf;
 use oat\oatbox\session\SessionService;
 use oat\oatbox\user\UserLanguageServiceInterface;
 use WikibaseSolutions\CypherDSL\Clauses\SetClause;
 use Zend\ServiceManager\ServiceLocatorInterface;
-
 use function WikibaseSolutions\CypherDSL\node;
 use function WikibaseSolutions\CypherDSL\parameter;
 use function WikibaseSolutions\CypherDSL\procedure;
@@ -129,12 +128,12 @@ class core_kernel_persistence_starsql_Resource implements core_kernel_persistenc
                 if (isset($selectedLanguage)) {
                     $values = array_merge(
                         $values,
-                        $this->getRecordProcessor()->filterRecordsByLanguage($value, [$selectedLanguage])
+                        $this->getRecordProcessor()->filterByLanguage($value, [$selectedLanguage])
                     );
                 } else {
                     $values = array_merge(
                         $values,
-                        $this->getRecordProcessor()->filterRecordsByAvailableLanguage(
+                        $this->getRecordProcessor()->filterByAvailableLanguage(
                             $value,
                             $dataLanguage,
                             $defaultLanguage
@@ -478,7 +477,7 @@ CYPHER;
                 $values = [$values];
             }
             foreach ($values as $value) {
-                preg_match(RecordProcessor::LANGUAGE_TAGGED_VALUE_PATTERN, $value, $matches);
+                preg_match(LanguageProcessor::LANGUAGE_TAGGED_VALUE_PATTERN, $value, $matches);
                 if (isset($matches[2])) {
                     $foundLanguages[] = $matches[2];
                 }
@@ -545,7 +544,7 @@ CYPHER;
                 if (is_iterable($value)) {
                     $returnValue[$key] = array_merge(
                         $returnValue[$key] ?? [],
-                        $this->getRecordProcessor()->filterRecordsByLanguage($value, [$dataLanguage, $defaultLanguage])
+                        $this->getRecordProcessor()->filterByLanguage($value, [$dataLanguage, $defaultLanguage])
                     );
                 } else {
                     $returnValue[$key][] = common_Utils::isUri($value)
@@ -609,9 +608,9 @@ CYPHER;
         return $this->getServiceLocator()->get(UserLanguageServiceInterface::SERVICE_ID)->getDefaultLanguage();
     }
 
-    protected function getRecordProcessor(): RecordProcessor
+    protected function getRecordProcessor(): LanguageProcessor
     {
-        return $this->getServiceLocator()->getContainer()->get(RecordProcessor::class);
+        return $this->getServiceLocator()->getContainer()->get(LanguageProcessor::class);
     }
 
     private function buildTriplesFromNode(core_kernel_classes_ContainerCollection $tripleCollection, $uri, $resultNode)

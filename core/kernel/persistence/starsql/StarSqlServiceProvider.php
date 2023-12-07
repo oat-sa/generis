@@ -24,7 +24,6 @@ declare(strict_types=1);
 namespace oat\generis\model\kernel\persistence\starsql;
 
 use oat\generis\model\DependencyInjection\ContainerServiceProviderInterface;
-use oat\generis\model\kernel\persistence\starsql\helper\RecordProcessor;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 /**
@@ -36,6 +35,6 @@ class StarSqlServiceProvider implements ContainerServiceProviderInterface
     {
         $services = $configurator->services();
 
-        $services->set(RecordProcessor::class, RecordProcessor::class)->public();
+        $services->set(LanguageProcessor::class, LanguageProcessor::class)->public();
     }
 }
