@@ -408,33 +408,40 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
      *
      * @return bool
      */
-    public function isRelationship(): bool
+    public function isRelationship(core_kernel_classes_Class $range = null): bool
     {
-        try {
-            return self::isRelationshipBasedOnUri($this->getUri());
-        } catch (RuntimeException $e) {
-            $model = $this->getModel();
+        if (in_array($this->getUri(), self::RELATIONSHIP_PROPERTIES)) {
+            return true;
+        }
+        if ($this->getUri() === OntologyRdf::RDF_VALUE) {
+            return false;
+        }
 
-            if ($this->supportCache() && $model->getCache()->has($this->generateIsRelationshipKey($this->getUri()))) {
-                $isRelationship = (bool)$model->getCache()->get($this->generateIsRelationshipKey($this->getUri()));
-            } else {
+        $model = $this->getModel();
+
+        if ($this->supportCache() && $model->getCache()->has($this->generateIsRelationshipKey($this->getUri()))) {
+            $isRelationship = (bool)$model->getCache()->get($this->generateIsRelationshipKey($this->getUri()));
+        } else {
+            if (empty($range)) {
                 $range = $this->getRange();
-                $isRelationship = self::isRelationshipBasedOnRange($range !== null ? $range->getUri() : null);
-
-                if ($this->supportCache()) {
-                    $this->getModel()
-                        ->getCache()
-                        ->set(
-                            $this->generateIsRelationshipKey(
-                                $this->getUri()
-                            ),
-                            $isRelationship
-                        );
-                }
             }
 
-            return $isRelationship;
+            $isRelationship = $range
+                && !in_array(
+                    $range->getUri(),
+                    [
+                        OntologyRdfs::RDFS_LITERAL,
+                        GenerisRdf::CLASS_GENERIS_FILE
+                    ],
+                    true
+                );
+
+            if ($this->supportCache()) {
+                $this->getModel()->getCache()->set($this->generateIsRelationshipKey($this->getUri()), $isRelationship);
+            }
         }
+
+        return $isRelationship;
     }
 
     /**
@@ -494,32 +501,6 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
         $this->isRelationship();
         $this->isMultiple();
         $this->isLgDependent();
-    }
-
-    public static function isRelationshipBasedOnUri(string $uri): bool
-    {
-        if (in_array($uri, self::RELATIONSHIP_PROPERTIES)) {
-            return true;
-        }
-
-        if ($uri === OntologyRdf::RDF_VALUE) {
-            return false;
-        }
-
-        throw new RuntimeException('Unable to find if property a relation based on uri');
-    }
-
-    public static function isRelationshipBasedOnRange(?string $rangeUri): bool
-    {
-        return $rangeUri !== null
-            && !in_array(
-                $rangeUri,
-                [
-                    OntologyRdfs::RDFS_LITERAL,
-                    GenerisRdf::CLASS_GENERIS_FILE
-                ],
-                true
-            );
     }
 
     protected function generateIsRelationshipKey(string $uri): string

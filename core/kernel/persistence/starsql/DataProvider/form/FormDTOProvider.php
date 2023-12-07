@@ -22,6 +22,7 @@
 namespace oat\generis\model\kernel\persistence\starsql\DataProvider\form;
 
 use common_persistence_Persistence;
+use core_kernel_classes_Class;
 use core_kernel_classes_Property;
 use oat\generis\model\data\Ontology;
 use oat\generis\model\GenerisRdf;
@@ -311,10 +312,8 @@ class FormDTOProvider implements FormDTOProviderInterface
 
     private function isPropertyRelation(string $uri, ?string $range): bool
     {
-        try {
-            return core_kernel_classes_Property::isRelationshipBasedOnUri($uri);
-        } catch (\RuntimeException $e) {
-            return core_kernel_classes_Property::isRelationshipBasedOnRange($range);
-        }
+        $property = new core_kernel_classes_Property($uri);
+
+        return $property->isRelationship($range !== null ? new core_kernel_classes_Class($range) : null);
     }
 }
