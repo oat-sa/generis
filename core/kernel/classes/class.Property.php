@@ -418,11 +418,8 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
             if ($this->supportCache() && $model->getCache()->has($this->generateIsRelationshipKey($this->getUri()))) {
                 $isRelationship = (bool)$model->getCache()->get($this->generateIsRelationshipKey($this->getUri()));
             } else {
-                $isRelationship = self::isRelationshipBasedOnRange(
-                    $this->getRange() !== null ?
-                        $this->getRange()->getUri() :
-                        null
-                );
+                $range = $this->getRange();
+                $isRelationship = self::isRelationshipBasedOnRange($range !== null ? $range->getUri() : null);
 
                 if ($this->supportCache()) {
                     $this->getModel()->getCache()->set($this->generateIsRelationshipKey($this->getUri()), $isRelationship);
