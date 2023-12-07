@@ -33,15 +33,12 @@ class core_kernel_persistence_starsql_Property extends core_kernel_persistence_s
 
     public function isLgDependent(core_kernel_classes_Resource $resource): bool
     {
-        $lgDependent = $this->getModel()->getCache()->get($resource->getUri());
-        if (is_null($lgDependent)) {
-            $lgDependentProperty = $this->getModel()->getProperty(GenerisRdf::PROPERTY_IS_LG_DEPENDENT);
-            $lgDependentResource = $resource->getOnePropertyValue($lgDependentProperty);
-            $lgDependent = !is_null($lgDependentResource)
-                && $lgDependentResource instanceof \core_kernel_classes_Resource
-                && $lgDependentResource->getUri() == GenerisRdf::GENERIS_TRUE;
-            $this->getModel()->getCache()->set($resource->getUri(), $lgDependent);
-        }
+        $lgDependentProperty = $this->getModel()->getProperty(GenerisRdf::PROPERTY_IS_LG_DEPENDENT);
+        $lgDependentResource = $resource->getOnePropertyValue($lgDependentProperty);
+        $lgDependent = !is_null($lgDependentResource)
+            && $lgDependentResource instanceof \core_kernel_classes_Resource
+            && $lgDependentResource->getUri() == GenerisRdf::GENERIS_TRUE;
+
         return (bool) $lgDependent;
     }
 
@@ -105,7 +102,6 @@ class core_kernel_persistence_starsql_Property extends core_kernel_persistence_s
 
     public function setLgDependent(core_kernel_classes_Resource $resource, $isLgDependent)
     {
-
         $lgDependentProperty = new core_kernel_classes_Property(GenerisRdf::PROPERTY_IS_LG_DEPENDENT, __METHOD__);
         $value = ((bool)$isLgDependent) ?  GenerisRdf::GENERIS_TRUE : GenerisRdf::GENERIS_FALSE ;
         $this->setPropertyValue($resource, $lgDependentProperty, $value);
