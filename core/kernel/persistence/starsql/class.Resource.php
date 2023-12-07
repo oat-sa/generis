@@ -129,12 +129,12 @@ class core_kernel_persistence_starsql_Resource implements core_kernel_persistenc
                 if (isset($selectedLanguage)) {
                     $values = array_merge(
                         $values,
-                        $this->getRecordProcessor()->filterByLanguage($value, [$selectedLanguage])
+                        $this->getLanguageProcessor()->filterByLanguage($value, [$selectedLanguage])
                     );
                 } else {
                     $values = array_merge(
                         $values,
-                        $this->getRecordProcessor()->filterByAvailableLanguage(
+                        $this->getLanguageProcessor()->filterByAvailableLanguage(
                             $value,
                             $dataLanguage,
                             $defaultLanguage
@@ -142,7 +142,7 @@ class core_kernel_persistence_starsql_Resource implements core_kernel_persistenc
                     );
                 }
             } else {
-                $values[] = $this->getRecordProcessor()->parseTranslatedValue($value);
+                $values[] = $this->getLanguageProcessor()->parseTranslatedValue($value);
             }
         }
 
@@ -545,12 +545,12 @@ CYPHER;
                 if (is_iterable($value)) {
                     $returnValue[$key] = array_merge(
                         $returnValue[$key] ?? [],
-                        $this->getRecordProcessor()->filterByLanguage($value, [$dataLanguage, $defaultLanguage])
+                        $this->getLanguageProcessor()->filterByLanguage($value, [$dataLanguage, $defaultLanguage])
                     );
                 } else {
                     $returnValue[$key][] = common_Utils::isUri($value)
                         ? $this->getModel()->getResource($value)
-                        : new core_kernel_classes_Literal($this->getRecordProcessor()->parseTranslatedValue($value));
+                        : new core_kernel_classes_Literal($this->getLanguageProcessor()->parseTranslatedValue($value));
                 }
             }
         }
@@ -609,7 +609,7 @@ CYPHER;
         return $this->getServiceLocator()->get(UserLanguageServiceInterface::SERVICE_ID)->getDefaultLanguage();
     }
 
-    protected function getRecordProcessor(): LanguageProcessor
+    protected function getLanguageProcessor(): LanguageProcessor
     {
         return $this->getServiceLocator()->getContainer()->get(LanguageProcessor::class);
     }
@@ -626,13 +626,13 @@ CYPHER;
             if (is_iterable($propValue)) {
                 foreach ($propValue as $value) {
                     $langTriple = clone $triple;
-                    $langTriple->lg = $this->getRecordProcessor()->parseTranslatedLang($value);
-                    $langTriple->object = $this->getRecordProcessor()->parseTranslatedValue($value);
+                    $langTriple->lg = $this->getLanguageProcessor()->parseTranslatedLang($value);
+                    $langTriple->object = $this->getLanguageProcessor()->parseTranslatedValue($value);
                     $tripleCollection->add($langTriple);
                 }
             } else {
-                $triple->lg = $this->getRecordProcessor()->parseTranslatedLang($propValue);
-                $triple->object = $this->getRecordProcessor()->parseTranslatedValue($propValue);
+                $triple->lg = $this->getLanguageProcessor()->parseTranslatedLang($propValue);
+                $triple->object = $this->getLanguageProcessor()->parseTranslatedValue($propValue);
                 $tripleCollection->add($triple);
             }
         }
