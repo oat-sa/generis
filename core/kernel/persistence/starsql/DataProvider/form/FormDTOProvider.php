@@ -89,8 +89,9 @@ class FormDTOProvider implements FormDTOProviderInterface
                 $defaultLanguage
             )[0] ?? null;
             $propertyData['isList'] = in_array($propertyData['range'], $listRanges);
-            $propertyData['validationRule'] = $propertyData['validationRule'] !== null ?
-                $propertyData['validationRule'] :
+            $validationRule = $propertyData['validationRule'];
+            $propertyData['validationRule'] = $validationRule !== null ?
+                (is_array($validationRule) ? $validationRule : [$validationRule]) :
                 [];
             if ($this->isPropertyRelation($propertyData['property'], $propertyData['range'])) {
                 $relationProperties[] = $propertyData['property'];
