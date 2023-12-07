@@ -35,6 +35,7 @@ use oat\oatbox\user\UserLanguageServiceInterface;
 use oat\tao\helpers\form\ValidationRuleRegistry;
 use oat\tao\model\TaoOntology;
 use WikibaseSolutions\CypherDSL\Clauses\WhereClause;
+
 use function WikibaseSolutions\CypherDSL\node;
 use function WikibaseSolutions\CypherDSL\parameter;
 use function WikibaseSolutions\CypherDSL\query;
@@ -127,10 +128,10 @@ class FormDTOProvider implements FormDTOProviderInterface
                             'uri' => $optionData['option'],
                             'level' => $optionData['level'],
                             'label' => $this->languageProcessor->filterByAvailableLanguage(
-                                    $optionData['label'],
-                                    $language,
-                                    $defaultLanguage
-                                )[0] ?? null
+                                $optionData['label'],
+                                $language,
+                                $defaultLanguage
+                            )[0] ?? null
                         ];
                 }
             }
