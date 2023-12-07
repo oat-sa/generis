@@ -302,9 +302,8 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
      */
     public function getPropertyValues(core_kernel_classes_Property $property, $options = [])
     {
-        $returnValue = [];
         $returnValue = $this->getImplementation()->getPropertyValues($this, $property, $options);
-        return (array) $returnValue;
+        return $returnValue;
     }
 
     /**
