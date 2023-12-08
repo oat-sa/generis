@@ -44,7 +44,7 @@ use oat\generis\model\kernel\persistence\Cacheable;
  */
 class core_kernel_classes_Property extends core_kernel_classes_Resource
 {
-    private const RELATIONSHIP_PROPERTIES = [
+    public const RELATIONSHIP_PROPERTIES = [
         OntologyRdf::RDF_TYPE,
         OntologyRdfs::RDFS_CLASS,
         OntologyRdfs::RDFS_RANGE,
@@ -122,6 +122,24 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
         $this->getWidget();
         $this->getRange();
         $this->getDomain();
+        $this->isLgDependent();
+    }
+
+    public function feedFromData($widget, $range, $domain)
+    {
+        $this->widget = is_string($widget) ? $this->getModel()->getResource($widget) : $widget;
+        $this->range = is_string($range) ? $this->getModel()->getClass($range) : $range;
+
+        if (is_string($domain)) {
+            $this->domain = new core_kernel_classes_ContainerCollection(new common_Object());
+            $domainValues = [$domain];
+            foreach ($domainValues as $domainValue) {
+                $this->domain->add($this->getClass($domainValue));
+            }
+        } else {
+            $this->domain = $domain;
+        }
+
         $this->isLgDependent();
     }
 
@@ -390,12 +408,11 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
      *
      * @return bool
      */
-    public function isRelationship(): bool
+    public function isRelationship(core_kernel_classes_Class $range = null): bool
     {
         if (in_array($this->getUri(), self::RELATIONSHIP_PROPERTIES)) {
             return true;
         }
-
         if ($this->getUri() === OntologyRdf::RDF_VALUE) {
             return false;
         }
@@ -405,7 +422,9 @@ class core_kernel_classes_Property extends core_kernel_classes_Resource
         if ($this->supportCache() && $model->getCache()->has($this->generateIsRelationshipKey($this->getUri()))) {
             $isRelationship = (bool)$model->getCache()->get($this->generateIsRelationshipKey($this->getUri()));
         } else {
-            $range = $this->getRange();
+            if (empty($range)) {
+                $range = $this->getRange();
+            }
 
             $isRelationship = $range
                 && !in_array(

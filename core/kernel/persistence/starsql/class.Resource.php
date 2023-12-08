@@ -20,6 +20,7 @@
 
 declare(strict_types=1);
 
+use oat\generis\model\kernel\persistence\starsql\LanguageProcessor;
 use oat\generis\model\OntologyRdf;
 use oat\oatbox\session\SessionService;
 use oat\oatbox\user\UserLanguageServiceInterface;
@@ -36,8 +37,6 @@ use function WikibaseSolutions\CypherDSL\variable;
 
 class core_kernel_persistence_starsql_Resource implements core_kernel_persistence_ResourceInterface
 {
-    private const LANGUAGE_TAGGED_VALUE_PATTERN = "/^(.*)@([a-zA-Z\\-]{5,6})$/";
-
     /**
      * @var core_kernel_persistence_starsql_StarModel
      */
@@ -128,15 +127,22 @@ class core_kernel_persistence_starsql_Resource implements core_kernel_persistenc
             }
             if (is_iterable($value)) {
                 if (isset($selectedLanguage)) {
-                    $values = array_merge($values, $this->filterRecordsByLanguage($value, [$selectedLanguage]));
+                    $values = array_merge(
+                        $values,
+                        $this->getLanguageProcessor()->filterByLanguage($value, [$selectedLanguage])
+                    );
                 } else {
                     $values = array_merge(
                         $values,
-                        $this->filterRecordsByAvailableLanguage($value, $dataLanguage, $defaultLanguage)
+                        $this->getLanguageProcessor()->filterByAvailableLanguage(
+                            $value,
+                            $dataLanguage,
+                            $defaultLanguage
+                        )
                     );
                 }
             } else {
-                $values[] = $this->parseTranslatedValue($value);
+                $values[] = $this->getLanguageProcessor()->parseTranslatedValue($value);
             }
         }
 
@@ -472,7 +478,7 @@ CYPHER;
                 $values = [$values];
             }
             foreach ($values as $value) {
-                preg_match(self::LANGUAGE_TAGGED_VALUE_PATTERN, $value, $matches);
+                preg_match(LanguageProcessor::LANGUAGE_TAGGED_VALUE_PATTERN, $value, $matches);
                 if (isset($matches[2])) {
                     $foundLanguages[] = $matches[2];
                 }
@@ -539,12 +545,12 @@ CYPHER;
                 if (is_iterable($value)) {
                     $returnValue[$key] = array_merge(
                         $returnValue[$key] ?? [],
-                        $this->filterRecordsByLanguage($value, [$dataLanguage, $defaultLanguage])
+                        $this->getLanguageProcessor()->filterByLanguage($value, [$dataLanguage, $defaultLanguage])
                     );
                 } else {
                     $returnValue[$key][] = common_Utils::isUri($value)
                         ? $this->getModel()->getResource($value)
-                        : new core_kernel_classes_Literal($this->parseTranslatedValue($value));
+                        : new core_kernel_classes_Literal($this->getLanguageProcessor()->parseTranslatedValue($value));
                 }
             }
         }
@@ -603,61 +609,9 @@ CYPHER;
         return $this->getServiceLocator()->get(UserLanguageServiceInterface::SERVICE_ID)->getDefaultLanguage();
     }
 
-    private function filterRecordsByLanguage($entries, $allowedLanguages): array
+    protected function getLanguageProcessor(): LanguageProcessor
     {
-        $filteredValues = [];
-        foreach ($entries as $entry) {
-            // collect all entries with matching language or without language
-            $matchSuccess = preg_match(self::LANGUAGE_TAGGED_VALUE_PATTERN, $entry, $matches);
-            if (!$matchSuccess) {
-                $filteredValues[] = $entry;
-            } elseif (isset($matches[2]) && in_array($matches[2], $allowedLanguages)) {
-                $filteredValues[] = $matches[1];
-            }
-        }
-
-        return $filteredValues;
-    }
-
-    private function filterRecordsByAvailableLanguage($entries, $dataLanguage, $defaultLanguage): array
-    {
-        $fallbackLanguage = '';
-
-        foreach ($entries as $entry) {
-            preg_match(self::LANGUAGE_TAGGED_VALUE_PATTERN, $entry, $matches);
-            $entryLang = $matches[2] ?? $fallbackLanguage;
-            $sortedResults[$entryLang][] = $matches[1] ?? $entry;
-        }
-
-        $languageOrderedEntries = [
-            $dataLanguage,
-            $defaultLanguage,
-            $fallbackLanguage,
-        ];
-
-        $returnValue = [];
-        foreach ($languageOrderedEntries as $language) {
-            if (isset($sortedResults[$language])) {
-                $returnValue = $sortedResults[$language];
-                break;
-            }
-        }
-
-        return (array) $returnValue;
-    }
-
-    private function parseTranslatedValue($value): string
-    {
-        preg_match(self::LANGUAGE_TAGGED_VALUE_PATTERN, (string)$value, $matches);
-
-        return $matches[1] ?? (string) $value;
-    }
-
-    private function parseTranslatedLang($value): string
-    {
-        preg_match(self::LANGUAGE_TAGGED_VALUE_PATTERN, (string)$value, $matches);
-
-        return $matches[2] ?? '';
+        return $this->getServiceLocator()->getContainer()->get(LanguageProcessor::class);
     }
 
     private function buildTriplesFromNode(core_kernel_classes_ContainerCollection $tripleCollection, $uri, $resultNode)
@@ -672,13 +626,13 @@ CYPHER;
             if (is_iterable($propValue)) {
                 foreach ($propValue as $value) {
                     $langTriple = clone $triple;
-                    $langTriple->lg = $this->parseTranslatedLang($value);
-                    $langTriple->object = $this->parseTranslatedValue($value);
+                    $langTriple->lg = $this->getLanguageProcessor()->parseTranslatedLang($value);
+                    $langTriple->object = $this->getLanguageProcessor()->parseTranslatedValue($value);
                     $tripleCollection->add($langTriple);
                 }
             } else {
-                $triple->lg = $this->parseTranslatedLang($propValue);
-                $triple->object = $this->parseTranslatedValue($propValue);
+                $triple->lg = $this->getLanguageProcessor()->parseTranslatedLang($propValue);
+                $triple->object = $this->getLanguageProcessor()->parseTranslatedValue($propValue);
                 $tripleCollection->add($triple);
             }
         }
