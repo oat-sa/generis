@@ -315,30 +315,25 @@ class QuerySerializer implements QuerySerialyserInterface
 
     protected function buildReturn(Node $subject): void
     {
-        $this->returnStatements[] = $subject->property('uri');
+        $this->returnStatements[] = Query::rawExpression(
+            sprintf('DISTINCT %s', $subject->getVariable()->toQuery())
+        );
     }
 
     protected function buildOrderCondition(Node $subject): void
     {
         $sortCriteria = $this->criteriaList->getSort();
-        $queryOptions = $this->criteriaList->getOptions();
-        $isDistinct = $queryOptions['distinct'] ?? false;
 
         $sort = [];
-        if ($this->criteriaList->getRandom() && !$isDistinct) {
-            $this->returnStatements[] = Procedure::raw('rand')->alias('rnd');
-            $sort[] = '`rnd`';
-        } else {
-            foreach ($sortCriteria as $field => $order) {
-                $predicate = $subject->property($field);
+        foreach ($sortCriteria as $field => $order) {
+            $predicate = $subject->property($field);
 
-                $orderProperty = ModelManager::getModel()->getProperty($field);
-                if ($orderProperty->isLgDependent()) {
-                    $predicate = $this->buildLanguagePattern($predicate);
-                }
-
-                $sort[] = $predicate->toQuery() . ((strtolower($order) === 'desc') ? ' DESCENDING' : '');
+            $orderProperty = ModelManager::getModel()->getProperty($field);
+            if ($orderProperty->isLgDependent()) {
+                $predicate = $this->buildLanguagePattern($predicate);
             }
+
+            $sort[] = $predicate->toQuery() . ((strtolower($order) === 'desc') ? ' DESCENDING' : '');
         }
 
         if (!empty($sort)) {
