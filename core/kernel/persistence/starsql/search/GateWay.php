@@ -137,7 +137,7 @@ class GateWay extends TaoSearchGateWay
             if (!$object) {
                 continue;
             }
-            $returnValue[] = \common_Utils::toResource($object);
+            $returnValue[] = \common_Utils::toResource($object->getProperty('uri'));
         }
         return $returnValue;
     }
