@@ -4,7 +4,7 @@ namespace oat\generis\Helper;
 
 use Iterator;
 
-class PropertyCaches
+class PropertyCache
 {
     /**
      * Clear property cached data
