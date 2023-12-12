@@ -2,7 +2,9 @@
 
 namespace oat\generis\Helper;
 
-class PropertyCache
+use Iterator;
+
+class PropertyCaches
 {
     /**
      * Clear property cached data
