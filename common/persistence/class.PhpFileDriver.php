@@ -260,14 +260,14 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
 
     /**
      * Create directory and suppress warning message
-     * @param $path
+     * @param string $path
      * @param int $mode
      * @return bool
      */
     private function makeDirectory(string $path, int $mode)
     {
-        if (is_dir($path) || @mkdir($path, $mode, true)) {
-            return true;
+        if (!is_dir($path)) {
+            return @mkdir($path, $mode, true);
         }
 
         if (is_dir($path)) {
