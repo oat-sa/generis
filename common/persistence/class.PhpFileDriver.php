@@ -266,8 +266,12 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
      */
     private function makeDirectory(string $path, int $mode)
     {
-        if (!is_dir($path)) {
-            return @mkdir($path, $mode, true);
+        if (is_dir($path)) {
+            return true;
+        }
+        $created = @mkdir($path, $mode, true);
+        if ($created) {
+            return true;
         }
 
         if (is_dir($path)) {
