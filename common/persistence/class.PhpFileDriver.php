@@ -267,20 +267,20 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
     private function makeDirectory(string $path, int $mode)
     {
         if (!file_exists($path)) {
-            @mkdir($path, $mode, true);
-        }
-
-        if (is_dir($path)) {
-            \common_Logger::w(sprintf('Directory already exists. Path: \'%s\'', $path));
-        } elseif (is_file($path)) {
-            \common_Logger::w(
-                sprintf(
-                    'Directory was not created. File with the same name already exists. Path: \'%s\'',
-                    $path
-                )
-            );
+            return @mkdir($path, $mode, true);
         } else {
-            \common_Logger::w(sprintf('Directory was not created. Path: \'%s\'', $path));
+            if (is_dir($path)) {
+                \common_Logger::w(sprintf('Directory already exists. Path: \'%s\'', $path));
+            } elseif (is_file($path)) {
+                \common_Logger::w(
+                    sprintf(
+                        'Directory was not created. File with the same name already exists. Path: \'%s\'',
+                        $path
+                    )
+                );
+            } else {
+                \common_Logger::w(sprintf('Directory was not created. Path: \'%s\'', $path));
+            }
         }
 
         return false;
