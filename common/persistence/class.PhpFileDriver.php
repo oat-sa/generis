@@ -270,7 +270,8 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
                 $message = sprintf('Directory already exists. Path: "%s"', $path);
             } elseif (is_file($path)) {
                 $message = sprintf(
-                    'Directory was not created. File with the same name already exists. Path: "%s"', $path
+                    'Directory was not created. File with the same name already exists. Path: "%s"',
+                    $path
                 );
             } else {
                 $message = sprintf('Directory was not created. Path: "%s"', $path);
