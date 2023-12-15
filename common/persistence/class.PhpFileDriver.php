@@ -262,27 +262,25 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
      * Create directory and suppress warning message
      * @param string $path
      * @param int $mode
-     * @return bool
      */
-    private function makeDirectory(string $path, int $mode)
+    private function makeDirectory(string $path, int $mode): void
     {
         if (file_exists($path)) {
             if (is_dir($path)) {
-                \common_Logger::w(sprintf('Directory already exists. Path: \'%s\'', $path));
+                $message = sprintf('Directory already exists. Path: "%s"', $path);
             } elseif (is_file($path)) {
-                \common_Logger::w(
-                    sprintf(
-                        'Directory was not created. File with the same name already exists. Path: \'%s\'',
-                        $path
-                    )
+                $message = sprintf(
+                    'Directory was not created. File with the same name already exists. Path: "%s"', $path
                 );
             } else {
-                \common_Logger::w(sprintf('Directory was not created. Path: \'%s\'', $path));
+                $message = sprintf('Directory was not created. Path: "%s"', $path);
             }
-            return false;
+            \common_Logger::i($message);
+
+            return;
         }
 
-        return @mkdir($path, $mode, true);
+        @mkdir($path, $mode, true);
     }
 
     /**
