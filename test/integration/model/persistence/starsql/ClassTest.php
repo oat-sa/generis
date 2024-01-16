@@ -345,6 +345,54 @@ class ClassTest extends GenerisPhpUnitTestRunner
             'incorrectLabel' => 'test case instance with special ymbols',
             'searchCriterion' => 'w\_th \%pecial \%ymbols',
         ];
+
+        yield 'regexp plus symbols' => [
+            'correctLabel' => 'application/qti+xml',
+            'incorrectLabel' => 'application/qtiiiiixml',
+            'searchCriterion' => 'application/qti+xml',
+        ];
+
+        yield 'regexp question mark symbols' => [
+            'correctLabel' => 'test case instance with question?',
+            'incorrectLabel' => 'test case instance with question!',
+            'searchCriterion' => '*question?*',
+        ];
+
+        yield 'regexp square brackets symbols' => [
+            'correctLabel' => 'test case instance with [abc]',
+            'incorrectLabel' => 'test case instance with c',
+            'searchCriterion' => '*with [abc]*',
+        ];
+
+        yield 'regexp round brackets symbols' => [
+            'correctLabel' => 'test case instance with (brackets)',
+            'incorrectLabel' => 'test case instance with brackets',
+            'searchCriterion' => '*with (brackets)*',
+        ];
+
+        yield 'regexp curly brackets symbols' => [
+            'correctLabel' => 'test case instance with{1,2}',
+            'incorrectLabel' => 'test case instance withh',
+            'searchCriterion' => '*with{1,2}*',
+        ];
+
+        yield 'regexp dollar symbols' => [
+            'correctLabel' => 'test case instance with$',
+            'incorrectLabel' => 'test case instance with',
+            'searchCriterion' => '*with$',
+        ];
+
+        yield 'regexp caret symbols' => [
+            'correctLabel' => '^test case instance with',
+            'incorrectLabel' => 'test case instance with',
+            'searchCriterion' => '^test*',
+        ];
+
+        yield 'regexp pipe symbols' => [
+            'correctLabel' => 'test case instance with|pipe',
+            'incorrectLabel' => 'test case instance with',
+            'searchCriterion' => '*with|pipe*',
+        ];
     }
 
     /**
