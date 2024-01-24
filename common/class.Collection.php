@@ -88,7 +88,7 @@ class common_Collection extends common_Object implements IteratorAggregate, Coun
      * @author Lionel Lecaque <lionel.lecaque@tudor.lu>
      * @return int
      */
-    public function count()
+    public function count(): int
     {
         $returnValue = (int) 0;
 
@@ -238,9 +238,8 @@ class common_Collection extends common_Object implements IteratorAggregate, Coun
      * @author Lionel Lecaque <lionel.lecaque@tudor.lu>
      * @return mixed
      */
-    public function getIterator()
+    public function getIterator(): ArrayIterator
     {
-
         return new ArrayIterator($this->sequence);
     }
 
