@@ -49,7 +49,10 @@ class Bin2HexUriProvider extends ConfigurableService implements UriProvider
      */
     public function provide()
     {
-        return $this->getOption(self::OPTION_NAMESPACE) . uniqid('i') . getmypid()
-            . bin2hex(openssl_random_pseudo_bytes(8));
+        $uniqIdAndPid = uniqid('i') . getmypid();
+        $bytesLength = floor((36 - strlen($uniqIdAndPid)) / 2);
+
+        return $this->getOption(self::OPTION_NAMESPACE) . $uniqIdAndPid
+            . bin2hex(openssl_random_pseudo_bytes($bytesLength));
     }
 }
