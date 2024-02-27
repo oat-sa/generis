@@ -543,22 +543,28 @@ CYPHER;
         foreach ($result->get('resource')->getProperties() as $key => $value) {
             if (in_array($key, $propertyUris)) {
                 if (is_iterable($value)) {
-                    $returnValue[$key] = array_merge(
-                        $returnValue[$key] ?? [],
-                        $this->getLanguageProcessor()->filterByLanguage($value, [$dataLanguage, $defaultLanguage])
-                    );
+                    $returnValue[$key] =
+                        array_map(
+                            fn($value) => $this->formatValue($value),
+                            array_merge(
+                                $returnValue[$key] ?? [],
+                                $this->getLanguageProcessor()->filterByLanguage(
+                                    $value,
+                                    [$dataLanguage, $defaultLanguage]
+                                )
+                            )
+                        );
                 } else {
-                    $returnValue[$key][] = common_Utils::isUri($value)
-                        ? $this->getModel()->getResource($value)
-                        : new core_kernel_classes_Literal($this->getLanguageProcessor()->parseTranslatedValue($value));
+                    $returnValue[$key][] = $this->formatValue(
+                        $value,
+                        [$this->getLanguageProcessor(), 'parseTranslatedValue']
+                    );
                 }
             }
         }
         foreach ($result->get('relationships') as $relationship) {
             if (in_array($relationship['relationship'], $propertyUris)) {
-                $returnValue[$relationship['relationship']][] = common_Utils::isUri($relationship['relatedResourceUri'])
-                    ? $this->getModel()->getResource($relationship['relatedResourceUri'])
-                    : new core_kernel_classes_Literal($relationship['relatedResourceUri']);
+                $returnValue[$relationship['relationship']][] = $this->formatValue($relationship['relatedResourceUri']);
             }
         }
 
@@ -638,5 +644,16 @@ CYPHER;
         }
 
         return $tripleCollection;
+    }
+
+    private function formatValue($value, array $literalValueProcessingCallback = [])
+    {
+        return common_Utils::isUri($value) ?
+            $this->getModel()->getResource($value)
+            : new core_kernel_classes_Literal(
+                !empty($literalValueProcessingCallback)
+                    ? call_user_func($literalValueProcessingCallback, $value)
+                    : $value
+            );
     }
 }
