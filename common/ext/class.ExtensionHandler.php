@@ -97,6 +97,36 @@ abstract class common_ext_ExtensionHandler
         }
     }
 
+    /**
+     * Run Extension Service
+     *
+     * @param string $service
+     * @param string $method
+     * @param array $arguments
+     *
+     * @return void
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
+     * @throws common_ext_InstallationException
+     */
+    protected function runExtensionService(string $service, string $method, array $arguments = []): void
+    {
+        $this->log(
+            'd',
+            sprintf('Running custom extension service "%s" for extension ', $this->getExtension()->getId())
+        );
+
+        if ($this->getServiceManager()->getContainer()->has($service)) {
+            $this->getServiceManager()->getContainer()->get($service)->$method(...$arguments);
+        } else {
+            $error = new common_ext_InstallationException(sprintf('Unable to run install service "%s"', $service));
+            $error->setExtensionId($this->getExtension()->getId());
+
+            throw $error;
+        }
+    }
+
     protected function getServiceManager()
     {
         return ServiceManager::getServiceManager();

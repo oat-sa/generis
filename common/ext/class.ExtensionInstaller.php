@@ -22,7 +22,6 @@
  *
  */
 
-use oat\generis\model\data\ModelManager;
 use oat\oatbox\service\ServiceFactoryInterface;
 use oat\oatbox\service\ServiceManager;
 use oat\oatbox\event\EventManager;
@@ -103,7 +102,7 @@ class common_ext_ExtensionInstaller extends common_ext_ExtensionHandler
         $this->installCustomScript();
         $this->log('d', 'Done installing custom script for extension ' . $this->extension->getId());
 
-        if ($this->getLocalData() == true) {
+        if ($this->getLocalData()) {
             $this->log('d', 'Installing local data for extension ' . $this->extension->getId());
             $this->installLocalData();
             $this->log('d', 'Done installing local data for extension ' . $this->extension->getId());
@@ -134,16 +133,7 @@ class common_ext_ExtensionInstaller extends common_ext_ExtensionHandler
                 if (!$fileinfo->isDot() && strpos($fileinfo->getFilename(), '.conf.php') > 0) {
                     $confKey = substr($fileinfo->getFilename(), 0, -strlen('.conf.php'));
                     if (! $this->extension->hasConfig($confKey)) {
-                        $config = include $fileinfo->getPathname();
-                        if ($config instanceof ServiceFactoryInterface) {
-                            $config = $config($this->getServiceManager());
-                        }
-                        if ($config instanceof ConfigurableService) {
-                            $this->getServiceManager()->register($this->extension->getId() . '/' . $confKey, $config);
-                        } else {
-                            $this->extension->setConfig($confKey, $config);
-                        }
-                        $this->extension->setConfig($confKey, $config);
+                        $this->loadExtensionConfig($fileinfo, $confKey);
                     }
                 }
             }
@@ -195,6 +185,13 @@ class common_ext_ExtensionInstaller extends common_ext_ExtensionHandler
         foreach ($this->extension->getManifest()->getInstallPHPFiles() as $script) {
             if (is_string($script)) {
                 $this->runExtensionScript($script);
+            } elseif (
+                is_array($script)
+                && array_key_exists('service', $script)
+                && array_key_exists('method', $script)
+            ) {
+                $parameters = $script['arguments'] && is_array($script['arguments']) ? $script['arguments'] : [];
+                $this->runExtensionService($script['service'], $script['method'], $parameters);
             } elseif (
                 is_array($script)
                 && isset($script[0])
@@ -291,6 +288,29 @@ class common_ext_ExtensionInstaller extends common_ext_ExtensionHandler
      */
     public function extendedInstall()
     {
-        return;
+    }
+
+    /**
+     * @param DirectoryIterator $fileinfo
+     * @param string $confKey
+     * @return void
+     * @throws common_Exception
+     * @throws common_exception_Error
+     */
+    protected function loadExtensionConfig(DirectoryIterator $fileinfo, string $confKey): void
+    {
+        $config = require_once $fileinfo->getPathname();
+
+        if ($config instanceof ServiceFactoryInterface) {
+            $config = $config($this->getServiceManager());
+        }
+
+        if ($config instanceof ConfigurableService) {
+            $this->getServiceManager()->register($this->extension->getId() . '/' . $confKey, $config);
+        } else {
+            $this->extension->setConfig($confKey, $config);
+        }
+
+        $this->extension->setConfig($confKey, $config);
     }
 }

@@ -76,6 +76,10 @@ define('VENDOR_PATH', ROOT_PATH . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEP
 define('EXTENSION_PATH', ROOT_PATH);
 define('FILES_PATH', '');
 define('GENERIS_CACHE_PATH', FILES_PATH . 'generis' . DIRECTORY_SEPARATOR . 'cache' . DIRECTORY_SEPARATOR);
+define(
+    'GENERIS_CACHE_INSTALL_DI_PATH',
+    FILES_PATH . 'generis' . DIRECTORY_SEPARATOR . 'cache_container' . DIRECTORY_SEPARATOR
+);
 
 #path to read configs from
 define('CONFIG_PATH', ROOT_PATH . 'config/');

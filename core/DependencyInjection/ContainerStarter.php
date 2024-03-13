@@ -46,7 +46,7 @@ final class ContainerStarter
         string $cachePath = null
     ) {
         if (!$cachePath) {
-            $cachePath = defined('GENERIS_CACHE_PATH') ? GENERIS_CACHE_PATH : null;
+            $cachePath = defined('GENERIS_CACHE_INSTALL_DI_PATH') ? GENERIS_CACHE_INSTALL_DI_PATH : null;
         }
 
         if (!$cachePath) {
