@@ -207,4 +207,9 @@ class common_Utils
 
         return (string) $returnValue;
     }
+
+    public static function getUnitId(string $uri): string
+    {
+        return substr($uri, strpos($uri, '#') + 1);
+    }
 }
