@@ -563,6 +563,7 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
         $limit = (isset($options['limit']) === false) ? 0 : $options['limit'];
         $order = (isset($options['order']) === false) ? '' : $options['order'];
         $orderdir = (isset($options['orderdir']) === false) ? 'ASC' : $options['orderdir'];
+        $onlyClass = (isset($options['onlyClass']) === false) ? false : $options['onlyClass'];
 
         if ($this->getServiceLocator()->has(ComplexSearchService::SERVICE_ID)) {
             $search = $this->getModel()->getSearchInterface();
@@ -576,7 +577,8 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
                 $offset,
                 $limit,
                 $order,
-                $orderdir
+                $orderdir,
+                $onlyClass
             );
         } else {
             $query = core_kernel_persistence_smoothsql_Utils::buildFilterQuery(

@@ -238,7 +238,8 @@ class ComplexSearchService extends ConfigurableService
         $offset = 0,
         $limit = 0,
         $order = '',
-        $orderDir = 'ASC'
+        $orderDir = 'ASC',
+        $onlyClass = false
     ) {
         $query = $this->getGateway()->query()->setLimit($limit)->setOffset($offset);
 
@@ -248,9 +249,15 @@ class ComplexSearchService extends ConfigurableService
 
         $this->setLanguage($query, $lang);
 
-        $criteria = $query->newQuery()
+        if ($onlyClass === true) {
+            $criteria = $query->newQuery()
+                ->add('http://www.w3.org/2000/01/rdf-schema#subClassOf')
+                ->in($classUri);
+        } else {
+            $criteria = $query->newQuery()
                 ->add('http://www.w3.org/1999/02/22-rdf-syntax-ns#type')
                 ->in($classUri);
+        }
 
         $query->setCriteria($criteria);
         $count     = 0;
