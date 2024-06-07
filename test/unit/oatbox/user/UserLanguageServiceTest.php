@@ -25,6 +25,7 @@ use oat\oatbox\user\UserLanguageService;
 use oat\oatbox\user\User;
 use oat\generis\model\GenerisRdf;
 use oat\generis\test\TestCase;
+use oat\tao\helpers\Layout;
 
 /**
  * class UserLanguageServiceTest
@@ -51,6 +52,11 @@ class UserLanguageServiceTest extends TestCase
      */
     public function testGetInterfaceLanguage(string $expected, User $user, array $serviceParams): void
     {
+        $layout = $this->createMock(Layout::class);
+
+        $layout->method('isSolarDesignEnabled')
+            ->willReturn(false);
+
         $service = $this->getService($serviceParams);
 
         $this->assertEquals($expected, $service->getInterfaceLanguage($user));
