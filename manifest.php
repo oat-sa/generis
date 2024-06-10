@@ -29,7 +29,6 @@ use oat\oatbox\log\ServiceProvider\LogServiceProvider;
 use oat\generis\model\resource\ResourceServiceProvider;
 use oat\generis\scripts\install\SetupDefaultKvPersistence;
 use oat\generis\model\DependencyInjection\ContainerServiceProvider;
-use oat\oatbox\user\UserServiceProvider;
 
 /**
  * @author CRP Henri Tudor - TAO Team - {@link http://www.tao.lu}
@@ -63,7 +62,6 @@ return [
         LogServiceProvider::class,
         ResourceServiceProvider::class,
         PersistenceServiceProvider::class,
-        StarSqlServiceProvider::class,
-        UserServiceProvider::class
+        StarSqlServiceProvider::class
     ],
 ];
