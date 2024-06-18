@@ -267,7 +267,11 @@ class ServiceManager implements ServiceLocatorInterface, ContainerInterface
 
     public function rebuildContainer(): void
     {
+        // if container was already built on same request, it has to be restarted before rebuild
+        // to avoid fatal error of compiled container modification
+        $this->containerStarter = null;
         $this->getContainerStarter()->getContainerBuilder()->forceBuild();
+        // after container rebuild this cached starter needs a reset, to avoid using container already cached in memory
         $this->containerStarter = null;
     }
 
