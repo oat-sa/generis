@@ -105,7 +105,7 @@ class ConfigurationTest extends TestCase
         $this->assertTrue($php->isOptional());
 
         // max & min test.
-        $php = new \common_configuration_PHPRuntime('7.4', '8.1.x');
+        $php = new \common_configuration_PHPRuntime('7.4', '8.3.x');
         $report = $php->check();
 
         $this->assertEquals($report->getStatus(), \common_configuration_Report::VALID);
@@ -175,7 +175,7 @@ class ConfigurationTest extends TestCase
         $report = $ext->check();
         $this->assertEquals($report->getStatus(), \common_configuration_Report::VALID);
 
-        $ext->setMax('8.2');
+        $ext->setMax('8.3.x');
         $report = $ext->check();
         $this->assertEquals($report->getStatus(), \common_configuration_Report::VALID);
 
@@ -322,7 +322,7 @@ class ConfigurationTest extends TestCase
 
     public function testComponentFactory()
     {
-        $component = \common_configuration_ComponentFactory::buildPHPRuntime('5.0', '8.1.x', true);
+        $component = \common_configuration_ComponentFactory::buildPHPRuntime('5.0', '8.3.x', true);
         $this->assertInstanceOf(\common_configuration_PHPRuntime::class, $component);
         $this->assertEquals($component->getMin(), '5.0');
         // 5.5.x will be replaced internally
@@ -365,7 +365,7 @@ class ConfigurationTest extends TestCase
         $this->assertInstanceOf(\common_configuration_Report::class, $report);
         $this->assertEquals($report->getStatus(), \common_configuration_Report::VALID);
 
-        $array = ['type' => 'PHPRuntime', 'value' => ['min' => '5.0', 'max' => '8.1.x', 'optional' => true]];
+        $array = ['type' => 'PHPRuntime', 'value' => ['min' => '5.0', 'max' => '8.3.x', 'optional' => true]];
         $component = \common_configuration_ComponentFactory::buildFromArray($array);
         $this->assertInstanceOf(\common_configuration_PHPRuntime::class, $component);
         $this->assertEquals($component->getMin(), '5.0');
