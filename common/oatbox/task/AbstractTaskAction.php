@@ -56,9 +56,9 @@ abstract class AbstractTaskAction extends AbstractAction
 
         $stream = fopen($path, 'r+');
         $filesystem->writeStream($filename, $stream);
-        
+
         if (is_resource($stream)) {
-            fclose($stream);   
+            fclose($stream);
         } else {
             $this->logWarning(
                 sprintf(
