@@ -144,50 +144,6 @@ class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDrive
         return $result;
     }
 
-    protected function getPrefix(array $params): ?string
-    {
-        $prefix = null;
-
-        if (!empty($this->params['prefix'])) {
-            $prefix = $this->params['prefix'];
-        }
-
-        return $prefix;
-    }
-
-    /**
-     * @param string|int $key
-     * @return string|int
-     */
-    protected function prefixKey($key)
-    {
-        $prefix = $this->getPrefix($this->params);
-
-        if ($prefix === null) {
-            return $key;
-        }
-
-        return $prefix . ($this->params['prefixSeparator'] ?? self::DEFAULT_PREFIX_SEPARATOR) . $key;
-    }
-
-    protected function prefixKeys(array $keys, bool $keyValueMode = false): array
-    {
-        if ($this->getPrefix($this->params) !== null) {
-            $prefixedKeys = [];
-            foreach (array_values($keys) as $i => $element) {
-                if ($keyValueMode) {
-                    $prefixedKeys[] = $i % 2 == 0 ? $this->prefixKey($element) : $element;
-                } else {
-                    $prefixedKeys[] = $this->prefixKey($element);
-                }
-            }
-
-            return $prefixedKeys;
-        }
-
-        return $keys;
-    }
-
     /**
      * (non-PHPdoc)
      * @see common_persistence_KvDriver::set()
@@ -257,7 +213,7 @@ class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDrive
     //Time complexity: O(N)
     public function keys($pattern)
     {
-        return $this->callWithRetry('keys', [$pattern]);
+        return $this->callWithRetry('keys', [$this->prefixKey($pattern)]);
     }
 
     //Time complexity: O(1)
@@ -283,9 +239,9 @@ class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDrive
 
         while ($attempt <= $retry) {
             try {
-                return $this->connection->scan($iterator, $pattern, $count);
+                return $this->connection->scan($iterator, $this->prefixKey($pattern), $count);
             } catch (Exception $exception) {
-                $this->reconnectOnException($exception, $method, $attempt, $retry);
+                $this->reconnectOnException($exception, 'scan', $attempt, $retry);
             }
 
             $attempt++;
@@ -328,6 +284,50 @@ class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDrive
     public function getConnection()
     {
         return $this->connection;
+    }
+
+    protected function getPrefix(array $params): ?string
+    {
+        $prefix = null;
+
+        if (!empty($this->params['prefix'])) {
+            $prefix = $this->params['prefix'];
+        }
+
+        return $prefix;
+    }
+
+    /**
+     * @param string|int|null $key
+     * @return string|int|null
+     */
+    private function prefixKey($key)
+    {
+        $prefix = $this->getPrefix($this->params);
+
+        if ($prefix === null) {
+            return $key;
+        }
+
+        return $prefix . ($this->params['prefixSeparator'] ?? self::DEFAULT_PREFIX_SEPARATOR) . $key;
+    }
+
+    private function prefixKeys(array $keys, bool $keyValueMode = false): array
+    {
+        if ($this->getPrefix($this->params) !== null) {
+            $prefixedKeys = [];
+            foreach (array_values($keys) as $i => $element) {
+                if ($keyValueMode) {
+                    $prefixedKeys[] = $i % 2 == 0 ? $this->prefixKey($element) : $element;
+                } else {
+                    $prefixedKeys[] = $this->prefixKey($element);
+                }
+            }
+
+            return $prefixedKeys;
+        }
+
+        return $keys;
     }
 
     /**
