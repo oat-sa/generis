@@ -56,7 +56,17 @@ abstract class AbstractTaskAction extends AbstractAction
 
         $stream = fopen($path, 'r+');
         $filesystem->writeStream($filename, $stream);
-        fclose($stream);
+        
+        if (is_resource($stream)) {
+            fclose($stream);   
+        } else {
+            $this->logWarning(
+                sprintf(
+                    'Stream for file "%s" is not valid. It may be already closed',
+                    $name
+                )
+            );
+        }
 
         $file = $dir->getFile($filename);
         return $this->getFileReferenceSerializer()->serialize($file);
