@@ -30,7 +30,7 @@ class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDrive
     public const DEFAULT_TIMEOUT = 5; // in seconds
     public const RETRY_DELAY = 500000; // Eq to 0.5s
 
-    private const DEFAULT_PREFIX_SEPARATOR = '::';
+    private const DEFAULT_PREFIX_SEPARATOR = ':';
 
     /**
      * @var Redis

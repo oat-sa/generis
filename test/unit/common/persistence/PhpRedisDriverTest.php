@@ -68,7 +68,7 @@ class PhpRedisDriverTest extends TestCase
 
         $this->driver->set('key1', 'value');
 
-        $this->assertEquals('25::key1', $this->getLastCallKey('set'));
+        $this->assertEquals('25:key1', $this->getLastCallKey('set'));
     }
 
     public function testKeyPrefixHasNotDefaultSeparatorIfSeparatorIsSet()
@@ -90,7 +90,7 @@ class PhpRedisDriverTest extends TestCase
 
         $this->driver->mGet(['key1', 'key2']);
 
-        $this->assertEquals(['26::key1', '26::key2'], $this->getLastCallKey('mGet'));
+        $this->assertEquals(['26:key1', '26:key2'], $this->getLastCallKey('mGet'));
     }
 
     public function testKeysHavePrefixWithKeyValueMode()
@@ -99,7 +99,7 @@ class PhpRedisDriverTest extends TestCase
 
         $this->driver->mSet(['key1', 'value1', 'key2', 'value2']);
 
-        $this->assertEquals(['25::key1', 'value1', '25::key2', 'value2'], $this->getLastCallKey('mSet'));
+        $this->assertEquals(['25:key1', 'value1', '25:key2', 'value2'], $this->getLastCallKey('mSet'));
     }
 
     public function testKeyPrefixIsAddedToAllMethods()
@@ -123,7 +123,7 @@ class PhpRedisDriverTest extends TestCase
 
         foreach ($methods as $method => $methodParams) {
             $this->driver->$method(...$methodParams);
-            $this->assertEquals('25::key', $this->getLastCallKey($method));
+            $this->assertEquals('25:key', $this->getLastCallKey($method));
         }
     }
 
@@ -134,7 +134,7 @@ class PhpRedisDriverTest extends TestCase
         $iterator = null;
         $this->driver->scan($iterator, '*pattern*');
 
-        $this->assertEquals('pref::*pattern*', $this->driver->getConnection()->calls['scan'][1]);
+        $this->assertEquals('pref:*pattern*', $this->driver->getConnection()->calls['scan'][1]);
     }
 
     private function getLastCallKey(string $method)
