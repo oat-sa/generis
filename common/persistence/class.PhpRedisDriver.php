@@ -30,6 +30,8 @@ class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDrive
     public const DEFAULT_TIMEOUT = 5; // in seconds
     public const RETRY_DELAY = 500000; // Eq to 0.5s
 
+    private const DEFAULT_PREFIX_SEPARATOR = ':';
+
     /**
      * @var Redis
      */
@@ -155,75 +157,75 @@ class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDrive
         if ($nx) {
             $options[] = 'nx';
         }
-        return $this->callWithRetry('set', [$key, $value, $options]);
+        return $this->callWithRetry('set', [$this->prefixKey($key), $value, $options]);
     }
 
     public function get($key)
     {
-        return $this->callWithRetry('get', [$key]);
+        return $this->callWithRetry('get', [$this->prefixKey($key)]);
     }
 
     public function exists($key)
     {
-        return (bool)$this->callWithRetry('exists', [$key]);
+        return (bool)$this->callWithRetry('exists', [$this->prefixKey($key)]);
     }
 
     public function del($key)
     {
-        return $this->callWithRetry('del', [$key]);
+        return $this->callWithRetry('del', [$this->prefixKey($key)]);
     }
 
     //O(N) where N is the number of fields being set.
     public function hmSet($key, $fields)
     {
-        return $this->callWithRetry('hmSet', [$key, $fields]);
+        return $this->callWithRetry('hmSet', [$this->prefixKey($key), $fields]);
     }
 
     //Time complexity: O(1)
     public function hExists($key, $field)
     {
-        return (bool)$this->callWithRetry('hExists', [$key, $field]);
+        return (bool)$this->callWithRetry('hExists', [$this->prefixKey($key), $field]);
     }
 
     //Time complexity: O(1)
     public function hSet($key, $field, $value)
     {
-        return $this->callWithRetry('hSet', [$key, $field, $value]);
+        return $this->callWithRetry('hSet', [$this->prefixKey($key), $field, $value]);
     }
 
     //Time complexity: O(1)
     public function hGet($key, $field)
     {
-        return $this->callWithRetry('hGet', [$key, $field]);
+        return $this->callWithRetry('hGet', [$this->prefixKey($key), $field]);
     }
 
     public function hDel($key, $field): bool
     {
-        return (bool)$this->callWithRetry('hDel', [$key, $field]);
+        return (bool)$this->callWithRetry('hDel', [$this->prefixKey($key), $field]);
     }
 
     //Time complexity: O(N) where N is the size of the hash.
     public function hGetAll($key)
     {
-        return $this->callWithRetry('hGetAll', [$key]);
+        return $this->callWithRetry('hGetAll', [$this->prefixKey($key)]);
     }
 
     //Time complexity: O(N)
     public function keys($pattern)
     {
-        return $this->callWithRetry('keys', [$pattern]);
+        return $this->callWithRetry('keys', [$this->prefixKey($pattern)]);
     }
 
     //Time complexity: O(1)
     public function incr($key)
     {
-        return $this->callWithRetry('incr', [$key]);
+        return $this->callWithRetry('incr', [$this->prefixKey($key)]);
     }
 
     //Time complexity: O(1)
     public function decr($key)
     {
-        return $this->callWithRetry('decr', [$key]);
+        return $this->callWithRetry('decr', [$this->prefixKey($key)]);
     }
 
     /**
@@ -237,9 +239,9 @@ class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDrive
 
         while ($attempt <= $retry) {
             try {
-                return $this->connection->scan($iterator, $pattern, $count);
+                return $this->connection->scan($iterator, $this->prefixKey($pattern), $count);
             } catch (Exception $exception) {
-                $this->reconnectOnException($exception, $method, $attempt, $retry);
+                $this->reconnectOnException($exception, 'scan', $attempt, $retry);
             }
 
             $attempt++;
@@ -257,7 +259,7 @@ class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDrive
      */
     public function mGet(array $keys)
     {
-        return $this->callWithRetry('mGet', [$keys]);
+        return $this->callWithRetry('mGet', [$this->prefixKeys($keys)]);
     }
 
     /**
@@ -265,7 +267,7 @@ class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDrive
      */
     public function mDel(array $keys)
     {
-        return $this->callWithRetry('del', [$keys]);
+        return $this->callWithRetry('del', [$this->prefixKeys($keys)]);
     }
 
     /**
@@ -273,7 +275,7 @@ class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDrive
      */
     public function mSet(array $keyValues)
     {
-        return $this->callWithRetry('mSet', [$keyValues]);
+        return $this->callWithRetry('mSet', [$this->prefixKeys($keyValues, true)]);
     }
 
     /**
@@ -282,6 +284,50 @@ class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDrive
     public function getConnection()
     {
         return $this->connection;
+    }
+
+    protected function getPrefix(array $params): ?string
+    {
+        $prefix = null;
+
+        if (!empty($this->params['prefix'])) {
+            $prefix = $this->params['prefix'];
+        }
+
+        return $prefix;
+    }
+
+    /**
+     * @param string|int|null $key
+     * @return string|int|null
+     */
+    private function prefixKey($key)
+    {
+        $prefix = $this->getPrefix($this->params);
+
+        if ($prefix === null) {
+            return $key;
+        }
+
+        return $prefix . ($this->params['prefixSeparator'] ?? self::DEFAULT_PREFIX_SEPARATOR) . $key;
+    }
+
+    private function prefixKeys(array $keys, bool $keyValueMode = false): array
+    {
+        if ($this->getPrefix($this->params) !== null) {
+            $prefixedKeys = [];
+            foreach (array_values($keys) as $i => $element) {
+                if ($keyValueMode) {
+                    $prefixedKeys[] = $i % 2 == 0 ? $this->prefixKey($element) : $element;
+                } else {
+                    $prefixedKeys[] = $this->prefixKey($element);
+                }
+            }
+
+            return $prefixedKeys;
+        }
+
+        return $keys;
     }
 
     /**
