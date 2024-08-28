@@ -21,6 +21,7 @@
 
 namespace oat\oatbox\filesystem\utils;
 
+use League\Flysystem\DirectoryListing;
 use League\Flysystem\Filesystem;
 use League\Flysystem\Handler;
 use League\Flysystem\PluginInterface;
@@ -36,9 +37,9 @@ trait FileSystemWrapperTrait
      * (non-PHPdoc)
      * @see \League\Flysystem\FilesystemInterface::has()
      */
-    public function has($path)
+    public function directoryExists($path)
     {
-        return $this->getFileSystem()->has($this->getFullPath($path));
+        return $this->getFileSystem()->directoryExists($this->getFullPath($path));
     }
 
 
@@ -46,9 +47,9 @@ trait FileSystemWrapperTrait
      * (non-PHPdoc)
      * @see \League\Flysystem\FilesystemInterface::read()
      */
-    public function read($path)
+    public function read(string $location): string
     {
-        return $this->getFileSystem()->read($this->getFullPath($path));
+        return $this->getFileSystem()->read($this->getFullPath($location));
     }
 
 
@@ -66,9 +67,9 @@ trait FileSystemWrapperTrait
      * (non-PHPdoc)
      * @see \League\Flysystem\FilesystemInterface::listContents()
      */
-    public function listContents($directory = '', $recursive = false)
+    public function listContents(string $location, bool $deep = self::LIST_SHALLOW): DirectoryListing
     {
-        return $this->getFileSystem()->listContents($this->getFullPath($directory), $recursive);
+        return $this->getFileSystem()->listContents($this->getFullPath($location), $deep);
     }
 
 
@@ -126,9 +127,9 @@ trait FileSystemWrapperTrait
      * (non-PHPdoc)
      * @see \League\Flysystem\FilesystemInterface::write()
      */
-    public function write($path, $contents, array $config = [])
+    public function write(string $location, string $contents, array $config = []): void
     {
-        return $this->getFileSystem()->write($this->getFullPath($path), $contents, $config);
+        $this->getFileSystem()->write($this->getFullPath($location), $contents, $config);
     }
 
 
@@ -136,9 +137,9 @@ trait FileSystemWrapperTrait
      * (non-PHPdoc)
      * @see \League\Flysystem\FilesystemInterface::writeStream()
      */
-    public function writeStream($path, $resource, array $config = [])
+    public function writeStream(string $location, $contents, array $config = []): void
     {
-        return $this->getFileSystem()->writeStream($this->getFullPath($path), $resource, $config);
+        $this->getFileSystem()->writeStream($this->getFullPath($location), $contents, $config);
     }
 
 
@@ -176,9 +177,9 @@ trait FileSystemWrapperTrait
      * (non-PHPdoc)
      * @see \League\Flysystem\FilesystemInterface::copy()
      */
-    public function copy($path, $newpath)
+    public function copy(string $source, string $destination, array $config = []): void
     {
-        return $this->getFileSystem()->copy($this->getFullPath($path), $newpath);
+        $this->getFileSystem()->copy($this->getFullPath($source), $destination);
     }
 
 
@@ -186,9 +187,9 @@ trait FileSystemWrapperTrait
      * (non-PHPdoc)
      * @see \League\Flysystem\FilesystemInterface::delete()
      */
-    public function delete($path)
+    public function delete(string $location): void
     {
-        return $this->getFileSystem()->delete($this->getFullPath($path));
+        $this->getFileSystem()->delete($this->getFullPath($location));
     }
 
 
@@ -216,9 +217,9 @@ trait FileSystemWrapperTrait
      * (non-PHPdoc)
      * @see \League\Flysystem\FilesystemInterface::setVisibility()
      */
-    public function setVisibility($path, $visibility)
+    public function setVisibility(string $path, string $visibility): void
     {
-        return $this->getFileSystem()->setVisibility($this->getFullPath($path), $visibility);
+        $this->getFileSystem()->setVisibility($this->getFullPath($path), $visibility);
     }
 
 
@@ -269,6 +270,46 @@ trait FileSystemWrapperTrait
     public function addPlugin(PluginInterface $plugin)
     {
         return $this->getFileSystem()->addPlugin($plugin);
+    }
+
+    public function fileExists(string $location): bool
+    {
+        return $this->getFileSystem()->fileExists($this->getFullPath($location));
+    }
+
+    public function lastModified(string $path): int
+    {
+        return $this->getFileSystem()->lastModified($this->getFullPath($path));
+    }
+
+    public function fileSize(string $path): int
+    {
+        return $this->getFileSystem()->fileSize($this->getFullPath($path));
+    }
+
+    public function mimeType(string $path): string
+    {
+        return $this->getFileSystem()->mimeType($this->getFullPath($path));
+    }
+
+    public function visibility(string $path): string
+    {
+        return $this->getFileSystem()->visibility($this->getFullPath($path));
+    }
+
+    public function deleteDirectory(string $location): void
+    {
+        $this->getFileSystem()->deleteDirectory($this->getFullPath($location));
+    }
+
+    public function createDirectory(string $location, array $config = []): void
+    {
+        $this->getFileSystem()->createDirectory($this->getFullPath($location), $config);
+    }
+
+    public function move(string $source, string $destination, array $config = []): void
+    {
+        $this->getFileSystem()->move($this->getFullPath($source), $destination, $config);
     }
 
     /**

@@ -127,7 +127,7 @@ class Directory extends FileSystemHandler implements \IteratorAggregate
      */
     public function exists()
     {
-        return $this->getFileSystem()->has($this->getPrefix());
+        return $this->getFileSystem()->directoryExists($this->getPrefix());
     }
 
     /**
