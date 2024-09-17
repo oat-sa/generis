@@ -1,0 +1,422 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:generis="http://www.tao.lu/Ontologies/generis.rdf#"
+    xmlns:tao="http://www.tao.lu/Ontologies/TAO.rdf#"
+    xmlns:widget="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#"
+    xmlns:nccer="http://www.nccer.org/itemmodel#"
+    xml:base="http://www.nccer.org/itemmodel#"
+>
+  <!-- + NCCER Metadata Property "Identifier" + -->
+  <rdf:Description rdf:about="http://www.nccer.org/itemmodel#identifier">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:label xml:lang="en-US"><![CDATA[NCCER ID]]></rdfs:label>
+    <rdfs:comment xml:lang="en-US"><![CDATA[Unique NCCER identifier for the item.]]></rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.tao.lu/Ontologies/TAOItem.rdf#Item"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    <widget:widget rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#Readonly"/>
+    <tao:TAOGUIOrder><![CDATA[0]]></tao:TAOGUIOrder>
+  </rdf:Description>
+
+  <!-- + NCCER Metadata Property "Language" + -->
+  <rdf:Description rdf:about="http://www.nccer.org/itemmodel#language">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:label xml:lang="en-US"><![CDATA[Language]]></rdfs:label>
+    <rdfs:comment xml:lang="en-US"><![CDATA[]]></rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.tao.lu/Ontologies/TAOItem.rdf#Item"/>
+    <rdfs:range rdf:resource="http://www.nccer.org/itemmodel#languageValues"/>
+    <widget:widget rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#ComboBox"/>
+    <tao:TAOGUIOrder><![CDATA[30]]></tao:TAOGUIOrder>
+  </rdf:Description>
+
+  <!-- NCCER Metadata List for "Language" Metadata Property -->
+  <rdf:Description rdf:about="http://www.nccer.org/itemmodel#languageValues">
+    <rdfs:subClassOf rdf:resource="http://www.tao.lu/Ontologies/TAO.rdf#List"/>
+    <rdfs:label xml:lang="en-US"><![CDATA[NCCER Language]]></rdfs:label>
+    <rdfs:comment xml:lang="en-US"><![CDATA[]]></rdfs:comment>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://www.nccer.org/itemmodel#languageEnglish">
+    <rdf:type rdf:resource="http://www.nccer.org/itemmodel#languageValues"/>
+    <rdfs:label xml:lang="en-US"><![CDATA[English (EN)]]></rdfs:label>
+    <rdfs:comment xml:lang="en-US"><![CDATA[]]></rdfs:comment>
+    <rdf:value><![CDATA[en-US]]></rdf:value>
+    <tao:level><![CDATA[1]]></tao:level>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://www.nccer.org/itemmodel#languageSpanish">
+    <rdf:type rdf:resource="http://www.nccer.org/itemmodel#languageValues"/>
+    <rdfs:label xml:lang="en-US"><![CDATA[Spanish (ES)]]></rdfs:label>
+    <rdfs:comment xml:lang="en-US"><![CDATA[]]></rdfs:comment>
+    <rdf:value><![CDATA[es-MX]]></rdf:value>
+    <tao:level><![CDATA[2]]></tao:level>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://www.nccer.org/itemmodel#languageFrench">
+    <rdf:type rdf:resource="http://www.nccer.org/itemmodel#languageValues"/>
+    <rdfs:label xml:lang="en-US"><![CDATA[French (FR)]]></rdfs:label>
+    <rdfs:comment xml:lang="en-US"><![CDATA[]]></rdfs:comment>
+    <rdf:value><![CDATA[fr-FR]]></rdf:value>
+    <tao:level><![CDATA[3]]></tao:level>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://www.nccer.org/itemmodel#languageRussian">
+    <rdf:type rdf:resource="http://www.nccer.org/itemmodel#languageValues"/>
+    <rdfs:label xml:lang="en-US"><![CDATA[Russian (RU)]]></rdfs:label>
+    <rdfs:comment xml:lang="en-US"><![CDATA[]]></rdfs:comment>
+    <rdf:value><![CDATA[ru-RU]]></rdf:value>
+    <tao:level><![CDATA[4]]></tao:level>
+  </rdf:Description>
+
+  <!-- + NCCER Metadata Property "MATS/MIRC/Assmt" + -->
+  <rdf:Description rdf:about="http://www.nccer.org/itemmodel#matsMircAssmt">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:label xml:lang="en-US"><![CDATA[MATS/MIRC/Assmt]]></rdfs:label>
+    <rdfs:comment xml:lang="en-US"><![CDATA[]]></rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.tao.lu/Ontologies/TAOItem.rdf#Item"/>
+    <rdfs:range rdf:resource="http://www.nccer.org/itemmodel#matsMircAssmtValues"/>
+    <widget:widget rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#RadioBox"/>
+    <tao:TAOGUIOrder><![CDATA[40]]></tao:TAOGUIOrder>
+  </rdf:Description>
+
+  <!-- NCCER Metadata List for "MATS/MIRC/Assmt" Metadata Property -->
+  <rdf:Description rdf:about="http://www.nccer.org/itemmodel#matsMircAssmtValues">
+    <rdfs:subClassOf rdf:resource="http://www.tao.lu/Ontologies/TAO.rdf#List"/>
+    <rdfs:label xml:lang="en-US"><![CDATA[MATS/MIRC/Assmt]]></rdfs:label>
+    <rdfs:comment xml:lang="en-US"><![CDATA[]]></rdfs:comment>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://www.nccer.org/itemmodel#MATS">
+    <rdf:type rdf:resource="http://www.nccer.org/itemmodel#matsMircAssmtValues"/>
+    <rdfs:label xml:lang="en-US"><![CDATA[MATS]]></rdfs:label>
+    <rdfs:comment xml:lang="en-US"><![CDATA[]]></rdfs:comment>
+    <rdf:value><![CDATA[mats]]></rdf:value>
+    <tao:level><![CDATA[1]]></tao:level>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://www.nccer.org/itemmodel#MIRC">
+    <rdf:type rdf:resource="http://www.nccer.org/itemmodel#matsMircAssmtValues"/>
+    <rdfs:label xml:lang="en-US"><![CDATA[MIRC]]></rdfs:label>
+    <rdfs:comment xml:lang="en-US"><![CDATA[]]></rdfs:comment>
+    <rdf:value><![CDATA[mirc]]></rdf:value>
+    <tao:level><![CDATA[2]]></tao:level>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://www.nccer.org/itemmodel#Assmt">
+    <rdf:type rdf:resource="http://www.nccer.org/itemmodel#matsMircAssmtValues"/>
+    <rdfs:label xml:lang="en-US"><![CDATA[Assmt]]></rdfs:label>
+    <rdfs:comment xml:lang="en-US"><![CDATA[]]></rdfs:comment>
+    <rdf:value><![CDATA[assmt]]></rdf:value>
+    <tao:level><![CDATA[3]]></tao:level>
+  </rdf:Description>
+
+  <!-- + NCCER Metadata Property "Series" + -->
+  <rdf:Description rdf:about="http://www.nccer.org/itemmodel#series">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:label xml:lang="en-US"><![CDATA[Series]]></rdfs:label>
+    <rdfs:comment xml:lang="en-US"><![CDATA[]]></rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.tao.lu/Ontologies/TAOItem.rdf#Item"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    <widget:widget rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#TextBox"/>
+    <tao:TAOGUIOrder><![CDATA[50]]></tao:TAOGUIOrder>
+  </rdf:Description>
+
+  <!-- + NCCER Metadata Property "Craft" + -->
+  <rdf:Description rdf:about="http://www.nccer.org/itemmodel#craft">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:label xml:lang="en-US"><![CDATA[Craft]]></rdfs:label>
+    <rdfs:comment xml:lang="en-US"><![CDATA[]]></rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.tao.lu/Ontologies/TAOItem.rdf#Item"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    <widget:widget rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#TextBox"/>
+    <tao:TAOGUIOrder><![CDATA[60]]></tao:TAOGUIOrder>
+  </rdf:Description>
+
+  <!-- + NCCER Metadata Property "Level" + -->
+  <rdf:Description rdf:about="http://www.nccer.org/itemmodel#level">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:label xml:lang="en-US"><![CDATA[Level]]></rdfs:label>
+    <rdfs:comment xml:lang="en-US"><![CDATA[]]></rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.tao.lu/Ontologies/TAOItem.rdf#Item"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    <widget:widget rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#TextBox"/>
+    <tao:TAOGUIOrder><![CDATA[70]]></tao:TAOGUIOrder>
+  </rdf:Description>
+
+  <!-- + NCCER Metadata Property "Module Number" + -->
+  <rdf:Description rdf:about="http://www.nccer.org/itemmodel#moduleNr">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:label xml:lang="en-US"><![CDATA[Module Number]]></rdfs:label>
+    <rdfs:comment xml:lang="en-US"><![CDATA[]]></rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.tao.lu/Ontologies/TAOItem.rdf#Item"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    <widget:widget rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#TextBox"/>
+    <tao:TAOGUIOrder><![CDATA[80]]></tao:TAOGUIOrder>
+  </rdf:Description>
+
+  <!-- + NCCER Metadata Property "Module Name" + -->
+  <rdf:Description rdf:about="http://www.nccer.org/itemmodel#moduleName">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:label xml:lang="en-US"><![CDATA[Module Name]]></rdfs:label>
+    <rdfs:comment xml:lang="en-US"><![CDATA[]]></rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.tao.lu/Ontologies/TAOItem.rdf#Item"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    <widget:widget rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#TextBox"/>
+    <tao:TAOGUIOrder><![CDATA[90]]></tao:TAOGUIOrder>
+  </rdf:Description>
+
+  <!-- + NCCER Metadata Property "Objective" + -->
+  <rdf:Description rdf:about="http://www.nccer.org/itemmodel#objective">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:label xml:lang="en-US"><![CDATA[Objective]]></rdfs:label>
+    <rdfs:comment xml:lang="en-US"><![CDATA[]]></rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.tao.lu/Ontologies/TAOItem.rdf#Item"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    <widget:widget rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#TextBox"/>
+    <tao:TAOGUIOrder><![CDATA[100]]></tao:TAOGUIOrder>
+  </rdf:Description>
+
+  <!-- + NCCER Metadata Property "Section" + -->
+  <rdf:Description rdf:about="http://www.nccer.org/itemmodel#section">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:label xml:lang="en-US"><![CDATA[Section]]></rdfs:label>
+    <rdfs:comment xml:lang="en-US"><![CDATA[]]></rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.tao.lu/Ontologies/TAOItem.rdf#Item"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    <widget:widget rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#TextBox"/>
+    <tao:TAOGUIOrder><![CDATA[110]]></tao:TAOGUIOrder>
+  </rdf:Description>
+
+  <!-- + NCCER Metadata Property "Math Workout" + -->
+  <rdf:Description rdf:about="http://www.nccer.org/itemmodel#mathWorkout">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:label xml:lang="en-US"><![CDATA[Math Workout]]></rdfs:label>
+    <rdfs:comment xml:lang="en-US"><![CDATA[]]></rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.tao.lu/Ontologies/TAOItem.rdf#Item"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    <widget:widget rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#TextArea"/>
+    <tao:TAOGUIOrder><![CDATA[120]]></tao:TAOGUIOrder>
+  </rdf:Description>
+
+  <!-- + NCCER Metadata Property "Development Comment" + -->
+  <rdf:Description rdf:about="http://www.nccer.org/itemmodel#developmentComment">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:label xml:lang="en-US"><![CDATA[Development Comment]]></rdfs:label>
+    <rdfs:comment xml:lang="en-US"><![CDATA[]]></rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.tao.lu/Ontologies/TAOItem.rdf#Item"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    <widget:widget rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#TextArea"/>
+    <tao:TAOGUIOrder><![CDATA[130]]></tao:TAOGUIOrder>
+  </rdf:Description>
+
+  <!-- + NCCER Metadata Property "Angoff" + -->
+  <rdf:Description rdf:about="http://www.nccer.org/itemmodel#angoff">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:label xml:lang="en-US"><![CDATA[Angoff]]></rdfs:label>
+    <rdfs:comment xml:lang="en-US"><![CDATA[]]></rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.tao.lu/Ontologies/TAOItem.rdf#Item"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    <widget:widget rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#TextBox"/>
+    <tao:TAOGUIOrder><![CDATA[140]]></tao:TAOGUIOrder>
+  </rdf:Description>
+
+  <!-- + NCCER Metadata Property "Covered Task (CT) Number" + -->
+  <rdf:Description rdf:about="http://www.nccer.org/itemmodel#coveredTask">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:label xml:lang="en-US"><![CDATA[Covered Task]]></rdfs:label>
+    <rdfs:comment xml:lang="en-US"><![CDATA[Covered Task (CT) Number]]></rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.tao.lu/Ontologies/TAOItem.rdf#Item"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    <widget:widget rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#TextBox"/>
+    <tao:TAOGUIOrder><![CDATA[150]]></tao:TAOGUIOrder>
+  </rdf:Description>
+
+  <!-- + NCCER Metadata Property "Domain Name" + -->
+  <rdf:Description rdf:about="http://www.nccer.org/itemmodel#domainName">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:label xml:lang="en-US"><![CDATA[Domain Name]]></rdfs:label>
+    <rdfs:comment xml:lang="en-US"><![CDATA[]]></rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.tao.lu/Ontologies/TAOItem.rdf#Item"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    <widget:widget rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#TextBox"/>
+    <tao:TAOGUIOrder><![CDATA[160]]></tao:TAOGUIOrder>
+  </rdf:Description>
+
+  <!-- + NCCER Metadata Property "Status" + -->
+  <rdf:Description rdf:about="http://www.nccer.org/itemmodel#status">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:label xml:lang="en-US"><![CDATA[Status]]></rdfs:label>
+    <rdfs:comment xml:lang="en-US"><![CDATA[]]></rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.tao.lu/Ontologies/TAOItem.rdf#Item"/>
+    <rdfs:range rdf:resource="http://www.nccer.org/itemmodel#statusValues"/>
+    <widget:widget rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#ComboBox"/>
+    <tao:TAOGUIOrder><![CDATA[170]]></tao:TAOGUIOrder>
+  </rdf:Description>
+
+  <!-- NCCER Metadata List for "Status" Metadata Property -->
+  <rdf:Description rdf:about="http://www.nccer.org/itemmodel#statusValues">
+    <rdfs:subClassOf rdf:resource="http://www.tao.lu/Ontologies/TAO.rdf#List"/>
+    <rdfs:label xml:lang="en-US"><![CDATA[NCCER Status]]></rdfs:label>
+    <rdfs:comment xml:lang="en-US"><![CDATA[]]></rdfs:comment>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://www.nccer.org/itemmodel#statusApproved">
+    <rdf:type rdf:resource="http://www.nccer.org/itemmodel#statusValues"/>
+    <rdfs:label xml:lang="en-US"><![CDATA[Approved]]></rdfs:label>
+    <rdfs:comment xml:lang="en-US"><![CDATA[]]></rdfs:comment>
+    <rdf:value><![CDATA[approved]]></rdf:value>
+    <tao:level><![CDATA[1]]></tao:level>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://www.nccer.org/itemmodel#statusArchived">
+    <rdf:type rdf:resource="http://www.nccer.org/itemmodel#statusValues"/>
+    <rdfs:label xml:lang="en-US"><![CDATA[Archived]]></rdfs:label>
+    <rdfs:comment xml:lang="en-US"><![CDATA[]]></rdfs:comment>
+    <rdf:value><![CDATA[archived]]></rdf:value>
+    <tao:level><![CDATA[2]]></tao:level>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://www.nccer.org/itemmodel#statusAwaitingApproval">
+    <rdf:type rdf:resource="http://www.nccer.org/itemmodel#statusValues"/>
+    <rdfs:label xml:lang="en-US"><![CDATA[Awaiting Approval]]></rdfs:label>
+    <rdfs:comment xml:lang="en-US"><![CDATA[]]></rdfs:comment>
+    <rdf:value><![CDATA[awaitingapproval]]></rdf:value>
+    <tao:level><![CDATA[3]]></tao:level>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://www.nccer.org/itemmodel#statusDevelopment">
+    <rdf:type rdf:resource="http://www.nccer.org/itemmodel#statusValues"/>
+    <rdfs:label xml:lang="en-US"><![CDATA[Development in Progress]]></rdfs:label>
+    <rdfs:comment xml:lang="en-US"><![CDATA[]]></rdfs:comment>
+    <rdf:value><![CDATA[developmentinprogress]]></rdf:value>
+    <tao:level><![CDATA[4]]></tao:level>
+  </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.nccer.org/itemmodel#statusHold">
+    <rdf:type rdf:resource="http://www.nccer.org/itemmodel#statusValues"/>
+    <rdfs:label xml:lang="en-US"><![CDATA[Hold]]></rdfs:label>
+    <rdfs:comment xml:lang="en-US"><![CDATA[]]></rdfs:comment>
+    <rdf:value><![CDATA[hold]]></rdf:value>
+    <tao:level><![CDATA[5]]></tao:level>
+  </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.nccer.org/itemmodel#statusRejected">
+    <rdf:type rdf:resource="http://www.nccer.org/itemmodel#statusValues"/>
+    <rdfs:label xml:lang="en-US"><![CDATA[Rejected]]></rdfs:label>
+    <rdfs:comment xml:lang="en-US"><![CDATA[]]></rdfs:comment>
+    <rdf:value><![CDATA[rejected]]></rdf:value>
+    <tao:level><![CDATA[6]]></tao:level>
+  </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.nccer.org/itemmodel#statusSuspended">
+    <rdf:type rdf:resource="http://www.nccer.org/itemmodel#statusValues"/>
+    <rdfs:label xml:lang="en-US"><![CDATA[Suspended]]></rdfs:label>
+    <rdfs:comment xml:lang="en-US"><![CDATA[]]></rdfs:comment>
+    <rdf:value><![CDATA[suspended]]></rdf:value>
+    <tao:level><![CDATA[7]]></tao:level>
+  </rdf:Description>
+  <!-- + NCCER Metadata Property "Applicable Assmts or Exams" + -->
+  <rdf:Description rdf:about="http://www.nccer.org/itemmodel#applicable">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:label xml:lang="en-US"><![CDATA[Applicable Assmts]]></rdfs:label>
+    <rdfs:comment xml:lang="en-US"><![CDATA[Applicable Assmts or Exams]]></rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.tao.lu/Ontologies/TAOItem.rdf#Item"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    <widget:widget rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#TextBox"/>
+    <tao:TAOGUIOrder><![CDATA[180]]></tao:TAOGUIOrder>
+  </rdf:Description>
+
+  <!-- + NCCER Metadata Property "Creation Date & Time" + -->
+  <rdf:Description rdf:about="http://www.nccer.org/itemmodel#creationTime">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:label xml:lang="en-US"><![CDATA[Creation Time]]></rdfs:label>
+    <rdfs:comment xml:lang="en-US"><![CDATA[Creation Date & Time]]></rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.tao.lu/Ontologies/TAOItem.rdf#Item"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    <widget:widget rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#Readonly"/>
+    <tao:TAOGUIOrder><![CDATA[190]]></tao:TAOGUIOrder>
+  </rdf:Description>
+
+  <!-- + NCCER Metadata Property "N cont" + -->
+  <rdf:Description rdf:about="http://www.nccer.org/itemmodel#nCount">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:label xml:lang="en-US"><![CDATA[N Count]]></rdfs:label>
+    <rdfs:comment xml:lang="en-US"><![CDATA[]]></rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.tao.lu/Ontologies/TAOItem.rdf#Item"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    <widget:widget rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#TextBox"/>
+    <tao:TAOGUIOrder><![CDATA[200]]></tao:TAOGUIOrder>
+  </rdf:Description>
+
+  <!-- + NCCER Metadata Property "P Value" + -->
+  <rdf:Description rdf:about="http://www.nccer.org/itemmodel#pValue">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:label xml:lang="en-US"><![CDATA[P Value]]></rdfs:label>
+    <rdfs:comment xml:lang="en-US"><![CDATA[]]></rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.tao.lu/Ontologies/TAOItem.rdf#Item"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    <widget:widget rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#TextBox"/>
+    <tao:TAOGUIOrder><![CDATA[210]]></tao:TAOGUIOrder>
+  </rdf:Description>
+
+  <!-- + NCCER Metadata Property "Point Biserial" + -->
+  <rdf:Description rdf:about="http://www.nccer.org/itemmodel#pointBserial">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:label xml:lang="en-US"><![CDATA[Point Biserial]]></rdfs:label>
+    <rdfs:comment xml:lang="en-US"><![CDATA[]]></rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.tao.lu/Ontologies/TAOItem.rdf#Item"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    <widget:widget rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#TextBox"/>
+    <tao:TAOGUIOrder><![CDATA[220]]></tao:TAOGUIOrder>
+  </rdf:Description>
+
+    <!-- + NCCER Metadata Property "NvalA" + -->
+  <rdf:Description rdf:about="http://www.nccer.org/itemmodel#nValA">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:label xml:lang="en-US"><![CDATA[NvalA]]></rdfs:label>
+    <rdfs:comment xml:lang="en-US"><![CDATA[]]></rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.tao.lu/Ontologies/TAOItem.rdf#Item"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    <widget:widget rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#TextBox"/>
+    <tao:TAOGUIOrder><![CDATA[230]]></tao:TAOGUIOrder>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://www.nccer.org/itemmodel#nValB">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:label xml:lang="en-US"><![CDATA[NvalB]]></rdfs:label>
+    <rdfs:comment xml:lang="en-US"><![CDATA[]]></rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.tao.lu/Ontologies/TAOItem.rdf#Item"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    <widget:widget rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#TextBox"/>
+    <tao:TAOGUIOrder><![CDATA[240]]></tao:TAOGUIOrder>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://www.nccer.org/itemmodel#nValC">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:label xml:lang="en-US"><![CDATA[NvalC]]></rdfs:label>
+    <rdfs:comment xml:lang="en-US"><![CDATA[]]></rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.tao.lu/Ontologies/TAOItem.rdf#Item"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    <widget:widget rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#TextBox"/>
+    <tao:TAOGUIOrder><![CDATA[250]]></tao:TAOGUIOrder>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://www.nccer.org/itemmodel#nValD">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:label xml:lang="en-US"><![CDATA[NvalD]]></rdfs:label>
+    <rdfs:comment xml:lang="en-US"><![CDATA[]]></rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.tao.lu/Ontologies/TAOItem.rdf#Item"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    <widget:widget rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#TextBox"/>
+    <tao:TAOGUIOrder><![CDATA[260]]></tao:TAOGUIOrder>
+</rdf:Description>
+
+  <rdf:Description rdf:about="http://www.nccer.org/itemmodel#classificationId">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:label xml:lang="en-US"><![CDATA[Classification ID]]></rdfs:label>
+    <rdfs:comment xml:lang="en-US"><![CDATA[Unique ID for each level classification]]></rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#type"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+  </rdf:Description>
+</rdf:RDF>

@@ -48,6 +48,7 @@ return [
             __DIR__ . '/core/ontology/rules.rdf',
             __DIR__ . '/core/ontology/generis.rdf',
             __DIR__ . '/core/ontology/taskqueue.rdf',
+            __DIR__ . '/core/ontology/nccer.rdf',
         ],
         'checks' => [],
         'php' => [
