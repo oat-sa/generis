@@ -203,6 +203,16 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
     public function getInstances(core_kernel_classes_Class $resource, $recursive = false, $params = [])
     {
         $returnValue = [];
+        
+        if (empty($params)) {
+            $resourceIds = $this->getInstanceIds($resource->getUri(), $recursive);
+
+            foreach ($resourceIds as $resourceId) {
+                $returnValue[$resourceId] = $this->getModel()->getResource($resourceId);
+            }
+
+            return $returnValue;
+        }
 
         $params = array_merge($params, ['like' => false, 'recursive' => $recursive]);
 
@@ -629,5 +639,48 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
                 'original_uri' => $resource->getUri(),
             ]
         );
+    }
+
+    public function getInstanceIds(string $classUri, bool $recursive = false): array
+    {
+        if ($recursive) {
+            $query = 'SELECT subject FROM statements WHERE predicate = ? AND object = ?';
+            $params = [
+                OntologyRdf::RDF_TYPE,
+                $classUri,
+            ];
+        } else {
+            $query = <<<'SQL'
+WITH RECURSIVE statements_tree AS (
+    SELECT
+        r.subject,
+        r.predicate
+    FROM statements r
+    WHERE r.subject = ?
+      AND r.predicate IN (?, ?)
+    UNION ALL
+    SELECT
+        s.subject,
+        s.predicate
+    FROM statements s
+        JOIN statements_tree st
+            ON s.object = st.subject
+    WHERE s.predicate IN (?, ?)
+)
+SELECT subject FROM statements_tree WHERE predicate = ?;
+SQL;
+            $params = [
+                $classUri,
+                OntologyRdfs::RDFS_SUBCLASSOF,
+                OntologyRdf::RDF_TYPE,
+                OntologyRdfs::RDFS_SUBCLASSOF,
+                OntologyRdf::RDF_TYPE,
+                OntologyRdf::RDF_TYPE,
+            ];
+        }
+
+        $statement = $this->getPersistence()->query($query, $params);
+
+        return array_column($statement->fetchAll(), 'subject');
     }
 }
