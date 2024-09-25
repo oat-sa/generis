@@ -23,6 +23,7 @@ namespace oat\oatbox\event;
 
 use oat\oatbox\service\ConfigurableService;
 use oat\oatbox\service\ServiceNotFoundException;
+use Throwable;
 
 /**
  * The simple placeholder ServiceManager
@@ -64,7 +65,17 @@ class EventManager extends ConfigurableService
                 }
             }
 
-            call_user_func($callback, $event);
+            try {
+                call_user_func($callback, $event);
+            } catch (Throwable $exception) {
+                $this->logError(
+                    sprintf(
+                        'An error occurred during triggering an event callback: %s. Trace: %s',
+                        $exception->getMessage(),
+                        $exception->getTraceAsString()
+                    )
+                );
+            }
         }
     }
 
