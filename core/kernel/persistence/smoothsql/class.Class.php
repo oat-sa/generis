@@ -643,7 +643,7 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
 
     public function getInstanceIds(string $classUri, bool $recursive = false): array
     {
-        if ($recursive) {
+        if (!$recursive) {
             $query = 'SELECT subject FROM statements WHERE predicate = ? AND object = ?';
             $params = [
                 OntologyRdf::RDF_TYPE,
