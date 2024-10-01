@@ -203,9 +203,9 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
     public function getInstances(core_kernel_classes_Class $resource, $recursive = false, $params = [])
     {
         $returnValue = [];
-        
+
         if (empty($params)) {
-            $resourceIds = $this->getInstanceIds($resource->getUri(), $recursive);
+            $resourceIds = $this->getInstanceUris($resource->getUri(), $recursive);
 
             foreach ($resourceIds as $resourceId) {
                 $returnValue[$resourceId] = $this->getModel()->getResource($resourceId);
@@ -641,7 +641,7 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
         );
     }
 
-    public function getInstanceIds(string $classUri, bool $recursive = false): array
+    public function getInstanceUris(string $classUri, bool $recursive = false): array
     {
         if (!$recursive) {
             $query = 'SELECT subject FROM statements WHERE predicate = ? AND object = ?';
