@@ -21,6 +21,7 @@
 
 namespace oat\oatbox\filesystem;
 
+use League\Flysystem\Local\LocalFilesystemAdapter;
 use oat\oatbox\service\ConfigurableService;
 use League\Flysystem\FilesystemAdapter;
 use common_exception_Error;
@@ -41,9 +42,7 @@ class FileSystemService extends ConfigurableService
 
     public const OPTION_DIRECTORIES = 'dirs';
 
-    public const FLYSYSTEM_ADAPTER_NS = '\\League\\Flysystem\\Adapter\\';
-
-    public const FLYSYSTEM_LOCAL_ADAPTER = 'Local';
+    private const FLYSYSTEM_NS = '\\League\\Flysystem\\';
 
     private $filesystems = [];
 
@@ -152,7 +151,7 @@ class FileSystemService extends ConfigurableService
     {
         $adapters = $this->hasOption(self::OPTION_ADAPTERS) ? $this->getOption(self::OPTION_ADAPTERS) : [];
         $adapters[$id] = [
-            'class' => self::FLYSYSTEM_LOCAL_ADAPTER,
+            'class' => LocalFilesystemAdapter::class,
             'options' => ['root' => $path]
         ];
         $this->setOption(self::OPTION_ADAPTERS, $adapters);
@@ -246,10 +245,10 @@ class FileSystemService extends ConfigurableService
         $options = isset($adapterConfig['options']) ? $adapterConfig['options'] : [];
 
         if (!class_exists($class)) {
-            if (class_exists(self::FLYSYSTEM_ADAPTER_NS . $class)) {
-                $class = self::FLYSYSTEM_ADAPTER_NS . $class;
-            } elseif (class_exists(self::FLYSYSTEM_ADAPTER_NS . $class . '\\' . $class . 'Adapter')) {
-                $class = self::FLYSYSTEM_ADAPTER_NS . $class . '\\' . $class . 'Adapter';
+            if (class_exists(self::FLYSYSTEM_NS . $class)) {
+                $class = self::FLYSYSTEM_NS . $class;
+            } elseif (class_exists(self::FLYSYSTEM_NS . $class . '\\' . $class . 'FilesystemAdapter')) {
+                $class = self::FLYSYSTEM_NS . $class . '\\' . $class . 'FilesystemAdapter';
             } else {
                 throw new common_exception_Error('Unknown Flysystem adapter "' . $class . '"');
             }

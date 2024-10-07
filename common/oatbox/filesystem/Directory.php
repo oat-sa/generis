@@ -21,7 +21,7 @@
 
 namespace oat\oatbox\filesystem;
 
-use League\Flysystem\FileExistsException;
+use League\Flysystem\FilesystemException;
 
 class Directory extends FileSystemHandler implements \IteratorAggregate
 {
@@ -87,7 +87,7 @@ class Directory extends FileSystemHandler implements \IteratorAggregate
         $contents = $this->getFileSystem()->listContents($this->getPrefix(), $recursive);
 
         if (!empty($contents)) {
-            $dirPath = $this->getFileSystem()->get($this->getPrefix())->getPath();
+            $dirPath = $this->getPrefix();
             foreach ($contents as $content) {
                 if ($withDirectories && $content['type'] == 'dir') {
                     $iterator[] = $this->getDirectory(str_replace($dirPath, '', $content['path']));
@@ -137,7 +137,13 @@ class Directory extends FileSystemHandler implements \IteratorAggregate
      */
     public function deleteSelf()
     {
-        return $this->getFileSystem()->deleteDir($this->getPrefix());
+        try {
+            $this->getFileSystem()->deleteDirectory($this->getPrefix());
+            return true;
+        } catch (FilesystemException $e) {
+        }
+
+        return false;
     }
 
     /**
@@ -185,15 +191,10 @@ class Directory extends FileSystemHandler implements \IteratorAggregate
 
         foreach ($filePaths as $renaming) {
             try {
-                if ($this->getFileSystem()->rename($renaming['source'], $renaming['destination']) === false) {
-                    throw new \common_exception_FileSystemError(
-                        "Unable to rename '" . $renaming['source'] . "' into '" . $renaming['destination'] . "'."
-                    );
-                }
-            } catch (FileExistsException $e) {
+                $this->getFileSystem()->move($renaming['source'], $renaming['destination']);
+            } catch (FilesystemException $e) {
                 throw new \common_exception_FileSystemError(
-                    "Unable to rename '" . $renaming['source'] . "' into '" . $renaming['destination']
-                        . "'. File already exists."
+                    "Unable to rename '" . $renaming['source'] . "' into '" . $renaming['destination'] . "'."
                 );
             }
         }

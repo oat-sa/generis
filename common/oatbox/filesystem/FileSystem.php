@@ -70,9 +70,8 @@ class FileSystem implements FilesystemOperator
 
     /**
      * @return FilesystemOperator
-     * @throws \common_Exception
      */
-    protected function getFileSystem()
+    protected function getFileSystem(): FilesystemOperator
     {
         return $this->filesystem;
     }
