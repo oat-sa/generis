@@ -21,8 +21,10 @@
 
 namespace oat\oatbox\event;
 
+use common_Logger;
 use oat\oatbox\service\ConfigurableService;
 use oat\oatbox\service\ServiceNotFoundException;
+use Throwable;
 
 /**
  * The simple placeholder ServiceManager
@@ -52,9 +54,18 @@ class EventManager extends ConfigurableService
         $event = is_object($event) ? $event : new GenericEvent($event, $params);
 
         foreach ($this->getListeners($event) as $callback) {
+            $callbackName = $callback;
+
             if (is_array($callback) && count($callback) == 2) {
-                list($key, $function) = $callback;
+                [$key, $function] = $callback;
+
+                if (is_object($key)) {
+                    $callbackName = sprintf('%s::%s', get_class($key), $function);
+                }
+
                 if (is_string($key)) {
+                    $callbackName = sprintf('%s::%s', $key, $function);
+
                     try {
                         $service = $container->get($key);
                         $callback = [$service, $function];
@@ -62,6 +73,18 @@ class EventManager extends ConfigurableService
                         //do nothing
                     }
                 }
+            }
+
+            if (!is_callable($callback)) {
+                common_Logger::w(
+                    sprintf(
+                        'Event manager cannot call %s because it is not a callable. '
+                        . 'Notice, that classes registered in DI container cannot be executed during the installation',
+                        $callbackName
+                    )
+                );
+
+                continue;
             }
 
             call_user_func($callback, $event);
