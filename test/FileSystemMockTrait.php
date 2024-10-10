@@ -21,7 +21,7 @@
 
 namespace oat\generis\test;
 
-use League\Flysystem\Memory\MemoryAdapter;
+use League\Flysystem\InMemory\InMemoryFilesystemAdapter;
 use oat\oatbox\filesystem\FileSystemService;
 
 trait FileSystemMockTrait
@@ -30,7 +30,7 @@ trait FileSystemMockTrait
     {
         $adapterparam = [
             'testfs' => [
-                'class' => MemoryAdapter::class
+                'class' => InMemoryFilesystemAdapter::class
             ]
         ];
         $dirparam = [];
