@@ -87,14 +87,13 @@ class Directory extends FileSystemHandler implements \IteratorAggregate
         $contents = $this->getFileSystem()->listContents($this->getPrefix(), $recursive);
 
         if (!empty($contents)) {
-            $dirPath = $this->getPrefix();
             foreach ($contents as $content) {
                 if ($withDirectories && $content['type'] == 'dir') {
-                    $iterator[] = $this->getDirectory(str_replace($dirPath, '', $content['path']));
+                    $iterator[] = $this->getDirectory($this->stripDirectoryPath($content['path']));
                 }
 
                 if ($withFiles && $content['type'] == 'file') {
-                    $iterator[] = $this->getFile(str_replace($dirPath, '', $content['path']));
+                    $iterator[] = $this->getFile($this->stripDirectoryPath($content['path']));
                 }
             }
         }
@@ -206,5 +205,11 @@ class Directory extends FileSystemHandler implements \IteratorAggregate
         }
 
         return true;
+    }
+
+    private function stripDirectoryPath(string $path): string
+    {
+        $strippedPath = str_replace($this->getPrefix(), '', $path);
+        return str_replace($this->getFileSystemId(), '', $strippedPath);
     }
 }

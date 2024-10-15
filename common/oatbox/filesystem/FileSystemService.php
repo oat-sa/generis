@@ -152,7 +152,7 @@ class FileSystemService extends ConfigurableService
         $adapters = $this->hasOption(self::OPTION_ADAPTERS) ? $this->getOption(self::OPTION_ADAPTERS) : [];
         $adapters[$id] = [
             'class' => LocalFilesystemAdapter::class,
-            'options' => ['root' => $path]
+            'options' => ['location' => $path]
         ];
         $this->setOption(self::OPTION_ADAPTERS, $adapters);
         return true;

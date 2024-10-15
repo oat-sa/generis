@@ -101,7 +101,7 @@ class Installer extends ConfigurableService
                     'default' => [
                         'class' => 'Local',
                         'options' => [
-                            'root' => $this->getOption('file_path')
+                            'location' => $this->getOption('file_path')
                         ]
                     ],
                     'memory' => [
