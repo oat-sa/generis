@@ -104,8 +104,10 @@ class File extends FileSystemHandler
                 }
                 $this->getFileSystem()->writeStream($this->getPrefix(), $resource, $config);
             } else {
-                throw new \InvalidArgumentException('Value to be written has to be: string, resource or StreamInterface, ' .
-                    '"' . gettype($mixed) . '" given.');
+                throw new \InvalidArgumentException(sprintf(
+                    'Value to be written has to be: string, resource or StreamInterface, "%s" given.',
+                    gettype($mixed)
+                ));
             }
         } catch (FilesystemException $e) {
             return false;
