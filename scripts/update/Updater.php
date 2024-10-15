@@ -465,7 +465,7 @@ class Updater extends common_ext_ExtensionUpdater
                     // override default behavior to ensure an adapter and not a directory is created
                     $adapters['default'] = [
                         'class' => LocalFilesystemAdapter::class,
-                        'options' => ['root' => $fs->getOption(FileSystemService::OPTION_FILE_PATH)]
+                        'options' => ['location' => $fs->getOption(FileSystemService::OPTION_FILE_PATH)]
                     ];
                     $fs->setOption(FileSystemService::OPTION_ADAPTERS, $adapters);
                 } else {
