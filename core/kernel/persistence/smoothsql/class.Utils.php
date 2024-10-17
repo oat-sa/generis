@@ -231,7 +231,7 @@ class core_kernel_persistence_smoothsql_Utils
             $sqlLang = ' AND (' . self::buildLanguagePattern($persistence, $lang) . ')';
         }
 
-        $query = "SELECT DISTINCT subject FROM statements WHERE (predicate = ${predicate}) AND (${sqlValues}${sqlLang})"
+        $query = "SELECT DISTINCT subject FROM statements WHERE (predicate = {$predicate}) AND ({$sqlValues}{$sqlLang})"
             . ' AND modelid IN (' . implode(',', $model->getReadableModels()) . ')';
 
         return $query;
@@ -244,7 +244,7 @@ class core_kernel_persistence_smoothsql_Utils
         if (empty($lang) === false) {
             $sqlEmpty = $persistence->quote('');
             $sqlLang = $persistence->quote($lang);
-            $languagePattern = "l_language = ${sqlEmpty} OR l_language = ${sqlLang}";
+            $languagePattern = "l_language = {$sqlEmpty} OR l_language = {$sqlLang}";
         }
 
         return $languagePattern;
@@ -261,7 +261,7 @@ class core_kernel_persistence_smoothsql_Utils
             // Add parenthesis.
             $finalPropertyQueries = [];
             foreach ($propertyQueries as $query) {
-                $finalPropertyQueries[] = "(${query})";
+                $finalPropertyQueries[] = "({$query})";
             }
 
             return implode(' UNION ALL ', $finalPropertyQueries);
@@ -305,7 +305,7 @@ class core_kernel_persistence_smoothsql_Utils
             $query = self::buildPropertyQuery($model, OntologyRdf::RDF_TYPE, $classUri, false, $lang);
         } else {
             $unionCount = ($and === true) ? ($propCount + 1) : 2;
-            $query = "SELECT subject FROM (${unionQuery}) AS unionq GROUP BY subject HAVING count(*) >= ${unionCount}";
+            $query = "SELECT subject FROM ({$unionQuery}) AS unionq GROUP BY subject HAVING count(*) >= {$unionCount}";
         }
 
         // Order...
@@ -316,17 +316,17 @@ class core_kernel_persistence_smoothsql_Utils
             if (!empty($lang)) {
                 $sqlEmptyLang = $persistence->quote('');
                 $sqlRequestedLang = $persistence->quote($lang);
-                $sqlLang = " AND (l_language = ${sqlEmptyLang} OR l_language = ${sqlRequestedLang})";
+                $sqlLang = " AND (l_language = {$sqlEmptyLang} OR l_language = {$sqlRequestedLang})";
             }
 
             $orderQueryId = $persistence->getPlatForm()->quoteIdentifier('orderq');
             $orderQuerySubject = $orderQueryId . '.' . $persistence->getPlatForm()->quoteIdentifier('subject');
             $orderQueryObject = $orderQueryId . '.' . $persistence->getPlatForm()->quoteIdentifier('object');
 
-            $sqlOrderFilter = "mainq.subject = ${orderQuerySubject} AND predicate = ${orderPredicate}${sqlLang}";
+            $sqlOrderFilter = "mainq.subject = {$orderQuerySubject} AND predicate = {$orderPredicate}{$sqlLang}";
 
-            $query = "SELECT mainq.subject, ${orderQueryObject} FROM (${query}) AS mainq LEFT JOIN ";
-            $query .= "statements AS ${orderQueryId} ON (${sqlOrderFilter}) ORDER BY ${orderQueryObject} ${orderDir}";
+            $query = "SELECT mainq.subject, {$orderQueryObject} FROM ({$query}) AS mainq LEFT JOIN ";
+            $query .= "statements AS {$orderQueryId} ON ({$sqlOrderFilter}) ORDER BY {$orderQueryObject} {$orderDir}";
         }
 
         // Limit...
@@ -336,7 +336,7 @@ class core_kernel_persistence_smoothsql_Utils
 
         // Suffix order...
         if (empty($order) === false) {
-            $query = "SELECT subject FROM (${query}) as rootq";
+            $query = "SELECT subject FROM ({$query}) as rootq";
         }
 
         return $query;
