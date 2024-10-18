@@ -21,7 +21,7 @@
 
 namespace oat\oatbox\filesystem;
 
-use League\Flysystem\FileExistsException;
+use League\Flysystem\FilesystemException;
 
 class Directory extends FileSystemHandler implements \IteratorAggregate
 {
@@ -87,14 +87,13 @@ class Directory extends FileSystemHandler implements \IteratorAggregate
         $contents = $this->getFileSystem()->listContents($this->getPrefix(), $recursive);
 
         if (!empty($contents)) {
-            $dirPath = $this->getFileSystem()->get($this->getPrefix())->getPath();
             foreach ($contents as $content) {
                 if ($withDirectories && $content['type'] == 'dir') {
-                    $iterator[] = $this->getDirectory(str_replace($dirPath, '', $content['path']));
+                    $iterator[] = $this->getDirectory($this->stripDirectoryPath($content['path']));
                 }
 
                 if ($withFiles && $content['type'] == 'file') {
-                    $iterator[] = $this->getFile(str_replace($dirPath, '', $content['path']));
+                    $iterator[] = $this->getFile($this->stripDirectoryPath($content['path']));
                 }
             }
         }
@@ -127,7 +126,7 @@ class Directory extends FileSystemHandler implements \IteratorAggregate
      */
     public function exists()
     {
-        return $this->getFileSystem()->has($this->getPrefix());
+        return $this->getFileSystem()->directoryExists($this->getPrefix());
     }
 
     /**
@@ -137,7 +136,13 @@ class Directory extends FileSystemHandler implements \IteratorAggregate
      */
     public function deleteSelf()
     {
-        return $this->getFileSystem()->deleteDir($this->getPrefix());
+        try {
+            $this->getFileSystem()->deleteDirectory($this->getPrefix());
+            return true;
+        } catch (FilesystemException $e) {
+        }
+
+        return false;
     }
 
     /**
@@ -185,15 +190,10 @@ class Directory extends FileSystemHandler implements \IteratorAggregate
 
         foreach ($filePaths as $renaming) {
             try {
-                if ($this->getFileSystem()->rename($renaming['source'], $renaming['destination']) === false) {
-                    throw new \common_exception_FileSystemError(
-                        "Unable to rename '" . $renaming['source'] . "' into '" . $renaming['destination'] . "'."
-                    );
-                }
-            } catch (FileExistsException $e) {
+                $this->getFileSystem()->move($renaming['source'], $renaming['destination']);
+            } catch (FilesystemException $e) {
                 throw new \common_exception_FileSystemError(
-                    "Unable to rename '" . $renaming['source'] . "' into '" . $renaming['destination']
-                        . "'. File already exists."
+                    "Unable to rename '" . $renaming['source'] . "' into '" . $renaming['destination'] . "'."
                 );
             }
         }
@@ -205,5 +205,11 @@ class Directory extends FileSystemHandler implements \IteratorAggregate
         }
 
         return true;
+    }
+
+    private function stripDirectoryPath(string $path): string
+    {
+        $strippedPath = str_replace($this->getPrefix(), '', $path);
+        return str_replace($this->getFileSystemId(), '', $strippedPath);
     }
 }

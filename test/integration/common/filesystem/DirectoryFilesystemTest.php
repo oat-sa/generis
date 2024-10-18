@@ -101,7 +101,6 @@ class DirectoryFilesystemTest extends GenerisTestCase
 
     /**
      * @return bool
-     * @throws \League\Flysystem\FileExistsException
      * @throws \common_Exception
      */
     private function generateFile($path)
