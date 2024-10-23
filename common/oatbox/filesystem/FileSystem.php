@@ -28,7 +28,7 @@ use League\Flysystem\FilesystemAdapter;
 /**
  * Class Filesystem
  */
-class FileSystem implements FilesystemOperator
+class FileSystem implements FilesystemInterface
 {
     use FileSystemWrapperTrait;
 

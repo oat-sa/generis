@@ -23,7 +23,6 @@ namespace oat\oatbox\filesystem;
 
 use GuzzleHttp\Psr7\Stream;
 use GuzzleHttp\Psr7\StreamWrapper;
-use League\Flysystem\FilesystemException;
 use Psr\Http\Message\StreamInterface;
 use tao_helpers_File;
 

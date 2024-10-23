@@ -21,8 +21,6 @@
 
 namespace oat\oatbox\filesystem;
 
-use League\Flysystem\FilesystemException;
-
 class Directory extends FileSystemHandler implements \IteratorAggregate
 {
     public const ITERATOR_RECURSIVE = '1';

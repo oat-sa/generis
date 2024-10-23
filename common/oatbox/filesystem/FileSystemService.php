@@ -97,7 +97,7 @@ class FileSystemService extends ConfigurableService
      * Retrieve an existing FileSystem by ID.
      *
      * @param string $id
-     * @return FilesystemOperator
+     * @return FileSystem
      * @throws \common_exception_Error
      * @throws \common_exception_NotFound
      */
@@ -117,7 +117,7 @@ class FileSystemService extends ConfigurableService
      *
      * @param string $id
      * @param string $subPath
-     * @return FilesystemOperator
+     * @return FileSystem
      */
     public function createFileSystem($id, $subPath = null)
     {

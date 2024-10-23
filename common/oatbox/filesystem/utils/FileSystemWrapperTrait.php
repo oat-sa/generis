@@ -22,7 +22,9 @@
 namespace oat\oatbox\filesystem\utils;
 
 use League\Flysystem\DirectoryListing;
+use League\Flysystem\FilesystemException as FlyFilesystemException;
 use League\Flysystem\FilesystemOperator;
+use oat\oatbox\filesystem\FilesystemException;
 
 /**
  * A trait to facilitate creation of filesystem wrappers
@@ -33,164 +35,209 @@ trait FileSystemWrapperTrait
 {
     /**
      * @see FilesystemOperator::has
-     * @inheritDoc
+     * @throws FilesystemException
      */
     public function has(string $location): bool
     {
-        return $this->getFileSystem()->has($this->getFullPath($location));
+        return $this->wrapFileSystemOperation(function () use ($location) {
+            return $this->getFileSystem()->has($this->getFullPath($location));
+        });
     }
 
     /**
      * @see FilesystemOperator::directoryExists
-     * @inheritDoc
+     * @throws FilesystemException
      */
     public function directoryExists(string $location): bool
     {
-        return $this->getFileSystem()->directoryExists($this->getFullPath($location));
+        return $this->wrapFileSystemOperation(function () use ($location) {
+            return $this->getFileSystem()->directoryExists($this->getFullPath($location));
+        });
     }
 
     /**
      * @see FilesystemOperator::read
-     * @inheritDoc
+     * @throws FilesystemException
      */
     public function read(string $location): string
     {
-        return $this->getFileSystem()->read($this->getFullPath($location));
+        return $this->wrapFileSystemOperation(function () use ($location) {
+            return $this->getFileSystem()->read($this->getFullPath($location));
+        });
     }
 
     /**
      * @see FilesystemOperator::readStream
-     * @inheritDoc
+     * @throws FilesystemException
      */
     public function readStream($path)
     {
-        return $this->getFileSystem()->readStream($this->getFullPath($path));
+        return $this->wrapFileSystemOperation(function () use ($path) {
+            return $this->getFileSystem()->readStream($this->getFullPath($path));
+        });
     }
 
     /**
      * @see FilesystemOperator::listContents
-     * @inheritDoc
+     * @throws FilesystemException
      */
     public function listContents(string $location = '', bool $deep = self::LIST_SHALLOW): DirectoryListing
     {
-        return $this->getFileSystem()->listContents($this->getFullPath($location), $deep);
+        return $this->wrapFileSystemOperation(function () use ($location, $deep) {
+            return $this->getFileSystem()->listContents($this->getFullPath($location), $deep);
+        });
     }
 
     /**
      * @see FilesystemOperator::write
-     * @inheritDoc
+     * @throws FilesystemException
      */
     public function write(string $location, string $contents, array $config = []): void
     {
-        $this->getFileSystem()->write($this->getFullPath($location), $contents, $config);
+        $this->wrapFileSystemOperation(function () use ($location, $contents, $config) {
+            $this->getFileSystem()->write($this->getFullPath($location), $contents, $config);
+        });
     }
 
     /**
      * @see FilesystemOperator::writeStream
-     * @inheritDoc
+     * @throws FilesystemException
      */
     public function writeStream(string $location, $contents, array $config = []): void
     {
-        $this->getFileSystem()->writeStream($this->getFullPath($location), $contents, $config);
+        $this->wrapFileSystemOperation(function () use ($location, $contents, $config) {
+            $this->getFileSystem()->writeStream($this->getFullPath($location), $contents, $config);
+        });
     }
 
     /**
      * @see FilesystemOperator::copy
-     * @inheritDoc
+     * @throws FilesystemException
      */
     public function copy(string $source, string $destination, array $config = []): void
     {
-        $this->getFileSystem()->copy($this->getFullPath($source), $destination);
+        $this->wrapFileSystemOperation(function () use ($source, $destination, $config) {
+            $this->getFileSystem()->copy($this->getFullPath($source), $destination, $config);
+        });
     }
 
     /**
      * @see FilesystemOperator::delete
-     * @inheritDoc
+     * @throws FilesystemException
      */
     public function delete(string $location): void
     {
-        $this->getFileSystem()->delete($this->getFullPath($location));
+        $this->wrapFileSystemOperation(function () use ($location) {
+            $this->getFileSystem()->delete($this->getFullPath($location));
+        });
     }
 
     /**
      * @see FilesystemOperator::setVisibility
-     * @inheritDoc
+     * @throws FilesystemException
      */
     public function setVisibility(string $path, string $visibility): void
     {
-        $this->getFileSystem()->setVisibility($this->getFullPath($path), $visibility);
+        $this->wrapFileSystemOperation(function () use ($path, $visibility) {
+            $this->getFileSystem()->setVisibility($this->getFullPath($path), $visibility);
+        });
     }
 
     /**
      * @see FilesystemOperator::fileExists
-     * @inheritDoc
+     * @throws FilesystemException
      */
     public function fileExists(string $location): bool
     {
-        return $this->getFileSystem()->fileExists($this->getFullPath($location));
+        return $this->wrapFileSystemOperation(function () use ($location) {
+            return $this->getFileSystem()->fileExists($this->getFullPath($location));
+        });
     }
 
     /**
      * @see FilesystemOperator::lastModified
-     * @inheritDoc
+     * @throws FilesystemException
      */
     public function lastModified(string $path): int
     {
-        return $this->getFileSystem()->lastModified($this->getFullPath($path));
+        return $this->wrapFileSystemOperation(function () use ($path) {
+            return $this->getFileSystem()->lastModified($this->getFullPath($path));
+        });
     }
 
     /**
      * @see FilesystemOperator::fileSize
-     * @inheritDoc
+     * @throws FilesystemException
      */
     public function fileSize(string $path): int
     {
-        return $this->getFileSystem()->fileSize($this->getFullPath($path));
+        return $this->wrapFileSystemOperation(function () use ($path) {
+            return $this->getFileSystem()->fileSize($this->getFullPath($path));
+        });
     }
 
     /**
      * @see FilesystemOperator::mimeType
-     * @inheritDoc
+     * @throws FilesystemException
      */
     public function mimeType(string $path): string
     {
-        return $this->getFileSystem()->mimeType($this->getFullPath($path));
+        return $this->wrapFileSystemOperation(function () use ($path) {
+            return $this->getFileSystem()->mimeType($this->getFullPath($path));
+        });
     }
 
     /**
      * @see FilesystemOperator::visibility
-     * @inheritDoc
+     * @throws FilesystemException
      */
     public function visibility(string $path): string
     {
-        return $this->getFileSystem()->visibility($this->getFullPath($path));
+        return $this->wrapFileSystemOperation(function () use ($path) {
+            return $this->getFileSystem()->visibility($this->getFullPath($path));
+        });
     }
 
     /**
      * @see FilesystemOperator::deleteDirectory
-     * @inheritDoc
+     * @throws FilesystemException
      */
     public function deleteDirectory(string $location): void
     {
-        $this->getFileSystem()->deleteDirectory($this->getFullPath($location));
+        $this->wrapFileSystemOperation(function () use ($location) {
+            $this->getFileSystem()->deleteDirectory($this->getFullPath($location));
+        });
     }
 
     /**
      * @see FilesystemOperator::createDirectory
-     * @inheritDoc
+     * @throws FilesystemException
      */
     public function createDirectory(string $location, array $config = []): void
     {
-        $this->getFileSystem()->createDirectory($this->getFullPath($location), $config);
+        $this->wrapFileSystemOperation(function () use ($location, $config) {
+            $this->getFileSystem()->createDirectory($this->getFullPath($location), $config);
+        });
     }
 
     /**
      * @see FilesystemOperator::move
-     * @inheritDoc
+     * @throws FilesystemException
      */
     public function move(string $source, string $destination, array $config = []): void
     {
-        $this->getFileSystem()->move($this->getFullPath($source), $destination, $config);
+        $this->wrapFileSystemOperation(function () use ($source, $destination, $config) {
+            $this->getFileSystem()->move($this->getFullPath($source), $destination, $config);
+        });
+    }
+
+    private function wrapFileSystemOperation(callable $operation)
+    {
+        try {
+            return $operation();
+        } catch (FlyFilesystemException $e) {
+            throw new FilesystemException($e->getMessage(), $e->getCode(), $e);
+        }
     }
 
     abstract protected function getFileSystem(): FilesystemOperator;
