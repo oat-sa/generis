@@ -28,8 +28,8 @@ use common_ext_ExtensionsManager;
 use common_ext_ExtensionUpdater;
 use core_kernel_impl_ApiModelOO;
 use core_kernel_persistence_smoothsql_SmoothModel;
-use League\Flysystem\Adapter\Local;
-use League\Flysystem\Memory\MemoryAdapter;
+use League\Flysystem\InMemory\InMemoryFilesystemAdapter;
+use League\Flysystem\Local\LocalFilesystemAdapter;
 use oat\generis\model\data\ModelManager;
 use oat\generis\model\data\Ontology;
 use oat\generis\model\fileReference\FileReferenceSerializer;
@@ -464,8 +464,8 @@ class Updater extends common_ext_ExtensionUpdater
                 if (get_class($fs) == FileSystemService::class) {
                     // override default behavior to ensure an adapter and not a directory is created
                     $adapters['default'] = [
-                        'class' => Local::class,
-                        'options' => ['root' => $fs->getOption(FileSystemService::OPTION_FILE_PATH)]
+                        'class' => LocalFilesystemAdapter::class,
+                        'options' => ['location' => $fs->getOption(FileSystemService::OPTION_FILE_PATH)]
                     ];
                     $fs->setOption(FileSystemService::OPTION_ADAPTERS, $adapters);
                 } else {
@@ -526,7 +526,7 @@ class Updater extends common_ext_ExtensionUpdater
             /** @var FileSystemService $fs */
             $fs = $this->getServiceManager()->get(FileSystemService::SERVICE_ID);
             $adapters = $fs->getOption(FileSystemService::OPTION_ADAPTERS);
-            $adapters['memory'] = [ 'class' => MemoryAdapter::class, ];
+            $adapters['memory'] = [ 'class' => InMemoryFilesystemAdapter::class, ];
             $fs->setOption(FileSystemService::OPTION_ADAPTERS, $adapters);
             $this->getServiceManager()->register(FileSystemService::SERVICE_ID, $fs);
 

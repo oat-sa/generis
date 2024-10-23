@@ -2,7 +2,8 @@
 
 namespace oat\oatbox\filesystem\utils;
 
-use League\Flysystem\AdapterInterface;
+use League\Flysystem\FileAttributes;
+use League\Flysystem\FilesystemAdapter;
 use League\Flysystem\Config;
 
 /**
@@ -13,116 +14,107 @@ use League\Flysystem\Config;
 trait FlyWrapperTrait
 {
     /**
-     * (non-PHPdoc)
-     * @see \League\Flysystem\AdapterInterface::write()
+     * @see FilesystemAdapter::write()
+     * @inheritDoc
      */
-    public function write($path, $contents, Config $config)
+    public function write(string $path, string $contents, Config $config): void
     {
-        return $this->getAdapter()->write($path, $contents, $config);
+        $this->getAdapter()->write($path, $contents, $config);
     }
 
     /**
-     * (non-PHPdoc)
-     * @see \League\Flysystem\AdapterInterface::writeStream()
+     * @see FilesystemAdapter::writeStream()
+     * @inheritDoc
      */
-    public function writeStream($path, $resource, Config $config)
+    public function writeStream(string $path, $contents, Config $config): void
     {
-        return $this->getAdapter()->writeStream($path, $resource, $config);
+        $this->getAdapter()->writeStream($path, $contents, $config);
     }
 
     /**
-     * (non-PHPdoc)
-     * @see \League\Flysystem\AdapterInterface::update()
+     * @see FilesystemAdapter::move()
+     * @inheritDoc
      */
-    public function update($path, $contents, Config $config)
+    public function move(string $source, string $destination, Config $config): void
     {
-        return $this->getAdapter()->update($path, $contents, $config);
+        $this->getAdapter()->move($source, $destination, $config);
     }
 
     /**
-     * (non-PHPdoc)
-     * @see \League\Flysystem\AdapterInterface::updateStream()
+     * @see FilesystemAdapter::copy()
+     * @inheritDoc
      */
-    public function updateStream($path, $resource, Config $config)
+    public function copy(string $source, string $destination, Config $config): void
     {
-        return $this->getAdapter()->updateStream($path, $resource, $config);
+        $this->getAdapter()->copy($source, $destination, $config);
     }
 
     /**
-     * (non-PHPdoc)
-     * @see \League\Flysystem\AdapterInterface::rename()
+     * @see FilesystemAdapter::delete()
+     * @inheritDoc
      */
-    public function rename($path, $newpath)
+    public function delete(string $path): void
     {
-        return $this->getAdapter()->rename($path, $newpath);
+        $this->getAdapter()->delete($path);
     }
 
     /**
-     * (non-PHPdoc)
-     * @see \League\Flysystem\AdapterInterface::copy()
+     * @see FilesystemAdapter::deleteDirectory()
+     * @inheritDoc
      */
-    public function copy($path, $newpath)
+    public function deleteDirectory(string $path): void
     {
-        $this->getAdapter()->copy($path, $newpath);
+        $this->getAdapter()->deleteDirectory($path);
     }
 
     /**
-     * (non-PHPdoc)
-     * @see \League\Flysystem\AdapterInterface::delete()
+     * @see FilesystemAdapter::createDirectory()
+     * @inheritDoc
      */
-    public function delete($path)
+    public function createDirectory(string $path, Config $config): void
     {
-        return $this->getAdapter()->delete($path);
+        $this->getAdapter()->createDirectory($path, $config);
     }
 
     /**
-     * (non-PHPdoc)
-     * @see \League\Flysystem\AdapterInterface::deleteDir()
+     * @see FilesystemAdapter::setVisibility()
+     * @inheritDoc
      */
-    public function deleteDir($dirname)
+    public function setVisibility(string $path, string $visibility): void
     {
-        return $this->getAdapter()->deleteDir($dirname);
+        $this->getAdapter()->setVisibility($path, $visibility);
     }
 
     /**
-     * (non-PHPdoc)
-     * @see \League\Flysystem\AdapterInterface::createDir()
+     * @see FilesystemAdapter::fileExists()
+     * @inheritDoc
      */
-    public function createDir($dirname, Config $config)
+    public function fileExists(string $path): bool
     {
-        return $this->getAdapter()->createDir($dirname, $config);
+        return $this->getAdapter()->fileExists($path);
     }
 
     /**
-     * (non-PHPdoc)
-     * @see \League\Flysystem\AdapterInterface::setVisibility()
+     * @see FilesystemAdapter::directoryExists()
+     * @inheritDoc
      */
-    public function setVisibility($path, $visibility)
+    public function directoryExists(string $path): bool
     {
-        return $this->getAdapter()->setVisibility($path, $visibility);
+        return $this->getAdapter()->directoryExists($path);
     }
 
     /**
-     * (non-PHPdoc)
-     * @see \League\Flysystem\ReadInterface::has()
+     * @see FilesystemAdapter::read()
+     * @inheritDoc
      */
-    public function has($path)
-    {
-        return $this->getAdapter()->has($path);
-    }
-
-    /**
-     * (non-PHPdoc)
-     * @see \League\Flysystem\ReadInterface::read()
-     */
-    public function read($path)
+    public function read(string $path): string
     {
         return $this->getAdapter()->read($path);
     }
 
     /**
-     * (non-PHPdoc)
-     * @see \League\Flysystem\ReadInterface::readStream()
+     * @see FilesystemAdapter::readStream()
+     * @inheritDoc
      */
     public function readStream($path)
     {
@@ -130,63 +122,54 @@ trait FlyWrapperTrait
     }
 
     /**
-     * (non-PHPdoc)
-     * @see \League\Flysystem\ReadInterface::listContents()
+     * @see FilesystemAdapter::listContents()
+     * @inheritDoc
      */
-    public function listContents($directory = '', $recursive = false)
+    public function listContents(string $path, bool $deep = false): iterable
     {
-        return $this->getAdapter()->listContents($directory, $recursive);
+        return $this->getAdapter()->listContents($path, $deep);
     }
 
     /**
-     * (non-PHPdoc)
-     * @see \League\Flysystem\ReadInterface::getMetadata()
+     * @see FilesystemAdapter::fileSize()
+     * @inheritDoc
      */
-    public function getMetadata($path)
+    public function fileSize(string $path): FileAttributes
     {
-        return $this->getAdapter()->getMetadata($path);
+        return $this->getAdapter()->fileSize($path);
     }
 
     /**
-     * (non-PHPdoc)
-     * @see \League\Flysystem\ReadInterface::getSize()
+     * @see FilesystemAdapter::mimeType()
+     * @inheritDoc
      */
-    public function getSize($path)
+    public function mimeType(string $path): FileAttributes
     {
-        return $this->getAdapter()->getSize($path);
+        return $this->getAdapter()->mimeType($path);
     }
 
     /**
-     * (non-PHPdoc)
-     * @see \League\Flysystem\ReadInterface::getMimetype()
+     * @see FilesystemAdapter::lastModified()
+     * @inheritDoc
      */
-    public function getMimetype($path)
+    public function lastModified(string $path): FileAttributes
     {
-        return $this->getAdapter()->getMimetype($path);
+        return $this->getAdapter()->lastModified($path);
     }
 
     /**
-     * (non-PHPdoc)
-     * @see \League\Flysystem\ReadInterface::getTimestamp()
+     * @see FilesystemAdapter::visibility()
+     * @inheritDoc
      */
-    public function getTimestamp($path)
+    public function visibility(string $path): FileAttributes
     {
-        return $this->getAdapter()->getTimestamp($path);
-    }
-
-    /**
-     * (non-PHPdoc)
-     * @see \League\Flysystem\ReadInterface::getVisibility()
-     */
-    public function getVisibility($path)
-    {
-        return $this->getAdapter()->getVisibility($path);
+        return $this->getAdapter()->visibility($path);
     }
 
     /**
      * Return the adapter implementation
      *
-     * @return AdapterInterface
+     * @return FilesystemAdapter
      */
     abstract public function getAdapter();
 }

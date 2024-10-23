@@ -21,9 +21,10 @@
 
 namespace oat\oatbox\filesystem\utils;
 
-use League\Flysystem\Filesystem;
-use League\Flysystem\Handler;
-use League\Flysystem\PluginInterface;
+use League\Flysystem\DirectoryListing;
+use League\Flysystem\FilesystemException as FlyFilesystemException;
+use League\Flysystem\FilesystemOperator;
+use oat\oatbox\filesystem\FilesystemException;
 
 /**
  * A trait to facilitate creation of filesystem wrappers
@@ -33,250 +34,213 @@ use League\Flysystem\PluginInterface;
 trait FileSystemWrapperTrait
 {
     /**
-     * (non-PHPdoc)
-     * @see \League\Flysystem\FilesystemInterface::has()
+     * @see FilesystemOperator::has
+     * @throws FilesystemException
      */
-    public function has($path)
+    public function has(string $location): bool
     {
-        return $this->getFileSystem()->has($this->getFullPath($path));
+        return $this->wrapFileSystemOperation(function () use ($location) {
+            return $this->getFileSystem()->has($this->getFullPath($location));
+        });
     }
 
-
     /**
-     * (non-PHPdoc)
-     * @see \League\Flysystem\FilesystemInterface::read()
+     * @see FilesystemOperator::directoryExists
+     * @throws FilesystemException
      */
-    public function read($path)
+    public function directoryExists(string $location): bool
     {
-        return $this->getFileSystem()->read($this->getFullPath($path));
+        return $this->wrapFileSystemOperation(function () use ($location) {
+            return $this->getFileSystem()->directoryExists($this->getFullPath($location));
+        });
     }
 
+    /**
+     * @see FilesystemOperator::read
+     * @throws FilesystemException
+     */
+    public function read(string $location): string
+    {
+        return $this->wrapFileSystemOperation(function () use ($location) {
+            return $this->getFileSystem()->read($this->getFullPath($location));
+        });
+    }
 
     /**
-     * (non-PHPdoc)
-     * @see \League\Flysystem\FilesystemInterface::readStream()
+     * @see FilesystemOperator::readStream
+     * @throws FilesystemException
      */
     public function readStream($path)
     {
-        return $this->getFileSystem()->readStream($this->getFullPath($path));
+        return $this->wrapFileSystemOperation(function () use ($path) {
+            return $this->getFileSystem()->readStream($this->getFullPath($path));
+        });
     }
 
-
     /**
-     * (non-PHPdoc)
-     * @see \League\Flysystem\FilesystemInterface::listContents()
+     * @see FilesystemOperator::listContents
+     * @throws FilesystemException
      */
-    public function listContents($directory = '', $recursive = false)
+    public function listContents(string $location = '', bool $deep = self::LIST_SHALLOW): DirectoryListing
     {
-        return $this->getFileSystem()->listContents($this->getFullPath($directory), $recursive);
+        return $this->wrapFileSystemOperation(function () use ($location, $deep) {
+            return $this->getFileSystem()->listContents($this->getFullPath($location), $deep);
+        });
     }
 
-
     /**
-     * (non-PHPdoc)
-     * @see \League\Flysystem\FilesystemInterface::getMetadata()
+     * @see FilesystemOperator::write
+     * @throws FilesystemException
      */
-    public function getMetadata($path)
+    public function write(string $location, string $contents, array $config = []): void
     {
-        return $this->getFileSystem()->getMetadata($this->getFullPath($path));
+        $this->wrapFileSystemOperation(function () use ($location, $contents, $config) {
+            $this->getFileSystem()->write($this->getFullPath($location), $contents, $config);
+        });
     }
 
-
     /**
-     * (non-PHPdoc)
-     * @see \League\Flysystem\FilesystemInterface::getSize()
+     * @see FilesystemOperator::writeStream
+     * @throws FilesystemException
      */
-    public function getSize($path)
+    public function writeStream(string $location, $contents, array $config = []): void
     {
-        return $this->getFileSystem()->getSize($this->getFullPath($path));
+        $this->wrapFileSystemOperation(function () use ($location, $contents, $config) {
+            $this->getFileSystem()->writeStream($this->getFullPath($location), $contents, $config);
+        });
     }
 
-
     /**
-     * (non-PHPdoc)
-     * @see \League\Flysystem\FilesystemInterface::getMimetype()
+     * @see FilesystemOperator::copy
+     * @throws FilesystemException
      */
-    public function getMimetype($path)
+    public function copy(string $source, string $destination, array $config = []): void
     {
-        return $this->getFileSystem()->getMimetype($this->getFullPath($path));
+        $this->wrapFileSystemOperation(function () use ($source, $destination, $config) {
+            $this->getFileSystem()->copy($this->getFullPath($source), $destination, $config);
+        });
     }
 
-
     /**
-     * (non-PHPdoc)
-     * @see \League\Flysystem\FilesystemInterface::getTimestamp()
+     * @see FilesystemOperator::delete
+     * @throws FilesystemException
      */
-    public function getTimestamp($path)
+    public function delete(string $location): void
     {
-        return $this->getFileSystem()->getTimestamp($this->getFullPath($path));
+        $this->wrapFileSystemOperation(function () use ($location) {
+            $this->getFileSystem()->delete($this->getFullPath($location));
+        });
     }
 
-
     /**
-     * (non-PHPdoc)
-     * @see \League\Flysystem\FilesystemInterface::getVisibility()
+     * @see FilesystemOperator::setVisibility
+     * @throws FilesystemException
      */
-    public function getVisibility($path)
+    public function setVisibility(string $path, string $visibility): void
     {
-        return $this->getFileSystem()->getVisibility($this->getFullPath($path));
+        $this->wrapFileSystemOperation(function () use ($path, $visibility) {
+            $this->getFileSystem()->setVisibility($this->getFullPath($path), $visibility);
+        });
     }
 
-
     /**
-     * (non-PHPdoc)
-     * @see \League\Flysystem\FilesystemInterface::write()
+     * @see FilesystemOperator::fileExists
+     * @throws FilesystemException
      */
-    public function write($path, $contents, array $config = [])
+    public function fileExists(string $location): bool
     {
-        return $this->getFileSystem()->write($this->getFullPath($path), $contents, $config);
+        return $this->wrapFileSystemOperation(function () use ($location) {
+            return $this->getFileSystem()->fileExists($this->getFullPath($location));
+        });
     }
 
-
     /**
-     * (non-PHPdoc)
-     * @see \League\Flysystem\FilesystemInterface::writeStream()
+     * @see FilesystemOperator::lastModified
+     * @throws FilesystemException
      */
-    public function writeStream($path, $resource, array $config = [])
+    public function lastModified(string $path): int
     {
-        return $this->getFileSystem()->writeStream($this->getFullPath($path), $resource, $config);
+        return $this->wrapFileSystemOperation(function () use ($path) {
+            return $this->getFileSystem()->lastModified($this->getFullPath($path));
+        });
     }
 
-
     /**
-     * (non-PHPdoc)
-     * @see \League\Flysystem\FilesystemInterface::update()
+     * @see FilesystemOperator::fileSize
+     * @throws FilesystemException
      */
-    public function update($path, $contents, array $config = [])
+    public function fileSize(string $path): int
     {
-        return $this->getFileSystem()->update($this->getFullPath($path), $contents, $config);
+        return $this->wrapFileSystemOperation(function () use ($path) {
+            return $this->getFileSystem()->fileSize($this->getFullPath($path));
+        });
     }
 
-
     /**
-     * (non-PHPdoc)
-     * @see \League\Flysystem\FilesystemInterface::updateStream()
+     * @see FilesystemOperator::mimeType
+     * @throws FilesystemException
      */
-    public function updateStream($path, $resource, array $config = [])
+    public function mimeType(string $path): string
     {
-        return $this->getFileSystem()->updateStream($this->getFullPath($path), $resource, $config);
+        return $this->wrapFileSystemOperation(function () use ($path) {
+            return $this->getFileSystem()->mimeType($this->getFullPath($path));
+        });
     }
 
-
     /**
-     * (non-PHPdoc)
-     * @see \League\Flysystem\FilesystemInterface::rename()
+     * @see FilesystemOperator::visibility
+     * @throws FilesystemException
      */
-    public function rename($path, $newpath)
+    public function visibility(string $path): string
     {
-        return $this->getFileSystem()->rename($this->getFullPath($path), $newpath);
+        return $this->wrapFileSystemOperation(function () use ($path) {
+            return $this->getFileSystem()->visibility($this->getFullPath($path));
+        });
     }
 
-
     /**
-     * (non-PHPdoc)
-     * @see \League\Flysystem\FilesystemInterface::copy()
+     * @see FilesystemOperator::deleteDirectory
+     * @throws FilesystemException
      */
-    public function copy($path, $newpath)
+    public function deleteDirectory(string $location): void
     {
-        return $this->getFileSystem()->copy($this->getFullPath($path), $newpath);
+        $this->wrapFileSystemOperation(function () use ($location) {
+            $this->getFileSystem()->deleteDirectory($this->getFullPath($location));
+        });
     }
 
-
     /**
-     * (non-PHPdoc)
-     * @see \League\Flysystem\FilesystemInterface::delete()
+     * @see FilesystemOperator::createDirectory
+     * @throws FilesystemException
      */
-    public function delete($path)
+    public function createDirectory(string $location, array $config = []): void
     {
-        return $this->getFileSystem()->delete($this->getFullPath($path));
+        $this->wrapFileSystemOperation(function () use ($location, $config) {
+            $this->getFileSystem()->createDirectory($this->getFullPath($location), $config);
+        });
     }
 
-
     /**
-     * (non-PHPdoc)
-     * @see \League\Flysystem\FilesystemInterface::deleteDir()
+     * @see FilesystemOperator::move
+     * @throws FilesystemException
      */
-    public function deleteDir($dirname)
+    public function move(string $source, string $destination, array $config = []): void
     {
-        return $this->getFileSystem()->deleteDir($this->getFullPath($dirname));
+        $this->wrapFileSystemOperation(function () use ($source, $destination, $config) {
+            $this->getFileSystem()->move($this->getFullPath($source), $destination, $config);
+        });
     }
 
-
-    /**
-     * (non-PHPdoc)
-     * @see \League\Flysystem\FilesystemInterface::createDir()
-     */
-    public function createDir($dirname, array $config = [])
+    private function wrapFileSystemOperation(callable $operation)
     {
-        return $this->getFileSystem()->createDir($this->getFullPath($dirname), $config);
+        try {
+            return $operation();
+        } catch (FlyFilesystemException $e) {
+            throw new FilesystemException($e->getMessage(), $e->getCode(), $e);
+        }
     }
 
-
-    /**
-     * (non-PHPdoc)
-     * @see \League\Flysystem\FilesystemInterface::setVisibility()
-     */
-    public function setVisibility($path, $visibility)
-    {
-        return $this->getFileSystem()->setVisibility($this->getFullPath($path), $visibility);
-    }
-
-
-    /**
-     * (non-PHPdoc)
-     * @see \League\Flysystem\FilesystemInterface::put()
-     */
-    public function put($path, $contents, array $config = [])
-    {
-        return $this->getFileSystem()->put($this->getFullPath($path), $contents, $config);
-    }
-
-
-    /**
-     * (non-PHPdoc)
-     * @see \League\Flysystem\FilesystemInterface::putStream()
-     */
-    public function putStream($path, $resource, array $config = [])
-    {
-        return $this->getFileSystem()->putStream($this->getFullPath($path), $resource, $config);
-    }
-
-
-    /**
-     * (non-PHPdoc)
-     * @see \League\Flysystem\FilesystemInterface::readAndDelete()
-     */
-    public function readAndDelete($path)
-    {
-        return $this->getFileSystem()->readAndDelete($this->getFullPath($path));
-    }
-
-
-    /**
-     * (non-PHPdoc)
-     * @see \League\Flysystem\FilesystemInterface::get()
-     */
-    public function get($path, Handler $handler = null)
-    {
-        return $this->getFileSystem()->get($this->getFullPath($path), $handler);
-    }
-
-
-    /**
-     * (non-PHPdoc)
-     * @see \League\Flysystem\FilesystemInterface::addPlugin()
-     */
-    public function addPlugin(PluginInterface $plugin)
-    {
-        return $this->getFileSystem()->addPlugin($plugin);
-    }
-
-    /**
-     * Return the underlying Filesystem
-     *
-     * @return Filesystem
-     */
-    abstract protected function getFileSystem();
+    abstract protected function getFileSystem(): FilesystemOperator;
 
     abstract protected function getFullPath($path);
 }
