@@ -22,6 +22,7 @@
 
 namespace oat\oatbox\filesystem;
 
+use oat\oatbox\log\LoggerAwareTrait;
 use oat\oatbox\service\ServiceManager;
 use ReflectionClass;
 use ReflectionProperty;
@@ -31,8 +32,9 @@ use Zend\ServiceManager\ServiceLocatorAwareTrait;
 abstract class FileSystemHandler implements ServiceLocatorAwareInterface
 {
     use ServiceLocatorAwareTrait;
+    use LoggerAwareTrait;
 
-    private const NOT_SERIALIZABLE_PROPERTIES = ['fileSystem', 'serviceLocator'];
+    private const NOT_SERIALIZABLE_PROPERTIES = ['fileSystem', 'serviceLocator', 'logger'];
 
     /**
      * @var mixed

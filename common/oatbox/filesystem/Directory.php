@@ -138,6 +138,7 @@ class Directory extends FileSystemHandler implements \IteratorAggregate
             $this->getFileSystem()->deleteDirectory($this->getPrefix());
             return true;
         } catch (FilesystemException $e) {
+            $this->logWarning($e->getMessage());
         }
 
         return false;

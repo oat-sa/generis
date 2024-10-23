@@ -21,6 +21,7 @@
 
 namespace oat\oatbox\filesystem;
 
+use common_Logger;
 use GuzzleHttp\Psr7\Stream;
 use GuzzleHttp\Psr7\StreamWrapper;
 use Psr\Http\Message\StreamInterface;
@@ -53,6 +54,7 @@ class File extends FileSystemHandler
 
             return $mimeType;
         } catch (FilesystemException $e) {
+            $this->logWarning($e->getMessage());
         }
         return false;
     }
@@ -109,6 +111,7 @@ class File extends FileSystemHandler
                 ));
             }
         } catch (FilesystemException $e) {
+            $this->logWarning($e->getMessage());
             return false;
         }
 
@@ -131,7 +134,7 @@ class File extends FileSystemHandler
             throw new \RuntimeException('File "' . $this->getPrefix() . '" not found."');
         }
 
-        \common_Logger::i('Writing in ' . $this->getPrefix());
+        common_Logger::i('Writing in ' . $this->getPrefix());
 
         return $this->write($mixed, $mimeType);
     }
@@ -148,7 +151,7 @@ class File extends FileSystemHandler
      */
     public function put($mixed, $mimeType = null)
     {
-        \common_Logger::i('Writting in ' . $this->getPrefix());
+        common_Logger::i('Writting in ' . $this->getPrefix());
 
         return $this->write($mixed, $mimeType);
     }
@@ -163,6 +166,7 @@ class File extends FileSystemHandler
         try {
             return $this->getFileSystem()->read($this->getPrefix());
         } catch (FilesystemException $e) {
+            $this->logWarning($e->getMessage());
         }
 
         return false;
@@ -178,6 +182,7 @@ class File extends FileSystemHandler
         try {
             return $this->getFileSystem()->readStream($this->getPrefix());
         } catch (FilesystemException $e) {
+            $this->logWarning($e->getMessage());
         }
 
         return false;
@@ -194,6 +199,7 @@ class File extends FileSystemHandler
         try {
             $resource = $this->getFileSystem()->readStream($this->getPrefix());
         } catch (FilesystemException $e) {
+            $this->logWarning($e->getMessage());
         }
 
         return new Stream($resource);
@@ -204,6 +210,7 @@ class File extends FileSystemHandler
         try {
             return $this->getFileSystem()->fileExists($this->getPrefix());
         } catch (FilesystemException $e) {
+            $this->logWarning($e->getMessage());
         }
         return false;
     }
@@ -214,6 +221,7 @@ class File extends FileSystemHandler
             $this->getFileSystem()->delete($this->getPrefix());
             return true;
         } catch (FilesystemException $e) {
+            $this->logWarning($e->getMessage());
         }
 
         return false;
