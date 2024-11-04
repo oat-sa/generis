@@ -92,10 +92,13 @@ class File extends FileSystemHandler
                 if (!$mixed->isReadable()) {
                     throw new \common_Exception('Stream is not readable. Write to filesystem aborted.');
                 }
-                if (!$mixed->isSeekable()) {
-                    throw new \common_Exception('Stream is not seekable. Write to filesystem aborted.');
+                if ($mixed->isSeekable()) {
+                    $mixed->rewind();
+                } elseif ($mixed->eof()) {
+                    throw new \common_Exception(
+                        'Stream is not seekable and is already processed. Write to filesystem aborted.'
+                    );
                 }
-                $mixed->rewind();
 
                 $resource = StreamWrapper::getResource($mixed);
                 if (!is_resource($resource)) {
