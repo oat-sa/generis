@@ -773,6 +773,14 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
         return array_pop($parentClassesIds);
     }
 
+    /**
+     * Return the parent class URI of a resource
+     */
+    public function getParentClassId(): ?string
+    {
+        return current($this->getParentClassesIds()) ?: null;
+    }
+
     public function getParentClassesIds(): array
     {
         $implementation = $this->getImplementation();
