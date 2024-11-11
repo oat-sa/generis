@@ -757,24 +757,28 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
     }
 
     /**
-     * Whenever or not the current resource is
-     * an instance of the specified class
+     * Whenever or not the current resource is an instance of the specified class
      *
-     * @access public
      * @author Joel Bout, <joel.bout@tudor.lu>
-     * @param  Class class
-     * @return boolean
      */
     public function isInstanceOf(core_kernel_classes_Class $class): bool
     {
-        $returnValue = (bool) false;
-        foreach ($this->getTypes() as $type) {
-            if ($class->equals($type) || $type->isSubClassOf($class)) {
-                $returnValue = true;
-                break;
-            }
-        }
-        return (bool) $returnValue;
+        return in_array($class->getUri(), $this->getParentClassesIds(), true);
+    }
+
+    public function getRootId(): string
+    {
+        $parentClassesIds = $this->getParentClassesIds();
+
+        return array_pop($parentClassesIds);
+    }
+
+    /**
+     * Return the parent class URI of a resource
+     */
+    public function getParentClassId(): ?string
+    {
+        return current($this->getParentClassesIds()) ?: null;
     }
 
     public function getParentClassesIds(): array
