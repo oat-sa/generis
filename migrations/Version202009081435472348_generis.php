@@ -28,12 +28,6 @@ use oat\oatbox\user\UserTimezoneService;
 use oat\oatbox\user\UserTimezoneServiceInterface;
 use oat\tao\scripts\tools\migrations\AbstractMigration;
 
-/**
- * run Migration
- * index.php '\oat\tao\scripts\tools\Migrations' -c execute -v 'oat\generis\migrations\Version202009081435472348_generis'
- * rollback Migration
- * php index.php '\oat\tao\scripts\tools\Migrations' -c rollback -v 'oat\generis\migrations\Version202009081435472348_generis'
- */
 final class Version202009081435472348_generis extends AbstractMigration
 {
     public function getDescription(): string
