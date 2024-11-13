@@ -763,7 +763,13 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
      */
     public function isInstanceOf(core_kernel_classes_Class $class): bool
     {
-        return in_array($class->getUri(), $this->getParentClassesIds(), true);
+        foreach ($this->getTypes() as $type) {
+            if ($class->equals($type) || $type->isSubClassOf($class)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public function getRootId(): string
