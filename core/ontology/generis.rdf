@@ -48,6 +48,14 @@
     <rdfs:range rdf:resource="http://www.tao.lu/Ontologies/generis.rdf#Boolean"/>
     <widget:widget rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#RadioBox"/>
   </rdf:Description>
+  <rdf:Description rdf:about="http://www.tao.lu/Ontologies/generis.rdf#is_editable">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:label xml:lang="en-US"><![CDATA[Is editable?]]></rdfs:label>
+    <rdfs:comment xml:lang="en-US"><![CDATA[is_editable]]></rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:range rdf:resource="http://www.tao.lu/Ontologies/generis.rdf#Boolean"/>
+    <widget:widget rdf:resource="http://www.tao.lu/datatypes/WidgetDefinitions.rdf#RadioBox"/>
+  </rdf:Description>
   <rdf:Description rdf:about="http://www.tao.lu/Ontologies/generis.rdf#Multiple">
     <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
     <rdfs:label xml:lang="en-US"><![CDATA[Has multiple values?]]></rdfs:label>
@@ -60,6 +68,7 @@
     <rdfs:subClassOf rdf:resource="http://www.tao.lu/Ontologies/generis.rdf#generis_Ressource"/>
     <rdfs:label xml:lang="en-US"><![CDATA[Boolean]]></rdfs:label>
     <rdfs:comment xml:lang="en-US"><![CDATA[Boolean]]></rdfs:comment>
+    <generis:is_editable rdf:resource="http://www.tao.lu/Ontologies/generis.rdf#False"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.tao.lu/Ontologies/generis.rdf#True">
     <rdf:type rdf:resource="http://www.tao.lu/Ontologies/generis.rdf#Boolean"/>
