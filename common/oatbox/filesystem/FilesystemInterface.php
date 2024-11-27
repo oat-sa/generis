@@ -6,5 +6,4 @@ use League\Flysystem\FilesystemOperator;
 
 interface FilesystemInterface extends FilesystemOperator
 {
-
 }
