@@ -21,6 +21,7 @@
 
 namespace oat\oatbox\install;
 
+use League\Flysystem\InMemory\InMemoryFilesystemAdapter;
 use oat\oatbox\service\ConfigurableService;
 use oat\oatbox\service\exception\InvalidService;
 use oat\oatbox\service\exception\InvalidServiceManagerException;
@@ -29,7 +30,6 @@ use oat\oatbox\service\ServiceManager;
 use oat\oatbox\filesystem\FileSystemService;
 use oat\oatbox\service\ServiceNotFoundException;
 use common_report_Report as Report;
-use League\Flysystem\Memory\MemoryAdapter;
 
 /**
  * A service to install oatbox functionality
@@ -101,11 +101,11 @@ class Installer extends ConfigurableService
                     'default' => [
                         'class' => 'Local',
                         'options' => [
-                            'root' => $this->getOption('file_path')
+                            'location' => $this->getOption('file_path')
                         ]
                     ],
                     'memory' => [
-                        'class' => MemoryAdapter::class
+                        'class' => InMemoryFilesystemAdapter::class
                     ]
                 ]
             ]);
