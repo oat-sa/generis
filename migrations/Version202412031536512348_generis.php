@@ -23,8 +23,8 @@ final class Version202412031536512348_generis extends AbstractMigration
             if ($adapterConfig['class'] === 'Local'
                 || $adapterConfig['class'] === 'League\\Flysystem\\Local\\LocalFilesystemAdapter'
             ) {
-                if (isset($adapterConfig['options']['root'])) {
-                    $updatedConfig[$adapterId]['options']['location'] = $adapterConfig[$adapterId]['options']['root'];
+                if (!empty($adapterConfig['options']['root'])) {
+                    $updatedConfig[$adapterId]['options']['location'] = $adapterConfig['options']['root'];
                     unset($updatedConfig[$adapterId]['options']['root']);
                 }
             } elseif ($adapterConfig['class'] === 'League\\Flysystem\\Memory\\MemoryAdapter') {
@@ -44,8 +44,8 @@ final class Version202412031536512348_generis extends AbstractMigration
             if ($adapterConfig['class'] === 'Local'
                 || $adapterConfig['class'] === 'League\\Flysystem\\Local\\LocalFilesystemAdapter'
             ) {
-                if (isset($adapterConfig['options']['location'])) {
-                    $updatedConfig[$adapterId]['options']['root'] = $adapterConfig[$adapterId]['options']['location'];
+                if (!empty($adapterConfig['options']['location'])) {
+                    $updatedConfig[$adapterId]['options']['root'] = $adapterConfig['options']['location'];
                     unset($updatedConfig[$adapterId]['options']['location']);
                 }
             } elseif ($adapterConfig['class'] === 'League\\Flysystem\\InMemory\\InMemoryFilesystemAdapter') {
