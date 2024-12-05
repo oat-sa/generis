@@ -241,6 +241,7 @@ class FileSystemService extends ConfigurableService
         while (is_string($adapterConfig)) {
             $adapterConfig = $fsConfig[$adapterConfig];
         }
+        $adapterConfig = $this->handleFlysystemUpgrade($adapterConfig);
         $class = $adapterConfig['class'];
         $options = isset($adapterConfig['options']) ? $adapterConfig['options'] : [];
 
@@ -262,5 +263,22 @@ class FileSystemService extends ConfigurableService
             $adapter->setServiceLocator($this->getServiceLocator());
         }
         return $adapter;
+    }
+
+    private function handleFlysystemUpgrade(array $adapterConfig): array
+    {
+        if (
+            $adapterConfig['class'] === 'Local'
+            || $adapterConfig['class'] === 'League\\Flysystem\\Local\\LocalFilesystemAdapter'
+        ) {
+            if (!empty($adapterConfig['options']['root'])) {
+                $adapterConfig['options']['location'] = $adapterConfig['options']['root'];
+                unset($adapterConfig['options']['root']);
+            }
+        } elseif ($adapterConfig['class'] === 'League\\Flysystem\\Memory\\MemoryAdapter') {
+            $adapterConfig['class'] = 'League\\Flysystem\\InMemory\\InMemoryFilesystemAdapter';
+        }
+
+        return $adapterConfig;
     }
 }
