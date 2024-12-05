@@ -267,7 +267,8 @@ class FileSystemService extends ConfigurableService
 
     private function handleFlysystemUpgrade(array $adapterConfig): array
     {
-        if ($adapterConfig['class'] === 'Local'
+        if (
+            $adapterConfig['class'] === 'Local'
             || $adapterConfig['class'] === 'League\\Flysystem\\Local\\LocalFilesystemAdapter'
         ) {
             if (!empty($adapterConfig['options']['root'])) {
