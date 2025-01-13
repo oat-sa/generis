@@ -15,9 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2021 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
- * @author Gabriel Felipe Soares <gabriel.felipe.soares@taotesting.com>
+ * Copyright (c) 2021-2025 (original work) Open Assessment Technologies SA;
  */
 
 declare(strict_types=1);
@@ -25,8 +23,8 @@ declare(strict_types=1);
 namespace oat\generis\model\DependencyInjection;
 
 use Psr\Container\ContainerInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Symfony\Component\DependencyInjection\Container;
-use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 /**
@@ -50,12 +48,16 @@ class BaseContainer extends Container
     /**
      * @inheritDoc
      */
-    public function get($id, int $invalidBehavior = 1)
+    public function get($id, int $invalidBehavior = self::EXCEPTION_ON_INVALID_REFERENCE)
     {
         try {
-            return parent::get($id, $invalidBehavior);
-        } catch (ServiceNotFoundException $exception) {
-            return $this->legacyContainer->get($id);
+            return parent::get($id, self::NULL_ON_INVALID_REFERENCE) ?? $this->legacyContainer->get($id);
+        } catch (NotFoundExceptionInterface $exception) {
+            if ($invalidBehavior >= self::NULL_ON_INVALID_REFERENCE) {
+                return null;
+            }
+
+            throw $exception;
         }
     }
 
