@@ -87,12 +87,15 @@ class ResourceRepository implements ResourceRepositoryInterface
         $selectedClass = $context->getParameter(ResourceRepositoryContext::PARAM_SELECTED_CLASS);
         /** @var core_kernel_classes_Class|null $selectedClass */
         $parentClass = $context->getParameter(ResourceRepositoryContext::PARAM_PARENT_CLASS);
+        $resourceType = reset($resourceType);
 
+        if (!$resourceType instanceof core_kernel_classes_Class) {
+            throw new InvalidArgumentException('Resource type is not a class.');
+        }
         $resourceDeletedEvent = (new ResourceDeleted($resource->getUri()))
             ->setSelectedClass($selectedClass)
             ->setParentClass($parentClass)
-            ->setResourceType(reset($resourceType)->getUri());
-        $this->eventManager->trigger($resourceDeletedEvent);
+            ->setResourceType($resourceType->getUri());
     }
 
     private function getImplementation(): core_kernel_persistence_ResourceInterface
