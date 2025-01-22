@@ -59,7 +59,6 @@ class ResourceRepository implements ResourceRepositoryInterface
     {
         /** @var core_kernel_classes_Resource|null $resource */
         $resource = $context->getParameter(ResourceRepositoryContext::PARAM_RESOURCE);
-        $resourceType = $resource->getTypes();
 
         if ($resource === null) {
             throw new InvalidArgumentException('Resource was not provided for deletion.');
@@ -87,6 +86,8 @@ class ResourceRepository implements ResourceRepositoryInterface
         $selectedClass = $context->getParameter(ResourceRepositoryContext::PARAM_SELECTED_CLASS);
         /** @var core_kernel_classes_Class|null $selectedClass */
         $parentClass = $context->getParameter(ResourceRepositoryContext::PARAM_PARENT_CLASS);
+
+        $resourceType = $resource->getTypes();
         $resourceType = reset($resourceType);
 
         if (!$resourceType instanceof core_kernel_classes_Class) {
@@ -96,6 +97,8 @@ class ResourceRepository implements ResourceRepositoryInterface
             ->setSelectedClass($selectedClass)
             ->setParentClass($parentClass)
             ->setResourceType($resourceType->getUri());
+
+        $this->eventManager->trigger($resourceDeletedEvent);
     }
 
     private function getImplementation(): core_kernel_persistence_ResourceInterface
