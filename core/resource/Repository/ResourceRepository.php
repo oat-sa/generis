@@ -71,6 +71,8 @@ class ResourceRepository implements ResourceRepositoryInterface
 
         $beforeResourceDeletedEvent = new BeforeResourceDeleted($resource->getUri());
         $this->eventManager->trigger($beforeResourceDeletedEvent);
+        $resourceType = $resource->getTypes();
+        $resourceType = reset($resourceType);
 
         if (!$this->getImplementation()->delete($resource, $deleteReference)) {
             throw new RuntimeException(
@@ -86,13 +88,6 @@ class ResourceRepository implements ResourceRepositoryInterface
         $selectedClass = $context->getParameter(ResourceRepositoryContext::PARAM_SELECTED_CLASS);
         /** @var core_kernel_classes_Class|null $selectedClass */
         $parentClass = $context->getParameter(ResourceRepositoryContext::PARAM_PARENT_CLASS);
-
-        $resourceType = $resource->getTypes();
-        $resourceType = reset($resourceType);
-
-        if (!$resourceType instanceof core_kernel_classes_Class) {
-            throw new InvalidArgumentException('Resource type is not a class.');
-        }
         $resourceDeletedEvent = (new ResourceDeleted($resource->getUri()))
             ->setSelectedClass($selectedClass)
             ->setParentClass($parentClass)
