@@ -71,7 +71,7 @@ class ResourceRepository implements ResourceRepositoryInterface
 
         $beforeResourceDeletedEvent = new BeforeResourceDeleted($resource->getUri());
         $this->eventManager->trigger($beforeResourceDeletedEvent);
-        $resourceType = $resource->getTypes();
+        $resourceType = $resource->getTypes() ?? [];
         $resourceType = reset($resourceType);
 
         if (!$this->getImplementation()->delete($resource, $deleteReference)) {
