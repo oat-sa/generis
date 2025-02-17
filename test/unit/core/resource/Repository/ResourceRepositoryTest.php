@@ -93,8 +93,11 @@ class ResourceRepositoryTest extends TestCase
         $this->eventManager
             ->expects($this->exactly(2))
             ->method('trigger');
-
-        $context = $this->createContext(4, $this->createResource('resourceUri'));
+        $classMock = $this->createMock(core_kernel_classes_Class::class);
+        $resource = $this->createResource('resourceUri');
+        $resource->method('getTypes')
+            ->willReturn([$classMock]);
+        $context = $this->createContext(4, $resource);
         $this->sut->delete($context);
     }
 
@@ -146,6 +149,9 @@ class ResourceRepositoryTest extends TestCase
         $this->sut->delete($context);
     }
 
+    /**
+     * @return core_kernel_classes_Resource|MockObject
+     */
     private function createResource(string $uri, string $label = null): core_kernel_classes_Resource
     {
         $class = $this->createMock(core_kernel_classes_Resource::class);
@@ -161,6 +167,9 @@ class ResourceRepositoryTest extends TestCase
         return $class;
     }
 
+    /**
+     * @return ContextInterface|MockObject
+     */
     private function createContext(int $expects, ?core_kernel_classes_Resource $resource): ContextInterface
     {
         $context = $this->createMock(ContextInterface::class);
