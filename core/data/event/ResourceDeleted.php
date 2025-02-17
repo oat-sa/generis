@@ -37,6 +37,7 @@ class ResourceDeleted implements Event, JsonSerializable
 
     /** @var core_kernel_classes_Resource|null */
     private $parentClass;
+    private string $resourceType;
 
     /**
      * @param string $uri
@@ -71,6 +72,18 @@ class ResourceDeleted implements Event, JsonSerializable
         $this->parentClass = $class;
 
         return $this;
+    }
+
+    public function setResourceType(string $resourceType): self
+    {
+        $this->resourceType = $resourceType;
+
+        return $this;
+    }
+
+    public function getResourceType(): string
+    {
+        return $this->resourceType;
     }
 
     public function jsonSerialize(): array
