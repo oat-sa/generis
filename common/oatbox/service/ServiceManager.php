@@ -146,7 +146,7 @@ class ServiceManager implements ServiceLocatorInterface, ContainerInterface
      * @see ContainerInterface::has()
      * @deprecated Use $this->getContainer()->has()
      */
-    public function has($serviceKey)
+    public function has($serviceKey): bool
     {
         if (isset($this->services[$serviceKey])) {
             return true;
