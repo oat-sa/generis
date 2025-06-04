@@ -22,3 +22,9 @@ Read here [how to use the Middlewares](./core/Middleware/README.md).
 ### Log
 
 Learn more here about [how to log](./common/oatbox/log/README.md).
+
+### Environment Variables
+
+| Environment Variable | Description                | Default Value                          |
+|----------------------|----------------------------|----------------------------------------|
+| `TENANT_ID`          | Identifier for the tenant. | `ROOT_URL` or empty string if not set. |
