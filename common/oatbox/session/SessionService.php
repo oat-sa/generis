@@ -54,6 +54,11 @@ class SessionService extends ConfigurableService
         return $this->getCurrentSession()->getUser();
     }
 
+    public function getTenantId(): string
+    {
+        return (string)(getenv('TENANT_ID') ?: rtrim(ROOT_URL, '/'));
+    }
+
     /**
      * Is the current session anonymous or associated to a user?
      * @return boolean
