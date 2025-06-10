@@ -24,6 +24,7 @@
  *               2017 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
 
+use oat\generis\model\GenerisRdf;
 use oat\generis\model\OntologyRdf;
 use oat\generis\model\OntologyRdfs;
 use oat\oatbox\session\SessionService;
@@ -120,7 +121,7 @@ WITH RECURSIVE statements_tree AS (
         JOIN statements_tree st
             ON s.subject = st.object
                    AND s.predicate IN (?, ?)
-                   AND s.object NOT IN (?, ?, ?, ?)
+                   AND s.object NOT IN (?, ?, ?, ?, ?)
 )
 SELECT object FROM statements_tree;
 SQL;
@@ -136,8 +137,9 @@ SQL;
                 OntologyRdf::RDF_TYPE,
                 'http://www.tao.lu/Ontologies/TAO.rdf#AssessmentContentObject',
                 'http://www.tao.lu/Ontologies/TAO.rdf#TAOObject',
-                'http://www.tao.lu/Ontologies/generis.rdf#generis_Ressource',
-                'http://www.w3.org/2000/01/rdf-schema#Resource',
+                GenerisRdf::CLASS_GENERIS_RESOURCE,
+                OntologyRdfs::RDFS_RESOURCE,
+                OntologyRdfs::RDFS_CLASS,
             ]
         );
 
