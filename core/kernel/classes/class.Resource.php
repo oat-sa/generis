@@ -29,6 +29,7 @@ use oat\generis\model\OntologyRdfs;
 use oat\oatbox\event\EventAggregator;
 use oat\oatbox\service\ServiceManager;
 use oat\generis\model\OntologyAwareTrait;
+use oat\tao\model\TaoOntology;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use oat\generis\model\data\event\ResourceUpdated;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
@@ -870,9 +871,17 @@ class core_kernel_classes_Resource extends core_kernel_classes_Container
 
     private function onUpdate(): void
     {
-        $updatedAt = microtime(true);
+        ## Update the 'UpdatedAt' property of the resource
+        $now = microtime(true);
+
         $property = $this->getProperty('http://www.tao.lu/Ontologies/TAO.rdf#UpdatedAt');
-        $this->getImplementation()->setPropertyValue($this, $property, $updatedAt);
+        $updatedAt = $this->getOnePropertyValue($property);
+        if ($updatedAt && $updatedAt instanceof core_kernel_classes_Literal) {
+            $updatedAt = (float)$updatedAt->literal;
+        }
+        if ((int)$now - (int)$updatedAt > 1) {
+            $this->getImplementation()->setPropertyValue($this, $property, $now);
+        }
 
         /** @var EventAggregator $eventAggregator */
         $eventAggregator = $this->getServiceManager()->get(EventAggregator::SERVICE_ID);
