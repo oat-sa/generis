@@ -29,7 +29,6 @@ use oat\generis\model\OntologyRdfs;
 use oat\oatbox\event\EventAggregator;
 use oat\oatbox\service\ServiceManager;
 use oat\generis\model\OntologyAwareTrait;
-use oat\tao\model\TaoOntology;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use oat\generis\model\data\event\ResourceUpdated;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
