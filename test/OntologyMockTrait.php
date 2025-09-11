@@ -15,9 +15,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2018-2021 (original work) Open Assessment Technologies SA;
- *
+ * Copyright (c) 2018-2025 (original work) Open Assessment Technologies SA.
  */
+
+declare(strict_types=1);
 
 namespace oat\generis\test;
 
@@ -91,7 +92,12 @@ trait OntologyMockTrait
         $persistenceManagerWithSqlMock = $this->getPersistenceManagerWithSqlMock('mockSql');
         $session = new \common_session_AnonymousSession();
         $eventManager = new EventManager();
-        $serviceLocatorMock = $this->getServiceLocatorMock([
+
+        $serviceManagerMethod = method_exists($this, 'getServiceManagerMock')
+            ? 'getServiceManagerMock'
+            : 'getServiceLocatorMock';
+
+        $serviceLocatorMock = $this->$serviceManagerMethod([
             Ontology::SERVICE_ID => $onto,
             PersistenceManager::SERVICE_ID => $persistenceManagerWithSqlMock,
             UserLanguageServiceInterface::SERVICE_ID => $this->getUserLanguageServiceMock('xx_XX'),
