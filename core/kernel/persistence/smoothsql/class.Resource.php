@@ -24,6 +24,8 @@
  *               2017 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
 
+declare(strict_types=1);
+
 use oat\generis\model\OntologyRdf;
 use oat\generis\model\OntologyRdfs;
 use oat\oatbox\session\SessionService;
@@ -359,6 +361,9 @@ SQL;
         $lg = null
     ) {
         $object  = $object instanceof core_kernel_classes_Resource ? $object->getUri() : (string) $object;
+        if (!common_Utils::isUri($object)) {
+            $object = helpers_ContentSanitizer::sanitize($object);
+        }
         if ($property->isLgDependent()) {
             $lang = ((null != $lg)
                 ? $lg
@@ -432,7 +437,7 @@ SQL;
             $this->getNewTripleModelId(),
             $resource->getUri(),
             $property->getUri(),
-            $value,
+            helpers_ContentSanitizer::sanitize($value),
             ($property->isLgDependent() ? $lg : '')
         );
         return $this->getModel()->getRdfInterface()->add($triple);
@@ -838,20 +843,39 @@ SQL;
     private function normalizePropertyValues($value)
     {
         $normalizedValues = [];
-        if ($value instanceof core_kernel_classes_Resource) {
-            $normalizedValues[] = $value->getUri();
-        } elseif (is_array($value)) {
+
+        if (is_array($value)) {
             foreach ($value as $val) {
-                if ($val !== null) {
-                    $normalizedValues[] = $val instanceof core_kernel_classes_Resource
-                        ? $val->getUri()
-                        : $val;
+                if ($val === null) {
+                    continue;
                 }
+                $normalizedValues[] = $this->normalizeSinglePropertyValue($val);
             }
         } else {
-            $normalizedValues[] = ($value == null) ? '' : $value;
+            $normalizedValues[] = $this->normalizeSinglePropertyValue($value);
         }
+
         return $normalizedValues;
+    }
+
+    private function normalizeSinglePropertyValue($value)
+    {
+        if ($value === null) {
+            return '';
+        }
+
+        if ($value instanceof core_kernel_classes_Resource) {
+            return $value->getUri();
+        }
+
+        if (is_string($value)) {
+            if (common_Utils::isUri($value)) {
+                return $value;
+            }
+            return helpers_ContentSanitizer::sanitize($value);
+        }
+
+        return $value;
     }
 
     /**
