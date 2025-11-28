@@ -856,7 +856,7 @@ SQL;
         return $normalizedValues;
     }
 
-    private function normalizeSinglePropertyValue(core_kernel_classes_Property $property, $value): string
+    private function normalizeSinglePropertyValue(core_kernel_classes_Property $property, $value)
     {
         if ($value === null) {
             return '';
