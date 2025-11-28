@@ -33,7 +33,7 @@ class helpers_ContentSanitizer
      * @param string $value
      * @param string $encoding
      */
-    public static function sanitize(core_kernel_classes_Property $property, $value, string $encoding = self::DEFAULT_ENCODING)
+    public static function sanitize(core_kernel_classes_Property $property, $value, string $encoding = self::DEFAULT_ENCODING): mixed
     {
         if (!is_string($value)) {
             return $value;

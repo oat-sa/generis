@@ -856,7 +856,7 @@ SQL;
         return $normalizedValues;
     }
 
-    private function normalizeSinglePropertyValue(core_kernel_classes_Property $property, $value)
+    private function normalizeSinglePropertyValue(core_kernel_classes_Property $property, $value): mixed
     {
         if ($value === null) {
             return '';
