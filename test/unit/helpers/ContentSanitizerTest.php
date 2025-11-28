@@ -190,4 +190,3 @@ class ContentSanitizerTest extends GenerisTestCase
         return $property;
     }
 }
-
