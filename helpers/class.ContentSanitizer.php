@@ -22,8 +22,7 @@ declare(strict_types=1);
 
 use oat\generis\model\OntologyRdfs;
 
-class helpers_ContentSanitizer
-{
+class helpers_ContentSanitizer {
     private const DEFAULT_ENCODING = 'UTF-8';
 
     /**
@@ -33,7 +32,11 @@ class helpers_ContentSanitizer
      * @param string $value
      * @param string $encoding
      */
-    public static function sanitize(core_kernel_classes_Property $property, $value, string $encoding = self::DEFAULT_ENCODING): mixed
+    public static function sanitize(
+        core_kernel_classes_Property $property, 
+        $value, 
+        string $encoding = self::DEFAULT_ENCODING
+    ): mixed {
     {
         if (!is_string($value)) {
             return $value;
