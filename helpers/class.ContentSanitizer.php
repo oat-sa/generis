@@ -32,9 +32,8 @@ class helpers_ContentSanitizer
      *
      * @param string $value
      * @param string $encoding
-     * @return string
      */
-    public static function sanitizeString(core_kernel_classes_Property $property, $value, string $encoding = self::DEFAULT_ENCODING): string
+    public static function sanitize(core_kernel_classes_Property $property, $value, string $encoding = self::DEFAULT_ENCODING)
     {
         if (!is_string($value)) {
             return $value;

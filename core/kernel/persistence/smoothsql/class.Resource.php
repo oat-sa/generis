@@ -361,7 +361,7 @@ SQL;
         $lg = null
     ) {
         $object  = $object instanceof core_kernel_classes_Resource ? $object->getUri() : (string) $object;
-        $object = helpers_ContentSanitizer::sanitizeString($property, $object);
+        $object = helpers_ContentSanitizer::sanitize($property, $object);
         if ($property->isLgDependent()) {
             $lang = ((null != $lg)
                 ? $lg
@@ -435,7 +435,7 @@ SQL;
             $this->getNewTripleModelId(),
             $resource->getUri(),
             $property->getUri(),
-            helpers_ContentSanitizer::sanitizeString($property, $value),
+            helpers_ContentSanitizer::sanitize($property, $value),
             ($property->isLgDependent() ? $lg : '')
         );
         return $this->getModel()->getRdfInterface()->add($triple);
@@ -870,7 +870,7 @@ SQL;
             if (common_Utils::isUri($value)) {
                 return $value;
             }
-            return helpers_ContentSanitizer::sanitizeString($property, $value);
+            return helpers_ContentSanitizer::sanitize($property, $value);
         }
 
         return $value;
