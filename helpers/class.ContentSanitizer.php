@@ -13,12 +13,14 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * 31 Milk St # 960789 Boston, MA 02196 USA.
  *
  * Copyright (c) 2025 Open Assessment Technologies SA
  */
 
 declare(strict_types=1);
+
+use oat\generis\model\OntologyRdfs;
 
 class helpers_ContentSanitizer
 {
@@ -32,25 +34,17 @@ class helpers_ContentSanitizer
      * @param string $encoding
      * @return string
      */
-    public static function sanitizeString($value, string $encoding = self::DEFAULT_ENCODING): string
-    {
-        $encoding = $encoding !== '' ? $encoding : self::DEFAULT_ENCODING;
-
-        return htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE, $encoding, false);
-    }
-
-    /**
-     * Sanitize only when the provided value is a string.
-     *
-     * @param mixed $value
-     * @return string|mixed
-     */
-    public static function sanitize($value)
+    public static function sanitizeString(core_kernel_classes_Property $property, $value, string $encoding = self::DEFAULT_ENCODING): string
     {
         if (!is_string($value)) {
             return $value;
         }
 
-        return self::sanitizeString($value);
+        if ($property->getUri() === OntologyRdfs::RDFS_LABEL) {
+            $encoding = $encoding !== '' ? $encoding : self::DEFAULT_ENCODING;
+            return htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE, $encoding, false);
+        }
+
+        return $value;
     }
 }
