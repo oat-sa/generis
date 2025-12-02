@@ -13,16 +13,9 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * Foundation, Inc., 31 Milk St # 960789 Boston, MA 02196 USA.
  *
- * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg
- *                         (under the project TAO & TAO2);
- *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung
- *                         (under the project TAO-TRANSFER);
- *               2009-2012 (update and modification) Public Research Centre Henri Tudor
- *                         (under the project TAO-SUSTAIN & TAO-DEV);
- *               2013      (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
+ * Copyright (c) 2002-2025 (original work) Open Assessment Technologies SA;
  */
 
 /**
@@ -325,7 +318,7 @@ class helpers_File
                 }
 
                 // Deep copy directories
-                self::copy("${source}/${entry}", "${destination}/${entry}", $recursive, $ignoreSystemFiles);
+                self::copy("{$source}/{$entry}", "{$destination}/{$entry}", $recursive, $ignoreSystemFiles);
             }
 
             // Clean up
@@ -334,9 +327,6 @@ class helpers_File
         } else {
             return false;
         }
-
-
-        return (bool) $returnValue;
     }
 
     /**
@@ -533,5 +523,92 @@ class helpers_File
         return in_array($type, [
             'application/zip', 'application/x-zip', 'application/x-zip-compressed', 'application/octet-stream'
         ]);
+    }
+
+    public static function isPathInsideDirectory(string $path, string $directory): bool
+    {
+        $base = rtrim(self::normalizePathSafe($directory), '/');
+        $target = self::normalizePathSafe(self::isAbsolutePathSafe($path) ? $path : $base . '/' . $path);
+
+        return $target === $base || strpos($target, $base . '/') === 0;
+    }
+
+    private static function isAbsolutePathSafe(string $path): bool
+    {
+        return strpos($path, '/') === 0
+            || (strlen($path) > 1 && ctype_alpha($path[0]) && $path[1] === ':');
+    }
+
+    public static function copySafe(string $sourcePath, string $destPath): bool
+    {
+        $srcIsLocal = self::isLocalPathSafe($sourcePath);
+        $dstIsLocal = self::isLocalPathSafe($destPath);
+
+        if ($srcIsLocal && $dstIsLocal) {
+            return self::copy($sourcePath, $destPath, false);
+        }
+
+        return self::copyStream($sourcePath, $destPath);
+    }
+
+    private static function isLocalPathSafe(string $path): bool
+    {
+        $scheme = parse_url($path, PHP_URL_SCHEME);
+
+        return $scheme === null || $scheme === '' || $scheme === 'file';
+    }
+
+    private static function copyStream(string $sourcePath, string $destPath): bool
+    {
+        $sourceHandle = @fopen($sourcePath, 'rb');
+        if ($sourceHandle === false) {
+            return false;
+        }
+
+        if (self::isLocalPathSafe($destPath)) {
+            $destDir = dirname($destPath);
+            if (!is_dir($destDir)) {
+                if (!@mkdir($destDir, 0777, true) && !is_dir($destDir)) {
+                    fclose($sourceHandle);
+                    return false;
+                }
+            }
+        }
+
+        $destHandle = @fopen($destPath, 'wb');
+        if ($destHandle === false) {
+            fclose($sourceHandle);
+            return false;
+        }
+
+        $bytesCopied = @stream_copy_to_stream($sourceHandle, $destHandle);
+
+        fclose($sourceHandle);
+        fclose($destHandle);
+
+        return $bytesCopied !== false && $bytesCopied > 0;
+    }
+
+    private static function normalizePathSafe(string $path): string
+    {
+        $path = str_replace('\\', '/', $path);
+
+        $segments = [];
+        foreach (explode('/', $path) as $segment) {
+            if ($segment === '' || $segment === '.') {
+                continue;
+            }
+
+            if ($segment === '..') {
+                array_pop($segments);
+                continue;
+            }
+
+            $segments[] = $segment;
+        }
+
+        $prefix = strpos($path, '/') === 0 ? '/' : '';
+
+        return $prefix . implode('/', $segments);
     }
 }
