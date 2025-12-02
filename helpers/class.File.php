@@ -525,32 +525,52 @@ class helpers_File
         ]);
     }
 
+    /**
+     * Check if a path is inside a given directory (prevents path traversal attacks).
+     *
+     * @param string $path Path to check
+     * @param string $directory Directory to check against
+     * @return bool True if path is inside directory
+     */
     public static function isPathInsideDirectory(string $path, string $directory): bool
     {
-        $base = rtrim(self::normalizePathSafe($directory), '/');
-        $target = self::normalizePathSafe(self::isAbsolutePathSafe($path) ? $path : $base . '/' . $path);
+        $realDirectory = realpath($directory);
+        $realPath = realpath($path);
 
-        return $target === $base || strpos($target, $base . '/') === 0;
+        if ($realDirectory === false || $realPath === false) {
+            return false;
+        }
+
+        $base = rtrim($realDirectory, DIRECTORY_SEPARATOR);
+        return $realPath === $base || str_starts_with($realPath, $base . DIRECTORY_SEPARATOR);
     }
 
-    private static function isAbsolutePathSafe(string $path): bool
-    {
-        return strpos($path, '/') === 0
-            || (strlen($path) > 1 && ctype_alpha($path[0]) && $path[1] === ':');
-    }
-
+    /**
+     * Safely copy a file from source to destination, supporting both local and remote paths.
+     *
+     * @param string $sourcePath Source file path (local or stream wrapper)
+     * @param string $destPath Destination file path (local or stream wrapper)
+     * @return bool True if copy successful
+     */
     public static function copySafe(string $sourcePath, string $destPath): bool
     {
         $srcIsLocal = self::isLocalPathSafe($sourcePath);
         $dstIsLocal = self::isLocalPathSafe($destPath);
 
         if ($srcIsLocal && $dstIsLocal) {
-            return self::copy($sourcePath, $destPath, false);
+            $recursive = is_dir($sourcePath);
+            return self::copy($sourcePath, $destPath, $recursive);
         }
 
         return self::copyStream($sourcePath, $destPath);
     }
 
+    /**
+     * Check if a path is a local filesystem path (not a stream wrapper).
+     *
+     * @param string $path Path to check
+     * @return bool True if path is local
+     */
     private static function isLocalPathSafe(string $path): bool
     {
         $scheme = parse_url($path, PHP_URL_SCHEME);
@@ -558,9 +578,16 @@ class helpers_File
         return $scheme === null || $scheme === '' || $scheme === 'file';
     }
 
+    /**
+     * Copy a file using streams (supports remote/cloud storage).
+     *
+     * @param string $sourcePath Source file path
+     * @param string $destPath Destination file path
+     * @return bool True if copy successful (including empty files)
+     */
     private static function copyStream(string $sourcePath, string $destPath): bool
     {
-        $sourceHandle = @fopen($sourcePath, 'rb');
+        $sourceHandle = fopen($sourcePath, 'rb');
         if ($sourceHandle === false) {
             return false;
         }
@@ -568,47 +595,24 @@ class helpers_File
         if (self::isLocalPathSafe($destPath)) {
             $destDir = dirname($destPath);
             if (!is_dir($destDir)) {
-                if (!@mkdir($destDir, 0777, true) && !is_dir($destDir)) {
+                if (!mkdir($destDir, 0777, true) && !is_dir($destDir)) {
                     fclose($sourceHandle);
                     return false;
                 }
             }
         }
 
-        $destHandle = @fopen($destPath, 'wb');
+        $destHandle = fopen($destPath, 'wb');
         if ($destHandle === false) {
             fclose($sourceHandle);
             return false;
         }
 
-        $bytesCopied = @stream_copy_to_stream($sourceHandle, $destHandle);
+        $bytesCopied = stream_copy_to_stream($sourceHandle, $destHandle);
 
         fclose($sourceHandle);
         fclose($destHandle);
 
-        return $bytesCopied !== false && $bytesCopied > 0;
-    }
-
-    private static function normalizePathSafe(string $path): string
-    {
-        $path = str_replace('\\', '/', $path);
-
-        $segments = [];
-        foreach (explode('/', $path) as $segment) {
-            if ($segment === '' || $segment === '.') {
-                continue;
-            }
-
-            if ($segment === '..') {
-                array_pop($segments);
-                continue;
-            }
-
-            $segments[] = $segment;
-        }
-
-        $prefix = strpos($path, '/') === 0 ? '/' : '';
-
-        return $prefix . implode('/', $segments);
+        return $bytesCopied !== false;
     }
 }
