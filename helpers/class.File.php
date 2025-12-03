@@ -32,6 +32,7 @@ class helpers_File
 {
     public const SCAN_FILE = 1;
     public const SCAN_DIRECTORY = 2;
+    private const DEFAULT_DIR_MODE = 0755;
 
     // --- ATTRIBUTES ---
 
@@ -294,7 +295,7 @@ class helpers_File
             // get path info of destination.
             $destInfo = pathinfo($destination);
             if (isset($destInfo['dirname']) && ! is_dir($destInfo['dirname'])) {
-                if (! mkdir($destInfo['dirname'], 0777, true)) {
+                if (! mkdir($destInfo['dirname'], self::DEFAULT_DIR_MODE, true)) {
                     return false;
                 }
             }
@@ -305,8 +306,7 @@ class helpers_File
         // Make destination directory
         if ($recursive == true) {
             if (! is_dir($destination)) {
-                // 0777 is default. See mkdir PHP Official documentation.
-                mkdir($destination, 0777, true);
+                mkdir($destination, self::DEFAULT_DIR_MODE, true);
             }
 
             // Loop through the folder
@@ -595,7 +595,7 @@ class helpers_File
         if (self::isLocalPathSafe($destPath)) {
             $destDir = dirname($destPath);
             if (!is_dir($destDir)) {
-                if (!mkdir($destDir, 0777, true) && !is_dir($destDir)) {
+                if (!mkdir($destDir, self::DEFAULT_DIR_MODE, true) && !is_dir($destDir)) {
                     fclose($sourceHandle);
                     return false;
                 }
