@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * 31 Milk St # 960789 Boston, MA 02196 USA.
  *
  * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg
  *                         (under the project TAO & TAO2);
@@ -23,6 +23,8 @@
  *                         (under the project TAO-SUSTAIN & TAO-DEV);
  *               2017 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
+
+declare(strict_types=1);
 
 use oat\generis\model\OntologyRdf;
 use oat\generis\model\OntologyRdfs;
@@ -359,6 +361,7 @@ SQL;
         $lg = null
     ) {
         $object  = $object instanceof core_kernel_classes_Resource ? $object->getUri() : (string) $object;
+        $object = helpers_ContentSanitizer::sanitize($property, $object);
         if ($property->isLgDependent()) {
             $lang = ((null != $lg)
                 ? $lg
@@ -432,7 +435,7 @@ SQL;
             $this->getNewTripleModelId(),
             $resource->getUri(),
             $property->getUri(),
-            $value,
+            helpers_ContentSanitizer::sanitize($property, $value),
             ($property->isLgDependent() ? $lg : '')
         );
         return $this->getModel()->getRdfInterface()->add($triple);
@@ -813,7 +816,7 @@ SQL;
 
             $lang = ($property->isLgDependent() ? $dataLanguage : '');
 
-            $formattedValues = $this->normalizePropertyValues($value);
+            $formattedValues = $this->normalizePropertyValues($property, $value);
 
             foreach ($formattedValues as $object) {
                 $triples[] = core_kernel_classes_Triple::createTriple(
@@ -835,23 +838,42 @@ SQL;
      * @param array $formattedValues
      * @return array
      */
-    private function normalizePropertyValues($value)
+    private function normalizePropertyValues(core_kernel_classes_Property $property, $value)
     {
         $normalizedValues = [];
-        if ($value instanceof core_kernel_classes_Resource) {
-            $normalizedValues[] = $value->getUri();
-        } elseif (is_array($value)) {
+
+        if (is_array($value)) {
             foreach ($value as $val) {
-                if ($val !== null) {
-                    $normalizedValues[] = $val instanceof core_kernel_classes_Resource
-                        ? $val->getUri()
-                        : $val;
+                if ($val === null) {
+                    continue;
                 }
+                $normalizedValues[] = $this->normalizeSinglePropertyValue($property, $val);
             }
         } else {
-            $normalizedValues[] = ($value == null) ? '' : $value;
+            $normalizedValues[] = $this->normalizeSinglePropertyValue($property, $value);
         }
+
         return $normalizedValues;
+    }
+
+    private function normalizeSinglePropertyValue(core_kernel_classes_Property $property, $value): mixed
+    {
+        if ($value === null) {
+            return '';
+        }
+
+        if ($value instanceof core_kernel_classes_Resource) {
+            return $value->getUri();
+        }
+
+        if (is_string($value)) {
+            if (common_Utils::isUri($value)) {
+                return $value;
+            }
+            return helpers_ContentSanitizer::sanitize($property, $value);
+        }
+
+        return $value;
     }
 
     /**
