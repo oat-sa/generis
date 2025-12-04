@@ -8,7 +8,7 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
@@ -21,7 +21,7 @@
  *                         (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor
  *                         (under the project TAO-SUSTAIN & TAO-DEV);
- *               2017 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
+ *               2017-2025 (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
 
 declare(strict_types=1);
@@ -76,9 +76,9 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
         return 'modelid IN (' . implode(',', $this->model->getWritableModels()) . ')';
     }
 
-    protected function getNewTripleModelId()
+    protected function getNewTripleModelId(): int
     {
-        return $this->model->getNewTripleModelId();
+        return (int)$this->model->getNewTripleModelId();
     }
 
     /**
@@ -435,7 +435,7 @@ SQL;
             $this->getNewTripleModelId(),
             $resource->getUri(),
             $property->getUri(),
-            helpers_ContentSanitizer::sanitize($property, $value),
+            (string)helpers_ContentSanitizer::sanitize($property, $value),
             ($property->isLgDependent() ? $lg : '')
         );
         return $this->getModel()->getRdfInterface()->add($triple);
@@ -823,7 +823,7 @@ SQL;
                     $this->getNewTripleModelId(),
                     $resource->getUri(),
                     $property->getUri(),
-                    $object,
+                    (string)$object,
                     $lang,
                     $userIdentifier
                 );
