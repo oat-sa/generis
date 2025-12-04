@@ -13,16 +13,9 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * Foundation, Inc., 31 Milk St # 960789 Boston, MA 02196 USA.
  *
- * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg
- *                         (under the project TAO & TAO2);
- *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung
- *                         (under the project TAO-TRANSFER);
- *               2009-2012 (update and modification) Public Research Centre Henri Tudor
- *                         (under the project TAO-SUSTAIN & TAO-DEV);
- *               2013      (update and modification) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
+ * Copyright (c) 2002-2025 (original work) Open Assessment Technologies SA;
  */
 
 /**
@@ -39,6 +32,7 @@ class helpers_File
 {
     public const SCAN_FILE = 1;
     public const SCAN_DIRECTORY = 2;
+    private const DEFAULT_DIR_MODE = 0755;
 
     // --- ATTRIBUTES ---
 
@@ -301,7 +295,7 @@ class helpers_File
             // get path info of destination.
             $destInfo = pathinfo($destination);
             if (isset($destInfo['dirname']) && ! is_dir($destInfo['dirname'])) {
-                if (! mkdir($destInfo['dirname'], 0777, true)) {
+                if (! mkdir($destInfo['dirname'], self::DEFAULT_DIR_MODE, true)) {
                     return false;
                 }
             }
@@ -312,8 +306,7 @@ class helpers_File
         // Make destination directory
         if ($recursive == true) {
             if (! is_dir($destination)) {
-                // 0777 is default. See mkdir PHP Official documentation.
-                mkdir($destination, 0777, true);
+                mkdir($destination, self::DEFAULT_DIR_MODE, true);
             }
 
             // Loop through the folder
@@ -325,7 +318,7 @@ class helpers_File
                 }
 
                 // Deep copy directories
-                self::copy("${source}/${entry}", "${destination}/${entry}", $recursive, $ignoreSystemFiles);
+                self::copy("{$source}/{$entry}", "{$destination}/{$entry}", $recursive, $ignoreSystemFiles);
             }
 
             // Clean up
@@ -334,9 +327,6 @@ class helpers_File
         } else {
             return false;
         }
-
-
-        return (bool) $returnValue;
     }
 
     /**
@@ -533,5 +523,96 @@ class helpers_File
         return in_array($type, [
             'application/zip', 'application/x-zip', 'application/x-zip-compressed', 'application/octet-stream'
         ]);
+    }
+
+    /**
+     * Check if a path is inside a given directory (prevents path traversal attacks).
+     *
+     * @param string $path Path to check
+     * @param string $directory Directory to check against
+     * @return bool True if path is inside directory
+     */
+    public static function isPathInsideDirectory(string $path, string $directory): bool
+    {
+        $realDirectory = realpath($directory);
+        $realPath = realpath($path);
+
+        if ($realDirectory === false || $realPath === false) {
+            return false;
+        }
+
+        $base = rtrim($realDirectory, DIRECTORY_SEPARATOR);
+        return $realPath === $base || str_starts_with($realPath, $base . DIRECTORY_SEPARATOR);
+    }
+
+    /**
+     * Safely copy a file from source to destination, supporting both local and remote paths.
+     *
+     * @param string $sourcePath Source file path (local or stream wrapper)
+     * @param string $destPath Destination file path (local or stream wrapper)
+     * @return bool True if copy successful
+     */
+    public static function copySafe(string $sourcePath, string $destPath): bool
+    {
+        $srcIsLocal = self::isLocalPathSafe($sourcePath);
+        $dstIsLocal = self::isLocalPathSafe($destPath);
+
+        if ($srcIsLocal && $dstIsLocal) {
+            $recursive = is_dir($sourcePath);
+            return self::copy($sourcePath, $destPath, $recursive);
+        }
+
+        return self::copyStream($sourcePath, $destPath);
+    }
+
+    /**
+     * Check if a path is a local filesystem path (not a stream wrapper).
+     *
+     * @param string $path Path to check
+     * @return bool True if path is local
+     */
+    private static function isLocalPathSafe(string $path): bool
+    {
+        $scheme = parse_url($path, PHP_URL_SCHEME);
+
+        return $scheme === null || $scheme === '' || $scheme === 'file';
+    }
+
+    /**
+     * Copy a file using streams (supports remote/cloud storage).
+     *
+     * @param string $sourcePath Source file path
+     * @param string $destPath Destination file path
+     * @return bool True if copy successful (including empty files)
+     */
+    private static function copyStream(string $sourcePath, string $destPath): bool
+    {
+        $sourceHandle = fopen($sourcePath, 'rb');
+        if ($sourceHandle === false) {
+            return false;
+        }
+
+        if (self::isLocalPathSafe($destPath)) {
+            $destDir = dirname($destPath);
+            if (!is_dir($destDir)) {
+                if (!mkdir($destDir, self::DEFAULT_DIR_MODE, true) && !is_dir($destDir)) {
+                    fclose($sourceHandle);
+                    return false;
+                }
+            }
+        }
+
+        $destHandle = fopen($destPath, 'wb');
+        if ($destHandle === false) {
+            fclose($sourceHandle);
+            return false;
+        }
+
+        $bytesCopied = stream_copy_to_stream($sourceHandle, $destHandle);
+
+        fclose($sourceHandle);
+        fclose($destHandle);
+
+        return $bytesCopied !== false;
     }
 }
