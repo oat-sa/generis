@@ -25,7 +25,7 @@ declare(strict_types=1);
 namespace oat\generis\test\unit\model\DependencyInjection;
 
 use oat\generis\model\DependencyInjection\LegacyServiceGateway;
-use oat\generis\test\TestCase;
+use PHPUnit\Framework\TestCase;
 use oat\oatbox\service\ServiceManager;
 use oat\oatbox\session\SessionService;
 use PHPUnit\Framework\MockObject\MockObject;

@@ -23,37 +23,35 @@ namespace oat\generis\test\unit\model\data\permission;
 
 use oat\generis\model\data\permission\implementation\NoAccess;
 use oat\oatbox\user\User;
-use oat\generis\test\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class NoAccessTest extends TestCase
 {
-    /**
-     * @var User
-     */
-    private $user;
+    private User|MockObject $user;
 
     public function setUp(): void
     {
-        $user = $this->prophesize('oat\oatbox\user\User');
-        $user->getIdentifier()->willReturn('tastIdentifier\\_of_//User');
-
-        $this->user = $user->reveal();
+        $this->user = $this->createMock(User::class);
+        $this->user
+            ->method('getIdentifier')
+            ->willReturn('tastIdentifier\\_of_//User');
     }
 
-    public function testConstruct()
+    public function testConstruct(): void
     {
         $model = new NoAccess();
         $this->assertInstanceOf('oat\generis\model\data\permission\PermissionInterface', $model);
     }
 
-    public function testGetPermissions()
+    public function testGetPermissions(): void
     {
         $model = new NoAccess();
         $this->assertEquals(['res1' => []], $model->getPermissions($this->user, ['res1']));
         $this->assertEquals(['res1' => [], 'res2' => []], $model->getPermissions($this->user, ['res1', 'res2']));
     }
 
-    public function testGetSupportedRights()
+    public function testGetSupportedRights(): void
     {
         $model = new NoAccess();
         $this->assertEquals([], $model->getSupportedRights());

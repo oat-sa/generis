@@ -22,49 +22,54 @@
 namespace oat\generis\test\unit\helpers;
 
 use common_exception_Error;
-use oat\generis\test\TestCase;
+use common_ext_Extension;
+use helpers_ExtensionHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class ExtensionHelperTest extends TestCase
 {
-    public function testSortByDependencies()
+    public function testSortByDependencies(): void
     {
         $ext1 = $this->mockExtension('ext1', []);
         $ext2 = $this->mockExtension('ext2', ['ext1']);
         $ext3 = $this->mockExtension('ext3', ['ext2']);
-        $sorted = \helpers_ExtensionHelper::sortByDependencies([$ext2,$ext3,$ext1]);
+        $sorted = helpers_ExtensionHelper::sortByDependencies([$ext2,$ext3,$ext1]);
         $this->assertEquals([$ext1,$ext2,$ext3], array_values($sorted));
     }
 
-    public function testCyclicDependencies()
+    public function testCyclicDependencies(): void
     {
         $this->expectException(common_exception_Error::class);
         $ext1 = $this->mockExtension('ext1', ['ext2']);
         $ext2 = $this->mockExtension('ext2', ['ext3']);
         $ext3 = $this->mockExtension('ext3', ['ext1']);
-        $sorted = \helpers_ExtensionHelper::sortByDependencies([$ext2,$ext3,$ext1]);
+        $sorted = helpers_ExtensionHelper::sortByDependencies([$ext2,$ext3,$ext1]);
     }
 
-    public function testMissingDependencies()
+    public function testMissingDependencies(): void
     {
         $this->expectException(common_exception_Error::class);
         $ext1 = $this->mockExtension('ext1', []);
         $ext2 = $this->mockExtension('ext2', ['ext4']);
         $ext3 = $this->mockExtension('ext3', ['ext2','ext4']);
-        $sorted = \helpers_ExtensionHelper::sortByDependencies([$ext2,$ext3,$ext1]);
+
+        helpers_ExtensionHelper::sortByDependencies([$ext2,$ext3,$ext1]);
     }
 
     /**
-     * Moch an extension with its dependencies
-     * @param string $id
-     * @param array $dependencies
-     * @return \common_ext_Extension::class
+     * Mock an extension with its dependencies
      */
-    protected function mockExtension($id, $dependencies = [])
+    private function mockExtension(string $id, array $dependencies = []): common_ext_Extension|MockObject
     {
-        $prophet = $this->prophesize();
-        $ext = $this->prophesize(\common_ext_Extension::class);
-        $ext->getId()->willReturn($id);
-        $ext->getDependencies()->willReturn(array_fill_keys($dependencies, '>=0'));
-        return $ext->reveal();
+        $ext = $this->createMock(common_ext_Extension::class);
+        $ext
+            ->method('getId')
+            ->willReturn($id);
+        $ext
+            ->method('getDependencies')
+            ->willReturn(array_fill_keys($dependencies, '>=0'));
+
+        return $ext;
     }
 }

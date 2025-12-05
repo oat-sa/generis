@@ -22,7 +22,7 @@ namespace oat\generis\test\unit\oatbox\log;
 
 use common_exception_InconsistentData;
 use Psr\Log\LogLevel;
-use oat\generis\test\TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test of test logger implementation

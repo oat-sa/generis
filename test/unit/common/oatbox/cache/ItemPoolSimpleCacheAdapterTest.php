@@ -25,7 +25,8 @@ namespace oat\generis\test\unit\common\oatbox\cache;
 use Exception;
 use Monolog\Logger;
 use oat\generis\test\MockObject;
-use oat\generis\test\TestCase;
+use oat\generis\test\ServiceManagerMockTrait;
+use PHPUnit\Framework\TestCase;
 use oat\oatbox\cache\CacheItem;
 use oat\oatbox\cache\ItemPoolSimpleCacheAdapter;
 use oat\oatbox\cache\SimpleCache;
@@ -34,6 +35,8 @@ use Psr\SimpleCache\CacheInterface;
 
 class ItemPoolSimpleCacheAdapterTest extends TestCase
 {
+    use ServiceManagerMockTrait;
+
     /** @var ItemPoolSimpleCacheAdapter */
     private $subject;
 
@@ -56,7 +59,7 @@ class ItemPoolSimpleCacheAdapterTest extends TestCase
 
         $this->subject->setLogger($this->loggerMock);
         $this->subject->setServiceLocator(
-            $this->getServiceLocatorMock(
+            $this->getServiceManagerMock(
                 [
                     SimpleCache::SERVICE_ID => $this->cacheMock,
                 ]

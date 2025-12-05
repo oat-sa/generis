@@ -22,17 +22,15 @@ declare(strict_types=1);
 
 namespace oat\generis\test\unit\common\oatbox\user;
 
-use oat\generis\model\GenerisRdf;
-use oat\generis\test\TestCase;
+use oat\generis\model\user\UserRdf;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use oat\oatbox\user\User;
 use oat\oatbox\user\UserLanguageService;
-use Prophecy\Argument;
-use Prophecy\Prophecy\ObjectProphecy;
 
 class UserLanguageServiceTest extends TestCase
 {
-    /** @var UserLanguageService */
-    private $subject;
+    private UserLanguageService $subject;
 
     public function setUp(): void
     {
@@ -78,16 +76,17 @@ class UserLanguageServiceTest extends TestCase
         $this->assertSame('es-ES', $this->subject->getInterfaceLanguage($user));
     }
 
-    private function createUser(?string $withLanguage = null): User
+    private function createUser(?string $withLanguage = null): User|MockObject
     {
-        /** @var User|ObjectProphecy $user */
-        $user = $this->prophesize(User::class);
+        $user = $this->createMock(User::class);
 
         if ($withLanguage !== null) {
-            $user->getPropertyValues(Argument::is(GenerisRdf::PROPERTY_USER_UILG))
+            $user
+                ->method('getPropertyValues')
+                ->with(UserRdf::PROPERTY_UILG)
                 ->willReturn([$withLanguage]);
         }
 
-        return $user->reveal();
+        return $user;
     }
 }

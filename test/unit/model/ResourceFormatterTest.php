@@ -21,123 +21,28 @@
 namespace oat\generis\test\unit\model;
 
 use common_exception_NoContent;
+use core_kernel_classes_Class;
+use core_kernel_classes_Resource;
 use core_kernel_classes_ResourceFormatter;
+use Exception;
 use oat\generis\model\GenerisRdf;
-use oat\generis\test\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class ResourceFormatterTest extends TestCase
 {
     /**
      *
      * @author Lionel Lecaque, lionel@taotesting.com
-     * @param string $uri
      */
-    private function createPropertyProphecy($uri)
-    {
-        $propertyProphecy = $this->createResourceProphecy($uri);
-        $propertyProphecy->__toString()->willReturn($uri);
-        return $propertyProphecy;
-    }
-
-    /**
-     *
-     * @author Lionel Lecaque, lionel@taotesting.com
-     * @param string $uri
-     */
-    private function createResourceProphecy($uri)
-    {
-        $resourceProphecy = $this->prophesize('core_kernel_classes_Resource');
-        $resourceProphecy->getUri()->willReturn($uri);
-        return $resourceProphecy;
-    }
-
-    /**
-     *
-     * @author Lionel Lecaque, lionel@taotesting.com
-     * @param string $uri
-     */
-    private function createClassProphecy($uri)
-    {
-        $classProphecy = $this->prophesize('core_kernel_classes_Class');
-        $classProphecy->getUri()->willReturn($uri);
-        return $classProphecy;
-    }
-
-    /**
-     *
-     * Create a mock to test formater result
-     *
-     * @author Lionel Lecaque, lionel@taotesting.com
-     * @param string $withNoValue
-     * @return Prophecy/Double
-     */
-    private function createResourceDescription($withNoValue = false)
-    {
-        $resourceDescProphecy = $this->createResourceProphecy('#fakeUri');
-        $propertyProphecy = $this->createPropertyProphecy('#propertyUri');
-        $propertyProphecy2 = $this->createPropertyProphecy('#propertyUri2');
-
-        $typeProphecy = $this->createClassProphecy('#typeUri');
-        $typeProphecy->getProperties(true)->willReturn(
-            [
-                $propertyProphecy->reveal(),
-                $propertyProphecy2->reveal()
-            ]
-        );
-
-        $typeProphecy2 = $typeProphecy = $this->createClassProphecy('#typeUri2');
-        $typeProphecy->getProperties(true)->willReturn([]);
-
-        $prop1 = $propertyProphecy->reveal();
-        $prop2 = $propertyProphecy2->reveal();
-
-        $typeProphecy2->getProperties(true)->willReturn(
-            [
-                $prop1,
-                $prop2
-            ]
-        );
-        $resourceDescProphecy->getTypes()->willReturn(
-            [
-                $typeProphecy->reveal(),
-                $typeProphecy2->reveal()
-            ]
-        );
-        if ($withNoValue) {
-            $resourceDescProphecy->getPropertiesValues(
-                [
-                    "#propertyUri" => $prop1,
-                    "#propertyUri2" => $prop2
-                ]
-            )->willReturn([]);
-        } else {
-            $resourceDescProphecy->getPropertiesValues([
-                "#propertyUri" => $prop1,
-                "#propertyUri2" => $prop2
-            ])->willReturn([
-                '#propertyUri' => [
-                    new \core_kernel_classes_Literal('value1'),
-                    new \core_kernel_classes_Literal('value2')
-                ],
-                '#propertyUri2' => [
-                    new \core_kernel_classes_Resource(GenerisRdf::GENERIS_BOOLEAN)
-                ]
-            ]);
-        }
-        return $resourceDescProphecy->reveal();
-    }
-
-    /**
-     *
-     * @author Lionel Lecaque, lionel@taotesting.com
-     */
-    public function testGetResourceDescriptionNoContent()
+    public function testGetResourceDescriptionNoContent(): void
     {
         $formatter = new core_kernel_classes_ResourceFormatter();
+
         try {
-            $result = $formatter->getResourceDescription($this->createResourceDescription(true));
+            $formatter->getResourceDescription($this->createResourceDescription(true));
             $this->fail('common_exception_NoContent should have been raised');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->assertInstanceOf('common_exception_NoContent', $e);
         }
     }
@@ -146,10 +51,10 @@ class ResourceFormatterTest extends TestCase
      *
      * @author Lionel Lecaque, lionel@taotesting.com
      */
-    public function testGetResourceDesciptionFromDef()
+    public function testGetResourceDesciptionFromDef(): void
     {
         $formatter = new core_kernel_classes_ResourceFormatter();
-        $result = $formatter->getResourceDescription($this->createResourceDescription(false));
+        $result = $formatter->getResourceDescription($this->createResourceDescription());
 
         $this->assertInstanceOf('stdClass', $result);
         $this->assertSame('#fakeUri', $result->uri);
@@ -182,45 +87,31 @@ class ResourceFormatterTest extends TestCase
     /**
      * @author Lionel Lecaque, lionel@taotesting.com
      */
-    public function testGetResourceDesciptionNoContentTripple()
+    public function testGetResourceDesciptionNoContentTripple(): void
     {
         $this->expectException(common_exception_NoContent::class);
-        $resourceDescProphecy = $this->createResourceProphecy('#fakeUri');
-        $resourceDescProphecy->getRdfTriples()->willReturn([]);
+        $resourceDesc = $this->createResourceMock('#fakeUri');
+        $resourceDesc
+            ->method('getRdfTriples')
+            ->willReturn([]);
         $formatter = new core_kernel_classes_ResourceFormatter();
 
-        $result = $formatter->getResourceDescription($resourceDescProphecy->reveal(), false);
-    }
-
-    /**
-     *
-     * @author Lionel Lecaque, lionel@taotesting.com
-     * @return array
-     */
-    private function generateTriple()
-    {
-        $returnValue = [];
-        for ($i = 0; $i < 3; $i++) {
-            $triple = new \core_kernel_classes_Triple();
-            $triple->subject = '#subject' . $i;
-            $triple->predicate = '#predicate' . $i;
-            $triple->object = $i == 0 ? GenerisRdf::GENERIS_BOOLEAN : 'object' . $i;
-            $returnValue[] = $triple;
-        }
-        return $returnValue;
+        $result = $formatter->getResourceDescription($resourceDesc, false);
     }
 
     /**
      * @author Lionel Lecaque, lionel@taotesting.com
      */
-    public function testGetResourceDesciption()
+    public function testGetResourceDesciption(): void
     {
-        $resourceDescProphecy = $this->createResourceProphecy('#fakeUri');
+        $resourceDesc = $this->createResourceMock('#fakeUri');
+        $resourceDesc
+            ->method('getRdfTriples')
+            ->willReturn($this->generateTriple());
 
-        $resourceDescProphecy->getRdfTriples()->willReturn($this->generateTriple());
         $formatter = new core_kernel_classes_ResourceFormatter();
 
-        $result = $formatter->getResourceDescription($resourceDescProphecy->reveal(), false);
+        $result = $formatter->getResourceDescription($resourceDesc, false);
 
         $this->assertInstanceOf('stdClass', $result);
         $this->assertSame('#fakeUri', $result->uri);
@@ -246,5 +137,128 @@ class ResourceFormatterTest extends TestCase
             $this->assertSame('literal', $result->properties[$i]->values[0]->valueType);
             $this->assertSame('object' . $i, $result->properties[$i]->values[0]->value);
         }
+    }
+    /**
+     *
+     * @author Lionel Lecaque, lionel@taotesting.com
+     */
+    private function createPropertyMock(string $uri): core_kernel_classes_Resource|MockObject
+    {
+        $property = $this->createResourceMock($uri);
+        $property
+            ->method('__toString')
+            ->willReturn($uri);
+
+        return $property;
+    }
+
+    /**
+     *
+     * @author Lionel Lecaque, lionel@taotesting.com
+     */
+    private function createResourceMock(string $uri): core_kernel_classes_Resource|MockObject
+    {
+        $resource = $this->createMock(core_kernel_classes_Resource::class);
+        $resource
+            ->method('getUri')
+            ->willReturn($uri);
+
+        return $resource;
+    }
+
+    /**
+     *
+     * @author Lionel Lecaque, lionel@taotesting.com
+     */
+    private function createClassMock(string $uri): core_kernel_classes_Class|MockObject
+    {
+        $class = $this->createMock(core_kernel_classes_Class::class);
+        $class
+            ->method('getUri')
+            ->willReturn($uri);
+
+        return $class;
+    }
+
+    /**
+     *
+     * Create a mock to test formater result
+     *
+     * @author Lionel Lecaque, lionel@taotesting.com
+     */
+    private function createResourceDescription(bool $withNoValue = false): core_kernel_classes_Resource|MockObject
+    {
+        $resource = $this->createResourceMock('#fakeUri');
+        $property = $this->createPropertyMock('#propertyUri');
+        $property2 = $this->createPropertyMock('#propertyUri2');
+
+        $type = $this->createClassMock('#typeUri');
+        $type
+            ->method('getProperties')
+            ->with(true)
+            ->willReturn([]);
+
+        $type2 = $this->createClassMock('#typeUri2');
+        $type2
+            ->method('getProperties')
+            ->with(true)
+            ->willReturn(
+                [
+                    $property,
+                    $property2
+                ]
+            );
+
+        $resource
+            ->method('getTypes')
+            ->willReturn(
+                [
+                    $type,
+                    $type2
+                ]
+            );
+
+        $resource
+            ->method('getPropertiesValues')
+            ->with(
+                [
+                    "#propertyUri" => $property,
+                    "#propertyUri2" => $property2
+                ]
+            )
+            ->willReturn(
+                $withNoValue
+                    ? []
+                    : [
+                    '#propertyUri' => [
+                        new \core_kernel_classes_Literal('value1'),
+                        new \core_kernel_classes_Literal('value2')
+                    ],
+                    '#propertyUri2' => [
+                        new core_kernel_classes_Resource(GenerisRdf::GENERIS_BOOLEAN)
+                    ]
+                ]
+            );
+
+        return $resource;
+    }
+
+    /**
+     *
+     * @author Lionel Lecaque, lionel@taotesting.com
+     */
+    private function generateTriple(): array
+    {
+        $returnValue = [];
+
+        for ($i = 0; $i < 3; $i++) {
+            $triple = new \core_kernel_classes_Triple();
+            $triple->subject = '#subject' . $i;
+            $triple->predicate = '#predicate' . $i;
+            $triple->object = $i == 0 ? GenerisRdf::GENERIS_BOOLEAN : 'object' . $i;
+            $returnValue[] = $triple;
+        }
+
+        return $returnValue;
     }
 }

@@ -72,7 +72,7 @@ class core_kernel_users_Cache
         // array of URIs.
         if (is_null($fromCache)) {
             $roleUri = $role->getUri();
-            $msg = "Includes roles related to Role with URI '${roleUri}' is not in the Cache memory.";
+            $msg = "Includes roles related to Role with URI '{$roleUri}' is not in the Cache memory.";
             throw new core_kernel_users_CacheException($msg);
         }
 
@@ -113,7 +113,7 @@ class core_kernel_users_Cache
             $returnValue = true;
         } catch (common_Exception $e) {
             $roleUri = $role->getUri();
-            $msg = "An error occurred while writing included roles in the cache memory for Role '${roleUri}': ";
+            $msg = "An error occurred while writing included roles in the cache memory for Role '{$roleUri}': ";
             $msg .= $e->getMessage();
             throw new core_kernel_users_CacheException($msg);
         }

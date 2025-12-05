@@ -30,7 +30,7 @@ use oat\generis\model\data\Ontology;
 use oat\generis\model\data\RdfsInterface;
 use oat\generis\model\resource\Context\ResourceRepositoryContext;
 use oat\generis\model\resource\Repository\ClassRepository;
-use oat\generis\test\TestCase;
+use PHPUnit\Framework\TestCase;
 use oat\oatbox\event\EventManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use RuntimeException;

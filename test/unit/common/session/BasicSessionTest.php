@@ -22,7 +22,8 @@ declare(strict_types=1);
 
 namespace oat\generis\test\unit\common\persistence;
 
-use oat\generis\test\TestCase;
+use common_session_BasicSession;
+use PHPUnit\Framework\TestCase;
 use oat\oatbox\user\User;
 use oat\oatbox\session\SessionContext;
 
@@ -30,14 +31,14 @@ class BasicSessionTest extends TestCase
 {
     public function testGetContext(): void
     {
-        $user = $this->prophesize(User::class)->reveal();
-        $context1 = $this->prophesize(SessionContext::class)->reveal();
-        $context2 = $this->prophesize(SessionContext::class)->reveal();
+        $user = $this->createMock(User::class);
+        $context1 = $this->createMock(SessionContext::class);
+        $context2 = $this->createMock(SessionContext::class);
 
-        $session = new \common_session_BasicSession($user, [$context1]);
+        $session = new common_session_BasicSession($user, [$context1]);
         $this->assertEquals([$context1], $session->getContexts());
 
-        $session = new \common_session_BasicSession($user, [$context1, $context2]);
+        $session = new common_session_BasicSession($user, [$context1, $context2]);
         $this->assertEquals([$context1, $context2], $session->getContexts());
     }
 }

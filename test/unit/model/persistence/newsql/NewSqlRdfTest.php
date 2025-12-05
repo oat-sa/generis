@@ -23,11 +23,14 @@ declare(strict_types=1);
 
 namespace oat\generis\test\unit\model\persistence\newsql;
 
+use common_persistence_sql_Platform;
+use common_persistence_SqlPersistence;
+use core_kernel_classes_Triple;
 use Doctrine\DBAL\ParameterType;
 use oat\generis\model\kernel\persistence\newsql\NewSqlOntology;
 use oat\generis\model\kernel\persistence\newsql\NewSqlRdf;
-use Prophecy\Argument;
-use oat\generis\test\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class NewSqlRdfTest extends TestCase
 {
@@ -36,7 +39,7 @@ class NewSqlRdfTest extends TestCase
         $query = 'INSERT INTO statements ( id, modelId, subject, predicate, object, l_language, epoch, author) VALUES '
             . '( ?, ? , ? , ? , ? , ? , ?, ?);';
 
-        $triple = new \core_kernel_classes_Triple();
+        $triple = new core_kernel_classes_Triple();
         $triple->modelid = 22;
         $triple->subject = 'subjectUri';
         $triple->predicate = 'predicateUri';
@@ -52,30 +55,34 @@ class NewSqlRdfTest extends TestCase
             ''
         ];
 
-        $persistence = $this->getPersistenceProphecy();
-        $persistence->exec(
-            $query,
-            Argument::that(function ($value) use ($expected) {
-                return array_slice($value, 1) == $expected && is_string($value[0]);
-            }),
-            $this->getExpectedTripleParameterTypes()
-        )->shouldBeCalled()->willReturn(true);
+        $persistence = $this->getPersistence();
+        $persistence
+            ->expects($this->once())
+            ->method('exec')
+            ->with(
+                $query,
+                $this->callback(function ($value) use ($expected) {
+                    return array_slice($value, 1) === $expected && is_string($value[0]);
+                }),
+                $this->getExpectedTripleParameterTypes()
+            )
+            ->willReturn(true);
 
-        $this->assertTrue($this->createRdfSubject($persistence->reveal())->add($triple));
+        $this->assertTrue($this->createRdfSubject($persistence)->add($triple));
     }
 
     public function testAddTripleCollection()
     {
         $table = 'statements';
 
-        $triple1 = new \core_kernel_classes_Triple();
+        $triple1 = new core_kernel_classes_Triple();
         $triple1->modelid = 11;
         $triple1->subject = 'subjectUri1';
         $triple1->predicate = 'predicateUri1';
         $triple1->object = 'objectUri1';
         $triple1->author = '';
 
-        $triple2 = new \core_kernel_classes_Triple();
+        $triple2 = new core_kernel_classes_Triple();
         $triple2->modelid = 22;
         $triple2->subject = 'subjectUri2';
         $triple2->predicate = 'predicateUri2';
@@ -108,40 +115,48 @@ class NewSqlRdfTest extends TestCase
             ]
         ];
 
-        $persistence = $this->getPersistenceProphecy();
-        $persistence->insertMultiple(
-            Argument::exact($table),
-            Argument::that(function ($value) use ($expectedValue) {
-                return array_slice($value[0], 1) == $expectedValue[0] && is_string($value[0]['id'])
-                    && array_slice($value[1], 1) == $expectedValue[1] && is_string($value[1]['id']);
-            }),
-            Argument::exact($types)
-        )->shouldBeCalled();
+        $persistence = $this->getPersistence();
+        $persistence
+            ->expects($this->once())
+            ->method('insertMultiple')
+            ->with(
+                $this->equalTo($table),
+                $this->callback(function ($value) use ($expectedValue) {
+                    return array_slice($value[0], 1) === $expectedValue[0] && is_string($value[0]['id'])
+                        && array_slice($value[1], 1) === $expectedValue[1] && is_string($value[1]['id']);
+                }),
+                $this->equalTo($types)
+            );
 
-        $this->createRdfSubject($persistence->reveal())->addTripleCollection($triples);
+        $this->createRdfSubject($persistence)->addTripleCollection($triples);
     }
 
-    protected function getPersistenceProphecy()
+    private function getPersistence(): common_persistence_SqlPersistence|MockObject
     {
-        $platform = $this->prophesize(\common_persistence_sql_Platform::class);
-        $platform->getNowExpression()->willReturn('now');
+        $platform = $this->createMock(common_persistence_sql_Platform::class);
+        $platform
+            ->method('getNowExpression')
+            ->willReturn('now');
 
-        $persistence = $this->prophesize(\common_persistence_SqlPersistence::class);
-        $persistence->getPlatForm()->willReturn($platform->reveal());
+        $persistence = $this->createMock(common_persistence_SqlPersistence::class);
+        $persistence
+            ->method('getPlatForm')
+            ->willReturn($platform);
 
         return $persistence;
     }
 
-    protected function createRdfSubject($persistence)
+    private function createRdfSubject($persistence): NewSqlRdf
     {
-        $model = $this->prophesize(NewSqlOntology::class);
-        $model->getPersistence()->willReturn($persistence);
+        $model = $this->createMock(NewSqlOntology::class);
+        $model
+            ->method('getPersistence')
+            ->willReturn($persistence);
 
-        return new NewSqlRdf($model->reveal());
-        ;
+        return new NewSqlRdf($model);
     }
 
-    protected function getExpectedTripleParameterTypes()
+    private function getExpectedTripleParameterTypes(): array
     {
         return [
             ParameterType::STRING,

@@ -23,30 +23,28 @@ namespace oat\generis\test\unit\model\data\permission;
 
 use oat\generis\model\data\permission\implementation\FreeAccess;
 use oat\oatbox\user\User;
-use oat\generis\test\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class FreeAccessTest extends TestCase
 {
-    /**
-     * @var User
-     */
-    private $user;
+    private User|MockObject $user;
 
     public function setUp(): void
     {
-        $user = $this->prophesize('oat\oatbox\user\User');
-        $user->getIdentifier()->willReturn('tastIdentifier\\_of_//User');
-
-        $this->user = $user->reveal();
+        $this->user = $this->createMock(User::class);
+        $this->user
+            ->method('getIdentifier')
+            ->willReturn('tastIdentifier\\_of_//User');
     }
 
-    public function testConstruct()
+    public function testConstruct(): void
     {
         $model = new FreeAccess();
         $this->assertInstanceOf('oat\generis\model\data\permission\PermissionInterface', $model);
     }
 
-    public function testGetPermissions()
+    public function testGetPermissions(): void
     {
         $model = new FreeAccess();
         $this->assertEquals(['res1' => [FreeAccess::RIGHT_UNSUPPORTED]], $model->getPermissions($this->user, ['res1']));
@@ -56,13 +54,13 @@ class FreeAccessTest extends TestCase
         );
     }
 
-    public function testGetSupportedRights()
+    public function testGetSupportedRights(): void
     {
         $model = new FreeAccess();
         $this->assertEquals([], $model->getSupportedRights());
     }
 
-    public function testPhpSerialize()
+    public function testPhpSerialize(): void
     {
         $phpCode = \common_Utils::toPHPVariableString(new FreeAccess());
         $restoredModel = eval('return ' . $phpCode . ';');

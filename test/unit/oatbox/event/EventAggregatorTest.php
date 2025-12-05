@@ -23,7 +23,8 @@ declare(strict_types=1);
 namespace oat\generis\test\unit\oatbox\event;
 
 use oat\generis\test\MockObject;
-use oat\generis\test\TestCase;
+use oat\generis\test\ServiceManagerMockTrait;
+use PHPUnit\Framework\TestCase;
 use oat\oatbox\event\EventAggregator;
 use oat\oatbox\event\EventManager;
 use oat\oatbox\event\GenericEvent;
@@ -33,6 +34,8 @@ use Psr\Log\LoggerInterface;
 
 class EventAggregatorTest extends TestCase
 {
+    use ServiceManagerMockTrait;
+
     /** @var EventManager|MockObject */
     private $eventManager;
 
@@ -47,7 +50,7 @@ class EventAggregatorTest extends TestCase
         $this->eventManager = $this->createMock(EventManager::class);
         $this->logger = $this->createMock(LoggerInterface::class);
 
-        $this->serviceLocator = $this->getServiceLocatorMock(
+        $this->serviceLocator = $this->getServiceManagerMock(
             [
                 EventManager::SERVICE_ID => $this->eventManager,
                 LoggerService::SERVICE_ID => $this->logger,

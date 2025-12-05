@@ -23,7 +23,7 @@ declare(strict_types=1);
 namespace oat\generis\test\unit\core\Context;
 
 use InvalidArgumentException;
-use oat\generis\test\TestCase;
+use PHPUnit\Framework\TestCase;
 use oat\generis\model\Context\AbstractContext;
 
 class AbstractContextTest extends TestCase

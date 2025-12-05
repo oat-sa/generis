@@ -22,7 +22,7 @@ declare(strict_types=1);
 
 namespace oat\generis\test\unit\model\resource\Repository;
 
-use oat\generis\test\TestCase;
+use PHPUnit\Framework\TestCase;
 use core_kernel_classes_Resource;
 use oat\generis\model\GenerisRdf;
 use oat\generis\model\OntologyRdf;
@@ -72,10 +72,12 @@ class PropertyRepositoryTest extends TestCase
             ->willReturn($query);
 
         $query
-            ->expects($this->at(0))
+            ->expects($this->exactly(2))
             ->method('addCriterion')
-            ->with(OntologyRdf::RDF_TYPE, SupportedOperatorHelper::EQUAL, OntologyRdf::RDF_PROPERTY)
-            ->willReturnSelf();
+            ->willReturnMap([
+                [OntologyRdf::RDF_TYPE, SupportedOperatorHelper::EQUAL, OntologyRdf::RDF_PROPERTY, $query],
+                [GenerisRdf::PROPERTY_ALIAS, SupportedOperatorHelper::IN, [], $query],
+            ]);
 
         $context = $this->createMock(ContextInterface::class);
         $context
@@ -88,12 +90,6 @@ class PropertyRepositoryTest extends TestCase
             ->method('getParameter')
             ->with(PropertyRepositoryContext::PARAM_ALIASES, [])
             ->willReturn([]);
-
-        $query
-            ->expects($this->at(1))
-            ->method('addCriterion')
-            ->with(GenerisRdf::PROPERTY_ALIAS, SupportedOperatorHelper::IN, [])
-            ->willReturnSelf();
 
         $queryBuilder
             ->expects($this->once())

@@ -25,7 +25,7 @@ namespace oat\generis\test\unit\common\oatbox\cache;
 use DateInterval;
 use DateTime;
 use InvalidArgumentException;
-use oat\generis\test\TestCase;
+use PHPUnit\Framework\TestCase;
 use oat\oatbox\cache\CacheItem;
 use ReflectionClass;
 use ReflectionProperty;

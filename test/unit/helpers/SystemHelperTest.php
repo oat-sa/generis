@@ -22,7 +22,7 @@
 namespace oat\generis\test\unit\helpers;
 
 use oat\generis\Helper\SystemHelper;
-use oat\generis\test\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class SystemHelperTest extends TestCase
 {

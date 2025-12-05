@@ -26,7 +26,7 @@
 error_reporting(E_ALL);
 // phpcs:enable PSR1.Files.SideEffects
 
-use oat\generis\test\TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for Collection.

@@ -21,10 +21,11 @@
 
 namespace oat\generis\test\unit\oatbox\user;
 
+use oat\generis\model\user\UserRdf;
 use oat\oatbox\user\UserLanguageService;
 use oat\oatbox\user\User;
-use oat\generis\model\GenerisRdf;
-use oat\generis\test\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * class UserLanguageServiceTest
@@ -86,7 +87,7 @@ class UserLanguageServiceTest extends TestCase
         ];
     }
 
-    public function testGetDataLanguageWithOptionDisabled()
+    public function testGetDataLanguageWithOptionDisabled(): void
     {
         $service = $this->getService([
             UserLanguageService::OPTION_LOCK_DATA_LANGUAGE => false
@@ -98,7 +99,7 @@ class UserLanguageServiceTest extends TestCase
         $this->assertEquals('fr-FR', $service->getDataLanguage($user));
     }
 
-    public function testGetDataLanguageWithOptionEnabled()
+    public function testGetDataLanguageWithOptionEnabled(): void
     {
         $service = $this->getService([
             UserLanguageService::OPTION_LOCK_DATA_LANGUAGE => true
@@ -110,7 +111,7 @@ class UserLanguageServiceTest extends TestCase
         $this->assertEquals('en-US', $service->getDataLanguage($user));
     }
 
-    public function testIsDataLanguageEnabled()
+    public function testIsDataLanguageEnabled(): void
     {
         $service = $this->getService();
         $this->assertEquals(true, $service->isDataLanguageEnabled());
@@ -126,27 +127,20 @@ class UserLanguageServiceTest extends TestCase
         $this->assertEquals(false, $service->isDataLanguageEnabled());
     }
 
-    /**
-     * @param string $uiLg
-     * @param string $dataLg
-     * @return User
-     */
-    private function getUser($uiLg = null, $dataLg = null)
+    private function getUser(?string $uiLg = null, ?string $dataLg = null): User|MockObject
     {
-        $user = $this->prophesize(User::class);
-        $user->getPropertyValues(GenerisRdf::PROPERTY_USER_DEFLG)
-            ->willReturn($dataLg === null ? [] : [$dataLg]);
-        $user->getPropertyValues(GenerisRdf::PROPERTY_USER_UILG)
-            ->willReturn($uiLg === null ? [] : [$uiLg]);
+        $user = $this->createMock(User::class);
+        $user
+            ->method('getPropertyValues')
+            ->willReturnMap([
+                [UserRdf::PROPERTY_DEFLG, $dataLg === null ? [] : [$dataLg]],
+                [UserRdf::PROPERTY_UILG, $uiLg === null ? [] : [$uiLg]],
+            ]);
 
-        return $user->reveal();
+        return $user;
     }
 
-    /**
-     * @param array $options
-     * @return UserLanguageService
-     */
-    private function getService($options = [])
+    private function getService(array $options = []): UserLanguageService
     {
         return new UserLanguageService($options);
     }

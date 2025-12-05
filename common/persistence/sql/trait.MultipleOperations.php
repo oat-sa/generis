@@ -40,7 +40,7 @@ trait common_persistence_sql_MultipleOperations
                 array_keys($data[0])
             );
 
-            $query = "INSERT INTO ${tableName} (" . implode(', ', $quotedColumnIdentifiers) . ') VALUES ';
+            $query = "INSERT INTO {$tableName} (" . implode(', ', $quotedColumnIdentifiers) . ') VALUES ';
             $valuesQueries = [];
             $allValues = [];
 

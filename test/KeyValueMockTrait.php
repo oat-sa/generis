@@ -21,24 +21,28 @@
 
 namespace oat\generis\test;
 
-use Prophecy\Argument;
+use PHPUnit\Framework\MockObject\MockObject;
 use oat\generis\persistence\PersistenceManager;
 
+/**
+ * @deprecated Use \oat\generis\test\PersistenceManagerMockTrait.
+ *             Since PHPUnit does all the work, we no longer have to use Prophecy to reduce dependencies.
+ */
 trait KeyValueMockTrait
 {
+    use PersistenceManagerMockTrait;
+
     /**
-     * Returns a keyvalue persistence on top of a SQL memory mock
+     * @deprecated Use \oat\generis\test\PersistenceManagerMockTrait::getPersistenceManagerMock() instead.
+     *             Since PHPUnit does all the work, we no longer have to use Prophecy to reduce dependencies.
      *
-     * @param string $key identifier of the persistence
-     * @return PersistenceManager
+     * Returns a key-value persistence on top of a SQL memory mock
      */
-    public function getKeyValueMock($key)
+    public function getKeyValueMock(string $key): PersistenceManager|MockObject
     {
-        $driver = new \common_persistence_InMemoryKvDriver();
-        $persistence = new \common_persistence_KeyValuePersistence([], $driver);
-        $pmProphecy = $this->prophesize(PersistenceManager::class);
-        $pmProphecy->setServiceLocator(Argument::any())->willReturn(null);
-        $pmProphecy->getPersistenceById($key)->willReturn($persistence);
-        return $pmProphecy->reveal();
+        return $this->getPersistenceManagerMock(
+            $key,
+            [self::OPTION_PERSISTENCE_TYPE => self::PERSISTENCE_TYPE_KV]
+        );
     }
 }

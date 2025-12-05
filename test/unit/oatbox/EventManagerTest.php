@@ -24,8 +24,6 @@ namespace oat\generis\test\unit\oatbox;
 use oat\generis\test\ServiceManagerMockTrait;
 use oat\oatbox\event\EventManager;
 use PHPUnit\Framework\TestCase;
-use Prophecy\Argument;
-use Prophecy\Prediction\CallTimesPrediction;
 use oat\oatbox\event\GenericEvent;
 
 class CallableListener
@@ -49,8 +47,7 @@ class EventManagerTest extends TestCase
 {
     use ServiceManagerMockTrait;
 
-    /** @var EventManager */
-    private $eventManager;
+    private EventManager $eventManager;
 
     public function setUp(): void
     {
@@ -67,19 +64,25 @@ class EventManagerTest extends TestCase
 
     public function testAttachedListenerIsInvokedWhenEventIsTriggered(): void
     {
-        $callable = $this->prophesize(CallableListener::class);
-        $callable->invoke(Argument::any())->should(new CallTimesPrediction(1));
+        $callable = $this->createMock(CallableListener::class);
+        $callable
+            ->expects($this->once())
+            ->method('invoke')
+            ->with($this->anything());
 
-        $this->eventManager->attach('testEvent', [$callable->reveal(), 'invoke']);
+        $this->eventManager->attach('testEvent', [$callable, 'invoke']);
         $this->eventManager->trigger('testEvent');
     }
 
     public function testListenerIsInvokedWhenAttachedToMultipleEvents(): void
     {
-        $callable = $this->prophesize(CallableListener::class);
-        $callable->invoke(Argument::any())->should(new CallTimesPrediction(2));
+        $callable = $this->createMock(CallableListener::class);
+        $callable
+            ->expects($this->exactly(2))
+            ->method('invoke')
+            ->with($this->anything());
 
-        $this->eventManager->attach(['testEvent1','testEvent2'], [$callable->reveal(), 'invoke']);
+        $this->eventManager->attach(['testEvent1', 'testEvent2'], [$callable, 'invoke']);
 
         $this->eventManager->trigger('testEvent1');
         $this->eventManager->trigger('testEvent2');
@@ -97,14 +100,15 @@ class EventManagerTest extends TestCase
 
     public function testDetachedListenerIsNotInvoked(): void
     {
-        $callable = $this->prophesize(CallableListener::class);
+        $callable = $this->createMock(CallableListener::class);
+        $callable
+            ->expects($this->never())
+            ->method('invoke')
+            ->with($this->anything());
 
-        $callable->invoke(Argument::any())->should(new CallTimesPrediction(0));
-        $listener = $callable->reveal();
+        $this->eventManager->attach(['testEvent'], [$callable, 'invoke']);
 
-        $this->eventManager->attach(['testEvent'], [$listener, 'invoke']);
-
-        $this->eventManager->detach(['testEvent'], [$listener, 'invoke']);
+        $this->eventManager->detach(['testEvent'], [$callable, 'invoke']);
 
         $this->eventManager->trigger('testEvent');
     }

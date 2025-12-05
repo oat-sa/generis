@@ -22,7 +22,7 @@
 
 namespace oat\generis\test\unit\oatbox\mutex;
 
-use oat\generis\test\TestCase;
+use PHPUnit\Framework\TestCase;
 use oat\oatbox\mutex\LockService;
 use oat\oatbox\service\ServiceManager;
 use Symfony\Component\Lock\Store\FlockStore;

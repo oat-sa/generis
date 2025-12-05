@@ -26,7 +26,7 @@ use oat\generis\model\data\event\BeforeResourceDeleted;
 use RuntimeException;
 use InvalidArgumentException;
 use core_kernel_classes_Class;
-use oat\generis\test\TestCase;
+use PHPUnit\Framework\TestCase;
 use core_kernel_classes_Resource;
 use oat\oatbox\event\EventManager;
 use oat\generis\model\data\Ontology;

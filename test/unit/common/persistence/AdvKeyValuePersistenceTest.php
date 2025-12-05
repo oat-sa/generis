@@ -20,7 +20,7 @@
 
 namespace oat\generis\test\unit\common\persistence;
 
-use oat\generis\test\TestCase;
+use PHPUnit\Framework\TestCase;
 use common_persistence_AdvKeyValuePersistence as AdvKeyValuePersistence;
 
 class AdvKeyValuePersistenceTest extends TestCase

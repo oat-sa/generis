@@ -21,7 +21,8 @@
 
 namespace oat\generis\test\unit\model;
 
-use oat\generis\test\TestCase;
+use oat\generis\test\ServiceManagerMockTrait;
+use PHPUnit\Framework\TestCase;
 use oat\generis\model\fileReference\UrlFileSerializer;
 use oat\generis\model\fileReference\FileSerializerException;
 use oat\oatbox\filesystem\File;
@@ -30,38 +31,55 @@ use oat\oatbox\filesystem\Directory;
 
 class UrlFileSerializerTest extends TestCase
 {
-    public function testSerialize()
-    {
-        $fileP = $this->prophesize(File::class);
-        $fileP->getFileSystemId()->willReturn('sampleFs');
-        $file = $fileP->reveal();
-        $baseDir = $this->prophesize(Directory::class);
-        $baseDir->getRelPath($file)->willReturn('sample~Path.txt');
+    use ServiceManagerMockTrait;
 
-        $fsMock = $this->prophesize(FileSystemService::class);
-        $fsMock->getDirectory('sampleFs')->willReturn($baseDir->reveal());
+    public function testSerialize(): void
+    {
+        $file = $this->createMock(File::class);
+        $file
+            ->method('getFileSystemId')
+            ->willReturn('sampleFs');
+
+        $baseDir = $this->createMock(Directory::class);
+        $baseDir
+            ->method('getRelPath')
+            ->with($file)
+            ->willReturn('sample~Path.txt');
+
+        $fsMock = $this->createMock(FileSystemService::class);
+        $fsMock
+            ->method('getDirectory')
+            ->with('sampleFs')
+            ->willReturn($baseDir);
 
         $serializer = new UrlFileSerializer();
-        $serializer->setServiceLocator($this->getServiceLocatorMock([
-            FileSystemService::SERVICE_ID => $fsMock->reveal()
+        $serializer->setServiceLocator($this->getServiceManagerMock([
+            FileSystemService::SERVICE_ID => $fsMock
         ]));
 
         $serial = $serializer->serialize($file);
         $this->assertEquals('file://sampleFs/sample%7EPath.txt', $serial);
     }
 
-    public function testUnSerialize()
+    public function testUnSerialize(): void
     {
-        $file = $this->prophesize(File::class)->reveal();
-        $baseDir = $this->prophesize(Directory::class);
-        $baseDir->getFile("sample~Path.txt")->willReturn($file);
+        $file = $this->createMock(File::class);
 
-        $fsMock = $this->prophesize(FileSystemService::class);
-        $fsMock->getDirectory('sampleFs')->willReturn($baseDir->reveal());
+        $baseDir = $this->createMock(Directory::class);
+        $baseDir
+            ->method('getFile')
+            ->with('sample~Path.txt')
+            ->willReturn($file);
+
+        $fsMock = $this->createMock(FileSystemService::class);
+        $fsMock
+            ->method('getDirectory')
+            ->with('sampleFs')
+            ->willReturn($baseDir);
 
         $serializer = new UrlFileSerializer();
-        $serializer->setServiceLocator($this->getServiceLocatorMock([
-            FileSystemService::SERVICE_ID => $fsMock->reveal()
+        $serializer->setServiceLocator($this->getServiceManagerMock([
+            FileSystemService::SERVICE_ID => $fsMock
         ]));
 
         $unserialized = $serializer->unserialize('file://sampleFs/sample%7EPath.txt');
@@ -71,14 +89,14 @@ class UrlFileSerializerTest extends TestCase
     /**
      * @dataProvider invalidUrlReferenceProvider
      */
-    public function testInvalidUrlFile($url)
+    public function testInvalidUrlFile($url): void
     {
         $this->expectException(FileSerializerException::class);
         $serializer = new UrlFileSerializer();
         $serializer->unserialize($url);
     }
 
-    public function invalidUrlReferenceProvider()
+    public function invalidUrlReferenceProvider(): array
     {
         return [
             ['file://aaa'],

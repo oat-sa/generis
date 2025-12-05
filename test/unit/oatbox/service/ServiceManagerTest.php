@@ -23,7 +23,7 @@ namespace oat\generis\test\unit\oatbox\service;
 
 use oat\oatbox\service\ServiceManager;
 use oat\oatbox\service\ConfigurableService;
-use oat\generis\test\TestCase;
+use PHPUnit\Framework\TestCase;
 use Psr\Container\NotFoundExceptionInterface;
 
 /**
