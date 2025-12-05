@@ -22,8 +22,7 @@ declare(strict_types=1);
 
 namespace oat\generis\test;
 
-use Prophecy\Argument;
-use common_persistence_sql_dbal_Driver;
+use PHPUnit\Framework\MockObject\MockObject;
 use oat\generis\persistence\PersistenceManager;
 
 /**
@@ -32,33 +31,17 @@ use oat\generis\persistence\PersistenceManager;
  */
 trait SqlMockTrait
 {
+    use PersistenceManagerMockTrait;
+
     /**
      * @deprecated Use \oat\generis\test\PersistenceManagerMockTrait::getPersistenceManagerMock() instead.
      *             Since PHPUnit does all the work, we no longer have to use Prophecy to reduce dependencies.
      */
-    public function getSqlMock(string $key): PersistenceManager
+    public function getSqlMock(string $key): PersistenceManager|MockObject
     {
-        if (!extension_loaded('pdo_sqlite')) {
-            $this->markTestSkipped('sqlite not found, tests skipped.');
-        }
-
-        $persistence = (new common_persistence_sql_dbal_Driver())->connect(
+        return $this->getPersistenceManagerMock(
             $key,
-            [
-                'connection' => [
-                    'url' => 'sqlite:///:memory:',
-                ],
-            ]
+            [self::OPTION_PERSISTENCE_TYPE => self::PERSISTENCE_TYPE_SQL]
         );
-
-        $pmProphecy = $this->prophesize(PersistenceManager::class);
-        $pmProphecy
-            ->setServiceLocator(Argument::any())
-            ->willReturn(null);
-        $pmProphecy
-            ->getPersistenceById($key)
-            ->willReturn($persistence);
-
-        return $pmProphecy->reveal();
     }
 }

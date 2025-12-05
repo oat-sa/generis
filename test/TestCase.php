@@ -23,6 +23,7 @@ declare(strict_types=1);
 namespace oat\generis\test;
 
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Container\ContainerInterface;
 use oat\oatbox\service\ServiceManager;
@@ -35,51 +36,21 @@ use PHPUnit\Framework\TestCase as UnitTestCase;
  */
 abstract class TestCase extends UnitTestCase
 {
+    use ServiceManagerMockTrait;
     use SqlMockTrait;
+    use ProphecyTrait {
+        ProphecyTrait::prophesize as traitProphesize;
+    }
 
     /**
      * @deprecated Use \oat\generis\test\ServiceManagerMockTrait::getServiceManagerMock() instead.
      *             Since PHPUnit does all the work, we no longer have to use Prophecy to reduce dependencies.
      *
      * @param array<string, object> $services
-     *
-     * @return ServiceManager
      */
-    public function getServiceLocatorMock(array $services = [])
+    public function getServiceLocatorMock(array $services = []): ServiceManager|MockObject
     {
-        /** @var ContainerInterface|ObjectProphecy $containerProphecy */
-        $containerProphecy = $this->prophesize(ContainerInterface::class);
-
-        /** @var ServiceManager|ObjectProphecy $serviceLocatorProphecy */
-        $serviceLocatorProphecy = $this->prophesize(ServiceManager::class);
-        $serviceLocatorProphecy
-            ->getContainer()
-            ->willReturn($containerProphecy);
-
-        foreach ($services as $key => $service) {
-            $serviceLocatorProphecy
-                ->get($key)
-                ->willReturn($service);
-            $serviceLocatorProphecy
-                ->has($key)
-                ->willReturn(true);
-
-            $containerProphecy
-                ->get($key)
-                ->willReturn($service);
-            $containerProphecy
-                ->has($key)
-                ->willReturn(true);
-        }
-
-        $serviceLocatorProphecy
-            ->has(Argument::any())
-            ->willReturn(false);
-        $containerProphecy
-            ->has(Argument::any())
-            ->willReturn(false);
-
-        return $serviceLocatorProphecy->reveal();
+        return $this->getServiceManagerMock($services);
     }
 
     /**
@@ -88,6 +59,6 @@ abstract class TestCase extends UnitTestCase
      */
     protected function prophesize($classOrInterface = null): ObjectProphecy
     {
-        return parent::prophesize($classOrInterface);
+        return $this->traitProphesize($classOrInterface);
     }
 }
