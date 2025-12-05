@@ -20,7 +20,7 @@
 
 declare(strict_types=1);
 
-use oat\generis\test\TestCase;
+use PHPUnit\Framework\TestCase;
 use oat\oatbox\reporting\Report;
 
 class ReportTest extends TestCase

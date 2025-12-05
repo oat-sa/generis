@@ -22,7 +22,7 @@
 namespace oat\generis\test\integration\oatbox\extension\script;
 
 use oat\oatbox\extension\script\OptionContainer;
-use oat\generis\test\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class OptionContainerTest extends TestCase
 {

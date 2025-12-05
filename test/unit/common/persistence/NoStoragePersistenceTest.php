@@ -23,7 +23,7 @@
 namespace oat\generis\test\unit\common\persistence;
 
 use common_persistence_NoStorageKvDriver;
-use oat\generis\test\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class NoStaragePersistenceTest extends TestCase
 {

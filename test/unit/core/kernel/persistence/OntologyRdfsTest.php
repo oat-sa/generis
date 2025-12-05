@@ -22,19 +22,21 @@
 namespace oat\generis\test\unit\core\kernel\persistence;
 
 use oat\generis\model\data\Model;
-use oat\generis\test\GenerisTestCase;
+use oat\generis\test\FileSystemMockTrait;
 use oat\generis\model\data\Ontology;
+use oat\generis\test\OntologyMockTrait;
+use oat\generis\test\ServiceManagerMockTrait;
 use oat\oatbox\action\Action;
-use Prophecy\Argument;
-use Prophecy\Prediction\CallTimesPrediction;
+use PHPUnit\Framework\TestCase;
 use oat\oatbox\event\EventManager;
 use oat\generis\model\data\event\ResourceCreated;
 
-/**
- *
- */
-class OntologyRdfsTest extends GenerisTestCase
+class OntologyRdfsTest extends TestCase
 {
+    use ServiceManagerMockTrait;
+    use OntologyMockTrait;
+    use FileSystemMockTrait;
+
     /**
      * @dataProvider getOntologies
      */
@@ -69,24 +71,30 @@ class OntologyRdfsTest extends GenerisTestCase
     /**
      * @dataProvider getOntologies
      */
-    public function testCreateResourceEvent(Ontology $model)
+    public function testCreateResourceEvent(Ontology $model): void
     {
-        $callable = $this->prophesize(Action::class);
-        $callable->__invoke(Argument::any())->should(new CallTimesPrediction(1));
+        $callable = $this->createMock(Action::class);
+        $callable
+            ->expects($this->once())
+            ->method('__invoke')
+            ->with($this->anything());
         $eventManager = $model->getServiceLocator()->get(EventManager::SERVICE_ID);
-        $eventManager->attach(ResourceCreated::class, $callable->reveal());
+        $eventManager->attach(ResourceCreated::class, $callable);
         $class = $model->getClass('http://testing#class');
         $class->createInstance('One love');
     }
     /**
      * @dataProvider getOntologies
      */
-    public function testCreateResourceEventWithProperties(Ontology $model)
+    public function testCreateResourceEventWithProperties(Ontology $model): void
     {
-        $callable = $this->prophesize(Action::class);
-        $callable->__invoke(Argument::any())->should(new CallTimesPrediction(1));
+        $callable = $this->createMock(Action::class);
+        $callable
+            ->expects($this->once())
+            ->method('__invoke')
+            ->with($this->anything());
         $eventManager = $model->getServiceLocator()->get(EventManager::SERVICE_ID);
-        $eventManager->attach(ResourceCreated::class, $callable->reveal());
+        $eventManager->attach(ResourceCreated::class, $callable);
         $class = $model->getClass('http://testing#class');
         $class->createInstanceWithProperties([
             'prop1' => 'value1',
@@ -97,7 +105,7 @@ class OntologyRdfsTest extends GenerisTestCase
     /**
      * @dataProvider getOntologies
      */
-    public function testDuplicateInstance(Ontology $model)
+    public function testDuplicateInstance(Ontology $model): void
     {
         $class = $model->getClass('http://testing#class');
         $this->assertInstanceOf(\core_kernel_classes_Class::class, $class);

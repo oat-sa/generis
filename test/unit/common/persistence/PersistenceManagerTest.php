@@ -23,7 +23,8 @@ declare(strict_types=1);
 namespace oat\generis\test\unit\common\persistence;
 
 use oat\generis\persistence\DriverConfigurationFeeder;
-use oat\generis\test\TestCase;
+use oat\generis\test\ServiceManagerMockTrait;
+use PHPUnit\Framework\TestCase;
 use oat\generis\persistence\PersistenceManager;
 use oat\generis\persistence\sql\SchemaCollection;
 use Doctrine\DBAL\Schema\Schema;
@@ -33,6 +34,8 @@ use PHPUnit\Framework\MockObject\MockObject;
 
 class PersistenceManagerTest extends TestCase
 {
+    use ServiceManagerMockTrait;
+
     /** @var PersistenceManager */
     private $pm;
 
@@ -59,7 +62,7 @@ class PersistenceManagerTest extends TestCase
             ]
         );
         $this->pm->setServiceLocator(
-            $this->getServiceLocatorMock(
+            $this->getServiceManagerMock(
                 [
                     LoggerService::SERVICE_ID => $this->createMock(LoggerService::class),
                     DriverConfigurationFeeder::SERVICE_ID => $this->driverConfigurationFeeder,

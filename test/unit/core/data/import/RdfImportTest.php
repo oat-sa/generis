@@ -23,11 +23,18 @@ namespace oat\generis\test\unit\core\data\import;
 
 use core_kernel_classes_Triple;
 use oat\generis\model\data\Ontology;
-use oat\generis\test\GenerisTestCase;
+use oat\generis\test\FileSystemMockTrait;
 use oat\generis\model\data\import\RdfImporter;
+use oat\generis\test\OntologyMockTrait;
+use oat\generis\test\ServiceManagerMockTrait;
+use PHPUnit\Framework\TestCase;
 
-class RdfImportTest extends GenerisTestCase
+class RdfImportTest extends TestCase
 {
+    use ServiceManagerMockTrait;
+    use OntologyMockTrait;
+    use FileSystemMockTrait;
+
     /**
      * @dataProvider getOntologies
      */

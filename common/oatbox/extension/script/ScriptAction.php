@@ -153,14 +153,14 @@ abstract class ScriptAction extends AbstractAction
         foreach ($optionsDescription as $optionName => $optionParams) {
             // Deal with prefixes.
             $prefixes = [];
-            $optionDisplay = (!empty($optionParams['flag'])) ? '' : " ${optionName}";
+            $optionDisplay = (!empty($optionParams['flag'])) ? '' : " {$optionName}";
 
             if (!empty($optionParams['prefix'])) {
-                $prefixes[] = '-' . $optionParams['prefix'] . "${optionDisplay}";
+                $prefixes[] = '-' . $optionParams['prefix'] . "{$optionDisplay}";
             }
 
             if (!empty($optionParams['longPrefix'])) {
-                $prefixes[] = '--' . $optionParams['longPrefix'] . "${optionDisplay}";
+                $prefixes[] = '--' . $optionParams['longPrefix'] . "{$optionDisplay}";
             }
 
             $optionMsg = implode(', ', $prefixes);
@@ -199,7 +199,7 @@ abstract class ScriptAction extends AbstractAction
 
     private static function valueToString($value)
     {
-        $string = "\"${value}\"";
+        $string = "\"{$value}\"";
 
         switch (gettype($value)) {
             case 'boolean':
@@ -229,6 +229,6 @@ abstract class ScriptAction extends AbstractAction
         $minutes = floor(($seconds / 60) % 60);
         $seconds = $seconds % 60;
 
-        return "${hours}h ${minutes}m {$seconds}s";
+        return "{$hours}h {$minutes}m {$seconds}s";
     }
 }

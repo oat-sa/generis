@@ -240,14 +240,14 @@ class common_configuration_FileSystemComponent extends common_configuration_Comp
         if (!$this->exists()) {
             return new common_configuration_Report(
                 common_configuration_Report::UNKNOWN,
-                "File system component '${name}' could not be found in '${location}'.",
+                "File system component '{$name}' could not be found in '{$location}'.",
                 $this
             );
         } else {
             if (strpos($expectedRights, 'r') !== false && !$this->isReadable($location)) {
                 return new common_configuration_Report(
                     common_configuration_Report::INVALID,
-                    "File system component '${name}' in '${location} is not readable.",
+                    "File system component '{$name}' in '{$location} is not readable.",
                     $this
                 );
             }
@@ -255,7 +255,7 @@ class common_configuration_FileSystemComponent extends common_configuration_Comp
             if (strpos($expectedRights, 'w') !== false && !$this->isWritable($location)) {
                 return new common_configuration_Report(
                     common_configuration_Report::INVALID,
-                    "File system component '${name}' in '${location} is not writable.",
+                    "File system component '{$name}' in '{$location} is not writable.",
                     $this
                 );
             }
@@ -263,7 +263,7 @@ class common_configuration_FileSystemComponent extends common_configuration_Comp
             if (strpos($expectedRights, 'x') !== false && !$this->isExecutable($location)) {
                 return new common_configuration_Report(
                     common_configuration_Report::INVALID,
-                    "File system component '${name}' in '${location} is not executable.",
+                    "File system component '{$name}' in '{$location} is not executable.",
                     $this
                 );
             }
@@ -272,7 +272,7 @@ class common_configuration_FileSystemComponent extends common_configuration_Comp
                 if (!$this->isEmptyDirectory($location)) {
                     return new common_configuration_Report(
                         common_configuration_Report::INVALID,
-                        "File system component '${name}' in '${location} is not empty.",
+                        "File system component '{$name}' in '{$location} is not empty.",
                         $this
                     );
                 }
@@ -280,8 +280,8 @@ class common_configuration_FileSystemComponent extends common_configuration_Comp
 
             return new common_configuration_Report(
                 common_configuration_Report::VALID,
-                "File system component '${name}' in '${location} is compliant with expected rights "
-                    . "(${expectedRights}).'",
+                "File system component '{$name}' in '{$location} is compliant with expected rights "
+                    . "({$expectedRights}).'",
                 $this
             );
         }
