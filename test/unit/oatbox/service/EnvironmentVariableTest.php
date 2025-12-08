@@ -22,7 +22,7 @@ namespace oat\generis\test\unit\oatbox\service;
 
 use common_Utils as Utils;
 use InvalidArgumentException;
-use oat\generis\test\TestCase;
+use PHPUnit\Framework\TestCase;
 use oat\oatbox\service\EnvironmentVariable;
 
 class EnvironmentVariableTest extends TestCase

@@ -24,7 +24,7 @@ namespace oat\generis\test\unit\core\data\event;
 
 use core_kernel_classes_Class;
 use oat\generis\model\data\event\ClassPropertyDeletedEvent;
-use oat\generis\test\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class ClassPropertyDeletedEventTest extends TestCase
 {

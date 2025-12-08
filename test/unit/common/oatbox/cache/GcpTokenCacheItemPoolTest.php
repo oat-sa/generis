@@ -24,7 +24,8 @@ namespace oat\generis\test\unit\common\oatbox\cache;
 
 use Monolog\Logger;
 use oat\generis\test\MockObject;
-use oat\generis\test\TestCase;
+use oat\generis\test\ServiceManagerMockTrait;
+use PHPUnit\Framework\TestCase;
 use oat\oatbox\cache\CacheItem;
 use oat\oatbox\cache\factory\CacheItemPoolFactory;
 use oat\oatbox\cache\GcpTokenCacheItemPool;
@@ -33,6 +34,8 @@ use Psr\Cache\CacheItemPoolInterface;
 
 class GcpTokenCacheItemPoolTest extends TestCase
 {
+    use ServiceManagerMockTrait;
+
     private const TOKEN_CACHE_KEY = 'tokenCacheKey';
 
     /** @var GcpTokenCacheItemPool */
@@ -62,7 +65,7 @@ class GcpTokenCacheItemPoolTest extends TestCase
         );
         $this->subject->setLogger($this->logger);
         $this->subject->setServiceLocator(
-            $this->getServiceLocatorMock(
+            $this->getServiceManagerMock(
                 [
                     CacheItemPoolFactory::class => $this->cacheFactory,
                 ]

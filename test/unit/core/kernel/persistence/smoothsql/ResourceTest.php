@@ -25,11 +25,16 @@ namespace oat\generis\test\unit\core\kernel\persistence\smoothsql;
 use core_kernel_classes_Resource;
 use core_kernel_persistence_smoothsql_Resource;
 use core_kernel_persistence_smoothsql_SmoothModel;
-use oat\generis\test\GenerisTestCase;
+use oat\generis\test\FileSystemMockTrait;
+use oat\generis\test\OntologyMockTrait;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ResourceTest extends GenerisTestCase
+class ResourceTest extends TestCase
 {
+    use OntologyMockTrait;
+    use FileSystemMockTrait;
+
     /** @var core_kernel_persistence_smoothsql_SmoothModel|MockObject */
     private $model;
 

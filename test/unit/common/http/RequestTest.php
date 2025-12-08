@@ -21,7 +21,7 @@
 namespace oat\generis\test\unit\common\http;
 
 use common_http_Request;
-use oat\generis\test\TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test the \common_http_Request class

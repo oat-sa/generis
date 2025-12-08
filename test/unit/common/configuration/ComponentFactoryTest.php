@@ -28,7 +28,7 @@ use common_configuration_PHPDatabaseDriver;
 use common_configuration_PHPExtension;
 use common_configuration_PHPINIValue;
 use common_configuration_PHPRuntime;
-use oat\generis\test\TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test the \common_configuration_ComponentFactory class

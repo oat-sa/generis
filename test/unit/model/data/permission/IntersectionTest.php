@@ -21,66 +21,31 @@
 
 namespace oat\generis\test\unit\model\data\permission;
 
+use core_kernel_classes_Resource;
 use oat\generis\model\data\permission\implementation\Intersection;
 use oat\oatbox\user\User;
-use oat\generis\test\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use oat\generis\model\data\permission\PermissionInterface;
 
 class IntersectionTest extends TestCase
 {
-    /**
-     * @var User
-     */
-    private $user;
+    private User|MockObject $user;
 
     public function setUp(): void
     {
-        $user = $this->prophesize('oat\oatbox\user\User');
-        $user->getIdentifier()->willReturn('tastIdentifier\\_of_//User');
-
-        $this->user = $user->reveal();
+        $this->user = $this->createMock(User::class);
+        $this->user
+            ->method('getIdentifier')
+            ->willReturn('tastIdentifier\\_of_//User');
     }
 
-
-    private function createIntersection()
+    public function testConstruct(): void
     {
-        $permissionModel1 = $this->prophesize('oat\generis\model\data\permission\PermissionInterface');
-        $permissionModel1->getSupportedRights()->willReturn(['rightA', 'rightB', 'rightC', 'right']);
-
-        $permissionModel2 = $this->prophesize('oat\generis\model\data\permission\PermissionInterface');
-        $permissionModel2->getSupportedRights()->willReturn(['rightB', 'rightC', 'rightD', 'rightAB']);
-
-        $permissionModel3 = $this->prophesize('oat\generis\model\data\permission\PermissionInterface');
-        $permissionModel3->getSupportedRights()->willReturn(['rightC', 'rightD', 'rightE', 'rightABC']);
-
-        // res1
-        $permissionModel1->getPermissions($this->user, ['res1'])->willReturn(['res1' => ['rightA']]);
-        $permissionModel2->getPermissions($this->user, ['res1'])->willReturn(['res1' => ['rightB']]);
-        $permissionModel3->getPermissions($this->user, ['res1'])->willReturn(['res1' => ['rightC']]);
-
-        // res2
-        $permissionModel1
-            ->getPermissions($this->user, ['res1', 'res2'])
-            ->willReturn(['res1' => ['rightA', 'rightC'], 'res2' => []]);
-        $permissionModel2
-            ->getPermissions($this->user, ['res1', 'res2'])
-            ->willReturn(['res1' => ['rightC'], 'res2' => []]);
-        $permissionModel3
-            ->getPermissions($this->user, ['res1', 'res2'])
-            ->willReturn(['res1' => ['rightC', 'rightD'], 'res2' => []]);
-
-        return Intersection::spawn([
-            $permissionModel1->reveal(),
-            $permissionModel2->reveal(),
-            $permissionModel3->reveal()
-        ]);
+        $this->assertInstanceOf(PermissionInterface::class, $this->createIntersection());
     }
 
-    public function testConstruct()
-    {
-        $this->assertInstanceOf('oat\generis\model\data\permission\PermissionInterface', $this->createIntersection());
-    }
-
-    public function testGetPermissions()
+    public function testGetPermissions(): void
     {
         $model = $this->createIntersection();
         $this->assertEquals(['res1' => []], $model->getPermissions($this->user, ['res1']));
@@ -90,30 +55,83 @@ class IntersectionTest extends TestCase
         );
     }
 
-    public function testGetSupportedRights()
+    public function testGetSupportedRights(): void
     {
         $model = $this->createIntersection();
         $this->assertEquals(['rightC'], $model->getSupportedRights());
     }
 
-    public function testOnResourceCreated()
+    public function testOnResourceCreated(): void
     {
-        $permissionModel = $this->prophesize('oat\generis\model\data\permission\PermissionInterface');
-        $permissionModel2 = $this->prophesize('oat\generis\model\data\permission\PermissionInterface');
+        $resource = $this->createMock(core_kernel_classes_Resource::class);
 
-        $model = Intersection::spawn([$permissionModel->reveal(),$permissionModel2->reveal()]);
-        $resourceprophecy = $this->prophesize('core_kernel_classes_Resource');
-        $resource = $resourceprophecy->reveal();
+        $permissionModel = $this->createMock(PermissionInterface::class);
+        $permissionModel
+            ->expects($this->once())
+            ->method('onResourceCreated')
+            ->with($resource);
+
+        $permissionModel2 = $this->createMock(PermissionInterface::class);
+        $permissionModel2
+            ->expects($this->once())
+            ->method('onResourceCreated')
+            ->with($resource);
+
+        $model = Intersection::spawn([$permissionModel, $permissionModel2]);
         $model->onResourceCreated($resource);
-        $permissionModel->onResourceCreated($resource)->shouldHaveBeenCalled();
-        $permissionModel2->onResourceCreated($resource)->shouldHaveBeenCalled();
     }
 
     /**
      * @doesNotPerformAssertions
      */
-    public function testPhpSerialize()
+    public function testPhpSerialize(): void
     {
         // no idea how to test
+    }
+
+
+    private function createIntersection(): Intersection
+    {
+        $permissionModel1 = $this->createMock(PermissionInterface::class);
+        $permissionModel1
+            ->method('getSupportedRights')
+            ->willReturn(['rightA', 'rightB', 'rightC', 'right']);
+
+        $permissionModel2 = $this->createMock(PermissionInterface::class);
+        $permissionModel2
+            ->method('getSupportedRights')
+            ->willReturn(['rightB', 'rightC', 'rightD', 'rightAB']);
+
+        $permissionModel3 = $this->createMock(PermissionInterface::class);
+        $permissionModel3
+            ->method('getSupportedRights')
+            ->willReturn(['rightC', 'rightD', 'rightE', 'rightABC']);
+
+        $permissionModel1
+            ->method('getPermissions')
+            ->willReturnMap([
+                [$this->user, ['res1'], ['res1' => ['rightA']]],
+                [$this->user, ['res1', 'res2'], ['res1' => ['rightA', 'rightC'], 'res2' => []]],
+            ]);
+
+        $permissionModel2
+            ->method('getPermissions')
+            ->willReturnMap([
+                [$this->user, ['res1'], ['res1' => ['rightB']]],
+                [$this->user, ['res1', 'res2'], ['res1' => ['rightC'], 'res2' => []]],
+            ]);
+
+        $permissionModel3
+            ->method('getPermissions')
+            ->willReturnMap([
+                [$this->user, ['res1'], ['res1' => ['rightC']]],
+                [$this->user, ['res1', 'res2'], ['res1' => ['rightC', 'rightD'], 'res2' => []]],
+            ]);
+
+        return Intersection::spawn([
+            $permissionModel1,
+            $permissionModel2,
+            $permissionModel3
+        ]);
     }
 }

@@ -110,7 +110,7 @@ class OptionContainer
                 $longPrefix = empty($optionParams['longPrefix']) ? '' : $optionParams['longPrefix'];
 
                 if (empty($prefix) && empty($longPrefix)) {
-                    throw new \LogicException("Argument with name '${optionName}' has no prefix, nor long prefix.");
+                    throw new \LogicException("Argument with name '{$optionName}' has no prefix, nor long prefix.");
                 }
 
                 if (!empty($optionParams['flag'])) {
@@ -125,7 +125,7 @@ class OptionContainer
                     $optionIndex = self::searchOptionIndex($prefix, $longPrefix, $values);
 
                     if ($required && $optionIndex === false) {
-                        throw new MissingOptionException("Required argument '${optionName}' is missing.", $optionName);
+                        throw new MissingOptionException("Required argument '{$optionName}' is missing.", $optionName);
                     }
 
                     if ($optionIndex === false && isset($optionParams['defaultValue'])) {
@@ -138,7 +138,7 @@ class OptionContainer
                             // Edge case. Option found, but it is the last value of the $value array.
                             if ($required) {
                                 throw new MissingOptionException(
-                                    "No value given for required argument '${optionName}'.",
+                                    "No value given for required argument '{$optionName}'.",
                                     $optionName
                                 );
                             } elseif (isset($optionParams['defaultValue'])) {
@@ -162,7 +162,7 @@ class OptionContainer
             $dashes = str_repeat('-', $i + 1);
             $p = $prefixes[$i];
             if (!empty($p)) {
-                if (($search = array_search("${dashes}${p}", $values)) !== false) {
+                if (($search = array_search("{$dashes}{$p}", $values)) !== false) {
                     $optionIndex = $search;
                     break;
                 }

@@ -25,7 +25,7 @@ declare(strict_types=1);
 namespace oat\generis\test\unit\model\DependencyInjection;
 
 use oat\generis\model\DependencyInjection\ServiceOptions;
-use oat\generis\test\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class ServiceOptionsTest extends TestCase
 {

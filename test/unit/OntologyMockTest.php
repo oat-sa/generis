@@ -21,19 +21,23 @@
 
 namespace oat\generis\test\unit;
 
-use oat\generis\test\GenerisTestCase;
+use oat\generis\test\FileSystemMockTrait;
+use oat\generis\test\OntologyMockTrait;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @deprecated backward compatibility class for unit tests extending a concrete unit test
- *
  */
-class OntologyMockTest extends GenerisTestCase
+class OntologyMockTest extends TestCase
 {
+    use OntologyMockTrait;
+    use FileSystemMockTrait;
+
     /**
      * this is done for backward compatibility and it was done to prevent the failing of phpunit
      * @doesNotPerformAssertions
      */
-    public function testSampleCase()
+    public function testSampleCase(): void
     {
     }
 }

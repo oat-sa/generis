@@ -25,7 +25,7 @@ namespace oat\generis\test\unit\common\persistence;
 use common_persistence_PhpFileDriver;
 use oat\generis\test\integration\tools\InvokeMethodTrait;
 use org\bovigo\vfs\vfsStream;
-use oat\generis\test\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class PhpFilePersistenceTtlModeTest extends TestCase
 {

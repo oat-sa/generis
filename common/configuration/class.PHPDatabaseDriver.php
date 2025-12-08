@@ -57,9 +57,9 @@ class common_configuration_PHPDatabaseDriver extends common_configuration_PHPExt
         $name = $this->getName();
 
         if ($report->getStatus() == common_configuration_Report::VALID) {
-            $report->setMessage("Database Driver '${name}' is available.");
+            $report->setMessage("Database Driver '{$name}' is available.");
         } else {
-            $report->setMessage("Database Driver '${name}' could not be found or is unavailable.");
+            $report->setMessage("Database Driver '{$name}' could not be found or is unavailable.");
         }
 
         $returnValue = $report;

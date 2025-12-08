@@ -446,7 +446,7 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
             $query .= ' DISTINCT';
         }
 
-        $query .= " object FROM (SELECT overq.subject, valuesq.object FROM (${filteredQuery}) as overq JOIN statements "
+        $query .= " object FROM (SELECT overq.subject, valuesq.object FROM ({$filteredQuery}) as overq JOIN statements "
             . "AS valuesq ON (overq.subject = valuesq.subject AND valuesq.predicate = ?)) AS overrootq";
 
         $sqlResult = $this->getPersistence()->query($query, [$property->getUri()]);

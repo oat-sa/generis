@@ -20,7 +20,7 @@
 
 namespace oat\generis\test\unit\common\persistence\sql\dbal;
 
-use oat\generis\test\TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class DriverTest

@@ -197,18 +197,18 @@ class common_configuration_ComponentFactory
             $name[$i] = ucfirst($name[$i]);
         }
         $name = implode('', $name);
-        $checkClassName = "${extension}_install_checks_${name}";
+        $checkClassName = "{$extension}_install_checks_{$name}";
 
         // Instanciate the Component.
         try {
             $checkClass = new ReflectionClass($checkClassName);
-            $returnValue = $checkClass->newInstanceArgs(["custom_${extension}_${name}", $optional]);
+            $returnValue = $checkClass->newInstanceArgs(["custom_{$extension}_{$name}", $optional]);
         } catch (LogicException $e) {
-            $msg = "Cannot instantiate custom check '${name}' for extension '${extension}': ";
+            $msg = "Cannot instantiate custom check '{$name}' for extension '{$extension}': ";
             $msg .= $e->getMessage();
             throw new common_configuration_ComponentFactoryException($msg);
         } catch (ReflectionException $e) {
-            $msg = "Cannot instantiate custom check '${name}' for extension '${extension}': ";
+            $msg = "Cannot instantiate custom check '{$name}' for extension '{$extension}': ";
             $msg .= $e->getMessage();
             throw new common_configuration_ComponentFactoryException($msg);
         }
@@ -377,7 +377,7 @@ class common_configuration_ComponentFactory
                         throw new common_configuration_ComponentFactoryException($msg);
                     }
                 } else {
-                    $msg = "Unknown 'type' = '${cleanType}'.";
+                    $msg = "Unknown 'type' = '{$cleanType}'.";
                     throw new common_configuration_ComponentFactoryException($msg);
                 }
             } else {

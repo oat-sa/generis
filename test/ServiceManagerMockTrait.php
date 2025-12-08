@@ -15,7 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2022 (original work) Open Assessment Technologies SA.
+ * Copyright (c) 2022-2025 (original work) Open Assessment Technologies SA.
  */
 
 declare(strict_types=1);
@@ -24,10 +24,11 @@ namespace oat\generis\test;
 
 use Psr\Container\ContainerInterface;
 use oat\oatbox\service\ServiceManager;
+use PHPUnit\Framework\MockObject\MockObject as PHPUnitMockObject;
 
 trait ServiceManagerMockTrait
 {
-    public function getServiceManagerMock(array $services = []): ServiceManager
+    public function getServiceManagerMock(array $services = []): ServiceManager|PHPUnitMockObject
     {
         $container = $this->createMock(ContainerInterface::class);
         $container

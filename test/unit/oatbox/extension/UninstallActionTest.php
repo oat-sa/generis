@@ -21,21 +21,22 @@
 
 namespace oat\generis\test\unit\oatbox\extension;
 
+use oat\generis\test\ServiceManagerMockTrait;
 use oat\oatbox\event\EventManager;
 use oat\oatbox\extension\UninstallAction;
 use oat\oatbox\service\ServiceManager;
-use oat\generis\test\TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
- *
  * @author Christophe GARCIA <christopheg@taotesting.com>
  */
 class UninstallActionTest extends TestCase
 {
-    public function testUnregisterEvent()
-    {
+    use ServiceManagerMockTrait;
 
-        $event    = 'testEvent';
+    public function testUnregisterEvent(): void
+    {
+        $event = 'testEvent';
         $callBack = function () {
         };
 
@@ -46,35 +47,38 @@ class UninstallActionTest extends TestCase
             false,
             false,
             true,
-            ['getServiceLocator' , 'getServiceManager']
+            ['getServiceLocator', 'getServiceManager']
         );
 
-        $prophetServiceManager = $this->prophesize(ServiceManager::class);
-        $prophetEventManager   = $this->prophesize(EventManager::class);
+        $eventManager = $this->createMock(EventManager::class);
+        $eventManager
+            ->expects($this->once())
+            ->method('detach')
+            ->with($event, $callBack);
 
-        $prophetEventManager->detach($event, $callBack)->willReturn(null);
+        $serviceManager = $this->getServiceManagerMock([
+            EventManager::SERVICE_ID => $eventManager,
+        ]);
+        $serviceManager
+            ->expects($this->once())
+            ->method('register')
+            ->with(EventManager::SERVICE_ID, $eventManager);
 
-        $EventManagerMock      = $prophetEventManager->reveal();
+        $instance
+            ->expects($this->once())
+            ->method('getServiceLocator')
+            ->willReturn($serviceManager);
 
-        $prophetServiceManager->get(EventManager::CONFIG_ID)->willReturn($EventManagerMock);
-        $prophetServiceManager->register(EventManager::CONFIG_ID, $EventManagerMock)->willReturn(null);
-
-        $serviceManagerMock    = $prophetServiceManager->reveal();
-
-        $instance->expects($this->once())
-               ->method('getServiceLocator')
-               ->willReturn($serviceManagerMock);
-
-        $instance->expects($this->once())
-               ->method('getServiceManager')
-               ->willReturn($serviceManagerMock);
+        $instance
+            ->expects($this->once())
+            ->method('getServiceManager')
+            ->willReturn($serviceManager);
 
         $instance->unregisterEvent($event, $callBack);
     }
 
-    public function testUnregisterService()
+    public function testUnregisterService(): void
     {
-
         $fixtureService = 'test/service';
 
         $instance = $this->getMockForAbstractClass(
@@ -87,13 +91,16 @@ class UninstallActionTest extends TestCase
             ['getServiceManager']
         );
 
-        $prophetServiceManager = $this->prophesize(ServiceManager::class);
-        $prophetServiceManager->unregister($fixtureService)->willReturn(null);
-        $serviceManagerMock    = $prophetServiceManager->reveal();
+        $serviceManagerMock = $this->getServiceManagerMock();
+        $serviceManagerMock
+            ->expects($this->once())
+            ->method('unregister')
+            ->with($fixtureService);
 
-        $instance->expects($this->once())
-                ->method('getServiceManager')
-                ->willReturn($serviceManagerMock);
+        $instance
+            ->expects($this->once())
+            ->method('getServiceManager')
+            ->willReturn($serviceManagerMock);
 
         $instance->unregisterService($fixtureService);
     }

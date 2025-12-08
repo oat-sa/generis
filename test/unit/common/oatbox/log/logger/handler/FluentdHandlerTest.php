@@ -22,7 +22,7 @@
 namespace oat\generis\test\unit\common\oatbox\log\logger\handler;
 
 use oat\oatbox\log\logger\handler\FluentdHandler;
-use oat\generis\test\TestCase;
+use PHPUnit\Framework\TestCase;
 use Fluent\Logger\FluentLogger;
 
 class FluentdHandlerTest extends TestCase

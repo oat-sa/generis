@@ -21,83 +21,33 @@
 
 namespace oat\generis\test\unit\model\persistence\smoothsql;
 
-use oat\generis\test\TestCase;
-use Prophecy\Argument;
-use Prophecy\Promise\ReturnPromise;
+use common_persistence_sql_Platform;
+use common_persistence_SqlPersistence;
+use core_kernel_classes_Triple;
+use core_kernel_persistence_smoothsql_SmoothIterator;
+use PDOStatement;
+use PHPUnit\Framework\TestCase;
 
 class SmoothModelIteratorTest extends TestCase
 {
-    public function setUp(): void
+    public function testConstruct(): void
     {
-    }
-
-
-    private function createIterator()
-    {
-
-        $persistenceProphecy = $this->prophesize('common_persistence_SqlPersistence');
-
-        $statementProphecy = $this->prophesize('PDOStatement');
-        $statementValue = [
-            "modelid"    => 1,
-            "subject"    => '#subject',
-            "predicate"  => '#predicate',
-            "object"     => 'obb',
-            "id"         => 898,
-            "l_language" => 'en-US',
-            "author"     => 'testauthor'
-        ];
-        $statementValue2 = [
-            "modelid"    => 1,
-            "subject"    => '#subject2',
-            "predicate"  => '#predicate2',
-            "object"     => 'ob2',
-            "id"         => 899,
-            "l_language" => 'en-US',
-            "author"     => 'testauthor'
-        ];
-        $return = new ReturnPromise([
-            $statementValue,
-            $statementValue2,
-            false
-        ]);
-
-        $statementProphecy->fetch()->will($return);
-
-        $plop = $statementProphecy->reveal();
-
-        $query = 'SELECT * FROM statements ORDER BY id';
-        $finalQuery = $query . ' LIMIT 100';
-
-        $platformProphecy = $this->prophesize('common_persistence_sql_Platform');
-        $platformProphecy->limitStatement($query, 100, 0)->willReturn($finalQuery);
-        $platform = $platformProphecy->reveal();
-
-        $persistenceProphecy->getPlatForm()->willReturn($platform);
-        $persistenceProphecy
-            ->query($finalQuery, Argument::type('array'), Argument::type('array'))
-            ->willReturn($plop);
-
-        $iterator = new \core_kernel_persistence_smoothsql_SmoothIterator($persistenceProphecy->reveal());
-        return $iterator;
-    }
-
-    public function testConstruct()
-    {
-        $this->assertInstanceOf('core_kernel_persistence_smoothsql_SmoothIterator', $this->createIterator());
+        $this->assertInstanceOf(
+            core_kernel_persistence_smoothsql_SmoothIterator::class,
+            $this->createIterator()
+        );
     }
 
     /**
      * @author Lionel Lecaque, lionel@taotesting.com
      */
-    public function testCurrent()
+    public function testCurrent(): void
     {
-
         $iterator = $this->createIterator();
         $this->assertTrue($iterator->valid());
 
         $current = $iterator->current();
-        $this->assertInstanceOf('core_kernel_classes_Triple', $current);
+        $this->assertInstanceOf(core_kernel_classes_Triple::class, $current);
         $this->assertSame(1, $current->modelid);
         $this->assertSame('#subject', $current->subject);
         $this->assertSame('#predicate', $current->predicate);
@@ -109,18 +59,77 @@ class SmoothModelIteratorTest extends TestCase
     /**
      * @author Lionel Lecaque, lionel@taotesting.com
      */
-    public function testNext()
+    public function testNext(): void
     {
         $iterator = $this->createIterator();
         $iterator->next();
         $this->assertTrue($iterator->valid());
+
         $current = $iterator->current();
-        $this->assertInstanceOf('core_kernel_classes_Triple', $current);
+        $this->assertInstanceOf(core_kernel_classes_Triple::class, $current);
         $this->assertSame(1, $current->modelid);
         $this->assertSame('#subject2', $current->subject);
         $this->assertSame('#predicate2', $current->predicate);
         $this->assertSame('ob2', $current->object);
         $this->assertSame(899, $current->id);
         $this->assertSame('en-US', $current->lg);
+    }
+
+    private function createIterator(): core_kernel_persistence_smoothsql_SmoothIterator
+    {
+        $statementMock = $this->createMock(PDOStatement::class);
+
+        $statementValue = [
+            "modelid" => 1,
+            "subject" => '#subject',
+            "predicate" => '#predicate',
+            "object" => 'obb',
+            "id" => 898,
+            "l_language" => 'en-US',
+            "author" => 'testauthor'
+        ];
+        $statementValue2 = [
+            "modelid" => 1,
+            "subject" => '#subject2',
+            "predicate" => '#predicate2',
+            "object" => 'ob2',
+            "id" => 899,
+            "l_language" => 'en-US',
+            "author" => 'testauthor'
+        ];
+
+        $statementMock
+            ->method('fetch')
+            ->willReturnOnConsecutiveCalls(
+                $statementValue,
+                $statementValue2,
+                false
+            );
+
+        $query = 'SELECT * FROM statements ORDER BY id';
+        $finalQuery = $query . ' LIMIT 100';
+
+        $platformMock = $this->createMock(common_persistence_sql_Platform::class);
+        $platformMock
+            ->method('limitStatement')
+            ->with($query, 100, 0)
+            ->willReturn($finalQuery);
+
+        $persistenceMock = $this->createMock(common_persistence_SqlPersistence::class);
+
+        $persistenceMock
+            ->method('getPlatForm')
+            ->willReturn($platformMock);
+
+        $persistenceMock
+            ->method('query')
+            ->with(
+                $this->equalTo($finalQuery),
+                $this->isType('array'),
+                $this->isType('array')
+            )
+            ->willReturn($statementMock);
+
+        return new core_kernel_persistence_smoothsql_SmoothIterator($persistenceMock);
     }
 }

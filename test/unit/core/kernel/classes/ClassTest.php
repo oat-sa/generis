@@ -24,16 +24,23 @@ use core_kernel_classes_Class as RdfClass;
 use core_kernel_persistence_ClassInterface as ClassImplementation;
 use core_kernel_persistence_smoothsql_SmoothModel as SmoothModel;
 use oat\generis\model\data\RdfsInterface;
-use oat\generis\test\GenerisTestCase;
+use oat\generis\test\FileSystemMockTrait;
 use oat\generis\test\MockObject;
+use oat\generis\test\OntologyMockTrait;
+use oat\generis\test\ServiceManagerMockTrait;
 use oat\oatbox\event\EventManager;
+use PHPUnit\Framework\TestCase;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Tests for class Rdf Class.
  */
-class ClassTest extends GenerisTestCase
+class ClassTest extends TestCase
 {
+    use ServiceManagerMockTrait;
+    use OntologyMockTrait;
+    use FileSystemMockTrait;
+
     /** @var RdfClass */
     private $subject;
 
@@ -150,7 +157,7 @@ class ClassTest extends GenerisTestCase
         $eventManager->expects($this->exactly($triggeredEvents))->method('trigger');
 
         /** @var ServiceLocatorInterface|MockObject $serviceLocatorInterface */
-        $serviceLocatorInterface = $this->getServiceLocatorMock(
+        $serviceLocatorInterface = $this->getServiceManagerMock(
             [EventManager::SERVICE_ID => $eventManager]
         );
         /** @var SmoothModel|MockObject $model */

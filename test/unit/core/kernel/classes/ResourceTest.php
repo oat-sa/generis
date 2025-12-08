@@ -27,11 +27,16 @@ use core_kernel_persistence_ResourceInterface;
 use core_kernel_persistence_smoothsql_Resource;
 use oat\generis\model\data\Ontology;
 use oat\generis\model\data\RdfsInterface;
-use oat\generis\test\GenerisTestCase;
+use oat\generis\test\FileSystemMockTrait;
+use oat\generis\test\OntologyMockTrait;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ResourceTest extends GenerisTestCase
+class ResourceTest extends TestCase
 {
+    use OntologyMockTrait;
+    use FileSystemMockTrait;
+
     /** @var core_kernel_classes_Resource */
     private $subject;
 

@@ -24,7 +24,7 @@ namespace oat\generis\test\unit\config;
 use common_exception_InconsistentData;
 use oat\oatbox\service\ConfigurableService;
 use oat\oatbox\config\ConfigSets;
-use oat\generis\test\TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class ConfigSetsTest

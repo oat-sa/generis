@@ -22,7 +22,7 @@ namespace oat\generis\test\unit\common\configuration;
 
 use common_configuration_FileSystemComponent;
 use common_configuration_Report;
-use oat\generis\test\TestCase;
+use PHPUnit\Framework\TestCase;
 use org\bovigo\vfs\vfsStream;
 
 /**

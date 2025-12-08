@@ -164,7 +164,7 @@ class core_kernel_persistence_smoothsql_SmoothRdf implements RdfInterface
         );
     }
 
-    public function getIterator()
+    public function getIterator(): Traversable
     {
         return new core_kernel_persistence_smoothsql_SmoothIterator(
             $this->getPersistence(),

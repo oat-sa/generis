@@ -26,7 +26,7 @@ namespace oat\generis\test\unit\model\DependencyInjection;
 
 use oat\generis\model\DependencyInjection\ContainerBuilder;
 use oat\generis\model\DependencyInjection\ContainerStarter;
-use oat\generis\test\TestCase;
+use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Container\ContainerInterface;
 

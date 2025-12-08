@@ -22,7 +22,7 @@ declare(strict_types=1);
 
 namespace oat\generis\test\unit\model\resource;
 
-use oat\generis\test\TestCase;
+use PHPUnit\Framework\TestCase;
 use core_kernel_classes_Property;
 use oat\generis\model\resource\DependsOnPropertyCollection;
 

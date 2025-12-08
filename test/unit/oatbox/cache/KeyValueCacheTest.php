@@ -21,13 +21,15 @@
 
 namespace oat\generis\test\unit\config;
 
-use oat\generis\test\TestCase;
+use oat\generis\test\ServiceManagerMockTrait;
+use PHPUnit\Framework\TestCase;
 use oat\oatbox\cache\KeyValueCache;
 use oat\generis\persistence\PersistenceManager;
 use oat\generis\test\KeyValueMockTrait;
 
 class KeyValueCacheTest extends TestCase
 {
+    use ServiceManagerMockTrait;
     use KeyValueMockTrait;
 
     /**
@@ -41,7 +43,7 @@ class KeyValueCacheTest extends TestCase
     protected function setUp(): void
     {
         $this->cache = new KeyValueCache([KeyValueCache::OPTION_PERSISTENCE => 'unittest']);
-        $serviceLocator = $this->getServiceLocatorMock([
+        $serviceLocator = $this->getServiceManagerMock([
             PersistenceManager::SERVICE_ID => $this->getKeyValueMock('unittest')
         ]);
         $this->cache->setServiceLocator($serviceLocator);
