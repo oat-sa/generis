@@ -19,6 +19,8 @@
  *
  */
 
+declare(strict_types=1);
+
 namespace oat\generis\test;
 
 use PHPUnit\Framework\MockObject\MockObject;
@@ -33,16 +35,15 @@ trait KeyValueMockTrait
     use PersistenceManagerMockTrait;
 
     /**
-     * @deprecated Use \oat\generis\test\PersistenceManagerMockTrait::getPersistenceManagerMock() instead.
+     * @deprecated Use \oat\generis\test\PersistenceManagerMockTrait::createPersistenceManagerMock() instead.
      *             Since PHPUnit does all the work, we no longer have to use Prophecy to reduce dependencies.
      *
      * Returns a key-value persistence on top of a SQL memory mock
      */
     public function getKeyValueMock(string $key): PersistenceManager|MockObject
     {
-        return $this->getPersistenceManagerMock(
-            $key,
-            [self::OPTION_PERSISTENCE_TYPE => self::PERSISTENCE_TYPE_KV]
-        );
+        return $this->createPersistenceManagerMock([
+            $key => $this->createKVPersistence($key)
+        ]);
     }
 }

@@ -34,14 +34,13 @@ trait SqlMockTrait
     use PersistenceManagerMockTrait;
 
     /**
-     * @deprecated Use \oat\generis\test\PersistenceManagerMockTrait::getPersistenceManagerMock() instead.
+     * @deprecated Use \oat\generis\test\PersistenceManagerMockTrait::createPersistenceManagerMock() instead.
      *             Since PHPUnit does all the work, we no longer have to use Prophecy to reduce dependencies.
      */
     public function getSqlMock(string $key): PersistenceManager|MockObject
     {
-        return $this->getPersistenceManagerMock(
-            $key,
-            [self::OPTION_PERSISTENCE_TYPE => self::PERSISTENCE_TYPE_SQL]
-        );
+        return $this->createPersistenceManagerMock([
+            $key => $this->createSqlPersistence($key)
+        ]);
     }
 }

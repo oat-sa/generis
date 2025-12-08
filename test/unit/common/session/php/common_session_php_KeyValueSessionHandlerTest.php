@@ -21,6 +21,10 @@
 
 declare(strict_types=1);
 
+namespace oat\generis\test\unit\common\session\php;
+
+use common_persistence_KeyValuePersistence;
+use common_session_php_KeyValueSessionHandler;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 

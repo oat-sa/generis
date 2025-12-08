@@ -52,6 +52,7 @@ class UninstallActionTest extends TestCase
 
         $eventManager = $this->createMock(EventManager::class);
         $eventManager
+            ->expects($this->once())
             ->method('detach')
             ->with($event, $callBack);
 
@@ -59,6 +60,7 @@ class UninstallActionTest extends TestCase
             EventManager::SERVICE_ID => $eventManager,
         ]);
         $serviceManager
+            ->expects($this->once())
             ->method('register')
             ->with(EventManager::SERVICE_ID, $eventManager);
 
@@ -91,6 +93,7 @@ class UninstallActionTest extends TestCase
 
         $serviceManagerMock = $this->getServiceManagerMock();
         $serviceManagerMock
+            ->expects($this->once())
             ->method('unregister')
             ->with($fixtureService);
 

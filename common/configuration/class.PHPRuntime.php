@@ -27,10 +27,7 @@
 /**
  * Short description of class common_configuration_PHPRuntime
  *
- * @access public
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
- * @package generis
-
  */
 class common_configuration_PHPRuntime extends common_configuration_BoundableComponent
 {
@@ -66,7 +63,7 @@ class common_configuration_PHPRuntime extends common_configuration_BoundableComp
                 $message = "PHP Version ({$current}) is between {$min} and {$max}.";
             } else {
                 $validity = common_configuration_Report::INVALID;
-                $message = "PHP Version ({$current} is not between {$min} and {$max}.)";
+                $message = "PHP Version ({$current}) is not between {$min} and {$max}.";
             }
         } elseif (!empty($min) && empty($max)) {
             if (version_compare($current, $min, '>=')) {

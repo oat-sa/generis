@@ -22,10 +22,8 @@ declare(strict_types=1);
 
 namespace oat\generis\test;
 
-use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
-use Psr\Container\ContainerInterface;
 use oat\oatbox\service\ServiceManager;
 use PHPUnit\Framework\TestCase as UnitTestCase;
 

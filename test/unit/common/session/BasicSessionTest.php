@@ -20,7 +20,7 @@
 
 declare(strict_types=1);
 
-namespace oat\generis\test\unit\common\persistence;
+namespace oat\generis\test\unit\common\session;
 
 use common_session_BasicSession;
 use PHPUnit\Framework\TestCase;

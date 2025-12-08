@@ -19,6 +19,8 @@
  *
  */
 
+declare(strict_types=1);
+
 namespace oat\generis\test\unit\helpers;
 
 use common_exception_Error;
@@ -44,7 +46,7 @@ class ExtensionHelperTest extends TestCase
         $ext1 = $this->mockExtension('ext1', ['ext2']);
         $ext2 = $this->mockExtension('ext2', ['ext3']);
         $ext3 = $this->mockExtension('ext3', ['ext1']);
-        $sorted = helpers_ExtensionHelper::sortByDependencies([$ext2,$ext3,$ext1]);
+        helpers_ExtensionHelper::sortByDependencies([$ext2,$ext3,$ext1]);
     }
 
     public function testMissingDependencies(): void

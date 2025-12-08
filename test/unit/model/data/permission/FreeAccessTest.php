@@ -35,7 +35,7 @@ class FreeAccessTest extends TestCase
         $this->user = $this->createMock(User::class);
         $this->user
             ->method('getIdentifier')
-            ->willReturn('tastIdentifier\\_of_//User');
+            ->willReturn('testIdentifier\\_of_//User');
     }
 
     public function testConstruct(): void

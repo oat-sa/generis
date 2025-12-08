@@ -75,7 +75,7 @@ class SmoothModelIteratorTest extends TestCase
         $this->assertSame('en-US', $current->lg);
     }
 
-    private function createIterator()
+    private function createIterator(): core_kernel_persistence_smoothsql_SmoothIterator
     {
         $statementMock = $this->createMock(PDOStatement::class);
 

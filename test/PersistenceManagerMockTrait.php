@@ -22,34 +22,43 @@ declare(strict_types=1);
 
 namespace oat\generis\test;
 
-use PHPUnit\Framework\MockObject\MockObject;
 use common_persistence_InMemoryKvDriver;
-use common_persistence_KeyValuePersistence;
+use common_persistence_Persistence;
 use common_persistence_sql_dbal_Driver;
 use oat\generis\persistence\PersistenceManager;
+use PHPUnit\Framework\MockObject\MockObject;
 
 trait PersistenceManagerMockTrait
 {
-    public const OPTION_PERSISTENCE_TYPE = 'persistenceType';
-    public const PERSISTENCE_TYPE_SQL = 'sql';
-    public const PERSISTENCE_TYPE_KV = 'kv';
-
-    public function getPersistenceManagerMock(string $key, array $options = []): PersistenceManager|MockObject
+    /**
+     * @deprecated Use PersistenceManagerMockTrait::createPersistenceManagerMock()
+     */
+    public function getPersistenceManagerMock(string $key): PersistenceManager|MockObject
     {
-        if (!extension_loaded('pdo_sqlite')) {
-            $this->markTestSkipped('Extension "pdo_sqlite" not loaded, test skipped');
+        return $this->createPersistenceManagerMock([
+            $key => $this->createSqlPersistence($key),
+        ]);
+    }
+
+    public function createPersistenceManagerMock(array $persistences): PersistenceManager|MockObject
+    {
+        if (empty($persistences)) {
+            $this->fail('Persistence manager requires at least one persistence');
         }
 
-        $persistence = match ($options[self::OPTION_PERSISTENCE_TYPE] ?? self::PERSISTENCE_TYPE_SQL) {
-            self::PERSISTENCE_TYPE_KV => new common_persistence_KeyValuePersistence(
-                [],
-                new common_persistence_InMemoryKvDriver()
-            ),
-            default => (new common_persistence_sql_dbal_Driver())->connect(
-                $key,
-                ['connection' => ['url' => 'sqlite:///:memory:']]
-            ),
-        };
+        $returnMap = [];
+
+        foreach ($persistences as $key => $persistence) {
+            if (!($persistence instanceof MockObject) && !($persistence instanceof common_persistence_Persistence)) {
+                $this->fail('Expected an instance of either MockObject or common_persistence_Persistence');
+            }
+
+            if (!is_string($key)) {
+                $this->fail('Expected persistence key to be a string');
+            }
+
+            $returnMap[] = [$key, $persistence];
+        }
 
         $persistenceManager = $this->createMock(PersistenceManager::class);
         $persistenceManager
@@ -57,9 +66,25 @@ trait PersistenceManagerMockTrait
             ->with($this->anything());
         $persistenceManager
             ->method('getPersistenceById')
-            ->with($key)
-            ->willReturn($persistence);
+            ->willReturnMap($returnMap);
 
         return $persistenceManager;
+    }
+
+    public function createSqlPersistence(string $key): common_persistence_Persistence
+    {
+        if (!extension_loaded('pdo_sqlite')) {
+            $this->markTestSkipped('Extension "pdo_sqlite" not loaded, test skipped');
+        }
+
+        return (new common_persistence_sql_dbal_Driver())->connect(
+            $key,
+            ['connection' => ['url' => 'sqlite:///:memory:']]
+        );
+    }
+
+    public function createKVPersistence(string $key): common_persistence_Persistence
+    {
+        return (new common_persistence_InMemoryKvDriver())->connect($key, []);
     }
 }

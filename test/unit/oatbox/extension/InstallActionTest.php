@@ -54,6 +54,7 @@ class InstallActionTest extends TestCase
 
         $eventManager = $this->createMock(EventManager::class);
         $eventManager
+            ->expects($this->once())
             ->method('attach')
             ->with($event, $callBack);
 
@@ -61,6 +62,7 @@ class InstallActionTest extends TestCase
             EventManager::SERVICE_ID => $eventManager,
         ]);
         $serviceManagerMock
+            ->expects($this->once())
             ->method('register')
             ->with(EventManager::SERVICE_ID, $eventManager);
 
@@ -100,6 +102,7 @@ class InstallActionTest extends TestCase
             ->willReturn($configurableServiceMock);
 
         $serviceManagerMock
+            ->expects($this->once())
             ->method('register')
             ->with($fixtureService, $configurableServiceMock);
 
