@@ -34,33 +34,26 @@ use PHPUnit\Framework\MockObject\MockObject;
 
 class PropertyTest extends GenerisTestCase
 {
-    /** @var core_kernel_classes_Property */
-    private $property;
-
-    /** @var core_kernel_persistence_starsql_StarModel|MockObject */
-    private $model;
-
-    /** @var core_kernel_persistence_PropertyInterface|MockObject */
-    private $persistenceProperty;
-
-    /** @var SimpleCache|MockObject */
-    private $cache;
+    private core_kernel_classes_Property|MockObject $property;
+    private core_kernel_persistence_PropertyInterface|MockObject $persistenceProperty;
+    private SimpleCache|MockObject $cache;
+    private RdfsInterface|MockObject $rdfs;
 
     public function setUp(): void
     {
-        $this->model = $this->createMock(core_kernel_persistence_starsql_StarModel::class);
+        $model = $this->createMock(core_kernel_persistence_starsql_StarModel::class);
         $this->rdfs = $this->createMock(RdfsInterface::class);
         $this->persistenceProperty = $this->createMock(core_kernel_persistence_PropertyInterface::class);
         $this->cache = $this->createMock(SimpleCache::class);
 
-        $this->model
+        $model
             ->method('getRdfsInterface')
             ->willReturn($this->rdfs);
         $this->rdfs
             ->method('getPropertyImplementation')
             ->willReturn($this->persistenceProperty);
 
-        $this->model
+        $model
             ->method('getCache')
             ->willReturn($this->cache);
 
@@ -69,7 +62,7 @@ class PropertyTest extends GenerisTestCase
             ['getRange', 'getProperty', 'getOnePropertyValue']
         );
         $this->property->__construct('uri');
-        $this->property->setModel($this->model);
+        $this->property->setModel($model);
     }
 
     public function testIsRelationshipFalseWithoutCache(): void

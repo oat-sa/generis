@@ -78,7 +78,7 @@ class common_persistence_sql_QueryIterator implements Iterator
         $this->rewind();
     }
 
-    public function rewind()
+    public function rewind(): void
     {
         $this->load(0);
     }
@@ -86,17 +86,17 @@ class common_persistence_sql_QueryIterator implements Iterator
     /**
      * @return core_kernel_classes_Triple
      */
-    public function current()
+    public function current(): mixed
     {
         return $this->cache[$this->currentResult];
     }
 
-    public function key()
+    public function key(): mixed
     {
         return $this->currentResult;
     }
 
-    public function next()
+    public function next(): void
     {
         if ($this->valid()) {
             $last = $this->key();
@@ -107,7 +107,7 @@ class common_persistence_sql_QueryIterator implements Iterator
         }
     }
 
-    public function valid()
+    public function valid(): bool
     {
         return !empty($this->cache);
     }

@@ -83,7 +83,7 @@ class Manifest implements ServiceLocatorAwareInterface
         // the file exists, we can refer to the $filePath.
         if (!is_readable($filePath)) {
             throw new ManifestNotFoundException(
-                "The Extension Manifest file located at '${filePath}' could not be read."
+                "The Extension Manifest file located at '{$filePath}' could not be read."
             );
         }
         $this->manifest = require($filePath);

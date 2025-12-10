@@ -45,7 +45,7 @@ class core_kernel_persistence_smoothsql_SmoothIterator extends common_persistenc
      * @see Iterator::current()
      * @return core_kernel_classes_Triple
      */
-    public function current()
+    public function current(): core_kernel_classes_Triple
     {
         $statement = parent::current();
 

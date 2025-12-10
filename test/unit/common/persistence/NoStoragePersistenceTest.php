@@ -25,7 +25,7 @@ namespace oat\generis\test\unit\common\persistence;
 use common_persistence_NoStorageKvDriver;
 use oat\generis\test\TestCase;
 
-class NoStaragePersistenceTest extends TestCase
+class NoStoragePersistenceTest extends TestCase
 {
     /**
      *

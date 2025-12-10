@@ -63,26 +63,26 @@ class common_configuration_PHPRuntime extends common_configuration_BoundableComp
             // min & max are specifed.
             if (version_compare($current, $min, '>=') && version_compare($current, $max, '<=')) {
                 $validity = common_configuration_Report::VALID;
-                $message = "PHP Version (${current}) is between ${min} and ${max}.";
+                $message = "PHP Version ({$current}) is between {$min} and {$max}.";
             } else {
                 $validity = common_configuration_Report::INVALID;
-                $message = "PHP Version (${current} is not between ${min} and ${max}.)";
+                $message = "PHP Version ({$current} is not between {$min} and {$max}.)";
             }
         } elseif (!empty($min) && empty($max)) {
             if (version_compare($current, $min, '>=')) {
                 $validity = common_configuration_Report::VALID;
-                $message = "PHP Version (${current}) is higher or equal to ${min}.";
+                $message = "PHP Version ({$current}) is higher or equal to {$min}.";
             } else {
                 $validity = common_configuration_Report::INVALID;
-                $message = "PHP Version (${current}) is lower than ${min}.";
+                $message = "PHP Version ({$current}) is lower than {$min}.";
             }
         } elseif (empty($min) && !empty($max)) {
             if (version_compare($current, $max, '<=')) {
                 $validity = common_configuration_Report::VALID;
-                $message = "PHP Version (${current}) is lesser than ${max}.";
+                $message = "PHP Version ({$current}) is lesser than {$max}.";
             } else {
                 $validity = common_configuration_Report::INVALID;
-                $message = "PHP Version (${current}) is greater than ${max}.";
+                $message = "PHP Version ({$current}) is greater than {$max}.";
             }
         }
 
