@@ -36,7 +36,6 @@ use PHPUnit\Framework\TestCase as UnitTestCase;
  */
 abstract class TestCase extends UnitTestCase
 {
-    use ServiceManagerMockTrait;
     use SqlMockTrait;
     use ProphecyTrait {
         ProphecyTrait::prophesize as traitProphesize;
@@ -52,7 +51,39 @@ abstract class TestCase extends UnitTestCase
      */
     public function getServiceLocatorMock(array $services = [])
     {
-        return $this->getServiceManagerMock($services);
+        /** @var ContainerInterface|ObjectProphecy $containerProphecy */
+        $containerProphecy = $this->prophesize(ContainerInterface::class);
+
+        /** @var ServiceManager|ObjectProphecy $serviceLocatorProphecy */
+        $serviceLocatorProphecy = $this->prophesize(ServiceManager::class);
+        $serviceLocatorProphecy
+            ->getContainer()
+            ->willReturn($containerProphecy);
+
+        foreach ($services as $key => $service) {
+            $serviceLocatorProphecy
+                ->get($key)
+                ->willReturn($service);
+            $serviceLocatorProphecy
+                ->has($key)
+                ->willReturn(true);
+
+            $containerProphecy
+                ->get($key)
+                ->willReturn($service);
+            $containerProphecy
+                ->has($key)
+                ->willReturn(true);
+        }
+
+        $serviceLocatorProphecy
+            ->has(Argument::any())
+            ->willReturn(false);
+        $containerProphecy
+            ->has(Argument::any())
+            ->willReturn(false);
+
+        return $serviceLocatorProphecy->reveal();
     }
 
     /**
