@@ -21,6 +21,8 @@
 
 namespace oat\oatbox\filesystem;
 
+use Traversable;
+
 class Directory extends FileSystemHandler implements \IteratorAggregate
 {
     public const ITERATOR_RECURSIVE = '1';
@@ -58,7 +60,7 @@ class Directory extends FileSystemHandler implements \IteratorAggregate
      *
      * @return \ArrayIterator
      */
-    public function getIterator()
+    public function getIterator(): Traversable
     {
         return $this->getFlyIterator();
     }

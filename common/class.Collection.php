@@ -84,19 +84,11 @@ class common_Collection extends common_Object implements IteratorAggregate, Coun
     /**
      * return the number of node of the collection (only this level)
      *
-     * @access public
      * @author Lionel Lecaque <lionel.lecaque@tudor.lu>
-     * @return int
      */
-    public function count()
+    public function count(): int
     {
-        $returnValue = (int) 0;
-
-
-        $returnValue = count($this->sequence);
-
-
-        return (int) $returnValue;
+        return count($this->sequence);
     }
 
     /**
@@ -234,13 +226,10 @@ class common_Collection extends common_Object implements IteratorAggregate, Coun
     /**
      * Implementation of IteratorAggregate::getIterator()
      *
-     * @access public
      * @author Lionel Lecaque <lionel.lecaque@tudor.lu>
-     * @return mixed
      */
-    public function getIterator()
+    public function getIterator(): Traversable
     {
-
         return new ArrayIterator($this->sequence);
     }
 

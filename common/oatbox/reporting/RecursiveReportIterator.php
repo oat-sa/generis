@@ -43,7 +43,7 @@ class RecursiveReportIterator extends ArrayIterator implements RecursiveIterator
     /**
      * @return self|RecursiveIterator
      */
-    public function getChildren()
+    public function getChildren(): ?RecursiveIterator
     {
         return new static($this->current()->getChildren());
     }

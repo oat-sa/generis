@@ -26,6 +26,7 @@ use Doctrine\DBAL\Schema\Schema;
 use IteratorAggregate;
 use ArrayIterator;
 use common_exception_InconsistentData;
+use Traversable;
 
 /**
  * A collection of multiple schemas, in order to accomodate for the possibility
@@ -87,7 +88,7 @@ class SchemaCollection implements IteratorAggregate
      * {@inheritDoc}
      * @see IteratorAggregate::getIterator()
      */
-    public function getIterator()
+    public function getIterator(): Traversable
     {
         return new ArrayIterator($this->schemas);
     }
