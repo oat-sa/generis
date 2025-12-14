@@ -31,7 +31,7 @@ trait KeyValueMockTrait
     /**
      * Returns a key-value persistence on top of a SQL memory mock
      */
-    public function getKeyValueMock($key): PersistenceManager|MockObject
+    public function getKeyValueMock(string $key): PersistenceManager|MockObject
     {
         $persistenceManager = $this->createMock(PersistenceManager::class);
         $persistenceManager
