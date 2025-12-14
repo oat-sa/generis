@@ -15,35 +15,30 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2020 (original work) Open Assessment Technologies SA;
- *
+ * Copyright (c) 2020-2025 (original work) Open Assessment Technologies SA;
  */
 
 declare(strict_types=1);
 
 namespace oat\generis\test;
 
-use PHPUnit\Framework\MockObject\MockObject;
+use common_persistence_InMemoryKvDriver;
 use oat\generis\persistence\PersistenceManager;
+use PHPUnit\Framework\MockObject\MockObject;
 
-/**
- * @deprecated Use \oat\generis\test\PersistenceManagerMockTrait.
- *             Since PHPUnit does all the work, we no longer have to use Prophecy to reduce dependencies.
- */
 trait KeyValueMockTrait
 {
-    use PersistenceManagerMockTrait;
-
     /**
-     * @deprecated Use \oat\generis\test\PersistenceManagerMockTrait::createPersistenceManagerMock() instead.
-     *             Since PHPUnit does all the work, we no longer have to use Prophecy to reduce dependencies.
-     *
      * Returns a key-value persistence on top of a SQL memory mock
      */
-    public function getKeyValueMock(string $key): PersistenceManager|MockObject
+    public function getKeyValueMock($key): PersistenceManager|MockObject
     {
-        return $this->createPersistenceManagerMock([
-            $key => $this->createKVPersistence($key)
-        ]);
+        $persistenceManager = $this->createMock(PersistenceManager::class);
+        $persistenceManager
+            ->method('getPersistenceById')
+            ->with($key)
+            ->willReturn((new common_persistence_InMemoryKvDriver())->connect($key, []));
+
+        return $persistenceManager;
     }
 }

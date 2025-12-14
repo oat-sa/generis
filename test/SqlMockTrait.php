@@ -15,32 +15,40 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2018-2022 (original work) Open Assessment Technologies SA.
+ * Copyright (c) 2018-2025 (original work) Open Assessment Technologies SA.
  */
 
 declare(strict_types=1);
 
 namespace oat\generis\test;
 
-use PHPUnit\Framework\MockObject\MockObject;
+use common_persistence_sql_dbal_Driver;
 use oat\generis\persistence\PersistenceManager;
+use PHPUnit\Framework\MockObject\MockObject;
 
-/**
- * @deprecated Use \oat\generis\test\PersistenceManagerMockTrait.
- *             Since PHPUnit does all the work, we no longer have to use Prophecy to reduce dependencies.
- */
 trait SqlMockTrait
 {
-    use PersistenceManagerMockTrait;
-
-    /**
-     * @deprecated Use \oat\generis\test\PersistenceManagerMockTrait::createPersistenceManagerMock() instead.
-     *             Since PHPUnit does all the work, we no longer have to use Prophecy to reduce dependencies.
-     */
     public function getSqlMock(string $key): PersistenceManager|MockObject
     {
-        return $this->createPersistenceManagerMock([
-            $key => $this->createSqlPersistence($key)
-        ]);
+        if (!extension_loaded('pdo_sqlite')) {
+            $this->markTestSkipped('sqlite not found, tests skipped.');
+        }
+
+        $persistence = (new common_persistence_sql_dbal_Driver())->connect(
+            $key,
+            [
+                'connection' => [
+                    'url' => 'sqlite:///:memory:',
+                ],
+            ]
+        );
+
+        $persistenceManager = $this->createMock(PersistenceManager::class);
+        $persistenceManager
+            ->method('getPersistenceById')
+            ->with($key)
+            ->willReturn($persistence);
+
+        return $persistenceManager;
     }
 }

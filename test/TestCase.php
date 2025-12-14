@@ -22,10 +22,12 @@ declare(strict_types=1);
 
 namespace oat\generis\test;
 
+use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use oat\oatbox\service\ServiceManager;
 use PHPUnit\Framework\TestCase as UnitTestCase;
+use Psr\Container\ContainerInterface;
 
 /**
  * @deprecated Use \PHPUnit\Framework\TestCase instead.
@@ -34,7 +36,6 @@ use PHPUnit\Framework\TestCase as UnitTestCase;
  */
 abstract class TestCase extends UnitTestCase
 {
-    use ServiceManagerMockTrait;
     use SqlMockTrait;
     use ProphecyTrait {
         ProphecyTrait::prophesize as traitProphesize;
@@ -46,9 +47,41 @@ abstract class TestCase extends UnitTestCase
      *
      * @param array<string, object> $services
      */
-    public function getServiceLocatorMock(array $services = []): ServiceManager|MockObject
+    public function getServiceLocatorMock(array $services = []): ServiceManager
     {
-        return $this->getServiceManagerMock($services);
+        /** @var ContainerInterface|ObjectProphecy $containerProphecy */
+        $containerProphecy = $this->prophesize(ContainerInterface::class);
+
+        /** @var ServiceManager|ObjectProphecy $serviceLocatorProphecy */
+        $serviceLocatorProphecy = $this->prophesize(ServiceManager::class);
+        $serviceLocatorProphecy
+            ->getContainer()
+            ->willReturn($containerProphecy);
+
+        foreach ($services as $key => $service) {
+            $serviceLocatorProphecy
+                ->get($key)
+                ->willReturn($service);
+            $serviceLocatorProphecy
+                ->has($key)
+                ->willReturn(true);
+
+            $containerProphecy
+                ->get($key)
+                ->willReturn($service);
+            $containerProphecy
+                ->has($key)
+                ->willReturn(true);
+        }
+
+        $serviceLocatorProphecy
+            ->has(Argument::any())
+            ->willReturn(false);
+        $containerProphecy
+            ->has(Argument::any())
+            ->willReturn(false);
+
+        return $serviceLocatorProphecy->reveal();
     }
 
     /**
