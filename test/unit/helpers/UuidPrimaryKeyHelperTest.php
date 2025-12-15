@@ -34,7 +34,7 @@ class UuidPrimaryKeyHelperTest extends TestCase
         };
 
         $uuid = $fixture->getUniquePrimaryKey();
-        $this->assertIsString($fixture->getUniquePrimaryKey());
+        $this->assertIsString($uuid);
         $this->assertEquals(36, strlen($uuid));
     }
 }
