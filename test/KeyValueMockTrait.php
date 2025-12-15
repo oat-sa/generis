@@ -36,8 +36,19 @@ trait KeyValueMockTrait
         $persistenceManager = $this->createMock(PersistenceManager::class);
         $persistenceManager
             ->method('getPersistenceById')
-            ->with($key)
+            ->with($this->anything())
             ->willReturn((new common_persistence_InMemoryKvDriver())->connect($key, []));
+
+        return $persistenceManager;
+    }
+
+    public function getAdvancedKeyValueMock(string $key): PersistenceManager|MockObject
+    {
+        $persistenceManager = $this->createMock(PersistenceManager::class);
+        $persistenceManager
+            ->method('getPersistenceById')
+            ->with($this->anything())
+            ->willReturn((new \common_persistence_InMemoryAdvKvDriver())->connect($key, []));
 
         return $persistenceManager;
     }

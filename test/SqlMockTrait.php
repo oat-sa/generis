@@ -46,7 +46,7 @@ trait SqlMockTrait
         $persistenceManager = $this->createMock(PersistenceManager::class);
         $persistenceManager
             ->method('getPersistenceById')
-            ->with($key)
+            ->with($this->anything())
             ->willReturn($persistence);
 
         return $persistenceManager;

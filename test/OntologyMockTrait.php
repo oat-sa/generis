@@ -93,9 +93,9 @@ trait OntologyMockTrait
         $session = new \common_session_AnonymousSession();
         $eventManager = new EventManager();
 
-        $serviceManagerMethod = method_exists($this, 'getServiceManagerMock')
-            ? 'getServiceManagerMock'
-            : 'getServiceLocatorMock';
+        $serviceManagerMethod = method_exists($this, 'getServiceLocatorMock')
+            ? 'getServiceLocatorMock'
+            : 'getServiceManagerMock';
 
         $serviceLocatorMock = $this->$serviceManagerMethod([
             Ontology::SERVICE_ID => $onto,

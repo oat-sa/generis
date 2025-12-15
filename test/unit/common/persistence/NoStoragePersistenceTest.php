@@ -22,31 +22,29 @@
 
 namespace oat\generis\test\unit\common\persistence;
 
+use common_persistence_KeyValuePersistence;
 use common_persistence_NoStorageKvDriver;
 use PHPUnit\Framework\TestCase;
 
-class NoStaragePersistenceTest extends TestCase
+class NoStoragePersistenceTest extends TestCase
 {
     /**
-     *
      * @author Lionel Lecaque, lionel@taotesting.com
-     * @return \common_persistence_KeyValuePersistence
      */
-    public function testConnect()
+    public function testConnect(): common_persistence_KeyValuePersistence
     {
-
         $driver = new common_persistence_NoStorageKvDriver();
         $persistence = $driver->connect('test', []);
         $this->assertInstanceOf('common_persistence_KeyValuePersistence', $persistence);
+
         return $persistence;
     }
 
     /**
      * @depends testConnect
      * @author Lionel Lecaque, lionel@taotesting.com
-     * @param \common_persistence_KeyValuePersistence $persistence
      */
-    public function testSet($persistence)
+    public function testSet(common_persistence_KeyValuePersistence $persistence): void
     {
         $this->assertFalse($persistence->set('fakeKeyName', 'value'));
     }
@@ -54,9 +52,8 @@ class NoStaragePersistenceTest extends TestCase
     /**
      * @depends testConnect
      * @author Lionel Lecaque, lionel@taotesting.com
-     * @param \common_persistence_KeyValuePersistence $persistence
      */
-    public function testGet($persistence)
+    public function testGet(common_persistence_KeyValuePersistence $persistence): void
     {
         $this->assertFalse($persistence->get('fakeKeyName'));
     }
@@ -65,9 +62,8 @@ class NoStaragePersistenceTest extends TestCase
     /**
      * @depends testConnect
      * @author Lionel Lecaque, lionel@taotesting.com
-     * @param \common_persistence_KeyValuePersistence $persistence
      */
-    public function testExists($persistence)
+    public function testExists(common_persistence_KeyValuePersistence $persistence): void
     {
         $this->assertFalse($persistence->exists('fakeKeyName'));
     }
@@ -75,20 +71,17 @@ class NoStaragePersistenceTest extends TestCase
     /**
      * @depends testConnect
      * @author Lionel Lecaque, lionel@taotesting.com
-     * @param \common_persistence_KeyValuePersistence $persistence
      */
-    public function testDel($persistence)
+    public function testDel(common_persistence_KeyValuePersistence $persistence): void
     {
-
         $this->assertTrue($persistence->del('fakeKeyName'));
     }
 
     /**
      * @depends testConnect
      * @author Lionel Lecaque, lionel@taotesting.com
-     * @param \common_persistence_KeyValuePersistence $persistence
      */
-    public function testPurge($persistence)
+    public function testPurge(common_persistence_KeyValuePersistence $persistence): void
     {
         $this->assertTrue($persistence->purge());
     }

@@ -25,16 +25,16 @@ namespace oat\generis\test\unit\helpers;
 use oat\generis\Helper\UuidPrimaryKeyTrait;
 use PHPUnit\Framework\TestCase;
 
-class UuidPrimaryKeyTraitTest extends TestCase
+class UuidPrimaryKeyHelperTest extends TestCase
 {
-    public function testGetUniquePrimaryKey()
+    public function testGetUniquePrimaryKey(): void
     {
         $fixture = new class () {
             use UuidPrimaryKeyTrait;
         };
 
         $uuid = $fixture->getUniquePrimaryKey();
-        $this->assertTrue(is_string($fixture->getUniquePrimaryKey()));
+        $this->assertIsString($fixture->getUniquePrimaryKey());
         $this->assertEquals(36, strlen($uuid));
     }
 }

@@ -84,8 +84,7 @@
   "require-dev": {
     "mikey179/vfsstream": "~1",
     "phpunit/phpunit": "^8.5 || ^9.6",
-    "php-mock/php-mock": "^2.0",
-    "phpspec/prophecy-phpunit": "^2.4.0"
+    "php-mock/php-mock": "^2.0"
   },
   "suggest": {
     "league/flysystem-google-cloud-storage": "Supports google flystore"
