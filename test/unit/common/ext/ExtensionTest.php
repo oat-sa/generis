@@ -20,11 +20,14 @@
 
 namespace oat\generis\test\unit\common\ext;
 
-use oat\generis\test\TestCase;
+use oat\generis\test\ServiceManagerMockTrait;
+use PHPUnit\Framework\TestCase;
 use common_ext_Extension as Extension;
 
 class ExtensionTest extends TestCase
 {
+    use ServiceManagerMockTrait;
+
     /**
      * @runInSeparateProcess
      * @throws \common_ext_ManifestException
@@ -45,7 +48,7 @@ class ExtensionTest extends TestCase
                 return $this->dir . $this->getId() . DIRECTORY_SEPARATOR;
             }
         };
-        $ext->setServiceLocator($this->getServiceLocatorMock([]));
+        $ext->setServiceLocator($this->getServiceManagerMock([]));
         $this->assertInstanceOf(\common_ext_ExtensionUpdater::class, $ext->getUpdater());
     }
 }

@@ -28,22 +28,29 @@ trait FileSystemMockTrait
 {
     protected function getFileSystemMock($dirs = []): FileSystemService
     {
-        $adapterparam = [
-            'testfs' => [
-                'class' => InMemoryFilesystemAdapter::class
-            ]
-        ];
         $dirparam = [];
+
         foreach ($dirs as $dir) {
             $dirparam[$dir] = 'testfs';
         }
+
         $service = new FileSystemService([
-            FileSystemService::OPTION_ADAPTERS => $adapterparam,
+            FileSystemService::OPTION_ADAPTERS => [
+                'testfs' => [
+                    'class' => InMemoryFilesystemAdapter::class
+                ]
+            ],
             FileSystemService::OPTION_DIRECTORIES => $dirparam
         ]);
-        $service->setServiceLocator($this->getServiceLocatorMock([
-            FileSystemService::SERVICE_ID => $service
+
+        $serviceManagerMethod = method_exists($this, 'getServiceLocatorMock')
+            ? 'getServiceLocatorMock'
+            : 'getServiceManagerMock';
+
+        $service->setServiceLocator($this->$serviceManagerMethod([
+            FileSystemService::SERVICE_ID => $service,
         ]));
+
         return $service;
     }
 }

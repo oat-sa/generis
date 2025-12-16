@@ -164,6 +164,7 @@ class core_kernel_persistence_smoothsql_SmoothRdf implements RdfInterface
         );
     }
 
+    #[ReturnTypeWillChange]
     public function getIterator()
     {
         return new core_kernel_persistence_smoothsql_SmoothIterator(

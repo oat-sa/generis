@@ -24,7 +24,7 @@
 
 namespace oat\generis\test\unit;
 
-use oat\generis\test\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class ConfigurationTest extends TestCase
 {

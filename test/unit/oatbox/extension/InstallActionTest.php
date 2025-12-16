@@ -21,10 +21,12 @@
 
 namespace oat\generis\test\unit\oatbox\extension;
 
+use oat\generis\test\ServiceManagerMockTrait;
 use oat\oatbox\event\EventManager;
 use oat\oatbox\extension\InstallAction;
+use oat\oatbox\service\ConfigurableService;
 use oat\oatbox\service\ServiceManager;
-use oat\generis\test\TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  *
@@ -32,10 +34,11 @@ use oat\generis\test\TestCase;
  */
 class InstallActionTest extends TestCase
 {
-    public function testRegisterEvent()
-    {
+    use ServiceManagerMockTrait;
 
-        $event    = 'testEvent';
+    public function testRegisterEvent(): void
+    {
+        $event = 'testEvent';
         $callBack = function () {
         };
 
@@ -46,35 +49,38 @@ class InstallActionTest extends TestCase
             false,
             false,
             true,
-            ['getServiceLocator' , 'getServiceManager']
+            ['getServiceLocator', 'getServiceManager']
         );
 
-        $prophetServiceManager = $this->prophesize(ServiceManager::class);
-        $prophetEventManager   = $this->prophesize(EventManager::class);
+        $eventManager = $this->createMock(EventManager::class);
+        $eventManager
+            ->expects($this->once())
+            ->method('attach')
+            ->with($event, $callBack);
 
-        $prophetEventManager->attach($event, $callBack)->willReturn(null);
+        $serviceManagerMock = $this->getServiceManagerMock([
+            EventManager::SERVICE_ID => $eventManager,
+        ]);
+        $serviceManagerMock
+            ->expects($this->once())
+            ->method('register')
+            ->with(EventManager::SERVICE_ID, $eventManager);
 
-        $EventManagerMock      = $prophetEventManager->reveal();
+        $instance
+            ->expects($this->once())
+            ->method('getServiceLocator')
+            ->willReturn($serviceManagerMock);
 
-        $prophetServiceManager->get(EventManager::CONFIG_ID)->willReturn($EventManagerMock);
-        $prophetServiceManager->register(EventManager::CONFIG_ID, $EventManagerMock)->willReturn(null);
-
-        $serviceManagerMock    = $prophetServiceManager->reveal();
-
-        $instance->expects($this->once())
-                ->method('getServiceLocator')
-                ->willReturn($serviceManagerMock);
-
-        $instance->expects($this->once())
-                ->method('getServiceManager')
-                ->willReturn($serviceManagerMock);
+        $instance
+            ->expects($this->once())
+            ->method('getServiceManager')
+            ->willReturn($serviceManagerMock);
 
         $instance->registerEvent($event, $callBack);
     }
 
-    public function testRegisterService()
+    public function testRegisterService(): void
     {
-
         $fixtureService = 'test/service';
 
         $instance = $this->getMockForAbstractClass(
@@ -87,21 +93,24 @@ class InstallActionTest extends TestCase
             ['getServiceManager']
         );
 
-        $serviceProphet = $this->prophesize()->willExtend(\oat\oatbox\service\ConfigurableService::class);
+        $serviceManagerMock = $this->getServiceManagerMock();
 
-        $prophetServiceManager = $this->prophesize(ServiceManager::class);
-        $serviceManagerMock    = $prophetServiceManager->reveal();
+        $configurableServiceMock = $this->createMock(ConfigurableService::class);
+        $configurableServiceMock
+            ->method('setServiceLocator')
+            ->with($serviceManagerMock)
+            ->willReturn($configurableServiceMock);
 
-        $serviceProphet->setServiceLocator($serviceManagerMock)->willReturn($serviceProphet);
-        $serviceMock    = $serviceProphet->reveal();
+        $serviceManagerMock
+            ->expects($this->once())
+            ->method('register')
+            ->with($fixtureService, $configurableServiceMock);
 
-        $prophetServiceManager->register($fixtureService, $serviceMock)->willReturn(null);
-        $serviceManagerMock    = $prophetServiceManager->reveal();
+        $instance
+            ->expects($this->exactly(1))
+            ->method('getServiceManager')
+            ->willReturn($serviceManagerMock);
 
-        $instance->expects($this->exactly(1))
-                ->method('getServiceManager')
-                ->willReturn($serviceManagerMock);
-
-        $instance->registerService($fixtureService, $serviceMock);
+        $instance->registerService($fixtureService, $configurableServiceMock);
     }
 }

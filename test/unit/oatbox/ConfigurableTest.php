@@ -20,7 +20,7 @@
 
 namespace oat\generis\test\unit\oatbox;
 
-use oat\generis\test\TestCase;
+use PHPUnit\Framework\TestCase;
 use oat\oatbox\Configurable;
 
 class ConfigurableTest extends TestCase

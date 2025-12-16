@@ -24,10 +24,10 @@ namespace oat\generis\test\unit\helpers;
 
 use core_kernel_classes_Property;
 use oat\generis\model\OntologyRdfs;
-use oat\generis\test\GenerisTestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ContentSanitizerTest extends GenerisTestCase
+class ContentSanitizerTest extends TestCase
 {
     /**
      * Test that string values with HTML characters on RDFS_LABEL property are escaped.

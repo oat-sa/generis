@@ -23,11 +23,14 @@ namespace oat\generis\test\unit\common\persistence\sql\dbal;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Schema\Schema;
-use oat\generis\test\TestCase;
+use oat\generis\test\ServiceManagerMockTrait;
+use PHPUnit\Framework\TestCase;
 use oat\generis\test\MockObject;
 
 class PlatformTest extends TestCase
 {
+    use ServiceManagerMockTrait;
+
     public function testGetQueryBuilder()
     {
         $platform = $this->createInstance();
@@ -108,7 +111,7 @@ class PlatformTest extends TestCase
         $service = new \common_persistence_Manager();
 
         $service->setServiceLocator(
-            $this->getServiceLocatorMock([])
+            $this->getServiceManagerMock([])
         );
         return $service;
     }

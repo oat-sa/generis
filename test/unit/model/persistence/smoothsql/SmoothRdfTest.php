@@ -24,45 +24,47 @@ declare(strict_types=1);
 namespace oat\generis\test\unit\model\persistence\smoothsql;
 
 use common_Exception;
+use common_persistence_sql_Platform;
+use common_persistence_SqlPersistence;
+use core_kernel_classes_Triple;
+use core_kernel_persistence_smoothsql_SmoothModel;
 use core_kernel_persistence_smoothsql_SmoothRdf;
 use Doctrine\DBAL\ParameterType;
-use Prophecy\Argument;
-use Prophecy\Prophet;
-use oat\generis\test\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class SmoothRdfTest extends TestCase
 {
     /**
      * @author Lionel Lecaque, lionel@taotesting.com
      */
-    public function testGet()
+    public function testGet(): void
     {
         $this->expectException(common_Exception::class);
         $this->expectExceptionMessage('Not implemented');
-        $prophet = new Prophet();
-        $persistence = $prophet->prophesize('\common_persistence_SqlPersistence');
 
-        $model = $prophet->prophesize('\core_kernel_persistence_smoothsql_SmoothModel');
-        $model->getPersistence()->willReturn($persistence->reveal());
+        $model = $this->createMock(core_kernel_persistence_smoothsql_SmoothModel::class);
+        $model
+            ->method('getPersistence')
+            ->willReturn($this->createMock(common_persistence_SqlPersistence::class));
 
-        $rdf = new core_kernel_persistence_smoothsql_SmoothRdf($model->reveal());
+        $rdf = new core_kernel_persistence_smoothsql_SmoothRdf($model);
         $rdf->get(null, null);
     }
 
     /**
      * @author Lionel Lecaque, lionel@taotesting.com
      */
-    public function testSearch()
+    public function testSearch(): void
     {
         $this->expectException(common_Exception::class);
         $this->expectExceptionMessage('Not implemented');
-        $prophet = new Prophet();
-        $persistence = $prophet->prophesize('\common_persistence_SqlPersistence');
 
-        $model = $prophet->prophesize('\core_kernel_persistence_smoothsql_SmoothModel');
-        $model->getPersistence()->willReturn($persistence->reveal());
+        $model = $this->createMock(core_kernel_persistence_smoothsql_SmoothModel::class);
+        $model
+            ->method('getPersistence')
+            ->willReturn($this->createMock(common_persistence_SqlPersistence::class));
 
-        $rdf = new core_kernel_persistence_smoothsql_SmoothRdf($model->reveal());
+        $rdf = new core_kernel_persistence_smoothsql_SmoothRdf($model);
         $rdf->search(null, null);
     }
 
@@ -70,40 +72,51 @@ class SmoothRdfTest extends TestCase
      *
      * @author Lionel Lecaque, lionel@taotesting.com
      */
-    public function testAdd()
+    public function testAdd(): void
     {
-        $platform = $this->prophesize('\common_persistence_sql_Platform');
-        $platform->getNowExpression()->willReturn('now');
+        $platform = $this->createMock(common_persistence_sql_Platform::class);
+        $platform
+            ->method('getNowExpression')
+            ->willReturn('now');
 
-        $persistence = $this->prophesize('\common_persistence_SqlPersistence');
-        $persistence->getPlatForm()->willReturn($platform->reveal());
+        $persistence = $this->createMock(common_persistence_SqlPersistence::class);
+        $persistence
+            ->method('getPlatForm')
+            ->willReturn($platform);
+
         $query = "INSERT INTO statements ( modelId, subject, predicate, object, l_language, epoch, author) VALUES "
             . "( ? , ? , ? , ? , ? , ?, ?);";
 
-        $triple = new \core_kernel_classes_Triple();
+        $triple = new core_kernel_classes_Triple();
         $triple->modelid = 22;
         $triple->subject = 'subjectUri';
         $triple->predicate = 'predicateUri';
         $triple->object = 'objectUri';
 
-        $persistence->exec(
-            $query,
-            [
-                22,
-                'subjectUri',
-                'predicateUri',
-                'objectUri',
-                '',
-                'now',
-                ''
-            ],
-            $this->getExpectedTripleParameterTypes()
-        )->shouldBeCalled()->willReturn(true);
+        $persistence
+            ->expects($this->once())
+            ->method('exec')
+            ->with(
+                $query,
+                [
+                    22,
+                    'subjectUri',
+                    'predicateUri',
+                    'objectUri',
+                    '',
+                    'now',
+                    ''
+                ],
+                $this->getExpectedTripleParameterTypes()
+            )
+            ->willReturn(true);
 
-        $model = $this->prophesize('\core_kernel_persistence_smoothsql_SmoothModel');
-        $model->getPersistence()->willReturn($persistence->reveal());
+        $model = $this->createMock(core_kernel_persistence_smoothsql_SmoothModel::class);
+        $model
+            ->method('getPersistence')
+            ->willReturn($persistence);
 
-        $rdf = new core_kernel_persistence_smoothsql_SmoothRdf($model->reveal());
+        $rdf = new core_kernel_persistence_smoothsql_SmoothRdf($model);
 
         $this->assertTrue($rdf->add($triple));
     }
@@ -112,95 +125,116 @@ class SmoothRdfTest extends TestCase
      *
      * @author Lionel Lecaque, lionel@taotesting.com
      */
-    public function testAddWithAuthor()
+    public function testAddWithAuthor(): void
     {
-        $platform = $this->prophesize('\common_persistence_sql_Platform');
-        $platform->getNowExpression()->willReturn('now');
+        $platform = $this->createMock(common_persistence_sql_Platform::class);
+        $platform
+            ->method('getNowExpression')
+            ->willReturn('now');
 
-        $persistence = $this->prophesize('\common_persistence_SqlPersistence');
-        $persistence->getPlatForm()->willReturn($platform->reveal());
+        $persistence = $this->createMock(common_persistence_SqlPersistence::class);
+        $persistence
+            ->method('getPlatForm')
+            ->willReturn($platform);
+
         $query = "INSERT INTO statements ( modelId, subject, predicate, object, l_language, epoch, author) VALUES "
             . "( ? , ? , ? , ? , ? , ?, ?);";
 
-        $triple = new \core_kernel_classes_Triple();
+        $triple = new core_kernel_classes_Triple();
         $triple->modelid = 22;
         $triple->subject = 'subjectUri';
         $triple->predicate = 'predicateUri';
         $triple->object = 'objectUri';
         $triple->author = 'JohnDoe';
 
-        $persistence->exec(
-            $query,
-            [
-                22,
-                'subjectUri',
-                'predicateUri',
-                'objectUri',
-                '',
-                'now',
-                'JohnDoe'
-            ],
-            $this->getExpectedTripleParameterTypes()
-        )->shouldBeCalled()->willReturn(true);
+        $persistence
+            ->expects($this->once())
+            ->method('exec')
+            ->with(
+                $query,
+                [
+                    22,
+                    'subjectUri',
+                    'predicateUri',
+                    'objectUri',
+                    '',
+                    'now',
+                    'JohnDoe'
+                ],
+                $this->getExpectedTripleParameterTypes()
+            )
+            ->willReturn(true);
 
-        $model = $this->prophesize('\core_kernel_persistence_smoothsql_SmoothModel');
-        $model->getPersistence()->willReturn($persistence->reveal());
+        $model = $this->createMock(core_kernel_persistence_smoothsql_SmoothModel::class);
+        $model
+            ->method('getPersistence')
+            ->willReturn($persistence);
 
-        $rdf = new core_kernel_persistence_smoothsql_SmoothRdf($model->reveal());
+        $rdf = new core_kernel_persistence_smoothsql_SmoothRdf($model);
 
         $this->assertTrue($rdf->add($triple));
     }
 
     /**
-     *
      * @author Lionel Lecaque, lionel@taotesting.com
      */
-    public function testRemove()
+    public function testRemove(): void
     {
-        $prophet = new Prophet();
-        $persistence = $prophet->prophesize('\common_persistence_SqlPersistence');
+        $persistence = $this->createMock(common_persistence_SqlPersistence::class);
         $query = "DELETE FROM statements WHERE subject = ? AND predicate = ? AND object = ? AND l_language = ?;";
 
-        $triple = new \core_kernel_classes_Triple();
+        $triple = new core_kernel_classes_Triple();
         $triple->modelid = 22;
         $triple->subject = 'subjectUri';
         $triple->predicate = 'predicateUri';
         $triple->object = 'objectUri';
 
-        $persistence->exec($query, [
-            'subjectUri',
-            'predicateUri',
-            'objectUri',
-            ''
-        ])->shouldBeCalled()->willReturn(true);
+        $persistence
+            ->expects($this->once())
+            ->method('exec')
+            ->with(
+                $query,
+                [
+                    'subjectUri',
+                    'predicateUri',
+                    'objectUri',
+                    ''
+                ]
+            )
+            ->willReturn(true);
 
-        $model = $prophet->prophesize('\core_kernel_persistence_smoothsql_SmoothModel');
-        $model->getPersistence()->willReturn($persistence->reveal());
+        $model = $this->createMock(core_kernel_persistence_smoothsql_SmoothModel::class);
+        $model
+            ->method('getPersistence')
+            ->willReturn($persistence);
 
-
-        $rdf = new core_kernel_persistence_smoothsql_SmoothRdf($model->reveal());
+        $rdf = new core_kernel_persistence_smoothsql_SmoothRdf($model);
 
         $this->assertTrue($rdf->remove($triple));
     }
 
-    public function testAddTripleCollection()
+    public function testAddTripleCollection(): void
     {
-        $platform = $this->prophesize('\common_persistence_sql_Platform');
-        $platform->getNowExpression()->willReturn('now');
+        $platform = $this->createMock(common_persistence_sql_Platform::class);
+        $platform
+            ->method('getNowExpression')
+            ->willReturn('now');
 
-        $persistence = $this->prophesize('\common_persistence_SqlPersistence');
-        $persistence->getPlatForm()->willReturn($platform->reveal());
+        $persistence = $this->createMock(common_persistence_SqlPersistence::class);
+        $persistence
+            ->method('getPlatForm')
+            ->willReturn($platform);
 
         $table = 'statements';
 
-        $triple1 = new \core_kernel_classes_Triple();
+        $triple1 = new core_kernel_classes_Triple();
         $triple1->modelid = 11;
         $triple1->subject = 'subjectUri1';
         $triple1->predicate = 'predicateUri1';
         $triple1->object = 'objectUri1';
         $triple1->author = '';
 
-        $triple2 = new \core_kernel_classes_Triple();
+        $triple2 = new core_kernel_classes_Triple();
         $triple2->modelid = 22;
         $triple2->subject = 'subjectUri2';
         $triple2->predicate = 'predicateUri2';
@@ -233,21 +267,26 @@ class SmoothRdfTest extends TestCase
             ]
         ];
 
-        $persistence->insertMultiple(
-            Argument::exact($table),
-            Argument::exact($expectedValue),
-            Argument::exact($types)
-        )->shouldBeCalled();
+        $persistence
+            ->expects($this->once())
+            ->method('insertMultiple')
+            ->with(
+                $this->equalTo($table),
+                $this->equalTo($expectedValue),
+                $this->equalTo($types)
+            );
 
-        $model = $this->prophesize('\core_kernel_persistence_smoothsql_SmoothModel');
-        $model->getPersistence()->willReturn($persistence->reveal());
+        $model = $this->createMock(core_kernel_persistence_smoothsql_SmoothModel::class);
+        $model
+            ->method('getPersistence')
+            ->willReturn($persistence);
 
-        $rdf = new core_kernel_persistence_smoothsql_SmoothRdf($model->reveal());
+        $rdf = new core_kernel_persistence_smoothsql_SmoothRdf($model);
 
         $rdf->addTripleCollection($triples);
     }
 
-    protected function getExpectedTripleParameterTypes()
+    protected function getExpectedTripleParameterTypes(): array
     {
         return [
             ParameterType::INTEGER,

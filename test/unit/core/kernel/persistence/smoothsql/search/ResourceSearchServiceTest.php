@@ -25,15 +25,21 @@ namespace oat\generis\test\unit\core\kernel\persistence\smoothsql\search;
 use oat\generis\model\kernel\persistence\smoothsql\search\ComplexSearchService;
 use oat\generis\model\kernel\persistence\smoothsql\search\GateWay;
 use oat\generis\model\kernel\persistence\smoothsql\search\ResourceSearchService;
-use oat\generis\test\GenerisTestCase;
+use oat\generis\test\FileSystemMockTrait;
+use oat\generis\test\OntologyMockTrait;
+use oat\generis\test\ServiceManagerMockTrait;
 use oat\search\base\QueryBuilderInterface;
 use oat\search\base\QueryInterface;
 use oat\search\base\ResultSetInterface;
-use oat\search\QueryBuilder;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ResourceSearchServiceTest extends GenerisTestCase
+class ResourceSearchServiceTest extends TestCase
 {
+    use ServiceManagerMockTrait;
+    use OntologyMockTrait;
+    use FileSystemMockTrait;
+
     /** @var ResourceSearchService */
     private $subject;
 
@@ -46,7 +52,7 @@ class ResourceSearchServiceTest extends GenerisTestCase
 
         $this->subject = new ResourceSearchService();
         $this->subject->setServiceLocator(
-            $this->getServiceLocatorMock(
+            $this->getServiceManagerMock(
                 [
                     ComplexSearchService::SERVICE_ID => $this->complexSearchService
                 ]

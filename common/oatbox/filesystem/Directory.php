@@ -21,6 +21,8 @@
 
 namespace oat\oatbox\filesystem;
 
+use ReturnTypeWillChange;
+
 class Directory extends FileSystemHandler implements \IteratorAggregate
 {
     public const ITERATOR_RECURSIVE = '1';
@@ -58,6 +60,7 @@ class Directory extends FileSystemHandler implements \IteratorAggregate
      *
      * @return \ArrayIterator
      */
+    #[ReturnTypeWillChange]
     public function getIterator()
     {
         return $this->getFlyIterator();
@@ -199,7 +202,7 @@ class Directory extends FileSystemHandler implements \IteratorAggregate
 
         if (!$this->deleteSelf()) {
             throw new \common_exception_FileSystemError(
-                "Could not finalize renaming of '" . $this->getPrefix() . "' into '${path}'."
+                "Could not finalize renaming of '" . $this->getPrefix() . "' into '{$path}'."
             );
         }
 

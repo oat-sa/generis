@@ -23,32 +23,42 @@ namespace oat\generis\test\unit\core\data\permission;
 
 use oat\generis\model\data\permission\PermissionHelper;
 use oat\generis\model\data\permission\PermissionInterface;
+use oat\generis\test\ServiceManagerMockTrait;
 use oat\oatbox\session\SessionService;
 use oat\oatbox\user\User;
-use oat\generis\test\TestCase;
-use Prophecy\Argument;
+use PHPUnit\Framework\TestCase;
 
 class PermissionTest extends TestCase
 {
+    use ServiceManagerMockTrait;
+
     public const RIGHT = 'testRight';
+
     /**
      * @dataProvider getSamples
      */
     public function testFilter($supported, $ids, $permissions, $expected)
     {
-        $userMock = $this->prophesize(User::class);
+        $userMock = $this->createMock(User::class);
 
-        $sessionMock = $this->prophesize(SessionService::class);
-        $sessionMock->getCurrentUser()->willReturn($userMock->reveal());
+        $sessionMock = $this->createMock(SessionService::class);
+        $sessionMock
+            ->method('getCurrentUser')
+            ->willReturn($userMock);
 
-        $permissionMock = $this->prophesize(PermissionInterface::class);
-        $permissionMock->getPermissions(Argument::any(), $ids)->willReturn($permissions);
-        $permissionMock->getSupportedRights()->willReturn($supported);
+        $permissionMock = $this->createMock(PermissionInterface::class);
+        $permissionMock
+            ->method('getPermissions')
+            ->with($this->anything(), $ids)
+            ->willReturn($permissions);
+        $permissionMock
+            ->method('getSupportedRights')
+            ->willReturn($supported);
 
         $helper = new PermissionHelper();
-        $helper->setServiceLocator($this->getServiceLocatorMock([
-            SessionService::SERVICE_ID => $sessionMock->reveal(),
-            PermissionInterface::SERVICE_ID => $permissionMock->reveal()
+        $helper->setServiceLocator($this->getServiceManagerMock([
+            SessionService::SERVICE_ID => $sessionMock,
+            PermissionInterface::SERVICE_ID => $permissionMock
         ]));
         $actual = $helper->filterByPermission($ids, self::RIGHT);
         $this->assertEquals($expected, $actual);

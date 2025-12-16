@@ -23,7 +23,7 @@ declare(strict_types=1);
 
 namespace oat\generis\test\unit\extension;
 
-use oat\generis\test\TestCase;
+use PHPUnit\Framework\TestCase;
 use oat\oatbox\extension\ComposerInfo;
 use oat\oatbox\extension\exception\ManifestException;
 

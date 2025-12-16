@@ -21,7 +21,7 @@
 
 namespace oat\generis\test\unit\helpers;
 
-use oat\generis\test\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class FileTest extends TestCase
 {
