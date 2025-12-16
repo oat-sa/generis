@@ -23,12 +23,15 @@
  *
  */
 
-use oat\generis\test\TestCase;
+use oat\generis\test\ServiceManagerMockTrait;
+use PHPUnit\Framework\TestCase;
 use oat\oatbox\extension\ComposerInfo;
 use oat\oatbox\extension\Manifest;
 
 class ManifestTest extends TestCase
 {
+    use ServiceManagerMockTrait;
+
     public const SAMPLES_PATH = '/../../test/samples/manifests/';
     public const MANIFEST_PATH_DOES_NOT_EXIST = 'idonotexist.php';
     public const MANIFEST_PATH_LIGHTWEIGHT = 'lightweightManifest.php';
@@ -53,7 +56,7 @@ class ManifestTest extends TestCase
             'oat-sa/extension-tao-taoItemBank' => 'taoItemBank',
             'oat-sa/extension-tao-taoDocuments' => 'taoDocuments'
         ]);
-        $serviceLocator = $this->getServiceLocatorMock([
+        $serviceLocator = $this->getServiceManagerMock([
             common_cache_Cache::SERVICE_ID => new \common_cache_NoCache(),
             common_ext_ExtensionsManager::class => $extensionsManager
         ]);

@@ -58,6 +58,7 @@ class core_kernel_classes_ClassIterator implements \Iterator
      * (non-PHPdoc)
      * @see Iterator::rewind()
      */
+    #[ReturnTypeWillChange]
     public function rewind()
     {
         $this->currentId = -1;
@@ -68,6 +69,7 @@ class core_kernel_classes_ClassIterator implements \Iterator
      * (non-PHPdoc)
      * @see Iterator::current()
      */
+    #[ReturnTypeWillChange]
     public function current()
     {
         return new \core_kernel_classes_Class($this->classes[$this->currentId]);
@@ -77,6 +79,7 @@ class core_kernel_classes_ClassIterator implements \Iterator
      * (non-PHPdoc)
      * @see Iterator::key()
      */
+    #[ReturnTypeWillChange]
     public function key()
     {
         return $this->currentId;
@@ -86,6 +89,7 @@ class core_kernel_classes_ClassIterator implements \Iterator
      * (non-PHPdoc)
      * @see Iterator::next()
      */
+    #[ReturnTypeWillChange]
     public function next()
     {
         $this->currentId++;
@@ -108,6 +112,7 @@ class core_kernel_classes_ClassIterator implements \Iterator
      * (non-PHPdoc)
      * @see Iterator::valid()
      */
+    #[ReturnTypeWillChange]
     public function valid()
     {
         return isset($this->classes[$this->currentId]);

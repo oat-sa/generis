@@ -15,30 +15,41 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2020 (original work) Open Assessment Technologies SA;
- *
+ * Copyright (c) 2020-2025 (original work) Open Assessment Technologies SA;
  */
+
+declare(strict_types=1);
 
 namespace oat\generis\test;
 
-use Prophecy\Argument;
+use common_persistence_InMemoryKvDriver;
 use oat\generis\persistence\PersistenceManager;
+use PHPUnit\Framework\MockObject\MockObject;
 
 trait KeyValueMockTrait
 {
     /**
-     * Returns a keyvalue persistence on top of a SQL memory mock
-     *
-     * @param string $key identifier of the persistence
-     * @return PersistenceManager
+     * Returns a key-value persistence on top of a SQL memory mock
      */
-    public function getKeyValueMock($key)
+    public function getKeyValueMock(string $key): PersistenceManager|MockObject
     {
-        $driver = new \common_persistence_InMemoryKvDriver();
-        $persistence = new \common_persistence_KeyValuePersistence([], $driver);
-        $pmProphecy = $this->prophesize(PersistenceManager::class);
-        $pmProphecy->setServiceLocator(Argument::any())->willReturn(null);
-        $pmProphecy->getPersistenceById($key)->willReturn($persistence);
-        return $pmProphecy->reveal();
+        $persistenceManager = $this->createMock(PersistenceManager::class);
+        $persistenceManager
+            ->method('getPersistenceById')
+            ->with($this->anything())
+            ->willReturn((new common_persistence_InMemoryKvDriver())->connect($key, []));
+
+        return $persistenceManager;
+    }
+
+    public function getAdvancedKeyValueMock(string $key): PersistenceManager|MockObject
+    {
+        $persistenceManager = $this->createMock(PersistenceManager::class);
+        $persistenceManager
+            ->method('getPersistenceById')
+            ->with($this->anything())
+            ->willReturn((new \common_persistence_InMemoryAdvKvDriver())->connect($key, []));
+
+        return $persistenceManager;
     }
 }

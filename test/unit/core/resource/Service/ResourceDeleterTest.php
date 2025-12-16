@@ -30,7 +30,7 @@ use oat\generis\model\resource\Context\ResourceRepositoryContext;
 use oat\generis\model\resource\Contract\ResourceRepositoryInterface;
 use oat\generis\model\resource\exception\ResourceDeletionException;
 use oat\generis\model\resource\Service\ResourceDeleter;
-use oat\generis\test\TestCase;
+use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 
 class ResourceDeleterTest extends TestCase

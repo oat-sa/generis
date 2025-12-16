@@ -25,13 +25,20 @@ use core_kernel_classes_Triple;
 use oat\generis\model\data\Ontology;
 use oat\generis\model\OntologyRdf;
 use oat\generis\model\OntologyRdfs;
-use oat\generis\test\GenerisTestCase;
+use oat\generis\test\FileSystemMockTrait;
+use oat\generis\test\OntologyMockTrait;
+use oat\generis\test\ServiceManagerMockTrait;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class OntologyRdfTest
  */
-class OntologyRdfTest extends GenerisTestCase
+class OntologyRdfTest extends TestCase
 {
+    use ServiceManagerMockTrait;
+    use OntologyMockTrait;
+    use FileSystemMockTrait;
+
     /**
      * @dataProvider getOntologies
      */

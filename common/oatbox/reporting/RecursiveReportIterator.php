@@ -24,6 +24,7 @@ namespace oat\oatbox\reporting;
 
 use RecursiveIterator;
 use ArrayIterator;
+use ReturnTypeWillChange;
 
 /**
  * Custom RecursiveIterator for reports.
@@ -43,6 +44,7 @@ class RecursiveReportIterator extends ArrayIterator implements RecursiveIterator
     /**
      * @return self|RecursiveIterator
      */
+    #[ReturnTypeWillChange]
     public function getChildren()
     {
         return new static($this->current()->getChildren());

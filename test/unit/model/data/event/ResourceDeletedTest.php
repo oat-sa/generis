@@ -23,7 +23,7 @@ declare(strict_types=1);
 namespace oat\generis\test\unit\model\data\event;
 
 use core_kernel_classes_Class;
-use oat\generis\test\TestCase;
+use PHPUnit\Framework\TestCase;
 use oat\generis\model\data\event\ResourceDeleted;
 
 class ResourceDeletedTest extends TestCase

@@ -22,19 +22,22 @@ declare(strict_types=1);
 
 namespace oat\generis\test\unit\common\oatbox\cache\factory;
 
-use oat\generis\test\TestCase;
+use oat\generis\test\ServiceManagerMockTrait;
+use PHPUnit\Framework\TestCase;
 use oat\oatbox\cache\factory\CacheItemPoolFactory;
 use oat\oatbox\cache\ItemPoolSimpleCacheAdapter;
 
 class CacheItemPoolFactoryTest extends TestCase
 {
+    use ServiceManagerMockTrait;
+
     /** @var CacheItemPoolFactory */
     private $subject;
 
     public function setUp(): void
     {
         $this->subject = new CacheItemPoolFactory();
-        $this->subject->setServiceLocator($this->getServiceLocatorMock([]));
+        $this->subject->setServiceLocator($this->getServiceManagerMock([]));
     }
 
     public function testCreate(): void

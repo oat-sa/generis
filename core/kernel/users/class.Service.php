@@ -114,7 +114,7 @@ class core_kernel_users_Service implements
 
         if ($this->loginExists($login)) {
             throw new core_kernel_users_Exception(
-                "Login '${login}' already in use.",
+                "Login '{$login}' already in use.",
                 core_kernel_users_Exception::LOGIN_EXITS
             );
         } else {
@@ -122,7 +122,7 @@ class core_kernel_users_Service implements
 
             $userClass = (!empty($class)) ? $class : new core_kernel_classes_Class(GenerisRdf::CLASS_GENERIS_USER);
             $returnValue = $userClass->createInstanceWithProperties([
-                OntologyRdfs::RDFS_LABEL => "User ${login}",
+                OntologyRdfs::RDFS_LABEL => "User {$login}",
                 OntologyRdfs::RDFS_COMMENT => 'User Created on ' . date(DATE_ISO8601),
                 GenerisRdf::PROPERTY_USER_LOGIN => $login,
                 GenerisRdf::PROPERTY_USER_PASSWORD => $this->userAdditionPasswordEncryption($login, $password),
@@ -130,7 +130,7 @@ class core_kernel_users_Service implements
             ]);
 
             if (empty($returnValue)) {
-                throw new core_kernel_users_Exception("Unable to create user with login = '${login}'.");
+                throw new core_kernel_users_Exception("Unable to create user with login = '{$login}'.");
             }
         }
 
@@ -181,7 +181,7 @@ class core_kernel_users_Service implements
         if (count($users) == 1) {
             $returnValue = current($users);
         } elseif (count($users) > 1) {
-            $msg = "More than one user have the same login '${login}'.";
+            $msg = "More than one user have the same login '{$login}'.";
         }
 
         return $returnValue;
@@ -335,7 +335,7 @@ class core_kernel_users_Service implements
         } catch (common_Exception $e) {
             $roleUri = $role->getUri;
             $userUri = $user->getUri();
-            $msg = "An error occured while attaching role '${roleUri}' to user '${userUri}': " . $e->getMessage();
+            $msg = "An error occured while attaching role '{$roleUri}' to user '{$userUri}': " . $e->getMessage();
             throw new core_kernel_users_Exception($msg);
         }
     }
@@ -359,7 +359,7 @@ class core_kernel_users_Service implements
         } catch (common_Exception $e) {
             $roleUri = $role->getUri();
             $userUri = $user->getUri();
-            $msg = "An error occured while unnataching role '${roleUri}' from user '${userUri}': " . $e->getMessage();
+            $msg = "An error occured while unnataching role '{$roleUri}' from user '{$userUri}': " . $e->getMessage();
         }
     }
 
@@ -382,7 +382,7 @@ class core_kernel_users_Service implements
 
         $classRole =  (empty($class)) ? new core_kernel_classes_Class(GenerisRdf::CLASS_ROLE) : $class;
         $includesRoleProperty = new core_kernel_classes_Property(GenerisRdf::PROPERTY_ROLE_INCLUDESROLE);
-        $role = $classRole->createInstance($label, "${label} Role");
+        $role = $classRole->createInstance($label, "{$label} Role");
 
         foreach ($includedRoles as $ir) {
             $role->setPropertyValue($includesRoleProperty, $ir);
@@ -419,7 +419,7 @@ class core_kernel_users_Service implements
                 }
             } else {
                 $roleUri = $role->getUri();
-                $msg = "An error occured while removing role '${roleUri}'. It could not be deleted from the cache.";
+                $msg = "An error occured while removing role '{$roleUri}'. It could not be deleted from the cache.";
                 throw new core_kernel_users_Exception($msg);
             }
         } else {
@@ -479,7 +479,7 @@ class core_kernel_users_Service implements
                     core_kernel_users_Cache::cacheIncludedRoles($role, $returnValue);
                 } catch (core_kernel_users_CacheException $e) {
                     $roleUri = $role->getUri();
-                    $msg = "Unable to retrieve included roles from cache memory for role '${roleUri}': ";
+                    $msg = "Unable to retrieve included roles from cache memory for role '{$roleUri}': ";
                     $msg .= $e->getMessage();
                     throw new core_kernel_users_Exception($msg);
                 }

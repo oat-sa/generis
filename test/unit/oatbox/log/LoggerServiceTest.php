@@ -26,7 +26,7 @@ namespace oat\generis\test\unit\oatbox\log;
 
 use oat\oatbox\log\LoggerService;
 use oat\oatbox\log\logger\TaoLog;
-use oat\generis\test\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class LoggerServiceTest extends TestCase
 {

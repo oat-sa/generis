@@ -15,18 +15,17 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2018-2022 (original work) Open Assessment Technologies SA.
+ * Copyright (c) 2018-2025 (original work) Open Assessment Technologies SA.
  */
 
 declare(strict_types=1);
 
 namespace oat\generis\test;
 
-use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
-use Psr\Container\ContainerInterface;
 use oat\oatbox\service\ServiceManager;
 use PHPUnit\Framework\TestCase as UnitTestCase;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * @deprecated Use \PHPUnit\Framework\TestCase instead.
@@ -35,6 +34,10 @@ use PHPUnit\Framework\TestCase as UnitTestCase;
  */
 abstract class TestCase extends UnitTestCase
 {
+    use ServiceManagerMockTrait {
+        ServiceManagerMockTrait::getServiceManagerMock as private;
+        ServiceManagerMockTrait::getServiceManagerMock as public traitGetServiceManagerMock;
+    }
     use SqlMockTrait;
 
     /**
@@ -42,44 +45,10 @@ abstract class TestCase extends UnitTestCase
      *             Since PHPUnit does all the work, we no longer have to use Prophecy to reduce dependencies.
      *
      * @param array<string, object> $services
-     *
-     * @return ServiceManager
      */
-    public function getServiceLocatorMock(array $services = [])
+    public function getServiceLocatorMock(array $services = []): ServiceManager|MockObject
     {
-        /** @var ContainerInterface|ObjectProphecy $containerProphecy */
-        $containerProphecy = $this->prophesize(ContainerInterface::class);
-
-        /** @var ServiceManager|ObjectProphecy $serviceLocatorProphecy */
-        $serviceLocatorProphecy = $this->prophesize(ServiceManager::class);
-        $serviceLocatorProphecy
-            ->getContainer()
-            ->willReturn($containerProphecy);
-
-        foreach ($services as $key => $service) {
-            $serviceLocatorProphecy
-                ->get($key)
-                ->willReturn($service);
-            $serviceLocatorProphecy
-                ->has($key)
-                ->willReturn(true);
-
-            $containerProphecy
-                ->get($key)
-                ->willReturn($service);
-            $containerProphecy
-                ->has($key)
-                ->willReturn(true);
-        }
-
-        $serviceLocatorProphecy
-            ->has(Argument::any())
-            ->willReturn(false);
-        $containerProphecy
-            ->has(Argument::any())
-            ->willReturn(false);
-
-        return $serviceLocatorProphecy->reveal();
+        return $this->traitGetServiceManagerMock($services);
     }
 
     /**

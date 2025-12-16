@@ -84,15 +84,15 @@ class common_configuration_PHPINIValue extends common_configuration_Component
             // The ini value exists for this name.
             if ((($value == '') ? '0' : $value) == $this->getExpectedValue()) {
                 $validity = common_configuration_Report::VALID;
-                $message = "PHP Configuration Option '${name}' = '${value}' has an expected value.";
+                $message = "PHP Configuration Option '{$name}' = '{$value}' has an expected value.";
             } else {
                 $validity = common_configuration_Report::INVALID;
-                $message = "PHP Configuration Option '${name}' = '${value}' has an unexpected value.";
+                $message = "PHP Configuration Option '{$name}' = '{$value}' has an unexpected value.";
             }
         } else {
             // Unknown ini value name.
             $validity = common_configuration_Report::UNKNOWN;
-            $message = "PHP Configuration Option '${name}' is unknown.";
+            $message = "PHP Configuration Option '{$name}' is unknown.";
         }
 
         $returnValue = new common_configuration_Report($validity, $message, $this);

@@ -4,7 +4,7 @@ namespace oat\generis\test\integration\model\persistence\smoothsql\search\filter
 
 use oat\generis\model\kernel\persistence\smoothsql\search\filter\Filter;
 use oat\generis\model\kernel\persistence\smoothsql\search\filter\FilterFactory;
-use oat\generis\test\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class FilterFactoryTest extends TestCase
 {

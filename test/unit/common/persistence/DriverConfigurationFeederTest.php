@@ -24,11 +24,14 @@ namespace oat\generis\test\unit\common\persistence;
 
 use Monolog\Logger;
 use oat\generis\persistence\DriverConfigurationFeeder;
-use oat\generis\test\TestCase;
+use oat\generis\test\ServiceManagerMockTrait;
+use PHPUnit\Framework\TestCase;
 use stdClass;
 
 class DriverConfigurationFeederTest extends TestCase
 {
+    use ServiceManagerMockTrait;
+
     /** @var DriverConfigurationFeeder */
     private $subject;
 
@@ -47,7 +50,7 @@ class DriverConfigurationFeederTest extends TestCase
             ]
         );
         $this->subject->setServiceLocator(
-            $this->getServiceLocatorMock(
+            $this->getServiceManagerMock(
                 [
                     Logger::class => $this->createMock(Logger::class),
                 ]

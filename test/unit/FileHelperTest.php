@@ -18,7 +18,7 @@
  * Copyright (c) 2008-2025 (original work) Open Assessment Technologies SA;
  */
 
-use oat\generis\test\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class FileHelperTest extends TestCase
 {

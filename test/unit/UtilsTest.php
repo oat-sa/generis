@@ -26,8 +26,7 @@
 error_reporting(E_ALL);
 // phpcs:enable PSR1.Files.SideEffects
 
-use oat\generis\test\TestCase;
-use Prophecy\Prophet;
+use PHPUnit\Framework\TestCase;
 use oat\generis\model\user\AuthAdapter;
 
 /**

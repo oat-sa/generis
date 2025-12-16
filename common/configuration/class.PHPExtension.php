@@ -66,38 +66,38 @@ class common_configuration_PHPExtension extends common_configuration_BoundableCo
                 // Both min and max are specified.
                 if (version_compare($current, $min, '>=') && version_compare($current, $max, '<=')) {
                     $validity = common_configuration_Report::VALID;
-                    $message = "PHP Extension '${name}' version (${current}) is between ${min} and ${max}.";
+                    $message = "PHP Extension '{$name}' version ({$current}) is between {$min} and {$max}.";
                 } else {
                     $validity = common_configuration_Report::INVALID;
-                    $message = "PHP Extension '${name}' version (${current}) is not between ${min} and ${max}.";
+                    $message = "PHP Extension '{$name}' version ({$current}) is not between {$min} and {$max}.";
                 }
             } elseif (!empty($min) && empty($max)) {
                 // Only min is specified.
                 if (version_compare($current, $min, '>=')) {
                     $validity = common_configuration_Report::VALID;
-                    $message = "PHP Extension '${name}' version (${current}) is greater or equal to ${min}.";
+                    $message = "PHP Extension '{$name}' version ({$current}) is greater or equal to {$min}.";
                 } else {
                     $validity = common_configuration_Report::INVALID;
-                    $message = "PHP Extension '${name}' version (${current}) is lesser than ${min}.";
+                    $message = "PHP Extension '{$name}' version ({$current}) is lesser than {$min}.";
                 }
             } elseif (empty($min) && !empty($max)) {
                 // Only max is specified.
                 if (version_compare($current, $max, '<=')) {
                     $validity = common_configuration_Report::VALID;
-                    $message = "PHP Extension '${name}' version (${current}) is lesser or equal to ${max}.";
+                    $message = "PHP Extension '{$name}' version ({$current}) is lesser or equal to {$max}.";
                 } else {
                     $validity = common_configuration_Report::INVALID;
-                    $message = "PHP Extension '${name}' version (${current}) is greater than ${max}.";
+                    $message = "PHP Extension '{$name}' version ({$current}) is greater than {$max}.";
                 }
             } else {
                 // No min and max are provided, we just check the
                 // existence of the extension (already done).
                 $validity = common_configuration_Report::VALID;
-                $message = "PHP Extension '${name}' is loaded.";
+                $message = "PHP Extension '{$name}' is loaded.";
             }
         } else {
             $validity = common_configuration_Report::UNKNOWN;
-            $message = "PHP Extension '${name}' could not be found.";
+            $message = "PHP Extension '{$name}' could not be found.";
         }
 
         $returnValue = new common_configuration_Report($validity, $message, $this);

@@ -22,7 +22,7 @@ declare(strict_types=1);
 
 namespace oat\generis\test\unit\common\oatbox\log\logger\extender;
 
-use oat\generis\test\TestCase;
+use PHPUnit\Framework\TestCase;
 use oat\oatbox\log\logger\extender\ContextExtenderInterface;
 use oat\oatbox\log\logger\extender\RequestContextExtender;
 

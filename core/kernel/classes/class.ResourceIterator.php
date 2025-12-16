@@ -73,6 +73,7 @@ class core_kernel_classes_ResourceIterator implements \Iterator
      * (non-PHPdoc)
      * @see Iterator::rewind()
      */
+    #[ReturnTypeWillChange]
     public function rewind()
     {
         if (!$this->unmoved) {
@@ -86,6 +87,7 @@ class core_kernel_classes_ResourceIterator implements \Iterator
      * @return core_kernel_classes_Resource|null
      * @throws common_exception_Error
      */
+    #[ReturnTypeWillChange]
     public function current()
     {
         if ($this->instanceCache === null) {
@@ -101,6 +103,7 @@ class core_kernel_classes_ResourceIterator implements \Iterator
      * (non-PHPdoc)
      * @see Iterator::key()
      */
+    #[ReturnTypeWillChange]
     public function key()
     {
         return $this->classIterator->key() . '#' . $this->currentInstance;
@@ -110,6 +113,7 @@ class core_kernel_classes_ResourceIterator implements \Iterator
      * (non-PHPdoc)
      * @see Iterator::next()
      */
+    #[ReturnTypeWillChange]
     public function next()
     {
         $this->unmoved = false;
@@ -135,6 +139,7 @@ class core_kernel_classes_ResourceIterator implements \Iterator
      * (non-PHPdoc)
      * @see Iterator::valid()
      */
+    #[ReturnTypeWillChange]
     public function valid()
     {
         if ($this->instanceCache === null) {

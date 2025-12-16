@@ -15,9 +15,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2018-2021 (original work) Open Assessment Technologies SA;
- *
+ * Copyright (c) 2018-2025 (original work) Open Assessment Technologies SA.
  */
+
+declare(strict_types=1);
 
 namespace oat\generis\test;
 
@@ -38,9 +39,9 @@ use oat\oatbox\event\EventManager;
 use oat\oatbox\log\LoggerService;
 use oat\oatbox\session\SessionService;
 use oat\oatbox\user\UserLanguageServiceInterface;
-use Prophecy\Argument;
 use Psr\Log\LoggerInterface;
 use oat\oatbox\cache\PropertyCache;
+use PHPUnit\Framework\MockObject\MockObject as PHPUnitMockObject;
 
 trait OntologyMockTrait
 {
@@ -91,13 +92,18 @@ trait OntologyMockTrait
         $persistenceManagerWithSqlMock = $this->getPersistenceManagerWithSqlMock('mockSql');
         $session = new \common_session_AnonymousSession();
         $eventManager = new EventManager();
-        $serviceLocatorMock = $this->getServiceLocatorMock([
+
+        $serviceManagerMethod = method_exists($this, 'getServiceLocatorMock')
+            ? 'getServiceLocatorMock'
+            : 'getServiceManagerMock';
+
+        $serviceLocatorMock = $this->$serviceManagerMethod([
             Ontology::SERVICE_ID => $onto,
             PersistenceManager::SERVICE_ID => $persistenceManagerWithSqlMock,
             UserLanguageServiceInterface::SERVICE_ID => $this->getUserLanguageServiceMock('xx_XX'),
             SessionService::SERVICE_ID => $this->getSessionServiceMock($session),
             EventManager::SERVICE_ID => $eventManager,
-            LoggerService::SERVICE_ID => $this->prophesize(LoggerInterface::class)->reveal(),
+            LoggerService::SERVICE_ID => $this->createMock(LoggerInterface::class),
             UriProvider::SERVICE_ID => new Bin2HexUriProvider([
                 Bin2HexUriProvider::OPTION_NAMESPACE => 'http://ontology.mock/bin2hex#'
             ]),
@@ -144,27 +150,29 @@ trait OntologyMockTrait
         ]);
     }
 
-    /**
-     * @param common_session_Session $session
-     * @return SessionService
-     */
-    protected function getSessionServiceMock(common_session_Session $session)
+    private function getSessionServiceMock(common_session_Session $session): SessionService|PHPUnitMockObject
     {
-        $prophet = $this->prophesize(SessionService::class);
-        $prophet->getCurrentUser()->willReturn($session->getUser());
-        $prophet->getCurrentSession()->willReturn($session);
-        return $prophet->reveal();
+        $sessionServiceMock = $this->createMock(SessionService::class);
+        $sessionServiceMock
+            ->method('getCurrentUser')
+            ->willReturn($session->getUser());
+        $sessionServiceMock
+            ->method('getCurrentSession')
+            ->willReturn($session);
+
+        return $sessionServiceMock;
     }
 
-    /**
-     * @param string $lang
-     * @return UserLanguageServiceInterface
-     */
-    protected function getUserLanguageServiceMock($lang = 'en_US')
+    private function getUserLanguageServiceMock(string $lang): UserLanguageServiceInterface|PHPUnitMockObject
     {
-        $prophet = $this->prophesize(UserLanguageServiceInterface::class);
-        $prophet->getDefaultLanguage()->willReturn($lang);
-        $prophet->getInterfaceLanguage(Argument::any())->willReturn($lang);
-        return $prophet->reveal();
+        $userLanguageServiceMock = $this->createMock(UserLanguageServiceInterface::class);
+        $userLanguageServiceMock
+            ->method('getDefaultLanguage')
+            ->willReturn($lang);
+        $userLanguageServiceMock
+            ->method('getInterfaceLanguage')
+            ->willReturn($lang);
+
+        return $userLanguageServiceMock;
     }
 }
