@@ -45,7 +45,7 @@ class helpers_ContentSanitizer
         if ($property->getUri() === OntologyRdfs::RDFS_LABEL) {
             $encoding = $encoding !== '' ? $encoding : self::DEFAULT_ENCODING;
             return preg_replace_callback(
-                '/<\/?[a-zA-Z][^>]*>/',
+                '/(<!--.*?-->|<!\[CDATA\[.*?\]\]>|<!DOCTYPE.*?>|<\?.*?\?>|<\/?[a-zA-Z][^>]*>)/s',
                 static fn(array $match) => htmlspecialchars(
                     $match[0],
                     ENT_QUOTES | ENT_SUBSTITUTE,
