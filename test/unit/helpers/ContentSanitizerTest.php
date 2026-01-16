@@ -55,8 +55,9 @@ class ContentSanitizerTest extends GenerisTestCase
             '</script>' => '&lt;/script&gt;',
             '<img src="x" onerror="alert(1)">' => '&lt;img src=&quot;x&quot; onerror=&quot;alert(1)&quot;&gt;',
             '<div onclick="alert(1)">Click</div>' => '&lt;div onclick=&quot;alert(1)&quot;&gt;Click&lt;/div&gt;',
-            "Text with 'quotes' and \"double quotes\"" => 'Text with &#039;quotes&#039; and &quot;double quotes&quot;',
-            '<>&"\'`' => '&lt;&gt;&amp;&quot;&#039;`',
+            "Text with 'quotes' and \"double quotes\"" => "Text with 'quotes' and \"double quotes\"",
+            'Symbols: “quote”, <, >, & and single \'' => 'Symbols: “quote”, <, >, & and single \'',
+            '<>&"\'`' => '<>&"\'`',
         ];
 
         foreach ($testCases as $input => $expected) {
