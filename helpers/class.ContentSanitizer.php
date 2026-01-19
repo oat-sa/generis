@@ -27,8 +27,8 @@ class helpers_ContentSanitizer
     private const DEFAULT_ENCODING = 'UTF-8';
 
     /**
-     * Encode the provided string so it can safely be stored without
-     * introducing executable HTML. All HTML special characters are escaped.
+     * Encode HTML tags so the provided string can safely be stored without
+     * introducing executable HTML, while preserving literal symbols in text.
      *
      * @param string $value
      * @param string $encoding
@@ -44,7 +44,16 @@ class helpers_ContentSanitizer
 
         if ($property->getUri() === OntologyRdfs::RDFS_LABEL) {
             $encoding = $encoding !== '' ? $encoding : self::DEFAULT_ENCODING;
-            return htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE, $encoding, false);
+            return preg_replace_callback(
+                '/(<!--.*?-->|<!\[CDATA\[.*?\]\]>|<!DOCTYPE.*?>|<\?.*?\?>|<\/?[a-zA-Z][^>]*>)/s',
+                static fn(array $match) => htmlspecialchars(
+                    $match[0],
+                    ENT_QUOTES | ENT_SUBSTITUTE,
+                    $encoding,
+                    false
+                ),
+                $value
+            );
         }
 
         return $value;
