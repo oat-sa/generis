@@ -23,11 +23,10 @@
 namespace oat\oatbox\mutex;
 
 use oat\oatbox\service\ConfigurableService;
-use Symfony\Component\Lock\Factory;
+use Symfony\Component\Lock\LockFactory;
+use Symfony\Component\Lock\PersistingStoreInterface;
 use Symfony\Component\Lock\Store\FlockStore;
 use Symfony\Component\Lock\Store\RedisStore;
-use Symfony\Component\Lock\StoreInterface;
-use Symfony\Component\Lock\Store\RetryTillSaveStore;
 
 /**
  * Class LockService
@@ -44,14 +43,14 @@ class LockService extends ConfigurableService
     public const OPTION_PERSISTENCE_CLASS = 'persistence_class';
     public const OPTION_PERSISTENCE_OPTIONS = 'persistence_options';
 
-    /** @var Factory */
+    /** @var LockFactory */
     private $factory;
 
-    /** @var StoreInterface */
+    /** @var PersistingStoreInterface */
     private $store;
 
     /**
-     * @return Factory
+     * @return LockFactory
      * @throws \common_exception_FileReadFailedException
      * @throws \common_exception_InconsistentData
      * @throws \common_exception_NotImplemented
@@ -59,13 +58,13 @@ class LockService extends ConfigurableService
     public function getLockFactory()
     {
         if ($this->factory === null) {
-            $this->factory = new Factory(new RetryTillSaveStore($this->getStore()));
+            $this->factory = new LockFactory($this->getStore());
         }
         return $this->factory;
     }
 
     /**
-     * @return StoreInterface
+     * @return PersistingStoreInterface
      * @throws \common_exception_FileReadFailedException
      * @throws \common_exception_InconsistentData
      * @throws \common_exception_NotImplemented

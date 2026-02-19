@@ -168,7 +168,7 @@ class common_persistence_PhpFileDriver implements common_persistence_KvDriver, c
             (isset($params[static::OPTION_TTL]) && $params[static::OPTION_TTL] == true)
         );
 
-        return new common_persistence_KeyValuePersistence($params, $this);
+        return new common_persistence_KeyValuePersistence($this, $params);
     }
 
     /**

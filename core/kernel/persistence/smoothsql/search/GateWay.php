@@ -28,6 +28,7 @@ namespace   oat\generis\model\kernel\persistence\smoothsql\search;
 use common_persistence_Manager;
 use common_persistence_SqlPersistence;
 use Doctrine\DBAL\Driver\Statement;
+use Doctrine\DBAL\Result;
 use oat\oatbox\service\ServiceManager;
 use oat\search\base\exception\SearchGateWayExeption;
 use oat\search\base\QueryBuilderInterface;
@@ -124,24 +125,31 @@ class GateWay extends TaoSearchGateWay
     }
 
     /**
-     *
-     * @param Statement $statement
+     * @param Result|Statement $result Doctrine DBAL 3 returns Result, DBAL 2 returns Statement
      * @return array
      */
-    protected function statementToArray(Statement $statement)
+    protected function statementToArray(Result|Statement $result)
     {
-        $result = [];
-        while ($row = $statement->fetch(\PDO::FETCH_OBJ)) {
-            $result[] = $row;
+        $rows = [];
+        if ($result instanceof Result) {
+            while (($row = $result->fetchAssociative()) !== false) {
+                $rows[] = (object) $row;
+            }
+        } else {
+            while ($row = $result->fetch(\PDO::FETCH_OBJ)) {
+                $rows[] = $row;
+            }
         }
-        return $result;
+        return $rows;
     }
 
     public function fetchQuery($query)
     {
-        $statement = $this->connector->query($query);
-        $result = $statement->fetch(\PDO::FETCH_ASSOC);
-        return $result;
+        $result = $this->connector->query($query);
+        if ($result instanceof Result) {
+            return $result->fetchAssociative();
+        }
+        return $result->fetch(\PDO::FETCH_ASSOC);
     }
 
     /**

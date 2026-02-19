@@ -54,13 +54,12 @@ class TestLogger implements LoggerInterface
      * Logs with an arbitrary level.
      *
      * @param mixed $level
-     * @param string $message
+     * @param string|\Stringable $message
      * @param array $context
      *
-     * @return void
      * @throws common_exception_InconsistentData
      */
-    public function log($level, $message, array $context = [])
+    public function log($level, string|\Stringable $message, array $context = []): void
     {
         if (! array_key_exists($level, $this->registry)) {
             $level = LogLevel::ERROR;

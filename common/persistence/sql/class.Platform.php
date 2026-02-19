@@ -23,21 +23,21 @@
  *
  */
 
-use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Schema\Schema;
+use Doctrine\DBAL\TransactionIsolationLevel;
 
 class common_persistence_sql_Platform
 {
     public const TRANSACTION_PLATFORM_DEFAULT = 0;
 
-    public const TRANSACTION_READ_UNCOMMITTED = Connection::TRANSACTION_READ_UNCOMMITTED;
+    public const TRANSACTION_READ_UNCOMMITTED = TransactionIsolationLevel::READ_UNCOMMITTED;
 
-    public const TRANSACTION_READ_COMMITTED = Connection::TRANSACTION_READ_COMMITTED;
+    public const TRANSACTION_READ_COMMITTED = TransactionIsolationLevel::READ_COMMITTED;
 
-    public const TRANSACTION_REPEATABLE_READ = Connection::TRANSACTION_REPEATABLE_READ;
+    public const TRANSACTION_REPEATABLE_READ = TransactionIsolationLevel::REPEATABLE_READ;
 
-    public const TRANSACTION_SERIALIZABLE = Connection::TRANSACTION_SERIALIZABLE;
+    public const TRANSACTION_SERIALIZABLE = TransactionIsolationLevel::SERIALIZABLE;
 
     protected $dbalPlatform;
 

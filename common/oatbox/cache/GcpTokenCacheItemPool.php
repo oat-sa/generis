@@ -44,7 +44,7 @@ class GcpTokenCacheItemPool extends ConfigurableService implements CacheItemPool
     /**
      * {@inheritdoc}
      */
-    public function getItem($key)
+    public function getItem(string $key): CacheItemInterface
     {
         $key = $this->getCacheKey();
 
@@ -60,7 +60,7 @@ class GcpTokenCacheItemPool extends ConfigurableService implements CacheItemPool
     /**
      * {@inheritdoc}
      */
-    public function getItems(array $keys = [])
+    public function getItems(array $keys = []): iterable
     {
         $keys = [$this->getCacheKey()];
 
@@ -78,7 +78,7 @@ class GcpTokenCacheItemPool extends ConfigurableService implements CacheItemPool
     /**
      * {@inheritdoc}
      */
-    public function hasItem($key)
+    public function hasItem(string $key): bool
     {
         $key = $this->getCacheKey();
 
@@ -90,7 +90,7 @@ class GcpTokenCacheItemPool extends ConfigurableService implements CacheItemPool
     /**
      * {@inheritdoc}
      */
-    public function clear()
+    public function clear(): bool
     {
         $this->log(__METHOD__);
 
@@ -100,7 +100,7 @@ class GcpTokenCacheItemPool extends ConfigurableService implements CacheItemPool
     /**
      * {@inheritdoc}
      */
-    public function deleteItem($key)
+    public function deleteItem(string $key): bool
     {
         $key = $this->getCacheKey();
 
@@ -112,7 +112,7 @@ class GcpTokenCacheItemPool extends ConfigurableService implements CacheItemPool
     /**
      * {@inheritdoc}
      */
-    public function deleteItems(array $keys)
+    public function deleteItems(array $keys): bool
     {
         $keys = [$this->getCacheKey()];
 
@@ -124,7 +124,7 @@ class GcpTokenCacheItemPool extends ConfigurableService implements CacheItemPool
     /**
      * {@inheritdoc}
      */
-    public function save(CacheItemInterface $item)
+    public function save(CacheItemInterface $item): bool
     {
         $this->log(__METHOD__);
 
@@ -140,7 +140,7 @@ class GcpTokenCacheItemPool extends ConfigurableService implements CacheItemPool
     /**
      * {@inheritdoc}
      */
-    public function saveDeferred(CacheItemInterface $item)
+    public function saveDeferred(CacheItemInterface $item): bool
     {
         $this->log(__METHOD__);
 
@@ -156,7 +156,7 @@ class GcpTokenCacheItemPool extends ConfigurableService implements CacheItemPool
     /**
      * {@inheritdoc}
      */
-    public function commit()
+    public function commit(): bool
     {
         $this->log(__METHOD__);
 

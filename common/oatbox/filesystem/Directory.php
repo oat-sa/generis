@@ -173,6 +173,20 @@ class Directory extends FileSystemHandler implements \IteratorAggregate
         // such as the Amazon S3 (v3) connector, rename on directories does not work. A custom
         // implementation is then needed.
 
+        $path = $this->sanitizePath($path);
+        $currentPrefix = $this->getPrefix();
+        $parentPrefix = dirname($currentPrefix);
+        $destinationPath = ($parentPrefix !== '.' && $parentPrefix !== '') ? $parentPrefix . '/' . $path : $path;
+
+        if (
+            $this->getFileSystem()->directoryExists($destinationPath)
+            || $this->getFileSystem()->fileExists($destinationPath)
+        ) {
+            throw new \common_exception_FileSystemError(
+                "Cannot rename directory: destination '{$destinationPath}' already exists."
+            );
+        }
+
         $contents = $this->getFileSystem()->listContents($this->getPrefix(), true);
         $fileSystemId = $this->getFileSystemId() . '/';
         // Filter files only.

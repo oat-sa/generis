@@ -95,8 +95,7 @@ class ContainerCacheTest extends TestCase
             ->willReturn($resources);
 
         $this->containerBuilder->expects($this->once())
-            ->method('compile')
-            ->willReturn(false);
+            ->method('compile');
 
         $this->phpDumper->expects($this->once())
             ->method('dump')

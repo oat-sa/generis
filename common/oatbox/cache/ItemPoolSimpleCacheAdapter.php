@@ -38,7 +38,7 @@ class ItemPoolSimpleCacheAdapter extends ConfigurableService implements CacheIte
     /**
      * @inheritdoc
      */
-    public function getItem($key)
+    public function getItem(string $key): CacheItemInterface
     {
         $item = $this->getCache()->get($key);
 
@@ -55,9 +55,9 @@ class ItemPoolSimpleCacheAdapter extends ConfigurableService implements CacheIte
     /**
      * @inheritdoc
      *
-     * @return CacheItemInterface[]
+     * @return iterable<string, CacheItemInterface>
      */
-    public function getItems(array $keys = [])
+    public function getItems(array $keys = []): iterable
     {
         $items = [];
 
@@ -71,7 +71,7 @@ class ItemPoolSimpleCacheAdapter extends ConfigurableService implements CacheIte
     /**
      * @inheritdoc
      */
-    public function hasItem($key)
+    public function hasItem(string $key): bool
     {
         return $this->getCache()->has($key);
     }
@@ -79,7 +79,7 @@ class ItemPoolSimpleCacheAdapter extends ConfigurableService implements CacheIte
     /**
      * @inheritdoc
      */
-    public function clear()
+    public function clear(): bool
     {
         return $this->getCache()->clear();
     }
@@ -87,7 +87,7 @@ class ItemPoolSimpleCacheAdapter extends ConfigurableService implements CacheIte
     /**
      * @inheritdoc
      */
-    public function deleteItem($key)
+    public function deleteItem(string $key): bool
     {
         return $this->getCache()->delete($key);
     }
@@ -95,7 +95,7 @@ class ItemPoolSimpleCacheAdapter extends ConfigurableService implements CacheIte
     /**
      * @inheritdoc
      */
-    public function deleteItems(array $keys)
+    public function deleteItems(array $keys): bool
     {
         return $this->getCache()->deleteMultiple($keys);
     }
@@ -103,7 +103,7 @@ class ItemPoolSimpleCacheAdapter extends ConfigurableService implements CacheIte
     /**
      * @inheritdoc
      */
-    public function save(CacheItemInterface $item)
+    public function save(CacheItemInterface $item): bool
     {
         return $this->store($item);
     }
@@ -111,7 +111,7 @@ class ItemPoolSimpleCacheAdapter extends ConfigurableService implements CacheIte
     /**
      * @inheritdoc
      */
-    public function saveDeferred(CacheItemInterface $item)
+    public function saveDeferred(CacheItemInterface $item): bool
     {
         $this->deferred[$item->getKey()] = $item;
 
@@ -121,7 +121,7 @@ class ItemPoolSimpleCacheAdapter extends ConfigurableService implements CacheIte
     /**
      * @inheritdoc
      */
-    public function commit()
+    public function commit(): bool
     {
         foreach ($this->deferred as $item) {
             if (!$this->store($item)) {
