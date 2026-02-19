@@ -33,10 +33,10 @@ class AdvKeyValuePersistenceTest extends TestCase
     public function setUp(): void
     {
         $this->largeValuePersistence = new AdvKeyValuePersistence(
+            new \common_persistence_InMemoryAdvKvDriver(),
             [
                 AdvKeyValuePersistence::MAX_VALUE_SIZE => 100
-            ],
-            new \common_persistence_InMemoryAdvKvDriver()
+            ]
         );
     }
 
@@ -56,10 +56,10 @@ class AdvKeyValuePersistenceTest extends TestCase
     {
         $this->expectException(\common_Exception::class);
         $this->largeValuePersistence = new AdvKeyValuePersistence(
+            new \common_persistence_InMemoryAdvKvDriver(),
             [
                 AdvKeyValuePersistence::MAX_VALUE_SIZE => 'toto'
-            ],
-            new \common_persistence_InMemoryAdvKvDriver()
+            ]
         );
         $this->largeValuePersistence->hSet('test', 'fixture', 'value');
     }
@@ -222,14 +222,14 @@ class AdvKeyValuePersistenceTest extends TestCase
     public function testMapMapControl()
     {
         $this->largeValuePersistence = new AdvKeyValuePersistence(
+            new \common_persistence_InMemoryAdvKvDriver(),
             [
                 \common_persistence_KeyValuePersistence::MAX_VALUE_SIZE => 100,
                 \common_persistence_KeyValuePersistence::MAP_IDENTIFIER => 'iamamap',
                 \common_persistence_KeyValuePersistence::START_MAP_DELIMITER => 'mapbegin',
                 \common_persistence_KeyValuePersistence::END_MAP_DELIMITER => 'mapend',
 
-            ],
-            new \common_persistence_InMemoryAdvKvDriver()
+            ]
         );
 
         $this->testHgetAllHexists();
@@ -264,13 +264,13 @@ class AdvKeyValuePersistenceTest extends TestCase
         $startMapDelimiter = '<<<>>>';
         $endMapDelimiter = '<<</>>>';
         $this->largeValuePersistence = new AdvKeyValuePersistence(
+            new \common_persistence_InMemoryAdvKvDriver(),
             [
                 'max_value_size' => 300,
                 'map_identifier' => $startMapDelimiter,
                 'start_map_delimiter' => $startMapDelimiter,
                 'end_map_delimiter' => $endMapDelimiter,
-            ],
-            new \common_persistence_InMemoryAdvKvDriver()
+            ]
         );
 
         $this->largeValuePersistence->hSet($key, $field, $value);
