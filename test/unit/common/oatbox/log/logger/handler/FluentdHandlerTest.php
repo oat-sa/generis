@@ -21,6 +21,8 @@
 
 namespace oat\generis\test\unit\common\oatbox\log\logger\handler;
 
+use Monolog\Level;
+use Monolog\LogRecord;
 use oat\oatbox\log\logger\handler\FluentdHandler;
 use PHPUnit\Framework\TestCase;
 use Fluent\Logger\FluentLogger;
@@ -29,13 +31,20 @@ class FluentdHandlerTest extends TestCase
 {
     public function testConstruct()
     {
-        $logMessage = ['level' => 100, 'extra' => [], 'context' => [], 'message' => 'foo', 'channel' => 'tao'];
+        $record = new LogRecord(
+            datetime: new \DateTimeImmutable(),
+            channel: 'tao',
+            level: Level::Debug,
+            message: 'foo',
+            context: [],
+            extra: []
+        );
         $logger = $this->getMockBuilder(FluentLogger::class)
             ->getMock();
         $logger->expects($this->once())
             ->method('post');
         $handler = new FluentdHandler($logger);
-        $handler->handle($logMessage);
+        $handler->handle($record);
 
         new FluentdHandler(FluentLogger::class, 100, true, ["127.0.0.1", 24224]);
     }

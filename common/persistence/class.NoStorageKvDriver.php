@@ -35,7 +35,7 @@ class common_persistence_NoStorageKvDriver implements common_persistence_KvDrive
      */
     public function connect($id, array $params)
     {
-        return new common_persistence_KeyValuePersistence($params, $this);
+        return new common_persistence_KeyValuePersistence($this, $params);
     }
     /**
      *

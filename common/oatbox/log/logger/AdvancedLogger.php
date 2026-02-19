@@ -47,52 +47,52 @@ class AdvancedLogger implements LoggerInterface
         return $this;
     }
 
-    public function emergency($message, array $context = [])
+    public function emergency(string|\Stringable $message, array $context = []): void
     {
         $this->logData('emergency', $message, $context);
     }
 
-    public function alert($message, array $context = [])
+    public function alert(string|\Stringable $message, array $context = []): void
     {
         $this->logData('alert', $message, $context);
     }
 
-    public function critical($message, array $context = [])
+    public function critical(string|\Stringable $message, array $context = []): void
     {
         $this->logData('critical', $message, $context);
     }
 
-    public function error($message, array $context = [])
+    public function error(string|\Stringable $message, array $context = []): void
     {
         $this->logData('error', $message, $context);
     }
 
-    public function warning($message, array $context = [])
+    public function warning(string|\Stringable $message, array $context = []): void
     {
         $this->logData('warning', $message, $context);
     }
 
-    public function notice($message, array $context = [])
+    public function notice(string|\Stringable $message, array $context = []): void
     {
         $this->logData('notice', $message, $context);
     }
 
-    public function info($message, array $context = [])
+    public function info(string|\Stringable $message, array $context = []): void
     {
         $this->logData('info', $message, $context);
     }
 
-    public function debug($message, array $context = [])
+    public function debug(string|\Stringable $message, array $context = []): void
     {
         $this->logData('debug', $message, $context);
     }
 
-    public function log($level, $message, array $context = [])
+    public function log($level, string|\Stringable $message, array $context = []): void
     {
         $this->logData('log', $message, $context, $level);
     }
 
-    private function logData(string $methodName, $message, array $context = [], $level = null): void
+    private function logData(string $methodName, string|\Stringable $message, array $context = [], $level = null): void
     {
         $context = $this->extendContext($context);
 

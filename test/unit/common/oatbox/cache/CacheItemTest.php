@@ -24,8 +24,8 @@ namespace oat\generis\test\unit\common\oatbox\cache;
 
 use DateInterval;
 use DateTime;
-use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
+use TypeError;
 use oat\oatbox\cache\CacheItem;
 use ReflectionClass;
 use ReflectionProperty;
@@ -62,7 +62,7 @@ class CacheItemTest extends TestCase
 
     public function testExpiresAtInvalidArgument(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(TypeError::class);
 
         $this->subject->expiresAt('string');
     }
@@ -131,7 +131,7 @@ class CacheItemTest extends TestCase
 
     public function testExpiresAfterWithInvalidArgument(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(TypeError::class);
 
         $this->subject->expiresAfter('string');
     }

@@ -58,17 +58,14 @@ abstract class common_persistence_Persistence
      *
      * @access public
      * @author "Lionel Lecaque, <lionel@taotesting.com>"
-     * @param array $params
      * @param common_persistence_driver $driver
-     *
-     * phpcs:disable PEAR.Functions.ValidDefaultValue
+     * @param array $params
      */
-    public function __construct($params = [], common_persistence_driver $driver)
+    public function __construct(common_persistence_driver $driver, array $params = [])
     {
         $this->setParams($params);
         $this->setDriver($driver);
     }
-    // phpcs:enable PEAR.Functions.ValidDefaultValue
 
     /**
      * Retrieve persistence's driver

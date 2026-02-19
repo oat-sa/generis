@@ -74,7 +74,7 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
             $this->exec('SET SESSION SQL_MODE=\'ANSI_QUOTES\';');
         }
 
-        return new common_persistence_SqlPersistence($params, $this);
+        return new common_persistence_SqlPersistence($this, $params);
     }
 
     /**

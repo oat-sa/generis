@@ -48,7 +48,7 @@ class BaseContainer extends Container
     /**
      * @inheritDoc
      */
-    public function get($id, int $invalidBehavior = self::EXCEPTION_ON_INVALID_REFERENCE)
+    public function get(string $id, int $invalidBehavior = self::EXCEPTION_ON_INVALID_REFERENCE): ?object
     {
         try {
             return parent::get($id, self::NULL_ON_INVALID_REFERENCE) ?? $this->legacyContainer->get($id);
@@ -64,7 +64,7 @@ class BaseContainer extends Container
     /**
      * @inheritDoc
      */
-    public function has($id)
+    public function has(string $id): bool
     {
         return parent::has($id) || $this->legacyContainer->has($id);
     }

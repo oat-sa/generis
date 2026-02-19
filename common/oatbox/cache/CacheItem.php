@@ -26,7 +26,6 @@ use DateInterval;
 use DateTime;
 use DateTimeImmutable;
 use DateTimeInterface;
-use InvalidArgumentException;
 use Psr\Cache\CacheItemInterface;
 
 class CacheItem implements CacheItemInterface
@@ -64,7 +63,7 @@ class CacheItem implements CacheItemInterface
     /**
      * @inheritDoc
      */
-    public function get()
+    public function get(): mixed
     {
         return $this->value;
     }
@@ -80,7 +79,7 @@ class CacheItem implements CacheItemInterface
     /**
      * @inheritDoc
      */
-    public function set($value): self
+    public function set(mixed $value): static
     {
         $this->value = $value;
 
@@ -90,7 +89,7 @@ class CacheItem implements CacheItemInterface
     /**
      * @inheritDoc
      */
-    public function expiresAt($expiration): self
+    public function expiresAt(?DateTimeInterface $expiration): static
     {
         if (null === $expiration) {
             $this->expiry = null;
@@ -98,21 +97,15 @@ class CacheItem implements CacheItemInterface
             return $this;
         }
 
-        if ($expiration instanceof DateTimeInterface) {
-            $this->expiry = $expiration->getTimestamp();
+        $this->expiry = $expiration->getTimestamp();
 
-            return $this;
-        }
-
-        throw new InvalidArgumentException('Expiration date must implement DateTimeInterface or be null');
+        return $this;
     }
 
     /**
      * @inheritDoc
-     *
-     * @param DateInterval|null $time
      */
-    public function expiresAfter($time): self
+    public function expiresAfter(int|\DateInterval|null $time): static
     {
         if (null === $time) {
             $this->expiry = null;
@@ -124,17 +117,8 @@ class CacheItem implements CacheItemInterface
             $time = new DateInterval(sprintf('PT%dS', $time));
         }
 
-        if ($time instanceof DateInterval) {
-            $this->expiry = $this->currentDateTime->add($time)->getTimestamp();
+        $this->expiry = $this->currentDateTime->add($time)->getTimestamp();
 
-            return $this;
-        }
-
-        throw new InvalidArgumentException(
-            sprintf(
-                'Expiration date must implement DateTimeInterface or be null, "%s" given.',
-                gettype($time)
-            )
-        );
+        return $this;
     }
 }

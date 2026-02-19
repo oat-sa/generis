@@ -10,7 +10,7 @@ require __DIR__ . '/../../../bootstrap.php';
 
 function getInstance($class, $dir): LockService
 {
-    $config = new \common_persistence_KeyValuePersistence([], new \common_persistence_InMemoryKvDriver());
+    $config = new \common_persistence_KeyValuePersistence(new \common_persistence_InMemoryKvDriver(), []);
     $config->set(\common_persistence_Manager::SERVICE_ID, new \common_persistence_Manager());
     $serviceManager = new ServiceManager($config);
     $service = new LockService([

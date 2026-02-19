@@ -45,11 +45,11 @@ class TaoLog extends ConfigurableService implements LoggerInterface
 
     /**
      * @param mixed $level
-     * @param string $message
+     * @param string|\Stringable $message
      * @param array $context
      * @throws \Exception
      */
-    public function log($level, $message, array $context = [])
+    public function log($level, string|\Stringable $message, array $context = []): void
     {
         if (isset($context['trace'])) {
             $stack = $context['trace'];
@@ -80,20 +80,8 @@ class TaoLog extends ConfigurableService implements LoggerInterface
             $requestURI = implode(' ', $_SERVER['argv']);
         }
 
-        //reformat input
-        if (is_object($message)) {
-            $message = 'Message is object of type ' . gettype($message);
-
-            //show content of logged object only from debug level
-            if ($level <= \common_Logger::DEBUG_LEVEL) {
-                $message .= ' : ' . PHP_EOL . var_export($message, true);
-            }
-        //same for arrays
-        } elseif (is_array($message) && $level <= \common_Logger::DEBUG_LEVEL) {
-            $message = 'Message is an array : ' . PHP_EOL . var_export($message, true);
-        } else {
-            $message = (string) $message;
-        }
+        //reformat input (string|\Stringable from PSR-3)
+        $message = (string) $message;
         $level = \common_log_Logger2Psr::getCommonFromPsrLevel($level);
         $this->getDispatcher()->log(
             new \common_log_Item(

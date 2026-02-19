@@ -70,10 +70,10 @@ class LoggerService extends ConfigurableService implements LoggerInterface
      * Wrap a log to built logger
      *
      * @param mixed $level
-     * @param string $message
+     * @param string|\Stringable $message
      * @param array $context
      */
-    public function log($level, $message, array $context = [])
+    public function log($level, string|\Stringable $message, array $context = []): void
     {
         $this->getLogger()->log($level, $message, $context);
     }

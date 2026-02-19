@@ -35,7 +35,7 @@ class ServiceManagerTest extends TestCase
 {
     public function testGet()
     {
-        $config = new \common_persistence_KeyValuePersistence([], new \common_persistence_InMemoryKvDriver());
+        $config = new \common_persistence_KeyValuePersistence(new \common_persistence_InMemoryKvDriver(), []);
         $serviceManager = new ServiceManager($config);
         $serviceManager->register(TestServiceInterface1::SERVICE_ID, new TestService1());
         $serviceManager->register(TestService2_2::SERVICE_ID, new TestService2_2());
@@ -48,7 +48,7 @@ class ServiceManagerTest extends TestCase
 
     public function testGetAutowire()
     {
-        $config = new \common_persistence_KeyValuePersistence([], new \common_persistence_InMemoryKvDriver());
+        $config = new \common_persistence_KeyValuePersistence(new \common_persistence_InMemoryKvDriver(), []);
         $serviceManager = new ServiceManager($config);
         $this->assertTrue($serviceManager->get(TestService3::class) instanceof TestService3);
     }
@@ -56,7 +56,7 @@ class ServiceManagerTest extends TestCase
     public function testWithoutAutowire()
     {
         $this->expectException(NotFoundExceptionInterface::class);
-        $config = new \common_persistence_KeyValuePersistence([], new \common_persistence_InMemoryKvDriver());
+        $config = new \common_persistence_KeyValuePersistence(new \common_persistence_InMemoryKvDriver(), []);
         $serviceManager = new ServiceManager($config);
         $serviceManager->get(TestService2::SERVICE_ID);
     }

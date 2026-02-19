@@ -34,7 +34,7 @@ class EnvironmentVariableKVDriver implements common_persistence_KvDriver
      */
     public function connect($id, array $params)
     {
-        return new common_persistence_KeyValuePersistence($params, $this);
+        return new common_persistence_KeyValuePersistence($this, $params);
     }
 
     /**

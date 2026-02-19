@@ -35,7 +35,7 @@ class common_persistence_PhpNeo4jDriver implements common_persistence_Driver
             ->withDefaultDriver('bolt')
             ->build();
 
-        return new common_persistence_GraphPersistence($params, $this);
+        return new common_persistence_GraphPersistence($this, $params);
     }
 
     public function getClient(): ?ClientInterface

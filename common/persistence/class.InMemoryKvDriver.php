@@ -37,7 +37,7 @@ class common_persistence_InMemoryKvDriver implements common_persistence_KvDriver
      */
     public function connect($id, array $params)
     {
-        return new common_persistence_KeyValuePersistence($params, $this);
+        return new common_persistence_KeyValuePersistence($this, $params);
     }
 
     public function set($id, $value, $ttl = null, $nx = false)

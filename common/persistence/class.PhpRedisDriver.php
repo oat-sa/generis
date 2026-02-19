@@ -51,7 +51,7 @@ class common_persistence_PhpRedisDriver implements common_persistence_AdvKvDrive
         $this->params = $params;
         $this->connectionSet($params);
 
-        return new common_persistence_AdvKeyValuePersistence($params, $this);
+        return new common_persistence_AdvKeyValuePersistence($this, $params);
     }
 
     /**

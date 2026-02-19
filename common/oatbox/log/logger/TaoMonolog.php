@@ -48,11 +48,11 @@ class TaoMonolog extends ConfigurableService implements LoggerInterface
 
     /**
      * @param mixed $level
-     * @param string $message
+     * @param string|\Stringable $message
      * @param array $context
      * @throws \common_configuration_ComponentFactoryException
      */
-    public function log($level, $message, array $context = [])
+    public function log($level, string|\Stringable $message, array $context = []): void
     {
         if (is_null($this->logger)) {
             $this->logger = $this->buildLogger();
