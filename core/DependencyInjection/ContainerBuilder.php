@@ -136,8 +136,10 @@ class ContainerBuilder extends SymfonyContainerBuilder
     /**
      * @inheritDoc
      */
-    public function get(string $id, int $invalidBehavior = SymfonyContainerInterface::EXCEPTION_ON_INVALID_REFERENCE)
-    {
+    public function get(
+        string $id,
+        int $invalidBehavior = SymfonyContainerInterface::EXCEPTION_ON_INVALID_REFERENCE
+    ): ?object {
         try {
             return parent::get($id, $invalidBehavior);
         } catch (SymfonyServiceNotFoundException $exception) {
@@ -153,7 +155,7 @@ class ContainerBuilder extends SymfonyContainerBuilder
     /**
      * @inheritDoc
      */
-    public function has(string $id)
+    public function has(string $id): bool
     {
         if (parent::has($id)) {
             return true;
@@ -171,7 +173,7 @@ class ContainerBuilder extends SymfonyContainerBuilder
     /**
      * @inheritDoc
      */
-    public function findDefinition(string $id)
+    public function findDefinition(string $id): Definition
     {
         try {
             return parent::findDefinition($id);

@@ -70,7 +70,7 @@ class common_persistence_SqlKvDriver implements common_persistence_KvDriver, Sch
         $this->garbageCollection = isset($params['gc']) ? $params['gc'] : self::DEFAULT_GC_PROBABILITY;
 
 
-        return new common_persistence_KeyValuePersistence($params, $this);
+        return new common_persistence_KeyValuePersistence($this, $params);
     }
 
     /**

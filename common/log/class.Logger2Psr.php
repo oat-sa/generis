@@ -83,7 +83,7 @@ class common_log_Logger2Psr extends AbstractLogger
      * (non-PHPdoc)
      * @see \Psr\Log\LoggerInterface::log()
      */
-    public function log($level, $message, array $context = [])
+    public function log($level, string|\Stringable $message, array $context = []): void
     {
         $errorLevel = isset(self::$map[$level]) ? self::$map[$level] : common_Logger::ERROR_LEVEL;
         $this->logger->log($errorLevel, $message, $context);

@@ -30,7 +30,7 @@ class common_persistence_InMemoryAdvKvDriver extends common_persistence_InMemory
      */
     public function connect($id, array $params)
     {
-        return new \common_persistence_AdvKeyValuePersistence($params, $this);
+        return new \common_persistence_AdvKeyValuePersistence($this, $params);
     }
 
     public function hmSet($key, $fields)

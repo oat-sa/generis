@@ -66,7 +66,7 @@ class LoggerAggregator extends ConfigurableService implements LoggerInterface
      * (non-PHPdoc)
      * @see \Psr\Log\LoggerInterface::log()
      */
-    public function log($level, $message, array $context = [])
+    public function log($level, string|\Stringable $message, array $context = []): void
     {
         foreach ($this->loggers as $logger) {
             $logger->log($level, $message, $context);

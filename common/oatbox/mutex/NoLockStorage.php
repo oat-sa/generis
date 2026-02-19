@@ -22,7 +22,7 @@
 
 namespace oat\oatbox\mutex;
 
-use Symfony\Component\Lock\StoreInterface;
+use Symfony\Component\Lock\BlockingStoreInterface;
 use Symfony\Component\Lock\Key;
 
 /**
@@ -30,40 +30,40 @@ use Symfony\Component\Lock\Key;
  * @package oat\oatbox\mutex
  * @author Aleh Hutnikau, <goodnickoff@gmail.com>
  */
-class NoLockStorage implements StoreInterface
+class NoLockStorage implements BlockingStoreInterface
 {
     /**
      * @inheritdoc
      */
-    public function save(Key $key)
+    public function save(Key $key): void
     {
     }
 
     /**
      * @inheritdoc
      */
-    public function waitAndSave(Key $key)
+    public function waitAndSave(Key $key): void
     {
     }
 
     /**
      * @inheritdoc
      */
-    public function putOffExpiration(Key $key, $ttl)
+    public function putOffExpiration(Key $key, float $ttl): void
     {
     }
 
     /**
      * @inheritdoc
      */
-    public function delete(Key $key)
+    public function delete(Key $key): void
     {
     }
 
     /**
      * @inheritdoc
      */
-    public function exists(Key $key)
+    public function exists(Key $key): bool
     {
         return false;
     }

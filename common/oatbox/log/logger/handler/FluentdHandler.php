@@ -23,6 +23,7 @@ namespace oat\oatbox\log\logger\handler;
 
 use Fluent\Logger\FluentLogger;
 use Monolog\Handler\AbstractProcessingHandler;
+use Monolog\LogRecord;
 use Monolog\Logger;
 
 /**
@@ -59,17 +60,17 @@ class FluentdHandler extends AbstractProcessingHandler
     /**
      * {@inheritDoc}
      */
-    protected function write(array $record)
+    protected function write(LogRecord $record): void
     {
-        if (isset($record['formatted'])) {
-            $logRecord = json_decode($record['formatted'], true);
+        if (isset($record->formatted)) {
+            $logRecord = json_decode($record->formatted, true);
         }
 
         if (empty($logRecord)) {
-            $logRecord = $record['context'];
-            $logRecord['level'] = Logger::getLevelName($record['level']);
-            $logRecord['message'] = $record['message'];
+            $logRecord = $record->context;
+            $logRecord['level'] = $record->level->getName();
+            $logRecord['message'] = $record->message;
         }
-        $this->logger->post($record['channel'], $logRecord);
+        $this->logger->post($record->channel, $logRecord);
     }
 }
