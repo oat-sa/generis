@@ -186,7 +186,7 @@ class ResourceCollection implements Iterator, Countable
     /**
      * @inheritdoc
      */
-    public function count()
+    public function count(): int
     {
         if (!is_array($this->resources) && !$this->resources instanceof Countable) {
             return 0;
@@ -198,7 +198,7 @@ class ResourceCollection implements Iterator, Countable
     /**
      * @inheritdoc
      */
-    public function current()
+    public function current(): mixed
     {
         return $this->resources[$this->index];
     }
@@ -206,7 +206,7 @@ class ResourceCollection implements Iterator, Countable
     /**
      * @inheritdoc
      */
-    public function next()
+    public function next(): void
     {
         $this->index++;
     }
@@ -214,7 +214,7 @@ class ResourceCollection implements Iterator, Countable
     /**
      * @inheritdoc
      */
-    public function key()
+    public function key(): mixed
     {
         return $this->index;
     }
@@ -222,7 +222,7 @@ class ResourceCollection implements Iterator, Countable
     /**
      * @inheritdoc
      */
-    public function valid()
+    public function valid(): bool
     {
         if ($this->resources === null) {
             return $this->load();
@@ -243,7 +243,7 @@ class ResourceCollection implements Iterator, Countable
     /**
      * @inheritdoc
      */
-    public function rewind()
+    public function rewind(): void
     {
         $this->index = 0;
     }
