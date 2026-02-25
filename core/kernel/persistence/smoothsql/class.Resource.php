@@ -143,7 +143,7 @@ SQL;
             ]
         );
 
-        return array_column($statement->fetchAll(), 'object');
+        return array_column($statement->fetchAllAssociative(), 'object');
     }
 
     /**
@@ -175,7 +175,7 @@ SQL;
             ]
         );
 
-        $results = $statement->fetchAll();
+        $results = $statement->fetchAllAssociative();
         $resourceIds = [];
 
         // Iterate over the provided class IDs to keep the same order
@@ -239,7 +239,7 @@ SQL;
             ]
         );
 
-        return $statement->fetchAll();
+        return $statement->fetchAllAssociative();
     }
 
     /**
@@ -736,7 +736,7 @@ SQL;
                 AND ' . $this->getModelReadSqlCondition();
         $result = $this->getPersistence()->query($query);
 
-        $rows = $result->fetchAll();
+        $rows = $result->fetchAllAssociative();
         foreach ($rows as $row) {
             $value = $platform->getPhpTextValue($row['object']);
             $returnValue[$row['predicate']][] = common_Utils::isUri($value)

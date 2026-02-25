@@ -23,6 +23,7 @@ namespace oat\oatbox\log\logger;
 
 use Monolog\Formatter\FormatterInterface;
 use Monolog\Handler\HandlerInterface;
+use Monolog\Handler\StreamHandler as MonologStreamHandler;
 use Monolog\Logger;
 use oat\oatbox\service\ConfigurableService;
 use Psr\Log\LoggerInterface;
@@ -114,6 +115,7 @@ class TaoMonolog extends ConfigurableService implements LoggerInterface
         if (isset($options['options'])) {
             $handlerOptions = is_array($options['options']) ? $options['options'] : [$options['options']];
         }
+        $this->ensureLogFileExists((string) $options['class'], $handlerOptions);
         /** @var HandlerInterface $handler */
         $handler = $this->buildObject($options['class'], $handlerOptions);
 
@@ -135,6 +137,31 @@ class TaoMonolog extends ConfigurableService implements LoggerInterface
         }
 
         return $handler;
+    }
+
+    /**
+     * Ensure the log file exists before the handler is used so Monolog's StreamHandler
+     * does not trigger fileinode(): stat failed when the file is missing (e.g. after rotation).
+     *
+     * @param string $handlerClass
+     * @param array $handlerOptions
+     */
+    protected function ensureLogFileExists(string $handlerClass, array $handlerOptions): void
+    {
+        if (!is_a($handlerClass, MonologStreamHandler::class, true) || empty($handlerOptions)) {
+            return;
+        }
+        $path = $handlerOptions[0];
+        if (!is_string($path) || strpos($path, '://') !== false) {
+            return;
+        }
+        $dir = dirname($path);
+        if (!is_dir($dir)) {
+            return;
+        }
+        if (!file_exists($path)) {
+            @touch($path);
+        }
     }
 
     /**

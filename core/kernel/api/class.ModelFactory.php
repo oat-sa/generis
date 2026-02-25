@@ -78,7 +78,7 @@ class core_kernel_api_ModelFactory
             [$modelId, $subject, $predicate, $object, (is_null($lang)) ? '' : $lang]
         );
 
-        if (intval($result->fetchColumn()) === 0) {
+        if (intval($result->fetchOne()) === 0) {
             $dbWrapper = core_kernel_classes_DbWrapper::singleton();
             $date = $dbWrapper->getPlatForm()->getNowExpression();
 
