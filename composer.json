@@ -54,6 +54,7 @@
     "tao-extension-name": "generis"
   },
   "require": {
+    "php": "^8.0",
     "clearfw/clearfw": "~1.2.0",
     "easyrdf/easyrdf": "^1.1",
     "doctrine/dbal": "^3.10",
