@@ -176,15 +176,15 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
 
 
     /**
-     * Query  the statement with provided params
+     * Executes parameterized query.
      *
-     * @param Statement $statement
-     * @param array $params
-     * @param array $types
+     * @param string $statement The SQL statement.
+     * @param array $params The query parameters.
+     * @param array $types The parameter types.
      * @return Result
      * @throws DBALException
      */
-    public function query($statement, $params = [], array $types = [])
+    public function query(string $statement, array $params = [], array $types = []): Result
     {
         return $this->connection->executeQuery($statement, $params, $types);
     }
