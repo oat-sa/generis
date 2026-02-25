@@ -33,7 +33,7 @@ class RdfExportTest extends GenerisPhpUnitTestRunner
         $result = $dbWrapper->query(
             'SELECT count(*) as count FROM (SELECT DISTINCT subject, predicate, object, l_language FROM statements)'
                 . ' as supercount'
-        )->fetch();
+        )->fetchAssociative();
         $triples = $result['count'];
 
 

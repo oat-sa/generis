@@ -30,7 +30,8 @@ use oat\generis\model\OntologyRdf;
 use oat\generis\model\OntologyRdfs;
 use oat\oatbox\event\EventManagerAwareTrait;
 use oat\generis\model\kernel\persistence\smoothsql\search\ComplexSearchService;
-use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Exception as DBALException;
+use Doctrine\DBAL\Result;
 use oat\generis\model\kernel\uri\UriProvider;
 
 /**
@@ -52,11 +53,12 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
             $returnValue = [];
             $sqlQuery = 'SELECT subject FROM statements WHERE predicate = ? and '
                 . $this->getPersistence()->getPlatForm()->getObjectTypeCondition() . ' = ?';
+            /** @var Result $sqlResult */
             $sqlResult = $this->getPersistence()->query(
                 $sqlQuery,
                 [OntologyRdfs::RDFS_SUBCLASSOF, $resource->getUri()]
             );
-            while ($row = $sqlResult->fetch()) {
+            while (($row = $sqlResult->fetchAssociative()) !== false) {
                 $returnValue[$row['subject']] = $this->getModel()->getClass($row['subject']);
             }
             return $returnValue;
@@ -82,9 +84,10 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
             $sqlQuery = 'SELECT subject FROM statements WHERE predicate = ? and '
                 . $this->getPersistence()->getPlatForm()->getObjectTypeCondition() . ' in ('
                 . substr($classString, 1) . ')';
+            /** @var Result $sqlResult */
             $sqlResult = $this->getPersistence()->query($sqlQuery, [OntologyRdfs::RDFS_SUBCLASSOF]);
             $todo = [];
-            while ($row = $sqlResult->fetch()) {
+            while (($row = $sqlResult->fetchAssociative()) !== false) {
                 $subClass = $this->getModel()->getClass($row['subject']);
                 if (!isset($returnValue[$subClass->getUri()])) {
                     $todo[] = $subClass;
@@ -105,13 +108,14 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
 
         $query = 'SELECT object FROM statements WHERE subject = ? AND predicate = ? AND '
             . $this->getPersistence()->getPlatForm()->getObjectTypeCondition() . ' = ?';
+        /** @var Result $result */
         $result = $this->getPersistence()->query($query, [
             $resource->getUri(),
             OntologyRdfs::RDFS_SUBCLASSOF,
             $parentClass->getUri()
         ]);
 
-        while ($row = $result->fetch()) {
+        while (($row = $result->fetchAssociative()) !== false) {
             $returnValue =  true;
             break;
         }
@@ -139,9 +143,10 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
 
         $sqlQuery = 'SELECT object FROM statements WHERE subject = ?  AND predicate = ?';
 
+        /** @var Result $sqlResult */
         $sqlResult = $this->getPersistence()->query($sqlQuery, [$resource->getUri(), OntologyRdfs::RDFS_SUBCLASSOF]);
 
-        while ($row = $sqlResult->fetch()) {
+        while (($row = $sqlResult->fetchAssociative()) !== false) {
             $parentClass = $this->getModel()->getClass($row['object']);
 
             $returnValue[$parentClass->getUri()] = $parentClass ;
@@ -174,12 +179,13 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
 
         $sqlQuery = 'SELECT subject FROM statements WHERE predicate = ?  AND '
             . $this->getPersistence()->getPlatForm()->getObjectTypeCondition() . ' = ?';
+        /** @var Result $sqlResult */
         $sqlResult = $this->getPersistence()->query($sqlQuery, [
             OntologyRdfs::RDFS_DOMAIN,
             $resource->getUri()
         ]);
 
-        while ($row = $sqlResult->fetch()) {
+        while (($row = $sqlResult->fetchAssociative()) !== false) {
             $property = $this->getModel()->getProperty($row['subject']);
             $returnValue[$property->getUri()] = $property;
         }
@@ -217,9 +223,10 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
         $params = array_merge($params, ['like' => false, 'recursive' => $recursive]);
 
         $query = $this->getFilteredQuery($resource, [], $params);
+        /** @var Result $result */
         $result = $this->getPersistence()->query($query);
 
-        while ($row = $result->fetch()) {
+        while (($row = $result->fetchAssociative()) !== false) {
             $foundInstancesUri = $row['subject'];
             $returnValue[$foundInstancesUri] = $this->getModel()->getResource($foundInstancesUri);
         }
@@ -387,9 +394,10 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
         }
 
         $query = $this->getFilteredQuery($resource, $propertyFilters, $options);
+        /** @var Result $result */
         $result = $this->getPersistence()->query($query);
 
-        while ($row = $result->fetch()) {
+        while (($row = $result->fetchAssociative()) !== false) {
             $foundInstancesUri = $row['subject'];
             $returnValue[$foundInstancesUri] = $this->getModel()->getResource($foundInstancesUri);
         }
@@ -418,7 +426,10 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
         $query = 'SELECT count(subject) FROM (' . $this->getFilteredQuery($resource, $propertyFilters, $options)
             . ') as countq';
 
-        return (int)$this->getPersistence()->query($query)->fetchOne();
+        /** @var Result $countResult */
+        $countResult = $this->getPersistence()->query($query);
+
+        return (int)$countResult->fetchOne();
     }
 
     /**
@@ -450,8 +461,9 @@ class core_kernel_persistence_smoothsql_Class extends core_kernel_persistence_sm
         $query .= " object FROM (SELECT overq.subject, valuesq.object FROM ({$filteredQuery}) as overq JOIN statements "
             . "AS valuesq ON (overq.subject = valuesq.subject AND valuesq.predicate = ?)) AS overrootq";
 
+        /** @var Result $sqlResult */
         $sqlResult = $this->getPersistence()->query($query, [$property->getUri()]);
-        while ($row = $sqlResult->fetch()) {
+        while (($row = $sqlResult->fetchAssociative()) !== false) {
             $returnValue[] = common_Utils::toResource($row['object']);
         }
 
@@ -680,8 +692,9 @@ SQL;
             ];
         }
 
+        /** @var Result $statement */
         $statement = $this->getPersistence()->query($query, $params);
 
-        return array_column($statement->fetchAll(), 'subject');
+        return array_column($statement->fetchAllAssociative(), 'subject');
     }
 }

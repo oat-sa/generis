@@ -74,7 +74,7 @@ class TaoResultSet extends ResultSet implements ResultSetInterface, \oat\search\
     * return a new resource create from current subject
     * @return core_kernel_classes_Resource|\core_kernel_classes_Triple
     */
-    public function current()
+    public function current(): mixed
     {
         $index = parent::current();
         if ($this->isTriple) {

@@ -72,10 +72,9 @@ class core_kernel_uri_DatabaseSerialUriProvider extends ConfigurableService impl
             );
 
             if ($sth !== false) {
-                $row = $sth->fetch();
+                $row = $sth->fetchAssociative();
 
-                $returnValue = current($row);
-                $sth->closeCursor();
+                $returnValue = $row ? (string) current($row) : '';
             } else {
                 throw new UriProviderException(
                     "An error occured while calling the stored procedure for persistence "

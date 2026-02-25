@@ -129,7 +129,7 @@ class common_persistence_sql_QueryIterator implements Iterator
 
         $this->cache = [];
         $pos = $offset;
-        while ($statement = $result->fetch()) {
+        while (($statement = $result->fetchAssociative()) !== false) {
             $this->cache[$pos++] = $statement;
         }
 

@@ -78,9 +78,8 @@ class MicrotimeRandUriProvider extends ConfigurableService implements UriProvide
             $sqlResult = $this->getPersistence()->query(
                 "SELECT COUNT(subject) AS num FROM statements WHERE subject = '" . $uri . "'"
             );
-            if ($row = $sqlResult->fetch()) {
+            if (($row = $sqlResult->fetchAssociative()) !== false) {
                 $uriExist = $row['num'] > 0;
-                $sqlResult->closeCursor();
             }
         } while ($uriExist);
 

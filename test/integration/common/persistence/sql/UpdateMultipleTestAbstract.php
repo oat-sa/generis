@@ -30,34 +30,34 @@ abstract class UpdateMultipleTestAbstract extends TestCase
         $sql = 'INSERT INTO test_table(column_1, column_2, column_3, column_4, column_5, column_6)
               VALUES(:value_1, :value_2, :value_3, :value_4, :value_5, :value_6)';
         $this->driver->query($sql, [
-            ':value_1' => 'value_1',
-            ':value_2' => 'value_2',
-            ':value_3' => 'value_3',
-            ':value_4' => 'value_4',
-            ':value_5' => 'value_5',
-            ':value_6' => 'value_6',
+            'value_1' => 'value_1',
+            'value_2' => 'value_2',
+            'value_3' => 'value_3',
+            'value_4' => 'value_4',
+            'value_5' => 'value_5',
+            'value_6' => 'value_6',
         ]);
 
         $sql = 'INSERT INTO test_table(column_1, column_2, column_3, column_4, column_5, column_6)
               VALUES(:value_1, :value_2, :value_3, :value_4, :value_5, :value_6)';
         $this->driver->query($sql, [
-            ':value_1' => 'value_1',
-            ':value_2' => 'value_2',
-            ':value_3' => 'value_3_2',
-            ':value_4' => 'value_4_2',
-            ':value_5' => 'value_5_2',
-            ':value_6' => 'value_6_2',
+            'value_1' => 'value_1',
+            'value_2' => 'value_2',
+            'value_3' => 'value_3_2',
+            'value_4' => 'value_4_2',
+            'value_5' => 'value_5_2',
+            'value_6' => 'value_6_2',
         ]);
 
         $sql = 'INSERT INTO test_table(column_1, column_2, column_3, column_4, column_5, column_6)
               VALUES(:value_1, :value_2, :value_3, :value_4, :value_5, :value_6)';
         $this->driver->query($sql, [
-            ':value_1' => 'value_1_3',
-            ':value_2' => 'value_2_3',
-            ':value_3' => 'value_3_3',
-            ':value_4' => 'value_4_3',
-            ':value_5' => 'value_5_3',
-            ':value_6' => 'value_6_3',
+            'value_1' => 'value_1_3',
+            'value_2' => 'value_2_3',
+            'value_3' => 'value_3_3',
+            'value_4' => 'value_4_3',
+            'value_5' => 'value_5_3',
+            'value_6' => 'value_6_3',
         ]);
 
         $this->driver->lastInsertId();
@@ -99,7 +99,7 @@ abstract class UpdateMultipleTestAbstract extends TestCase
             ],
         ]);
 
-        $all = $this->driver->query('SELECT * FROM test_table')->fetchAll();
+        $all = $this->driver->query('SELECT * FROM test_table')->fetchAllAssociative();
         $this->assertEquals('value_1', $all[0]['column_1']);
         $this->assertEquals('value_2', $all[0]['column_2']);
         $this->assertEquals('update value 3', $all[0]['column_3']);

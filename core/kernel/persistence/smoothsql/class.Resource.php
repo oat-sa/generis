@@ -97,7 +97,7 @@ class core_kernel_persistence_smoothsql_Resource implements core_kernel_persiste
         $sqlQuery = 'SELECT object FROM statements WHERE subject = ? and predicate = ?';
         $sth = $this->getPersistence()->query($sqlQuery, [$resource->getUri(), OntologyRdf::RDF_TYPE]);
 
-        while ($row = $sth->fetch()) {
+        while (($row = $sth->fetchAssociative()) !== false) {
             $uri = $this->getPersistence()->getPlatForm()->getPhpTextValue($row['object']);
             $returnValue[$uri] = $this->getModel()->getClass($uri);
         }
@@ -298,7 +298,7 @@ SQL;
         if ($result == true) {
             if (isset($options['lg'])) {
                 // If a language has been defined, do not filter result by language
-                while ($row = $result->fetch()) {
+                while (($row = $result->fetchAssociative()) !== false) {
                     $returnValue[] = $this->getPersistence()->getPlatForm()->getPhpTextValue($row['object']);
                 }
             } else {
@@ -306,7 +306,7 @@ SQL;
                 // language in second and the fallback language (null) in third)
                 $returnValue = core_kernel_persistence_smoothsql_Utils::filterByLanguage(
                     $this->getPersistence(),
-                    $result->fetchAll(),
+                    $result->fetchAllAssociative(),
                     'l_language',
                     $lang,
                     $default
@@ -571,7 +571,7 @@ SQL;
         $result = $this->getPersistence()->query($query, [$resource->getUri()]);
 
         $returnValue = new core_kernel_classes_ContainerCollection(new common_Object(__METHOD__));
-        while ($statement = $result->fetch()) {
+        while (($statement = $result->fetchAssociative()) !== false) {
             $triple = new core_kernel_classes_Triple();
             $triple->modelid = $statement["modelid"];
             $triple->subject = $statement["subject"];
@@ -610,7 +610,7 @@ SQL;
             $resource->getUri(),
             $property->getUri(),
         ]);
-        while ($row = $sqlResult->fetch()) {
+        while (($row = $sqlResult->fetchAssociative()) !== false) {
             if (!empty($row['l_language'])) {
                 $returnValue[] = $row['l_language'];
             }

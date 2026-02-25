@@ -143,13 +143,13 @@ class ResourceCollection implements Iterator, Countable
         }
 
         $query = $this->filter->applyFilters($query);
-        $results = $query->execute();
+        $results = $query->executeQuery();
 
         if ($this->cacheSize > 0) {
             $this->endOfClass = $results->rowCount() < $this->cacheSize;
         }
 
-        foreach ($results->fetchAll() as $result) {
+        foreach ($results->fetchAllAssociative() as $result) {
             $this->resources[] = $result;
             $this->lastId = $result['id'] > $this->lastId ? $result['id'] : $this->lastId;
         }

@@ -63,13 +63,11 @@ class common_uri_MicrotimeUriProvider implements common_uri_UriProvider
                 "SELECT COUNT(subject) AS num FROM statements WHERE subject = '" . $uri . "'"
             );
 
-            if ($row = $sqlResult->fetch()) {
+            if (($row = $sqlResult->fetchAssociative()) !== false) {
                 $found = (int)$row['num'];
                 if ($found > 0) {
                     $uriExist = true;
                 }
-
-                $sqlResult->closeCursor();
             }
         } while ($uriExist);
 

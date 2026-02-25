@@ -25,7 +25,7 @@ use common_persistence_sql_Platform;
 use common_persistence_SqlPersistence;
 use core_kernel_classes_Triple;
 use core_kernel_persistence_smoothsql_SmoothIterator;
-use PDOStatement;
+use Doctrine\DBAL\Result;
 use PHPUnit\Framework\TestCase;
 
 class SmoothModelIteratorTest extends TestCase
@@ -77,7 +77,7 @@ class SmoothModelIteratorTest extends TestCase
 
     private function createIterator(): core_kernel_persistence_smoothsql_SmoothIterator
     {
-        $statementMock = $this->createMock(PDOStatement::class);
+        $resultMock = $this->createMock(Result::class);
 
         $statementValue = [
             "modelid" => 1,
@@ -98,8 +98,8 @@ class SmoothModelIteratorTest extends TestCase
             "author" => 'testauthor'
         ];
 
-        $statementMock
-            ->method('fetch')
+        $resultMock
+            ->method('fetchAssociative')
             ->willReturnOnConsecutiveCalls(
                 $statementValue,
                 $statementValue2,
@@ -128,7 +128,7 @@ class SmoothModelIteratorTest extends TestCase
                 $this->isType('array'),
                 $this->isType('array')
             )
-            ->willReturn($statementMock);
+            ->willReturn($resultMock);
 
         return new core_kernel_persistence_smoothsql_SmoothIterator($persistenceMock);
     }

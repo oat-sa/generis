@@ -26,8 +26,8 @@ declare(strict_types=1);
 
 use Doctrine\DBAL\Configuration;
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\DBALException;
-use Doctrine\DBAL\Driver\ResultStatement;
+use Doctrine\DBAL\Exception as DBALException;
+use Doctrine\DBAL\Result;
 use Doctrine\DBAL\Driver\Statement;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\Logging\SQLLogger;
@@ -181,7 +181,7 @@ class common_persistence_sql_dbal_Driver implements common_persistence_sql_Drive
      * @param Statement $statement
      * @param array $params
      * @param array $types
-     * @return ResultStatement
+     * @return Result
      * @throws DBALException
      */
     public function query($statement, $params = [], array $types = [])
