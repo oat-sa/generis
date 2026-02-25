@@ -26,6 +26,7 @@
 
 namespace oat\generis\model\kernel\uri;
 
+use Doctrine\DBAL\Result;
 use oat\oatbox\service\ConfigurableService;
 use oat\generis\persistence\PersistenceManager;
 use common_persistence_SqlPersistence;
@@ -75,8 +76,10 @@ class MicrotimeRandUriProvider extends ConfigurableService implements UriProvide
             list($usec, $sec) = explode(" ", microtime());
             $uri = $this->getOption(self::OPTION_NAMESPACE) . 'i' . (str_replace(".", "", $sec
                     . "" . $usec)) . rand(0, 1000);
+            /** @var Result $sqlResult */
             $sqlResult = $this->getPersistence()->query(
-                "SELECT COUNT(subject) AS num FROM statements WHERE subject = '" . $uri . "'"
+                "SELECT COUNT(subject) AS num FROM statements WHERE subject = ?",
+                [$uri]
             );
             if (($row = $sqlResult->fetchAssociative()) !== false) {
                 $uriExist = $row['num'] > 0;

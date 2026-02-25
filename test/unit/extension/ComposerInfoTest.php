@@ -46,7 +46,7 @@ class ComposerInfoTest extends TestCase
             if ($ref->hasProperty($propName)) {
                 $prop = $ref->getProperty($propName);
                 $prop->setAccessible(true);
-                $prop->setValue(null);
+                $prop->setValue(null, null);
             }
         }
     }
