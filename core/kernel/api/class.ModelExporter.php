@@ -77,7 +77,7 @@ class core_kernel_api_ModelExporter
     private static function statement2rdf($statement, $format = self::DEFAULT_FORMAT)
     {
         $graph = new Graph();
-        while ($r = $statement->fetch()) {
+        while (($r = $statement->fetchAssociative()) !== false) {
             if (isset($r['l_language']) && !empty($r['l_language'])) {
                 $graph->addLiteral($r['subject'], $r['predicate'], $r['object'], $r['l_language']);
             } elseif (common_Utils::isUri($r['object'])) {

@@ -23,7 +23,7 @@ namespace oat\generis\test\integration\common\persistence\sql\dbal;
 use common_persistence_sql_Platform;
 use common_persistence_SqlPersistence;
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Exception as DBALException;
 use oat\generis\test\TestCase;
 
 class TestDbalDriver extends \common_persistence_sql_dbal_Driver
@@ -44,7 +44,7 @@ class TestDbalDriverManager
      * @param $params
      * @param $conf
      * @return mixed
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws DBALException
      */
     public static function getConnection($params, $conf)
     {

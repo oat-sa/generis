@@ -189,9 +189,13 @@ class FileSerializerMigrationHelperTest extends GenerisTestCase
 
     protected function tearDown(): void
     {
-        $dir = $this->getTempDirectory();
-        $this->testFile = $dir->getFile(self::SAMPLE_FILE);
-        $this->testFile->delete();
+        try {
+            $dir = $this->getTempDirectory();
+            $this->testFile = $dir->getFile(self::SAMPLE_FILE);
+            $this->testFile->delete();
+        } catch (\Throwable $e) {
+            // Ignore cleanup errors (e.g. mock File without service locator)
+        }
     }
 
     /**

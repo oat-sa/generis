@@ -56,6 +56,11 @@ class ClassTest extends GenerisPhpUnitTestRunner
 
         $this->oldModel = ModelManager::getModel();
         $ontologyModel = $this->getStarSqlMock();
+        try {
+            $ontologyModel->getPersistence();
+        } catch (\common_Exception $e) {
+            $this->markTestSkipped('neo4j persistence not configured for StarSQL tests: ' . $e->getMessage());
+        }
         ModelManager::setModel($ontologyModel);
 
         $this->object = new core_kernel_classes_Class(OntologyRdfs::RDFS_RESOURCE);

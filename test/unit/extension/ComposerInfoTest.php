@@ -33,6 +33,24 @@ use oat\oatbox\extension\exception\ManifestException;
  */
 class ComposerInfoTest extends TestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->resetComposerInfoStaticCache();
+    }
+
+    private function resetComposerInfoStaticCache(): void
+    {
+        $ref = new \ReflectionClass(ComposerInfo::class);
+        foreach (['availablePackages', 'jsons', 'locks'] as $propName) {
+            if ($ref->hasProperty($propName)) {
+                $prop = $ref->getProperty($propName);
+                $prop->setAccessible(true);
+                $prop->setValue(null, null);
+            }
+        }
+    }
+
     public function testGetAvailableTaoExtensions()
     {
         $instance = new ComposerInfo($this->getSamplesDir());

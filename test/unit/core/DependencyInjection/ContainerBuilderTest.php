@@ -64,6 +64,10 @@ class ContainerBuilderTest extends TestCase
 
     public function setUp(): void
     {
+        if (!class_exists('org\bovigo\vfs\vfsStream')) {
+            $this->markTestSkipped('ContainerBuilder tests require mikey179/vfsstream (vfsStream)');
+        }
+
         $this->extensionManager = $this->createMock(common_ext_ExtensionsManager::class);
         $this->middlewareExtensionsMapper = $this->createMock(MiddlewareExtensionsMapper::class);
 
