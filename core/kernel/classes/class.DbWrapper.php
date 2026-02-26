@@ -478,9 +478,7 @@ class core_kernel_classes_DbWrapper
     {
         $sql = 'SELECT count("' . $column . '") FROM "' . $tableName . '"';
         $result = $this->persistence->query($sql);
-        $returnValue = (int) $result->fetchOne();
-
-        return $returnValue;
+        return (int) $result->fetchOne();
     }
 
     /**
