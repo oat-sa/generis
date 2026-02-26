@@ -114,6 +114,7 @@ class TaoMonolog extends ConfigurableService implements LoggerInterface
         if (isset($options['options'])) {
             $handlerOptions = is_array($options['options']) ? $options['options'] : [$options['options']];
         }
+
         /** @var HandlerInterface $handler */
         $handler = $this->buildObject($options['class'], $handlerOptions);
 

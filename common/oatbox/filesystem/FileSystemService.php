@@ -42,6 +42,9 @@ class FileSystemService extends ConfigurableService
 
     public const OPTION_DIRECTORIES = 'dirs';
 
+    /** @var string Adapter class for local filesystem (League Flysystem 3) */
+    public const FLYSYSTEM_LOCAL_ADAPTER = LocalFilesystemAdapter::class;
+
     private const FLYSYSTEM_NS = '\\League\\Flysystem\\';
 
     private $filesystems = [];

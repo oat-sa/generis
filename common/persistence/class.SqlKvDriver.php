@@ -151,7 +151,7 @@ class common_persistence_SqlKvDriver implements common_persistence_KvDriver, Sch
             $statement = 'SELECT kv_value, kv_time FROM kv_store WHERE kv_id = ?';
             $statement = $this->sqlPersistence->getPlatForm()->limitStatement($statement, 1);
             $sessionValue = $this->sqlPersistence->query($statement, [$id]);
-            while ($row = $sessionValue->fetch()) {
+            while (($row = $sessionValue->fetchAssociative()) !== false) {
                 if ($row["kv_time"] == 0 || $row["kv_time"] >= time()) {
                     return (filter_var($row['kv_value'], FILTER_VALIDATE_INT) !== false)
                         ? (int)$row['kv_value']
@@ -177,7 +177,7 @@ class common_persistence_SqlKvDriver implements common_persistence_KvDriver, Sch
             $statement = 'SELECT kv_value FROM kv_store WHERE kv_id = ?';
             $statement = $this->sqlPersistence->getPlatForm()->limitStatement($statement, 1);
             $sessionValue = $this->sqlPersistence->query($statement, [$id]);
-            return ($sessionValue->fetch() !== false);
+            return ($sessionValue->fetchAssociative() !== false);
         } catch (Exception $e) {
             throw new common_Exception("Unable to read value from key value storage");
         }

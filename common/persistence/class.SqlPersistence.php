@@ -22,7 +22,7 @@
  *
  */
 
-use Doctrine\DBAL\Driver\Statement;
+use Doctrine\DBAL\Result;
 
 /**
  * Persistence base on SQL
@@ -104,9 +104,9 @@ class common_persistence_SqlPersistence extends common_persistence_Persistence i
      * @param string $statement
      * @param array $params
      * @param array $types
-     * @return Statement
+     * @return Result
      */
-    public function query($statement, $params = [], array $types = [])
+    public function query(string $statement, array $params = [], array $types = []): Result
     {
         return $this->getDriver()->query($statement, $params, $types);
     }

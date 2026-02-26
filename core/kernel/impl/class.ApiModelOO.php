@@ -26,7 +26,7 @@
 
 use oat\generis\model\OntologyRdf;
 use oat\generis\model\OntologyRdfs;
-use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Exception as DBALException;
 use oat\generis\model\data\import\RdfImporter;
 use oat\oatbox\log\LoggerAwareTrait;
 use oat\oatbox\service\ServiceManager;
@@ -122,7 +122,7 @@ class core_kernel_impl_ApiModelOO extends core_kernel_impl_Api implements core_k
             $description->setAttribute('rdf:about', $uriResource);
 
             $result = $dbWrapper->query('SELECT * FROM "statements" WHERE "subject" = ' . $subject);
-            while ($row = $result->fetch()) {
+            while (($row = $result->fetchAssociative()) !== false) {
                 $predicate  = trim($row['predicate']);
                 $object     = trim($row['object']);
                 $lang       = trim($row['l_language']);
@@ -209,7 +209,7 @@ class core_kernel_impl_ApiModelOO extends core_kernel_impl_Api implements core_k
             OntologyRdfs::RDFS_SUBCLASSOF
         ]);
 
-        while ($row = $result->fetch()) {
+        while (($row = $result->fetchAssociative()) !== false) {
             $returnValue->add(new core_kernel_classes_Class($row['subject']));
         }
 
@@ -282,7 +282,7 @@ class core_kernel_impl_ApiModelOO extends core_kernel_impl_Api implements core_k
             OntologyRdfs::RDFS_SUBCLASSOF
         ]);
 
-        while ($row = $result->fetch()) {
+        while (($row = $result->fetchAssociative()) !== false) {
             $returnValue->add(new core_kernel_classes_Class($row['subject']));
         }
 
@@ -309,7 +309,7 @@ class core_kernel_impl_ApiModelOO extends core_kernel_impl_Api implements core_k
             $object
         ]);
         $returnValue = new core_kernel_classes_ContainerCollection(new common_Object());
-        while ($row = $sqlResult->fetch()) {
+        while (($row = $sqlResult->fetchAssociative()) !== false) {
             $container = new core_kernel_classes_Resource($row['subject'], __METHOD__);
             $container->debug = __METHOD__ ;
             $returnValue->add($container);
@@ -365,7 +365,7 @@ class core_kernel_impl_ApiModelOO extends core_kernel_impl_Api implements core_k
             $predicate
         ]);
         $returnValue = new core_kernel_classes_ContainerCollection(new common_Object());
-        while ($row = $sqlResult->fetch()) {
+        while (($row = $sqlResult->fetchAssociative()) !== false) {
             $value = $row['object'];
             if (!common_Utils::isUri($value)) {
                 $container = new core_kernel_classes_Literal($value);

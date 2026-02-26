@@ -141,7 +141,7 @@ class CleanUpOrphanFiles extends ScriptAction
     {
         $sql = 'SELECT subject FROM statements s WHERE s.object=?';
         $stmt = $this->getPersistence()->query($sql, [$resource->getUri()]);
-        $res = $stmt->fetchAll();
+        $res = $stmt->fetchAllAssociative();
 
         return 0 === count($res);
     }

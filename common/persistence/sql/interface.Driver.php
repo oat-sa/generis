@@ -22,9 +22,20 @@
  * @package generis
  *
  */
+
+use Doctrine\DBAL\Result;
+
 interface common_persistence_sql_Driver extends common_persistence_Driver
 {
-    public function query($statement, $params, array $types = []);
+    /**
+     * Executes parameterized query.
+     *
+     * @param string $statement The SQL statement.
+     * @param array $params The query parameters.
+     * @param array $types The parameter types.
+     * @return Result
+     */
+    public function query(string $statement, array $params = [], array $types = []): Result;
 
     public function exec($statement, $params, array $types = []);
 

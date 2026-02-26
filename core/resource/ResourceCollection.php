@@ -143,13 +143,14 @@ class ResourceCollection implements Iterator, Countable
         }
 
         $query = $this->filter->applyFilters($query);
-        $results = $query->execute();
+        $results = $query->executeQuery();
+        $rows = $results->fetchAllAssociative();
 
         if ($this->cacheSize > 0) {
-            $this->endOfClass = $results->rowCount() < $this->cacheSize;
+            $this->endOfClass = count($rows) < $this->cacheSize;
         }
 
-        foreach ($results->fetchAll() as $result) {
+        foreach ($rows as $result) {
             $this->resources[] = $result;
             $this->lastId = $result['id'] > $this->lastId ? $result['id'] : $this->lastId;
         }
@@ -185,7 +186,7 @@ class ResourceCollection implements Iterator, Countable
     /**
      * @inheritdoc
      */
-    public function count()
+    public function count(): int
     {
         if (!is_array($this->resources) && !$this->resources instanceof Countable) {
             return 0;
@@ -197,7 +198,7 @@ class ResourceCollection implements Iterator, Countable
     /**
      * @inheritdoc
      */
-    public function current()
+    public function current(): mixed
     {
         return $this->resources[$this->index];
     }
@@ -205,7 +206,7 @@ class ResourceCollection implements Iterator, Countable
     /**
      * @inheritdoc
      */
-    public function next()
+    public function next(): void
     {
         $this->index++;
     }
@@ -213,7 +214,7 @@ class ResourceCollection implements Iterator, Countable
     /**
      * @inheritdoc
      */
-    public function key()
+    public function key(): mixed
     {
         return $this->index;
     }
@@ -221,7 +222,7 @@ class ResourceCollection implements Iterator, Countable
     /**
      * @inheritdoc
      */
-    public function valid()
+    public function valid(): bool
     {
         if ($this->resources === null) {
             return $this->load();
@@ -242,7 +243,7 @@ class ResourceCollection implements Iterator, Countable
     /**
      * @inheritdoc
      */
-    public function rewind()
+    public function rewind(): void
     {
         $this->index = 0;
     }
