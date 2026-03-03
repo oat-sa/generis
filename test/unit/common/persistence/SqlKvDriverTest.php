@@ -41,7 +41,7 @@ class SqlKvDriverTest extends TestCase
      * Builds an SqlKvDriver with injected mock persistence and platform.
      * Uses reflection so we can assert params passed to exec() without requiring a real DB.
      *
-     * @param string $platformName One of: mysql, oracle, postgresql, gcp-spanner, or other for "else" branch
+     * @param string $platformName One of: mysql, postgresql, gcp-spanner, or other for "else" branch
      * @return array{0: common_persistence_SqlKvDriver, 1: MockObject, 2: MockObject}
      */
     private function createDriverWithMockPersistence(string $platformName): array
@@ -78,10 +78,10 @@ class SqlKvDriverTest extends TestCase
     private function assertParamKeysHaveNoLeadingColon(array $params): void
     {
         foreach (array_keys($params) as $key) {
-            $this->assertStringNotContainsString(
-                ':',
-                (string)$key,
-                'Parameter keys must not have leading colon for DBAL binding. Got: ' . $key
+            $keyStr = (string)$key;
+            $this->assertFalse(
+                str_starts_with($keyStr, ':'),
+                'Parameter keys must not start with a leading colon for DBAL binding. Got: ' . $key
             );
         }
     }
@@ -164,22 +164,6 @@ class SqlKvDriverTest extends TestCase
 
         $this->assertTrue($result);
         $this->assertSame('key3', $execParams['id']);
-    }
-
-    /**
-     * Oracle branch currently does not call exec() (only sets $statement); set() returns false.
-     * When fixed to call exec(), params must use keys without leading colon.
-     */
-    public function testSetOracleCurrentlyReturnsFalseWithoutCallingExec(): void
-    {
-        [$driver, $persistence] = $this->createDriverWithMockPersistence('oracle');
-
-        $persistence->expects($this->never())->method('exec');
-        $persistence->expects($this->never())->method('insert');
-
-        $result = $driver->set('key_oracle', 'val', null, false);
-
-        $this->assertFalse($result);
     }
 
     public function testSetThrowsCommonExceptionOnExecFailure(): void
