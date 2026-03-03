@@ -96,7 +96,8 @@ class common_persistence_SqlKvDriver implements common_persistence_KvDriver, Sch
             $encoded = is_int($value) ? $value : base64_encode($value);
 
             $platformName = $this->sqlPersistence->getPlatForm()->getName();
-            $params = [':data' => $encoded, ':time' => $expire, ':id' => $id];
+            // Doctrine DBAL expects parameter keys without leading colon when binding
+            $params = ['data' => $encoded, 'time' => $expire, 'id' => $id];
 
             if ($platformName == 'mysql') {
                 //query found in Symfony PdoSessionHandler
@@ -220,7 +221,7 @@ class common_persistence_SqlKvDriver implements common_persistence_KvDriver, Sch
             default:
                 $statement = 'UPDATE kv_store SET kv_value = kv_value + 1 WHERE kv_id = :id';
         }
-        $params = [':id' => $id];
+        $params = ['id' => $id];
         return $this->sqlPersistence->exec($statement, $params);
     }
 
@@ -242,7 +243,7 @@ class common_persistence_SqlKvDriver implements common_persistence_KvDriver, Sch
             default:
                 $statement = 'UPDATE kv_store SET kv_value = kv_value - 1 WHERE kv_id = :id';
         }
-        $params = [':id' => $id];
+        $params = ['id' => $id];
         return $this->sqlPersistence->exec($statement, $params);
     }
 
