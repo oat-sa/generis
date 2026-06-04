@@ -58,7 +58,9 @@ class common_log_SingleFileAppender extends common_log_BaseAppender
      * %l line from which the log was called
      * %t timestamp
      * %u user
-     * %g tags
+     * %g tags (JSON)
+     * %traceId active OpenTelemetry trace id from PSR-3 context (when present)
+     * %spanId active OpenTelemetry span id from PSR-3 context (when present)
      *
      * @access protected
      * @var string
@@ -163,6 +165,10 @@ class common_log_SingleFileAppender extends common_log_BaseAppender
             $this->initFile();
         }
         if ($this->filehandle !== false) {
+            $tags = $item->getTags();
+            $traceId = is_array($tags) && isset($tags['traceId']) ? (string) $tags['traceId'] : '';
+            $spanId = is_array($tags) && isset($tags['spanId']) ? (string) $tags['spanId'] : '';
+
             $map = [
                 '%d' => gmdate('Y-m-d H:i:s', $item->getDateTime()),
                 '%m' => $item->getDescription(),
@@ -171,8 +177,10 @@ class common_log_SingleFileAppender extends common_log_BaseAppender
                 '%t' => $item->getDateTime(),
                 '%r' => $item->getRequest(),
                 '%f' => $item->getCallerFile(),
-                '%g' => json_encode($item->getTags()),
-                '%l' => $item->getCallerLine()
+                '%g' => json_encode($tags),
+                '%l' => $item->getCallerLine(),
+                '%traceId' => $traceId,
+                '%spanId' => $spanId,
             ];
             if (strpos($this->format, '%b')) {
                 $map['%b'] = 'Backtrace not yet supported';
