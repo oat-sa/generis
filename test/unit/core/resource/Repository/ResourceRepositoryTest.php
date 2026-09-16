@@ -94,10 +94,28 @@ class ResourceRepositoryTest extends TestCase
             ->expects($this->exactly(2))
             ->method('trigger');
         $classMock = $this->createMock(core_kernel_classes_Class::class);
+        $classMock->method('getUri')->willReturn('http://example.test/Type');
         $resource = $this->createResource('resourceUri');
         $resource->method('getTypes')
             ->willReturn([$classMock]);
         $context = $this->createContext(4, $resource);
+        $this->sut->delete($context);
+    }
+
+    public function testDeleteSucceedsWhenResourceHasNoTypes(): void
+    {
+        $this->resourceImplementation
+            ->expects($this->once())
+            ->method('delete')
+            ->willReturn(true);
+        $this->eventManager
+            ->expects($this->exactly(2))
+            ->method('trigger');
+
+        $resource = $this->createResource('resourceUri');
+        $resource->method('getTypes')->willReturn([]);
+        $context = $this->createContext(4, $resource);
+
         $this->sut->delete($context);
     }
 
