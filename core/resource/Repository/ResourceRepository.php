@@ -86,12 +86,17 @@ class ResourceRepository implements ResourceRepositoryInterface
 
         /** @var core_kernel_classes_Class|null $selectedClass */
         $selectedClass = $context->getParameter(ResourceRepositoryContext::PARAM_SELECTED_CLASS);
-        /** @var core_kernel_classes_Class|null $selectedClass */
+        /** @var core_kernel_classes_Class|null $parentClass */
         $parentClass = $context->getParameter(ResourceRepositoryContext::PARAM_PARENT_CLASS);
+        // subclasses often have rdfs:subClassOf only — getTypes() is empty
         $resourceDeletedEvent = (new ResourceDeleted($resource->getUri()))
             ->setSelectedClass($selectedClass)
             ->setParentClass($parentClass)
-            ->setResourceType($resourceType->getUri());
+            ->setResourceType(
+                $resourceType instanceof core_kernel_classes_Resource
+                    ? $resourceType->getUri()
+                    : ''
+            );
 
         $this->eventManager->trigger($resourceDeletedEvent);
     }
