@@ -23,6 +23,7 @@ declare(strict_types=1);
 namespace oat\generis\test\unit\model\resource\Repository;
 
 use oat\generis\model\data\event\BeforeResourceDeleted;
+use oat\generis\model\data\event\ResourceDeleted;
 use RuntimeException;
 use InvalidArgumentException;
 use core_kernel_classes_Class;
@@ -94,11 +95,62 @@ class ResourceRepositoryTest extends TestCase
             ->expects($this->exactly(2))
             ->method('trigger');
         $classMock = $this->createMock(core_kernel_classes_Class::class);
+        $classMock->method('getUri')->willReturn('http://example.test/Type');
         $resource = $this->createResource('resourceUri');
         $resource->method('getTypes')
             ->willReturn([$classMock]);
         $context = $this->createContext(4, $resource);
         $this->sut->delete($context);
+    }
+
+    public function testDeleteSucceedsWhenResourceHasNoTypes(): void
+    {
+        $this->resourceImplementation
+            ->expects($this->once())
+            ->method('delete')
+            ->willReturn(true);
+
+        $selectedClass = $this->createMock(core_kernel_classes_Class::class);
+        $selectedClass->method('getUri')->willReturn('http://example.test/Selected');
+        $selectedClass->method('getLabel')->willReturn('Selected');
+
+        $parentClass = $this->createMock(core_kernel_classes_Class::class);
+        $parentClass->method('getUri')->willReturn('http://example.test/Parent');
+        $parentClass->method('getLabel')->willReturn('Parent');
+
+        /** @var ResourceDeleted|null $resourceDeletedEvent */
+        $resourceDeletedEvent = null;
+        $this->eventManager
+            ->expects($this->exactly(2))
+            ->method('trigger')
+            ->willReturnCallback(function ($event) use (&$resourceDeletedEvent): void {
+                if ($event instanceof ResourceDeleted) {
+                    $resourceDeletedEvent = $event;
+                }
+            });
+
+        $resource = $this->createResource('resourceUri');
+        $resource->method('getTypes')->willReturn([]);
+        $context = $this->createContext(4, $resource, $selectedClass, $parentClass);
+
+        $this->sut->delete($context);
+
+        $this->assertInstanceOf(ResourceDeleted::class, $resourceDeletedEvent);
+        $this->assertSame('', $resourceDeletedEvent->getResourceType());
+        $this->assertSame(
+            [
+                'uri' => 'resourceUri',
+                'selectedClass' => [
+                    'uri' => 'http://example.test/Selected',
+                    'label' => 'Selected',
+                ],
+                'parentClass' => [
+                    'uri' => 'http://example.test/Parent',
+                    'label' => 'Parent',
+                ],
+            ],
+            $resourceDeletedEvent->jsonSerialize()
+        );
     }
 
     public function testDeleteWithoutResource(): void
@@ -170,14 +222,18 @@ class ResourceRepositoryTest extends TestCase
     /**
      * @return ContextInterface|MockObject
      */
-    private function createContext(int $expects, ?core_kernel_classes_Resource $resource): ContextInterface
-    {
+    private function createContext(
+        int $expects,
+        ?core_kernel_classes_Resource $resource,
+        ?core_kernel_classes_Class $selectedClass = null,
+        ?core_kernel_classes_Class $parentClass = null
+    ): ContextInterface {
         $context = $this->createMock(ContextInterface::class);
         $context
             ->expects($this->exactly($expects))
             ->method('getParameter')
             ->willReturnCallback(
-                function (string $param) use ($resource) {
+                function (string $param) use ($resource, $selectedClass, $parentClass) {
                     if ($param === self::PARAM_RESOURCE) {
                         return $resource;
                     }
@@ -186,8 +242,12 @@ class ResourceRepositoryTest extends TestCase
                         return false;
                     }
 
-                    if (in_array($param, [self::PARAM_SELECTED_CLASS, self::PARAM_PARENT_CLASS], true)) {
-                        return $this->createMock(core_kernel_classes_Class::class);
+                    if ($param === self::PARAM_SELECTED_CLASS) {
+                        return $selectedClass ?? $this->createMock(core_kernel_classes_Class::class);
+                    }
+
+                    if ($param === self::PARAM_PARENT_CLASS) {
+                        return $parentClass ?? $this->createMock(core_kernel_classes_Class::class);
                     }
 
                     return null;
