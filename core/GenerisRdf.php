@@ -53,6 +53,7 @@ interface GenerisRdf
     public const CLASS_ROLE = 'http://www.tao.lu/Ontologies/generis.rdf#ClassRole';
     public const PROPERTY_ROLE_ISSYSTEM = 'http://www.tao.lu/Ontologies/generis.rdf#isSystem';
     public const PROPERTY_ROLE_INCLUDESROLE = 'http://www.tao.lu/Ontologies/generis.rdf#includesRole';
+    public const PROPERTY_ROLE_EXCLUDESROLE = 'http://www.tao.lu/Ontologies/generis.rdf#excludesRole';
     public const INSTANCE_ROLE_GENERIS = 'http://www.tao.lu/Ontologies/generis.rdf#GenerisRole';
     public const INSTANCE_ROLE_ANONYMOUS = 'http://www.tao.lu/Ontologies/generis.rdf#AnonymousRole';
     public const CLASS_SUBCRIPTION = 'http://www.tao.lu/Ontologies/generis.rdf#Subscription';

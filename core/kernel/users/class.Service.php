@@ -474,6 +474,34 @@ class core_kernel_users_Service implements
             // remove the root vertex which is actually the role we are testing.
             unset($returnValue[$role->getUri()]);
 
+            // Subtract roles excluded by the role itself or by any included role.
+            $excludesRoleProperty = new core_kernel_classes_Property(GenerisRdf::PROPERTY_ROLE_EXCLUDESROLE);
+            $ownerRoles = [$role->getUri() => $role] + $returnValue;
+            $excluded = [];
+            $visitedExcludedRoles = [];
+            $s = array_values($ownerRoles);
+
+            while (!empty($s)) {
+                $u = array_pop($s);
+
+                if (false === in_array($u->getUri(), $visitedExcludedRoles, true)) {
+                    $visitedExcludedRoles[] = $u->getUri();
+
+                    $ar = $u->getPropertyValuesCollection($excludesRoleProperty);
+                    foreach ($ar->getIterator() as $w) {
+                        $excluded[$w->getUri()] = $w;
+
+                        if (false === in_array($w->getUri(), $visitedExcludedRoles, true)) { // not visited
+                            array_push($s, $w);
+                        }
+                    }
+                }
+            }
+
+            foreach (array_keys($excluded) as $excludedUri) {
+                unset($returnValue[$excludedUri]);
+            }
+
             if (GENERIS_CACHE_USERS_ROLES === true) {
                 try {
                     core_kernel_users_Cache::cacheIncludedRoles($role, $returnValue);
@@ -567,6 +595,68 @@ class core_kernel_users_Service implements
 
             // For each roles that have $role for included role,
             // remove the cache entry.
+            foreach ($this->getAllRoles() as $r) {
+                $includedRoles = $this->getIncludedRoles($r);
+
+                if (array_key_exists($role->getUri(), $includedRoles)) {
+                    core_kernel_users_Cache::removeIncludedRoles($r);
+                }
+            }
+        }
+    }
+
+    /**
+     * Make a Role exclude another Role from its effective role set.
+     *
+     * @access public
+     * @param core_kernel_classes_Resource $role The Role that excludes another Role.
+     * @param core_kernel_classes_Resource $roleToExclude The Role to be excluded.
+     * @return boolean
+     */
+    public function excludeRole(core_kernel_classes_Resource $role, core_kernel_classes_Resource $roleToExclude)
+    {
+        $excludesRoleProperty = new core_kernel_classes_Property(GenerisRdf::PROPERTY_ROLE_EXCLUDESROLE);
+
+        // Clean to avoid double entries...
+        $role->removePropertyValues($excludesRoleProperty, ['like' => false, 'pattern' => $roleToExclude->getUri()]);
+
+        // Exclude the Role.
+        $role->setPropertyValue($excludesRoleProperty, $roleToExclude->getUri());
+
+        $this->invalidateIncludedRolesCache($role);
+
+        return true;
+    }
+
+    /**
+     * Remove an exclusion of a Role from another Role.
+     *
+     * @access public
+     * @param core_kernel_classes_Resource $role The Role from which the exclusion is removed.
+     * @param core_kernel_classes_Resource $roleToExclude The Role to unexclude.
+     * @return boolean
+     */
+    public function unexcludeRole(core_kernel_classes_Resource $role, core_kernel_classes_Resource $roleToExclude)
+    {
+        $excludesRoleProperty = new core_kernel_classes_Property(GenerisRdf::PROPERTY_ROLE_EXCLUDESROLE);
+        $role->removePropertyValues($excludesRoleProperty, ['like' => false, 'pattern' => $roleToExclude->getUri()]);
+
+        $this->invalidateIncludedRolesCache($role);
+
+        return true;
+    }
+
+    /**
+     * Invalidate the included roles cache for a Role and every Role that includes it.
+     *
+     * @param core_kernel_classes_Resource $role
+     */
+    private function invalidateIncludedRolesCache(core_kernel_classes_Resource $role)
+    {
+        if (GENERIS_CACHE_USERS_ROLES == true) {
+            core_kernel_users_Cache::removeIncludedRoles($role);
+
+            // For each role that has $role for included role, remove the cache entry.
             foreach ($this->getAllRoles() as $r) {
                 $includedRoles = $this->getIncludedRoles($r);
 

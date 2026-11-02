@@ -388,6 +388,104 @@ class UserServiceTestCase extends GenerisPhpUnitTestRunner
         $this->assertFalse($user->exists());
     }
 
+    public function testExcludeRole()
+    {
+        $includedRole = $this->service->addRole('EXCLUDED ROLE');
+        $role = $this->service->addRole('EXCLUDING ROLE', $includedRole);
+
+        $includedRoles = $this->service->getIncludedRoles($role);
+        $this->assertArrayHasKey($includedRole->getUri(), $includedRoles);
+
+        $this->assertTrue($this->service->excludeRole($role, $includedRole));
+
+        $includedRoles = $this->service->getIncludedRoles($role);
+        $this->assertArrayNotHasKey($includedRole->getUri(), $includedRoles);
+
+        $this->assertTrue($this->service->unexcludeRole($role, $includedRole));
+
+        $includedRoles = $this->service->getIncludedRoles($role);
+        $this->assertArrayHasKey($includedRole->getUri(), $includedRoles);
+
+        $role->delete(true);
+        $includedRole->delete(true);
+    }
+
+    public function testExcludeRoleOnParentIsTransitive()
+    {
+        $excludedRole = $this->service->addRole('TRANSITIVE EXCLUDED ROLE');
+        $parentRole = $this->service->addRole('TRANSITIVE PARENT ROLE', $excludedRole);
+        $childRole = $this->service->addRole('TRANSITIVE CHILD ROLE', $parentRole);
+
+        $this->service->excludeRole($parentRole, $excludedRole);
+
+        $includedRoles = $this->service->getIncludedRoles($childRole);
+        $this->assertArrayHasKey($parentRole->getUri(), $includedRoles);
+        $this->assertArrayNotHasKey($excludedRole->getUri(), $includedRoles);
+
+        $childRole->delete(true);
+        $parentRole->delete(true);
+        $excludedRole->delete(true);
+    }
+
+    public function testExcludeRoleIgnoresTheRoleItself()
+    {
+        $includedRole = $this->service->addRole('SELF EXCLUSION INCLUDED ROLE');
+        $role = $this->service->addRole('SELF EXCLUDING ROLE', $includedRole);
+
+        $this->service->excludeRole($role, $role);
+
+        $includedRoles = $this->service->getIncludedRoles($role);
+        $this->assertArrayHasKey($includedRole->getUri(), $includedRoles);
+        $this->assertArrayNotHasKey($role->getUri(), $includedRoles);
+
+        $user = $this->service->addUser('selfExclusionUser', 'password', $role);
+        $userRoles = $this->service->getUserRoles($user);
+        $this->assertArrayHasKey($role->getUri(), $userRoles);
+        $this->assertArrayHasKey($includedRole->getUri(), $userRoles);
+        $user->delete();
+
+        $role->delete(true);
+        $includedRole->delete(true);
+    }
+
+    public function testExcludedRoleWinsOverIncludedRole()
+    {
+        $excludedRole = $this->service->addRole('CONFLICT EXCLUDED ROLE');
+        $parentRole = $this->service->addRole('CONFLICT PARENT ROLE', $excludedRole);
+        $role = $this->service->addRole('CONFLICT CHILD ROLE', $parentRole);
+
+        $this->service->excludeRole($role, $excludedRole);
+
+        $includedRoles = $this->service->getIncludedRoles($role);
+        $this->assertArrayHasKey($parentRole->getUri(), $includedRoles);
+        $this->assertArrayNotHasKey($excludedRole->getUri(), $includedRoles);
+
+        $role->delete(true);
+        $parentRole->delete(true);
+        $excludedRole->delete(true);
+    }
+
+    public function testExcludesRoleCycleDoesNotHang()
+    {
+        $roleA = $this->service->addRole('CYCLE ROLE A');
+        $roleB = $this->service->addRole('CYCLE ROLE B');
+        $roleC = $this->service->addRole('CYCLE ROLE C');
+
+        $this->service->includeRole($roleA, $roleB);
+        $this->service->includeRole($roleB, $roleC);
+        $this->service->excludeRole($roleA, $roleB);
+        $this->service->excludeRole($roleB, $roleC);
+        $this->service->excludeRole($roleC, $roleB);
+
+        $includedRoles = $this->service->getIncludedRoles($roleA);
+        $this->assertArrayNotHasKey($roleB->getUri(), $includedRoles);
+        $this->assertArrayNotHasKey($roleC->getUri(), $includedRoles);
+
+        $roleA->delete(true);
+        $roleB->delete(true);
+        $roleC->delete(true);
+    }
+
     public function testRemoveRole()
     {
         $prefix = LOCAL_NAMESPACE . '#';
