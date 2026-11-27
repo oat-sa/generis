@@ -78,7 +78,7 @@
     "relay/relay": "^2.0 || ^3.0",
     "composer-runtime-api": "^2.0",
     "ext-pdo": "*",
-    "laudis/neo4j-php-client": "^2.0 || ^3.7",
+    "laudis/neo4j-php-client": "^3.7",
     "wikibase-solutions/php-cypher-dsl": "^5.0"
   },
   "require-dev": {
