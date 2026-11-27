@@ -30,7 +30,7 @@ namespace oat\oatbox\cache;
  */
 trait MultipleCacheTrait
 {
-    public function deleteMultiple($keys)
+    public function deleteMultiple($keys): bool
     {
         $success = true;
         foreach ($keys as $key) {
@@ -39,7 +39,7 @@ trait MultipleCacheTrait
         return $success;
     }
 
-    public function getMultiple($keys, $default = null)
+    public function getMultiple($keys, $default = null): iterable
     {
         $values = [];
         foreach ($keys as $key) {
@@ -48,7 +48,7 @@ trait MultipleCacheTrait
         return $values;
     }
 
-    public function setMultiple($values, $ttl = null)
+    public function setMultiple($values, $ttl = null): bool
     {
         $success = true;
         foreach ($values as $key => $value) {

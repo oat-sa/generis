@@ -44,7 +44,7 @@ class KeyValueCache extends ConfigurableService implements SimpleCache
     /** @var common_persistence_KeyValuePersistence */
     private $persistence;
 
-    public function set($key, $value, $ttl = null)
+    public function set($key, $value, $ttl = null): bool
     {
         if ($ttl instanceof DateInterval) {
             $ttl = $this->dateIntervalToSeconds($ttl);
@@ -52,7 +52,7 @@ class KeyValueCache extends ConfigurableService implements SimpleCache
         return $this->getPersistence()->set($key, $value, $ttl);
     }
 
-    public function clear()
+    public function clear(): bool
     {
         try {
             return $this->getPersistence()->purge();
@@ -61,12 +61,12 @@ class KeyValueCache extends ConfigurableService implements SimpleCache
         }
     }
 
-    public function delete($key)
+    public function delete($key): bool
     {
         return $this->getPersistence()->del($key);
     }
 
-    public function get($key, $default = null)
+    public function get($key, $default = null): mixed
     {
         $returnValue = $this->getPersistence()->get($key);
         // persistence can return false on a value of false or a not found key
@@ -75,7 +75,7 @@ class KeyValueCache extends ConfigurableService implements SimpleCache
             : $default;
     }
 
-    public function has($key)
+    public function has($key): bool
     {
         return $this->getPersistence()->exists($key);
     }
