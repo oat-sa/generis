@@ -77,9 +77,7 @@
     "ramsey/uuid": "^4.2.3",
     "relay/relay": "~2.0",
     "composer-runtime-api": "^2.0",
-    "ext-pdo": "*",
-    "laudis/neo4j-php-client": "~2.0",
-    "wikibase-solutions/php-cypher-dsl": "^5.0"
+    "ext-pdo": "*"
   },
   "require-dev": {
     "lcobucci/jwt": "~5",
