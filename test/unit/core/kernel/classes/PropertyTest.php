@@ -24,7 +24,7 @@ namespace oat\generis\test\unit\core\kernel\classes;
 
 use core_kernel_classes_Property;
 use core_kernel_persistence_PropertyInterface;
-use core_kernel_persistence_starsql_StarModel;
+use core_kernel_persistence_smoothsql_SmoothModel;
 use oat\generis\model\data\RdfsInterface;
 use oat\generis\model\GenerisRdf;
 use oat\generis\model\OntologyRdfs;
@@ -46,7 +46,7 @@ class PropertyTest extends TestCase
 
     public function setUp(): void
     {
-        $model = $this->createMock(core_kernel_persistence_starsql_StarModel::class);
+        $model = $this->createMock(core_kernel_persistence_smoothsql_SmoothModel::class);
         $this->rdfs = $this->createMock(RdfsInterface::class);
         $this->persistenceProperty = $this->createMock(core_kernel_persistence_PropertyInterface::class);
         $this->cache = $this->createMock(SimpleCache::class);

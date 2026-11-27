@@ -20,7 +20,6 @@
 
 declare(strict_types=1);
 
-use oat\generis\model\kernel\persistence\starsql\StarSqlServiceProvider;
 use oat\generis\persistence\PersistenceServiceProvider;
 use oat\generis\scripts\update\Updater;
 use oat\generis\scripts\install\TaskQueue;
@@ -62,6 +61,5 @@ return [
         LogServiceProvider::class,
         ResourceServiceProvider::class,
         PersistenceServiceProvider::class,
-        StarSqlServiceProvider::class,
     ],
 ];
